@@ -1,0 +1,118 @@
+SuperKaramba v0.36
+
+2005-04-19 22:19  p0z3r
+
+        * doc/python_api/api_html.rc: Fixed a bug that was preventing all
+          the api functions being generated into html.
+
+2005-04-19 01:01  p0z3r
+
+        * admin/cvs.sh: Update so that automake up through version 1.9.x
+          can generate configure/Makefile scripts.
+
+2005-04-15 15:25  kodaaja
+
+        * src/: meter.h, textlabel.h: getTextValue fix.
+
+2005-02-14 18:26  p0z3r
+
+        * src/karamba.cpp: moved the move() call to be after the theme file
+          arguments for LEFT/RIGHT/TOP/BOTTOM were read in.  It seems
+          though that once the theme is loaded, the ~/.superkaramba/*.rc
+          options of widgetPosX and widgetPosY override those options.  We
+          may want to consider a change in that behavior.
+
+2005-02-02 16:32  kodaaja
+
+        * src/meter_python.cpp: Convert from UCS4 to UCS2 if python uses 4
+          byte unicode chars.
+
+2005-02-02 13:46  kodaaja
+
+        * examples/richtext/rtext.py: Removed unneeded getThemeRichText
+          calls.
+
+2005-01-19 19:20  p0z3r
+
+        * src/karamba.cpp: Some themes have trailing '/'s that cause
+          problems when report disk usage through a DiskSensor mntMap
+          key/value pair.  This removes the trailing '/' so that it can get
+          the match it needs for a mountpoint.
+
+2005-01-18 19:05  p0z3r
+
+        * src/karamba.cpp: There is no need to call step() in
+          mouseReleaseEvent().  It was causing widgetUpdated to be called
+          in themes.
+
+2005-01-07 19:31  p0z3r
+
+        * admin/acinclude.m4.in: Update superkaramba to check for the
+          recently release Python2.4.
+
+2004-11-28 07:47  kodaaja
+
+        * src/misc_python.h: Documentation fix
+
+2004-11-23 10:16  kodaaja
+
+        * src/: imagelabel_python.cpp, main.cpp, menu_python.cpp,
+          misc_python.cpp, task_python.cpp, widget_python.cpp: AMD 64
+          compile warning fixes.
+
+2004-11-18 01:46  kodaaja
+
+        * admin/acinclude.m4.in: QT 3.2 => QT 3.1
+
+2004-11-17 15:26  kodaaja
+
+        * src/showdesktop.cpp: More warning fixes
+
+2004-11-17 13:56  kodaaja
+
+        * src/: imagelabel.cpp, karambainterface.cpp, taskmanager.cpp: More
+          compile warning removals.
+
+2004-11-17 05:16  kodaaja
+
+        * admin/Doxyfile.am, admin/Doxyfile.global, admin/Makefile.common,
+          admin/acinclude.m4.in, admin/am_edit, admin/bcheck.pl,
+          admin/conf.change.pl, admin/config.pl, admin/cvs-clean.pl,
+          admin/cvs.sh, admin/debianrules, admin/depcomp,
+          admin/detect-autoconf.sh, admin/install-sh, admin/libtool.m4.in,
+          admin/ltmain.sh, admin/nmcheck, src/bar_python.cpp,
+          src/bar_python.h, src/config_python.cpp, src/config_python.h,
+          src/graph_python.cpp, src/graph_python.h, src/imagelabel.cpp,
+          src/imagelabel.h, src/imagelabel_python.cpp,
+          src/imagelabel_python.h, src/karamba.cpp, src/karamba.h,
+          src/karamba_python.cpp, src/karamba_python.h, src/karambaapp.cpp,
+          src/karambaapp.h, src/karambarootpixmap.cpp,
+          src/karambasessionmanaged.cpp, src/karambasessionmanaged.h,
+          src/main.cpp, src/memsensor.cpp, src/menu_python.cpp,
+          src/menu_python.h, src/meter_python.cpp, src/meter_python.h,
+          src/misc_python.cpp, src/misc_python.h, src/networksensor.cpp,
+          src/pyapi_templates.h, src/richtextlabel.cpp,
+          src/richtextlabel.h, src/richtextlabel_python.cpp,
+          src/richtextlabel_python.h, src/rsssensor.cpp,
+          src/showdesktop.cpp, src/skicon.xpm, src/systemtray.cpp,
+          src/systray_python.cpp, src/systray_python.h,
+          src/task_python.cpp, src/task_python.h, src/taskmanager.cpp,
+          src/taskmanager.h, src/textlabel.cpp, src/textlabel_python.cpp,
+          src/textlabel_python.h, src/themelistwindow.cpp,
+          src/welcomeform.cpp, src/widget_python.cpp, src/widget_python.h,
+          src/xmmssensor.cpp: Removed all the compile warnings.
+          
+SuperKaramba v0.35
+
+* many new APIs
+* new callbacks
+* DCOP interface for superkaramba
+* multiple superkarambas / one systray support
+* added Fahrenheit support
+* fixed the "moving themes" problem
+* fixed the "always on top" problem
+* fixed bug in setMenuConfigOption(). ATTENTION DEVELOPERS: please see api.html for the new syntax.
+* asyncronous image loading. karamba.setImagePath should now work with net files.
+* fixed bug in meterClicked()
+* fixed bug in setRichTextWidth() / getRichTextSize()
+* much more code cleanup, bug fixes, and internal documentation

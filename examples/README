@@ -1,0 +1,50 @@
+All of the information for programmers is in the file called "API".
+
+
+
+Here are some examples of themes with matching python addons:
+
+autoHide/
+
+	This is the main.theme from kde-look.org with a simple
+	example python script that makes it "auto-hide".
+	Move the mouse over it to pop it back out.
+
+
+globalMouse/
+
+	This shows how to get the mouse cursor position anyway on
+	the screen but using the xcursor python module.
+	(This is Karamba Eyes by Wilfried.Huss@gmx.at)
+
+
+popupMenu/
+
+	This shows up to create popup menus, display them, and then
+	do something with the user input from them.
+	(This is a sample by MrDobalina <r6_junk@sympatico.ca>)
+
+
+taskBar/
+	
+	This shows how to use the task management API to create a 
+	simple taskbar.
+	(This is cleanbar by Adam Geitgey)
+
+richtext/
+	
+	This is a simple example of how to use rich text (text with HTML
+	tags) in your themes.
+	(This is by Wilfried.Huss@gmx.at)
+
+unicode/
+	
+	This is a simple example of how to display unicode characters in your
+	theme.
+	(This is by Wilfried.Huss@gmx.at)
+
+mouseDrag/
+
+        This shows how to use mouse dragging in the callback widgetMouseMoved
+        in your themes.
+        (This is karmix by Tian and rewritten by Ryan Nickell)

@@ -1,0 +1,35 @@
+KARAMBA x=100 y=10 w=600 h=580 INTERVAL=1000 LOCKED=true
+DEFAULTFONT font="Bitstream Vera Sans" fontsize=16 color=200,200,200
+
+TEXT x=0 Y=0 w=600 h=20 VALUE="createText & deleteText" name=ttext0
+TEXT x=0 Y=20 w=200 h=20 value="Text meter" min=0 max=100 name=text0
+
+TEXT x=0 Y=45 w=600 h=20 VALUE="getTextSize & resizeText" name=ttext1
+TEXT x=0 Y=65 w=200 h=20 value="The quick brown fox jumps over the lazy dog" min=0 max=100 name=text1
+
+TEXT x=0 Y=90 w=600 h=20 VALUE="getTextPos & moveText" name=ttext2
+TEXT x=0 Y=110 w=200 h=20 value="Text meter" min=0 max=100 name=text2
+
+TEXT x=0 Y=135 w=600 h=20 VALUE="hideText & showText" name=ttext3
+TEXT x=0 Y=155 w=200 h=20 value="Text meter" min=0 max=100 name=text3
+
+TEXT x=0 Y=180 w=600 h=20 VALUE="getTextSensor & setTextSensor" name=ttext4
+TEXT x=0 Y=200 w=200 h=20 value=50 min=0 max=100 name=text4
+
+TEXT x=0 Y=225 w=600 h=20 VALUE="getTextValue & setTextValue" name=ttext5
+TEXT x=0 Y=245 w=200 h=20 value="." min=0 max=100 name=text5
+
+TEXT x=0 Y=270 w=600 h=20 VALUE="getTextShadow & setTextShadow" name=ttext6
+TEXT x=0 Y=290 w=400 h=20 value="The quick brown fox jumps over the lazy dog" min=0 max=100 name=text6
+
+TEXT x=0 Y=315 w=600 h=20 VALUE="setTextSize & getTextSize" name=ttext7
+TEXT x=0 Y=335 w=200 h=20 value="Text meter" min=0 max=100 name=text7
+
+TEXT x=0 Y=360 w=600 h=20 VALUE="setTextColor & getTextColor" name=ttext8
+TEXT x=0 Y=380 w=400 h=20 value="The quick brown fox jumps over the lazy dog" min=0 max=100 name=text8
+
+TEXT x=0 Y=405 w=600 h=20 VALUE="setTextFont & getTextFont" name=ttext9
+TEXT x=0 Y=425 w=400 h=20 value="The quick brown fox jumps over the lazy dog" min=0 max=100 name=text9
+
+TEXT x=0 Y=450 w=600 h=20 VALUE="setTextAlign & getTextAlign" name=ttext10
+TEXT x=0 Y=470 w=400 h=20 value="Text meter" min=0 max=100 name=text10

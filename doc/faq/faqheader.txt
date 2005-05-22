@@ -1,0 +1,4 @@
+SuperKaramba Frequently Asked Questions
+
+This FAQ is current to SuperKaramba 0.35. For more information about this FAQ, please visit the SuperKaramba Help forum (http://sourceforge.net/forum/forum.php?forum_id=67470) or contact selan at users dot sf dot net.
+______________________________________________________________________

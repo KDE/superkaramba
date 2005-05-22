@@ -1,0 +1,42 @@
+This is SuperKaramba, a version of Karamba with python scripting!
+http://netdragon.sourceforge.net
+
+
+All the info for programmers is in examples/api.html.
+
+
+
+TO COMPILE:
+----------
+
+Optional:  
+
+make -f Makefile.cvs
+
+Required:
+
+./configure
+make
+make install
+
+
+
+SuperKaramba is written by more than one person.
+
+The "super" part was created by:  
+
+Adam Geitgey
+adam@rootnode.org
+
+
+The most recent super-karamba info can be found here:
+http://netdragon.sourceforge.net
+
+
+The "karamba" part was created by:
+
+Hans Karlsson
+karlsson.h@home.se
+
+The most recent information about non-super Karamba can be found here:
+http://www.efd.lth.se/~d98hk/karamba

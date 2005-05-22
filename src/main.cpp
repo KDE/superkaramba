@@ -1,0 +1,135 @@
+/*
+ * Copyright (C) 2003 Hans Karlsson <karlsson.h@home.se>
+ */
+
+#include <karambaapp.h>
+#include <qobject.h>
+
+#include <kaboutdata.h>
+#include <kcmdlineargs.h>
+#include <klocale.h>
+#include <kconfig.h>
+#include <kmainwindow.h>
+#include <qfileinfo.h>
+#include <qstringlist.h>
+#include <kconfig.h>
+#include <kstandarddirs.h>
+#include <kdeversion.h>
+
+#include "karamba.h"
+#include "karambasessionmanaged.h"
+#include "karambainterface.h"
+#include "karamba_python.h"
+
+static const char *description =
+    I18N_NOOP("A KDE Eye-candy Application");
+
+static const char *version = "0.36";
+
+static KCmdLineOptions options[] =
+{
+  // { "+[URL]", I18N_NOOP( "Document to open." ), 0 },
+  // { "!nosystray", I18N_NOOP("Disable systray icon."), 0 },
+  { "+file", I18N_NOOP("A required argument 'file'."), 0 },
+  { 0, 0, 0 }
+};
+
+// This is for redirecting all qWarning, qDebug,... messages to file.
+// Usefull when testing session management issues etc.
+// #define KARAMBA_LOG 1
+
+#ifdef KARAMBA_LOG
+
+void karambaMessageOutput(QtMsgType type, const char *msg)
+{
+  FILE* fp = fopen("/tmp/karamba.log", "a");
+  if(fp)
+  {
+    pid_t pid = getpid();
+
+    switch ( type )
+    {
+        case QtDebugMsg:
+            fprintf( fp, "Debug (%d): %s\n", pid, msg );
+            break;
+        case QtWarningMsg:
+            if (strncmp(msg, "X Error", 7) != 0)
+              fprintf( fp, "Warning (%d): %s\n", pid, msg );
+            break;
+        case QtFatalMsg:
+            fprintf( fp, "Fatal (%d): %s\n", pid, msg );
+            abort();                    // deliberately core dump
+    }
+    fclose(fp);
+  }
+}
+
+#endif
+
+int main(int argc, char **argv)
+{
+#ifdef KARAMBA_LOG
+    qInstallMsgHandler(karambaMessageOutput);
+#endif
+    KAboutData about("superkaramba", I18N_NOOP("superkaramba"),
+                     version, description,
+                     KAboutData::License_GPL,
+                     "(C) 2003-2004 Adam Geitgey", 0, 0,
+                     "adam@rootnode.org");
+    about.addAuthor( "Adam Geitgey", 0, "adam@rootnode.org" );
+    about.addAuthor( "Hans Karlsson", 0, "karlsson.h@home.se" );
+    KCmdLineArgs::init(argc, argv, &about);
+    KCmdLineArgs::addCmdLineOptions( options );
+    KSessionManaged ksm;
+    //karamba *mainWin = 0;
+    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+    QStringList lst;
+    int ret = 0;
+
+    // Create ~/.superkaramba if necessary
+    KarambaApplication::checkSuperKarambaDir();
+
+    KarambaApplication::lockKaramba();
+
+    KarambaApplication app;
+
+    QString mainAppId = app.getMainKaramba();
+    if(!mainAppId.isEmpty())
+    {
+      app.initDcopStub(mainAppId.ascii());
+    }
+    else
+    {
+      //Set up systray icon
+      //if(args->isSet("systray"))
+      app.setUpSysTray();
+      app.initDcopStub();
+    }
+
+    KarambaApplication::unlockKaramba();
+
+    app.connect(qApp,SIGNAL(lastWindowClosed()),qApp,SLOT(quit()));
+
+    // Try to restore a previous session if applicable.
+    app.checkPreviousSession(app, lst);
+    if(lst.size() == 0)
+    {
+      //Not a saved session - check for themes given on command line
+      app.checkCommandLine(args, lst);
+    }
+    if(lst.size() == 0)
+    {
+      //No themes given on command line and no saved session.
+      //Show welcome dialog.
+      app.showWelcomeDialog(lst);
+    }
+
+    args->clear();
+
+    KarambaPython::initPython();
+    //qDebug("startThemes");
+    if (app.startThemes(lst))
+      ret = app.exec();
+    KarambaPython::shutdownPython();
+    return ret;
+}

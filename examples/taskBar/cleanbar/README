@@ -1,0 +1,25 @@
+Cleanbar for SuperKaramba, version 0.4
+Written by Adam Geitgey <adam@rootnode.org>
+Released under the GNU General Public License version 2
+
+
+Cleanbar requires SuperKaramba 0.31 or higher!!
+
+
+Cleanbar is a simple taskbar, xmms control, and clock.  Cleanbar is quick, 
+simple, and appealing.
+
+The Launch button brings up the K Menu.  The play control buttons will control
+XMMS (xmmsctrl is required).  A clock is shown on the right.  Tasks show up
+along the middle and the taskbar works just like any other taskbar from the 
+last 10 years.
+
+I created this basically as a quick example of how to use the new
+event-based task control API in SuperKaramba 0.31.  
+
+It also demonstrates how to create themes that work at any resolution.  You
+should not have to change anything for this to work on your desktop.
+
+Please report any major problems you have.
+
+Thanks.

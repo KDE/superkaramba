@@ -1,0 +1,144 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>ThemeListWindow</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>ThemeListWindow</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>270</width>
+            <height>337</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>SuperKaramba</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLayoutWidget" row="0" column="0">
+            <property name="name">
+                <cstring>layout5</cstring>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Loaded Themes:</string>
+                    </property>
+                </widget>
+                <widget class="KListBox">
+                    <property name="name">
+                        <cstring>lbxThemes</cstring>
+                    </property>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout4</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>btnOpen</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Open Theme...</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>btnCloseTheme</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Close Selected</string>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout3</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <spacer>
+                            <property name="name">
+                                <cstring>spacer1</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>40</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>btnQuit</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Quit</string>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+            </vbox>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>btnCloseTheme</sender>
+        <signal>clicked()</signal>
+        <receiver>ThemeListWindow</receiver>
+        <slot>closeTheme()</slot>
+    </connection>
+    <connection>
+        <sender>lbxThemes</sender>
+        <signal>selected(int)</signal>
+        <receiver>ThemeListWindow</receiver>
+        <slot>themeSelected()</slot>
+    </connection>
+    <connection>
+        <sender>btnQuit</sender>
+        <signal>clicked()</signal>
+        <receiver>ThemeListWindow</receiver>
+        <slot>quitSuperKaramba()</slot>
+    </connection>
+    <connection>
+        <sender>btnOpen</sender>
+        <signal>clicked()</signal>
+        <receiver>ThemeListWindow</receiver>
+        <slot>openTheme()</slot>
+    </connection>
+</connections>
+<slots>
+    <slot>closeTheme()</slot>
+    <slot>themeSelected()</slot>
+    <slot>quitSuperKaramba()</slot>
+    <slot>openTheme()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>klistbox.h</includehint>
+</includehints>
+</UI>

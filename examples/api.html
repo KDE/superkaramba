@@ -1,0 +1,4016 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<link rel="stylesheet" href="./python_api.css" type="text/css">
+<title>./python_api</title>
+<!-- Source: ./../../src/ -->
+<!-- Generated with ROBODoc Version 4.99.6 (Oct 10 2004) -->
+<!-- ROBODoc (c) 1994-2004 by Frans Slothouber and Jacco van Weert. -->
+</head>
+<body bgcolor="#FFFFFF">
+<a name="robo_top_of_doc">Generated</a> with <a href="http://sourceforge.net/projects/robodoc/">ROBODoc</a> v4.99.6 on Mon Nov 15 21:51:28 2004
+<br />
+<h3 align="center">TABLE OF CONTENTS</h3>
+<ul>
+<li><a href="#robo0">Bar/createBar</a></li>
+<li><a href="#robo1">Bar/deleteBar</a></li>
+<li><a href="#robo2">Bar/getBarImage</a></li>
+<li><a href="#robo3">Bar/getBarMinMax</a></li>
+<li><a href="#robo4">Bar/getBarPos</a></li>
+<li><a href="#robo5">Bar/getBarSensor</a></li>
+<li><a href="#robo6">Bar/getBarSize</a></li>
+<li><a href="#robo7">Bar/getBarValue</a></li>
+<li><a href="#robo8">Bar/getBarVertical</a></li>
+<li><a href="#robo9">Bar/getThemeBar</a></li>
+<li><a href="#robo10">Bar/hideBar</a></li>
+<li><a href="#robo11">Bar/moveBar</a></li>
+<li><a href="#robo12">Bar/resizeBar</a></li>
+<li><a href="#robo13">Bar/setBarImage</a></li>
+<li><a href="#robo14">Bar/setBarMinMax</a></li>
+<li><a href="#robo15">Bar/setBarSensor</a></li>
+<li><a href="#robo16">Bar/setBarValue</a></li>
+<li><a href="#robo17">Bar/setBarVertical</a></li>
+<li><a href="#robo18">Bar/showBar</a></li>
+<li><a href="#robo19">Config/addMenuConfigOption</a></li>
+<li><a href="#robo20">Config/readConfigEntry</a></li>
+<li><a href="#robo21">Config/readMenuConfigOption</a></li>
+<li><a href="#robo22">Config/setMenuConfigOption</a></li>
+<li><a href="#robo23">Config/writeConfigEntry</a></li>
+<li><a href="#robo24">Graph/createGraph</a></li>
+<li><a href="#robo25">Graph/deleteGraph</a></li>
+<li><a href="#robo26">Graph/getGraphColor</a></li>
+<li><a href="#robo27">Graph/getGraphMinMax</a></li>
+<li><a href="#robo28">Graph/getGraphPos</a></li>
+<li><a href="#robo29">Graph/getGraphSensor</a></li>
+<li><a href="#robo30">Graph/getGraphSize</a></li>
+<li><a href="#robo31">Graph/getGraphValue</a></li>
+<li><a href="#robo32">Graph/getThemeGraph</a></li>
+<li><a href="#robo33">Graph/hideGraph</a></li>
+<li><a href="#robo34">Graph/moveGraph</a></li>
+<li><a href="#robo35">Graph/resizeGraph</a></li>
+<li><a href="#robo36">Graph/setGraphColor</a></li>
+<li><a href="#robo37">Graph/setGraphMinMax</a></li>
+<li><a href="#robo38">Graph/setGraphSensor</a></li>
+<li><a href="#robo39">Graph/setGraphValue</a></li>
+<li><a href="#robo40">Graph/showGraph</a></li>
+<li><a href="#robo41">Image/addImageTooltip</a></li>
+<li><a href="#robo42">Image/changeImageChannelIntensity</a></li>
+<li><a href="#robo43">Image/changeImageIntensity</a></li>
+<li><a href="#robo44">Image/changeImageToGray</a></li>
+<li><a href="#robo45">Image/createBackgroundImage</a></li>
+<li><a href="#robo46">Image/createImage</a></li>
+<li><a href="#robo47">Image/createTaskIcon</a></li>
+<li><a href="#robo48">Image/deleteImage</a></li>
+<li><a href="#robo49">Image/getImageHeight</a></li>
+<li><a href="#robo50">Image/getImagePath</a></li>
+<li><a href="#robo51">Image/getImagePos</a></li>
+<li><a href="#robo52">Image/getImageSensor</a></li>
+<li><a href="#robo53">Image/getImageSize</a></li>
+<li><a href="#robo54">Image/getImageWidth</a></li>
+<li><a href="#robo55">Image/getThemeImage</a></li>
+<li><a href="#robo56">Image/hideImage</a></li>
+<li><a href="#robo57">Image/moveImage</a></li>
+<li><a href="#robo58">Image/removeImageEffects</a></li>
+<li><a href="#robo59">Image/removeImageTransformations</a></li>
+<li><a href="#robo60">Image/resizeImage</a></li>
+<li><a href="#robo61">Image/resizeImageSmooth</a></li>
+<li><a href="#robo62">Image/rotateImage</a></li>
+<li><a href="#robo63">Image/setImagePath</a></li>
+<li><a href="#robo64">Image/setImageSensor</a></li>
+<li><a href="#robo65">Image/showImage</a></li>
+<li><a href="#robo66">Menu/addMenuItem</a></li>
+<li><a href="#robo67">Menu/addMenuSeparator</a></li>
+<li><a href="#robo68">Menu/createMenu</a></li>
+<li><a href="#robo69">Menu/deleteMenu</a></li>
+<li><a href="#robo70">Menu/popupMenu</a></li>
+<li><a href="#robo71">Menu/removeMenuItem</a></li>
+<li><a href="#robo72">Misc/acceptDrops</a></li>
+<li><a href="#robo73">Misc/attachClickArea</a></li>
+<li><a href="#robo74">Misc/createClickArea</a></li>
+<li><a href="#robo75">Misc/execute</a></li>
+<li><a href="#robo76">Misc/executeInteractive</a></li>
+<li><a href="#robo77">Misc/getIp</a></li>
+<li><a href="#robo78">Misc/getNumberOfDesktop</a></li>
+<li><a href="#robo79">Misc/getThemePath</a></li>
+<li><a href="#robo80">Misc/hide</a></li>
+<li><a href="#robo81">Misc/openTheme</a></li>
+<li><a href="#robo82">Misc/show</a></li>
+<li><a href="#robo83">Misc/toggleShowDesktop</a></li>
+<li><a href="#robo84">Misc/translateAll</a></li>
+<li><a href="#robo85">RichText/changeRichText</a></li>
+<li><a href="#robo86">RichText/changeRichTextFont</a></li>
+<li><a href="#robo87">RichText/changeRichTextSize</a></li>
+<li><a href="#robo88">RichText/createRichText</a></li>
+<li><a href="#robo89">RichText/deleteRichText</a></li>
+<li><a href="#robo90">RichText/getRichTextFont</a></li>
+<li><a href="#robo91">RichText/getRichTextFontSize</a></li>
+<li><a href="#robo92">RichText/getRichTextPos</a></li>
+<li><a href="#robo93">RichText/getRichTextSensor</a></li>
+<li><a href="#robo94">RichText/getRichTextSize</a></li>
+<li><a href="#robo95">RichText/getRichTextValue</a></li>
+<li><a href="#robo96">RichText/getThemeRichText</a></li>
+<li><a href="#robo97">RichText/hideRichText</a></li>
+<li><a href="#robo98">RichText/moveRichText</a></li>
+<li><a href="#robo99">RichText/resizeRichText</a></li>
+<li><a href="#robo100">RichText/setRichTextSensor</a></li>
+<li><a href="#robo101">RichText/setRichTextWidth</a></li>
+<li><a href="#robo102">RichText/showRichText</a></li>
+<li><a href="#robo103">Systray/createSystray</a></li>
+<li><a href="#robo104">Systray/getCurrentWindowCount</a></li>
+<li><a href="#robo105">Systray/hideSystray</a></li>
+<li><a href="#robo106">Systray/moveSystray</a></li>
+<li><a href="#robo107">Systray/showSystray</a></li>
+<li><a href="#robo108">Systray/updateSystrayLayout</a></li>
+<li><a href="#robo109">Task/getStartupInfo</a></li>
+<li><a href="#robo110">Task/getStartupList</a></li>
+<li><a href="#robo111">Task/getTaskInfo</a></li>
+<li><a href="#robo112">Task/getTaskList</a></li>
+<li><a href="#robo113">Task/getTaskNames</a></li>
+<li><a href="#robo114">Task/performTaskAction</a></li>
+<li><a href="#robo115">Text/changeText</a></li>
+<li><a href="#robo116">Text/changeTextColor</a></li>
+<li><a href="#robo117">Text/changeTextFont</a></li>
+<li><a href="#robo118">Text/changeTextShadow</a></li>
+<li><a href="#robo119">Text/changeTextSize</a></li>
+<li><a href="#robo120">Text/createText</a></li>
+<li><a href="#robo121">Text/deleteText</a></li>
+<li><a href="#robo122">Text/getTextAlign</a></li>
+<li><a href="#robo123">Text/getTextColor</a></li>
+<li><a href="#robo124">Text/getTextFont</a></li>
+<li><a href="#robo125">Text/getTextFontSize</a></li>
+<li><a href="#robo126">Text/getTextPos</a></li>
+<li><a href="#robo127">Text/getTextSensor</a></li>
+<li><a href="#robo128">Text/getTextShadow</a></li>
+<li><a href="#robo129">Text/getTextSize</a></li>
+<li><a href="#robo130">Text/getTextValue</a></li>
+<li><a href="#robo131">Text/getThemeText</a></li>
+<li><a href="#robo132">Text/hideText</a></li>
+<li><a href="#robo133">Text/moveText</a></li>
+<li><a href="#robo134">Text/resizeText</a></li>
+<li><a href="#robo135">Text/setTextAlign</a></li>
+<li><a href="#robo136">Text/setTextSensor</a></li>
+<li><a href="#robo137">Text/showText</a></li>
+<li><a href="#robo138">Widget/createWidgetMask</a></li>
+<li><a href="#robo139">Widget/getWidgetPosition</a></li>
+<li><a href="#robo140">Widget/moveWidget</a></li>
+<li><a href="#robo141">Widget/redrawWidget</a></li>
+<li><a href="#robo142">Widget/redrawWidgetBackground</a></li>
+<li><a href="#robo143">Widget/resizeWidget</a></li>
+<li><a href="#robo144">Widget/toggleWidgetRedraw</a></li>
+</ul>
+<hr />
+
+<h2><a name="robo138"><a name="Widget2fcreateWidgetMask">
+Widget/createWidgetMask</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>createWidgetMask</strong>(widget, mask)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This function doesn't work currently due to a bug in KDE. Please use
+   MASK= in your .theme file for the time being.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   string mask --  The name of the widget mask file.
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo139"><a name="Widget2fgetWidgetPosition">
+Widget/getWidgetPosition</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   tuple <strong>getWidgetPosition</strong>(widget)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Returns a Python Tuple containing the x and y position of you widget.
+   widget is a reference to the current widget.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   position of the widget
+</p>
+</span>
+<hr />
+
+<h2><a name="robo140"><a name="Widget2fmoveWidget">
+Widget/moveWidget</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>moveWidget</strong>(widget, x, y)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Moves your karamba widget to a new screen location
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long x -- x coordinate
+</li>
+<li>   long y -- y coordinate
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo141"><a name="Widget2fredrawWidget">
+Widget/redrawWidget</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>redrawWidget</strong>(widget)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This is THE most important function. After you do a bunch of other calls
+   (moving images, adding images or text, etc), you call this to update the
+   widget display area. You will not see your changes until you call this.
+   Redraws widget background.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo142"><a name="Widget2fredrawWidgetBackground">
+Widget/redrawWidgetBackground</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>redrawWidgetBackground</strong>(widget)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Redraws widget background.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo143"><a name="Widget2fresizeWidget">
+Widget/resizeWidget</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>resizeWidget</strong>(widget, w, h)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Resizes your karamba widget to width=w, height=h
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long w -- width
+</li>
+<li>   long h -- height
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo144"><a name="Widget2ftoggleWidgetRedraw">
+Widget/toggleWidgetRedraw</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>toggleWidgetRedraw</strong>(widget, b)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Toggles widget redraw.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long b -- 1 = widget is drawn
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo115"><a name="Text2fchangeText">
+Text/changeText</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>changeText</strong>(widget, text, value)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This will change the contents of a text widget.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long text -- pointer to text
+</li>
+<li>   long value -- new value
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo116"><a name="Text2fchangeTextColor">
+Text/changeTextColor</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>changeTextColor</strong>(widget, text, r, g, b)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This will change the color of a text widget (only ones you created
+   through python currently). textToChange is the reference to the text
+   object to change that you saved from the <a href="#robo120">createText</a>() call. r, g, b are
+   ints from 0 to 255 that represent red, green, and blue.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long text -- pointer to text
+</li>
+<li>   long red -- red component of color
+</li>
+<li>   long green -- green component of color
+</li>
+<li>   long blue -- blue component of color
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo117"><a name="Text2fchangeTextFont">
+Text/changeTextFont</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>changeTextFont</strong>(widget, text, font)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This will change the font of a text widget (only ones you created
+   through python currently). textToChange is the reference to the text
+   object to change that you saved from the <a href="#robo120">createText</a>() call. newFont is a
+   string the the name of the font to use.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long text -- pointer to text
+</li>
+<li>   string font -- font name
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo118"><a name="Text2fchangeTextShadow">
+Text/changeTextShadow</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>changeTextShadow</strong>(widget, text, shadow)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>    This will change the shadow size of a text widget (only ones you
+    created through python currently). textToChange is the reference to the
+    text object to change that you saved from the <a href="#robo120">createText</a>() call. size
+    is the offset of the shadow in pixels. 1 or 2 is a good value in most
+    cases. Get current sensor string
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long text -- pointer to text
+</li>
+<li>   long shadow -- shadow offset
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo119"><a name="Text2fchangeTextSize">
+Text/changeTextSize</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>changeTextSize</strong>(widget, text, size)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This will change the font size of a text widget (only ones you created
+   through python currently). textToChange is the reference to the text
+   object to change that you saved from the <a href="#robo120">createText</a>() call. size is the
+   new font point size.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long text -- pointer to text
+</li>
+<li>   long size -- new size for text
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo120"><a name="Text2fcreateText">
+Text/createText</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>createText</strong>(widget, x, y, w, h, text)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This creates a text at x,y with width and height w,h. You need to save
+   the return value of this function to call other functions on your text
+   field, such as <a href="#robo115">changeText</a>()
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long x -- x coordinate
+</li>
+<li>   long y -- y coordinate
+</li>
+<li>   long w -- width
+</li>
+<li>   long h -- height
+</li>
+<li>   string text -- text for the textlabel
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   Pointer to new text meter
+</p>
+</span>
+<hr />
+
+<h2><a name="robo121"><a name="Text2fdeleteText">
+Text/deleteText</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>deleteText</strong>(widget, text)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This removes a text object from memory. Please do not call functions on
+   "text" after calling <strong>deleteText</strong>, as it does not exist anymore and that
+   could cause crashes in some cases.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long widget -- text
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo122"><a name="Text2fgetTextAlign">
+Text/getTextAlign</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   string <strong>getTextAlign</strong>(widget, text)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Get current text align.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long text -- pointer to text
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   LEFT, CENTER or RIGHT
+</p>
+</span>
+<hr />
+
+<h2><a name="robo123"><a name="Text2fgetTextColor">
+Text/getTextColor</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   tuple <strong>getTextColor</strong>(widget, text)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Get current text color
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long text -- pointer to text
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   (red, green, blue)
+</p>
+</span>
+<hr />
+
+<h2><a name="robo124"><a name="Text2fgetTextFont">
+Text/getTextFont</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   string <strong>getTextFont</strong>(widget, text)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Get current text font name
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long text -- pointer to text
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   font name
+</p>
+</span>
+<hr />
+
+<h2><a name="robo125"><a name="Text2fgetTextFontSize">
+Text/getTextFontSize</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>getTextFontSize</strong>(widget, text)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Get current text font size
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long text -- pointer to text
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   text font size
+</p>
+</span>
+<hr />
+
+<h2><a name="robo126"><a name="Text2fgetTextPos">
+Text/getTextPos</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   tuple <strong>getTextPos</strong>(widget, text)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Given a reference to a text object, this will return a tuple
+   containing the x and y coordinate of a text object.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long text -- pointer to text
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   pos
+</p>
+</span>
+<hr />
+
+<h2><a name="robo127"><a name="Text2fgetTextSensor">
+Text/getTextSensor</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   string <strong>getTextSensor</strong>(widget, text)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Get current sensor string
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long text -- pointer to text
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   sensor string
+</p>
+</span>
+<hr />
+
+<h2><a name="robo128"><a name="Text2fgetTextShadow">
+Text/getTextShadow</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>getTextShadow</strong>(widget, text)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Get current shadow offset
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long text -- pointer to text
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   shadow offset
+</p>
+</span>
+<hr />
+
+<h2><a name="robo129"><a name="Text2fgetTextSize">
+Text/getTextSize</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   tuple <strong>getTextSize</strong>(widget, text)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Given a reference to a text object, this will return a tuple
+   containing the height and width of a text object.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long text -- pointer to text
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   size
+</p>
+</span>
+<hr />
+
+<h2><a name="robo130"><a name="Text2fgetTextValue">
+Text/getTextValue</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   string <strong>getTextValue</strong>(widget, text)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Returns current text value.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long text -- pointer to text
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   value
+</p>
+</span>
+<hr />
+
+<h2><a name="robo131"><a name="Text2fgetThemeText">
+Text/getThemeText</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>getThemeText</strong>(widget, name)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   You can reference text in your python code that was created in the
+   theme file. Basically, you just add a NAME= value to the TEXT line in
+   the .theme file. Then if you want to use that object, instead of calling
+   <a href="#robo120">createText</a>, you can call this function.
+</p>
+
+<p>   The name you pass to the function is the same one that you gave it for
+   the NAME= parameter in the .theme file.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   string name -- name of the text to get
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   Pointer to text
+</p>
+</span>
+<hr />
+
+<h2><a name="robo132"><a name="Text2fhideText">
+Text/hideText</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>hideText</strong>(widget, text)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Hides text that is visible. You need to call <a href="#robo141">redrawWidget</a>() afterwords
+   to actually <a href="#robo80">hide</a> the text on screen.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long text -- pointer to text
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo133"><a name="Text2fmoveText">
+Text/moveText</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>moveText</strong>(widget, text, x, y)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This moves a text object to a new x, y relative to your widget. In other
+   words, (0,0) is the top corner of your widget, not the screen.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long text -- pointer to text
+</li>
+<li>   long x -- x coordinate
+</li>
+<li>   long y -- y coordinate
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo134"><a name="Text2fresizeText">
+Text/resizeText</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>resizeText</strong>(widget, text, w, h)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This will resize text to new height and width.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long text -- pointer to text
+</li>
+<li>   long w -- new width
+</li>
+<li>   long h -- new height
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo135"><a name="Text2fsetTextAlign">
+Text/setTextAlign</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>setTextAlign</strong>(widget, text, align)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Sets text label align.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long text -- pointer to text
+</li>
+<li>   string align -- LEFT, CENTER or RIGHT
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo136"><a name="Text2fsetTextSensor">
+Text/setTextSensor</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>setTextSensor</strong>(widget, text, sensor)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Get current sensor string
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long text -- pointer to text
+</li>
+<li>   string sensor -- new sensor as in theme files
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo137"><a name="Text2fshowText">
+Text/showText</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>showText</strong>(widget, text)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Shows text that has been hidden with <a href="#robo132">hideText</a>()
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long text -- pointer to text
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo109"><a name="Task2fgetStartupInfo">
+Task/getStartupInfo</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   list <strong>getStartupInfo</strong>(widget, task)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This returns all of the info about a certain starting task in the form of
+   a Python List. widget is a reference to the current widget. task is a
+   reference to the window you want info about which you obtain by calling
+   <a href="#robo110">getStartupList</a>().
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long task -- pointer to task
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   Here is the format of the returned list by index value:
+</p>
+<ul><li>   0 = Task name (The full name of the window)
+</li>
+<li>   1 = Icon name
+</li>
+<li>   2 = Executable name
+</li>
+<li>   3 = A reference back to the task you got info on
+</li>
+</ul>
+<p></p>
+</span>
+<hr />
+
+<h2><a name="robo110"><a name="Task2fgetStartupList">
+Task/getStartupList</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   list <a href="#robo112">getTaskList</a>(widget)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This returns a Python List object with references to all the current
+   windows that are in the process of loading on this system. You can then
+   call <a href="#robo109">getStartupInfo</a>() on any of the entries in the list.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   startup list
+</p>
+</span>
+<hr />
+
+<h2><a name="robo111"><a name="Task2fgetTaskInfo">
+Task/getTaskInfo</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   list <strong>getTaskInfo</strong>(widget, task)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This returns all of the info about a certain task in the form of a Python
+   List. widget is a reference to the current widget. task is a reference to
+   the window you want info about which you obtain by calling <a href="#robo112">getTaskList</a>().
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long task -- pointer to task
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   Here is the format of the returned list by index value:
+</p>
+<ul><li>   0 = Task name (The full name of the window)
+</li>
+<li>   1 = Icon name
+</li>
+<li>   2 = Class name - This is for grouping tasks. All tasks with the same
+         name can be grouped together because they are instances of the same
+         program.
+</li>
+<li>   3 = Desktop number - The desktop number this window is on
+</li>
+<li>   4 = Is this window maximized? 0=no, 1=yes
+</li>
+<li>   5 = Is this window iconified (minimized)? 0=no, 1=yes
+</li>
+<li>   6 = Is this window shaded (rolled up)? 0=no, 1=yes
+</li>
+<li>   7 = Is this window focused? 0=no, 1=yes
+</li>
+<li>   8 = A reference back to the task you got info on
+</li>
+</ul>
+<p></p>
+</span>
+<hr />
+
+<h2><a name="robo112"><a name="Task2fgetTaskList">
+Task/getTaskList</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   list <strong>getTaskList</strong>(widget)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This returns a Python List object with references to all the current
+   windows open on this system. You can then call <a href="#robo114">performTaskAction</a>() or
+   <a href="#robo111">getTaskInfo</a>() on any of the entries in the list.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   Task list
+</p>
+</span>
+<hr />
+
+<h2><a name="robo113"><a name="Task2fgetTaskNames">
+Task/getTaskNames</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   list <strong>getTaskNames</strong>(widget)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This returns a Python List containing the String names of all open
+   windows on the system. This is for convience if you want to list open
+   windows or see if a window by a certain name exists. Anything else
+   requires the reference to the window you would obtain from <a href="#robo112">getTaskList</a>()
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   Task list
+</p>
+</span>
+<hr />
+
+<h2><a name="robo114"><a name="Task2fperformTaskAction">
+Task/performTaskAction</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>performTaskAction</strong>(widget, task, action)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This peforms the given action on a task object. widget is a reference to
+   the current widget. task is a reference to a task object you got from
+   <a href="#robo112">getTaskList</a>(). Action is a number from 1 to 10. See the list below.
+</p>
+
+<p>   Possible actions:
+</p>
+<ul><li>   1 = Maximize the window
+</li>
+<li>   2 = Restore the window (use on iconified windows)
+</li>
+<li>   3 = Iconify the window (minimize it)
+</li>
+<li>   4 = Close the window
+</li>
+<li>   5 = Activate (give focus to) the window
+</li>
+<li>   6 = Raise the window
+</li>
+<li>   7 = Lower the window
+</li>
+<li>   8 = Smart Focus/Minimize - This will what the KDE taskbar does when you
+         click on a window. If it is iconified, raise it. If it has focus,
+         iconify it.
+</li>
+<li>   9 = Toggle whether this window is always on top
+</li>
+<li>   10 = Toggle wheter this window is shaded (rolled up)
+</li>
+</ul>
+<p></p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long task -- pointer to task
+</li>
+<li>   long action -- action number
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo103"><a name="Systray2fcreateSystray">
+Systray/createSystray</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>createSystray</strong>(widget, x, y, w, h)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   ??
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long x -- x coordinate
+</li>
+<li>   long y -- y coordinate
+</li>
+<li>   long w -- width
+</li>
+<li>   long h -- height
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo104"><a name="Systray2fgetCurrentWindowCount">
+Systray/getCurrentWindowCount</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>getCurrentWindowCount</strong>(widget)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   ??
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   window count
+</p>
+</span>
+<hr />
+
+<h2><a name="robo105"><a name="Systray2fhideSystray">
+Systray/hideSystray</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>hideSystray</strong>(widget)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   ??
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo106"><a name="Systray2fmoveSystray">
+Systray/moveSystray</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>moveSystray</strong>(widget, x, y, w, h)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   ??
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long x -- x coordinate
+</li>
+<li>   long y -- y coordinate
+</li>
+<li>   long w -- width
+</li>
+<li>   long h -- height
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo107"><a name="Systray2fshowSystray">
+Systray/showSystray</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>showSystray</strong>(widget)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   ??
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo108"><a name="Systray2fupdateSystrayLayout">
+Systray/updateSystrayLayout</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <a href="#robo104">getCurrentWindowCount</a>(widget)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   ??
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo85"><a name="RichText2fchangeRichText">
+RichText/changeRichText</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>changeRichText</strong>(widget, richtext, value)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This will change the contents of a rich text widget. richText is the
+   reference to the text object to change that you saved from the
+   <a href="#robo88">createRichText</a>() call. text is a string containing the new value for the
+   rich text object.
+</p>
+
+<p>   The differance between Rich Text and a regular text field is that rich
+   text fields can display HTML code embedded in your text.
+</p>
+
+<p>   In a &lt;a href="command"&gt; ... &lt;/a&gt; tag command is executed if the link is
+   click with the left mouse button.
+</p>
+
+<p>   Except if command starts with an '#' (ie: href="#value" ) the callback
+   meterClicked is called with value (without the #) as the meter argument.
+</p>
+
+<p>   Also inline images work. Unfortunatly currently only when using absolute
+   paths.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long richtext -- pointer to richtext
+</li>
+<li>   string value -- new text
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo86"><a name="RichText2fchangeRichTextFont">
+RichText/changeRichTextFont</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>changeRichTextFont</strong>(widget, richtext, font)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This will change the font of a richtext widget.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long richtext -- pointer to richtext
+</li>
+<li>   string font -- name of the new font
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo87"><a name="RichText2fchangeRichTextSize">
+RichText/changeRichTextSize</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>changeRichTextSize</strong>(widget, richtext, size)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This will change the font size of a richtext widget.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long richtext -- pointer to richtext
+</li>
+<li>   long size -- new font point size
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo88"><a name="RichText2fcreateRichText">
+RichText/createRichText</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>createRichText</strong>(widget, text, underlineLinks)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This creates creates a rich text string. underlineLinks is a boolean that
+   determines if html links will be automatically underlined so that the
+   user knows that the links can be clicked on. You need to save the return
+   value of this function to call other functions on your rich text field,
+   such as <a href="#robo85">changeRichText</a>().
+</p>
+
+<p>   The differance between Rich Text and a regular text field is that rich
+   text fields can display HTML code embedded in your text.
+</p>
+
+<p>   In a &lt;a href="command"&gt; ... &lt;/a&gt; tag command is executed if the link is
+   click with the left mouse button.
+</p>
+
+<p>   Except if command starts with an '#' (ie: href="#value" ) the callback
+   meterClicked is called with value (without the #) as the meter argument.
+</p>
+
+<p>   Also inline images work. Unfortunatly currently only when using absolute
+   paths.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   string text -- text for richtext
+</li>
+<li>   long underlineLinks -- should the links be underlined
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   Pointer to new richtext meter
+</p>
+</span>
+<hr />
+
+<h2><a name="robo89"><a name="RichText2fdeleteRichText">
+RichText/deleteRichText</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>deleteRichText</strong>(widget, richtext)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This removes a richt text object from memory. Please do not call
+   functions on "text" after calling <strong>deleteRichText</strong>, as it does not exist
+   anymore and that could cause crashes in some cases.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long widget -- richtext
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo90"><a name="RichText2fgetRichTextFont">
+RichText/getRichTextFont</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   string <strong>getRichTextFont</strong>(widget, richtext)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This will get the font of a richtext widget.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long richtext -- pointer to richtext
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   font name
+</p>
+</span>
+<hr />
+
+<h2><a name="robo91"><a name="RichText2fgetRichTextFontSize">
+RichText/getRichTextFontSize</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>getRichTextFontSize</strong>(widget, richtext)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This will get the font size of a richtext widget.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long richtext -- pointer to richtext
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   font point size
+</p>
+</span>
+<hr />
+
+<h2><a name="robo92"><a name="RichText2fgetRichTextPos">
+RichText/getRichTextPos</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   tuple <strong>getRichTextPos</strong>(widget, richtext)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Given a reference to a richtext object, this will return a tuple
+   containing the x and y coordinate of a richtext object.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long richtext -- pointer to richtext
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   pos
+</p>
+</span>
+<hr />
+
+<h2><a name="robo93"><a name="RichText2fgetRichTextSensor">
+RichText/getRichTextSensor</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   string <strong>getRichTextSensor</strong>(widget, richtext)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Get current sensor string
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long richtext -- pointer to richtext
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   sensor string
+</p>
+</span>
+<hr />
+
+<h2><a name="robo94"><a name="RichText2fgetRichTextSize">
+RichText/getRichTextSize</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   tuple <strong>getRichTextSize</strong>(widget, richtext)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Given a reference to a richtext object, this will return a tuple
+   containing the height and width of a richtext object.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long richtext -- pointer to richtext
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   size
+</p>
+</span>
+<hr />
+
+<h2><a name="robo95"><a name="RichText2fgetRichTextValue">
+RichText/getRichTextValue</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   string <strong>getRichTextValue</strong>(widget, richtext)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Returns current richtext value.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long richtext -- pointer to richtext
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   value
+</p>
+</span>
+<hr />
+
+<h2><a name="robo96"><a name="RichText2fgetThemeRichText">
+RichText/getThemeRichText</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>getThemeRichText</strong>(widget, name)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   You can reference richtext in your python code that was created in the
+   theme file. Basically, you just add a NAME= value to the GRAPH line in
+   the .theme file. Then if you want to use that object, instead of calling
+   <a href="#robo88">createRichText</a>, you can call this function.
+</p>
+
+<p>   The name you pass to the function is the same one that you gave it for
+   the NAME= parameter in the .theme file.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   string name -- name of the richtext to get
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   Pointer to richtext
+</p>
+</span>
+<hr />
+
+<h2><a name="robo97"><a name="RichText2fhideRichText">
+RichText/hideRichText</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>hideRichText</strong>(widget, richtext)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This hides an richtext. In other words, during subsequent calls to
+   widgetUpdate(), this richtext will not be drawn.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long richtext -- pointer to richtext
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo98"><a name="RichText2fmoveRichText">
+RichText/moveRichText</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>moveRichText</strong>(widget, richtext, x, y)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This moves a text object to a new x, y relative to your widget. In other
+   words, (0,0) is the top corner of your widget, not the screen.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long richtext -- pointer to richtext
+</li>
+<li>   long x -- x coordinate
+</li>
+<li>   long y -- y coordinate
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo99"><a name="RichText2fresizeRichText">
+RichText/resizeRichText</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>resizeRichText</strong>(widget, richtext, w, h)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This will resize richtext to new height and width.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long richtext -- pointer to richtext
+</li>
+<li>   long w -- new width
+</li>
+<li>   long h -- new height
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo100"><a name="RichText2fsetRichTextSensor">
+RichText/setRichTextSensor</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>setRichTextSensor</strong>(widget, richtext, sensor)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Get current sensor string
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long richtext -- pointer to richtext
+</li>
+<li>   string sensor -- new sensor as in theme files
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo101"><a name="RichText2fsetRichTextWidth">
+RichText/setRichTextWidth</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>setRichTextWidth</strong>(widget, richtext, width)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Given a reference to a rich text object, this function changes it's width
+   to the specified value in pixels.
+</p>
+
+<p>   The height adjusts automatically as the contents are changed with
+   <a href="#robo85">changeRichText</a>.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long richtext -- pointer to richtext
+</li>
+<li>   long width -- new width in pixels
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo102"><a name="RichText2fshowRichText">
+RichText/showRichText</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>showRichText</strong>(widget, richtext)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This shows an richtext. In other words, during subsequent calls to
+   widgetUpdate(), this richtext will be drawn.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long richtext -- pointer to richtext
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo72"><a name="Misc2facceptDrops">
+Misc/acceptDrops</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>acceptDrops</strong>(widget)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Calling this enables your widget to receive Drop events. In other words,
+   the user will be able to drag icons from her desktop and drop them on
+   your widget. The "itemDropped" callback is called as a result with the
+   data about the icon that was dropped on your widget. This allows, for
+   example, icon bars where items are added to the icon bar by Drag and
+   Drop.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo73"><a name="Misc2fattachClickArea">
+Misc/attachClickArea</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>attachClickArea</strong>(widget, meter, lB, mB, rB)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   It is possible to attach a clickarea to a meter (image or text field),
+   which is moved and resized correctly if the meter is moved or resized.
+</p>
+
+<p>   There is also a callback meterClicked(widget, meter, button) which is
+   called whenever a meter is clicked (if something is attached to it).
+   Given an Image or a TextLabel, this call makes it clickable. When a mouse
+   click is detected, the callback meterClicked is called.
+</p>
+
+<p>   lB, mB, and rB are strings that specify what command is executed when
+   this meter is clicked with the left mouse button, middle mouse button,
+   and right mouse button respectively. If given, the appropriate command is
+   executed when the mouse click is received.
+</p>
+
+<p>   The keyword arguments are all optional. If command is an empty string
+   nothing is executed.
+</p>
+
+<p>   For now the command given to RightButton has obviosly no effect (because
+   that brings up the SuperKaramba menu).
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long meter -- pointer to meter
+</li>
+<li>   string lB -- command to left mouse button
+</li>
+<li>   string mB -- command to middle mouse button
+</li>
+<li>   string rB -- command to right mouse button
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo74"><a name="Misc2fcreateClickArea">
+Misc/createClickArea</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>createClickArea</strong>(widget, x, y, w, h, cmd_to_run)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>    This creates a clickable area at x,y with width and height w,h. When
+    this area is clicked, cmd_to_run will be executed. The mouse will change
+    to the clickable icon when over this area.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long x -- x coordinate
+</li>
+<li>   long y -- y coordinate
+</li>
+<li>   long w -- width
+</li>
+<li>   long h -- height
+</li>
+<li>   string cmd_to_run -- command to be run
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo75"><a name="Misc2fexecute">
+Misc/execute</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>execute</strong>(widget, command)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This command simply executes a program or command on the system. This is
+   just for convience (IE you could accomplish this directly through python,
+   but sometimes threading problems crop up that way). The only option is a
+   string containing the command to <strong>execute</strong>.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   string command -- command to <strong>execute</strong>
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo76"><a name="Misc2fexecuteInteractive">
+Misc/executeInteractive</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>executeInteractive</strong>(widget, command)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This command executes a program or command on the system. But it allows
+   you to get any text that the program outputs. Futhermore, it won't freeze
+   up your widget while the command executes.
+</p>
+
+<p>   To use it, call <strong>executeInteractive</strong> with the reference to your widget and
+   a list of command options. The array is simply a list that contains the
+   command as the first entry, and each option as a seperate list entry.
+   Output from the command is returned via the commandOutput callback.
+</p>
+
+<p>   The command returns the process number of the command. This is useful if
+   you want to run more than one program at a time. The number will allow
+   you to figure out which program is outputting in the commandOutput
+   callback.
+</p>
+
+<p>   Example: Run the command "ls -la *.zip"
+</p>
+
+<p>   myCommand = ["ls", "-la", "*.zip"]
+   karamba.<strong>executeInteractive</strong>(widget, myCommand)
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   string command -- command to <a href="#robo75">execute</a>
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo77"><a name="Misc2fgetIp">
+Misc/getIp</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   string <strong>getIp</strong>(widget, interface_name)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   get current IP address of the interface_name interface.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   string interface_name -- name of the interface to get ip
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   ip address
+</p>
+</span>
+<hr />
+
+<h2><a name="robo78"><a name="Misc2fgetNumberOfDesktop">
+Misc/getNumberOfDesktop</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>getNumberOfDesktop</strong>(widget)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Returns number fo desktops
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   number of desktops
+</p>
+</span>
+<hr />
+
+<h2><a name="robo79"><a name="Misc2fgetThemePath">
+Misc/getThemePath</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   string <strong>getThemePath</strong>(widget)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Returns a string containing the directory where your theme was loaded
+   from.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   path to theme
+</p>
+</span>
+<hr />
+
+<h2><a name="robo80"><a name="Misc2fhide">
+Misc/hide</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   string <strong>hide</strong>(widget)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   <strong>hide</strong> theme
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo81"><a name="Misc2fopenTheme">
+Misc/openTheme</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>openTheme</strong>(theme)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Opens new theme.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   string theme -- path to new theme
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo82"><a name="Misc2fshow">
+Misc/show</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   string <strong>show</strong>(widget)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   <strong>show</strong> theme
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo83"><a name="Misc2ftoggleShowDesktop">
+Misc/toggleShowDesktop</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>toggleShowDesktop</strong>(widget)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This shows/hides the current desktop just like the Show Desktop button on
+   kicker. Basically, it minimizes all the windows on the current desktop.
+   Call it once to <a href="#robo82">show</a> the desktop and again to <a href="#robo80">hide</a> it.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo84"><a name="Misc2ftranslateAll">
+Misc/translateAll</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>translateAll</strong>(widget, relative_x, relative_y)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Moves all widgets within a theme in a particular direction relative from
+   the previous spot without moving the parent theme widget.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long translate_x -- move horizontally
+</li>
+<li>   long translate_y -- move vertically
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo66"><a name="Menu2faddMenuItem">
+Menu/addMenuItem</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>addMenuItem</strong>(widget, menu, text, icon)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This adds an entry to the given menu with label text and with given icon.
+   icon can be just an application name in which case the user's current
+   icon set is used, or can be a path to a 16x16 png file.
+</p>
+
+<p>   The function returns the id of the menu item, which identifies that popup
+   menu item uniquely among popupmenu items application-wide or returns 0
+   if the given menu doesn't exist.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long menu -- pointer to menu
+</li>
+<li>   string text -- text for menu item
+</li>
+<li>   string icon -- icon
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   menu item id
+</p>
+</span>
+<hr />
+
+<h2><a name="robo67"><a name="Menu2faddMenuSeparator">
+Menu/addMenuSeparator</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>addMenuSeparator</strong>(widget, menu)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This adds an menu separator to the given menu.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long menu -- pointer to menu
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   menu item id
+</p>
+</span>
+<hr />
+
+<h2><a name="robo68"><a name="Menu2fcreateMenu">
+Menu/createMenu</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>createMenu</strong>(widget)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This creates an empty popup menu and returns a pointer to the menu.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   pointer to menu
+</p>
+</span>
+<hr />
+
+<h2><a name="robo69"><a name="Menu2fdeleteMenu">
+Menu/deleteMenu</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>deleteMenu</strong>(widget, menu)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This deletes the referenced menu if that menu exists.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long menu -- pointer to menu
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if menu existed and was deleted, returns 0 otherwise.
+</p>
+</span>
+<hr />
+
+<h2><a name="robo70"><a name="Menu2fpopupMenu">
+Menu/popupMenu</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>popupMenu</strong>(widget, menu, x, y)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This pops up the given menu at the given co-ordinates. The co-ordinates
+   are relative to the widget, not the screen. You can use negative
+   co-ordinates to make a menu appear to the right of or above your theme.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long menu -- pointer to menu
+</li>
+<li>   long x -- x coordinate
+</li>
+<li>   long y -- y coordinate
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if the menu existed and was popped up, returns 0 otherwise.
+</p>
+</span>
+<hr />
+
+<h2><a name="robo71"><a name="Menu2fremoveMenuItem">
+Menu/removeMenuItem</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>removeMenuItem</strong>(widget, menu, id)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This removes the item with given id from given menu if that menu exists.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long menu -- pointer to menu
+</li>
+<li>   long id -- menu item id
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if the menu item existed and was removed or returns zero otherwise.
+</p>
+</span>
+<hr />
+
+<h2><a name="robo41"><a name="Image2faddImageTooltip">
+Image/addImageTooltip</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>addImageTooltip</strong>(widget, image, text)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This creats a tooltip for image with tooltip_text.
+</p>
+
+<p>   Note:
+</p>
+<ul><li>   If you move the image, the tooltip does not move! It stays! Do not
+     create a tooltip if the image is off-screen because you will not be
+     able to ever see it.
+</li>
+</ul>
+<p></p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long image -- pointer to image
+</li>
+<li>   string text -- tooltip text
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo42"><a name="Image2fchangeImageChannelIntensity">
+Image/changeImageChannelIntensity</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>changeImageChannelIntensity</strong>(widget, image, ratio, channel, millisec)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Changes the "intensity" of the image color channel, which is similar to
+   it's brightness.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long image -- pointer to image
+</li>
+<li>   float ratio -- -1.0 to 1.0 (dark to bright)
+</li>
+<li>   string channel -- color channel (red|green|blue)
+</li>
+<li>   long millisec -- milliseconds before the image is restored
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo43"><a name="Image2fchangeImageIntensity">
+Image/changeImageIntensity</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>changeImageIntensity</strong>(widget, image, ratio, millisec)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Changes the "intensity" of the image, which is similar to it's
+   brightness. ratio is a floating point number from -1.0 to 1.0 that
+   determines how much to brighten or darken the image. Millisec specifies
+   how long in milliseconds before the image is restored to it's original
+   form. This is useful for "mouse over" type animations. Using 0 for
+   millisec disables this feature and leaves the image permanently
+   affected.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long image -- pointer to image
+</li>
+<li>   float ratio -- -1.0 to 1.0 (dark to bright)
+</li>
+<li>   long millisec -- milliseconds before the image is restored
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo44"><a name="Image2fchangeImageToGray">
+Image/changeImageToGray</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>changeImageToGray</strong>(widget, image, millisec)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Turns the given image into a grayscale image. Millisec specifies how
+   long in milliseconds before the image is restored to it's original form.
+   This is useful for "mouse over" type animations. Using 0 for millisec
+   disables this feature and leaves the image permanently affected.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long image -- pointer to image
+</li>
+<li>   long millisec -- milliseconds before the image is restored
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo45"><a name="Image2fcreateBackgroundImage">
+Image/createBackgroundImage</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>createBackgroundImage</strong>(widget, x, y, w, h, image)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This creates an background image on your widget at x, y. The filename
+   should be given as the path parameter. In theory the image could be
+   local or could be a url. It works just like adding an image in your
+   theme file. You will need to save the return value to be able to call
+   other functions on your image, such as <a href="#robo57">moveImage</a>()
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long x -- x coordinate
+</li>
+<li>   long y -- y coordinate
+</li>
+<li>   string image -- image for the imagelabel
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   Pointer to new image meter
+</p>
+</span>
+<hr />
+
+<h2><a name="robo46"><a name="Image2fcreateImage">
+Image/createImage</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>createImage</strong>(widget, x, y, image)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This creates an image on your widget at x, y. The filename should be
+   given as the path parameter. In theory the image could be local or could
+   be a url. It works just like adding an image in your theme file. You
+   will need to save the return value to be able to call other functions on
+   your image, such as <a href="#robo57">moveImage</a>()
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long x -- x coordinate
+</li>
+<li>   long y -- y coordinate
+</li>
+<li>   string image -- image for the imagelabel
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   Pointer to new image meter
+</p>
+</span>
+<hr />
+
+<h2><a name="robo47"><a name="Image2fcreateTaskIcon">
+Image/createTaskIcon</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>createTaskIcon</strong>(widget, x, y, ctask)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This creates a task image at x,y.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long x -- x coordinate
+</li>
+<li>   long y -- y coordinate
+</li>
+<li>   long task -- task
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   Pointer to new image meter
+</p>
+</span>
+<hr />
+
+<h2><a name="robo48"><a name="Image2fdeleteImage">
+Image/deleteImage</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>deleteImage</strong>(widget, image)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This removes image from memory. Please do not call functions on "image"
+   after calling <strong>deleteImage</strong>, as it does not exist anymore and that could
+   cause crashes in some cases.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long widget -- image
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo49"><a name="Image2fgetImageHeight">
+Image/getImageHeight</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <a href="#robo53">getImageSize</a>(widget, image)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This returns the height of an image. This is useful if you have rotated
+   an image and its size changed, so you do not know how big it is anymore.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long image -- pointer to image
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   height
+</p>
+</span>
+<hr />
+
+<h2><a name="robo50"><a name="Image2fgetImagePath">
+Image/getImagePath</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   string <strong>getImagePath</strong>(widget, image)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Returns current image path.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long image -- pointer to image
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   path
+</p>
+</span>
+<hr />
+
+<h2><a name="robo51"><a name="Image2fgetImagePos">
+Image/getImagePos</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   tuple <strong>getImagePos</strong>(widget, image)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Given a reference to a image object, this will return a tuple
+   containing the x and y coordinate of a image object.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long image -- pointer to image
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   pos
+</p>
+</span>
+<hr />
+
+<h2><a name="robo52"><a name="Image2fgetImageSensor">
+Image/getImageSensor</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   string <strong>getImageSensor</strong>(widget, image)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Get current sensor string
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long image -- pointer to image
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   sensor string
+</p>
+</span>
+<hr />
+
+<h2><a name="robo53"><a name="Image2fgetImageSize">
+Image/getImageSize</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   tuple <strong>getImageSize</strong>(widget, image)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Given a reference to a image object, this will return a tuple
+   containing the height and width of a image object.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long image -- pointer to image
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   size
+</p>
+</span>
+<hr />
+
+<h2><a name="robo54"><a name="Image2fgetImageWidth">
+Image/getImageWidth</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <a href="#robo53">getImageSize</a>(widget, image)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This returns the width of an image. This is useful if you have rotated
+   an image and its size changed, so you do not know how big it is anymore. // ARGUMENTS
+   * long widget -- karamba
+   * long image -- pointer to image
+</p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   width
+</p>
+</span>
+<hr />
+
+<h2><a name="robo55"><a name="Image2fgetThemeImage">
+Image/getThemeImage</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>getThemeImage</strong>(widget, name)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   You can reference an image in your python code that was created in the
+   .theme file. Basically, you just add a NAME= value to the IMAGE line in
+   the .theme file. Then if you want to use that object, instead of calling
+   <a href="#robo46">createImage</a>, you can call this function.
+</p>
+
+<p>   The name you pass to the function is the same one that you gave it for
+   the NAME= parameter in the .theme file.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   string name -- name of the image to get
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   Pointer to image
+</p>
+</span>
+<hr />
+
+<h2><a name="robo56"><a name="Image2fhideImage">
+Image/hideImage</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>hideImage</strong>(widget, image)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This hides an image. In other words, during subsequent calls to
+   widgetUpdate(), this image will not be drawn.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long image -- pointer to image
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo57"><a name="Image2fmoveImage">
+Image/moveImage</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>moveImage</strong>(widget, image, x, y)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This moves an image to a new x, y relative to your widget. In other
+   words, (0,0) is the top corner of your widget, not the screen. The
+   imageToMove parameter is a reference to the image to move that you saved
+   as the return value from <a href="#robo46">createImage</a>()
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long image -- pointer to image
+</li>
+<li>   long x -- x coordinate
+</li>
+<li>   long y -- y coordinate
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo58"><a name="Image2fremoveImageEffects">
+Image/removeImageEffects</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>removeImageEffects</strong>(widget, image)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   If you have called image effect commands on your image (ex:
+   <a href="#robo43">changeImageIntensity</a>), you can call this to restore your image to it's
+   original form.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long image -- pointer to image
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo59"><a name="Image2fremoveImageTransformations">
+Image/removeImageTransformations</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>removeImageTransformations</strong>(widget, image)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   If you have rotated or resized your image, you can call this to restore
+   your image to it's original form.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long image -- pointer to image
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo60"><a name="Image2fresizeImage">
+Image/resizeImage</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>resizeImage</strong>(widget, image, w, h)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This resizes your image to width, height. The imageToResize parameter is
+   a reference to an image that you saved as the return value from
+   <a href="#robo46">createImage</a>()
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long image -- pointer to image
+</li>
+<li>   long w -- width
+</li>
+<li>   long h -- height
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo61"><a name="Image2fresizeImageSmooth">
+Image/resizeImageSmooth</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>resizeImageSmooth</strong>(widget, image, w, h)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>    DEPRECATED: <a href="#robo60">resizeImage</a> now allows the user to pick whether to use fast
+    or smooth resizing from the SuperKaramba menu - This resizes your image
+    to width, height. The imageToResize parameter is a reference to an
+    image that you saved as the return value from <a href="#robo46">createImage</a>()
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long image -- pointer to image
+</li>
+<li>   long w -- width
+</li>
+<li>   long h -- height
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo62"><a name="Image2frotateImage">
+Image/rotateImage</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>rotateImage</strong>(widget, image, deg)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This rotates your image to by the specified amount of degrees. The
+   imageToRotate parameter is a reference to an image that you saved as the
+   return value from <a href="#robo46">createImage</a>()
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long image -- pointer to image
+</li>
+<li>   long deg -- degrees to rotate
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo63"><a name="Image2fsetImagePath">
+Image/setImagePath</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>setImagePath</strong>(widget, image, path)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This will change image of a image widget.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long image -- pointer to image
+</li>
+<li>   long path -- new path
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo64"><a name="Image2fsetImageSensor">
+Image/setImageSensor</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>setImageSensor</strong>(widget, image, sensor)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Get current sensor string
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long image -- pointer to image
+</li>
+<li>   string sensor -- new sensor as in theme files
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo65"><a name="Image2fshowImage">
+Image/showImage</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>showImage</strong>(widget, image)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This shows a previously hidden image. It does not actually refresh the
+   image on screen. That is what <a href="#robo141">redrawWidget</a>() does.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long image -- pointer to image
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo24"><a name="Graph2fcreateGraph">
+Graph/createGraph</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>createGraph</strong>(widget, x, y, w, h, points)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This creates a graph at x,y with width and height w,h.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long x -- x coordinate
+</li>
+<li>   long y -- y coordinate
+</li>
+<li>   long w -- width
+</li>
+<li>   long h -- height
+</li>
+<li>   long points -- Number of points in graph
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   Pointer to new graph meter
+</p>
+</span>
+<hr />
+
+<h2><a name="robo25"><a name="Graph2fdeleteGraph">
+Graph/deleteGraph</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>deleteGraph</strong>(widget, graph)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This deletes graph.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long widget -- graph
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo26"><a name="Graph2fgetGraphColor">
+Graph/getGraphColor</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   tuple <strong>getGraphColor</strong>(widget, graph)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Get current graph color
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long graph -- pointer to graph
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   (red, green, blue)
+</p>
+</span>
+<hr />
+
+<h2><a name="robo27"><a name="Graph2fgetGraphMinMax">
+Graph/getGraphMinMax</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   tuple <strong>getGraphMinMax</strong>(widget, graph)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Returns current graph value.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long graph -- pointer to graph
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   min &amp; max
+</p>
+</span>
+<hr />
+
+<h2><a name="robo28"><a name="Graph2fgetGraphPos">
+Graph/getGraphPos</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   tuple <strong>getGraphPos</strong>(widget, graph)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Given a reference to a graph object, this will return a tuple
+   containing the x and y coordinate of a graph object.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long graph -- pointer to graph
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   pos
+</p>
+</span>
+<hr />
+
+<h2><a name="robo29"><a name="Graph2fgetGraphSensor">
+Graph/getGraphSensor</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   string <strong>getGraphSensor</strong>(widget, graph)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Get current sensor string
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long graph -- pointer to graph
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   sensor string
+</p>
+</span>
+<hr />
+
+<h2><a name="robo30"><a name="Graph2fgetGraphSize">
+Graph/getGraphSize</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   tuple <strong>getGraphSize</strong>(widget, graph)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Given a reference to a graph object, this will return a tuple
+   containing the height and width of a graph object.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long graph -- pointer to graph
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   size
+</p>
+</span>
+<hr />
+
+<h2><a name="robo31"><a name="Graph2fgetGraphValue">
+Graph/getGraphValue</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>getGraphValue</strong>(widget, graph)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Returns current graph value.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long graph -- pointer to graph
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   value
+</p>
+</span>
+<hr />
+
+<h2><a name="robo32"><a name="Graph2fgetThemeGraph">
+Graph/getThemeGraph</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>getThemeGraph</strong>(widget, name)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   You can reference graph in your python code that was created in the
+   theme file. Basically, you just add a NAME= value to the GRAPH line in
+   the .theme file. Then if you want to use that object, instead of calling
+   <a href="#robo24">createGraph</a>, you can call this function.
+</p>
+
+<p>   The name you pass to the function is the same one that you gave it for
+   the NAME= parameter in the .theme file.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   string name -- name of the graph to get
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   Pointer to graph
+</p>
+</span>
+<hr />
+
+<h2><a name="robo33"><a name="Graph2fhideGraph">
+Graph/hideGraph</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>hideGraph</strong>(widget, graph)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This hides an graph. In other words, during subsequent calls to
+   widgetUpdate(), this graph will not be drawn.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long graph -- pointer to graph
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo34"><a name="Graph2fmoveGraph">
+Graph/moveGraph</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>moveGraph</strong>(widget, graph, x, y)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This will move graph to new x and y coordinates.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long graph -- pointer to graph
+</li>
+<li>   long x -- x coordinate
+</li>
+<li>   long y -- y coordinate
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo35"><a name="Graph2fresizeGraph">
+Graph/resizeGraph</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>resizeGraph</strong>(widget, graph, w, h)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This will resize graph to new height and width.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long graph -- pointer to graph
+</li>
+<li>   long w -- new width
+</li>
+<li>   long h -- new height
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo36"><a name="Graph2fsetGraphColor">
+Graph/setGraphColor</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   tuple <strong>setGraphColor</strong>(widget, graph, red, green, blue)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Set current graph color
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long graph -- pointer to graph
+</li>
+<li>   long red -- red component of color
+</li>
+<li>   long green -- green component of color
+</li>
+<li>   long blue -- blue component of color
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo37"><a name="Graph2fsetGraphMinMax">
+Graph/setGraphMinMax</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>setGraphMinMax</strong>(widget, graph, min, max)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Returns current graph value.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long graph -- pointer to graph
+</li>
+<li>   long min -- min value
+</li>
+<li>   long max -- max value
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo38"><a name="Graph2fsetGraphSensor">
+Graph/setGraphSensor</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>setGraphSensor</strong>(widget, graph, sensor)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Get current sensor string
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long graph -- pointer to graph
+</li>
+<li>   string sensor -- new sensor as in theme files
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo39"><a name="Graph2fsetGraphValue">
+Graph/setGraphValue</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>setGraphValue</strong>(widget, graph, value)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Sets current graph value.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long graph -- pointer to graph
+</li>
+<li>   long value -- new value
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo40"><a name="Graph2fshowGraph">
+Graph/showGraph</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>showGraph</strong>(widget, graph)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This shows an graph. In other words, during subsequent calls to
+   widgetUpdate(), this graph will be drawn.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long graph -- pointer to graph
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo19"><a name="Config2faddMenuConfigOption">
+Config/addMenuConfigOption</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>addMenuConfigOption</strong>(widget, key, name)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   SuperKaramba supports a simplistic configuration pop-up menu. This menu
+   appears when you right-click on a widget and choose Configure Theme.
+   Basically, it allows you to have check-able entrys in the menu to allow
+   the user to enable or disable features in your theme.
+</p>
+
+<p>   Before you use any configuration menu stuff, you NEED to add a new
+   callback to your script:
+</p>
+
+<p>   def menuOptionChanged(widget, key, value):
+</p>
+
+<p>   This will get called whenever a config menu option is changed. Now you
+   can add items to the config menu:
+</p>
+
+<p>   <strong>addMenuConfigOption</strong>(widget, String key, String name)
+</p>
+
+<p>   Key is the name of a key value where the value will be saved
+   automatically into the widget's config file. Name is the actual text that
+   will <a href="#robo82">show</a> up in the config menu.
+</p>
+
+<p>   For example, I could allow the user to enable or disable a clock showing
+   up in my theme:
+</p>
+
+<p>   karamba.<strong>addMenuConfigOption</strong>(widget, "showclock", "Display a clock")
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   string key -- key for menu item
+</li>
+<li>   string name -- name of the graph to get
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo20"><a name="Config2freadConfigEntry">
+Config/readConfigEntry</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   string|long <strong>readConfigEntry</strong>(widget, key, value)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This function reads an entry from the config file with the given key.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   string key -- key for config item
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   config value for key
+</p>
+</span>
+<hr />
+
+<h2><a name="robo21"><a name="Config2freadMenuConfigOption">
+Config/readMenuConfigOption</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>readMenuConfigOption</strong>(widget, key)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This returns whether or not the given option is checked in the theme's
+   Configure Theme menu.
+</p>
+
+<p>   See <a href="#robo19">addMenuConfigOption</a> for a more detailed explanation.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   string key -- key for menu item
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   0 is returned if it is not checked and 1 is returned if it is.
+</p>
+</span>
+<hr />
+
+<h2><a name="robo22"><a name="Config2fsetMenuConfigOption">
+Config/setMenuConfigOption</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>setMenuConfigOption</strong>(widget, key, value)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This sets whether or not the given option is checked in the theme's
+   Configure Theme menu. Value should be 0 if key should not be checked and
+   1 if key should be checked.
+</p>
+
+<p>   See <a href="#robo19">addMenuConfigOption</a> for a more detailed explanation.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   string key -- key for menu item
+</li>
+<li>   int value -- 1 if checked
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo23"><a name="Config2fwriteConfigEntry">
+Config/writeConfigEntry</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>writeConfigEntry</strong>(widget, key, value)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   SuperKaramba automatically supports configuration files for each theme.
+   These files will be saved in /your/home/dir/.superkaramba/ and will be
+   named themenamerc where themename is the name of the theme.
+</p>
+
+<p>   This function writes an entry into the config file with the given key and
+   value.
+</p>
+
+<p>   For example, to save my favorite color, I would do
+   karamba.<strong>writeConfigEntry</strong>(widget, "FavColor", "Red")
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   string key -- key for config item
+</li>
+<li>   string value -- config value
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo0"><a name="Bar2fcreateBar">
+Bar/createBar</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>createBar</strong>(widget, x, y, w, h, image)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This creates a bar at x,y with width and height w,h.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long x -- x coordinate
+</li>
+<li>   long y -- y coordinate
+</li>
+<li>   long w -- width
+</li>
+<li>   long h -- height
+</li>
+<li>   string image -- Path to image
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   Pointer to new bar meter
+</p>
+</span>
+<hr />
+
+<h2><a name="robo1"><a name="Bar2fdeleteBar">
+Bar/deleteBar</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>deleteBar</strong>(widget, bar)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This deletes bar.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long widget -- bar
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo2"><a name="Bar2fgetBarImage">
+Bar/getBarImage</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   string <strong>getBarImage</strong>(widget, bar)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Get bar image
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long bar -- pointer to bar
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   path to bar image
+</p>
+</span>
+<hr />
+
+<h2><a name="robo3"><a name="Bar2fgetBarMinMax">
+Bar/getBarMinMax</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   tuple <strong>getBarMinMax</strong>(widget, bar)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Returns current bar value.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long bar -- pointer to bar
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   min &amp; max
+</p>
+</span>
+<hr />
+
+<h2><a name="robo4"><a name="Bar2fgetBarPos">
+Bar/getBarPos</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   tuple <strong>getBarPos</strong>(widget, bar)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Given a reference to a bar object, this will return a tuple
+   containing the x and y coordinate of a bar object.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long bar -- pointer to bar
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   pos
+</p>
+</span>
+<hr />
+
+<h2><a name="robo5"><a name="Bar2fgetBarSensor">
+Bar/getBarSensor</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   string <strong>getBarSensor</strong>(widget, bar)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Get current sensor string
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long bar -- pointer to bar
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   sensor string
+</p>
+</span>
+<hr />
+
+<h2><a name="robo6"><a name="Bar2fgetBarSize">
+Bar/getBarSize</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   tuple <strong>getBarSize</strong>(widget, bar)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Given a reference to a bar object, this will return a tuple
+   containing the height and width of a bar object.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long bar -- pointer to bar
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   size
+</p>
+</span>
+<hr />
+
+<h2><a name="robo7"><a name="Bar2fgetBarValue">
+Bar/getBarValue</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>getBarValue</strong>(widget, bar)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Returns current bar value.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long bar -- pointer to bar
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   value
+</p>
+</span>
+<hr />
+
+<h2><a name="robo8"><a name="Bar2fgetBarVertical">
+Bar/getBarVertical</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   string <strong>getBarVertical</strong>(widget, bar)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Check if bar is vertical bar
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long bar -- pointer to bar
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if vertical
+</p>
+</span>
+<hr />
+
+<h2><a name="robo9"><a name="Bar2fgetThemeBar">
+Bar/getThemeBar</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>getThemeBar</strong>(widget, name)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   You can reference bar in your python code that was created in the
+   theme file. Basically, you just add a NAME= value to the BAR line in
+   the .theme file. Then if you want to use that object, instead of calling
+   <a href="#robo0">createBar</a>, you can call this function.
+</p>
+
+<p>   The name you pass to the function is the same one that you gave it for
+   the NAME= parameter in the .theme file.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   string name -- name of the bar to get
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   Pointer to bar
+</p>
+</span>
+<hr />
+
+<h2><a name="robo10"><a name="Bar2fhideBar">
+Bar/hideBar</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>hideBar</strong>(widget, bar)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This hides an bar. In other words, during subsequent calls to
+   widgetUpdate(), this bar will not be drawn.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long bar -- pointer to bar
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo11"><a name="Bar2fmoveBar">
+Bar/moveBar</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>moveBar</strong>(widget, bar, x, y)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This will move bar to new x and y coordinates.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long bar -- pointer to bar
+</li>
+<li>   long x -- x coordinate
+</li>
+<li>   long y -- y coordinate
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo12"><a name="Bar2fresizeBar">
+Bar/resizeBar</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>resizeBar</strong>(widget, bar, w, h)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This will resize bar to new height and width.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long bar -- pointer to bar
+</li>
+<li>   long w -- new width
+</li>
+<li>   long h -- new height
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo13"><a name="Bar2fsetBarImage">
+Bar/setBarImage</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>setBarImage</strong>(widget, bar, image)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Get bar image
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long bar -- pointer to bar
+</li>
+<li>   string image -- new image
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo14"><a name="Bar2fsetBarMinMax">
+Bar/setBarMinMax</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>setBarMinMax</strong>(widget, bar, min, max)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Returns current bar value.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long bar -- pointer to bar
+</li>
+<li>   long min -- min value
+</li>
+<li>   long max -- max value
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo15"><a name="Bar2fsetBarSensor">
+Bar/setBarSensor</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>setBarSensor</strong>(widget, bar, sensor)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Get current sensor string
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long bar -- pointer to bar
+</li>
+<li>   string sensor -- new sensor as in theme files
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo16"><a name="Bar2fsetBarValue">
+Bar/setBarValue</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>setBarValue</strong>(widget, bar, value)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Sets current bar value.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long bar -- pointer to bar
+</li>
+<li>   long value -- new value
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo17"><a name="Bar2fsetBarVertical">
+Bar/setBarVertical</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>setBarVertical</strong>(widget, bar)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   Set bar vertical
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long bar -- pointer to bar
+</li>
+<li>   long vertical -- 1 if vertical
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+<hr />
+
+<h2><a name="robo18"><a name="Bar2fshowBar">
+Bar/showBar</a></h2>
+
+<p>[<a href="#robo_top_of_doc">top</a>]</p>
+<p><strong>SYNOPSIS</strong></p>
+<span class="SYNOPSIS"><p>   long <strong>showBar</strong>(widget, bar)
+</p>
+</span><p><strong>DESCRIPTION</strong></p>
+<span class="DESCRIPTION"><p>   This shows an bar. In other words, during subsequent calls to
+   widgetUpdate(), this bar will be drawn.
+</p>
+</span><p><strong>ARGUMENTS</strong></p>
+<span class="ARGUMENTS"><ul><li>   long widget -- karamba
+</li>
+<li>   long bar -- pointer to bar
+</li>
+</ul>
+<p></p>
+</span><p><strong>RETURN VALUE</strong></p>
+<span class="RETURN_VALUE"><p>   1 if successful
+</p>
+</span>
+</body>
+</html>

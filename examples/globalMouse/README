@@ -1,0 +1,29 @@
+
+Karamba Eyes 0.6 by Wilfried.Huss@gmx.at
+----------------------------------------
+
+Karamba Eyes is a implementation of the classic xeyes for superkaramba.
+
+
+INSTALLATION:
+	Karamba Eyes needs a small Python extension module named xcursor
+	which is implemented in the file extension/xcursor.c.
+
+	To build it go to the extension subdirectory and type
+
+		python setup.py build
+	
+	(The Python develop package needs to be installed)
+
+	This creates the shared library xcursor.so, probably in a subdirectory
+	named build. This file needs to be copied in the same directory as the
+	eyes.theme and eyes.py file.
+
+	A precompiled xcursor.so file is included (Compiled on Mandrake 9.1).
+
+CHANGES:
+	* Moving the theme now works as it should.
+	* Widget Mask added
+
+TODO:
+	Add Theme Support
