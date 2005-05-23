@@ -55,7 +55,7 @@ ThemeListWindow* KarambaIface::getThemeWnd()
   while ( (w=it.current()) != 0 ) // for each widget...
   {
     ++it;
-    if (QString(w->name()) == "ThemeListWindow")
+    if (QString(w->name()) == "ThemeListWindowLayout")
     {
       result = (ThemeListWindow*) w;
       break;
