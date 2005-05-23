@@ -31,7 +31,7 @@ AC_DEFUN(AC_CHECK_XMMS,
   ])
   AC_MSG_RESULT($ac_cv_have_xmms)
   if test "$ac_cv_have_xmms" = "yes"; then
-    XMMS_LIBS="`xmms-config --libs`"
+    XMMS_LDADD="`xmms-config --libs`"
     XMMS_INCLUDES="`xmms-config --cflags`"
     AC_DEFINE(HAVE_XMMS, 1, [Define if you have xmms libraries and header files.])
   fi
@@ -39,7 +39,7 @@ AC_DEFUN(AC_CHECK_XMMS,
 
 KDE_CHECK_PYTHON
 AC_CHECK_XMMS
-AC_SUBST(XMMS_LIBS)
+AC_SUBST(XMMS_LDADD)
 AC_SUBST(XMMS_INCLUDES)
 
 AC_CHECK_LIB(kvm, main, [LIBKVM="-lkvm"])
