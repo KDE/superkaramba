@@ -25,10 +25,28 @@
 #include <qtextbrowser.h>
 #include <qdir.h>
 
+WelcomeForm::WelcomeForm(QWidget* parent, const char* name,
+                         bool modal, WFlags fl)
+  : WelcomeFormLayout(parent, name, modal, fl)
+{
+  //Try to get new themes list without blocking execution
+  //    KIO::Scheduler::checkSlaveOnHold(true);
+
+  KIO::Job * job = KIO::file_copy("http://www.superkaramba.com/listing.php",
+                                  QDir::home().absPath() +
+                                  "/.superkaramba/newestThemes.html",
+                                  -1, true, false, false);
+  job->setWindow (this);
+
+  connect(job, SIGNAL(result(KIO::Job *)),
+          this, SLOT( downloadResult(KIO::Job *)));
+}
+
 void WelcomeForm::downloadResult(KIO::Job*)
 {
   //do something eventually!
-  textLabel1->setSource("file://" + QDir::home().absPath() + "/.superkaramba/newestThemes.html");
+  textLabel1->setSource("file://" + QDir::home().absPath() +
+                        "/.superkaramba/newestThemes.html");
   textLabel1->reload();
   //  disp->show();
 }
@@ -36,7 +54,27 @@ void WelcomeForm::downloadResult(KIO::Job*)
 void WelcomeForm::linkClicked ( const QString & link )
 {
   KRun::runURL( KURL( link ), "text/html" );
-  textLabel1->setSource("file://" + QDir::home().absPath() + "/.superkaramba/newestThemes.html");
-
+  textLabel1->setSource("file://" + QDir::home().absPath() +
+                        "/.superkaramba/newestThemes.html");
 }
 
+void WelcomeForm::exitButton_clicked()
+{
+  close();
+}
+
+void WelcomeForm::helpButton_clicked()
+{
+  KRun::runURL(KURL( "http://netdragon.sourceforge.net/index.php?page=Help" ),
+               "text/html" );
+}
+
+void WelcomeForm::downloadButton_clicked()
+{
+  KRun::runURL(KURL( "http://www.superkaramba.com/" ), "text/html" );
+}
+
+void WelcomeForm::openButton_clicked()
+{
+  accept();
+}

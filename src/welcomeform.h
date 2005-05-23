@@ -32,12 +32,15 @@ class WelcomeForm : public WelcomeFormLayout
 
   public:
     WelcomeForm(QWidget* parent = 0, const char* name = 0,
-                bool modal = FALSE, WFlags fl = 0)
-      : WelcomeFormLayout(parent, name, modal, fl) {};
+                bool modal = FALSE, WFlags fl = 0);
 
   public slots:
-    void downloadResult( KIO::Job * job ) ;
-    void linkClicked ( const QString & link );
+    virtual void exitButton_clicked();
+    virtual void helpButton_clicked();
+    virtual void downloadButton_clicked();
+    virtual void openButton_clicked();
+    void downloadResult(KIO::Job* job);
+    void linkClicked(const QString& link);
 };
 
 #endif // WELCOMEFORM_H

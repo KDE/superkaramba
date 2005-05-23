@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>WelcomeFormLayout</class>
 <widget class="QDialog">
     <property name="name">
@@ -166,29 +166,6 @@
             <set>WordBreak|AlignTop</set>
         </property>
     </widget>
-    <widget class="QTextBrowser">
-        <property name="name">
-            <cstring>textLabel1</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>380</x>
-                <y>180</y>
-                <width>260</width>
-                <height>300</height>
-            </rect>
-        </property>
-        <property name="paletteBackgroundColor">
-            <color>
-                <red>75</red>
-                <green>75</green>
-                <blue>75</blue>
-            </color>
-        </property>
-        <property name="text">
-            <string>textLabel1</string>
-        </property>
-    </widget>
     <widget class="QPushButton">
         <property name="name">
             <cstring>exitButton</cstring>
@@ -224,38 +201,7 @@
             <bool>false</bool>
         </property>
     </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>openLabel</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>120</x>
-                <y>190</y>
-                <width>73</width>
-                <height>20</height>
-            </rect>
-        </property>
-        <property name="paletteForegroundColor">
-            <color>
-                <red>255</red>
-                <green>255</green>
-                <blue>255</blue>
-            </color>
-        </property>
-        <property name="font">
-            <font>
-                <pointsize>12</pointsize>
-            </font>
-        </property>
-        <property name="frameShadow">
-            <enum>Plain</enum>
-        </property>
-        <property name="text">
-            <string>&lt;b&gt;&lt;u&gt;Open ...&lt;/u&gt;&lt;/b&gt;</string>
-        </property>
-    </widget>
-    <widget class="QLabel">
+    <widget class="KURLLabel">
         <property name="name">
             <cstring>downloadLabel</cstring>
         </property>
@@ -277,13 +223,14 @@
         <property name="font">
             <font>
                 <pointsize>12</pointsize>
+                <underline>1</underline>
             </font>
         </property>
         <property name="text">
             <string>&lt;u&gt;&lt;b&gt;Download ...&lt;/b&gt;&lt;/u&gt;</string>
         </property>
     </widget>
-    <widget class="QLabel">
+    <widget class="KURLLabel">
         <property name="name">
             <cstring>helpLabel</cstring>
         </property>
@@ -305,10 +252,66 @@
         <property name="font">
             <font>
                 <pointsize>12</pointsize>
+                <underline>1</underline>
             </font>
         </property>
         <property name="text">
             <string>&lt;b&gt;&lt;u&gt;Help ...&lt;/u&gt;&lt;/b&gt;</string>
+        </property>
+    </widget>
+    <widget class="KURLLabel">
+        <property name="name">
+            <cstring>openLabel</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>120</x>
+                <y>190</y>
+                <width>73</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property name="paletteForegroundColor">
+            <color>
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+            </color>
+        </property>
+        <property name="font">
+            <font>
+                <pointsize>12</pointsize>
+                <underline>1</underline>
+            </font>
+        </property>
+        <property name="frameShadow">
+            <enum>Plain</enum>
+        </property>
+        <property name="text">
+            <string>&lt;b&gt;&lt;u&gt;Open ...&lt;/u&gt;&lt;/b&gt;</string>
+        </property>
+    </widget>
+    <widget class="QTextBrowser">
+        <property name="name">
+            <cstring>textLabel1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>380</x>
+                <y>180</y>
+                <width>260</width>
+                <height>300</height>
+            </rect>
+        </property>
+        <property name="paletteBackgroundColor">
+            <color>
+                <red>75</red>
+                <green>75</green>
+                <blue>75</blue>
+            </color>
+        </property>
+        <property name="text">
+            <string>textLabel1</string>
         </property>
     </widget>
 </widget>
@@ -333,15 +336,37 @@
         <receiver>WelcomeFormLayout</receiver>
         <slot>exitButton_clicked()</slot>
     </connection>
+    <connection>
+        <sender>openLabel</sender>
+        <signal>leftClickedURL()</signal>
+        <receiver>WelcomeFormLayout</receiver>
+        <slot>openButton_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>helpLabel</sender>
+        <signal>leftClickedURL()</signal>
+        <receiver>WelcomeFormLayout</receiver>
+        <slot>helpButton_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>downloadLabel</sender>
+        <signal>leftClickedURL()</signal>
+        <receiver>WelcomeFormLayout</receiver>
+        <slot>downloadButton_clicked()</slot>
+    </connection>
+    <connection>
+        <sender>textLabel1</sender>
+        <signal>linkClicked(const QString&amp;)</signal>
+        <receiver>WelcomeFormLayout</receiver>
+        <slot>linkClicked()</slot>
+    </connection>
 </connections>
-<includes>
-    <include location="local" impldecl="in implementation">WelcomeFormLayout.ui.h</include>
-</includes>
 <slots>
     <slot>exitButton_clicked()</slot>
     <slot>helpButton_clicked()</slot>
     <slot>downloadButton_clicked()</slot>
     <slot>openButton_clicked()</slot>
+    <slot>linkClicked()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>
