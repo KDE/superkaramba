@@ -13,25 +13,23 @@
     </keywords>
     <version>0.35</version>
     <description></description>
-    <ignoreparts>
-      <part>KDevDoxygen</part>
-      <part>KDevPerforce</part>
-    </ignoreparts>
+    <ignoreparts/>
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
     <secondaryLanguages/>
+    <versioncontrol></versioncontrol>
   </general>
   <kdevautoproject>
     <general>
       <activetarget>src/karamba</activetarget>
-      <useconfiguration>optimized</useconfiguration>
+      <useconfiguration>debug</useconfiguration>
     </general>
     <run>
-      <mainprogram>src/superkaramba</mainprogram>
+      <mainprogram>superkaramba/src/superkaramba</mainprogram>
       <programargs></programargs>
       <terminal>false</terminal>
       <envvars/>
-      <directoryradio>executable</directoryradio>
+      <directoryradio>build</directoryradio>
       <customdirectory>/</customdirectory>
       <autocompile>true</autocompile>
     </run>
@@ -44,11 +42,12 @@
       <abortonerror>true</abortonerror>
       <numberofjobs>1</numberofjobs>
       <dontact>false</dontact>
-      <makebin/>
+      <makebin></makebin>
       <envvars>
         <envvar value="1" name="WANT_AUTOCONF_2_5" />
         <envvar value="1" name="WANT_AUTOMAKE_1_6" />
       </envvars>
+      <prio>0</prio>
     </make>
     <configurations>
       <optimized>
@@ -57,6 +56,16 @@
         <cxxcompiler>kdevgppoptions</cxxcompiler>
         <f77compiler>kdevg77options</f77compiler>
         <cxxflags>-O2 -g0</cxxflags>
+        <envvars/>
+        <configargs></configargs>
+        <topsourcedir>..</topsourcedir>
+        <cppflags></cppflags>
+        <ldflags></ldflags>
+        <ccompilerbinary></ccompilerbinary>
+        <cxxcompilerbinary></cxxcompilerbinary>
+        <f77compilerbinary></f77compilerbinary>
+        <cflags></cflags>
+        <f77flags></f77flags>
       </optimized>
       <debug>
         <configargs>--enable-debug=full</configargs>
@@ -65,14 +74,15 @@
         <cxxcompiler>kdevgppoptions</cxxcompiler>
         <f77compiler>kdevg77options</f77compiler>
         <cxxflags>-O0 -g3</cxxflags>
-        <topsourcedir/>
-        <cppflags/>
-        <ldflags/>
-        <ccompilerbinary/>
-        <cxxcompilerbinary/>
-        <f77compilerbinary/>
+        <topsourcedir>..</topsourcedir>
+        <cppflags></cppflags>
+        <ldflags></ldflags>
+        <ccompilerbinary></ccompilerbinary>
+        <cxxcompilerbinary></cxxcompilerbinary>
+        <f77compilerbinary></f77compilerbinary>
         <cflags>-O0 -g3</cflags>
-        <f77flags/>
+        <f77flags></f77flags>
+        <envvars/>
       </debug>
       <default>
         <configargs>--prefix=/usr</configargs>
@@ -86,9 +96,10 @@
         <cflags></cflags>
         <cxxflags>-march=athlon-xp -mcpu=athlon-xp -mmmx -m3dnow -msse</cxxflags>
         <f77flags></f77flags>
-        <topsourcedir></topsourcedir>
+        <topsourcedir>..</topsourcedir>
         <cppflags></cppflags>
         <ldflags></ldflags>
+        <envvars/>
       </default>
     </configurations>
   </kdevautoproject>
@@ -128,8 +139,8 @@
   <kdevdebugger>
     <general>
       <dbgshell>libtool</dbgshell>
-      <programargs/>
-      <gdbpath/>
+      <programargs></programargs>
+      <gdbpath></gdbpath>
       <breakonloadinglibs>false</breakonloadinglibs>
       <separatetty>false</separatetty>
       <floatingtoolbar>false</floatingtoolbar>
@@ -140,6 +151,7 @@
     <display>
       <staticmembers>false</staticmembers>
       <demanglenames>true</demanglenames>
+      <outputradix>10</outputradix>
     </display>
   </kdevdebugger>
   <cppsupportpart>
@@ -216,6 +228,14 @@
       <headerCompletionDelay>250</headerCompletionDelay>
     </codecompletion>
     <references/>
+    <creategettersetter>
+      <prefixGet></prefixGet>
+      <prefixSet>set</prefixSet>
+      <prefixVariable>m_,_</prefixVariable>
+      <parameterName>theValue</parameterName>
+      <inlineGet>true</inlineGet>
+      <inlineSet>true</inlineSet>
+    </creategettersetter>
   </kdevcppsupport>
   <kdevcvsservice>
     <recursivewhenupdate>true</recursivewhenupdate>
@@ -224,4 +244,11 @@
     <recursivewhencommitremove>true</recursivewhencommitremove>
     <revertoptions>-C</revertoptions>
   </kdevcvsservice>
+  <kdevdocumentation>
+    <projectdoc>
+      <docsystem></docsystem>
+      <docurl></docurl>
+      <usermanualurl></usermanualurl>
+    </projectdoc>
+  </kdevdocumentation>
 </kdevelop>
