@@ -1,8 +1,8 @@
 <!DOCTYPE UI><UI version="3.2" stdsetdef="1">
-<class>WelcomeForm</class>
+<class>WelcomeFormLayout</class>
 <widget class="QDialog">
     <property name="name">
-        <cstring>WelcomeForm</cstring>
+        <cstring>WelcomeFormLayout</cstring>
     </property>
     <property name="geometry">
         <rect>
@@ -166,7 +166,7 @@
             <set>WordBreak|AlignTop</set>
         </property>
     </widget>
-    <widget class="QLabel">
+    <widget class="QTextBrowser">
         <property name="name">
             <cstring>textLabel1</cstring>
         </property>
@@ -330,12 +330,12 @@
     <connection>
         <sender>exitButton</sender>
         <signal>clicked()</signal>
-        <receiver>WelcomeForm</receiver>
+        <receiver>WelcomeFormLayout</receiver>
         <slot>exitButton_clicked()</slot>
     </connection>
 </connections>
 <includes>
-    <include location="local" impldecl="in implementation">welcomeform.ui.h</include>
+    <include location="local" impldecl="in implementation">WelcomeFormLayout.ui.h</include>
 </includes>
 <slots>
     <slot>exitButton_clicked()</slot>

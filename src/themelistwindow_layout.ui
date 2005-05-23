@@ -1,8 +1,8 @@
 <!DOCTYPE UI><UI version="3.2" stdsetdef="1">
-<class>ThemeListWindow</class>
+<class>ThemeListWindowLayout</class>
 <widget class="QDialog">
     <property name="name">
-        <cstring>ThemeListWindow</cstring>
+        <cstring>ThemeListWindowLayout</cstring>
     </property>
     <property name="geometry">
         <rect>
@@ -109,25 +109,25 @@
     <connection>
         <sender>btnCloseTheme</sender>
         <signal>clicked()</signal>
-        <receiver>ThemeListWindow</receiver>
+        <receiver>ThemeListWindowLayout</receiver>
         <slot>closeTheme()</slot>
     </connection>
     <connection>
         <sender>lbxThemes</sender>
         <signal>selected(int)</signal>
-        <receiver>ThemeListWindow</receiver>
+        <receiver>ThemeListWindowLayout</receiver>
         <slot>themeSelected()</slot>
     </connection>
     <connection>
         <sender>btnQuit</sender>
         <signal>clicked()</signal>
-        <receiver>ThemeListWindow</receiver>
+        <receiver>ThemeListWindowLayout</receiver>
         <slot>quitSuperKaramba()</slot>
     </connection>
     <connection>
         <sender>btnOpen</sender>
         <signal>clicked()</signal>
-        <receiver>ThemeListWindow</receiver>
+        <receiver>ThemeListWindowLayout</receiver>
         <slot>openTheme()</slot>
     </connection>
 </connections>
