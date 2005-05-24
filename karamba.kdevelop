@@ -11,13 +11,13 @@
       <keyword>Qt</keyword>
       <keyword>KDE</keyword>
     </keywords>
-    <version>0.35</version>
+    <version>0.36</version>
     <description></description>
     <ignoreparts/>
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
     <secondaryLanguages/>
-    <versioncontrol></versioncontrol>
+    <versioncontrol/>
   </general>
   <kdevautoproject>
     <general>
@@ -26,7 +26,7 @@
     </general>
     <run>
       <mainprogram>superkaramba/src/superkaramba</mainprogram>
-      <programargs></programargs>
+      <programargs/>
       <terminal>false</terminal>
       <envvars/>
       <directoryradio>build</directoryradio>
@@ -42,7 +42,7 @@
       <abortonerror>true</abortonerror>
       <numberofjobs>1</numberofjobs>
       <dontact>false</dontact>
-      <makebin></makebin>
+      <makebin/>
       <envvars>
         <envvar value="1" name="WANT_AUTOCONF_2_5" />
         <envvar value="1" name="WANT_AUTOMAKE_1_6" />
@@ -51,7 +51,7 @@
     </make>
     <configurations>
       <optimized>
-        <builddir>optimized</builddir>
+        <builddir>../optimized</builddir>
         <ccompiler>kdevgccoptions</ccompiler>
         <cxxcompiler>kdevgppoptions</cxxcompiler>
         <f77compiler>kdevg77options</f77compiler>
@@ -69,7 +69,7 @@
       </optimized>
       <debug>
         <configargs>--enable-debug=full</configargs>
-        <builddir>debug</builddir>
+        <builddir>../debug</builddir>
         <ccompiler>kdevgccoptions</ccompiler>
         <cxxcompiler>kdevgppoptions</cxxcompiler>
         <f77compiler>kdevg77options</f77compiler>
@@ -86,19 +86,19 @@
       </debug>
       <default>
         <configargs>--prefix=/usr</configargs>
-        <builddir></builddir>
+        <builddir/>
         <ccompiler>kdevgccoptions</ccompiler>
         <cxxcompiler>kdevgppoptions</cxxcompiler>
         <f77compiler>kdevpgf77options</f77compiler>
-        <ccompilerbinary></ccompilerbinary>
-        <cxxcompilerbinary></cxxcompilerbinary>
-        <f77compilerbinary></f77compilerbinary>
-        <cflags></cflags>
+        <ccompilerbinary/>
+        <cxxcompilerbinary/>
+        <f77compilerbinary/>
+        <cflags/>
         <cxxflags>-march=athlon-xp -mcpu=athlon-xp -mmmx -m3dnow -msse</cxxflags>
-        <f77flags></f77flags>
+        <f77flags/>
         <topsourcedir>..</topsourcedir>
-        <cppflags></cppflags>
-        <ldflags></ldflags>
+        <cppflags/>
+        <ldflags/>
         <envvars/>
       </default>
     </configurations>
@@ -246,9 +246,9 @@
   </kdevcvsservice>
   <kdevdocumentation>
     <projectdoc>
-      <docsystem></docsystem>
-      <docurl></docurl>
-      <usermanualurl></usermanualurl>
+      <docsystem/>
+      <docurl/>
+      <usermanualurl/>
     </projectdoc>
   </kdevdocumentation>
 </kdevelop>
