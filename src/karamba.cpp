@@ -23,7 +23,6 @@
 #include "karamba_python.h"
 #include "dcopinterface_stub.h"
 #include "richtextlabel.h"
-#include "xpm.h"
 #include "karamba.h"
 #include "karambaapp.h"
 #include "themelistwindow.h"
@@ -42,6 +41,8 @@
 
 #include <qdir.h>
 #include <qwidgetlist.h>
+
+#include <X11/xpm.h>
 
 // Menu IDs
 #define EDITSCRIPT 1
