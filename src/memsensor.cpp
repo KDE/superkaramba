@@ -296,3 +296,5 @@ void MemSensor::setMaxValue( SensorParams *sp )
     if( f=="%fs" || f== "%us" )
         meter->setMax( getSwapTotal() / 1024 );
 }
+
+#include "memsensor.moc"

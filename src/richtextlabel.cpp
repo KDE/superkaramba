@@ -202,3 +202,5 @@ const QColorGroup & RichTextLabel::getColorGroup() const
 {
   return colorGrp;
 }
+
+#include "richtextlabel.moc"

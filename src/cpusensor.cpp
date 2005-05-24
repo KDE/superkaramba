@@ -141,3 +141,5 @@ void CPUSensor::setMaxValue( SensorParams *sp )
     meter = sp->getMeter();
     meter->setMax( 100 );
 }
+
+#include "cpusensor.moc"

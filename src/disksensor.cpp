@@ -157,3 +157,5 @@ void DiskSensor::setMaxValue( SensorParams *sp )
 }
 
 
+
+#include "disksensor.moc"

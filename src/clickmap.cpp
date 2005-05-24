@@ -92,3 +92,5 @@ void ClickMap::setValue( int v )
         displays.clear();
     }
 }
+
+#include "clickmap.moc"

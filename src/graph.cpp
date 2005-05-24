@@ -70,3 +70,5 @@ void Graph::mUpdate(QPainter *p)
     }
   }
 }
+
+#include "graph.moc"

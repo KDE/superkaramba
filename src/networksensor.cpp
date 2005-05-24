@@ -157,3 +157,5 @@ void NetworkSensor::update()
     receivedBytes = inB;
     transmittedBytes = outB;
 }
+
+#include "networksensor.moc"

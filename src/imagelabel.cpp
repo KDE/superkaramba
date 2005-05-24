@@ -627,3 +627,5 @@ void ImageLabel::attachClickArea(QString leftMouseButton,
     middleButtonAction = middleMouseButton;
     rightButtonAction = rightMouseButton;
 }
+
+#include "imagelabel.moc"

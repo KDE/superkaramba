@@ -222,3 +222,5 @@ int Systemtray::getCurrentWindowCount()
 {
   return no_of_systray_windows;
 }
+
+#include "systemtray.moc"

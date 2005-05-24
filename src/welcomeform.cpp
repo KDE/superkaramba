@@ -78,3 +78,5 @@ void WelcomeForm::openButton_clicked()
 {
   accept();
 }
+
+#include "welcomeform.moc"

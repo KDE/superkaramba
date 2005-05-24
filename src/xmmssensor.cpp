@@ -144,3 +144,5 @@ void XMMSSensor::setMaxValue( SensorParams *sp)
 }
 
 
+
+#include "xmmssensor.moc"

@@ -132,3 +132,5 @@ void RssSensor::update()
     file.close();
     KIO::NetAccess::removeTempFile( tmpFile );
 }
+
+#include "rsssensor.moc"

@@ -111,3 +111,5 @@ void SensorSensor::update()
     ksp.start( KProcess::NotifyOnExit,KProcIO::Stdout);
 }
 
+
+#include "sensorsensor.moc"

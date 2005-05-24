@@ -88,3 +88,5 @@ void ProgramSensor::update()
 
     ksp.start( KProcIO::NotifyOnExit,KProcIO::Stdout);
 }
+
+#include "programsensor.moc"

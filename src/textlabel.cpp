@@ -378,3 +378,5 @@ void TextLabel::attachClickArea(QString leftMouseButton,
     middleButtonAction = middleMouseButton;
     rightButtonAction = rightMouseButton;
 }
+
+#include "textlabel.moc"

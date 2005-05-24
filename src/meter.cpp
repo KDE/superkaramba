@@ -102,3 +102,5 @@ bool Meter::insideActiveArea(int x, int y)
 {
   return boundingBox.contains(x, y) && clickable;
 }
+
+#include "meter.moc"

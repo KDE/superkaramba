@@ -141,3 +141,5 @@ void Bar::mUpdate(QPainter *p)
     }
   }
 }
+
+#include "bar.moc"

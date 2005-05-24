@@ -60,3 +60,5 @@ void Sensor::deleteMeter( Meter *meter )
 void Sensor::setMaxValue( SensorParams* )
 {
 }
+
+#include "sensor.moc"

@@ -83,3 +83,5 @@ void ClickArea::setValue( QString v )
 
 
 
+
+#include "clickarea.moc"

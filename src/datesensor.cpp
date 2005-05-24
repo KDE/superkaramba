@@ -125,3 +125,5 @@ void DateSensor::mousePressEvent(QMouseEvent *ev)
 	}
 }
 
+
+#include "datesensor.moc"

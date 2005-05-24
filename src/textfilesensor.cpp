@@ -105,3 +105,5 @@ void TextFileSensor::update()
         ++it;
     }
 }
+
+#include "textfilesensor.moc"
