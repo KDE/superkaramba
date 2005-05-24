@@ -10,12 +10,13 @@
 
 #include "textfield.h"
 #include <qfontmetrics.h>
+#include <kdebug.h>
 
 TextField::TextField( )
 {
   setFontSize(12);
-  setColor(192, 192, 192);
-  setBGColor(0, 0, 0);
+  setColor(QColor(192, 192, 192));
+  setBGColor(QColor(0, 0, 0));
   setFont("Helvetica");
   setAlignment(Qt::AlignLeft);
   setFixedPitch(false);
@@ -30,11 +31,8 @@ TextField::TextField( const TextField& def )
 {
     setFontSize( def.getFontSize() );
 
-    int r, g, b;
-    def.getColor().rgb ( &r, &g, &b );
-    setColor( r, g, b );
-    def.getBGColor().rgb ( &r, &g, &b );
-    setBGColor( r, g, b );
+    setColor(def.getColor());
+    setBGColor(def.getBGColor());
 
     setFont( def.getFont() );
     setAlignment( def.getAlignment() );
@@ -49,11 +47,8 @@ TextField& TextField::operator=(const TextField& rhs)
 
     setFontSize( rhs.getFontSize() );
 
-    int r, g, b;
-    rhs.getColor().rgb ( &r, &g, &b );
-    setColor( r, g, b );
-    rhs.getBGColor().rgb ( &r, &g, &b );
-    setBGColor( r, g, b );
+    setColor(rhs.getColor());
+    setBGColor(rhs.getBGColor());
 
     setFont( rhs.getFont() );
     setAlignment( rhs.getAlignment() );
@@ -63,9 +58,9 @@ TextField& TextField::operator=(const TextField& rhs)
     return *this;
 }
 
-void TextField::setColor(int r, int g, int b)
+void TextField::setColor(QColor clr)
 {
-    color.setRgb(r,g,b);
+  color = clr;
 }
 
 QColor TextField::getColor() const
@@ -73,9 +68,9 @@ QColor TextField::getColor() const
     return color;
 }
 
-void TextField::setBGColor( int r, int g, int b )
+void TextField::setBGColor(QColor clr)
 {
-    bgColor.setRgb( r, g, b );
+    bgColor = clr;
 }
 
 QColor TextField::getBGColor() const

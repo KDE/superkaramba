@@ -37,7 +37,7 @@ public:
     //virtual QString getStringValue() const { return value.join("\n"); };
     QString getStringValue() const { return value.join("\n"); };
     void setFontSize( int );
-    void setBGColor( int, int, int);
+    void setBGColor(QColor clr);
     void setFont( QString );
     void setAlignment( QString );
     void setFixedPitch( bool );

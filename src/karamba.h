@@ -102,6 +102,7 @@
  */
 
 class KarambaPython;
+class LineParser;
 
 class karamba :  public QWidget
 {
@@ -116,7 +117,7 @@ public:
     QObjectList *imageList;
     QString themePath;
     QObjectList *clickList;
-    void setSensor( QString &line , Meter* meter);
+    void setSensor(const LineParser& lineParser, Meter* meter);
     QString getSensor(Meter* meter);
     QString findSensorFromMap(Sensor* sensor);
     void deleteMeterFromSensors(Meter* meter);
@@ -178,16 +179,6 @@ private:
     char tempUnit;
 
     bool parseConfig();
-    int getInt( QString, QString & );
-    int getInt( QString, QString &, bool & );
-    // get3Int reads an int triplet, e.g. COLOR:0,50,100
-    void get3Int(QString w, QString &line, int&, int&, int& );
-    void get3Int(QString w, QString &line, int&, int&, int&, bool& );
-    QString getString( QString, QString & );
-    QString getString( QString, QString &, bool& );
-    bool getBoolean( QString, QString & );
-    bool getBoolean( QString, QString &, bool& );
-
 
     void passClick( QMouseEvent* );
     void passWheelClick( QWheelEvent* );

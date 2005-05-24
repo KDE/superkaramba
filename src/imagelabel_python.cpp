@@ -32,6 +32,7 @@
 #include "imagelabel.h"
 #include "meter_python.h"
 #include "imagelabel_python.h"
+#include "lineparser.h"
 
 ImageLabel* createImageLabel(karamba *theme, long x, long y,
                              char* path, bool bg)
@@ -47,7 +48,7 @@ ImageLabel* createImageLabel(karamba *theme, long x, long y,
     //tmp->parseImages(file, fakefile, x,y, 0, 0);
   }
   tmp->setBackground(bg);
-  theme->setSensor(file, tmp);
+  theme->setSensor(LineParser(file), tmp);
   theme->meterList->append (tmp);
   theme->imageList->append (tmp);
   if(bg)

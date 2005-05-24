@@ -18,6 +18,7 @@
 #include "karambaapp.h"
 #include "meter.h"
 #include "meter_python.h"
+#include "lineparser.h"
 
 bool checkKaramba(long widget)
 {
@@ -308,14 +309,12 @@ PyObject* py_setSensor(PyObject *, PyObject *args, QString type)
 {
   long widget, meter;
   char* s;
-  QString str;
 
   if (!PyArg_ParseTuple(args, (char*)"lls", &widget, &meter, &s))
     return NULL;
   if (!checkKarambaAndMeter(widget, meter, type))
     return NULL;
-  str = s;
-  ((karamba*)widget)->setSensor(str, (Meter*)meter);
+  ((karamba*)widget)->setSensor(LineParser(s), (Meter*)meter);
   return Py_BuildValue((char*)"l", 1);
 }
 
@@ -327,7 +326,7 @@ PyObject* py_setColor(PyObject *, PyObject *args, QString type)
     return NULL;
   if (!checkKarambaAndMeter(widget, meter, type))
     return NULL;
-  ((Meter*)meter)->setColor( r, g, b );
+  ((Meter*)meter)->setColor(QColor(r, g, b));
   return Py_BuildValue((char*)"l", 1);
 }
 

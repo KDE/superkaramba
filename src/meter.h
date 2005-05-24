@@ -52,7 +52,7 @@ public:
   virtual QString getStringValue() const { return QString::null; };
   virtual void recalculateValue() {};
 
-  virtual void setColor(int r, int g, int b) { color.setRgb(r, g, b); };
+  virtual void setColor(QColor clr) { color = clr; };
   virtual QColor getColor() { return color; };
 
   virtual void show() { hidden = 0; };

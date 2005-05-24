@@ -26,6 +26,7 @@
 #include "karamba.h"
 #include "karambaapp.h"
 #include "themelistwindow.h"
+#include "lineparser.h"
 
 #include <kdebug.h>
 #include <kzip.h>
@@ -194,9 +195,9 @@ karamba::karamba(QString fn, bool reloading) :
 
   kpop->insertItem( SmallIconSet("fileopen"),i18n("&Open New Theme..."), this,
                     SLOT(startNewKaramba()), CTRL+Key_O );
-  
+
   /*kpop->insertItem(tr("&Edit"), keditpop);*/
-  
+
   kpop->insertItem(i18n("Configure &Theme"), themeConfMenu, THEMECONF);
   kpop->setItemEnabled(THEMECONF, false);
   kpop->insertItem(i18n("To Des&ktop"), toDesktopMenu);
@@ -431,8 +432,7 @@ bool karamba::parseConfig()
   QTimer *m_sysTimer = new QTimer(this);
 
   QFile file(themeFile);
-  QString line;
-  QString meter;
+  QString fileLine;
   int interval = 0;
   QTextStream *t = 0;        // use a text stream
   bool ok = false;
@@ -464,22 +464,20 @@ bool karamba::parseConfig()
     int y=0;
     int w=0;
     int h=0;
-    while( ( line = t->readLine() ) !=0 )
+    while((fileLine = t->readLine()) !=0 )
     {
-      QRegExp rx("^\\s*(\\S+)");
-      rx.search(line);
-      meter = rx.cap(1).upper();
+      LineParser lineParser(fileLine);
 
-      x = getInt("X",line)+offsetStack.top().x();
-      y = getInt("Y",line)+offsetStack.top().y();
-      w = getInt("W",line);
-      h = getInt("H",line);
+      x = lineParser.getInt("X") + offsetStack.top().x();
+      y = lineParser.getInt("Y") + offsetStack.top().y();
+      w = lineParser.getInt("W");
+      h = lineParser.getInt("H");
 
 
-      if( meter == "KARAMBA" && !foundKaramba )
+      if(lineParser.meter() == "KARAMBA" && !foundKaramba )
       {
         //qDebug("karamba found");
-        toggleLocked->setChecked( getBoolean( "LOCKED", line ) );
+        toggleLocked->setChecked(lineParser.getBoolean("LOCKED"));
         slotToggleLocked();
 
         x = ( x < 0 ) ? 0:x;
@@ -492,43 +490,40 @@ bool karamba::parseConfig()
         }
         setFixedSize(w,h);
 
-        if( getBoolean( "RIGHT", line ) )
+        if(lineParser.getBoolean("RIGHT"))
         {
           QDesktopWidget *d = QApplication::desktop();
           x = d->width() - w;
         }
-        else
-          if( getBoolean( "LEFT", line ) )
-          {
-            x = 0;
-          }
+        else if(lineParser.getBoolean("LEFT"))
+        {
+          x = 0;
+        }
 
-        if( getBoolean( "BOTTOM", line ) )
+        if(lineParser.getBoolean("BOTTOM"))
         {
           QDesktopWidget *d = QApplication::desktop();
           y = d->height() - h;
         }
-        else
-          if( getBoolean( "TOP", line ) )
-          {
-            y = 0;
-          }
+        else if(lineParser.getBoolean("TOP"))
+        {
+          y = 0;
+        }
 
         move(x,y);
         pm = QPixmap(size());
 
-        if( getBoolean("ONTOP", line ) )
+        if(lineParser.getBoolean("ONTOP"))
         {
           onTop = true;
           KWin::setState( winId(), NET::StaysOnTop );
         }
 
-        if( getBoolean("MANAGED", line ) )
+        if(lineParser.getBoolean("MANAGED"))
         {
           managed = true;
           reparent(0, Qt::WType_Dialog | WStyle_Customize | WStyle_NormalBorder
                       |  WRepaintNoErase | WDestructiveClose, pos());
-
         }
         else
         {
@@ -542,19 +537,19 @@ bool karamba::parseConfig()
           }
         }
 
-        if (getBoolean("ONALLDESKTOPS", line))
+        if (lineParser.getBoolean("ONALLDESKTOPS"))
         {
           desktop = 200; // ugly
         }
 
 
         bool dfound=false;
-        //int desktop = getInt("DESKTOP", line, dfound);
+        //int desktop = lineParser.getInt("DESKTOP", line, dfound);
         if (dfound)
         {
           info->setDesktop( dfound );
         }
-        if( getBoolean("TOPBAR", line ) )
+        if(lineParser.getBoolean("TOPBAR"))
         {
           move(x,0);
           KWin::setStrut( winId(), 0, 0, h, 0 );
@@ -564,7 +559,7 @@ bool karamba::parseConfig()
 
         }
 
-        if( getBoolean("BOTTOMBAR", line ) )
+        if(lineParser.getBoolean("BOTTOMBAR"))
         {
           int dh = QApplication::desktop()->height();
           move( x, dh - h );
@@ -572,11 +567,9 @@ bool karamba::parseConfig()
           toggleLocked->setChecked( true );
           slotToggleLocked();
           toggleLocked->setEnabled(false);
-
-
         }
 
-        if( getBoolean("RIGHTBAR", line ) )
+        if(lineParser.getBoolean("RIGHTBAR"))
         {
           int dw = QApplication::desktop()->width();
           move( dw - w, y );
@@ -584,9 +577,9 @@ bool karamba::parseConfig()
           toggleLocked->setChecked( true );
           slotToggleLocked();
           toggleLocked->setEnabled(false);
-
         }
-        if( getBoolean("LEFTBAR", line) )
+
+        if(lineParser.getBoolean("LEFTBAR"))
         {
           //int dw = QApplication::desktop()->width();
           move( 0, y );
@@ -596,34 +589,26 @@ bool karamba::parseConfig()
           toggleLocked->setEnabled(false);
         }
 
-        bool found = false;
-        QString path = getString( "MASK", line, found );
+        QString path = lineParser.getString("MASK");
 
-        if( 1 )
-        {
+        QFileInfo info(path);
+        if( info.isRelative())
+          path = themePath +"/" + path;
 
-          QFileInfo info(path);
-          if( info.isRelative())
-            path = themePath +"/" + path;
+        widgetMask = new QBitmap(path);
+        setMask(*widgetMask);
 
-          widgetMask = new QBitmap(path);
+        interval = lineParser.getInt("INTERVAL");
+        interval = (interval == 0) ? 5000 : interval;
 
-          setMask(*widgetMask);
-
-        }
-
-        interval = getInt("INTERVAL",line);
-        interval = ( interval == 0 ) ? 5000 : interval;
-
-        QString temp = getString("TEMPUNIT", line, found).upper();
-        if(found && !temp.isEmpty())
-          tempUnit = temp.ascii()[0];
+        QString temp = lineParser.getString("TEMPUNIT", "C").upper();
+        tempUnit = temp.ascii()[0];
         foundKaramba = true;
       }
 
-      if( meter == "THEME" )
+      if(lineParser.meter() == "THEME")
       {
-        QString path = getString( "PATH", line );
+        QString path = lineParser.getString("PATH");
         QFileInfo info(path);
         if( info.isRelative())
           path = themePath +"/" + path;
@@ -631,47 +616,47 @@ bool karamba::parseConfig()
         (new karamba( path, false ))->show();
       }
 
-      if( meter == "<GROUP>" )
+      if(lineParser.meter() == "<GROUP>")
       {
         int offsetX = offsetStack.top().x();
         int offsetY = offsetStack.top().y();
-        offsetStack.push( QPoint( offsetX + getInt("X",line),
-                                  offsetY + getInt("Y",line) ) );
+        offsetStack.push( QPoint( offsetX + lineParser.getInt("X"),
+                                  offsetY + lineParser.getInt("Y")));
       }
 
-      if( meter == "</GROUP>" )
+      if(lineParser.meter() == "</GROUP>")
       {
         offsetStack.pop();
       }
 
-      if( meter == "CLICKAREA" )
+      if(lineParser.meter() == "CLICKAREA")
       {
         if( !hasMouseTracking() )
           setMouseTracking(true);
         ClickArea *tmp = new ClickArea(this, x, y, w, h );
-        tmp->setOnClick( getString( "ONCLICK", line ) );
+        tmp->setOnClick(lineParser.getString("ONCLICK"));
 
-        setSensor( line, (Meter*) tmp );
+        setSensor(lineParser, (Meter*)tmp);
         clickList->append( tmp );
-        if( getBoolean( "PREVIEW", line ) )
+        if( lineParser.getBoolean("PREVIEW"))
           meterList->append( tmp );
       }
 
       // program sensor without a meter
-      if(meter == "SENSOR=PROGRAM")
+      if(lineParser.meter() == "SENSOR=PROGRAM")
       {
-        setSensor(line, 0 );
+        setSensor(lineParser, 0 );
       }
 
-      if(meter == "IMAGE")
+      if(lineParser.meter() == "IMAGE")
       {
-        QString file = getString("PATH",line);
-        QString file_roll = getString("PATHROLL",line);
-        int xon = getInt("XROLL",line);
-        int yon = getInt("YROLL",line);
-        QString tiptext = getString("TOOLTIP",line);
-        QString name = getString("NAME",line);
-        bool bg = getBoolean("BACKGROUND", line);
+        QString file = lineParser.getString("PATH");
+        QString file_roll = lineParser.getString("PATHROLL");
+        int xon = lineParser.getInt("XROLL");
+        int yon = lineParser.getInt("YROLL");
+        QString tiptext = lineParser.getString("TOOLTIP");
+        QString name = lineParser.getString("NAME");
+        bool bg = lineParser.getBoolean("BACKGROUND");
         xon = ( xon <= 0 ) ? x:xon;
         yon = ( yon <= 0 ) ? y:yon;
 
@@ -686,194 +671,130 @@ bool karamba::parseConfig()
           tmp->setTooltip(tiptext);
 
         connect(tmp, SIGNAL(pixmapLoaded()), this, SLOT(externalStep()));
-        setSensor(line, (Meter*) tmp );
+        setSensor(lineParser, (Meter*) tmp );
         meterList->append (tmp );
         imageList->append (tmp );
       }
 
-      if( meter == "DEFAULTFONT" )
+      if(lineParser.meter() == "DEFAULTFONT" )
       {
-        int r,g,b;
-
         delete defaultTextField;
         defaultTextField = new TextField( );
 
-        get3Int( "COLOR", line, r, g, b );
-        defaultTextField->setColor(r, g, b);
-        get3Int( "BGCOLOR", line, r, g, b );
-        defaultTextField->setBGColor( r, g, b );
-
-        defaultTextField->setFont( getString( "FONT", line ) );
-        defaultTextField->setFontSize( getInt( "FONTSIZE", line ) );
-        defaultTextField->setAlignment( getString( "ALIGN", line ) );
-        defaultTextField->setFixedPitch( getBoolean( "FIXEDPITCH", line ) );
-        defaultTextField->setShadow( getInt( "SHADOW", line ) );
-
+        defaultTextField->setColor(lineParser.getColor("COLOR"));
+        defaultTextField->setBGColor(lineParser.getColor("BGCOLOR"));
+        defaultTextField->setFont(lineParser.getString("FONT"));
+        defaultTextField->setFontSize(lineParser.getInt("FONTSIZE"));
+        defaultTextField->setAlignment(lineParser.getString("ALIGN"));
+        defaultTextField->setFixedPitch(lineParser.getBoolean( "FIXEDPITCH"));
+        defaultTextField->setShadow(lineParser.getInt("SHADOW"));
       }
 
-
-      if(meter == "TEXT" || meter == "CLICKMAP" || meter == "RICHTEXT")
+      if(lineParser.meter() == "TEXT" ||
+         lineParser.meter() == "CLICKMAP" ||
+         lineParser.meter() == "RICHTEXT")
       {
-        int r,g,b;
+        TextField defTxt;
+
+        if(defaultTextField)
+          defTxt = *defaultTextField;
 
         TextField* tmpText = new TextField();
-        bool paramFound = false;
 
-        get3Int( "COLOR", line, r, g, b, paramFound );
-        if ( paramFound || !defaultTextField )
-        {
-          tmpText->setColor ( r, g, b );
-        }
-        else
-          if ( defaultTextField )
-          {
-            defaultTextField->getColor().rgb ( &r, &g, &b );
-            tmpText->setColor( r, g, b );
-          }
+        tmpText->setColor(lineParser.getColor("COLOR", defTxt.getColor()));
+        tmpText->setBGColor(lineParser.getColor("BGCOLOR",
+                            defTxt.getBGColor()));
+        tmpText->setFont(lineParser.getString("FONT", defTxt.getFont()));
+        tmpText->setFontSize(lineParser.getInt("FONTSIZE",
+                             defTxt.getFontSize()));
+        tmpText->setAlignment(lineParser.getString("ALIGN",
+                              defTxt.getAlignmentAsString()));
+        tmpText->setFixedPitch(lineParser.getInt("FIXEDPITCH",
+                               defTxt.getFixedPitch()));
 
-        get3Int( "BGCOLOR", line, r, g, b, paramFound );
-        if ( paramFound  || !defaultTextField )
-          tmpText->setBGColor( r, g, b );
-        else
-          if ( defaultTextField )
-          {
-            defaultTextField->getBGColor().rgb ( &r, &g, &b );
-            tmpText->setBGColor( r, g, b );
-          }
-
-        QString dFont = getString("FONT", line, paramFound);
-        if( paramFound || !defaultTextField )
-          tmpText->setFont( dFont );
-        else
-          if( defaultTextField )
-            tmpText->setFont( defaultTextField->getFont() );
-
-
-        int dFontSize = getInt( "FONTSIZE", line, paramFound );
-        if( paramFound || !defaultTextField )
-          tmpText->setFontSize( dFontSize );
-        else
-          if( defaultTextField )
-            tmpText->setFontSize( defaultTextField->getFontSize() );
-
-        QString dAlign = getString( "ALIGN", line, paramFound );
-        if( paramFound || !defaultTextField )
-          tmpText->setAlignment( dAlign );
-        else
-          if( defaultTextField )
-            tmpText->setAlignment( defaultTextField->getAlignment() );
-
-        bool dFp = getBoolean( "FIXEDPITCH", line, paramFound );
-        if( paramFound || !defaultTextField )
-          tmpText->setFixedPitch( dFp );
-        else
-          if( defaultTextField )
-            tmpText->setFixedPitch( defaultTextField->getFixedPitch() );
-
-        int dShadow = getInt( "SHADOW", line, paramFound );
-        if( paramFound || !defaultTextField )
-          tmpText->setShadow( dShadow );
-        else
-          if( defaultTextField )
-            tmpText->setShadow( defaultTextField->getShadow() );
+        tmpText->setShadow(lineParser.getInt("SHADOW", defTxt.getShadow()));
 
         // ////////////////////////////////////////////////////
         // Now handle the specifics
-        if( meter == "TEXT" )
+        if(lineParser.meter() == "TEXT")
         {
 
           TextLabel *tmp = new TextLabel(this, x, y, w, h );
-          tmp->setTextProps( tmpText );
-          tmp->setValue( getString( "VALUE", line ) );
+          tmp->setTextProps(tmpText);
+          tmp->setValue(lineParser.getString("VALUE"));
 
-          QString name = getString( "NAME", line);
+          QString name = lineParser.getString("NAME");
           if (name != "")
             tmp->setName(name.ascii());
 
-          setSensor( line, (Meter*)tmp );
+          setSensor(lineParser, (Meter*)tmp);
           meterList->append ( tmp );
         }
 
-        if(meter == "CLICKMAP")
+        if(lineParser.meter() == "CLICKMAP")
         {
           if( !hasMouseTracking() )
             setMouseTracking(true);
           ClickMap *tmp = new ClickMap(this, x, y, w, h);
           tmp->setTextProps( tmpText );
 
-          setSensor( line, (Meter*) tmp );
+          setSensor(lineParser, (Meter*)tmp);
           // set all params
           clickList -> append(tmp);
           meterList->append( tmp );
 
         }
 
-        if( meter == "RICHTEXT" )
+        if(lineParser.meter() == "RICHTEXT")
         {
           RichTextLabel *tmp = new RichTextLabel(this, x, y, w, h);
 
-          bool dUl = getBoolean( "UNDERLINE", line, paramFound );
-          if( !paramFound )
-            dUl = false;
+          bool dUl = lineParser.getBoolean("UNDERLINE");
 
-          tmp->setText( getString( "VALUE", line ), dUl );
+          tmp->setText(lineParser.getString("VALUE"), dUl);
           tmp->setTextProps( tmpText );
           tmp->setWidth(w);
           tmp->setHeight(h);
 
-          QString name = getString( "NAME", line);
+          QString name = lineParser.getString("NAME");
           if (name != "")
             tmp->setName(name.ascii());
 
-          setSensor( line, (Meter*)tmp );
+          setSensor(lineParser, (Meter*)tmp);
           clickList -> append(tmp);
           meterList->append ( tmp );
         }
       }
 
-      if(meter == "BAR")
+      if(lineParser.meter() == "BAR")
       {
         Bar *tmp = new Bar(this, x, y, w, h );
-        tmp->setImage( getString( "PATH", line ) );
-        tmp->setVertical( getBoolean( "VERTICAL", line ) );
-        bool maxFound = false;
-        int max = getInt( "MAX", line, maxFound );
-        if( maxFound )
-          tmp->setMax( max );
-        bool minFound = false;
-        int min = getInt( "MIN", line, minFound );
-        if( minFound )
-          tmp->setMin( min );
-        tmp->setValue( getInt( "VALUE", line ) );
-        QString name = getString("NAME",line);
+        tmp->setImage(lineParser.getString("PATH"));
+        tmp->setVertical(lineParser.getBoolean("VERTICAL"));
+        tmp->setMax(lineParser.getInt("MAX", 100));
+        tmp->setMin(lineParser.getInt("MIN", 0));
+        tmp->setValue(lineParser.getInt("VALUE"));
+        QString name = lineParser.getString("NAME");
         if (name != "")
           tmp->setName(name.ascii());
-        setSensor( line, (Meter*)tmp );
+        setSensor(lineParser, (Meter*)tmp );
         meterList->append ( tmp );
       }
 
-      if(meter == "GRAPH")
+      if(lineParser.meter() == "GRAPH")
       {
-        int r, g, b;
-        int points = getInt("POINTS",line);
-        get3Int("COLOR", line, r, g, b);
+        int points = lineParser.getInt("POINTS");
 
-        Graph *tmp = new Graph(this, x, y, w, h, points );
-        bool maxFound = false;
-        int max = getInt( "MAX", line, maxFound );
-        if( maxFound )
-          tmp->setMax( max );
-        bool minFound = false;
-        int min = getInt( "MIN", line, minFound );
-        if( minFound )
-          tmp->setMin( min );
-        QString name = getString("NAME",line);
+        Graph *tmp = new Graph(this, x, y, w, h, points);
+        tmp->setMax(lineParser.getInt("MAX", 100));
+        tmp->setMin(lineParser.getInt("MIN", 0));
+        QString name = lineParser.getString("NAME");
         if (name != "")
           tmp->setName(name.ascii());
 
-        tmp->setColor( r , g, b );
+        tmp->setColor(lineParser.getColor("COLOR"));
 
-        setSensor( line, (Graph*)tmp );
+        setSensor(lineParser, (Graph*)tmp );
         meterList->append ( tmp );
       }
     }
@@ -993,75 +914,6 @@ void karamba::editScript()
   KRun::runURL( KURL( path ), "text/plain" );
 }
 
-int karamba::getInt(QString w, QString &line )
-{
-  //qDebug("karamba::getInt");
-  bool b;
-  return getInt( w, line, b );
-}
-
-int karamba::getInt(QString w, QString &line, bool &found )
-{
-  //qDebug("karamba::getInt (2)");
-  QRegExp rx( "\\W+" + w +"=([-]?\\d+)", false );
-  found = (rx.search(line)==-1)?false:true;
-  return rx.cap(1).toInt();
-}
-
-void karamba::get3Int(QString w, QString &line, int &a, int &b, int &c )
-{
-  //qDebug("karamba::get3Int");
-  bool bo;
-  get3Int ( w, line, a, b, c, bo );
-}
-
-void karamba::get3Int(QString w, QString &line, int &a, int &b, int &c, bool &found )
-{
-  //qDebug("karamba::get3Int (2)");
-  QRegExp rx( "\\W+" + w + "=([-]?\\d+),([-]?\\d+),([-]?\\d+)", false );
-  found = (rx.search(line)==-1)?false:true;
-  a = rx.cap(1).toInt();
-  b = rx.cap(2).toInt();
-  c = rx.cap(3).toInt();
-}
-
-QString karamba::getString(QString w, QString &line)
-{
-  //qDebug("karamba::getString");
-  bool b;
-  return getString ( w, line, b );
-}
-
-QString karamba::getString(QString w, QString &line, bool &found)
-{
-  //qDebug("karamba::getString (2)");
-  QRegExp rx( "\\W+" + w + "=\"([^\"]*)\"", false );
-  found = (rx.search(line)==-1)?false:true;
-  if (rx.cap(1).isEmpty())
-  {
-    rx = QRegExp(w + "=(\\S+)", false);
-    found = (rx.search(line)==-1)?false:true;
-    return rx.cap(1);
-  }
-  else
-  {
-    return rx.cap(1);
-  }
-}
-
-bool karamba::getBoolean( QString w, QString &line )
-{
-  //qDebug("karamba::getBoolean");
-  bool b;
-  return getBoolean ( w, line, b );
-}
-
-bool karamba::getBoolean( QString w, QString &line, bool &found )
-{
-  //qDebug("karamba::getBoolean (2)");
-  return  ( getString( w, line, found ).lower() == "true")?true:false;
-}
-
 QString karamba::findSensorFromMap(Sensor* sensor)
 {
   //qDebug("karamba::findSensorFromMap");
@@ -1116,29 +968,29 @@ void karamba::deleteMeterFromSensors(Meter* meter)
   }
 }
 
-void karamba::setSensor(QString &line, Meter* meter)
+void karamba::setSensor(const LineParser& lineParser, Meter* meter)
 {
   //qDebug("karamba::setSensor");
   Sensor* sensor = 0;
 
   deleteMeterFromSensors(meter);
 
-  QString sens = getString("SENSOR",line).upper();
+  QString sens = lineParser.getString("SENSOR").upper();
 
   if( sens == "CPU" )
   {
-    QString cpuNbr = getString( "CPU", line );
+    QString cpuNbr = lineParser.getString("CPU");
     sensor = sensorMap["CPU"+cpuNbr];
     if (sensor == 0)
     {
-      int interval = getInt("INTERVAL",line);
+      int interval = lineParser.getInt("INTERVAL");
       interval = (interval == 0)?1000:interval;
       sensor = ( sensorMap["CPU"+cpuNbr] = new CPUSensor( cpuNbr, interval ) );
       sensorList->append( sensor );
     }
     SensorParams *sp = new SensorParams(meter);
-    sp->addParam("FORMAT",getString("FORMAT",line));
-    sp->addParam("DECIMALS",getString("DECIMALS",line));
+    sp->addParam("FORMAT",lineParser.getString("FORMAT"));
+    sp->addParam("DECIMALS",lineParser.getString("DECIMALS"));
 
     sensor->addMeter(sp);
     sensor->setMaxValue(sp);
@@ -1150,13 +1002,13 @@ void karamba::setSensor(QString &line, Meter* meter)
     sensor = sensorMap["MEMORY"];
     if (sensor == 0)
     {
-      int interval = getInt("INTERVAL",line);
+      int interval = lineParser.getInt("INTERVAL");
       interval = (interval == 0)?3000:interval;
       sensor = ( sensorMap["MEMORY"] = new MemSensor( interval ) );
       sensorList->append( sensor );
     }
     SensorParams *sp = new SensorParams(meter);
-    sp->addParam("FORMAT",getString("FORMAT",line));
+    sp->addParam("FORMAT",lineParser.getString("FORMAT"));
 
     sensor->addMeter(sp);
     sensor->setMaxValue(sp);
@@ -1168,7 +1020,7 @@ void karamba::setSensor(QString &line, Meter* meter)
     sensor = sensorMap["DISK"];
     if (sensor == 0)
     {
-      int interval = getInt("INTERVAL",line);
+      int interval = lineParser.getInt("INTERVAL");
       interval = (interval == 0)?5000:interval;
       sensor = ( sensorMap["DISK"] = new DiskSensor( interval ) );
       connect( sensor, SIGNAL(initComplete()), this, SLOT(externalStep()) );
@@ -1176,7 +1028,7 @@ void karamba::setSensor(QString &line, Meter* meter)
     }
     // meter->setMax( ((DiskSensor*)sensor)->getTotalSpace(mntPt)/1024 );
     SensorParams *sp = new SensorParams(meter);
-    QString mntPt = getString("MOUNTPOINT",line);
+    QString mntPt = lineParser.getString("MOUNTPOINT");
     if( mntPt == ""  )
     {
         mntPt = "/";
@@ -1188,25 +1040,26 @@ void karamba::setSensor(QString &line, Meter* meter)
         mntPt.remove( mntPt.length()-1, 1 );
     }
     sp->addParam("MOUNTPOINT",mntPt);
-    sp->addParam("FORMAT",getString("FORMAT",line));
+    sp->addParam("FORMAT",lineParser.getString("FORMAT"));
     sensor->addMeter(sp);
     sensor->setMaxValue(sp);
   }
 
   if( sens == "NETWORK")
   {
-    int interval = getInt("INTERVAL",line );
+    int interval = lineParser.getInt("INTERVAL");
     interval = (interval == 0)?2000:interval;
-    QString device = getString("DEVICE", line );
+    QString device = lineParser.getString("DEVICE");
     sensor = sensorMap["NETWORK"+device];
     if (sensor == 0)
     {
-      sensor = ( sensorMap["NETWORK"+device] = new NetworkSensor( device, interval ) );
+      sensor = ( sensorMap["NETWORK"+device] =
+          new NetworkSensor(device, interval));
       sensorList->append( sensor );
     }
     SensorParams *sp = new SensorParams(meter);
-    sp->addParam( "FORMAT", getString( "FORMAT", line ) );
-    sp->addParam( "DECIMALS", getString( "DECIMALS", line ) );
+    sp->addParam( "FORMAT", lineParser.getString("FORMAT"));
+    sp->addParam( "DECIMALS", lineParser.getString("DECIMALS"));
     sensor->addMeter(sp);
   }
 
@@ -1215,14 +1068,14 @@ void karamba::setSensor(QString &line, Meter* meter)
     sensor = sensorMap["UPTIME"];
     if (sensor == 0)
     {
-      int interval = getInt("INTERVAL",line);
+      int interval = lineParser.getInt("INTERVAL");
       interval = (interval == 0)?60000:interval;
       sensor = ( sensorMap["UPTIME"] = new UptimeSensor( interval ));
       sensorList->append( sensor );
 
     }
     SensorParams *sp = new SensorParams(meter);
-    sp->addParam( "FORMAT", getString( "FORMAT", line ) );
+    sp->addParam( "FORMAT", lineParser.getString("FORMAT"));
     sensor->addMeter(sp);
   }
 
@@ -1231,35 +1084,35 @@ void karamba::setSensor(QString &line, Meter* meter)
     sensor = sensorMap["SENSOR"];
     if (sensor == 0)
     {
-      int interval = getInt("INTERVAL",line);
+      int interval = lineParser.getInt("INTERVAL");
       interval = (interval == 0)?30000:interval;
       sensor = (sensorMap["SENSOR"] = new SensorSensor(interval, tempUnit));
       sensorList->append( sensor );
     }
     SensorParams *sp = new SensorParams(meter);
-    sp->addParam("FORMAT",getString("FORMAT",line));
-    sp->addParam("TYPE",getString("TYPE",line));
+    sp->addParam("FORMAT",lineParser.getString("FORMAT"));
+    sp->addParam("TYPE",lineParser.getString("TYPE"));
     sensor->addMeter(sp);
   }
 
 
   if( sens == "TEXTFILE" )
   {
-    QString path = getString( "PATH", line );
-    bool rdf = getBoolean( "RDF", line );
+    QString path = lineParser.getString("PATH");
+    bool rdf = lineParser.getBoolean("RDF");
     sensor = sensorMap["TEXTFILE"+path];
     if (sensor == 0)
     {
-      int interval = getInt( "INTERVAL", line );
+      int interval = lineParser.getInt("INTERVAL");
       interval = ( interval == 0 )?60000:interval;
-      QString encoding = getString( "ENCODING", line );
+      QString encoding = lineParser.getString("ENCODING");
 
       sensor = ( sensorMap["TEXTFILE"+path] =
                    new TextFileSensor( path, rdf, interval, encoding ) );
       sensorList->append( sensor );
     }
     SensorParams *sp = new SensorParams(meter);
-    sp->addParam("LINE",QString::number(getInt("LINE",line)));
+    sp->addParam("LINE",QString::number(lineParser.getInt("LINE")));
     sensor->addMeter(sp);
   }
 
@@ -1269,16 +1122,16 @@ void karamba::setSensor(QString &line, Meter* meter)
     sensor = sensorMap["DATE"];
     if (sensor == 0)
     {
-      int interval = getInt("INTERVAL",line);
+      int interval = lineParser.getInt("INTERVAL");
       interval = (interval == 0)?60000:interval;
       sensor = ( sensorMap["DATE"] = new DateSensor( interval ) );
       sensorList->append( sensor );
       timeList->append( sensor );
     }
     SensorParams *sp = new SensorParams(meter);
-    sp->addParam("FORMAT",getString("FORMAT",line));
-    sp->addParam("CALWIDTH",getString("CALWIDTH",line));
-    sp->addParam("CALHEIGHT",getString("CALHEIGHT",line));
+    sp->addParam("FORMAT",lineParser.getString("FORMAT"));
+    sp->addParam("CALWIDTH",lineParser.getString("CALWIDTH"));
+    sp->addParam("CALHEIGHT",lineParser.getString("CALHEIGHT"));
     sensor->addMeter(sp);
   }
 
@@ -1289,15 +1142,15 @@ void karamba::setSensor(QString &line, Meter* meter)
     sensor = sensorMap["XMMS"];
     if (sensor == 0)
     {
-      int interval = getInt("INTERVAL",line);
+      int interval = lineParser.getInt("INTERVAL");
       interval = (interval == 0)?1000:interval;
-      QString encoding = getString( "ENCODING", line );
+      QString encoding = lineParser.getString("ENCODING");
 
       sensor = ( sensorMap["XMMS"] = new XMMSSensor( interval, encoding ) );
       sensorList->append( sensor );
     }
     SensorParams *sp = new SensorParams(meter);
-    sp->addParam("FORMAT",getString("FORMAT",line));
+    sp->addParam("FORMAT",lineParser.getString("FORMAT"));
     sensor->addMeter(sp);
     sensor->setMaxValue(sp);
   }
@@ -1309,55 +1162,56 @@ void karamba::setSensor(QString &line, Meter* meter)
     sensor = sensorMap["NOATUN"];
     if (sensor == 0)
     {
-      int interval = getInt("INTERVAL",line);
+      int interval = lineParser.getInt("INTERVAL");
       interval = (interval == 0)?1000:interval;
       sensor = ( sensorMap["NOATUN"] = new NoatunSensor( interval, client ) );
       sensorList->append( sensor );
     }
     SensorParams *sp = new SensorParams(meter);
-    sp->addParam("FORMAT",getString("FORMAT",line));
+    sp->addParam("FORMAT",lineParser.getString("FORMAT"));
     sensor->addMeter(sp);
     sensor->setMaxValue(sp);
   }
 
   if( sens == "PROGRAM")
   {
-    QString progName = getString("PROGRAM",line);
+    QString progName = lineParser.getString("PROGRAM");
     sensor = sensorMap["PROGRAM"+progName];
     if (sensor == 0)
     {
-      int interval = getInt("INTERVAL",line);
+      int interval = lineParser.getInt("INTERVAL");
       interval = (interval == 0)?3600000:interval;
-      QString encoding = getString( "ENCODING", line );
+      QString encoding = lineParser.getString("ENCODING");
 
       sensor = (sensorMap["PROGRAM"+progName] =
                   new ProgramSensor( progName, interval, encoding ) );
       sensorList->append( sensor );
     }
     SensorParams *sp = new SensorParams(meter);
-    sp->addParam( "LINE", QString::number( getInt( "LINE", line ) ) );
+    sp->addParam( "LINE", QString::number( lineParser.getInt("LINE"))
+);
     sp->addParam( "THEMAPATH", themePath );
     sensor->addMeter(sp);
   }
 
   if( sens == "RSS" )
   {
-    QString source = getString( "SOURCE", line );
-    QString format = getString( "FORMAT", line );
+    QString source = lineParser.getString("SOURCE");
+    QString format = lineParser.getString("FORMAT");
 
     sensor = sensorMap["RSS"+source];
     if (sensor == 0)
     {
-      int interval = getInt( "INTERVAL", line );
+      int interval = lineParser.getInt( "INTERVAL");
       interval = ( interval == 0 )?60000:interval;
-      QString encoding = getString( "ENCODING", line );
+      QString encoding = lineParser.getString("ENCODING");
 
       sensor = ( sensorMap["RSS"+source] =
                    new RssSensor( source, interval, format, encoding ) );
       sensorList->append( sensor );
     }
     SensorParams *sp = new SensorParams(meter);
-    sp->addParam("SOURCE",getString("SOURCE",line));
+    sp->addParam("SOURCE",lineParser.getString("SOURCE"));
     sensor->addMeter(sp);
   }
 

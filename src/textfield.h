@@ -28,8 +28,8 @@ public:
     TextField& operator=(const TextField& );
 
     void setFontSize( int );
-    void setColor( int, int, int );
-    void setBGColor( int, int, int);
+    void setColor(QColor clr);
+    void setBGColor(QColor clr);
     void setFont( QString );
     void setAlignment( int );
     void setAlignment( QString );

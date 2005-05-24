@@ -64,11 +64,8 @@ void TextLabel::setTextProps( TextField* t )
     setFontSize(t->getFontSize());
     setFont(t->getFont());
 
-    int r, g, b;
-    t->getColor().rgb ( &r, &g, &b );
-    setColor( r, g, b );
-    t->getBGColor().rgb ( &r, &g, &b );
-    setBGColor( r, g, b );
+    setColor(t->getColor());
+    setBGColor(t->getBGColor());
   }
   calculateTextSize();
 }
@@ -102,9 +99,9 @@ void TextLabel::setValue( int v)
     calculateTextSize();
 }
 
-void TextLabel::setBGColor( int r, int g, int b )
+void TextLabel::setBGColor(QColor clr)
 {
-    bgColor.setRgb( r, g, b );
+    bgColor = clr;
 }
 
 QColor TextLabel::getBGColor() const
