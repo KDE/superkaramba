@@ -341,7 +341,7 @@
                         <cstring>exitButton</cstring>
                     </property>
                     <property name="text">
-                        <string>Quit</string>
+                        <string>&amp;Quit</string>
                     </property>
                 </widget>
             </hbox>

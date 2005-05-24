@@ -32,7 +32,7 @@
                         <cstring>textLabel1</cstring>
                     </property>
                     <property name="text">
-                        <string>Loaded Themes:</string>
+                        <string>Loaded themes:</string>
                     </property>
                 </widget>
                 <widget class="KListBox">

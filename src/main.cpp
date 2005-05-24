@@ -48,7 +48,7 @@ static KCmdLineOptions options[] =
 {
   // { "+[URL]", I18N_NOOP( "Document to open." ), 0 },
   // { "!nosystray", I18N_NOOP("Disable systray icon."), 0 },
-  { "+file", I18N_NOOP("A required argument 'file'."), 0 },
+  { "+file", I18N_NOOP("A required argument 'file'"), 0 },
   { 0, 0, 0 }
 };
 

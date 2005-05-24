@@ -42,7 +42,7 @@ static const char *version = "0.17";
 static KCmdLineOptions options[] =
     {
         //    { "+[URL]", I18N_NOOP( "Document to open." ), 0 },
-        { "+file", I18N_NOOP("A required argument 'file'."), 0 },
+        { "+file", I18N_NOOP("A required argument 'file'"), 0 },
         { 0, 0, 0 }
 
     };

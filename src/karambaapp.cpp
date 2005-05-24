@@ -21,6 +21,7 @@
 #include <kfiledialog.h>
 #include <kcmdlineargs.h>
 #include <fcntl.h>
+#include <klocale.h>
 
 #include "skicon.xpm"
 
@@ -111,7 +112,7 @@ void KarambaApplication::setUpSysTray()
   sysTrayIcon->setPixmap( QPixmap(skicon_xpm));
 #if defined(KDE_MAKE_VERSION)
 # if KDE_VERSION >= KDE_MAKE_VERSION(3,1,9)
-  sysTrayIcon->contextMenu()->insertItem("Open a theme...",
+  sysTrayIcon->contextMenu()->insertItem(i18n("Open Theme..."),
       themeListWindow, SLOT(openTheme()));
 # endif
 #endif
@@ -162,9 +163,9 @@ void KarambaApplication::showWelcomeDialog(QStringList &lst)
   if (wcmFrm->exec() == QDialog::Accepted)
   {
     lst = KFileDialog::getOpenFileNames(QString::null,
-                                        "*.theme *.ctheme *.skz|Themes",
+                                        i18n("*.theme *.ctheme *.skz|Themes"),
                                         0,
-                                        "Open Themes");
+                                        i18n("Open Themes"));
   }
 }
 

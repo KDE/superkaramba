@@ -133,7 +133,7 @@ karamba::karamba(QString fn, bool reloading) :
 
   toDesktopMenu = new KPopupMenu (this);
   toDesktopMenu -> setCheckable(true);
-  mid = toDesktopMenu -> insertItem ("&All Desktops",
+  mid = toDesktopMenu -> insertItem (i18n("&All Desktops"),
                                      dslot = new DesktopChangeSlot(this,0),
                                      SLOT(receive()));
   dslot->setMenuId(mid);
@@ -141,7 +141,7 @@ karamba::karamba(QString fn, bool reloading) :
   toDesktopMenu -> insertSeparator();
   for (int ndesktop=1; ndesktop <= kWinModule->numberOfDesktops(); ndesktop++)
   {
-    QString name = "Desktop &";
+    QString name = i18n("Desktop &");
     name += ('0' + ndesktop);
 
     mid = toDesktopMenu -> insertItem (name,
@@ -155,9 +155,9 @@ karamba::karamba(QString fn, bool reloading) :
 
   /*
   keditpop = new KPopupMenu ( this );
-  keditpop -> insertItem(SmallIconSet("edit"),tr("Edit &theme"),this,
+  keditpop -> insertItem(SmallIconSet("edit"),i18n("Edit &Theme"),this,
                          SLOT(editConfig()), CTRL+Key_E );
-  keditpop -> insertItem(SmallIconSet("edit"),tr("Edit &script"),this,
+  keditpop -> insertItem(SmallIconSet("edit"),i18n("Edit &Script"),this,
                          SLOT(editScript()), ALT+Key_E, EDITSCRIPT);
 
   // Test if Theme Script exists
@@ -168,9 +168,9 @@ karamba::karamba(QString fn, bool reloading) :
   accColl = new KActionCollection( this );
   menuAccColl = new KActionCollection( this );
 
-  kpop->insertItem( SmallIconSet("reload"),tr("Update"), this,
+  kpop->insertItem( SmallIconSet("reload"),i18n("Update"), this,
                     SLOT(updateSensors()), Key_F5 );
-  toggleLocked = new KToggleAction (  tr("Toggle &locked position"),
+  toggleLocked = new KToggleAction (  i18n("Toggle &Locked Position"),
                                       SmallIconSet("locked"),
                                       CTRL+Key_L, this,
                                       SLOT( slotToggleLocked() ),
@@ -180,7 +180,7 @@ karamba::karamba(QString fn, bool reloading) :
 
   toggleLocked->plug(kpop);
 
-  toggleFastTransforms = new KToggleAction(tr("Use &fast image scaling"),
+  toggleFastTransforms = new KToggleAction(i18n("Use &Fast Image Scaling"),
                          CTRL+Key_F, this,
                          SLOT( slotToggleFastTransforms() ),
                          accColl, "Fast transformations");
@@ -192,27 +192,27 @@ karamba::karamba(QString fn, bool reloading) :
 
   kpop->insertSeparator();
 
-  kpop->insertItem( SmallIconSet("fileopen"),tr("&Open new theme"), this,
+  kpop->insertItem( SmallIconSet("fileopen"),i18n("&Open New Theme..."), this,
                     SLOT(startNewKaramba()), CTRL+Key_O );
   
   /*kpop->insertItem(tr("&Edit"), keditpop);*/
   
-  kpop->insertItem(tr("Configure &theme"), themeConfMenu, THEMECONF);
+  kpop->insertItem(i18n("Configure &Theme"), themeConfMenu, THEMECONF);
   kpop->setItemEnabled(THEMECONF, false);
-  kpop->insertItem(tr("To Des&ktop"), toDesktopMenu);
+  kpop->insertItem(i18n("To Des&ktop"), toDesktopMenu);
 
-  kpop->insertItem( SmallIconSet("reload3"),tr("&Reload theme"),this,
+  kpop->insertItem( SmallIconSet("reload3"),i18n("&Reload Theme"),this,
                     SLOT(reloadConfig()), CTRL+Key_R );
-  kpop->insertItem( SmallIconSet("fileclose"),tr("&Close this theme"), this,
+  kpop->insertItem( SmallIconSet("fileclose"),i18n("&Close This Theme"), this,
                     SLOT(killWidget()), CTRL+Key_C );
 
   kpop->insertSeparator();
-  kpop->insertItem( SmallIconSet("find"),tr("&Download more themes"), this,
+  kpop->insertItem( SmallIconSet("find"),i18n("&Download More Themes"), this,
                     SLOT(downloadThemes()), CTRL+Key_D );
 
   kpop->insertSeparator();
 
-  kpop->insertItem( SmallIconSet("exit"),tr("&Quit"), this,
+  kpop->insertItem( SmallIconSet("exit"),i18n("&Quit"), this,
                     SLOT(quitKaramba()), CTRL+Key_Q );
 
   kpop->polish();
@@ -909,8 +909,8 @@ void karamba::startNewKaramba()
   //qDebug("karamba::startNewKaramba");
   QStringList fileNames;
   fileNames = KFileDialog::getOpenFileNames(QString::null,
-                                            "*.theme *.ctheme *.skz|Themes",
-                                            0, "Open Themes");
+                                            i18n("*.theme *.ctheme *.skz|Themes"),
+                                            0, i18n("Open Themes"));
   for ( QStringList::Iterator it = fileNames.begin();
         it != fileNames.end();
         ++it )

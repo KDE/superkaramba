@@ -25,14 +25,15 @@
 #include "karambalistboxitem.h"
 #include "themelistwindow.h"
 #include "karambainterface.h"
+#include <klocale.h>
 
 void ThemeListWindow::openTheme()
 {
   QStringList fileNames;
   fileNames = KFileDialog::getOpenFileNames(QString::null,
-                                            "*.theme *.ctheme *.skz|Themes",
+                                            i18n("*.theme *.ctheme *.skz|Themes"),
                                             0,
-                                            "Open Themes");
+                                            i18n("Open Themes"));
   for ( QStringList::Iterator it = fileNames.begin(); it != fileNames.end(); ++it )
   {
     QFileInfo file( *it );
@@ -92,3 +93,5 @@ void ThemeListWindow::removeTheme(QString, QString name)
     }
   }
 }
+
+#include "themelistwindow.moc"
