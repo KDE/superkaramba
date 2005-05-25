@@ -45,6 +45,11 @@ unicode/
 
 mouseDrag/
 
-        This shows how to use mouse dragging in the callback widgetMouseMoved
-        in your themes.
-        (This is karmix by Tian and rewritten by Ryan Nickell)
+    This shows how to use mouse dragging in the callback widgetMouseMoved
+    in your themes.
+    (This is karmix by Tian and rewritten by Ryan Nickell)
+
+openCloseTheme/
+
+    This shows how you can open a new theme from within an existing theme,
+    and how you can close themes.
