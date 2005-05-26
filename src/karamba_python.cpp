@@ -481,6 +481,12 @@ bool KarambaPython::commandOutput(karamba* k, int pid, char *buffer)
   return callObject("commandOutput", pArgs);
 }
 
+bool KarambaPython::commandFinished(karamba* k, int pid)
+{
+  PyObject* pArgs = Py_BuildValue((char*)"(li)", k, pid);
+  return callObject("commandFinished", pArgs);
+}
+
 bool KarambaPython::itemDropped(karamba* k, QString text)
 {
   PyObject* pArgs = Py_BuildValue((char*)"(ls)", k, text.ascii());

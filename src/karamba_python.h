@@ -73,6 +73,7 @@ public:
   bool startupAdded(karamba* k, Startup* t);
   bool startupRemoved(karamba* k, Startup* t);
   bool commandOutput(karamba* k, int pid, char *buffer);
+  bool commandFinished(karamba* k, int pid);
   bool itemDropped(karamba* k, QString text);
   bool systrayUpdated(karamba* k);
   bool desktopChanged(karamba* k, int desktop);

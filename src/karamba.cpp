@@ -1783,12 +1783,11 @@ void karamba::startupRemoved(Startup* t)
     pythonIface->startupRemoved(this, t);
 }
 
-void  karamba::processExited (KProcess*)
+void  karamba::processExited (KProcess* proc)
 {
   //qDebug("karamba::processExited");
-  // Nothing needed here at the moment.
-  // Could add a "commandFinished" callback here if it becomes
-  // needed at some point.
+  if (pythonIface && pythonIface->isExtensionLoaded())
+    pythonIface->commandFinished(this, (int)proc->pid());
 }
 
 void  karamba::receivedStdout (KProcess *proc, char *buffer, int)
