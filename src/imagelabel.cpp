@@ -289,17 +289,13 @@ void ImageLabel::setValue(QString fn)
   }
   else
   {
-    QFileInfo fileInfo(fileName);
-
-    if(fileInfo.isRelative() && m_karamba->zipTheme())
+    if(m_karamba->theme().isThemeFile(fileName))
     {
-      QByteArray ba = m_karamba->readZipFile(fileName);
+      QByteArray ba = m_karamba->theme().readThemeFile(fileName);
       pm.loadFromData(ba);
     }
     else
     {
-      if(fileInfo.isRelative())
-        fileName = m_karamba->themePath + "/" + fileName;
       pm.load(fileName);
     }
     imagePath = fileName;
@@ -435,7 +431,7 @@ void ImageLabel::parseImages(QString fn, QString fn_roll, int _xoff,
 
   if( fileInfo.isRelative() && !fileOnNet )
   {
-    path = m_karamba->themePath + "/" + fileName;
+    path = m_karamba->theme().path() + "/" + fileName;
   }
   else
   {
@@ -483,7 +479,7 @@ void ImageLabel::parseImages(QString fn, QString fn_roll, int _xoff,
 
   if( fileInfo.isRelative() && !fileOnNet )
   {
-    path = m_karamba->themePath + "/" + fileName;
+    path = m_karamba->theme().path() + "/" + fileName;
   }
   else
   {

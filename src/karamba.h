@@ -94,6 +94,8 @@
 #include "taskmanager.h"
 #include "showdesktop.h"
 #include "systemtray.h"
+#include "themefile.h"
+
 /**
  * @short Application Main Window
  * @author Adam Geitgey <adam@rootnode.org>
@@ -113,9 +115,10 @@ public:
     QObjectList *menuList;
 
     virtual ~karamba();
+    const ThemeFile& theme() const { return m_theme; };
+
     QObjectList *meterList;
     QObjectList *imageList;
-    QString themePath;
     QObjectList *clickList;
     void setSensor(const LineParser& lineParser, Meter* meter);
     QString getSensor(Meter* meter);
@@ -140,14 +143,9 @@ public:
     bool readMenuConfigOption(QString key);
     void writeConfigData();
     TextField* getDefaultTextProps() { return defaultTextField; };
-    QByteArray readZipFile(const QString& filename);
-    bool zipTheme() const { return m_zipTheme; };
-    static bool isZipFile(const QString& filename);
 
     int numberOfConfMenuItems;
     KConfig* config;
-    QString themeFile;
-    QString themeName;
 
     void toggleWidgetUpdate( bool );
 
@@ -191,8 +189,6 @@ private:
     QTime lowerTimer;
     // use only the first occurance of KARAMBA in a config file
     bool foundKaramba;
-    bool m_zipTheme;
-
 
     KPopupMenu* themeConfMenu;
     KPopupMenu* toDesktopMenu;
@@ -216,6 +212,7 @@ private:
     TextField *defaultTextField;
 
     int  desktop;
+    ThemeFile m_theme;
 
 public slots:
     void step();

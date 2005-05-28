@@ -54,7 +54,7 @@ void RichTextLabel::setText(QString t, bool linkUnderline)
         underlineLinks = linkUnderline;
     }
 
-    text = new QSimpleRichText(t, font, m_karamba -> themePath,
+    text = new QSimpleRichText(t, font, m_karamba->theme().path(),
                                0 /*default QStyleSheet*/,
                                0 /*default QMimeSourceFactory*/,
                                -1 /*no pageBreak*/,

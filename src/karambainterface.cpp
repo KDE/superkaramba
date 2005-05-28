@@ -34,7 +34,7 @@ karamba* KarambaIface::getKaramba(QString name)
     if (QString(w->name()).startsWith("karamba"))
     {
       karamba* k = (karamba*) w;
-      if(k->themeName == name)
+      if(k->theme().name() == name)
       {
         result = k;
         break;

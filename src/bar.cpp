@@ -28,26 +28,15 @@ bool Bar::setImage(QString fileName)
 {
   QFileInfo fileInfo(fileName);
   bool res = false;
-  QString path;
 
-  if(fileInfo.isRelative() && m_karamba->zipTheme())
+  if(m_karamba->theme().isThemeFile(fileName))
   {
-    QByteArray ba = m_karamba->readZipFile(fileName);
+    QByteArray ba = m_karamba->theme().readThemeFile(fileName);
     res = pixmap.loadFromData(ba);
-    path = fileName;
   }
   else
   {
-    if(fileInfo.isRelative())
-    {
-      path = m_karamba->themePath + "/" + fileName;
-    }
-    else
-    {
-      path = fileName;
-    }
-    //qDebug( "bar: fileName=" + path );
-    res = pixmap.load( path );
+    res = pixmap.load(fileName);
   }
   pixmapWidth = pixmap.width();
   pixmapHeight = pixmap.height();
@@ -58,7 +47,7 @@ bool Bar::setImage(QString fileName)
     setHeight(pixmapHeight);
   }
   if(res)
-    imagePath = path;
+    imagePath = fileName;
   return res;
 }
 

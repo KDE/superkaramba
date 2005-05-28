@@ -55,25 +55,15 @@ karamba::karamba(QString fn, bool reloading) :
     tempUnit('C'), clickPos(0,0), pythonIface(0)
 {
   //qDebug("karamba::karamba");
-  QFileInfo fi(fn);
-
-  if(isZipFile(fn))
-  {
-    themePath = fn;
-    m_zipTheme = true;
-  }
-  else
-  {
-    themePath = fi.dirPath(true) + "/";
-    m_zipTheme = false;
-  }
-  themeName = fi.baseName();
-  themeFile = fn;
-  setName("karamba - " + themeName);
+  m_theme.set(fn);
+  setName("karamba - " + m_theme.name());
 
   widgetUpdate = true;
 
-  QFile themeConfigFile(QDir::home().absPath() + "/.superkaramba/" + themeName + ".rc");
+  // Creates KConfig Object
+  QString cfg = QDir::home().absPath() + "/.superkaramba/"
+      + m_theme.name() + ".rc";
+  QFile themeConfigFile(cfg);
   // Tests if config file Exists
   if (!QFileInfo(themeConfigFile).exists())
   {
@@ -82,15 +72,15 @@ karamba::karamba(QString fn, bool reloading) :
     themeConfigFile.close();
   }
 
-  // Creates KConfig Object
-  config = new KConfig(QFileInfo(themeConfigFile).filePath(), false, false);
+  config = new KConfig(cfg, false, false);
   config -> sync();
   config -> setGroup("internal");
 
   m_reloading = reloading;
   QTimer::singleShot(0, this, SLOT(initPythonInterface()));
 
-  //Matthew Kay: set window type to "dock" (plays better with taskbar themes this way)
+  // Matthew Kay: set window type to "dock" (plays better with taskbar themes
+  // this way)
   KWin::setType(winId(), NET::Dock);
 
 #if defined(KDE_MAKE_VERSION)
@@ -162,7 +152,7 @@ karamba::karamba(QString fn, bool reloading) :
                          SLOT(editScript()), ALT+Key_E, EDITSCRIPT);
 
   // Test if Theme Script exists
-  QFileInfo scriptFile(themePath + "/" + themeName + ".py");
+  QFileInfo scriptFile(m_theme.path() + "/" + m_theme.name() + ".py");
   keditpop -> setItemEnabled(EDITSCRIPT, scriptFile.exists());
   */
 
@@ -307,14 +297,14 @@ karamba::karamba(QString fn, bool reloading) :
   setFocusPolicy(QWidget::StrongFocus);
 
   //Add self to list of open themes
-  karambaApp->addKaramba(this, themeName);
+  karambaApp->addKaramba(this, m_theme.name());
 }
 
 karamba::~karamba()
 {
   //qDebug("karamba::~karamba");
   //Remove self from list of open themes
-  karambaApp->deleteKaramba(this, themeName);
+  karambaApp->deleteKaramba(this, m_theme.name());
 
   widgetClosed();
   writeConfigData();
@@ -375,99 +365,25 @@ karamba::~karamba()
   delete pythonIface;
 }
 
-bool karamba::isZipFile(const QString& filename)
-{
-  QFile file(filename);
-
-  if(file.open(IO_ReadOnly))
-  {
-    unsigned char buf[5];
-
-    if(file.readBlock((char*)buf, 4) == 4)
-    {
-      if(buf[0] == 'P' && buf[1] == 'K' && buf[2] == 3 && buf[3] == 4)
-        return true;
-    }
-  }
-  return false;
-}
-
-QByteArray karamba::readZipFile(const QString& filename)
-{
-  QByteArray result;
-  KZip zip(themeFile);
-  const KArchiveDirectory* dir;
-  const KArchiveEntry* entry;
-  const KArchiveFile* file;
-
-  if(!zip.open(IO_ReadOnly))
-  {
-    qDebug("Unable to open '%s' for reading.", themeFile.ascii());
-    return result;
-  }
-  dir = zip.directory();
-  if(dir == 0)
-  {
-    qDebug("Error reading directory contents of file %s", themeFile.ascii());
-    return result;
-  }
-
-  entry = dir->entry(filename);
-  if(entry == 0 || !entry->isFile())
-  {
-    qDebug("Error reading %s file from %s",
-           filename.ascii(), themeFile.ascii());
-    return false;
-  }
-
-  file = static_cast<const KArchiveFile*>(entry);
-  result = file->data();
-  zip.close();
-  return result;
-}
-
 bool karamba::parseConfig()
 {
   //qDebug("karamba::parseConfig");
   QTimer *m_sysTimer = new QTimer(this);
-
-  QFile file(themeFile);
-  QString fileLine;
   int interval = 0;
-  QTextStream *t = 0;        // use a text stream
-  bool ok = false;
 
-  if(m_zipTheme)
-  {
-    QByteArray ba = readZipFile(themeName + ".theme");
-    if(ba.size() > 0)
-    {
-      t = new QTextStream(ba, IO_ReadOnly);
-      ok = true;
-    }
-  }
-  else
-  {
-    if(file.open(IO_ReadOnly|IO_Translate))
-    {
-      t = new QTextStream(&file);        // use a text stream
-      ok = true;
-    }
-  }
-
-  if(ok)
+  if(m_theme.open())
   {
     QValueStack<QPoint> offsetStack;
-    offsetStack.push(QPoint(0,0));
-
+    LineParser lineParser;
     int x=0;
     int y=0;
     int w=0;
     int h=0;
-    while((fileLine = t->readLine()) !=0 )
-    {
-      LineParser lineParser(fileLine);
 
+    offsetStack.push(QPoint(0,0));
+
+    while(m_theme.nextLine(lineParser))
+    {
       x = lineParser.getInt("X") + offsetStack.top().x();
       y = lineParser.getInt("Y") + offsetStack.top().y();
       w = lineParser.getInt("W");
@@ -593,7 +509,7 @@ bool karamba::parseConfig()
 
         QFileInfo info(path);
         if( info.isRelative())
-          path = themePath +"/" + path;
+          path = m_theme.path() +"/" + path;
 
         widgetMask = new QBitmap(path);
         setMask(*widgetMask);
@@ -611,7 +527,7 @@ bool karamba::parseConfig()
         QString path = lineParser.getString("PATH");
         QFileInfo info(path);
         if( info.isRelative())
-          path = themePath +"/" + path;
+          path = m_theme.path() +"/" + path;
         //qDebug("new theme from theme. path: " + path);
         (new karamba( path, false ))->show();
       }
@@ -798,7 +714,7 @@ bool karamba::parseConfig()
         meterList->append ( tmp );
       }
     }
-    delete t;
+    m_theme.close();
   }
   //qDebug("parseConfig ok: %d", foundKaramba);
   if( !foundKaramba )
@@ -830,8 +746,8 @@ void karamba::startNewKaramba()
   //qDebug("karamba::startNewKaramba");
   QStringList fileNames;
   fileNames = KFileDialog::getOpenFileNames(QString::null,
-                                            i18n("*.theme *.ctheme *.skz|Themes"),
-                                            0, i18n("Open Themes"));
+      i18n("*.theme *.ctheme *.skz|Themes"),
+      0, i18n("Open Themes"));
   for ( QStringList::Iterator it = fileNames.begin();
         it != fileNames.end();
         ++it )
@@ -851,12 +767,11 @@ void karamba::popupNotify(int)
 
 void karamba::reloadConfig()
 {
-  //qDebug("karamba::reloadConfig: %s", themeFile.ascii());
+  //qDebug("karamba::reloadConfig: %s", m_theme.file().ascii());
   writeConfigData();
-  QFileInfo file( themeFile );
-  if( file.exists() )
+  if(m_theme.exists())
   {
-    (new karamba( themeFile, true ))->show();
+    (new karamba(m_theme.file(), true ))->show();
   }
   killWidget();
 }
@@ -869,7 +784,7 @@ void karamba::killWidget()
 
 void karamba::initPythonInterface()
 {
-  pythonIface = new KarambaPython(themePath, themeName, m_reloading);
+  pythonIface = new KarambaPython(m_theme.path(), m_theme.name(), m_reloading);
 }
 
 void karamba::quitKaramba()
@@ -882,16 +797,16 @@ void karamba::quitKaramba()
 void karamba::editConfig()
 {
   //qDebug("karamba::editConfig");
-  QFileInfo fileInfo( themeFile );
+  QFileInfo fileInfo( m_theme.file() );
   QString path;
 
   if( fileInfo.isRelative() )
   {
-    path = themePath + "/" + themeFile;
+    path = m_theme.path() + "/" + m_theme.file();
   }
   else
   {
-    path = themeFile;
+    path = m_theme.file();
   }
 
   KRun::runURL( KURL( path ), "text/plain" );
@@ -900,16 +815,16 @@ void karamba::editConfig()
 void karamba::editScript()
 {
   //qDebug("karamba::editScript");
-  QFileInfo fileInfo( themeFile );
+  QFileInfo fileInfo( m_theme.file() );
   QString path;
 
   if( fileInfo.isRelative() )
   {
-      path = themePath + "/" + themeName + ".py";
+      path = m_theme.path() + "/" + m_theme.name() + ".py";
   }
   else
   {
-      path = QFileInfo(themeFile).dirPath() + "/" + themeName + ".py";
+      path = QFileInfo(m_theme.file()).dirPath() + "/" + m_theme.name() + ".py";
   }
   KRun::runURL( KURL( path ), "text/plain" );
 }
@@ -1190,7 +1105,7 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
     SensorParams *sp = new SensorParams(meter);
     sp->addParam( "LINE", QString::number( lineParser.getInt("LINE"))
 );
-    sp->addParam( "THEMAPATH", themePath );
+    sp->addParam( "THEMAPATH", m_theme.path() );
     sensor->addMeter(sp);
   }
 
@@ -1245,7 +1160,8 @@ void karamba::meterClicked(QMouseEvent* e, Meter* meter)
 
     if (RichTextLabel* richText = dynamic_cast<RichTextLabel*>(meter))
     {
-      pythonIface->meterClicked(this, richText->anchorAt(e->x(), e->y()), button);
+      pythonIface->meterClicked(this, richText->anchorAt(e->x(), e->y()),
+button);
     }
     else
     {
@@ -1374,7 +1290,8 @@ void karamba::mouseMoveEvent( QMouseEvent *e )
 
     while (it != 0)
     {
-                insideArea = ((Meter*)(*it)) -> insideActiveArea(e -> x(), e -> y());
+                insideArea = ((Meter*)(*it)) -> insideActiveArea(e -> x(), e ->
+y());
                 if (insideArea)
                 {
                         break;
@@ -1646,7 +1563,8 @@ void karamba::writeConfigData()
 
   // write changes to DiskSensor
   config -> sync();
-  //qWarning("Config File ~/.superkaramba/%s.rc written.", themeName.ascii());
+  //qWarning("Config File ~/.superkaramba/%s.rc written.",
+  //         m_theme.name().ascii());
 }
 
 void karamba::slotToggleConfigOption(QString key, bool value)
@@ -1803,7 +1721,7 @@ void karamba::saveProperties(KConfig* config)
 {
   //qDebug("karamba::saveProperties");
   config->setGroup("session");
-  config->writeEntry("theme", themeFile);
+  config->writeEntry("theme", m_theme.file());
   writeConfigData();
 }
 

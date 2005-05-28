@@ -190,7 +190,7 @@ bool KarambaApplication::startThemes(QStringList &lst)
   return result;
 }
 
-void KarambaApplication::addKaramba(karamba* k, QString &themeName)
+void KarambaApplication::addKaramba(karamba* k, const QString& themeName)
 {
   if(karambaApp->dcopStub())
     karambaApp->dcopStub()->themeAdded(
@@ -198,7 +198,7 @@ void KarambaApplication::addKaramba(karamba* k, QString &themeName)
   karambaList->append(k);
 }
 
-void KarambaApplication::deleteKaramba(karamba* k, QString &themeName)
+void KarambaApplication::deleteKaramba(karamba* k, const QString& themeName)
 {
   if(karambaApp->dcopStub())
     karambaApp->dcopStub()->themeClosed(

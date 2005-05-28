@@ -223,7 +223,7 @@ const char* getThemePath(long widget)
 {
   karamba* currTheme = (karamba*)widget;
 
-  return currTheme->themePath.ascii();
+  return currTheme->theme().path().ascii();
 }
 
 PyObject* py_get_theme_path(PyObject *, PyObject *args)
