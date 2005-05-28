@@ -35,6 +35,7 @@ struct _object;
 typedef struct _object PyObject;
 struct _ts;
 typedef struct _ts PyThreadState;
+class ThemeFile;
 
 class KarambaPython
 {
@@ -50,7 +51,7 @@ protected:
   bool callObject(const char* func, PyObject* pArgs);
 
 public:
-  KarambaPython(QString themePath, QString themeName, bool reloading);
+  KarambaPython(const ThemeFile& theme, bool reloading);
   ~KarambaPython();
 
   static void initPython();

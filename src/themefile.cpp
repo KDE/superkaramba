@@ -27,6 +27,7 @@
 #include <kzip.h>
 #include <qtextstream.h>
 #include <qfileinfo.h>
+#include <qdom.h>
 
 ThemeFile::ThemeFile()
   : m_stream(0)
@@ -44,7 +45,7 @@ bool ThemeFile::open()
 
   if(m_zipTheme)
   {
-    m_ba = readZipFile(m_name + ".theme");
+    m_ba = readZipFile(m_theme);
     if(m_ba.size() > 0)
     {
       m_stream = new QTextStream(m_ba, IO_ReadOnly);
@@ -115,18 +116,53 @@ bool ThemeFile::set(const KURL &url)
 
   QFileInfo fi(m_file);
 
+  m_name = fi.baseName();
+  m_theme = m_name + ".theme";
+  m_python = m_name;
+
   if(isZipFile(m_file))
   {
     m_path = m_file;
     m_zipTheme = true;
+    parseXml();
   }
   else
   {
     m_path = fi.dirPath(true) + "/";
     m_zipTheme = false;
   }
-  m_name = fi.baseName();
   return true;
+}
+
+void ThemeFile::parseXml()
+{
+  QDomDocument doc("superkaramba_theme");
+  doc.setContent(readThemeFile("maindata.xml"));
+  QDomElement element = doc.documentElement();
+
+  QDomNode n = element.firstChild();
+  while(!n.isNull())
+  {
+    QDomElement e = n.toElement();
+    if(!e.isNull())
+    {
+      if(e.tagName() == "name")
+        m_name = e.text();
+      if(e.tagName() == "themefile")
+        m_file = e.text();
+      if(e.tagName() == "python_module")
+        m_python = e.text();
+      if(e.tagName() == "description")
+        m_description = e.text();
+      if(e.tagName() == "author")
+        m_author = e.text();
+      if(e.tagName() == "author_email")
+        m_authorEmail = e.text();
+      if(e.tagName() == "homepage")
+        m_homepage = e.text();
+    }
+    n = n.nextSibling();
+  }
 }
 
 bool ThemeFile::isThemeFile(const QString& filename) const

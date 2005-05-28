@@ -784,7 +784,7 @@ void karamba::killWidget()
 
 void karamba::initPythonInterface()
 {
-  pythonIface = new KarambaPython(m_theme.path(), m_theme.name(), m_reloading);
+  pythonIface = new KarambaPython(m_theme, m_reloading);
 }
 
 void karamba::quitKaramba()

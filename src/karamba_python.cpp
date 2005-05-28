@@ -28,6 +28,7 @@
 
 #include <Python.h>
 #include "karambaapp.h"
+#include "themefile.h"
 
 #include "karamba_python.h"
 #include "meter_python.h"
@@ -233,7 +234,7 @@ static PyMethodDef karamba_methods[] = {
 
 PyThreadState* KarambaPython::mainThreadState = 0;
 
-KarambaPython::KarambaPython(QString themePath, QString themeName, bool reloading):
+KarambaPython::KarambaPython(const ThemeFile& theme, bool reloading):
   pythonThemeExtensionLoaded(false), pName(0), pModule(0), pDict(0)
 {
   PyThreadState* myThreadState;
@@ -244,14 +245,14 @@ KarambaPython::KarambaPython(QString themePath, QString themeName, bool reloadin
   // load the .py file for this .theme
   PyRun_SimpleString((char*)"import sys");
   //Add theme path to python path so that we can find the python file
-  snprintf(pypath, 1023, "sys.path.insert(0, '%s')", themePath.ascii());
+  snprintf(pypath, 1023, "sys.path.insert(0, '%s')", theme.path().ascii());
   PyRun_SimpleString(pypath);
   PyRun_SimpleString((char*)"sys.path.insert(0, '')");
 
   PyImport_AddModule((char*)"karamba");
   Py_InitModule((char*)"karamba", karamba_methods);
 
-  pName = PyString_FromString(themeName.ascii());
+  pName = PyString_FromString(theme.pythonModule().ascii());
   pModule = PyImport_Import(pName);
 
   //Make sure the module is up to date.
@@ -274,8 +275,8 @@ KarambaPython::KarambaPython(QString themePath, QString themeName, bool reloadin
     fprintf(stderr, "What does ImportError mean?\n");
     fprintf(stderr, "\n");
     fprintf(stderr,
-            "It means that I couldn't load a python add-on for %s.theme\n",
-            themeName.ascii());
+            "It means that I couldn't load a python add-on %s.py\n",
+            theme.pythonModule().ascii());
     fprintf(stderr, "If this is a regular theme and doesn't use python\n");
     fprintf(stderr, "extensions, then nothing is wrong.\n");
     fprintf(stderr,
