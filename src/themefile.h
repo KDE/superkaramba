@@ -46,6 +46,7 @@ class ThemeFile
     const QString& name() const { return m_name; };
     const QString& file() const { return m_file; };
     const QString& pythonModule() const { return m_python; };
+    //bool pythonModuleExist() const;
     const QString& path() const { return m_path; };
     const QString& description() const { return m_description; };
     const QString& author() const { return m_author; };
@@ -53,6 +54,7 @@ class ThemeFile
     const QString& homepage() const { return m_homepage; };
     bool exists() const;
     bool isThemeFile(const QString& filename) const;
+    bool isValid() const;
     QByteArray readThemeFile(const QString& filename) const;
 
     bool set(const KURL& url);
@@ -65,6 +67,7 @@ class ThemeFile
   private:
     QByteArray readZipFile(const QString& filename) const;
     void parseXml();
+    void mkdir(QDir dir);
 
     QString m_path;
     bool m_zipTheme;

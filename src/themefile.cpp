@@ -23,11 +23,18 @@
 ****************************************************************************/
 #include "themefile.h"
 #include "lineparser.h"
+#include <kdebug.h>
 #include <kurl.h>
 #include <kzip.h>
+#include <kapplication.h>
+#include <kmessagebox.h>
+#include <kstandarddirs.h>
+#include <klocale.h>
+#include <kio/netaccess.h>
 #include <qtextstream.h>
 #include <qfileinfo.h>
 #include <qdom.h>
+#include <qdir.h>
 
 ThemeFile::ThemeFile()
   : m_stream(0)
@@ -94,18 +101,59 @@ bool ThemeFile::close()
   return false;
 }
 
+bool ThemeFile::isValid() const
+{
+  return (exists() && !m_name.isEmpty() && !m_theme.isEmpty());
+}
+
 bool ThemeFile::exists() const
 {
   QFileInfo file(m_file);
   return file.exists();
 }
 
+void ThemeFile::mkdir(QDir dir)
+{
+  QStringList dirs = QStringList::split("/", dir.absPath());
+  QDir path("/");
+
+  for(uint i = 0; i < dirs.count(); ++i)
+  {
+    path.setPath(path.path() + "/" + dirs[i]);
+    kdDebug() << path.path() << endl;
+    if(!path.exists())
+      path.mkdir(path.path());
+  }
+}
+
 bool ThemeFile::set(const KURL &url)
 {
   if(!url.isLocalFile())
   {
-    // TODO: download file
-    return false;
+    KStandardDirs ksd;
+    QDir themeDir(ksd.localkdedir() + ksd.kde_default("data")
+                  + kapp->name() + "/themes/");
+    QFileInfo localFile = themeDir.filePath(url.fileName());
+
+    kdDebug() << themeDir.path() << endl;
+    if(!themeDir.exists())
+      mkdir(themeDir);
+    if(localFile.exists())
+    {
+      if(KMessageBox::questionYesNo(kapp->activeWindow(),
+         i18n("%1 already exists. Do you want to overwrite it.")
+             .arg(localFile.filePath()))
+         == KMessageBox::No)
+      {
+        return false;
+      }
+    }
+    if(!KIO::NetAccess::file_copy(url, localFile.filePath(), -1, true,
+      false, kapp->mainWidget()))
+    {
+      return false;
+    }
+    m_file = localFile.filePath();
   }
   else
   {
@@ -131,7 +179,7 @@ bool ThemeFile::set(const KURL &url)
     m_path = fi.dirPath(true) + "/";
     m_zipTheme = false;
   }
-  return true;
+  return isValid();
 }
 
 void ThemeFile::parseXml()

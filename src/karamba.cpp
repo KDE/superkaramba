@@ -52,10 +52,18 @@
 karamba::karamba(QString fn, bool reloading) :
     QWidget(0,"karamba", Qt::WGroupLeader | WStyle_Customize |
             WRepaintNoErase| WStyle_NoBorder | WDestructiveClose  ),
-    tempUnit('C'), clickPos(0,0), pythonIface(0)
+    meterList(0), imageList(0), clickList(0), kpop(0), widgetMask(0),
+    config(0), kWinModule(0), tempUnit('C'), sensorList(0), timeList(0),
+    themeConfMenu(0), clickPos(0, 0), accColl(0), menuAccColl(0),
+    toggleLocked(0), pythonIface(0), defaultTextField(0)
 {
   //qDebug("karamba::karamba");
-  m_theme.set(fn);
+  if(!m_theme.set(fn))
+  {
+    setFixedSize(0, 0);
+    QTimer::singleShot(100, this, SLOT(killWidget()));
+    return;
+  }
   setName("karamba - " + m_theme.name());
 
   widgetUpdate = true;
@@ -307,7 +315,9 @@ karamba::~karamba()
   karambaApp->deleteKaramba(this, m_theme.name());
 
   widgetClosed();
-  writeConfigData();
+  if(m_theme.isValid())
+    writeConfigData();
+
   delete config;
 
   if(meterList != 0)
@@ -340,28 +350,14 @@ karamba::~karamba()
     delete timeList;
   }
 
-  if( toggleLocked != 0)
-    delete toggleLocked;
-  if( accColl != 0)
-    delete accColl;
-  if ( menuAccColl != 0)
-    delete menuAccColl;
-  /*
-  if( keditpop != 0)
-    delete keditpop;
-  */
-  if( themeConfMenu != 0)
-    delete themeConfMenu;
-
-  if( kpop != 0)
-    delete kpop;
-
-  if( widgetMask != 0)
-    delete widgetMask;
-
+  delete toggleLocked;
+  delete accColl;
+  delete menuAccColl;
+  delete themeConfMenu;
+  delete kpop;
+  delete widgetMask;
   delete kWinModule;
   delete defaultTextField;
-
   delete pythonIface;
 }
 

@@ -175,17 +175,11 @@ bool KarambaApplication::startThemes(QStringList &lst)
 
   for(QStringList::Iterator it = lst.begin(); it != lst.end(); ++it )
   {
-    QFileInfo file( *it );
-    if(file.exists() && !file.isDir())
-    {
-      karamba *mainWin = 0;
+    karamba *mainWin = 0;
 
-      mainWin = new karamba(*it , false);
-      mainWin->show();
-      result = true;
-    }
-    else
-      qWarning("%s theme not found.", (*it).ascii());
+    mainWin = new karamba(*it , false);
+    mainWin->show();
+    result = true;
   }
   return result;
 }
