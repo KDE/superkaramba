@@ -112,32 +112,13 @@ bool ThemeFile::exists() const
   return file.exists();
 }
 
-void ThemeFile::mkdir(QDir dir)
-{
-  QStringList dirs = QStringList::split("/", dir.absPath());
-  QDir path("/");
-
-  for(uint i = 0; i < dirs.count(); ++i)
-  {
-    path.setPath(path.path() + "/" + dirs[i]);
-    kdDebug() << path.path() << endl;
-    if(!path.exists())
-      path.mkdir(path.path());
-  }
-}
-
 bool ThemeFile::set(const KURL &url)
 {
   if(!url.isLocalFile())
   {
-    KStandardDirs ksd;
-    QDir themeDir(ksd.localkdedir() + ksd.kde_default("data")
-                  + kapp->name() + "/themes/");
+    QDir themeDir(locateLocal("appdata", "themes/", true));
     QFileInfo localFile = themeDir.filePath(url.fileName());
 
-    kdDebug() << themeDir.path() << endl;
-    if(!themeDir.exists())
-      mkdir(themeDir);
     if(localFile.exists())
     {
       if(KMessageBox::questionYesNo(kapp->activeWindow(),
