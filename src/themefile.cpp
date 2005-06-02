@@ -122,7 +122,7 @@ bool ThemeFile::set(const KURL &url)
     if(localFile.exists())
     {
       if(KMessageBox::questionYesNo(kapp->activeWindow(),
-         i18n("%1 already exists. Do you want to overwrite it.")
+         i18n("%1 already exists. Do you want to overwrite it?")
              .arg(localFile.filePath()))
          == KMessageBox::No)
       {
