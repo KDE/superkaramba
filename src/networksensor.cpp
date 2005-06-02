@@ -142,13 +142,16 @@ void NetworkSensor::update()
         sp = (SensorParams*)(*it);
         meter = sp->getMeter();
         format = sp->getParam( "FORMAT" );
-  decimals = ( sp->getParam( "DECIMALS" ) ).toInt();
+        decimals = ( sp->getParam( "DECIMALS" ) ).toInt();
         if (format.length() == 0 )
         {
             format = "%in";
         }
 
+        format.replace( QRegExp("%inkb", false), QString::number( ((inB - receivedBytes)*8)/delay, 'f', decimals ) );
         format.replace( QRegExp("%in", false), QString::number( (inB - receivedBytes)/delay, 'f', decimals ) );
+
+        format.replace( QRegExp("%outkb", false), QString::number( ((outB - transmittedBytes)*8)/delay, 'f', decimals ) );
         format.replace( QRegExp("%out", false), QString::number( (outB - transmittedBytes)/delay, 'f', decimals ) );
 
         meter->setValue( format );

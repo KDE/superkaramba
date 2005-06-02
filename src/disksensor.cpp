@@ -117,13 +117,27 @@ void DiskSensor::processExited(KProcess *)
         format.replace( QRegExp("%fp", false),QString::number(getPercentFree(mntPt)));
         format.replace( QRegExp("%fg",false),
                         QString::number(getFreeSpace(mntPt)/(1024*1024)));
+        format.replace( QRegExp("%fkb",false),
+                        QString::number(getFreeSpace(mntPt)*8) );
+        format.replace( QRegExp("%fk",false),
+                        QString::number(getFreeSpace(mntPt)) );
         format.replace( QRegExp("%f", false),QString::number(getFreeSpace(mntPt)/1024));
+        
         format.replace( QRegExp("%up", false),QString::number(getPercentUsed(mntPt)));
         format.replace( QRegExp("%ug",false),
                         QString::number(getUsedSpace(mntPt)/(1024*1024)));
+        format.replace( QRegExp("%ukb",false),
+                        QString::number(getUsedSpace(mntPt)*8) );
+        format.replace( QRegExp("%uk",false),
+                        QString::number(getUsedSpace(mntPt)) );
         format.replace( QRegExp("%u", false),QString::number(getUsedSpace(mntPt)/1024));
+
         format.replace( QRegExp("%tg",false),
                         QString::number(getTotalSpace(mntPt)/(1024*1024)));
+        format.replace( QRegExp("%tkb",false),
+                        QString::number(getTotalSpace(mntPt)*8));
+        format.replace( QRegExp("%tk",false),
+                        QString::number(getTotalSpace(mntPt)));
         format.replace( QRegExp("%t", false),QString::number(getTotalSpace(mntPt)/1024));
         meter->setValue(format);
         ++lit;
