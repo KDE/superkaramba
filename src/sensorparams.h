@@ -35,8 +35,8 @@ public:
 
     ~SensorParams();
 
-    void addParam( QString name, QString value);
-    QString getParam( QString ) const;
+    void addParam( const QString &name, const QString &value);
+    QString getParam( const QString& ) const;
 
     Meter* getMeter() const;
 private:

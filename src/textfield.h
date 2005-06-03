@@ -30,9 +30,9 @@ public:
     void setFontSize( int );
     void setColor(QColor clr);
     void setBGColor(QColor clr);
-    void setFont( QString );
+    void setFont( const QString& );
     void setAlignment( int );
-    void setAlignment( QString );
+    void setAlignment( const QString& );
     void setFixedPitch( bool );
     void setShadow( int );
 

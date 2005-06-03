@@ -19,11 +19,11 @@ SensorParams::~SensorParams()
 {
 }
 
-void SensorParams::addParam( QString name, QString value){
+void SensorParams::addParam( const QString &name, const QString &value){
     params[name] = value;
 }
 
-QString SensorParams::getParam( QString name ) const
+QString SensorParams::getParam( const QString &name ) const
 {
     return params[name];
 }

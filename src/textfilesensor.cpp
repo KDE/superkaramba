@@ -10,13 +10,13 @@
 #include "textfilesensor.h"
 #include "qdom.h"
 
-TextFileSensor::TextFileSensor( QString fn, bool iRdf, int interval, QString encoding )
+TextFileSensor::TextFileSensor( const QString &fn, bool iRdf, int interval, const QString &encoding )
         : Sensor( interval )
 {
     fileName = fn;
     rdf = iRdf;
 
-    if( encoding != "" )
+    if( !encoding.isEmpty() )
     {
         codec = QTextCodec::codecForName( encoding );
         if ( codec == 0)

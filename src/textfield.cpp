@@ -79,7 +79,7 @@ QColor TextField::getBGColor() const
 }
 
 
-void TextField::setFont(QString f)
+void TextField::setFont(const QString &f)
 {
     font.setFamily(f);
     lineHeight = QFontMetrics(font).height();
@@ -102,7 +102,7 @@ int TextField::getFontSize() const
     return font.pointSize();
 }
 
-void TextField::setAlignment( QString align )
+void TextField::setAlignment( const QString &align )
 {
     QString a = align.upper();
     if( a == "LEFT" || a == "" )

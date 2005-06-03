@@ -13,9 +13,10 @@
 #include <xmmsctrl.h>
 #endif // HAVE_XMMS
 
-XMMSSensor::XMMSSensor( int interval, QString encoding ) : Sensor( interval )
+XMMSSensor::XMMSSensor( int interval, const QString &encoding )
+    : Sensor( interval )
 {
-     if( encoding != "" )
+     if( !encoding.isEmpty() )
     {
         codec = QTextCodec::codecForName( encoding );
         if ( codec == 0)

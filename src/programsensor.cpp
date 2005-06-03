@@ -10,10 +10,10 @@
 #include "programsensor.h"
 
 #include <qstringlist.h>
-ProgramSensor::ProgramSensor(QString progName, int interval, QString encoding )
+ProgramSensor::ProgramSensor(const QString &progName, int interval, QString encoding )
         : Sensor( interval )
 {
-     if( encoding != "" )
+     if( !encoding.isEmpty())
     {
         codec = QTextCodec::codecForName( encoding );
         if ( codec == 0)

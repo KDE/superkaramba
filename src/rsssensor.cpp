@@ -15,7 +15,7 @@
 #include <kurl.h>
 #include <kio/netaccess.h>
 
-RssSensor::RssSensor( QString src, int interval, QString form, QString enc)
+RssSensor::RssSensor( const QString &src, int interval, const QString &form, const QString &enc)
     : Sensor(interval),
     source(src),
     format(form),
@@ -26,7 +26,7 @@ RssSensor::RssSensor( QString src, int interval, QString form, QString enc)
     //  %t = title (DEFAULT)
     //  %d = desc
 
-    if( encoding != "" )
+    if( !encoding.isEmpty() )
     {
         codec = QTextCodec::codecForName( encoding );
         if ( codec == 0)

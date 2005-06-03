@@ -212,14 +212,14 @@ int ThemesDlg::themeIndex(QString file)
   return -1;
 }
 
-void ThemesDlg::addTheme(QString , QString file)
+void ThemesDlg::addTheme(const QString& , const QString &file)
 {
   int i = themeIndex(file);
   if(i < 0)
     tableThemes->insertItem(new ThemeWidget(new ThemeFile(file)));
 }
 
-void ThemesDlg::removeTheme(QString, QString)
+void ThemesDlg::removeTheme(const QString&, const QString&)
 {
 }
 
