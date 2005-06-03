@@ -11,7 +11,7 @@
 #include "karamba.h"
 #include "karambainterface.h"
 #include "qwidgetlist.h"
-#include "themelistwindow.h"
+#include "themesdlg.h"
 
 KarambaIface::KarambaIface(): DCOPObject("KarambaIface")
 {
@@ -45,19 +45,19 @@ karamba* KarambaIface::getKaramba(QString name)
   return result;
 }
 
-ThemeListWindow* KarambaIface::getThemeWnd()
+ThemesDlg* KarambaIface::getThemeWnd()
 {
   QWidgetList  *list = QApplication::allWidgets();
   QWidgetListIt it( *list );         // iterate over the widgets
   QWidget* w;
-  ThemeListWindow* result = 0;
+  ThemesDlg* result = 0;
 
   while ( (w=it.current()) != 0 ) // for each widget...
   {
     ++it;
-    if (QString(w->name()) == "ThemeListWindowLayout")
+    if (QString(w->name()) == "ThemesLayout")
     {
-      result = (ThemeListWindow*) w;
+      result = (ThemesDlg*) w;
       break;
     }
   }
@@ -90,18 +90,18 @@ void KarambaIface::quit()
   qApp->quit();
 }
 
-void KarambaIface::themeAdded(QString appId, QString name)
+void KarambaIface::themeAdded(QString appId, QString file)
 {
-  ThemeListWindow* tw = getThemeWnd();
+  ThemesDlg* tw = getThemeWnd();
   if(tw)
-    tw->addTheme(appId, name);
+    tw->addTheme(appId, file);
 }
 
-void KarambaIface::themeClosed(QString appId, QString name)
+void KarambaIface::themeClosed(QString appId, QString file)
 {
-  ThemeListWindow* tw = getThemeWnd();
+  ThemesDlg* tw = getThemeWnd();
   if(tw)
-    tw->removeTheme(appId, name);
+    tw->removeTheme(appId, file);
 }
 
 bool KarambaIface::isMainKaramba()

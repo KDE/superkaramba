@@ -25,12 +25,10 @@
 #include "richtextlabel.h"
 #include "karamba.h"
 #include "karambaapp.h"
-#include "themelistwindow.h"
+#include "themesdlg.h"
 #include "lineparser.h"
 
 #include <kdebug.h>
-#include <kzip.h>
-#include <karchive.h>
 #include <kmessagebox.h>
 #include <krun.h>
 #include <klocale.h>
@@ -191,11 +189,6 @@ karamba::karamba(QString fn, bool reloading) :
 
   kpop->insertSeparator();
 
-  kpop->insertItem( SmallIconSet("fileopen"),i18n("&Open New Theme..."), this,
-                    SLOT(startNewKaramba()), CTRL+Key_O );
-
-  /*kpop->insertItem(tr("&Edit"), keditpop);*/
-
   kpop->insertItem(i18n("Configure &Theme"), themeConfMenu, THEMECONF);
   kpop->setItemEnabled(THEMECONF, false);
   kpop->insertItem(i18n("To Des&ktop"), toDesktopMenu);
@@ -204,15 +197,6 @@ karamba::karamba(QString fn, bool reloading) :
                     SLOT(reloadConfig()), CTRL+Key_R );
   kpop->insertItem( SmallIconSet("fileclose"),i18n("&Close This Theme"), this,
                     SLOT(killWidget()), CTRL+Key_C );
-
-  kpop->insertSeparator();
-  kpop->insertItem( SmallIconSet("find"),i18n("&Download More Themes"), this,
-                    SLOT(downloadThemes()), CTRL+Key_D );
-
-  kpop->insertSeparator();
-
-  kpop->insertItem( SmallIconSet("exit"),i18n("&Quit"), this,
-                    SLOT(quitKaramba()), CTRL+Key_Q );
 
   kpop->polish();
 
@@ -305,7 +289,7 @@ karamba::karamba(QString fn, bool reloading) :
   setFocusPolicy(QWidget::StrongFocus);
 
   //Add self to list of open themes
-  karambaApp->addKaramba(this, m_theme.name());
+  karambaApp->addKaramba(this, m_theme.file());
 }
 
 karamba::~karamba()
@@ -737,25 +721,6 @@ bool karamba::parseConfig()
   }
 }
 
-void karamba::startNewKaramba()
-{
-  //qDebug("karamba::startNewKaramba");
-  QStringList fileNames;
-  fileNames = KFileDialog::getOpenFileNames(QString::null,
-      i18n("*.theme *.ctheme *.skz|Themes"),
-      0, i18n("Open Themes"));
-  for ( QStringList::Iterator it = fileNames.begin();
-        it != fileNames.end();
-        ++it )
-  {
-    QFileInfo file( *it );
-    if( file.exists() )
-    {
-      (new karamba( *it, false ))->show();
-    }
-  }
-}
-
 void karamba::popupNotify(int)
 {
   //qDebug("karamba::popupNotify");
@@ -781,13 +746,6 @@ void karamba::killWidget()
 void karamba::initPythonInterface()
 {
   pythonIface = new KarambaPython(m_theme, m_reloading);
-}
-
-void karamba::quitKaramba()
-{
-  //qDebug("karamba::quitKaramba.");
-  qApp -> closeAllWindows();
-  qApp -> quit();
 }
 
 void karamba::editConfig()
@@ -1770,14 +1728,6 @@ void karamba::toDesktop(int id, int menuid)
     info->setDesktop( desktop);
   else
     info->setDesktop( NETWinInfo::OnAllDesktops );
-}
-
-//Eventually maybe add a theme browser here
-void karamba::downloadThemes()
-{
-  //qDebug("karamba::downloadThemes");
-  //Go to SK Themes webpage for now
-  KRun::runURL( KURL( "http://www.superkaramba.com/" ), "text/html" );
 }
 
 void karamba::systrayUpdated()

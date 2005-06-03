@@ -16,8 +16,7 @@
 #include <qstringlist.h>
 #include "karambainterface.h"
 #include <qdir.h>
-#include "welcomeform.h"
-#include "themelistwindow.h"
+#include "themesdlg.h"
 #include <kfiledialog.h>
 #include <kcmdlineargs.h>
 #include <fcntl.h>
@@ -105,22 +104,16 @@ void KarambaApplication::setUpSysTray()
 {
   //Create theme list window.
   //This will function as the main window for the tray icon
-  themeListWindow = new ThemeListWindow();
+  themeListWindow = new ThemesDlg();
 
   //Set up systray icon
   KSystemTray* sysTrayIcon = new KSystemTray(themeListWindow);
-  sysTrayIcon->setPixmap( QPixmap(skicon_xpm));
-#if defined(KDE_MAKE_VERSION)
-# if KDE_VERSION >= KDE_MAKE_VERSION(3,1,9)
-  sysTrayIcon->contextMenu()->insertItem(i18n("Open Theme..."),
-      themeListWindow, SLOT(openTheme()));
-# endif
-#endif
+  sysTrayIcon->setPixmap(QPixmap(skicon_xpm));
   sysTrayIcon->show();
 
   //Connect Systray icon's quit event
-  QObject::connect(sysTrayIcon, SIGNAL( quitSelected() ), themeListWindow,
-                  SLOT(quitSuperKaramba()) );
+  QObject::connect(sysTrayIcon, SIGNAL(quitSelected()),
+                   themeListWindow, SLOT(quitSuperKaramba()));
 }
 
 void KarambaApplication::checkPreviousSession(KApplication &app, QStringList &lst)
@@ -141,32 +134,26 @@ void KarambaApplication::checkPreviousSession(KApplication &app, QStringList &ls
 
 void KarambaApplication::checkCommandLine(KCmdLineArgs *args, QStringList &lst)
 {
-    /******
-     Not a saved session - check for themes given on command line
-    */
-    if(args->count() > 0)
+  /******
+    Not a saved session - check for themes given on command line
+  */
+  if(args->count() > 0)
+  {
+    for(int i = 0; i < (args->count()); i++)
     {
-      for(int i = 0; i < (args->count()); i++)
-      {
-        if( args->arg(i) != "" )
-          lst.push_back(args->arg(i));
-      }
+      if( args->arg(i) != "" )
+        lst.push_back(args->arg(i));
     }
+  }
 }
 
-void KarambaApplication::showWelcomeDialog(QStringList &lst)
+void KarambaApplication::showWelcomeDialog()
 {
   //No themes given on command line and no saved session.
   //Show welcome dialog.
 
-  WelcomeForm* wcmFrm = new WelcomeForm(themeListWindow,0,true,0);
-  if (wcmFrm->exec() == QDialog::Accepted)
-  {
-    lst = KFileDialog::getOpenFileNames(QString::null,
-                                        i18n("*.theme *.ctheme *.skz|Themes"),
-                                        0,
-                                        i18n("Open Themes"));
-  }
+  if(themeListWindow)
+    themeListWindow->show();
 }
 
 bool KarambaApplication::startThemes(QStringList &lst)

@@ -30,7 +30,7 @@
 class karamba;
 class KarambaIface;
 class KCmdLineArgs;
-class ThemeListWindow;
+class ThemesDlg;
 class dcopIface_stub;
 
 class KarambaApplication : public KApplication
@@ -39,7 +39,7 @@ private:
   static int fd;
 protected:
   KarambaIface* iface;
-  ThemeListWindow* themeListWindow;
+  ThemesDlg* themeListWindow;
   dcopIface_stub* dcopIfaceStub;
   QObjectList *karambaList;
 
@@ -53,7 +53,7 @@ public:
   void setUpSysTray();
   void checkPreviousSession(KApplication &app, QStringList &lst);
   void checkCommandLine(KCmdLineArgs *args, QStringList &lst);
-  void showWelcomeDialog(QStringList &lst);
+  void showWelcomeDialog();
   bool startThemes(QStringList &lst);
   KarambaIface* dcopIface() { return iface; };
   dcopIface_stub* dcopStub() { return dcopIfaceStub; };

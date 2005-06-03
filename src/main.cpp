@@ -139,14 +139,15 @@ int main(int argc, char **argv)
     {
       //No themes given on command line and no saved session.
       //Show welcome dialog.
-      app.showWelcomeDialog(lst);
+      if(mainAppId.isEmpty())
+        app.showWelcomeDialog();
     }
 
     args->clear();
 
     KarambaPython::initPython();
     //qDebug("startThemes");
-    if (app.startThemes(lst))
+    if(app.startThemes(lst) || mainAppId.isEmpty())
       ret = app.exec();
     KarambaPython::shutdownPython();
     return ret;

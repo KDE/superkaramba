@@ -18,17 +18,17 @@ class ThemeListWindow;
 
 class KarambaIface: virtual public dcopIface
 {
-public:   
+public:
   KarambaIface();
-  ~KarambaIface(); 
+  ~KarambaIface();
   karamba* getKaramba(QString name);
-  ThemeListWindow* getThemeWnd();
-  
+  ThemesDlg* getThemeWnd();
+
 public slots:
   virtual void openTheme(QString filename);
   virtual void closeTheme(QString name);
   virtual void quit();
-  
+
   virtual void themeAdded(QString appId, QString name);
   virtual void themeClosed(QString appId, QString name);
   virtual bool isMainKaramba();

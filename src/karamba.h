@@ -225,10 +225,8 @@ public slots:
     void updateBackground(KSharedPixmap*);
     void passMenuOptionChanged(QString key, bool);
     void passMenuItemClicked(int);
-    void quitKaramba();
     void processExited (KProcess *proc);
     void receivedStdout (KProcess *proc, char *buffer, int buflen);
-    void downloadThemes();
     void toDesktop(int desktopid, int menuid);
 
     // Systray
@@ -247,7 +245,6 @@ private:
     bool m_reloading;
 private slots:
     void initPythonInterface();
-    void startNewKaramba();
     void killWidget();
     void editConfig();
     void editScript();
