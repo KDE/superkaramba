@@ -36,6 +36,71 @@
 #include <qdom.h>
 #include <qdir.h>
 
+class ZipFile
+{
+  public:
+    ZipFile(const QString& zipfile, const QString& filename) :
+      m_zip(0), m_file(0), m_filename(filename)
+    {
+      if(filename.isEmpty())
+        return;
+
+      const KArchiveDirectory* dir;
+      const KArchiveEntry* entry;
+
+      m_zip = new KZip(zipfile);
+
+      if(!m_zip->open(IO_ReadOnly))
+      {
+        qDebug("Unable to open '%s' for reading.", zipfile.ascii());
+        return;
+      }
+      dir = m_zip->directory();
+      if(dir == 0)
+      {
+        qDebug("Error reading directory contents of file %s", zipfile.ascii());
+        return;
+      }
+
+      entry = dir->entry(filename);
+      if(entry == 0 || !entry->isFile())
+        return;
+
+      m_file = static_cast<const KArchiveFile*>(entry);
+    }
+
+    virtual ~ZipFile()
+    {
+      if(m_zip)
+      {
+        m_zip->close();
+        delete  m_zip;
+      }
+    }
+
+    QByteArray data()
+    {
+      if(m_file)
+        return m_file->data();
+      else
+      {
+        if(!m_filename.isEmpty())
+          qDebug("Error reading file %s from zip", m_filename.ascii());
+        return QByteArray();
+      }
+    }
+
+    bool exists()
+    {
+      return (m_file != 0);
+    }
+
+  private:
+    KZip* m_zip;
+    const KArchiveFile* m_file;
+    QString m_filename;
+};
+
 ThemeFile::ThemeFile(const KURL& url)
   : m_stream(0)
 {
@@ -54,7 +119,8 @@ bool ThemeFile::open()
 
   if(m_zipTheme)
   {
-    m_ba = readZipFile(m_theme);
+    ZipFile zf(m_file, m_theme);
+    m_ba = zf.data();
     if(m_ba.size() > 0)
     {
       m_stream = new QTextStream(m_ba, IO_ReadOnly);
@@ -160,20 +226,23 @@ bool ThemeFile::set(const KURL &url)
   {
     m_path = m_file;
     m_zipTheme = true;
-    parseXml();
   }
   else
   {
     m_path = fi.dirPath(true) + "/";
     m_zipTheme = false;
   }
+  parseXml();
   return isValid();
 }
 
 void ThemeFile::parseXml()
 {
+  if(!fileExists("maindata.xml"))
+    return;
+  QByteArray ba = readThemeFile("maindata.xml");
   QDomDocument doc("superkaramba_theme");
-  doc.setContent(readThemeFile("maindata.xml"));
+  doc.setContent(ba);
   QDomElement element = doc.documentElement();
 
   QDomNode n = element.firstChild();
@@ -207,8 +276,23 @@ bool ThemeFile::isThemeFile(const QString& filename) const
 {
   QFileInfo fileInfo(filename);
 
-  // TODO: check if file exists
   return fileInfo.isRelative();
+}
+
+bool ThemeFile::fileExists(const QString& filename) const
+{
+  if(isThemeFile(filename))
+  {
+    if(isZipTheme())
+    {
+      ZipFile zf(m_file, filename);
+      return zf.exists();
+    }
+    else
+      return QFileInfo(path() + "/" + filename).exists();
+  }
+  else
+    return QFileInfo(filename).exists();
 }
 
 QByteArray ThemeFile::readThemeFile(const QString& filename) const
@@ -217,7 +301,8 @@ QByteArray ThemeFile::readThemeFile(const QString& filename) const
 
   if(isZipTheme())
   {
-    ba = readZipFile(filename);
+    ZipFile zf(m_file, filename);
+    ba = zf.data();
   }
   else
   {
@@ -230,43 +315,6 @@ QByteArray ThemeFile::readThemeFile(const QString& filename) const
     }
   }
   return ba;
-}
-
-QByteArray ThemeFile::readZipFile(const QString& filename) const
-{
-  if(filename.isEmpty())
-    return false;
-
-  QByteArray result;
-  KZip zip(m_file);
-  const KArchiveDirectory* dir;
-  const KArchiveEntry* entry;
-  const KArchiveFile* file;
-
-  if(!zip.open(IO_ReadOnly))
-  {
-    qDebug("Unable to open '%s' for reading.", m_file.ascii());
-    return result;
-  }
-  dir = zip.directory();
-  if(dir == 0)
-  {
-    qDebug("Error reading directory contents of file %s", m_file.ascii());
-    return result;
-  }
-
-  entry = dir->entry(filename);
-  if(entry == 0 || !entry->isFile())
-  {
-    qDebug("Error reading %s file from %s",
-           filename.ascii(), m_file.ascii());
-    return false;
-  }
-
-  file = static_cast<const KArchiveFile*>(entry);
-  result = file->data();
-  zip.close();
-  return result;
 }
 
 bool ThemeFile::isZipFile(const QString& filename)

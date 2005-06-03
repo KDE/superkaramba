@@ -60,6 +60,7 @@ class ThemeFile
     bool isThemeFile(const QString& filename) const;
     bool isValid() const;
     QByteArray readThemeFile(const QString& filename) const;
+    bool fileExists(const QString& filename) const;
 
     bool set(const KURL& url);
     bool open();
@@ -69,7 +70,6 @@ class ThemeFile
     static bool isZipFile(const QString& filename);
 
   private:
-    QByteArray readZipFile(const QString& filename) const;
     void parseXml();
     void mkdir(QDir dir);
 
