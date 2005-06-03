@@ -14,19 +14,19 @@
     <version>0.36</version>
     <description></description>
     <ignoreparts/>
-    <projectdirectory>.</projectdirectory>
+    <projectdirectory>..</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
     <secondaryLanguages/>
     <versioncontrol/>
   </general>
   <kdevautoproject>
     <general>
-      <activetarget>src/karamba</activetarget>
-      <useconfiguration>debug</useconfiguration>
+      <activetarget>src/superkaramba</activetarget>
+      <useconfiguration>optimized</useconfiguration>
     </general>
     <run>
       <mainprogram>superkaramba/src/superkaramba</mainprogram>
-      <programargs/>
+      <programargs>/home/damu/.kde/share/apps/superkaramba/themes/month.skz</programargs>
       <terminal>false</terminal>
       <envvars/>
       <directoryradio>build</directoryradio>
@@ -51,14 +51,14 @@
     </make>
     <configurations>
       <optimized>
-        <builddir>../optimized</builddir>
+        <builddir>optimized</builddir>
         <ccompiler>kdevgccoptions</ccompiler>
         <cxxcompiler>kdevgppoptions</cxxcompiler>
         <f77compiler>kdevg77options</f77compiler>
         <cxxflags>-O2 -g0</cxxflags>
         <envvars/>
         <configargs></configargs>
-        <topsourcedir>..</topsourcedir>
+        <topsourcedir></topsourcedir>
         <cppflags></cppflags>
         <ldflags></ldflags>
         <ccompilerbinary></ccompilerbinary>
@@ -75,13 +75,13 @@
         <f77compiler>kdevg77options</f77compiler>
         <cxxflags>-O0 -g3</cxxflags>
         <topsourcedir>..</topsourcedir>
-        <cppflags></cppflags>
-        <ldflags></ldflags>
-        <ccompilerbinary></ccompilerbinary>
-        <cxxcompilerbinary></cxxcompilerbinary>
-        <f77compilerbinary></f77compilerbinary>
+        <cppflags/>
+        <ldflags/>
+        <ccompilerbinary/>
+        <cxxcompilerbinary/>
+        <f77compilerbinary/>
         <cflags>-O0 -g3</cflags>
-        <f77flags></f77flags>
+        <f77flags/>
         <envvars/>
       </debug>
       <default>
@@ -139,7 +139,7 @@
   <kdevdebugger>
     <general>
       <dbgshell>libtool</dbgshell>
-      <programargs></programargs>
+      <programargs>/home/damu/.kde/share/apps/superkaramba/themes/month.skz</programargs>
       <gdbpath></gdbpath>
       <breakonloadinglibs>false</breakonloadinglibs>
       <separatetty>false</separatetty>
@@ -236,6 +236,9 @@
       <inlineGet>true</inlineGet>
       <inlineSet>true</inlineSet>
     </creategettersetter>
+    <designerintegration>
+      <qtdesigner/>
+    </designerintegration>
   </kdevcppsupport>
   <kdevcvsservice>
     <recursivewhenupdate>true</recursivewhenupdate>
