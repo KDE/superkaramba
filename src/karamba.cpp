@@ -55,13 +55,13 @@ karamba::karamba(QString fn, bool reloading) :
     themeConfMenu(0), clickPos(0, 0), accColl(0), menuAccColl(0),
     toggleLocked(0), pythonIface(0), defaultTextField(0)
 {
-  //qDebug("karamba::karamba");
   if(!m_theme.set(fn))
   {
     setFixedSize(0, 0);
     QTimer::singleShot(100, this, SLOT(killWidget()));
     return;
   }
+  kdDebug() << "Starting theme: " << m_theme.name() << endl;
   setName("karamba - " + m_theme.name());
 
   widgetUpdate = true;
@@ -83,8 +83,12 @@ karamba::karamba(QString fn, bool reloading) :
   config -> setGroup("internal");
 
   m_reloading = reloading;
-  QTimer::singleShot(0, this, SLOT(initPythonInterface()));
-
+  if(!m_theme.pythonModule().isEmpty() &&
+     m_theme.fileExists(m_theme.pythonModule() + ".py"))
+  {
+    kdDebug() << "Loading python module: " << m_theme.pythonModule() << endl;
+    QTimer::singleShot(0, this, SLOT(initPythonInterface()));
+  }
   // Matthew Kay: set window type to "dock" (plays better with taskbar themes
   // this way)
   KWin::setType(winId(), NET::Dock);
