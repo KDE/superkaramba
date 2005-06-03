@@ -211,7 +211,7 @@ bool ThemeFile::set(const KURL &url)
   }
   else
   {
-    m_file = url.path();
+    m_file = canonicalFile(url.path());
     if(!exists())
       return false;
   }
@@ -257,7 +257,11 @@ void ThemeFile::parseXml()
       if(e.tagName() == "themefile")
         m_theme = e.text();
       if(e.tagName() == "python_module")
+      {
         m_python = e.text();
+        if(m_python.right(3).lower() == ".py")
+          m_python.remove(m_python.length() - 3, 3);
+      }
       if(e.tagName() == "description")
         m_description = e.text();
       if(e.tagName() == "author")
@@ -337,6 +341,12 @@ bool ThemeFile::isZipFile(const QString& filename)
 
 bool ThemeFile::pythonModuleExists() const
 {
-  return (!pythonModule().isEmpty() && fileExists(pythonModule() + ".py"));
+  return (!m_python.isEmpty() && fileExists(m_python + ".py"));
 }
 
+QString ThemeFile::canonicalFile(const QString& file)
+{
+  // Get absolute path with NO symlinks
+  QFileInfo fi(file);
+  return QDir(fi.dir().canonicalPath()).filePath(fi.fileName());
+}

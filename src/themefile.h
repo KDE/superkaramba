@@ -69,6 +69,7 @@ class ThemeFile
     bool close();
 
     static bool isZipFile(const QString& filename);
+    static QString canonicalFile(const QString& file);
 
   private:
     void parseXml();

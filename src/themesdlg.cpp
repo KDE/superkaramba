@@ -197,17 +197,10 @@ void ThemesDlg::quitSuperKaramba()
   }
 }
 
-QString ThemesDlg::realFile(QString file)
-{
-  // Get absolute path with NO symlinks
-  QFileInfo fi(file);
-  return QDir(fi.dir().canonicalPath()).filePath(fi.fileName());
-}
-
 int ThemesDlg::themeIndex(QString file)
 {
   ThemeWidget* w;
-  file = realFile(file);
+  file = ThemeFile::canonicalFile(file);
 
   for(uint i = 2; i < tableThemes->count(); ++i)
   {
