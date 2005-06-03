@@ -50,6 +50,8 @@ class ThemesDlg : public ThemesLayout
     void populateListbox();
     int themeIndex(QString file);
     QString realFile(QString file);
+    void saveUserAddedThemes();
+    QStringList themes();
 };
 
 #endif

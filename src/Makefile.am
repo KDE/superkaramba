@@ -33,7 +33,9 @@ superkaramba_SOURCES = main.cpp karamba.cpp meter.cpp bar.cpp sensor.cpp \
 	karambalistboxitem.cpp graph_python.cpp dcopinterface.skel dcopinterface.stub \
 	karambainterface.cpp karambaapp.cpp karamba_python.cpp lineparser.cpp themefile.cpp \
 	themesdlg.cpp themes_layout.ui themewidget_layout.ui themewidget.cpp \
-	kwidgetlistbox.cpp
+	kwidgetlistbox.cpp superkarambasettings.kcfgc
+
+# kde_cfg_DATA = superkaramba.kcfg
 
 superkaramba_LDFLAGS = -Wl,-export-dynamic  $(KDE_RPATH) $(all_libraries) $(PYTHONLIB) $(XMMS_LDFLAGS)
 superkaramba_LDADD = -lkio -lXpm $(LIB_KDEUI) $(XMMS_LDADD) $(LIBPYTHON) $(LIBKVM)

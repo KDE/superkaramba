@@ -24,6 +24,7 @@
 #include "themewidget.h"
 #include "kwidgetlistbox.h"
 #include "karamba.h"
+#include "superkarambasettings.h"
 #include <kdebug.h>
 #include <kfiledialog.h>
 #include <kpushbutton.h>
@@ -44,6 +45,49 @@ ThemesDlg::ThemesDlg(QWidget *parent, const char *name)
 
 ThemesDlg::~ThemesDlg()
 {
+  saveUserAddedThemes();
+}
+
+void ThemesDlg::saveUserAddedThemes()
+{
+  KStandardDirs ksd;
+  QStringList t = themes();
+  QStringList dirs = ksd.findDirs("data", QString(kapp->name()) + "/themes");
+  QStringList::Iterator it = t.begin();
+  bool remove;
+
+  while(it != t.end())
+  {
+    remove = false;
+    for(QStringList::Iterator jt = dirs.begin(); jt != dirs.end(); ++jt)
+    {
+      if((*it).startsWith((*jt)))
+      {
+        remove = true;
+        break;
+      }
+    }
+    if(remove)
+      it = t.remove(it);
+    else
+      ++it;
+  }
+  SuperkarambaSettings::setUserAddedThemes(t);
+  SuperkarambaSettings::writeConfig();
+}
+
+QStringList ThemesDlg::themes()
+{
+  QStringList result;
+  ThemeWidget* w;
+
+  for(uint i = 2; i < tableThemes->count(); ++i)
+  {
+    w = static_cast<ThemeWidget*>(tableThemes->item(i));
+
+    result.append(w->themeFile()->file());
+  }
+  return result;
 }
 
 void ThemesDlg::populateListbox()
@@ -51,7 +95,7 @@ void ThemesDlg::populateListbox()
   ThemeWidget* item;
   QDir dir;
   QStringList dirs;
-  QStringList themes;
+  QStringList t;
   KStandardDirs ksd;
 
   tableThemes->clear();
@@ -83,12 +127,22 @@ void ThemesDlg::populateListbox()
   for(QStringList::Iterator it = dirs.begin(); it != dirs.end(); ++it )
   {
     dir.setPath(*it);
-    themes = dir.entryList("*.skz; *.theme");
-    for(QStringList::Iterator it = themes.begin(); it != themes.end(); ++it )
+    t = dir.entryList("*.skz; *.theme");
+    for(QStringList::Iterator it = t.begin(); it != t.end(); ++it )
     {
       tableThemes->insertItem(
           new ThemeWidget(new ThemeFile(dir.filePath(*it))));
     }
+  }
+  t = SuperkarambaSettings::userAddedThemes();
+  for(QStringList::Iterator it = t.begin(); it != t.end(); ++it )
+  {
+    ThemeFile* file = new ThemeFile(*it);
+
+    if(file->isValid())
+      tableThemes->insertItem(new ThemeWidget(file));
+    else
+      delete file;
   }
   tableThemes->setSelected(0);
 }
