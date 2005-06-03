@@ -36,9 +36,11 @@
 #include <qdom.h>
 #include <qdir.h>
 
-ThemeFile::ThemeFile()
+ThemeFile::ThemeFile(const KURL& url)
   : m_stream(0)
 {
+  if(url.isValid())
+    set(url);
 }
 
 ThemeFile::~ThemeFile()
@@ -112,6 +114,11 @@ bool ThemeFile::exists() const
   return file.exists();
 }
 
+QPixmap ThemeFile::icon() const
+{
+  return QPixmap(readThemeFile(m_icon));
+}
+
 bool ThemeFile::set(const KURL &url)
 {
   if(!url.isLocalFile())
@@ -178,7 +185,7 @@ void ThemeFile::parseXml()
       if(e.tagName() == "name")
         m_name = e.text();
       if(e.tagName() == "themefile")
-        m_file = e.text();
+        m_theme = e.text();
       if(e.tagName() == "python_module")
         m_python = e.text();
       if(e.tagName() == "description")
@@ -189,6 +196,8 @@ void ThemeFile::parseXml()
         m_authorEmail = e.text();
       if(e.tagName() == "homepage")
         m_homepage = e.text();
+      if(e.tagName() == "icon")
+        m_icon = e.text();
     }
     n = n.nextSibling();
   }
@@ -225,6 +234,9 @@ QByteArray ThemeFile::readThemeFile(const QString& filename) const
 
 QByteArray ThemeFile::readZipFile(const QString& filename) const
 {
+  if(filename.isEmpty())
+    return false;
+
   QByteArray result;
   KZip zip(m_file);
   const KArchiveDirectory* dir;

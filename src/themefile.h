@@ -24,13 +24,15 @@
 #ifndef THEMEFILE_H
 #define THEMEFILE_H
 
+#include <kurl.h>
 #include <qstring.h>
 #include <qcstring.h>
+#include <qpixmap.h>
 #include <qfile.h>
+#include <qvaluevector.h>
 
 class LineParser;
 class QTextStream;
-class KURL;
 
 /**
 @author See README for the list of authors
@@ -38,10 +40,11 @@ class KURL;
 class ThemeFile
 {
   public:
-    ThemeFile();
+    typedef QValueVector<ThemeFile> List;
+
+    ThemeFile(const KURL& url = KURL());
     ~ThemeFile();
 
-  public:
     bool isZipTheme() const { return m_zipTheme; };
     const QString& name() const { return m_name; };
     const QString& file() const { return m_file; };
@@ -52,6 +55,7 @@ class ThemeFile
     const QString& author() const { return m_author; };
     const QString& authorEmail() const { return m_authorEmail; };
     const QString& homepage() const { return m_homepage; };
+    QPixmap icon() const;
     bool exists() const;
     bool isThemeFile(const QString& filename) const;
     bool isValid() const;
@@ -75,6 +79,7 @@ class ThemeFile
     QString m_name;
     QString m_theme;
     QString m_python;
+    QString m_icon;
     QTextStream* m_stream;
     QByteArray m_ba;
     QFile m_fl;
