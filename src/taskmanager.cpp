@@ -53,7 +53,6 @@ TaskManager::TaskManager(QObject *parent, const char *name)
 {
 
     kwin_module = new KWinModule();
-    kdDebug(155001) << "TaskManager::TaskManager()" << endl;
 
 //    KGlobal::locale()->insertCatalogue("libtaskmanager");
     connect(kwin_module, SIGNAL(windowAdded(WId)), SLOT(windowAdded(WId)));
