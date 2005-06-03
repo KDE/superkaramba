@@ -221,6 +221,7 @@ bool ThemeFile::set(const KURL &url)
   m_name = fi.baseName();
   m_theme = m_name + ".theme";
   m_python = m_name;
+  m_id = m_name;
 
   if(isZipFile(m_file))
   {
@@ -332,5 +333,10 @@ bool ThemeFile::isZipFile(const QString& filename)
     }
   }
   return false;
+}
+
+bool ThemeFile::pythonModuleExists() const
+{
+  return (!pythonModule().isEmpty() && fileExists(pythonModule() + ".py"));
 }
 

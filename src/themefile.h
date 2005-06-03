@@ -47,9 +47,10 @@ class ThemeFile
 
     bool isZipTheme() const { return m_zipTheme; };
     const QString& name() const { return m_name; };
+    const QString& id() const { return m_id; };
     const QString& file() const { return m_file; };
     const QString& pythonModule() const { return m_python; };
-    //bool pythonModuleExist() const;
+    bool pythonModuleExists() const;
     const QString& path() const { return m_path; };
     const QString& description() const { return m_description; };
     const QString& author() const { return m_author; };
@@ -76,6 +77,7 @@ class ThemeFile
     QString m_path;
     bool m_zipTheme;
     QString m_file;
+    QString m_id;
     QString m_name;
     QString m_theme;
     QString m_python;

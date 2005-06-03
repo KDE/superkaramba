@@ -68,7 +68,7 @@ karamba::karamba(QString fn, bool reloading) :
 
   // Creates KConfig Object
   QString cfg = QDir::home().absPath() + "/.superkaramba/"
-      + m_theme.name() + ".rc";
+      + m_theme.id() + ".rc";
   QFile themeConfigFile(cfg);
   // Tests if config file Exists
   if (!QFileInfo(themeConfigFile).exists())
@@ -83,8 +83,7 @@ karamba::karamba(QString fn, bool reloading) :
   config -> setGroup("internal");
 
   m_reloading = reloading;
-  if(!m_theme.pythonModule().isEmpty() &&
-     m_theme.fileExists(m_theme.pythonModule() + ".py"))
+  if(m_theme.pythonModuleExists())
   {
     kdDebug() << "Loading python module: " << m_theme.pythonModule() << endl;
     QTimer::singleShot(0, this, SLOT(initPythonInterface()));
