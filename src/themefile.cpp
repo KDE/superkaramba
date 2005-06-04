@@ -228,7 +228,7 @@ bool ThemeFile::set(const KURL &url)
 
   if(isZipFile(m_file))
   {
-    m_path = m_file + "/";
+    m_path = m_file;
     m_zipTheme = true;
   }
   else
