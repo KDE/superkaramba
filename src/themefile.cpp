@@ -187,7 +187,7 @@ QPixmap ThemeFile::icon() const
 
 bool ThemeFile::set(const KURL &url)
 {
-  if(!url.isLocalFile())
+  if(!url.isLocalFile() && !url.protocol().isEmpty())
   {
     QDir themeDir(locateLocal("appdata", "themes/", true));
     QFileInfo localFile = themeDir.filePath(url.fileName());
@@ -211,7 +211,10 @@ bool ThemeFile::set(const KURL &url)
   }
   else
   {
-    m_file = canonicalFile(url.path());
+    if(url.directory().isEmpty() or url.directory() == "/")
+      m_file = canonicalFile(QDir::current().filePath(url.fileName()));
+    else
+      m_file = canonicalFile(url.path());
     if(!exists())
       return false;
   }
