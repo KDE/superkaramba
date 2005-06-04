@@ -66,6 +66,11 @@
                             <string>All</string>
                         </property>
                     </item>
+                    <item>
+                        <property name="text">
+                            <string>Running</string>
+                        </property>
+                    </item>
                     <property name="name">
                         <cstring>comboShow</cstring>
                     </property>
@@ -83,6 +88,9 @@
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                 </sizepolicy>
+            </property>
+            <property name="focusPolicy">
+                <enum>StrongFocus</enum>
             </property>
         </widget>
         <widget class="QLayoutWidget">
@@ -200,7 +208,20 @@
         <receiver>ThemesLayout</receiver>
         <slot>search(const QString&amp;)</slot>
     </connection>
+    <connection>
+        <sender>comboShow</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>ThemesLayout</receiver>
+        <slot>search(const QString&amp;)</slot>
+    </connection>
 </connections>
+<tabstops>
+    <tabstop>editSearch</tabstop>
+    <tabstop>comboShow</tabstop>
+    <tabstop>tableThemes</tabstop>
+    <tabstop>buttonAddToDesktop</tabstop>
+    <tabstop>buttonClose</tabstop>
+</tabstops>
 <slots>
     <slot access="protected">addToDesktop()</slot>
     <slot access="protected">selectionChanged(int)</slot>

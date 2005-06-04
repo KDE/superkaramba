@@ -48,12 +48,11 @@ class ThemesDlg : public ThemesLayout
     virtual void search(const QString& text);
 
   protected:
-    static bool matchText(int index, QWidget* widget, void* data);
+    static bool filter(int index, QWidget* widget, void* data);
     void populateListbox();
     int themeIndex(QString file);
     void saveUserAddedThemes();
     QStringList themes();
-    QString m_searchText;
 };
 
 #endif

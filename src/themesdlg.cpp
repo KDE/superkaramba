@@ -32,6 +32,7 @@
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <klocale.h>
+#include <qlineedit.h>
 #include <qtable.h>
 #include <qdir.h>
 #include <qlabel.h>
@@ -231,18 +232,12 @@ void ThemesDlg::removeTheme(const QString&, const QString& file, int instance)
     return w->removeInstance(instance);
 }
 
-void ThemesDlg::search(const QString& text)
+void ThemesDlg::search(const QString&)
 {
-  if(text.isEmpty())
-    tableThemes->showItems();
-  else
-  {
-    m_searchText = text.lower();
-    tableThemes->showItems(&matchText, this);
-  }
+  tableThemes->showItems(&filter, this);
 }
 
-bool ThemesDlg::matchText(int index, QWidget* widget, void* data)
+bool ThemesDlg::filter(int index, QWidget* widget, void* data)
 {
   if(index < 2)
     return true;
@@ -250,11 +245,22 @@ bool ThemesDlg::matchText(int index, QWidget* widget, void* data)
   ThemesDlg* dlg = static_cast<ThemesDlg*>(data);
   ThemeWidget* w = static_cast<ThemeWidget*>(widget);
 
-  if(w->themeName->text().lower().contains(dlg->m_searchText))
-    return true;
-  if(w->description->text().lower().contains(dlg->m_searchText))
-    return true;
+  if(dlg->comboShow->currentItem() == 1) // Running themes
+    if(w->instances() == 0)
+      return false;
 
+  QString searchText = dlg->editSearch->text().lower();
+  if(searchText.isEmpty())
+  {
+    return true;
+  }
+  else
+  {
+    if(w->themeName->text().lower().contains(searchText))
+      return true;
+    if(w->description->text().lower().contains(searchText))
+      return true;
+  }
   return false;
 }
 
