@@ -212,15 +212,23 @@ int ThemesDlg::themeIndex(QString file)
   return -1;
 }
 
-void ThemesDlg::addTheme(const QString& , const QString &file)
+int ThemesDlg::addTheme(const QString& , const QString &file)
 {
   int i = themeIndex(file);
   if(i < 0)
-    tableThemes->insertItem(new ThemeWidget(new ThemeFile(file)));
+    i = tableThemes->insertItem(new ThemeWidget(new ThemeFile(file)));
+  ThemeWidget* w = static_cast<ThemeWidget*>(tableThemes->item(i));
+  if(w)
+    return w->addInstance();
+  return -1;
 }
 
-void ThemesDlg::removeTheme(const QString&, const QString&)
+void ThemesDlg::removeTheme(const QString&, const QString& file, int instance)
 {
+  int i = themeIndex(file);
+  ThemeWidget* w = static_cast<ThemeWidget*>(tableThemes->item(i));
+  if(w)
+    return w->removeInstance(instance);
 }
 
 void ThemesDlg::search(const QString& text)

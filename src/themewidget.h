@@ -37,8 +37,12 @@ class ThemeWidget : public ThemeWidgetLayout
 
     ThemeFile* themeFile() const { return m_themeFile; };
 
+    int  addInstance();
+    void removeInstance(int instance);
+
   private:
     ThemeFile* m_themeFile;
+    QValueList<int> m_instancePool;
 };
 
 #endif

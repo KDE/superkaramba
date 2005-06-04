@@ -171,19 +171,22 @@ bool KarambaApplication::startThemes(QStringList &lst)
   return result;
 }
 
-void KarambaApplication::addKaramba(karamba* k, const QString& themeName)
+void KarambaApplication::addKaramba(karamba* k)
 {
   if(karambaApp->dcopStub())
-    karambaApp->dcopStub()->themeAdded(
-      karambaApp->dcopClient()->appId(), themeName);
+  {
+    int instance = karambaApp->dcopStub()->themeAdded(
+        karambaApp->dcopClient()->appId(), k->theme().file());
+    k->setInstance(instance);
+  }
   karambaList->append(k);
 }
 
-void KarambaApplication::deleteKaramba(karamba* k, const QString& themeName)
+void KarambaApplication::deleteKaramba(karamba* k)
 {
   if(karambaApp->dcopStub())
     karambaApp->dcopStub()->themeClosed(
-      karambaApp->dcopClient()->appId(), themeName);
+        karambaApp->dcopClient()->appId(), k->theme().file(), k->instance());
   karambaList->removeRef(k);
 }
 

@@ -90,18 +90,19 @@ void KarambaIface::quit()
   qApp->quit();
 }
 
-void KarambaIface::themeAdded(QString appId, QString file)
+int KarambaIface::themeAdded(QString appId, QString file)
 {
   ThemesDlg* tw = getThemeWnd();
   if(tw)
-    tw->addTheme(appId, file);
+    return tw->addTheme(appId, file);
+  return -1;
 }
 
-void KarambaIface::themeClosed(QString appId, QString file)
+void KarambaIface::themeClosed(QString appId, QString file, int instance)
 {
   ThemesDlg* tw = getThemeWnd();
   if(tw)
-    tw->removeTheme(appId, file);
+    tw->removeTheme(appId, file, instance);
 }
 
 bool KarambaIface::isMainKaramba()

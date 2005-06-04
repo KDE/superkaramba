@@ -51,11 +51,17 @@ karamba::karamba(QString fn, bool reloading) :
     QWidget(0,"karamba", Qt::WGroupLeader | WStyle_Customize |
             WRepaintNoErase| WStyle_NoBorder | WDestructiveClose  ),
     meterList(0), imageList(0), clickList(0), kpop(0), widgetMask(0),
-    config(0), kWinModule(0), tempUnit('C'), sensorList(0), timeList(0),
-    themeConfMenu(0), clickPos(0, 0), accColl(0), menuAccColl(0),
+    config(0), kWinModule(0), tempUnit('C'), m_instance(-1), sensorList(0),
+    timeList(0), themeConfMenu(0), clickPos(0, 0), accColl(0), menuAccColl(0),
     toggleLocked(0), pythonIface(0), defaultTextField(0)
 {
-  if(!m_theme.set(fn))
+  KURL url;
+
+  if(fn.find('/') == -1)
+    url.setFileName(fn);
+  else
+    url = fn;
+  if(!m_theme.set(url))
   {
     setFixedSize(0, 0);
     QTimer::singleShot(100, this, SLOT(killWidget()));
@@ -64,11 +70,18 @@ karamba::karamba(QString fn, bool reloading) :
   kdDebug() << "Starting theme: " << m_theme.name() << endl;
   setName("karamba - " + m_theme.name());
 
+  //Add self to list of open themes
+  karambaApp->addKaramba(this);
+
   widgetUpdate = true;
 
   // Creates KConfig Object
+  QString instance;
+  if(m_instance > 1)
+    instance = QString("-%1").arg(m_instance);
   QString cfg = QDir::home().absPath() + "/.superkaramba/"
-      + m_theme.id() + ".rc";
+      + m_theme.id() + instance + ".rc";
+  kdDebug() << cfg << endl;
   QFile themeConfigFile(cfg);
   // Tests if config file Exists
   if (!QFileInfo(themeConfigFile).exists())
@@ -290,16 +303,13 @@ karamba::karamba(QString fn, bool reloading) :
 
 
   setFocusPolicy(QWidget::StrongFocus);
-
-  //Add self to list of open themes
-  karambaApp->addKaramba(this, m_theme.file());
 }
 
 karamba::~karamba()
 {
   //qDebug("karamba::~karamba");
   //Remove self from list of open themes
-  karambaApp->deleteKaramba(this, m_theme.name());
+  karambaApp->deleteKaramba(this);
 
   widgetClosed();
   if(m_theme.isValid())

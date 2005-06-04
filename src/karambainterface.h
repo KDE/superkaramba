@@ -29,8 +29,8 @@ public slots:
   virtual void closeTheme(QString name);
   virtual void quit();
 
-  virtual void themeAdded(QString appId, QString name);
-  virtual void themeClosed(QString appId, QString name);
+  virtual int themeAdded(QString appId, QString file);
+  virtual void themeClosed(QString appId, QString file, int instance);
   virtual bool isMainKaramba();
 };
 

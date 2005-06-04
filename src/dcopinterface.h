@@ -23,8 +23,8 @@ k_dcop:
     virtual ASYNC closeTheme(QString name) = 0;
     virtual ASYNC quit() = 0;
 
-    virtual ASYNC themeAdded(QString appId, QString file) = 0;
-    virtual ASYNC themeClosed(QString appId, QString file) = 0;
+    virtual int themeAdded(QString appId, QString file) = 0;
+    virtual ASYNC themeClosed(QString appId, QString file, int instance) = 0;
     virtual bool isMainKaramba() = 0;
 };
 

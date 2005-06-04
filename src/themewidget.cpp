@@ -42,4 +42,18 @@ ThemeWidget::~ThemeWidget()
   delete m_themeFile;
 }
 
+int ThemeWidget::addInstance()
+{
+  int i = 1;
+  while(m_instancePool.find(i) != m_instancePool.end())
+    ++i;
+  m_instancePool.append(i);
+  return i;
+}
+
+void ThemeWidget::removeInstance(int instance)
+{
+  m_instancePool.remove(instance);
+}
+
 #include "themewidget.moc"

@@ -143,6 +143,8 @@ public:
     bool readMenuConfigOption(QString key);
     void writeConfigData();
     TextField* getDefaultTextProps() { return defaultTextField; };
+    int instance() const { return m_instance; };
+    void setInstance(int instance) { m_instance = instance; };
 
     int numberOfConfMenuItems;
     KConfig* config;
@@ -175,6 +177,7 @@ private:
     bool fixedPosition;
     bool haveUpdated;
     char tempUnit;
+    int m_instance;
 
     bool parseConfig();
 

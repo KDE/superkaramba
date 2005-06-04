@@ -34,8 +34,8 @@ class ThemesDlg : public ThemesLayout
     ThemesDlg(QWidget *parent = 0, const char *name = 0);
     ~ThemesDlg();
 
-    void addTheme(const QString &appId, const QString &file);
-    void removeTheme(const QString &appId, const QString &file);
+    int addTheme(const QString &appId, const QString &file);
+    void removeTheme(const QString &appId, const QString &file, int instance);
 
   public slots:
     virtual void quitSuperKaramba();
