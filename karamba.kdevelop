@@ -17,20 +17,20 @@
     <projectdirectory>..</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
     <secondaryLanguages/>
-    <versioncontrol/>
+    <versioncontrol></versioncontrol>
   </general>
   <kdevautoproject>
     <general>
       <activetarget>src/superkaramba</activetarget>
-      <useconfiguration>optimized</useconfiguration>
+      <useconfiguration>debug</useconfiguration>
     </general>
     <run>
       <mainprogram>superkaramba/src/superkaramba</mainprogram>
-      <programargs>/home/damu/.kde/share/apps/superkaramba/themes/month.skz</programargs>
+      <programargs></programargs>
       <terminal>false</terminal>
       <envvars/>
       <directoryradio>build</directoryradio>
-      <customdirectory>/</customdirectory>
+      <customdirectory>/home/damu/.kde/share/apps/superkaramba/themes/hdd/</customdirectory>
       <autocompile>true</autocompile>
     </run>
     <makeenvvars>
@@ -57,24 +57,24 @@
         <f77compiler>kdevg77options</f77compiler>
         <cxxflags>-O2 -g0</cxxflags>
         <envvars/>
-        <configargs></configargs>
-        <topsourcedir></topsourcedir>
-        <cppflags></cppflags>
-        <ldflags></ldflags>
-        <ccompilerbinary></ccompilerbinary>
-        <cxxcompilerbinary></cxxcompilerbinary>
-        <f77compilerbinary></f77compilerbinary>
-        <cflags></cflags>
-        <f77flags></f77flags>
+        <configargs/>
+        <topsourcedir/>
+        <cppflags/>
+        <ldflags/>
+        <ccompilerbinary/>
+        <cxxcompilerbinary/>
+        <f77compilerbinary/>
+        <cflags/>
+        <f77flags/>
       </optimized>
       <debug>
         <configargs>--enable-debug=full</configargs>
-        <builddir>../debug</builddir>
+        <builddir>debug</builddir>
         <ccompiler>kdevgccoptions</ccompiler>
         <cxxcompiler>kdevgppoptions</cxxcompiler>
         <f77compiler>kdevg77options</f77compiler>
         <cxxflags>-O0 -g3</cxxflags>
-        <topsourcedir>..</topsourcedir>
+        <topsourcedir/>
         <cppflags/>
         <ldflags/>
         <ccompilerbinary/>
@@ -139,7 +139,7 @@
   <kdevdebugger>
     <general>
       <dbgshell>libtool</dbgshell>
-      <programargs>/home/damu/.kde/share/apps/superkaramba/themes/month.skz</programargs>
+      <programargs>/home/damu/.kde/share/apps/superkaramba/themes/hdd/hdd.theme</programargs>
       <gdbpath></gdbpath>
       <breakonloadinglibs>false</breakonloadinglibs>
       <separatetty>false</separatetty>
