@@ -41,6 +41,9 @@ class ThemeWidget : public ThemeWidgetLayout
     int  instances() const { return m_instancePool.count(); };
     void removeInstance(int instance);
 
+  protected:
+    void updateRunning();
+
   private:
     ThemeFile* m_themeFile;
     QValueList<int> m_instancePool;
