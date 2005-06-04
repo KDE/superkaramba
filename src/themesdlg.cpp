@@ -223,4 +223,31 @@ void ThemesDlg::removeTheme(const QString&, const QString&)
 {
 }
 
+void ThemesDlg::search(const QString& text)
+{
+  if(text.isEmpty())
+    tableThemes->showItems();
+  else
+  {
+    m_searchText = text.lower();
+    tableThemes->showItems(&matchText, this);
+  }
+}
+
+bool ThemesDlg::matchText(int index, QWidget* widget, void* data)
+{
+  if(index < 2)
+    return true;
+
+  ThemesDlg* dlg = static_cast<ThemesDlg*>(data);
+  ThemeWidget* w = static_cast<ThemeWidget*>(widget);
+
+  if(w->themeName->text().lower().contains(dlg->m_searchText))
+    return true;
+  if(w->description->text().lower().contains(dlg->m_searchText))
+    return true;
+
+  return false;
+}
+
 #include "themesdlg.moc"

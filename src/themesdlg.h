@@ -45,12 +45,15 @@ class ThemesDlg : public ThemesLayout
     virtual void selectionChanged(int);
     virtual void openLocalTheme();
     virtual void getNewStuff();
+    virtual void search(const QString& text);
 
   protected:
+    static bool matchText(int index, QWidget* widget, void* data);
     void populateListbox();
     int themeIndex(QString file);
     void saveUserAddedThemes();
     QStringList themes();
+    QString m_searchText;
 };
 
 #endif
