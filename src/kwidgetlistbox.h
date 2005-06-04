@@ -36,7 +36,7 @@ class KWidgetListbox : public QTable
     KWidgetListbox(QWidget *parent = 0, const char *name = 0);
     ~KWidgetListbox();
 
-    void insertItem(QWidget* item, int index = -1);
+    int insertItem(QWidget* item, int index = -1);
     void setSelected(QWidget* item);
     void setSelected(int index);
     void clear();

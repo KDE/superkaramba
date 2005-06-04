@@ -49,7 +49,7 @@ void KWidgetListbox::clear()
   setNumRows(0);
 }
 
-void KWidgetListbox::insertItem(QWidget* item, int index)
+int KWidgetListbox::insertItem(QWidget* item, int index)
 {
   int row;
 
@@ -59,11 +59,12 @@ void KWidgetListbox::insertItem(QWidget* item, int index)
     setNumRows(row + 1);
   }
   else
-    return;
+    return -1;
 
   setRowHeight(row, item->height());
   setCellWidget(row, 0, item);
   setItemColors(row, even(row));
+  return row;
 }
 
 void KWidgetListbox::setSelected(QWidget* item)
