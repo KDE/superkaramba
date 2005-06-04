@@ -26,6 +26,8 @@
 @author See README for the list of authors
 */
 
+typedef bool (*show_callback) (int index, QWidget* widget, void* data);
+
 class KWidgetListbox : public QTable
 {
     Q_OBJECT
@@ -44,11 +46,14 @@ class KWidgetListbox : public QTable
     int index(QWidget* itm) const;
     uint count() const { return numRows(); };
 
+    void showItems(show_callback func = 0, void* data = 0);
+
     void paintCell(QPainter* p, int row, int col, const QRect& cr,
                    bool selected, const QColorGroup& cg);
   protected:
-    void setItemColors(int index);
+    void setItemColors(int index, bool even);
     void updateColors();
+    bool even(int index);
 
   protected slots:
     void selectionChanged(int row, int col);

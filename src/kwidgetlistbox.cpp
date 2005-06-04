@@ -63,7 +63,7 @@ void KWidgetListbox::insertItem(QWidget* item, int index)
 
   setRowHeight(row, item->height());
   setCellWidget(row, 0, item);
-  setItemColors(row);
+  setItemColors(row, even(row));
 }
 
 void KWidgetListbox::setSelected(QWidget* item)
@@ -106,13 +106,33 @@ int KWidgetListbox::index(QWidget* itm) const
   return -1;
 }
 
-void KWidgetListbox::updateColors()
+bool KWidgetListbox::even(int index)
 {
+  int v = 0;
   for(int i = 0; i < numRows(); ++i)
-    setItemColors(i);
+  {
+    if(index == i)
+      break;
+    if(!isRowHidden(i))
+      ++v;
+  }
+  return (v%2 == 0);
 }
 
-void KWidgetListbox::setItemColors(int index)
+void KWidgetListbox::updateColors()
+{
+  int v = 0;
+  for(int i = 0; i < numRows(); ++i)
+  {
+    if(!isRowHidden(i))
+    {
+      setItemColors(i, (v%2 == 0));
+      ++v;
+    }
+  }
+}
+
+void KWidgetListbox::setItemColors(int index, bool even)
 {
   QWidget* itm = item(index);
 
@@ -121,7 +141,7 @@ void KWidgetListbox::setItemColors(int index)
     itm->setPaletteBackgroundColor(KGlobalSettings::highlightColor());
     itm->setPaletteForegroundColor(KGlobalSettings::highlightedTextColor());
   }
-  else if(index % 2 != 0)
+  else if(even)
   {
     itm->setPaletteBackgroundColor(KGlobalSettings::baseColor());
     itm->setPaletteForegroundColor(KGlobalSettings::textColor());
@@ -132,6 +152,23 @@ void KWidgetListbox::setItemColors(int index)
         KGlobalSettings::alternateBackgroundColor());
     itm->setPaletteForegroundColor(KGlobalSettings::textColor());
   }
+}
+
+void KWidgetListbox::showItems(show_callback func, void* data)
+{
+  for(int i = 0; i < numRows(); ++i)
+  {
+    if(func == 0)
+      showRow(i);
+    else
+    {
+      if(func(i, item(i), data))
+        showRow(i);
+      else
+        hideRow(i);
+    }
+  }
+  updateColors();
 }
 
 void KWidgetListbox::paintCell(QPainter*, int, int, const QRect&,
