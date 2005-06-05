@@ -236,6 +236,19 @@ PyObject* py_get_theme_path(PyObject *, PyObject *args)
   return Py_BuildValue((char*)"s", getThemePath(widget));
 }
 
+PyObject* py_read_theme_file(PyObject *, PyObject *args)
+{
+  long widget;
+  char *file;
+  if (!PyArg_ParseTuple(args, (char*)"ls:readThemeFile", &widget, &file))
+    return NULL;
+  if (!checkKaramba(widget))
+    return NULL;
+  karamba* k = (karamba*)widget;
+  QByteArray ba = k->theme().readThemeFile(file);
+  return PyString_FromStringAndSize(ba.data(), ba.size());
+}
+
 /* now a method we need to expose to Python */
 long createClickArea(long widget, long x, long y, long w, long h, char* text) {
 

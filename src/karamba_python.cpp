@@ -213,7 +213,10 @@ static PyMethodDef karamba_methods[] = {
 
     // Misc - misc_python.cpp
     {(char*)"getThemePath", py_get_theme_path, METH_VARARGS,  (char*)"Get the file path of the theme"},
-    {(char*)"openTheme", py_open_theme, METH_VARARGS, (char*)"Open a new theme"},
+    {(char*)"readThemeFile", py_read_theme_file, METH_VARARGS,
+        (char*)"Read file from theme."},
+    {(char*)"openTheme", py_open_theme, METH_VARARGS,
+        (char*)"Open a new theme"},
     {(char*)"reloadTheme", py_reload_theme, METH_VARARGS,
             (char*)"Reload current theme"},
     {(char*)"acceptDrops", py_accept_drops, METH_VARARGS,

@@ -153,6 +153,20 @@ PyObject* py_toggle_show_desktop(PyObject *self, PyObject *args);
 //***
 PyObject* py_get_theme_path(PyObject *self, PyObject *args);
 
+//****p* Misc/readThemeFile
+//
+// SYNOPSIS
+//   string readThemeFile(widget, file)
+// DESCRIPTION
+//   Returns a string containing the file
+// ARGUMENTS
+//   * long widget -- karamba
+//   * string file -- name of the file to read
+// RETURN VALUE
+//   file contents
+//***
+PyObject* py_read_theme_file(PyObject *self, PyObject *args);
+
 //****p* Misc/createClickArea
 //
 // SYNOPSIS
