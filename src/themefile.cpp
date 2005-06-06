@@ -189,6 +189,16 @@ bool ThemeFile::set(const KURL &url)
 {
   if(!url.isLocalFile() && !url.protocol().isEmpty())
   {
+    if(KMessageBox::questionYesNo(kapp->activeWindow(),
+       i18n("You are about to install and run %1 superkaramba theme. Since "
+            "themes can contain executable code you should only install themes "
+            "from sources that you trust. Continue?")
+           .arg(url.prettyURL()))
+       == KMessageBox::No)
+    {
+      return false;
+    }
+
     QDir themeDir(locateLocal("appdata", "themes/", true));
     QFileInfo localFile = themeDir.filePath(url.fileName());
 
