@@ -26,6 +26,8 @@
 /**
 @author See README for the list of authors
 */
+class SKNewStuff;
+
 class ThemesDlg : public ThemesLayout
 {
     Q_OBJECT
@@ -53,6 +55,10 @@ class ThemesDlg : public ThemesLayout
     int themeIndex(QString file);
     void saveUserAddedThemes();
     QStringList themes();
+
+  private:
+    ThemesDlg *mDlg;
+    SKNewStuff *mNewStuff;
 };
 
 #endif
