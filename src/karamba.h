@@ -111,7 +111,7 @@ class karamba :  public QWidget
     Q_OBJECT
 
 public:
-    karamba(QString fn, bool reloading);
+    karamba(QString fn, bool reloading = false, int instance = -1);
     QObjectList *menuList;
 
     virtual ~karamba();
@@ -145,6 +145,7 @@ public:
     TextField* getDefaultTextProps() { return defaultTextField; };
     int instance() const { return m_instance; };
     void setInstance(int instance) { m_instance = instance; };
+    void closeTheme(bool reloading = false);
 
     int numberOfConfMenuItems;
     KConfig* config;
@@ -246,6 +247,7 @@ public slots:
 
 private:
     bool m_reloading;
+
 private slots:
     void initPythonInterface();
     void killWidget();
@@ -254,7 +256,7 @@ private slots:
     void slotToggleLocked();
     void slotToggleFastTransforms();
     void popupNotify(int);
-
+    void slotFileChanged( const QString & );
 };
 
 /*

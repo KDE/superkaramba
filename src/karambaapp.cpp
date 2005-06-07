@@ -171,9 +171,9 @@ bool KarambaApplication::startThemes(QStringList &lst)
   return result;
 }
 
-void KarambaApplication::addKaramba(karamba* k)
+void KarambaApplication::addKaramba(karamba* k, bool reloading)
 {
-  if(karambaApp->dcopStub())
+  if(!reloading && karambaApp->dcopStub())
   {
     int instance = karambaApp->dcopStub()->themeAdded(
         karambaApp->dcopClient()->appId(), k->theme().file());
@@ -182,9 +182,9 @@ void KarambaApplication::addKaramba(karamba* k)
   karambaList->append(k);
 }
 
-void KarambaApplication::deleteKaramba(karamba* k)
+void KarambaApplication::deleteKaramba(karamba* k, bool reloading)
 {
-  if(karambaApp->dcopStub())
+  if(!reloading && karambaApp->dcopStub())
     karambaApp->dcopStub()->themeClosed(
         karambaApp->dcopClient()->appId(), k->theme().file(), k->instance());
   karambaList->removeRef(k);

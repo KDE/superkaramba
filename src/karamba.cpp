@@ -34,6 +34,7 @@
 #include <klocale.h>
 #include <kwin.h>
 #include <kdeversion.h>
+#include <kdirwatch.h>
 
 #include <kparts/componentfactory.h>
 #include <kparts/part.h>
@@ -47,13 +48,13 @@
 #define EDITSCRIPT 1
 #define THEMECONF  2
 
-karamba::karamba(QString fn, bool reloading) :
+karamba::karamba(QString fn, bool reloading, int instance) :
     QWidget(0,"karamba", Qt::WGroupLeader | WStyle_Customize |
             WRepaintNoErase| WStyle_NoBorder | WDestructiveClose  ),
     meterList(0), imageList(0), clickList(0), kpop(0), widgetMask(0),
-    config(0), kWinModule(0), tempUnit('C'), m_instance(-1), sensorList(0),
-    timeList(0), themeConfMenu(0), clickPos(0, 0), accColl(0), menuAccColl(0),
-    toggleLocked(0), pythonIface(0), defaultTextField(0)
+    config(0), kWinModule(0), tempUnit('C'), m_instance(instance),
+    sensorList(0), timeList(0), themeConfMenu(0), clickPos(0, 0), accColl(0),
+    menuAccColl(0), toggleLocked(0), pythonIface(0), defaultTextField(0)
 {
   KURL url;
 
@@ -71,16 +72,26 @@ karamba::karamba(QString fn, bool reloading) :
   setName("karamba - " + m_theme.name());
 
   //Add self to list of open themes
-  karambaApp->addKaramba(this);
+  karambaApp->addKaramba(this, reloading);
+
+  KDirWatch *dirWatch = new KDirWatch( this );
+  connect(dirWatch, SIGNAL( dirty( const QString & ) ),
+          SLOT( slotFileChanged( const QString & ) ) );
+  dirWatch->addFile(m_theme.file());
+  if(!m_theme.isZipTheme() && m_theme.pythonModuleExists())
+  {
+    QString pythonFile = m_theme.path() + "/" + m_theme.pythonModule() + ".py";
+    dirWatch->addFile(pythonFile);
+  }
 
   widgetUpdate = true;
 
   // Creates KConfig Object
-  QString instance;
+  QString instanceString;
   if(m_instance > 1)
-    instance = QString("-%1").arg(m_instance);
+    instanceString = QString("-%1").arg(m_instance);
   QString cfg = QDir::home().absPath() + "/.superkaramba/"
-      + m_theme.id() + instance + ".rc";
+      + m_theme.id() + instanceString + ".rc";
   kdDebug() << cfg << endl;
   QFile themeConfigFile(cfg);
   // Tests if config file Exists
@@ -309,7 +320,7 @@ karamba::~karamba()
 {
   //qDebug("karamba::~karamba");
   //Remove self from list of open themes
-  karambaApp->deleteKaramba(this);
+  karambaApp->deleteKaramba(this, m_reloading);
 
   widgetClosed();
   if(m_theme.isValid())
@@ -745,15 +756,20 @@ void karamba::reloadConfig()
   writeConfigData();
   if(m_theme.exists())
   {
-    (new karamba(m_theme.file(), true ))->show();
+    (new karamba(m_theme.file(), true, m_instance))->show();
   }
   killWidget();
 }
 
+void karamba::closeTheme(bool reloading)
+{
+  m_reloading = reloading;
+  close();
+}
+
 void karamba::killWidget()
 {
-  //qDebug("karamba::killWidget");
-  close();
+  closeTheme();
 }
 
 void karamba::initPythonInterface()
@@ -1104,6 +1120,11 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
   }
 }
 
+void karamba::slotFileChanged( const QString & )
+{
+  reloadConfig();
+}
+
 void karamba::passMenuOptionChanged(QString key, bool value)
 {
   //Everything below is to call the python callback function
@@ -1257,12 +1278,11 @@ void karamba::mouseMoveEvent( QMouseEvent *e )
 
     while (it != 0)
     {
-                insideArea = ((Meter*)(*it)) -> insideActiveArea(e -> x(), e ->
-y());
-                if (insideArea)
-                {
-                        break;
-                }
+      insideArea = ((Meter*)(*it)) -> insideActiveArea(e -> x(), e ->y());
+      if (insideArea)
+      {
+         break;
+      }
       ++it;
     }
 

@@ -59,8 +59,8 @@ public:
   dcopIface_stub* dcopStub() { return dcopIfaceStub; };
   QWidget* parentWindow() { return (QWidget*)themeListWindow; };
 
-  void addKaramba(karamba* k);
-  void deleteKaramba(karamba* k);
+  void addKaramba(karamba* k, bool reloading = false);
+  void deleteKaramba(karamba* k, bool reloading = false);
   bool hasKaramba(karamba* k);
 
   static bool lockKaramba();
