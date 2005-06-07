@@ -20,6 +20,9 @@
 
 #include <kapplication.h>
 #include <kdebug.h>
+#include <kstandarddirs.h>
+#include <ktar.h>
+#include <qdir.h>
 
 #include "themesdlg.h"
 #include "sknewstuff.h"
@@ -33,11 +36,22 @@ SKNewStuff::SKNewStuff( ThemesDlg *dlg ) :
 bool SKNewStuff::install( const QString &fileName )
 {
   kdDebug() << "SKNewStuff::install(): " << fileName << endl;
-  return false;
+
+  //TODO: add some way to load up the installed themes in the dialog.
+  KTar archive( fileName );
+  if ( !archive.open( IO_ReadOnly ) )
+    return false;
+  const KArchiveDirectory *archiveDir = archive.directory();
+  KStandardDirs myStdDir;
+  const QString destDir =myStdDir.saveLocation("data", kapp->instanceName() + "/themes/", true);
+  KStandardDirs::makeDir( destDir );
+  archiveDir->copyTo(destDir);
+  archive.close();
+  return true;
 }
 
 bool SKNewStuff::createUploadFile( const QString &fileName )
 {
   kdDebug() << "SKNewStuff::createUploadFile(): " << fileName << endl;
-  return false;
+  return true;
 }

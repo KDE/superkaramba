@@ -28,7 +28,6 @@
 #include "superkarambasettings.h"
 #include <kdebug.h>
 #include <kfiledialog.h>
-//#include <knewstuff/downloaddialog.h>
 #include <kpushbutton.h>
 #include <kstandarddirs.h>
 #include <kapplication.h>
@@ -112,7 +111,6 @@ void ThemesDlg::populateListbox()
   item->themeName->setText(i18n("Get new stuff"));
   item->description->setText(i18n("Download new themes."));
   // TODO: Get new stuff
-  //item->buttonGo->setEnabled(false);
   item->buttonGo->setEnabled(true);
   item->buttonGo->setText(i18n("New Stuff..."));
   connect(item->buttonGo, SIGNAL(clicked()),
@@ -183,12 +181,11 @@ void ThemesDlg::openLocalTheme()
 
 void ThemesDlg::getNewStuff()
 {
-  // TODO: Get new stuff here
   KConfig* config = KGlobal::config();
   config->setGroup("KNewStuff");
   config->writeEntry( "ProvidersUrl", "http://download.kde.org/khotnewstuff/karamba-providers.xml" );
-  config->writeEntry( "StandardResource", "data" );
   config->sync();
+  
   if ( !mNewStuff )
   {
     mNewStuff = new SKNewStuff( mDlg );
