@@ -35,7 +35,11 @@ ThemeWidget::ThemeWidget(ThemeFile* tf)
   QPixmap pixmap = m_themeFile->icon();
   if(!pixmap.isNull())
     icon->setPixmap(pixmap);
-  themeName->setText(m_themeFile->locale()->translate(m_themeFile->name()));
+  QString version;
+  if(!m_themeFile->version().isEmpty())
+    version = " - " + m_themeFile->version();
+  themeName->setText(
+      m_themeFile->locale()->translate(m_themeFile->name()) + version);
   description->setText(
       m_themeFile->locale()->translate(m_themeFile->description()));
   running->setText("");
