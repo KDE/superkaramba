@@ -18,6 +18,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  ****************************************************************************/
 #include "themewidget.h"
+#include "themelocale.h"
 #include <kpushbutton.h>
 #include <klocale.h>
 #include <qlabel.h>
@@ -34,8 +35,9 @@ ThemeWidget::ThemeWidget(ThemeFile* tf)
   QPixmap pixmap = m_themeFile->icon();
   if(!pixmap.isNull())
     icon->setPixmap(pixmap);
-  themeName->setText(m_themeFile->name());
-  description->setText(m_themeFile->description());
+  themeName->setText(m_themeFile->locale()->translate(m_themeFile->name()));
+  description->setText(
+      m_themeFile->locale()->translate(m_themeFile->description()));
   running->setText("");
   buttonGo->hide();
 }

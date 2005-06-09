@@ -215,6 +215,8 @@ static PyMethodDef karamba_methods[] = {
     {(char*)"getThemePath", py_get_theme_path, METH_VARARGS,  (char*)"Get the file path of the theme"},
     {(char*)"readThemeFile", py_read_theme_file, METH_VARARGS,
         (char*)"Read file from theme."},
+    {(char*)"language", py_language, METH_VARARGS,
+        (char*)"Return default language."},
     {(char*)"openTheme", py_open_theme, METH_VARARGS,
         (char*)"Open a new theme"},
     {(char*)"reloadTheme", py_reload_theme, METH_VARARGS,

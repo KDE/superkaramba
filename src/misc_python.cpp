@@ -30,6 +30,8 @@
 #include <qobject.h>
 #include "karamba.h"
 #include "karambaapp.h"
+#include "themefile.h"
+#include "themelocale.h"
 #include "meter.h"
 #include "meter_python.h"
 #include "misc_python.h"
@@ -234,6 +236,17 @@ PyObject* py_get_theme_path(PyObject *, PyObject *args)
   if (!checkKaramba(widget))
     return NULL;
   return Py_BuildValue((char*)"s", getThemePath(widget));
+}
+
+PyObject* py_language(PyObject *, PyObject *args)
+{
+  long widget;
+  if (!PyArg_ParseTuple(args, (char*)"l:language", &widget))
+    return NULL;
+  if (!checkKaramba(widget))
+    return NULL;
+  return Py_BuildValue((char*)"s",
+      ((karamba*)widget)->theme().locale()->language().ascii());
 }
 
 PyObject* py_read_theme_file(PyObject *, PyObject *args)

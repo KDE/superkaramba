@@ -153,6 +153,19 @@ PyObject* py_toggle_show_desktop(PyObject *self, PyObject *args);
 //***
 PyObject* py_get_theme_path(PyObject *self, PyObject *args);
 
+//****p* Misc/language
+//
+// SYNOPSIS
+//   string language(widget)
+// DESCRIPTION
+//   Returns a string containing default language.
+// ARGUMENTS
+//   * long widget -- karamba
+// RETURN VALUE
+//   default language or empty string if no translation files found.
+//***
+PyObject* py_language(PyObject *self, PyObject *args);
+
 //****p* Misc/readThemeFile
 //
 // SYNOPSIS

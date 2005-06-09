@@ -23,6 +23,7 @@
 ****************************************************************************/
 #include "themefile.h"
 #include "lineparser.h"
+#include "themelocale.h"
 #include <kdebug.h>
 #include <kurl.h>
 #include <kzip.h>
@@ -102,7 +103,7 @@ class ZipFile
 };
 
 ThemeFile::ThemeFile(const KURL& url)
-  : m_stream(0)
+  : m_stream(0), m_locale(0)
 {
   if(url.isValid())
     set(url);
@@ -111,11 +112,14 @@ ThemeFile::ThemeFile(const KURL& url)
 ThemeFile::~ThemeFile()
 {
   delete m_stream;
+  delete m_locale;
 }
 
 bool ThemeFile::open()
 {
   bool result = false;
+
+  close();
 
   if(m_zipTheme)
   {
@@ -247,6 +251,7 @@ bool ThemeFile::set(const KURL &url)
     m_zipTheme = false;
   }
   parseXml();
+  m_locale = new ThemeLocale(this);
   return isValid();
 }
 
@@ -285,6 +290,8 @@ void ThemeFile::parseXml()
         m_homepage = e.text();
       if(e.tagName() == "icon")
         m_icon = e.text();
+      if(e.tagName() == "version")
+        m_version = e.text();
     }
     n = n.nextSibling();
   }

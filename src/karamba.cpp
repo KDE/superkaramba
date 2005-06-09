@@ -27,6 +27,7 @@
 #include "karambaapp.h"
 #include "themesdlg.h"
 #include "lineparser.h"
+#include "themelocale.h"
 
 #include <kdebug.h>
 #include <kmessagebox.h>
@@ -641,7 +642,8 @@ bool karamba::parseConfig()
 
           TextLabel *tmp = new TextLabel(this, x, y, w, h );
           tmp->setTextProps(tmpText);
-          tmp->setValue(lineParser.getString("VALUE"));
+          tmp->setValue(
+              m_theme.locale()->translate(lineParser.getString("VALUE")));
 
           QString name = lineParser.getString("NAME");
           if (name != "")
@@ -671,7 +673,8 @@ bool karamba::parseConfig()
 
           bool dUl = lineParser.getBoolean("UNDERLINE");
 
-          tmp->setText(lineParser.getString("VALUE"), dUl);
+          tmp->setText(
+              m_theme.locale()->translate(lineParser.getString("VALUE")), dUl);
           tmp->setTextProps( tmpText );
           tmp->setWidth(w);
           tmp->setHeight(h);
@@ -887,7 +890,8 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
       sensorList->append( sensor );
     }
     SensorParams *sp = new SensorParams(meter);
-    sp->addParam("FORMAT",lineParser.getString("FORMAT"));
+    sp->addParam("FORMAT",
+                 m_theme.locale()->translate(lineParser.getString("FORMAT")));
     sp->addParam("DECIMALS",lineParser.getString("DECIMALS"));
 
     sensor->addMeter(sp);
@@ -906,7 +910,8 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
       sensorList->append( sensor );
     }
     SensorParams *sp = new SensorParams(meter);
-    sp->addParam("FORMAT",lineParser.getString("FORMAT"));
+    sp->addParam("FORMAT",
+        m_theme.locale()->translate(lineParser.getString("FORMAT")));
 
     sensor->addMeter(sp);
     sensor->setMaxValue(sp);
@@ -938,7 +943,8 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
         mntPt.remove( mntPt.length()-1, 1 );
     }
     sp->addParam("MOUNTPOINT",mntPt);
-    sp->addParam("FORMAT",lineParser.getString("FORMAT"));
+    sp->addParam("FORMAT",
+                 m_theme.locale()->translate(lineParser.getString("FORMAT")));
     sensor->addMeter(sp);
     sensor->setMaxValue(sp);
   }
@@ -956,8 +962,9 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
       sensorList->append( sensor );
     }
     SensorParams *sp = new SensorParams(meter);
-    sp->addParam( "FORMAT", lineParser.getString("FORMAT"));
-    sp->addParam( "DECIMALS", lineParser.getString("DECIMALS"));
+    sp->addParam("FORMAT",
+                 m_theme.locale()->translate(lineParser.getString("FORMAT")));
+    sp->addParam("DECIMALS", lineParser.getString("DECIMALS"));
     sensor->addMeter(sp);
   }
 
@@ -973,7 +980,8 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
 
     }
     SensorParams *sp = new SensorParams(meter);
-    sp->addParam( "FORMAT", lineParser.getString("FORMAT"));
+    sp->addParam("FORMAT",
+                 m_theme.locale()->translate(lineParser.getString("FORMAT")));
     sensor->addMeter(sp);
   }
 
@@ -988,8 +996,9 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
       sensorList->append( sensor );
     }
     SensorParams *sp = new SensorParams(meter);
-    sp->addParam("FORMAT",lineParser.getString("FORMAT"));
-    sp->addParam("TYPE",lineParser.getString("TYPE"));
+    sp->addParam("FORMAT",
+                 m_theme.locale()->translate(lineParser.getString("FORMAT")));
+    sp->addParam("TYPE", lineParser.getString("TYPE"));
     sensor->addMeter(sp);
   }
 
@@ -1027,7 +1036,8 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
       timeList->append( sensor );
     }
     SensorParams *sp = new SensorParams(meter);
-    sp->addParam("FORMAT",lineParser.getString("FORMAT"));
+    sp->addParam("FORMAT",
+                 m_theme.locale()->translate(lineParser.getString("FORMAT")));
     sp->addParam("CALWIDTH",lineParser.getString("CALWIDTH"));
     sp->addParam("CALHEIGHT",lineParser.getString("CALHEIGHT"));
     sensor->addMeter(sp);
@@ -1048,7 +1058,8 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
       sensorList->append( sensor );
     }
     SensorParams *sp = new SensorParams(meter);
-    sp->addParam("FORMAT",lineParser.getString("FORMAT"));
+    sp->addParam("FORMAT",
+                 m_theme.locale()->translate(lineParser.getString("FORMAT")));
     sensor->addMeter(sp);
     sensor->setMaxValue(sp);
   }
@@ -1066,7 +1077,8 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
       sensorList->append( sensor );
     }
     SensorParams *sp = new SensorParams(meter);
-    sp->addParam("FORMAT",lineParser.getString("FORMAT"));
+    sp->addParam("FORMAT",
+                 m_theme.locale()->translate(lineParser.getString("FORMAT")));
     sensor->addMeter(sp);
     sensor->setMaxValue(sp);
   }
@@ -1095,7 +1107,8 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
   if( sens == "RSS" )
   {
     QString source = lineParser.getString("SOURCE");
-    QString format = lineParser.getString("FORMAT");
+    QString format =
+        m_theme.locale()->translate(lineParser.getString("FORMAT"));
 
     sensor = sensorMap["RSS"+source];
     if (sensor == 0)

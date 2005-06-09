@@ -33,6 +33,7 @@
 
 class LineParser;
 class QTextStream;
+class ThemeLocale;
 
 /**
 @author See README for the list of authors
@@ -47,6 +48,7 @@ class ThemeFile
 
     bool isZipTheme() const { return m_zipTheme; };
     const QString& name() const { return m_name; };
+    const QString& version() const { return m_version; };
     const QString& id() const { return m_id; };
     const QString& file() const { return m_file; };
     const QString& pythonModule() const { return m_python; };
@@ -62,6 +64,7 @@ class ThemeFile
     bool isValid() const;
     QByteArray readThemeFile(const QString& filename) const;
     bool fileExists(const QString& filename) const;
+    const ThemeLocale* locale() const { return m_locale; };
 
     bool set(const KURL& url);
     bool open();
@@ -83,6 +86,7 @@ class ThemeFile
     QString m_theme;
     QString m_python;
     QString m_icon;
+    QString m_version;
     QTextStream* m_stream;
     QByteArray m_ba;
     QFile m_fl;
@@ -90,6 +94,7 @@ class ThemeFile
     QString m_author;
     QString m_authorEmail;
     QString m_homepage;
+    ThemeLocale* m_locale;
 };
 
 #endif
