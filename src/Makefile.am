@@ -3,13 +3,14 @@ INCLUDES = $(all_includes) $(XMMS_INCLUDES) $(PYTHONINC)
 
 # these are the headers for your project
 noinst_HEADERS = karamba.h karambaapp.h karamba_python.h lineparser.h \
-			themefile.h themesdlg.h themewidget.h kwidgetlistbox.h
+				themefile.h themesdlg.h themewidget.h kwidgetlistbox.h themelocale.h
 
 # let automoc handle all of the meta source files (moc)
 METASOURCES = AUTO
 
 messages: rc.cpp
-	$(XGETTEXT) *.cpp -o $(podir)/karamba.pot
+	$(EXTRACTRC) *.ui >> rc.cpp
+	$(XGETTEXT) *.cpp -o $(podir)/superkaramba.pot
 
 KDE_ICON = superkaramba
 
@@ -22,18 +23,18 @@ bin_PROGRAMS = superkaramba
 
 # the application source, library search path, and link libraries
 superkaramba_SOURCES = main.cpp karamba.cpp meter.cpp bar.cpp sensor.cpp \
-	datesensor.cpp textlabel.cpp memsensor.cpp uptimesensor.cpp cpusensor.cpp \
-	networksensor.cpp imagelabel.cpp graph.cpp xmmssensor.cpp programsensor.cpp \
-	disksensor.cpp sensorparams.cpp sensorsensor.cpp textfilesensor.cpp clickarea.cpp \
-	noatunsensor.cpp karambarootpixmap.cpp clickmap.cpp rsssensor.cpp textfield.cpp \
-	taskmanager.cpp showdesktop.cpp richtextlabel.cpp karambasessionmanaged.cpp \
-	systemtray.cpp bar_python.cpp meter_python.cpp textlabel_python.cpp \
-	richtextlabel_python.cpp imagelabel_python.cpp config_python.cpp misc_python.cpp \
-	systray_python.cpp task_python.cpp widget_python.cpp menu_python.cpp \
-	karambalistboxitem.cpp graph_python.cpp dcopinterface.skel dcopinterface.stub \
-	karambainterface.cpp karambaapp.cpp karamba_python.cpp lineparser.cpp themefile.cpp \
-	themesdlg.cpp themes_layout.ui themewidget_layout.ui themewidget.cpp \
-	kwidgetlistbox.cpp sknewstuff.h sknewstuff.cpp superkarambasettings.kcfgc
+		datesensor.cpp textlabel.cpp memsensor.cpp uptimesensor.cpp cpusensor.cpp \
+		networksensor.cpp imagelabel.cpp graph.cpp xmmssensor.cpp programsensor.cpp \
+		disksensor.cpp sensorparams.cpp sensorsensor.cpp textfilesensor.cpp clickarea.cpp \
+		noatunsensor.cpp karambarootpixmap.cpp clickmap.cpp rsssensor.cpp textfield.cpp \
+		taskmanager.cpp showdesktop.cpp richtextlabel.cpp karambasessionmanaged.cpp \
+		systemtray.cpp bar_python.cpp meter_python.cpp textlabel_python.cpp \
+		richtextlabel_python.cpp imagelabel_python.cpp config_python.cpp misc_python.cpp \
+		systray_python.cpp task_python.cpp widget_python.cpp menu_python.cpp \
+		karambalistboxitem.cpp graph_python.cpp dcopinterface.skel dcopinterface.stub \
+		karambainterface.cpp karambaapp.cpp karamba_python.cpp lineparser.cpp themefile.cpp \
+		themesdlg.cpp themes_layout.ui themewidget_layout.ui themewidget.cpp \
+		kwidgetlistbox.cpp sknewstuff.h sknewstuff.cpp superkarambasettings.kcfgc themelocale.cpp
 
 # kde_cfg_DATA = superkaramba.kcfg
 
