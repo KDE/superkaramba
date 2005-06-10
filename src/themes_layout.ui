@@ -131,9 +131,6 @@
                     <property name="text">
                         <string>&amp;Add to desktop</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+A</string>
-                    </property>
                 </widget>
                 <widget class="KPushButton">
                     <property name="name">
@@ -147,9 +144,6 @@
                     </property>
                     <property name="text">
                         <string>&amp;Close</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+C</string>
                     </property>
                     <property name="stdItem" stdset="0">
                         <number>13</number>
