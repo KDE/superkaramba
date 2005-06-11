@@ -28,6 +28,7 @@
 
 #include <Python.h>
 #include <qobject.h>
+#include "kdebug.h"
 #include "karamba.h"
 #include "karambaapp.h"
 #include "themefile.h"
@@ -60,10 +61,11 @@ PyObject* py_accept_drops(PyObject *, PyObject *args)
 // Runs a command, returns 0 if it could not start command
 PyObject* py_execute_command(PyObject *, PyObject* args)
 {
-  char* command;
-  if (!PyArg_ParseTuple(args, (char*)"s:execute", &command))
+  PyObject* s;
+
+  if (!PyArg_ParseTuple(args, (char*)"O:execute", &s))
       return NULL;
-  return Py_BuildValue((char*)"l", KRun::runCommand(command));
+  return Py_BuildValue((char*)"l", KRun::runCommand(PyString2QString(s)));
 }
 
 // Runs a command, returns 0 if it could not start command
@@ -74,7 +76,7 @@ PyObject* py_execute_command_interactive(PyObject *, PyObject* args)
   //  return NULL;
 
   int numLines;       /* how many lines we passed for parsing */
-  char * line;        /* pointer to the line as a string */
+  QString line;       /* pointer to the line as a string */
 
   PyObject * listObj; /* the list of strings */
   PyObject * strObj;  /* one string in the list */
@@ -104,7 +106,7 @@ PyObject* py_execute_command_interactive(PyObject *, PyObject* args)
     strObj = PyList_GetItem(listObj, i); /* Can't fail */
 
     /* make it a string */
-    line = PyString_AsString( strObj );
+    line = PyString2QString(strObj);
 
     /* now do the parsing */
     *(currTheme->currProcess) << line;
