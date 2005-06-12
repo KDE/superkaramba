@@ -44,3 +44,6 @@ AC_SUBST(XMMS_INCLUDES)
 
 AC_CHECK_LIB(kvm, main, [LIBKVM="-lkvm"])
 AC_SUBST(LIBKVM)
+if test -z "$PYTHONINC" ; then
+        DO_NOT_COMPILE="$DO_NOT_COMPILE superkaramba"
+fi

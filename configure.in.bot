@@ -1,0 +1,7 @@
+if test -z "$PYTHONINC"; then
+  echo ""
+  echo "Superkaramba can't be compiled"
+  echo "because of missing Python libraries/headers."
+  echo ""
+  all_tests=bad
+fi
