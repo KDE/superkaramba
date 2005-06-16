@@ -108,7 +108,7 @@ void ThemesDlg::populateListbox()
   item = new ThemeWidget;
   item->icon->setPixmap(KGlobal::iconLoader()->loadIcon("knewstuff",
                         KIcon::NoGroup, KIcon::SizeHuge));
-  item->themeName->setText(i18n("Get new stuff"));
+  item->themeName->setText(i18n("Get New Stuff"));
   item->description->setText(i18n("Download new themes."));
   // TODO: Get new stuff
   item->buttonGo->setEnabled(true);
@@ -120,7 +120,7 @@ void ThemesDlg::populateListbox()
   item = new ThemeWidget;
   item->icon->setPixmap(KGlobal::iconLoader()->loadIcon("ksysguard",
                         KIcon::NoGroup, KIcon::SizeHuge));
-  item->themeName->setText(i18n("Open local theme"));
+  item->themeName->setText(i18n("Open Local Theme"));
   item->description->setText(i18n("Add local theme to the list."));
   item->buttonGo->setProperty("stdItem", 18);
   connect(item->buttonGo, SIGNAL(clicked()),
@@ -185,7 +185,7 @@ void ThemesDlg::getNewStuff()
   config->setGroup("KNewStuff");
   config->writeEntry( "ProvidersUrl", "http://download.kde.org/khotnewstuff/karamba-providers.xml" );
   config->sync();
-  
+
   if ( !mNewStuff )
   {
     mNewStuff = new SKNewStuff( mDlg );
