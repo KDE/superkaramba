@@ -232,6 +232,7 @@ int ThemesDlg::addThemeToList(const QString &file)
   int i = themeIndex(file);
   if(i < 0)
     i = tableThemes->insertItem(new ThemeWidget(new ThemeFile(file)));
+  tableThemes->setSelected(i);
   return i;
 }
 
