@@ -45,7 +45,6 @@ void SKNewStuff::addThemes(const KArchiveDirectory *archiveDir,
 
   for(QStringList::Iterator it = entries.begin(); it != entries.end(); ++it)
   {
-    kdDebug() << "Finding theme: " << *it << endl;
     if(archiveDir->entry(*it)->isDirectory())
     {
       addThemes(static_cast<const KArchiveDirectory*>(archiveDir->entry(*it)),
@@ -56,7 +55,6 @@ void SKNewStuff::addThemes(const KArchiveDirectory *archiveDir,
       QFileInfo fi(*it);
       if(fi.extension() == "theme")
       {
-        kdDebug() << "Theme found: " << destDir + *it << endl;
         mDlg->addThemeToList(destDir + *it);
       }
     }
