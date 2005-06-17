@@ -5,4 +5,6 @@ Exec=superkaramba
 Icon=clanbomber
 Type=Application
 Comment=An engine for cool desktop eyecandy.
+Comment[pt]=Um motor para elementos no ecrã.
 GenericName=Desktop Widgets
+GenericName[pt]=Elementos no Ecrã
