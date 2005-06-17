@@ -43,7 +43,6 @@ ThemesDlg::ThemesDlg(QWidget *parent, const char *name)
  : ThemesLayout(parent, name)
 {
   populateListbox();
-  mDlg = this;
   mNewStuff = 0;
 }
 
@@ -188,7 +187,7 @@ void ThemesDlg::getNewStuff()
 
   if ( !mNewStuff )
   {
-    mNewStuff = new SKNewStuff( mDlg );
+    mNewStuff = new SKNewStuff(this);
   }
   mNewStuff->download();
 }
@@ -226,11 +225,17 @@ int ThemesDlg::themeIndex(QString file)
   return -1;
 }
 
-int ThemesDlg::addTheme(const QString& , const QString &file)
+int ThemesDlg::addThemeToList(const QString &file)
 {
   int i = themeIndex(file);
   if(i < 0)
     i = tableThemes->insertItem(new ThemeWidget(new ThemeFile(file)));
+  return i;
+}
+
+int ThemesDlg::addTheme(const QString& , const QString &file)
+{
+  int i = addThemeToList(file);
   ThemeWidget* w = static_cast<ThemeWidget*>(tableThemes->item(i));
   if(w)
     return w->addInstance();

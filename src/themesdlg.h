@@ -38,6 +38,7 @@ class ThemesDlg : public ThemesLayout
 
     int addTheme(const QString &appId, const QString &file);
     void removeTheme(const QString &appId, const QString &file, int instance);
+    int addThemeToList(const QString &file);
 
   public slots:
     virtual void quitSuperKaramba();
@@ -57,7 +58,6 @@ class ThemesDlg : public ThemesLayout
     QStringList themes();
 
   private:
-    ThemesDlg *mDlg;
     SKNewStuff *mNewStuff;
 };
 

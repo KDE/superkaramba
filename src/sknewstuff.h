@@ -25,6 +25,7 @@
 #include "knewstuff/entry.h"
 
 class ThemesDlg;
+class KArchiveDirectory;
 
 class SKNewStuff : public KNewStuff
 {
@@ -34,6 +35,10 @@ class SKNewStuff : public KNewStuff
     bool install( const QString &fileName );
     bool createUploadFile( const QString &fileName );
     QString downloadDestination( KNS::Entry *entry );
+
+  protected:
+    void addThemes(const KArchiveDirectory *archiveDir,
+                   const QString& destDir);
 
   private:
     ThemesDlg *mDlg;
