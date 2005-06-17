@@ -48,8 +48,9 @@ ThemesDlg::ThemesDlg(QWidget *parent, const char *name)
 
 ThemesDlg::~ThemesDlg()
 {
-  delete mNewStuff;
+  kdDebug() << k_funcinfo << endl;
   saveUserAddedThemes();
+  delete mNewStuff;
 }
 
 void ThemesDlg::saveUserAddedThemes()
@@ -65,7 +66,7 @@ void ThemesDlg::saveUserAddedThemes()
     remove = false;
     for(QStringList::Iterator jt = dirs.begin(); jt != dirs.end(); ++jt)
     {
-      if((*it).startsWith((*jt)))
+      if(QFileInfo(*it).dir().path() + "/" == *jt)
       {
         remove = true;
         break;
@@ -199,6 +200,7 @@ void ThemesDlg::selectionChanged(int index)
 
 void ThemesDlg::quitSuperKaramba()
 {
+  kdDebug() << k_funcinfo << endl;
   KarambaApplication* app = karambaApp;
   QStringList apps = app->getKarambas();
   QStringList::Iterator it;
