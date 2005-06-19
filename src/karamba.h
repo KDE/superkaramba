@@ -71,6 +71,7 @@
 #include "textlabel.h"
 #include "imagelabel.h"
 #include "graph.h"
+#include "input.h"
 
 #include "clickarea.h"
 
@@ -153,6 +154,9 @@ public:
     void toggleWidgetUpdate( bool );
 
     KWinModule*    kWinModule;
+  
+    void makeActive();
+  void makePassive();
 
 protected:
     void mousePressEvent( QMouseEvent *);

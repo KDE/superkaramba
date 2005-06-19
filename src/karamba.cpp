@@ -113,16 +113,6 @@ karamba::karamba(QString fn, bool reloading, int instance) :
     kdDebug() << "Loading python module: " << m_theme.pythonModule() << endl;
     QTimer::singleShot(0, this, SLOT(initPythonInterface()));
   }
-  // Matthew Kay: set window type to "dock" (plays better with taskbar themes
-  // this way)
-  KWin::setType(winId(), NET::Dock);
-
-#if defined(KDE_MAKE_VERSION)
-# if KDE_VERSION >= KDE_MAKE_VERSION(3,1,9)
-  //KDE 3.2 addition for the always on top issues
-  KWin::setState(winId(), NET::KeepBelow);
-# endif
-#endif
 
   widgetMask = 0;
   info = new NETWinInfo( qt_xdisplay(), winId(), qt_xrootwin(), NET::WMState );
@@ -375,6 +365,7 @@ bool karamba::parseConfig()
   //qDebug("karamba::parseConfig");
   QTimer *m_sysTimer = new QTimer(this);
   int interval = 0;
+  bool passive = true;
 
   if(m_theme.open())
   {
@@ -394,10 +385,9 @@ bool karamba::parseConfig()
       w = lineParser.getInt("W");
       h = lineParser.getInt("H");
 
-
       if(lineParser.meter() == "KARAMBA" && !foundKaramba )
       {
-        //qDebug("karamba found");
+        //qDebug(("karamba found");
         toggleLocked->setChecked(lineParser.getBoolean("LOCKED"));
         slotToggleLocked();
 
@@ -717,10 +707,40 @@ bool karamba::parseConfig()
 
         tmp->setColor(lineParser.getColor("COLOR"));
 
-        setSensor(lineParser, (Graph*)tmp );
+        setSensor(lineParser, (Graph*)tmp);
         meterList->append ( tmp );
       }
+      
+      if(lineParser.meter() == "INPUT")
+      {
+        Input *tmp = new Input(this, x, y, w, h);
+        
+        QString name = lineParser.getString("NAME");
+        if (name != "")
+          tmp->setName(name.ascii());
+        
+        tmp->setBGColor(lineParser.getColor("BGCOLOR", Qt::white));
+        tmp->setColor(lineParser.getColor("COLOR", QColor(192, 192, 192)));
+        
+        meterList->append(tmp);
+        passive = false;
+      }
     }
+    
+    if(passive)
+    {
+      // Matthew Kay: set window type to "dock" (plays better with taskbar themes
+      // this way)
+      KWin::setType(winId(), NET::Dock);
+          
+      #if defined(KDE_MAKE_VERSION)
+        #if KDE_VERSION >= KDE_MAKE_VERSION(3,1,9)
+          //KDE 3.2 addition for the always on top issues
+          KWin::setState(winId(), NET::KeepBelow);
+        #endif
+      #endif
+    }
+    
     m_theme.close();
   }
   //qDebug("parseConfig ok: %d", foundKaramba);
@@ -746,6 +766,39 @@ bool karamba::parseConfig()
 
     return true;
   }
+}
+
+void karamba::makeActive()
+{
+  KWin::setType(winId(), NET::Normal);
+  
+  #if defined(KDE_MAKE_VERSION)
+    #if KDE_VERSION >= KDE_MAKE_VERSION(3,1,9)
+      //KDE 3.2 addition for the always on top issues
+      KWin::setState(winId(), NET::Modal);
+    #endif
+  #endif
+}
+
+void karamba::makePassive()
+{
+  QObject *meter;
+  for (meter = meterList->first(); meter; meter = meterList->next())
+  {
+    if((meter)->isA("Input"))
+      return;
+  }
+  
+  // Matthew Kay: set window type to "dock" (plays better with taskbar themes
+  // this way)
+  KWin::setType(winId(), NET::Dock);
+    
+  #if defined(KDE_MAKE_VERSION)
+    #if KDE_VERSION >= KDE_MAKE_VERSION(3,1,9)
+      //KDE 3.2 addition for the always on top issues
+      KWin::setState(winId(), NET::KeepBelow);
+    #endif
+  #endif
 }
 
 void karamba::popupNotify(int)
@@ -1147,7 +1200,7 @@ void karamba::passMenuOptionChanged(QString key, bool value)
 
 void karamba::meterClicked(QMouseEvent* e, Meter* meter)
 {
-  //qWarning("karamba::meterClicked");
+  qWarning("karamba::meterClicked");
   if (pythonIface->isExtensionLoaded() && haveUpdated)
   {
     int button = 0;
@@ -1180,7 +1233,8 @@ void karamba::passClick(QMouseEvent *e)
     (( DateSensor* ) *it2)->toggleCalendar( e );
     ++it2;
   }
-
+  
+  
   // We create a temporary click list here because original
   // can change during the loop (infinite loop Bug 994359)
   QObjectList clickListTmp(*clickList);
@@ -1196,7 +1250,7 @@ void karamba::passClick(QMouseEvent *e)
     }
     ++it;
   }
-
+  
   //Everything below is to call the python callback function
   if (pythonIface->isExtensionLoaded() && haveUpdated)
   {

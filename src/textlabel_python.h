@@ -336,8 +336,8 @@ PyObject* py_getTextColor(PyObject *self, PyObject *args);
 //   long changeTextFont(widget, text, font)
 // DESCRIPTION
 //   This will change the font of a text widget (only ones you created
-//   through python currently). textToChange is the reference to the text
-//   object to change that you saved from the createText() call. newFont is a
+//   through python currently). Text is the reference to the text
+//   object to change that you saved from the createText() call. Font is a
 //   string the the name of the font to use.
 // ARGUMENTS
 //   * long widget -- karamba
