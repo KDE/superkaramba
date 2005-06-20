@@ -150,7 +150,7 @@ void ThemeLocale::setLanguage(const QStringList &languages)
       ++it)
   {
     QString file =
-        QString("locale/%1/LC_MESSAGES/%2.mo").arg(*it).arg(m_theme->id());
+        QString("locale/%1/LC_MESSAGES/%2.mo").arg(*it).arg(m_theme->mo());
 
     if(m_theme->fileExists(file))
     {

@@ -50,6 +50,7 @@ class ThemeFile
     const QString& name() const { return m_name; };
     const QString& version() const { return m_version; };
     const QString& id() const { return m_id; };
+    const QString& mo() const { return m_mo; };
     const QString& file() const { return m_file; };
     const QString& pythonModule() const { return m_python; };
     bool pythonModuleExists() const;
@@ -82,6 +83,7 @@ class ThemeFile
     bool m_zipTheme;
     QString m_file;
     QString m_id;
+    QString m_mo;
     QString m_name;
     QString m_theme;
     QString m_python;

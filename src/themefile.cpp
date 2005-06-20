@@ -251,6 +251,14 @@ bool ThemeFile::set(const KURL &url)
     m_zipTheme = false;
   }
   parseXml();
+
+  QFileInfo fimo(m_python);
+  if(m_python.isEmpty())
+    fimo.setFile(m_theme);
+  else
+    fimo.setFile(m_python);
+  m_mo = fimo.baseName();
+
   m_locale = new ThemeLocale(this);
   return isValid();
 }
