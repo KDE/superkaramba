@@ -235,34 +235,59 @@ static PyMethodDef karamba_methods[] = {
     {(char*)"translateAll", py_translate_all, METH_VARARGS, (char*)"Translate all widgets in a theme"},
     {(char*)"show", py_show, METH_VARARGS, (char*)"Show theme"},
     {(char*)"hide", py_hide, METH_VARARGS, (char*)"Hide theme"},
-    
+
     // Input Box - input_python.cpp
-    {(char*)"createInputBox", py_createInputBox, METH_VARARGS, (char*)"Create new Input Box."},
-    {(char*)"deleteInputBox", py_deleteInputBox, METH_VARARGS, (char*)"Delete Input Box."},
-    {(char*)"getThemeInputBox", py_getThemeInputBox, METH_VARARGS, (char*)"Get Input Box from .theme using it's name."},
-    {(char*)"getInputBoxValue", py_getInputBoxValue, METH_VARARGS, (char*)"Get Input Box value"},
-    {(char*)"changeInputBox", py_setInputBoxValue, METH_VARARGS, (char*)"Change a Input Box Text"},
-    {(char*)"hideInputBox", py_hideInputBox, METH_VARARGS, (char*)"Hide Input Box."},
-    {(char*)"showInputBox", py_showInputBox, METH_VARARGS, (char*)"Show Input Box."},
-    {(char*)"getInputBoxPos", py_getInputBoxPos, METH_VARARGS, (char*)"Get InputBox position."},
-    {(char*)"moveInputBox", py_moveInputBox, METH_VARARGS, (char*)"Moves a Input Box"},
-    {(char*)"getInputBoxSize", py_getInputBoxSize, METH_VARARGS, (char*)"Get the (width, height) of a Input Box"},
-    {(char*)"resizeInputBox", py_resizeInputBox, METH_VARARGS, (char*)"Resize Input Box."},
-    {(char*)"changeInputBoxFont", py_setInputBoxFont, METH_VARARGS, (char*)"Change a Input Box Font"},
-    {(char*)"getInputBoxFont", py_getInputBoxFont, METH_VARARGS, (char*)"Get a Input Box Font"},
-    {(char*)"changeInputBoxFontColor", py_setInputBoxFontColor, METH_VARARGS, (char*)"Change a Input Box Font Color"},
-    {(char*)"getInputBoxFontColor", py_getInputBoxFontColor, METH_VARARGS, (char*)"Get a Input Box Font Color"},
-    {(char*)"changeInputBoxSelectionColor", py_setInputBoxSelectionColor, METH_VARARGS, (char*)"Change a Input Box Selection Color"},
-    {(char*)"getInputBoxSelectionColor", py_getInputBoxSelectionColor, METH_VARARGS, (char*)"Get a Input Box Selection Color"},
-    {(char*)"changeInputBoxBackgroundColor", py_setInputBoxBGColor, METH_VARARGS, (char*)"Change a Input Box Background Color"},
-    {(char*)"getInputBoxBackgroundColor", py_getInputBoxBGColor, METH_VARARGS, (char*)"Get a Input Box Background Color"},
-    {(char*)"changeInputBoxFrameColor", py_setInputBoxFrameColor, METH_VARARGS, (char*)"Change a Input Box Frame Color"},
-    {(char*)"getInputBoxFrameColor", py_getInputBoxFrameColor, METH_VARARGS, (char*)"Get a Input Box Frame Color"},
-    {(char*)"changeInputBoxSelectedTextColor", py_setInputBoxSelectedTextColor, METH_VARARGS, (char*)"Change a Input Box Selected Text Color"},
-    {(char*)"getInputBoxSelectedTextColor", py_getInputBoxSelectedTextColor, METH_VARARGS, (char*)"Get a Input Box Selected Text Color"},
-    {(char*)"changeInputBoxFontSize", py_setInputBoxFontSize, METH_VARARGS, (char*)"Change a Input Box Font Size"},
-    {(char*)"getInputBoxFontSize", py_getInputBoxFontSize, METH_VARARGS, (char*)"Get a Input Box Font Size"},
-    
+    {(char*)"createInputBox", py_createInputBox, METH_VARARGS,
+        (char*)"Create new Input Box."},
+    {(char*)"deleteInputBox", py_deleteInputBox, METH_VARARGS,
+        (char*)"Delete Input Box."},
+    {(char*)"getThemeInputBox", py_getThemeInputBox, METH_VARARGS,
+        (char*)"Get Input Box from .theme using it's name."},
+    {(char*)"getInputBoxValue", py_getInputBoxValue, METH_VARARGS,
+        (char*)"Get Input Box value"},
+    {(char*)"changeInputBox", py_setInputBoxValue, METH_VARARGS,
+        (char*)"Change a Input Box Text"},
+    {(char*)"hideInputBox", py_hideInputBox, METH_VARARGS,
+        (char*)"Hide Input Box."},
+    {(char*)"showInputBox", py_showInputBox, METH_VARARGS,
+        (char*)"Show Input Box."},
+    {(char*)"getInputBoxPos", py_getInputBoxPos, METH_VARARGS,
+        (char*)"Get InputBox position."},
+    {(char*)"moveInputBox", py_moveInputBox, METH_VARARGS,
+        (char*)"Moves a Input Box"},
+    {(char*)"getInputBoxSize", py_getInputBoxSize, METH_VARARGS,
+        (char*)"Get the (width, height) of a Input Box"},
+    {(char*)"resizeInputBox", py_resizeInputBox, METH_VARARGS,
+        (char*)"Resize Input Box."},
+    {(char*)"changeInputBoxFont", py_setInputBoxFont, METH_VARARGS,
+        (char*)"Change a Input Box Font"},
+    {(char*)"getInputBoxFont", py_getInputBoxFont, METH_VARARGS,
+        (char*)"Get a Input Box Font"},
+    {(char*)"changeInputBoxFontColor", py_setInputBoxFontColor, METH_VARARGS,
+        (char*)"Change a Input Box Font Color"},
+    {(char*)"getInputBoxFontColor", py_getInputBoxFontColor, METH_VARARGS,
+        (char*)"Get a Input Box Font Color"},
+    {(char*)"changeInputBoxSelectionColor", py_setInputBoxSelectionColor,
+        METH_VARARGS, (char*)"Change a Input Box Selection Color"},
+    {(char*)"getInputBoxSelectionColor", py_getInputBoxSelectionColor,
+        METH_VARARGS, (char*)"Get a Input Box Selection Color"},
+    {(char*)"changeInputBoxBackgroundColor", py_setInputBoxBGColor,
+        METH_VARARGS, (char*)"Change a Input Box Background Color"},
+    {(char*)"getInputBoxBackgroundColor", py_getInputBoxBGColor, METH_VARARGS,
+        (char*)"Get a Input Box Background Color"},
+    {(char*)"changeInputBoxFrameColor", py_setInputBoxFrameColor, METH_VARARGS,
+        (char*)"Change a Input Box Frame Color"},
+    {(char*)"getInputBoxFrameColor", py_getInputBoxFrameColor, METH_VARARGS,
+        (char*)"Get a Input Box Frame Color"},
+    {(char*)"changeInputBoxSelectedTextColor", py_setInputBoxSelectedTextColor,
+        METH_VARARGS, (char*)"Change a Input Box Selected Text Color"},
+    {(char*)"getInputBoxSelectedTextColor", py_getInputBoxSelectedTextColor,
+        METH_VARARGS, (char*)"Get a Input Box Selected Text Color"},
+    {(char*)"changeInputBoxFontSize", py_setInputBoxFontSize, METH_VARARGS,
+        (char*)"Change a Input Box Font Size"},
+    {(char*)"getInputBoxFontSize", py_getInputBoxFontSize, METH_VARARGS,
+        (char*)"Get a Input Box Font Size"},
+
     {NULL, NULL, 0 ,NULL}
 };
 
@@ -468,9 +493,10 @@ bool KarambaPython::widgetClicked(karamba* k, int x, int y, int button)
   return callObject("widgetClicked", pArgs);
 }
 
-bool KarambaPython::keyPressed(karamba* k, QString text)
+bool KarambaPython::keyPressed(karamba* k, const Meter* meter,
+                               const QString& text)
 {
-  PyObject* pArgs = Py_BuildValue((char*)"(ls)", k, text.ascii());
+  PyObject* pArgs = Py_BuildValue((char*)"(lls)", k, meter, text.ascii());
   return callObject("keyPressed", pArgs);
 }
 

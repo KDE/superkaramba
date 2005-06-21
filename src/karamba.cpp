@@ -710,29 +710,29 @@ bool karamba::parseConfig()
         setSensor(lineParser, (Graph*)tmp);
         meterList->append ( tmp );
       }
-      
+
       if(lineParser.meter() == "INPUT")
       {
         Input *tmp = new Input(this, x, y, w, h);
-        
+
         QString name = lineParser.getString("NAME");
         if (name != "")
           tmp->setName(name.ascii());
-        
+
         tmp->setBGColor(lineParser.getColor("BGCOLOR", Qt::white));
         tmp->setColor(lineParser.getColor("COLOR", QColor(192, 192, 192)));
-        
+
         meterList->append(tmp);
         passive = false;
       }
     }
-    
+
     if(passive)
     {
-      // Matthew Kay: set window type to "dock" (plays better with taskbar themes
-      // this way)
+      // Matthew Kay: set window type to "dock"
+      // (plays better with taskbar themes this way)
       KWin::setType(winId(), NET::Dock);
-          
+
       #if defined(KDE_MAKE_VERSION)
         #if KDE_VERSION >= KDE_MAKE_VERSION(3,1,9)
           //KDE 3.2 addition for the always on top issues
@@ -740,7 +740,7 @@ bool karamba::parseConfig()
         #endif
       #endif
     }
-    
+
     m_theme.close();
   }
   //qDebug("parseConfig ok: %d", foundKaramba);
@@ -771,7 +771,7 @@ bool karamba::parseConfig()
 void karamba::makeActive()
 {
   KWin::setType(winId(), NET::Normal);
-  
+
   #if defined(KDE_MAKE_VERSION)
     #if KDE_VERSION >= KDE_MAKE_VERSION(3,1,9)
       //KDE 3.2 addition for the always on top issues
@@ -788,11 +788,11 @@ void karamba::makePassive()
     if((meter)->isA("Input"))
       return;
   }
-  
+
   // Matthew Kay: set window type to "dock" (plays better with taskbar themes
   // this way)
   KWin::setType(winId(), NET::Dock);
-    
+
   #if defined(KDE_MAKE_VERSION)
     #if KDE_VERSION >= KDE_MAKE_VERSION(3,1,9)
       //KDE 3.2 addition for the always on top issues
@@ -1233,8 +1233,8 @@ void karamba::passClick(QMouseEvent *e)
     (( DateSensor* ) *it2)->toggleCalendar( e );
     ++it2;
   }
-  
-  
+
+
   // We create a temporary click list here because original
   // can change during the loop (infinite loop Bug 994359)
   QObjectList clickListTmp(*clickList);
@@ -1250,7 +1250,7 @@ void karamba::passClick(QMouseEvent *e)
     }
     ++it;
   }
-  
+
   //Everything below is to call the python callback function
   if (pythonIface->isExtensionLoaded() && haveUpdated)
   {
@@ -1325,9 +1325,13 @@ void karamba::mouseDoubleClickEvent( QMouseEvent *e )
 void karamba::keyPressEvent(QKeyEvent *e)
 {
   //qDebug("karamba::keyPressEvent");
-  //Everything below is to call the python callback function
+  keyPressed(e->text(), 0);
+}
+
+void karamba::keyPressed(const QString& s, const Meter* meter)
+{
   if (pythonIface && pythonIface->isExtensionLoaded())
-    pythonIface->keyPressed(this, e->text());
+    pythonIface->keyPressed(this, meter, s);
 }
 
 void karamba::mouseMoveEvent( QMouseEvent *e )

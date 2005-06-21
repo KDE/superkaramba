@@ -27,24 +27,28 @@
 #include <qpainter.h>
 #include <qcolor.h>
 
+class Input;
 
 class SKLineEdit : public QLineEdit
 {
-public:
-  SKLineEdit(QWidget *w);
+  public:
+    SKLineEdit(QWidget *w, Input *i);
+    ~SKLineEdit();
 
-  ~SKLineEdit();
-  
-  void drawFrame(QPainter *p);
-  void drawContents(QPainter *p);
-  
-  void setFrameColor(QColor c);
-  QColor getFrameColor() const;
-  
-  void setBackgroundColor(QColor c);
-  
-private:
-  QColor frameColor;
+    void drawFrame(QPainter *p);
+    void drawContents(QPainter *p);
+
+    void setFrameColor(QColor c);
+    QColor getFrameColor() const;
+
+    void setBackgroundColor(QColor c);
+
+  protected:
+    virtual void keyReleaseEvent(QKeyEvent* e);
+
+  private:
+    QColor frameColor;
+    Input* m_input;
 };
 
 #endif

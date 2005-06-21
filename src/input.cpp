@@ -23,7 +23,7 @@
 Input::Input(karamba* k, int x, int y, int w, int h):
   Meter(k, x, y, w, h)
 {
-  edit = new SKLineEdit((QWidget*)k);
+  edit = new SKLineEdit((QWidget*)k, this);
   edit->setGeometry(x,y,w,h);
 
   font = edit->font();

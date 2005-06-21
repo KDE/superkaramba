@@ -65,7 +65,7 @@ public:
   bool meterClicked(karamba* k, Meter* meter, int button);
   bool meterClicked(karamba* k, QString anchor, int button);
   bool widgetClicked(karamba* k, int x, int y, int button);
-  bool keyPressed(karamba* k, QString text);
+  bool keyPressed(karamba* k, const Meter* meter, const QString& text);
   bool widgetMouseMoved(karamba* k, int x, int y, int button);
   bool menuItemClicked(karamba* k, KPopupMenu* menu, long id);
   bool activeTaskChanged(karamba* k, Task* t);

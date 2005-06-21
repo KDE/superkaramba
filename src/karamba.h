@@ -147,6 +147,7 @@ public:
     int instance() const { return m_instance; };
     void setInstance(int instance) { m_instance = instance; };
     void closeTheme(bool reloading = false);
+    void keyPressed(const QString& s, const Meter* meter);
 
     int numberOfConfMenuItems;
     KConfig* config;
@@ -154,7 +155,7 @@ public:
     void toggleWidgetUpdate( bool );
 
     KWinModule*    kWinModule;
-  
+
     void makeActive();
   void makePassive();
 
