@@ -47,6 +47,7 @@ PyObject* py_createInputBox(PyObject *, PyObject *args)
   Input *tmp = new Input((karamba*)widget, (int)x, (int)y, (int)w, (int)h);
   tmp->setValue(PyString2QString(text));
   ((karamba*)widget)->meterList->append(tmp);
+  tmp->show();
   
   ((karamba*)widget)->makeActive();
   

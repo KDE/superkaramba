@@ -387,7 +387,7 @@ bool karamba::parseConfig()
 
       if(lineParser.meter() == "KARAMBA" && !foundKaramba )
       {
-        //qDebug(("karamba found");
+        //qDebug("karamba found");
         toggleLocked->setChecked(lineParser.getBoolean("LOCKED"));
         slotToggleLocked();
 
@@ -1200,7 +1200,7 @@ void karamba::passMenuOptionChanged(QString key, bool value)
 
 void karamba::meterClicked(QMouseEvent* e, Meter* meter)
 {
-  qWarning("karamba::meterClicked");
+  //qWarning("karamba::meterClicked");
   if (pythonIface->isExtensionLoaded() && haveUpdated)
   {
     int button = 0;
