@@ -110,7 +110,7 @@ void ThemesDlg::populateListbox()
                         KIcon::NoGroup, KIcon::SizeHuge));
   item->themeName->setText(i18n("Get New Stuff"));
   item->description->setText(i18n("Download new themes."));
-  // TODO: Get new stuff
+
   item->buttonGo->setEnabled(true);
   item->buttonGo->setText(i18n("New Stuff..."));
   connect(item->buttonGo, SIGNAL(clicked()),

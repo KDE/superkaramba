@@ -54,6 +54,7 @@ class KWidgetListbox : public QTable
     void setItemColors(int index, bool even);
     void updateColors();
     bool even(int index);
+    virtual void showEvent(QShowEvent* e);
 
   protected slots:
     void selectionChanged(int row, int col);
