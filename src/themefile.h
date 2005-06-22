@@ -49,6 +49,7 @@ class ThemeFile
     bool isZipTheme() const { return m_zipTheme; };
     const QString& name() const { return m_name; };
     const QString& version() const { return m_version; };
+    const QString& license() const { return m_license; };
     const QString& id() const { return m_id; };
     const QString& mo() const { return m_mo; };
     const QString& file() const { return m_file; };
@@ -89,6 +90,7 @@ class ThemeFile
     QString m_python;
     QString m_icon;
     QString m_version;
+    QString m_license;
     QTextStream* m_stream;
     QByteArray m_ba;
     QFile m_fl;

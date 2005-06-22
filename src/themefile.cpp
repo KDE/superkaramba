@@ -280,26 +280,28 @@ void ThemeFile::parseXml()
     {
       if(e.tagName() == "name")
         m_name = e.text();
-      if(e.tagName() == "themefile")
+      else if(e.tagName() == "themefile")
         m_theme = e.text();
-      if(e.tagName() == "python_module")
+      else if(e.tagName() == "python_module")
       {
         m_python = e.text();
         if(m_python.right(3).lower() == ".py")
           m_python.remove(m_python.length() - 3, 3);
       }
-      if(e.tagName() == "description")
+      else if(e.tagName() == "description")
         m_description = e.text();
-      if(e.tagName() == "author")
+      else if(e.tagName() == "author")
         m_author = e.text();
-      if(e.tagName() == "author_email")
+      else if(e.tagName() == "author_email")
         m_authorEmail = e.text();
-      if(e.tagName() == "homepage")
+      else if(e.tagName() == "homepage")
         m_homepage = e.text();
-      if(e.tagName() == "icon")
+      else if(e.tagName() == "icon")
         m_icon = e.text();
-      if(e.tagName() == "version")
+      else if(e.tagName() == "version")
         m_version = e.text();
+      else if(e.tagName() == "license")
+        m_license = e.text();
     }
     n = n.nextSibling();
   }
