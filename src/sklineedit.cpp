@@ -60,12 +60,16 @@ QColor SKLineEdit::getFrameColor() const
   return frameColor;
 }
 
+void SKLineEdit::keyPressEvent(QKeyEvent* e)
+{
+  m_key = e->text();
+  QLineEdit::keyPressEvent(e);
+}
+
 void SKLineEdit::keyReleaseEvent(QKeyEvent* e)
 {
-  kdDebug() << k_funcinfo << '-' << e->text()<< '-' << e->key()<< '-' <<
-               e->ascii() << endl;
   karamba* k = static_cast<karamba*>(parent());
   // e->text() is empty ?
-  k->keyPressed(QChar(e->ascii()), m_input);
+  k->keyPressed(m_key, m_input);
   QLineEdit::keyReleaseEvent(e);
 }

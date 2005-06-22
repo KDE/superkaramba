@@ -45,10 +45,12 @@ class SKLineEdit : public QLineEdit
 
   protected:
     virtual void keyReleaseEvent(QKeyEvent* e);
+    virtual void keyPressEvent(QKeyEvent* e);
 
   private:
     QColor frameColor;
     Input* m_input;
+    QString m_key;
 };
 
 #endif
