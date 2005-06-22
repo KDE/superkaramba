@@ -18,14 +18,15 @@
 #include <qfont.h>
 #include <qfontmetrics.h>
 #include <qrect.h>
+#include <qsize.h>
 #include "karamba.h"
 
 class RichTextLabel : public Meter
 {
-Q_OBJECT
-public:
+    Q_OBJECT
+  public:
     RichTextLabel(karamba*);
-    RichTextLabel(karamba* k, int x,int y,int w,int h);
+    RichTextLabel(karamba* k, int x, int y, int w, int h);
     ~RichTextLabel();
 
     void setText(QString text, bool linkUnderline = false);
@@ -51,14 +52,13 @@ public:
 
     QString anchorAt(int, int);
 
-private:
+  private:
     QSimpleRichText* text;
-
     QString source;
     QFont font;
     QColorGroup colorGrp;
-
     bool underlineLinks;
+    QSize originalSize;
 };
 
 #endif
