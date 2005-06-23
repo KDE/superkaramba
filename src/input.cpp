@@ -19,14 +19,13 @@
  ****************************************************************************/
 
 #include "input.h"
+#include "kdebug.h"
 
 Input::Input(karamba* k, int x, int y, int w, int h):
   Meter(k, x, y, w, h)
 {
   edit = new SKLineEdit((QWidget*)k, this);
   edit->setGeometry(x,y,w,h);
-
-  font = edit->font();
 }
 
 Input::~Input()
@@ -171,6 +170,17 @@ void Input::setFontSize(int size)
 int Input::getFontSize() const
 {
   return font.pixelSize();
+}
+
+void Input::setTextProps(TextField* t)
+{
+  if(t)
+  {
+    setFontSize(t->getFontSize());
+    setFont(t->getFont());
+    setColor(t->getColor());
+    setBGColor(t->getBGColor());
+  }
 }
 
 #include "input.moc"

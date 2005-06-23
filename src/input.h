@@ -31,6 +31,8 @@
 #include <qstring.h>
 #include <qfont.h>
 
+#include "textfield.h"
+
 class Input : public Meter
 {
 Q_OBJECT
@@ -39,12 +41,12 @@ public:
   Input();
 
   ~Input();
-  
+
   void mUpdate(QPainter *p);
-  
+
   void setValue(QString text);
   QString getStringValue() const;
-  
+
   void setBGColor(QColor c);
   QColor getBGColor() const;
   void setColor(QColor c);
@@ -55,21 +57,22 @@ public:
   QColor getSelectionColor() const;
   void setSelectedTextColor(QColor selectedTextColor);
   QColor Input::getSelectedTextColor() const;
-    
+  void setTextProps(TextField*);
+
   void hide();
   void show();
-  
+
   void setSize(int ix, int iy, int iw, int ih);
   void setX(int ix);
   void setY(int iy);
   void setWidth(int iw);
   void setHeight(int ih);
-  
+
   void setFont(QString f);
-  QString getFont() const; 
+  QString getFont() const;
   void setFontSize(int size);
   int getFontSize() const;
-  
+
 private:
   SKLineEdit *edit;
   QFont font;

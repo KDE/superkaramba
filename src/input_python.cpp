@@ -40,17 +40,18 @@ PyObject* py_createInputBox(PyObject *, PyObject *args)
   PyObject *text;
   if (!PyArg_ParseTuple(args, (char*)"lllllO:createInputBox", &widget, &x, &y, &w, &h, &text))
     return NULL;
-  
+
   if (!checkKaramba(widget))
     return NULL;
-  
+
   Input *tmp = new Input((karamba*)widget, (int)x, (int)y, (int)w, (int)h);
   tmp->setValue(PyString2QString(text));
+  tmp->setTextProps(((karamba*)widget)->getDefaultTextProps());
   ((karamba*)widget)->meterList->append(tmp);
   tmp->show();
-  
+
   ((karamba*)widget)->makeActive();
-  
+
   return (Py_BuildValue((char*)"l", (long)tmp));
 }
 
@@ -59,14 +60,14 @@ PyObject* py_deleteInputBox(PyObject *, PyObject *args)
   long widget, meter;
   if (!PyArg_ParseTuple(args, (char*)"ll:deleteInputBox", &widget, &meter))
     return NULL;
-  
+
   if (!checkKarambaAndMeter(widget, meter, "Input"))
     return NULL;
-  
+
   bool result = ((karamba*)widget)->meterList->removeRef((Meter*)meter);
-  
+
   ((karamba*)widget)->makePassive();
-  
+
   return Py_BuildValue((char*)"l", result);
 }
 
@@ -122,10 +123,10 @@ PyObject* py_setInputBoxFont(PyObject *, PyObject *args)
   if (!PyArg_ParseTuple(args, (char*)"lls:changeInputBoxFont",
                         &widget, &inputBox, &text))
     return NULL;
-  
+
   if (!checkKarambaAndMeter(widget, inputBox, "Input"))
     return NULL;
-  
+
   ((Input*)inputBox)->setFont(text);
   return Py_BuildValue((char*)"l", 1);
 }
@@ -135,10 +136,10 @@ PyObject* py_getInputBoxFont(PyObject *, PyObject *args)
   long widget, inputBox;
   if (!PyArg_ParseTuple(args, (char*)"ll:getInputBoxFont", &widget, &inputBox))
     return NULL;
-  
+
   if (!checkKarambaAndMeter(widget, inputBox, "Input"))
     return NULL;
-  
+
   return Py_BuildValue((char*)"s", ((Input*)inputBox)->getFont().ascii());
 }
 
@@ -148,10 +149,10 @@ PyObject* py_setInputBoxFontColor(PyObject *, PyObject *args)
   long r, g, b;
   if (!PyArg_ParseTuple(args, (char*)"lllll:changeInputBoxFontColor", &widget, &inputBox, &r, &g, &b))
     return NULL;
-  
+
   if (!checkKarambaAndMeter(widget, inputBox, "Input"))
     return NULL;
-  
+
   ((Input*)inputBox)->setFontColor(QColor(r, g, b));
   return Py_BuildValue((char*)"l", 1);
 }
@@ -161,10 +162,10 @@ PyObject* py_getInputBoxFontColor(PyObject *, PyObject *args)
   long widget, inputBox;
   if (!PyArg_ParseTuple(args, (char*)"ll:changeInputBoxFontColor", &widget, &inputBox))
     return NULL;
-  
+
   if (!checkKarambaAndMeter(widget, inputBox, "Input"))
     return NULL;
-  
+
   QColor color = ((Input*)inputBox)->getFontColor();
   return Py_BuildValue((char*)"(i,i,i)", color.red(), color.green(), color.blue());
 }
@@ -175,10 +176,10 @@ PyObject* py_setInputBoxSelectionColor(PyObject *, PyObject *args)
   long r, g, b;
   if (!PyArg_ParseTuple(args, (char*)"lllll:changeInputBoxSelectionColor", &widget, &inputBox, &r, &g, &b))
     return NULL;
-  
+
   if (!checkKarambaAndMeter(widget, inputBox, "Input"))
     return NULL;
-  
+
   ((Input*)inputBox)->setSelectionColor(QColor(r, g, b));
   return Py_BuildValue((char*)"l", 1);
 }
@@ -188,10 +189,10 @@ PyObject* py_getInputBoxSelectionColor(PyObject *, PyObject *args)
   long widget, inputBox;
   if (!PyArg_ParseTuple(args, (char*)"ll:changeInputBoxSelectionColor", &widget, &inputBox))
     return NULL;
-  
+
   if (!checkKarambaAndMeter(widget, inputBox, "Input"))
     return NULL;
-  
+
   QColor color = ((Input*)inputBox)->getSelectionColor();
   return Py_BuildValue((char*)"(i,i,i)", color.red(), color.green(), color.blue());
 }
@@ -202,10 +203,10 @@ PyObject* py_setInputBoxBGColor(PyObject *, PyObject *args)
   long r, g, b;
   if (!PyArg_ParseTuple(args, (char*)"lllll:changeInputBoxBackgroundColor", &widget, &inputBox, &r, &g, &b))
     return NULL;
-  
+
   if (!checkKarambaAndMeter(widget, inputBox, "Input"))
     return NULL;
-  
+
   ((Input*)inputBox)->setBGColor(QColor(r, g, b));
   return Py_BuildValue((char*)"l", 1);
 }
@@ -215,10 +216,10 @@ PyObject* py_getInputBoxBGColor(PyObject *, PyObject *args)
   long widget, inputBox;
 if (!PyArg_ParseTuple(args, (char*)"ll:getInputBoxBackgroundColor", &widget, &inputBox))
   return NULL;
-  
+
   if (!checkKarambaAndMeter(widget, inputBox, "Input"))
     return NULL;
-  
+
   QColor color = ((Input*)inputBox)->getBGColor();
   return Py_BuildValue((char*)"(i,i,i)", color.red(), color.green(), color.blue());
 }
@@ -229,10 +230,10 @@ PyObject* py_setInputBoxFrameColor(PyObject *, PyObject *args)
   long r, g, b;
 if (!PyArg_ParseTuple(args, (char*)"lllll:changeInputBoxFrameColor", &widget, &inputBox, &r, &g, &b))
   return NULL;
-  
+
   if (!checkKarambaAndMeter(widget, inputBox, "Input"))
     return NULL;
-  
+
   ((Input*)inputBox)->setColor(QColor(r, g, b));
   return Py_BuildValue((char*)"l", 1);
 }
@@ -242,10 +243,10 @@ PyObject* py_getInputBoxFrameColor(PyObject *, PyObject *args)
   long widget, inputBox;
 if (!PyArg_ParseTuple(args, (char*)"ll:getInputBoxFrameColor", &widget, &inputBox))
   return NULL;
-  
+
   if (!checkKarambaAndMeter(widget, inputBox, "Input"))
     return NULL;
-  
+
   QColor color = ((Input*)inputBox)->getColor();
   return Py_BuildValue((char*)"(i,i,i)", color.red(), color.green(), color.blue());
 }
@@ -256,10 +257,10 @@ PyObject* py_setInputBoxSelectedTextColor(PyObject *, PyObject *args)
   long r, g, b;
 if (!PyArg_ParseTuple(args, (char*)"lllll:changeInputBoxSelectedTextColor", &widget, &inputBox, &r, &g, &b))
   return NULL;
-  
+
   if (!checkKarambaAndMeter(widget, inputBox, "Input"))
     return NULL;
-  
+
   ((Input*)inputBox)->setSelectedTextColor(QColor(r, g, b));
   return Py_BuildValue((char*)"l", 1);
 }
@@ -269,10 +270,10 @@ PyObject* py_getInputBoxSelectedTextColor(PyObject *, PyObject *args)
   long widget, inputBox;
 if (!PyArg_ParseTuple(args, (char*)"ll:getInputBoxSelectedTextColor", &widget, &inputBox))
   return NULL;
-  
+
   if (!checkKarambaAndMeter(widget, inputBox, "Input"))
     return NULL;
-  
+
   QColor color = ((Input*)inputBox)->getSelectedTextColor();
   return Py_BuildValue((char*)"(i,i,i)", color.red(), color.green(), color.blue());
 }
@@ -284,10 +285,10 @@ PyObject* py_setInputBoxFontSize(PyObject *, PyObject *args)
   if (!PyArg_ParseTuple(args, (char*)"lll:changeInputBoxFontSize",
                       &widget, &inputBox, &size))
     return NULL;
-  
+
   if (!checkKarambaAndMeter(widget, inputBox, "Input"))
     return NULL;
-  
+
   ((Input*)inputBox)->setFontSize( size );
   return Py_BuildValue((char*)"l", 1);
 }
@@ -297,9 +298,9 @@ PyObject* py_getInputBoxFontSize(PyObject *, PyObject *args)
   long widget, inputBox;
   if (!PyArg_ParseTuple(args, (char*)"ll:getInputBoxFontSize", &widget, &inputBox))
     return NULL;
-  
+
   if (!checkKarambaAndMeter(widget, inputBox, "Input"))
     return NULL;
-  
+
   return Py_BuildValue((char*)"l", ((Input*)inputBox)->getFontSize());
 }

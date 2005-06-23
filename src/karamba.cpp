@@ -592,18 +592,23 @@ bool karamba::parseConfig()
         delete defaultTextField;
         defaultTextField = new TextField( );
 
-        defaultTextField->setColor(lineParser.getColor("COLOR"));
-        defaultTextField->setBGColor(lineParser.getColor("BGCOLOR"));
-        defaultTextField->setFont(lineParser.getString("FONT"));
-        defaultTextField->setFontSize(lineParser.getInt("FONTSIZE"));
-        defaultTextField->setAlignment(lineParser.getString("ALIGN"));
-        defaultTextField->setFixedPitch(lineParser.getBoolean( "FIXEDPITCH"));
-        defaultTextField->setShadow(lineParser.getInt("SHADOW"));
+        defaultTextField->setColor(lineParser.getColor("COLOR",
+                                   QColor("black")));
+        defaultTextField->setBGColor(lineParser.getColor("BGCOLOR",
+                                     QColor("white")));
+        defaultTextField->setFont(lineParser.getString("FONT", "Helvetica"));
+        defaultTextField->setFontSize(lineParser.getInt("FONTSIZE", 12));
+        defaultTextField->setAlignment(lineParser.getString("ALIGN",
+                                       "LEFT"));
+        defaultTextField->setFixedPitch(lineParser.getBoolean("FIXEDPITCH",
+                                        false));
+        defaultTextField->setShadow(lineParser.getInt("SHADOW", 0));
       }
 
       if(lineParser.meter() == "TEXT" ||
          lineParser.meter() == "CLICKMAP" ||
-         lineParser.meter() == "RICHTEXT")
+         lineParser.meter() == "RICHTEXT" ||
+         lineParser.meter() == "INPUT")
       {
         TextField defTxt;
 
@@ -677,6 +682,22 @@ bool karamba::parseConfig()
           clickList -> append(tmp);
           meterList->append ( tmp );
         }
+
+        if(lineParser.meter() == "INPUT")
+        {
+          Input *tmp = new Input(this, x, y, w, h);
+
+          QString name = lineParser.getString("NAME");
+          if (name != "")
+            tmp->setName(name.ascii());
+
+          tmp->setTextProps(tmpText);
+          tmp->setValue(
+              m_theme.locale()->translate(lineParser.getString("VALUE")));
+
+          meterList->append(tmp);
+          passive = false;
+        }
       }
 
       if(lineParser.meter() == "BAR")
@@ -709,21 +730,6 @@ bool karamba::parseConfig()
 
         setSensor(lineParser, (Graph*)tmp);
         meterList->append ( tmp );
-      }
-
-      if(lineParser.meter() == "INPUT")
-      {
-        Input *tmp = new Input(this, x, y, w, h);
-
-        QString name = lineParser.getString("NAME");
-        if (name != "")
-          tmp->setName(name.ascii());
-
-        tmp->setBGColor(lineParser.getColor("BGCOLOR", Qt::white));
-        tmp->setColor(lineParser.getColor("COLOR", QColor(192, 192, 192)));
-
-        meterList->append(tmp);
-        passive = false;
       }
     }
 
