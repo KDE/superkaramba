@@ -1,9 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=SuperKaramba
+Name[sv]=Superkaramba
 Exec=superkaramba
 Icon=clanbomber
 Type=Application
 Comment=An engine for cool desktop eyecandy.
 Comment[et]=Vahva töölaualisanduse mootor.
 Comment[pt]=Um motor para elementos no ecrã.
+Comment[sv]=Ett gränssnitt för häftigt ögongodis på skrivbordet
