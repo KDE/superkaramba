@@ -158,6 +158,9 @@ public:
 
     void makeActive();
   void makePassive();
+  
+  void showMenuExtension();
+  void hideMenuExtension();
 
 protected:
     void mousePressEvent( QMouseEvent *);
@@ -201,6 +204,7 @@ private:
 
     KPopupMenu* themeConfMenu;
     KPopupMenu* toDesktopMenu;
+    KPopupMenu* kglobal;
 
     DCOPClient *client;
     QCString appId;
@@ -215,8 +219,6 @@ private:
     KToggleAction *toggleLocked;
     // use highquality scale and rotate algorithms
     KToggleAction *toggleFastTransforms;
-  
-    KToggleAction *toggleSystemTray;
 
     // Python module references
     KarambaPython* pythonIface;
@@ -224,6 +226,11 @@ private:
 
     int  desktop;
     ThemeFile m_theme;
+  
+  int trayMenuSeperatorId;
+  int trayMenuQuitId;
+  int trayMenuToggleId;
+  int trayMenuThemeId;
 
 public slots:
     void step();
@@ -267,6 +274,7 @@ private slots:
   
     void slotToggleSystemTray();
     void slotQuit();
+    void slotShowTheme();
 };
 
 /*

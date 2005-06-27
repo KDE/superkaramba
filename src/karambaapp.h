@@ -40,6 +40,8 @@ class KarambaApplication : public KApplication
     
 private:
   static int fd;
+  void showKarambaMenuExtension(bool show = true);
+  
 protected:
   KarambaIface* iface;
   ThemesDlg* themeListWindow;

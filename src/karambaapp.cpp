@@ -122,7 +122,7 @@ void KarambaApplication::setUpSysTray(KApplication &app)
   sysTrayIcon = new KSystemTray(themeListWindow);
   
   KPopupMenu *menu = sysTrayIcon->contextMenu();
-  menu->insertItem(i18n("Hide System Tray Icon"), this,
+  menu->insertItem(QPixmap(skicon_xpm), i18n("Hide System Tray Icon"), this,
                    SLOT(hideSysTray()));
   
   sysTrayIcon->setPixmap(QPixmap(skicon_xpm));
@@ -132,7 +132,14 @@ void KarambaApplication::setUpSysTray(KApplication &app)
   
   bool showSysTrayIcon = config->readBoolEntry("ShowSysTray", true);
   
-  if(showSysTrayIcon) sysTrayIcon->show();
+  if(showSysTrayIcon)
+  {
+    sysTrayIcon->show();
+  }
+  else
+  {
+    showKarambaMenuExtension();
+  }
 
   //Connect Systray icon's quit event
   QObject::connect(sysTrayIcon, SIGNAL(quitSelected()),
@@ -147,13 +154,36 @@ void KarambaApplication::hideSysTray(bool hide)
                             "To show it again restart Superkaramba.</qt>"),
                             i18n("Hiding System Tray Icon"), "hideIcon");
     
+    showKarambaMenuExtension();
     sysTrayIcon->hide();
   }
   else
   {
+    showKarambaMenuExtension(false);
     sysTrayIcon->show();
   }
 }
+
+void KarambaApplication::showKarambaMenuExtension(bool show)
+{
+  QObject *k;
+  
+  if(show)
+  { 
+    for (k = karambaList->first(); k; k = karambaList->next())
+    {
+      ((karamba*)k)->showMenuExtension();
+    }
+  }
+  else
+  {
+    for (k = karambaList->first(); k; k = karambaList->next())
+    {
+      ((karamba*)k)->hideMenuExtension();
+    }
+  }
+}
+
 
 bool KarambaApplication::sysTrayIconShown()
 {

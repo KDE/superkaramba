@@ -44,6 +44,7 @@
 #include <qwidgetlist.h>
 
 #include <X11/xpm.h>
+#include "skicon.xpm"
 
 // Menu IDs
 #define EDITSCRIPT 1
@@ -216,22 +217,6 @@ karamba::karamba(QString fn, bool reloading, int instance) :
   kpop->insertItem( SmallIconSet("fileclose"),i18n("&Close This Theme"), this,
                     SLOT(killWidget()), CTRL+Key_C );
   
-  kpop->insertSeparator();
-  
-  toggleSystemTray = new KToggleAction(i18n("Toogle System Tray Icon"),
-                                      SmallIconSet("exec"),
-                                      CTRL+Key_S, this,
-                                      SLOT(slotToggleSystemTray()),
-                                      accColl, "System Tray");
-  accColl->insert(toggleSystemTray);
-  
-  toggleSystemTray->setChecked(true);
-  
-  toggleSystemTray->plug(kpop);
-  
-  kpop->insertItem(SmallIconSet("exit"), i18n("&Quit Superkaramba"), this,
-                    SLOT(slotQuit()), CTRL+Key_Q);
-
   kpop->polish();
 
   numberOfConfMenuItems = 0;
@@ -366,7 +351,6 @@ karamba::~karamba()
   }
 
   delete toggleLocked;
-  delete toggleSystemTray;
   delete accColl;
   delete menuAccColl;
   delete themeConfMenu;
@@ -1917,6 +1901,41 @@ void karamba::slotQuit()
 {
   //qDebug("karamba::slotQuit");
   exit(0);
+}
+
+void karamba::showMenuExtension()
+{
+  kglobal = new KPopupMenu(this);
+
+  trayMenuToggleId = kglobal->insertItem(QPixmap(skicon_xpm), i18n("Show System Tray Icon"), this,
+                                     SLOT(slotToggleSystemTray()), CTRL+Key_S);
+  
+  trayMenuThemeId = kglobal->insertItem(SmallIconSet("knewstuff"), i18n("&Manage Themes..."), this,
+                                     SLOT(slotShowTheme()), CTRL+Key_M);
+
+  trayMenuQuitId = kglobal->insertItem(SmallIconSet("exit"), i18n("&Quit Superkaramba"), this,
+                   SLOT(slotQuit()), CTRL+Key_Q);
+  
+  kglobal->polish();
+  
+  trayMenuSeperatorId = kpop->insertSeparator();
+  kpop->insertItem("Superkaramba", kglobal);
+}
+
+void karamba::hideMenuExtension()
+{
+  kpop->removeItem(trayMenuSeperatorId);
+  kglobal->removeItem(trayMenuToggleId);
+  kglobal->removeItem(trayMenuThemeId);
+  kglobal->removeItem(trayMenuQuitId);
+  
+  delete kglobal;
+}
+
+void karamba::slotShowTheme()
+{
+  //qDebug("karamba::slotShowTheme");  
+  karambaApp->showWelcomeDialog();
 }
 
 #include "karamba.moc"
