@@ -215,6 +215,22 @@ karamba::karamba(QString fn, bool reloading, int instance) :
                     SLOT(reloadConfig()), CTRL+Key_R );
   kpop->insertItem( SmallIconSet("fileclose"),i18n("&Close This Theme"), this,
                     SLOT(killWidget()), CTRL+Key_C );
+  
+  kpop->insertSeparator();
+  
+  toggleSystemTray = new KToggleAction(i18n("Toogle System Tray Icon"),
+                                      SmallIconSet("exec"),
+                                      CTRL+Key_S, this,
+                                      SLOT(slotToggleSystemTray()),
+                                      accColl, "System Tray");
+  accColl->insert(toggleSystemTray);
+  
+  toggleSystemTray->setChecked(true);
+  
+  toggleSystemTray->plug(kpop);
+  
+  kpop->insertItem(SmallIconSet("exit"), i18n("&Quit Superkaramba"), this,
+                    SLOT(slotQuit()), CTRL+Key_Q);
 
   kpop->polish();
 
@@ -350,6 +366,7 @@ karamba::~karamba()
   }
 
   delete toggleLocked;
+  delete toggleSystemTray;
   delete accColl;
   delete menuAccColl;
   delete themeConfMenu;
@@ -1207,7 +1224,7 @@ void karamba::passMenuOptionChanged(QString key, bool value)
 void karamba::meterClicked(QMouseEvent* e, Meter* meter)
 {
   //qWarning("karamba::meterClicked");
-  if (pythonIface->isExtensionLoaded() && haveUpdated)
+  if (pythonIface && pythonIface->isExtensionLoaded() && haveUpdated)
   {
     int button = 0;
 
@@ -1258,7 +1275,7 @@ void karamba::passClick(QMouseEvent *e)
   }
 
   //Everything below is to call the python callback function
-  if (pythonIface->isExtensionLoaded() && haveUpdated)
+  if (pythonIface && pythonIface->isExtensionLoaded() && haveUpdated)
   {
     int button = 0;
 
@@ -1277,7 +1294,7 @@ void karamba::passWheelClick( QWheelEvent *e )
 {
   //qDebug("karamba::passWheelClick");
   //Everything below is to call the python callback function
-  if (pythonIface->isExtensionLoaded() && haveUpdated)
+  if (pythonIface && pythonIface->isExtensionLoaded() && haveUpdated)
   {
     int button = 0;
 
@@ -1888,6 +1905,18 @@ void DesktopChangeSlot::setMenuId(int id)
 int DesktopChangeSlot::menuId()
 {
   return menuid;
+}
+
+void karamba::slotToggleSystemTray()
+{
+  //qDebug("karamba::slotToggleSystemTray");
+  karambaApp->hideSysTray(karambaApp->sysTrayIconShown());
+}
+
+void karamba::slotQuit()
+{
+  //qDebug("karamba::slotQuit");
+  exit(0);
 }
 
 #include "karamba.moc"

@@ -13,6 +13,7 @@
 
 #include "kapplication.h"
 #include <kdeversion.h>
+#include <ksystemtray.h>
 
 #undef KDE_3_2
 #undef KDE_3_3
@@ -35,6 +36,8 @@ class dcopIface_stub;
 
 class KarambaApplication : public KApplication
 {
+  Q_OBJECT
+    
 private:
   static int fd;
 protected:
@@ -42,15 +45,17 @@ protected:
   ThemesDlg* themeListWindow;
   dcopIface_stub* dcopIfaceStub;
   QObjectList *karambaList;
+  KSystemTray* sysTrayIcon;
 
 public:
   KarambaApplication();
   ~KarambaApplication();
 
   QString getMainKaramba();
+  void setupKaramba(QCString app);
   QStringList getKarambas();
   void initDcopStub(QCString app = "");
-  void setUpSysTray();
+  void setUpSysTray(KApplication &app);
   void checkPreviousSession(KApplication &app, QStringList &lst);
   void checkCommandLine(KCmdLineArgs *args, QStringList &lst);
   void showWelcomeDialog();
@@ -66,6 +71,11 @@ public:
   static bool lockKaramba();
   static void unlockKaramba();
   static void checkSuperKarambaDir();
+  
+  bool sysTrayIconShown();
+  
+public slots:
+  void hideSysTray(bool hide = true);
 };
 
 #endif // KARAMBAAPP_H

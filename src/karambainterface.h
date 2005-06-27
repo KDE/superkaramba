@@ -32,6 +32,8 @@ public slots:
   virtual int themeAdded(QString appId, QString file);
   virtual void themeClosed(QString appId, QString file, int instance);
   virtual bool isMainKaramba();
+  
+  virtual void hideSystemTray(bool show);
 };
 
 #endif // KARAMBAINTERFACE_H

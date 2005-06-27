@@ -112,5 +112,11 @@ bool KarambaIface::isMainKaramba()
   return false;
 }
 
+void KarambaIface::hideSystemTray(bool hide)
+{
+  ((KarambaApplication*)qApp)->hideSysTray(hide);
+}
+
+
 
 

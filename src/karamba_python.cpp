@@ -313,7 +313,9 @@ KarambaPython::KarambaPython(const ThemeFile& theme, bool reloading):
 
   pName = PyString_FromString(theme.pythonModule().ascii());
   pModule = PyImport_Import(pName);
-
+  
+  fprintf(stderr, "%s\n", pypath);
+  
   //Make sure the module is up to date.
   if (reloading)
     PyImport_ReloadModule(pModule);

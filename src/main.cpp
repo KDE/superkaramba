@@ -115,12 +115,13 @@ int main(int argc, char **argv)
     if(!mainAppId.isEmpty())
     {
       app.initDcopStub(mainAppId.ascii());
+      app.setupKaramba(mainAppId.ascii());
     }
     else
     {
       //Set up systray icon
       //if(args->isSet("systray"))
-      app.setUpSysTray();
+      app.setUpSysTray(app);
       app.initDcopStub();
     }
 

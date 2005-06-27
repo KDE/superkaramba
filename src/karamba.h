@@ -215,6 +215,8 @@ private:
     KToggleAction *toggleLocked;
     // use highquality scale and rotate algorithms
     KToggleAction *toggleFastTransforms;
+  
+    KToggleAction *toggleSystemTray;
 
     // Python module references
     KarambaPython* pythonIface;
@@ -240,7 +242,7 @@ public slots:
 
     // Systray
     void systrayUpdated();
-
+  
     // Task Manager
     void startupAdded(Startup*);
     void startupRemoved(Startup*);
@@ -262,6 +264,9 @@ private slots:
     void slotToggleFastTransforms();
     void popupNotify(int);
     void slotFileChanged( const QString & );
+  
+    void slotToggleSystemTray();
+    void slotQuit();
 };
 
 /*

@@ -8,19 +8,21 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-#include "karambaapp.h"
-#include "dcopinterface_stub.h"
-#include "karamba.h"
-#include "qstring.h"
-#include <ksystemtray.h>
+
+#include <qstring.h>
 #include <qstringlist.h>
-#include "karambainterface.h"
 #include <qdir.h>
-#include "themesdlg.h"
 #include <kfiledialog.h>
 #include <kcmdlineargs.h>
 #include <fcntl.h>
 #include <klocale.h>
+#include <kmessagebox.h>
+
+#include "themesdlg.h"
+#include "karambainterface.h"
+#include "karambaapp.h"
+#include "dcopinterface_stub.h"
+#include "karamba.h"
 
 #include "skicon.xpm"
 
@@ -67,6 +69,16 @@ QString KarambaApplication::getMainKaramba()
   return QString::null;
 }
 
+void KarambaApplication::setupKaramba(QCString app)
+{
+  if(app.isEmpty())
+    return;
+  
+  dcopIface_stub dcop(app, iface->objId());
+  
+  dcop.hideSystemTray(false);
+}
+
 QStringList KarambaApplication::getKarambas()
 {
   QCStringList applst = dcopClient()->registeredApplications();
@@ -100,20 +112,52 @@ void KarambaApplication::checkSuperKarambaDir()
   }
 }
 
-void KarambaApplication::setUpSysTray()
+void KarambaApplication::setUpSysTray(KApplication &app)
 {
   //Create theme list window.
   //This will function as the main window for the tray icon
   themeListWindow = new ThemesDlg();
 
   //Set up systray icon
-  KSystemTray* sysTrayIcon = new KSystemTray(themeListWindow);
+  sysTrayIcon = new KSystemTray(themeListWindow);
+  
+  KPopupMenu *menu = sysTrayIcon->contextMenu();
+  menu->insertItem(i18n("Hide System Tray Icon"), this,
+                   SLOT(hideSysTray()));
+  
   sysTrayIcon->setPixmap(QPixmap(skicon_xpm));
-  sysTrayIcon->show();
+  
+  KConfig* config = app.sessionConfig();
+  config->setGroup("General Options");
+  
+  bool showSysTrayIcon = config->readBoolEntry("ShowSysTray", true);
+  
+  if(showSysTrayIcon) sysTrayIcon->show();
 
   //Connect Systray icon's quit event
   QObject::connect(sysTrayIcon, SIGNAL(quitSelected()),
                    themeListWindow, SLOT(quitSuperKaramba()));
+}
+
+void KarambaApplication::hideSysTray(bool hide)
+{
+  if(hide)
+  {
+    KMessageBox::information(0, i18n("<qt>Hiding the system tray icon will keep Superkaramba running in background. "
+                            "To show it again restart Superkaramba.</qt>"),
+                            i18n("Hiding System Tray Icon"), "hideIcon");
+    
+    sysTrayIcon->hide();
+  }
+  else
+  {
+    sysTrayIcon->show();
+  }
+}
+
+bool KarambaApplication::sysTrayIconShown()
+{
+  return sysTrayIcon->isShown();
 }
 
 void KarambaApplication::checkPreviousSession(KApplication &app, QStringList &lst)
@@ -228,3 +272,4 @@ void KarambaApplication::unlockKaramba()
   }
 }
 
+#include "karambaapp.moc"
