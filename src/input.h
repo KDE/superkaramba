@@ -56,7 +56,7 @@ public:
   void setSelectionColor(QColor selectionColor);
   QColor getSelectionColor() const;
   void setSelectedTextColor(QColor selectedTextColor);
-  QColor Input::getSelectedTextColor() const;
+  QColor getSelectedTextColor() const;
   void setTextProps(TextField*);
 
   void hide();

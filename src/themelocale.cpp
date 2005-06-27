@@ -34,6 +34,7 @@
 #include <qbuffer.h>
 #include <qglobal.h>
 #include <qiodevice.h>
+#include <stdlib.h>
 
 #ifndef W
 # define W(flag, data) ((flag) ? SWAP (data) : (data))
