@@ -35,6 +35,8 @@ KWidgetListbox::KWidgetListbox(QWidget *parent, const char *name)
   setFocusStyle(QTable::FollowStyle);
   connect(this, SIGNAL(currentChanged(int, int)),
           this, SLOT(selectionChanged(int, int)));
+  setHScrollBarMode(QScrollView::AlwaysOff);
+  setVScrollBarMode(QScrollView::Auto);
 }
 
 KWidgetListbox::~KWidgetListbox()
