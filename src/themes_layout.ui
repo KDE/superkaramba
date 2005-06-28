@@ -170,6 +170,7 @@
         </sizepolicy>
         <pixmap>image0</pixmap>
         <signal>selected(int)</signal>
+        <signal>doubleClicked(int, int, int, const QPoint&amp;)</signal>
     </customwidget>
 </customwidgets>
 <images>
@@ -207,6 +208,12 @@
         <signal>activated(const QString&amp;)</signal>
         <receiver>ThemesLayout</receiver>
         <slot>search(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>tableThemes</sender>
+        <signal>doubleClicked(int,int,int,const QPoint&amp;)</signal>
+        <receiver>ThemesLayout</receiver>
+        <slot>addToDesktop()</slot>
     </connection>
 </connections>
 <tabstops>
