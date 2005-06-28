@@ -45,11 +45,11 @@ superkaramba_LDADD = -lkio -lXpm $(LIB_KDEUI) $(XMMS_LDADD) $(LIBPYTHON) $(LIBKV
 
 # this is where the desktop file will go
 shelldesktopdir = $(kde_appsdir)/Utilities
-shelldesktop_DATA = karamba.desktop
+shelldesktop_DATA = superkaramba.desktop
 
 # this is where the shell's XML-GUI resource file goes
 shellrcdir = $(kde_datadir)/superkaramba
-shellrc_DATA = karambaui.rc
+shellrc_DATA = superkarambaui.rc
 
 AM_CFLAGS =
 AM_CXXFLAGS =

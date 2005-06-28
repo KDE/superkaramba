@@ -1,0 +1,16 @@
+Begin3
+Title:          Superkaramba - Eye-candy for KDE
+Version:        0.40
+Entered-date:
+Description:
+Keywords:       KDE3 Qt
+Author:         Hans Karlsson <karlsson.h@home.se>
+Maintained-by:  Adam Geitgey <adam@rootnode.org>
+Home-page:      http://netdragon.sourceforge.net/ssuperkaramba.html
+Alternate-site:
+Primary-site:   http://netdragon.sourceforge.net/ssuperkaramba.html
+                xxxxxx  superkaramba-0.40.tar.gz
+                xxx     superkaramba-0.40.lsm
+Platform:       Linux. Needs KDE 3.? QT 3.?
+Copying-policy: GPL
+End
