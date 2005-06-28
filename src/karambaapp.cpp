@@ -24,8 +24,6 @@
 #include "dcopinterface_stub.h"
 #include "karamba.h"
 
-#include "skicon.xpm"
-
 int KarambaApplication::fd = -1;
 
 KarambaApplication::KarambaApplication() :
@@ -73,9 +71,9 @@ void KarambaApplication::setupKaramba(QCString app)
 {
   if(app.isEmpty())
     return;
-  
+
   dcopIface_stub dcop(app, iface->objId());
-  
+
   dcop.hideSystemTray(false);
 }
 
@@ -120,18 +118,19 @@ void KarambaApplication::setUpSysTray(KApplication &app)
 
   //Set up systray icon
   sysTrayIcon = new KSystemTray(themeListWindow);
-  
+
   KPopupMenu *menu = sysTrayIcon->contextMenu();
-  menu->insertItem(QPixmap(skicon_xpm), i18n("Hide System Tray Icon"), this,
+  menu->insertItem(SmallIconSet("superkaramba"),
+                   i18n("Hide System Tray Icon"), this,
                    SLOT(hideSysTray()));
-  
-  sysTrayIcon->setPixmap(QPixmap(skicon_xpm));
-  
+
+  sysTrayIcon->setPixmap(sysTrayIcon->loadIcon("superkaramba"));
+
   KConfig* config = app.sessionConfig();
   config->setGroup("General Options");
-  
+
   bool showSysTrayIcon = config->readBoolEntry("ShowSysTray", true);
-  
+
   if(showSysTrayIcon)
   {
     sysTrayIcon->show();
@@ -150,10 +149,11 @@ void KarambaApplication::hideSysTray(bool hide)
 {
   if(hide)
   {
-    KMessageBox::information(0, i18n("<qt>Hiding the system tray icon will keep Superkaramba running in background. "
-                            "To show it again restart Superkaramba.</qt>"),
-                            i18n("Hiding System Tray Icon"), "hideIcon");
-    
+    KMessageBox::information(0,
+        i18n("<qt>Hiding the system tray icon will keep Superkaramba running"
+             "in background. To show it again restart Superkaramba.</qt>"),
+             i18n("Hiding System Tray Icon"), "hideIcon");
+
     showKarambaMenuExtension();
     sysTrayIcon->hide();
   }
@@ -167,9 +167,9 @@ void KarambaApplication::hideSysTray(bool hide)
 void KarambaApplication::showKarambaMenuExtension(bool show)
 {
   QObject *k;
-  
+
   if(show)
-  { 
+  {
     for (k = karambaList->first(); k; k = karambaList->next())
     {
       ((karamba*)k)->showMenuExtension();

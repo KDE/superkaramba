@@ -43,9 +43,6 @@
 #include <qdir.h>
 #include <qwidgetlist.h>
 
-#include <X11/xpm.h>
-#include "skicon.xpm"
-
 // Menu IDs
 #define EDITSCRIPT 1
 #define THEMECONF  2
@@ -216,7 +213,7 @@ karamba::karamba(QString fn, bool reloading, int instance) :
                     SLOT(reloadConfig()), CTRL+Key_R );
   kpop->insertItem( SmallIconSet("fileclose"),i18n("&Close This Theme"), this,
                     SLOT(killWidget()), CTRL+Key_C );
-  
+
   kpop->polish();
 
   numberOfConfMenuItems = 0;
@@ -1863,7 +1860,8 @@ SignalBridge::SignalBridge(QObject* parent, QString name, KActionCollection* ac)
 
 void SignalBridge::receive()
 {
-  emit enabled(name(), ((KToggleAction*)collection -> action(name())) -> isChecked());
+  emit enabled(name(), ((KToggleAction*)collection -> action(name())) ->
+isChecked());
 }
 
 DesktopChangeSlot::DesktopChangeSlot(QObject *parent, int id)
@@ -1907,17 +1905,21 @@ void karamba::showMenuExtension()
 {
   kglobal = new KPopupMenu(this);
 
-  trayMenuToggleId = kglobal->insertItem(QPixmap(skicon_xpm), i18n("Show System Tray Icon"), this,
-                                     SLOT(slotToggleSystemTray()), CTRL+Key_S);
-  
-  trayMenuThemeId = kglobal->insertItem(SmallIconSet("knewstuff"), i18n("&Manage Themes..."), this,
-                                     SLOT(slotShowTheme()), CTRL+Key_M);
+  trayMenuToggleId = kglobal->insertItem(SmallIconSet("superkaramba"),
+                                         i18n("Show System Tray Icon"), this,
+                                         SLOT(slotToggleSystemTray()),
+                                         CTRL+Key_S);
 
-  trayMenuQuitId = kglobal->insertItem(SmallIconSet("exit"), i18n("&Quit Superkaramba"), this,
-                   SLOT(slotQuit()), CTRL+Key_Q);
-  
+  trayMenuThemeId = kglobal->insertItem(SmallIconSet("knewstuff"),
+                                        i18n("&Manage Themes..."), this,
+                                        SLOT(slotShowTheme()), CTRL+Key_M);
+
+  trayMenuQuitId = kglobal->insertItem(SmallIconSet("exit"),
+                                       i18n("&Quit Superkaramba"), this,
+                                       SLOT(slotQuit()), CTRL+Key_Q);
+
   kglobal->polish();
-  
+
   trayMenuSeperatorId = kpop->insertSeparator();
   kpop->insertItem("Superkaramba", kglobal);
 }
@@ -1928,13 +1930,13 @@ void karamba::hideMenuExtension()
   kglobal->removeItem(trayMenuToggleId);
   kglobal->removeItem(trayMenuThemeId);
   kglobal->removeItem(trayMenuQuitId);
-  
+
   delete kglobal;
 }
 
 void karamba::slotShowTheme()
 {
-  //qDebug("karamba::slotShowTheme");  
+  //qDebug("karamba::slotShowTheme");
   karambaApp->showWelcomeDialog();
 }
 
