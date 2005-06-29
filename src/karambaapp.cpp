@@ -146,7 +146,7 @@ void KarambaApplication::hideSysTray(bool hide)
   if(hide)
   {
     KMessageBox::information(0,
-        i18n("<qt>Hiding the system tray icon will keep Superkaramba running"
+        i18n("<qt>Hiding the system tray icon will keep Superkaramba running "
              "in background. To show it again restart Superkaramba.</qt>"),
              i18n("Hiding System Tray Icon"), "hideIcon");
 
