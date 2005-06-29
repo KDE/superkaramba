@@ -213,6 +213,9 @@ karamba::karamba(QString fn, bool reloading, int instance) :
                     SLOT(reloadConfig()), CTRL+Key_R );
   kpop->insertItem( SmallIconSet("fileclose"),i18n("&Close This Theme"), this,
                     SLOT(killWidget()), CTRL+Key_C );
+  
+  if(!karambaApp->sysTrayIconShown())
+    showMenuExtension();
 
   kpop->polish();
 

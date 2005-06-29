@@ -135,13 +135,14 @@ int main(int argc, char **argv)
     {
       //Not a saved session - check for themes given on command line
       app.checkCommandLine(args, lst);
-    }
-    if(lst.size() == 0)
-    {
-      //No themes given on command line and no saved session.
-      //Show welcome dialog.
-      if(mainAppId.isEmpty())
-        app.showWelcomeDialog();
+      
+      if(lst.size() == 0)
+      {
+        //No themes given on command line and no saved session.
+        //Show welcome dialog.
+        if(mainAppId.isEmpty())
+          app.showWelcomeDialog();
+      }
     }
 
     args->clear();

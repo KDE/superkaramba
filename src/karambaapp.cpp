@@ -135,10 +135,6 @@ void KarambaApplication::setUpSysTray(KApplication &app)
   {
     sysTrayIcon->show();
   }
-  else
-  {
-    showKarambaMenuExtension();
-  }
 
   //Connect Systray icon's quit event
   QObject::connect(sysTrayIcon, SIGNAL(quitSelected()),
@@ -216,7 +212,11 @@ void KarambaApplication::checkCommandLine(KCmdLineArgs *args, QStringList &lst)
     for(int i = 0; i < (args->count()); i++)
     {
       if( args->arg(i) != "" )
-        lst.push_back(args->arg(i));
+      {
+        KURL url = args->url(i);
+
+        lst.push_back(url.path());
+      }
     }
   }
 }
