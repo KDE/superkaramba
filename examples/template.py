@@ -139,6 +139,13 @@ def desktopChanged(widget, desktop):
 #  desktop = the desktop whose wallpaper changed
 def wallpaperChanged(widget, desktop):
     pass
+
+#This is called everytime there is a key press in any focused input field
+#  widget = reference to your widget
+#  meter = reference to an input box
+#  char = the key that was pressed
+def keyPressed(widget, meter, char):
+    pass
     
 # This will be printed when the widget loads.
 print "Loaded my python extension!"
