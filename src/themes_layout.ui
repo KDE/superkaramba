@@ -19,7 +19,7 @@
         </size>
     </property>
     <property name="caption">
-        <string>Superkaramba Themes</string>
+        <string>SuperKaramba Themes</string>
     </property>
     <vbox>
         <property name="name">

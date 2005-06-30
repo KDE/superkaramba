@@ -1,7 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=SuperKaramba
-Name[sv]=Superkaramba
+Name[sv]=SuperKaramba
 Exec=superkaramba
 Icon=superkaramba
 Type=Application
