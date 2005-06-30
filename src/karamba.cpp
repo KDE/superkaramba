@@ -52,8 +52,11 @@ karamba::karamba(QString fn, bool reloading, int instance) :
             WRepaintNoErase| WStyle_NoBorder | WDestructiveClose  ),
     meterList(0), imageList(0), clickList(0), kpop(0), widgetMask(0),
     config(0), kWinModule(0), tempUnit('C'), m_instance(instance),
-    sensorList(0), timeList(0), themeConfMenu(0), clickPos(0, 0), accColl(0),
-    menuAccColl(0), toggleLocked(0), pythonIface(0), defaultTextField(0)
+    sensorList(0), timeList(0),
+    themeConfMenu(0), toDesktopMenu(0), kglobal(0), clickPos(0, 0), accColl(0),
+    menuAccColl(0), toggleLocked(0), pythonIface(0), defaultTextField(0),
+    trayMenuSeperatorId(-1), trayMenuQuitId(-1), trayMenuToggleId(-1),
+    trayMenuThemeId(-1)
 {
   KURL url;
 
@@ -213,7 +216,7 @@ karamba::karamba(QString fn, bool reloading, int instance) :
                     SLOT(reloadConfig()), CTRL+Key_R );
   kpop->insertItem( SmallIconSet("fileclose"),i18n("&Close This Theme"), this,
                     SLOT(killWidget()), CTRL+Key_C );
-  
+
   if(!karambaApp->sysTrayIconShown())
     showMenuExtension();
 
@@ -1929,12 +1932,16 @@ void karamba::showMenuExtension()
 
 void karamba::hideMenuExtension()
 {
-  kpop->removeItem(trayMenuSeperatorId);
-  kglobal->removeItem(trayMenuToggleId);
-  kglobal->removeItem(trayMenuThemeId);
-  kglobal->removeItem(trayMenuQuitId);
+  if(kglobal)
+  {
+    kpop->removeItem(trayMenuSeperatorId);
+    kglobal->removeItem(trayMenuToggleId);
+    kglobal->removeItem(trayMenuThemeId);
+    kglobal->removeItem(trayMenuQuitId);
 
-  delete kglobal;
+    delete kglobal;
+    kglobal = 0;
+  }
 }
 
 void karamba::slotShowTheme()
