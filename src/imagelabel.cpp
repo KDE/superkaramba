@@ -149,6 +149,10 @@ ImageLabel::~ImageLabel()
     delete imageEffect;
     imageEffect = 0;
   }
+  if(!old_tip_rect.isNull())
+  {
+    QToolTip::remove(m_karamba, old_tip_rect);
+  }
 }
 
 void ImageLabel::setValue(int v)
@@ -560,6 +564,7 @@ void ImageLabel::setTooltip(QString txt)
 {
   QRect rect(getX(),getY(),pixmapWidth,pixmapHeight);
   QToolTip::add(m_karamba, rect, txt);
+  old_tip_rect = QRect(rect.topLeft(), rect.bottomRight());
 }
 
 

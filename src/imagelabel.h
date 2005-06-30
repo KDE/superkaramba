@@ -175,6 +175,7 @@ private:
   KPixmap realpixmap;
 
   QRect rect_off, rect_on;
+  QRect old_tip_rect;
 
   bool zoomed;
   //QString fn, fn_roll;
