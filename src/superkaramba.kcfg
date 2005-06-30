@@ -2,6 +2,12 @@
 <!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd">
 <kcfg>
   <kcfgfile name="superkarambarc"/>
+  <group name="general">
+    <entry name="ShowSysTray" type="Bool">
+      <label>Show system tray icon.</label>
+      <default>true</default>
+    </entry>
+  </group>
   <group name="themes">
     <entry name="UserAddedThemes" type="StringList">
       <label>Themes that user added to theme list.</label>

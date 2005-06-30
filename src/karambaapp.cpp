@@ -23,11 +23,12 @@
 #include "karambaapp.h"
 #include "dcopinterface_stub.h"
 #include "karamba.h"
+#include "superkarambasettings.h"
 
 int KarambaApplication::fd = -1;
 
 KarambaApplication::KarambaApplication() :
-  iface(0), themeListWindow(0), dcopIfaceStub(0)
+    iface(0), themeListWindow(0), dcopIfaceStub(0), sysTrayIcon(0)
 {
   iface = new KarambaIface();
   karambaList = new QObjectList();
@@ -110,7 +111,7 @@ void KarambaApplication::checkSuperKarambaDir()
   }
 }
 
-void KarambaApplication::setUpSysTray(KApplication &app)
+void KarambaApplication::setUpSysTray(KApplication&)
 {
   //Create theme list window.
   //This will function as the main window for the tray icon
@@ -126,10 +127,7 @@ void KarambaApplication::setUpSysTray(KApplication &app)
 
   sysTrayIcon->setPixmap(sysTrayIcon->loadIcon("superkaramba"));
 
-  KConfig* config = app.sessionConfig();
-  config->setGroup("General Options");
-
-  bool showSysTrayIcon = config->readBoolEntry("ShowSysTray", true);
+  bool showSysTrayIcon = SuperKarambaSettings::showSysTray();
 
   if(showSysTrayIcon)
   {
@@ -147,7 +145,7 @@ void KarambaApplication::hideSysTray(bool hide)
   {
     KMessageBox::information(0,
         i18n("<qt>Hiding the system tray icon will keep SuperKaramba running "
-             "in background. To show it again restart SuperKaramba.</qt>"),
+             "in background. To show it again use the theme menu.</qt>"),
              i18n("Hiding System Tray Icon"), "hideIcon");
 
     showKarambaMenuExtension();
@@ -158,6 +156,8 @@ void KarambaApplication::hideSysTray(bool hide)
     showKarambaMenuExtension(false);
     sysTrayIcon->show();
   }
+  SuperKarambaSettings::setShowSysTray(!hide);
+  SuperKarambaSettings::writeConfig();
 }
 
 void KarambaApplication::showKarambaMenuExtension(bool show)
@@ -183,7 +183,9 @@ void KarambaApplication::showKarambaMenuExtension(bool show)
 
 bool KarambaApplication::sysTrayIconShown()
 {
-  return sysTrayIcon->isShown();
+  if(sysTrayIcon)
+    return sysTrayIcon->isVisible();
+  return false;
 }
 
 void KarambaApplication::checkPreviousSession(KApplication &app, QStringList &lst)

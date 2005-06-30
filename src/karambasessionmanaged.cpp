@@ -52,9 +52,6 @@ bool KSessionManaged::saveState(QSessionManager&)
 
   qDebug("Open themes %s", openThemes.ascii());
   config->writeEntry("OpenThemes", openThemes);
-  
-  config->writeEntry("ShowSysTray", karambaApp->sysTrayIconShown());
-
   return true;
 }
 
