@@ -1,4 +1,4 @@
-SUBDIRS = src icons
+SUBDIRS = src icons mimetype
 INCLUDES =  $(XMMS_INCLUDES) $(all_includes)
 LIBS = $(XMMS_LIBS) $(all_libraries)
 $(top_srcdir)/configure.in: configure.in.in $(top_srcdir)/subdirs
@@ -10,10 +10,10 @@ $(top_srcdir)/subdirs:
 $(top_srcdir)/acinclude.m4: $(top_srcdir)/admin/acinclude.m4.in $(top_srcdir)/admin/libtool.m4.in
 	@cd $(top_srcdir) && cat admin/acinclude.m4.in admin/libtool.m4.in > acinclude.m4
 
-MAINTAINERCLEANFILES = subdirs configure.in acinclude.m4 configure.files 
+MAINTAINERCLEANFILES = subdirs configure.in acinclude.m4 configure.files
 
 package-messages:
-	$(MAKE) -f admin/Makefile.common package-messages
+	cd $(top_srcdir) && $(MAKE) -f admin/Makefile.common package-messages
 	$(MAKE) -C po merge
 
 EXTRA_DIST = admin COPYING configure.in.in
