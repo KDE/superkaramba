@@ -1,4 +1,4 @@
-SUBDIRS = src icons mimetype
+SUBDIRS = src icons mimetypes
 INCLUDES =  $(XMMS_INCLUDES) $(all_includes)
 LIBS = $(XMMS_LIBS) $(all_libraries)
 $(top_srcdir)/configure.in: configure.in.in $(top_srcdir)/subdirs
