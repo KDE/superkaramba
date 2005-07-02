@@ -169,18 +169,6 @@ karamba::karamba(QString fn, bool reloading, int instance) :
   kpop = new KPopupMenu( this );
   kpop -> setCheckable(true);
 
-  /*
-  keditpop = new KPopupMenu ( this );
-  keditpop -> insertItem(SmallIconSet("edit"),i18n("Edit &Theme"),this,
-                         SLOT(editConfig()), CTRL+Key_E );
-  keditpop -> insertItem(SmallIconSet("edit"),i18n("Edit &Script"),this,
-                         SLOT(editScript()), ALT+Key_E, EDITSCRIPT);
-
-  // Test if Theme Script exists
-  QFileInfo scriptFile(m_theme.path() + "/" + m_theme.name() + ".py");
-  keditpop -> setItemEnabled(EDITSCRIPT, scriptFile.exists());
-  */
-
   accColl = new KActionCollection( this );
   menuAccColl = new KActionCollection( this );
 
@@ -737,7 +725,7 @@ bool karamba::parseConfig()
       }
     }
 
-    if(passive)
+    if(passive && !managed)
     {
       // Matthew Kay: set window type to "dock"
       // (plays better with taskbar themes this way)
