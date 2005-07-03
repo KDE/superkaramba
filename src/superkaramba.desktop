@@ -2,9 +2,10 @@
 Encoding=UTF-8
 Name=SuperKaramba
 Name[sv]=Superkaramba
-Exec=superkaramba
+Exec=superkaramba %U
 Icon=superkaramba
 Type=Application
+MimeType=application/x-superkaramba
 Comment=An engine for cool desktop eyecandy.
 Comment[et]=Vahva töölaualisanduse mootor.
 Comment[pt]=Um motor para elementos no ecrã.
