@@ -187,7 +187,7 @@ void KarambaApplication::setToolTip(const QString &tip)
 {
   QToolTip::remove(sysTrayIcon);
   if(tip.isNull())
-    QToolTip::add(sysTrayIcon, "SuperKaramba");
+    QToolTip::add(sysTrayIcon, i18n("SuperKaramba"));
   //TODO: implement a slot to call setToolTip with the number of running themes
   else
     QToolTip::add(sysTrayIcon, tip);
