@@ -41,6 +41,7 @@ class KarambaApplication : public KApplication
 private:
   static int fd;
   void showKarambaMenuExtension(bool show = true);
+  void setToolTip(const QString &tip = QString::null);
   
 protected:
   KarambaIface* iface;

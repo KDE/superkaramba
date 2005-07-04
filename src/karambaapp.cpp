@@ -18,6 +18,8 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
+#include <qtooltip.h>
+
 #include "themesdlg.h"
 #include "karambainterface.h"
 #include "karambaapp.h"
@@ -126,6 +128,7 @@ void KarambaApplication::setUpSysTray(KApplication&)
                    SLOT(hideSysTray()));
 
   sysTrayIcon->setPixmap(sysTrayIcon->loadIcon("superkaramba"));
+  setToolTip();
 
   bool showSysTrayIcon = SuperKarambaSettings::showSysTray();
 
@@ -180,6 +183,15 @@ void KarambaApplication::showKarambaMenuExtension(bool show)
   }
 }
 
+void KarambaApplication::setToolTip(const QString &tip)
+{
+  QToolTip::remove(sysTrayIcon);
+  if(tip.isNull())
+    QToolTip::add(sysTrayIcon, "SuperKaramba");
+  //TODO: implement a slot to call setToolTip with the number of running themes
+  else
+    QToolTip::add(sysTrayIcon, tip);
+}
 
 bool KarambaApplication::sysTrayIconShown()
 {
