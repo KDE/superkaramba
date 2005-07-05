@@ -812,7 +812,7 @@ void karamba::reloadConfig()
   {
     (new karamba(m_theme.file(), true, m_instance))->show();
   }
-  killWidget();
+  closeTheme(true);
 }
 
 void karamba::closeTheme(bool reloading)
