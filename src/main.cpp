@@ -42,7 +42,7 @@
 static const char *description =
     I18N_NOOP("A KDE Eye-candy Application");
 
-static const char *version = "0.36";
+static const char *version = "0.37";
 
 static KCmdLineOptions options[] =
 {
