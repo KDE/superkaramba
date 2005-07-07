@@ -3,7 +3,7 @@
 *
 *  Copyright (C) 2003 Hans Karlsson <karlsson.h@home.se>
 *  Copyright (C) 2003-2004 Adam Geitgey <adam@rootnode.org>
-*  Copyright (c) 2004 Petri Damstén <damu@iki.fi>
+*  Copyright (c) 2004 Petri Damstï¿½ <damu@iki.fi>
 *
 *  This file is part of SuperKaramba.
 *
@@ -193,12 +193,12 @@ bool ThemeFile::set(const KURL &url)
 {
   if(!url.isLocalFile() && !url.protocol().isEmpty())
   {
-    if(KMessageBox::questionYesNo(kapp->activeWindow(),
+    if(KMessageBox::warningContinueCancel(kapp->activeWindow(),
        i18n("You are about to install and run %1 SuperKaramba theme. Since "
             "themes can contain executable code you should only install themes "
-            "from sources that you trust. Continue?")
+            "from sources that you trust. Continue?"), i18n("Executable Code Warning"), i18n("Install")
            .arg(url.prettyURL()))
-       == KMessageBox::No)
+       == KMessageBox::Cancel)
     {
       return false;
     }
@@ -208,10 +208,10 @@ bool ThemeFile::set(const KURL &url)
 
     if(localFile.exists())
     {
-      if(KMessageBox::questionYesNo(kapp->activeWindow(),
+      if(KMessageBox::warningContinueCancel(kapp->activeWindow(),
          i18n("%1 already exists. Do you want to overwrite it?")
-             .arg(localFile.filePath()))
-         == KMessageBox::No)
+             .arg(localFile.filePath()),i18n("File Exists"),i18n("Overwrite"))
+         == KMessageBox::Cancel)
       {
         return false;
       }
