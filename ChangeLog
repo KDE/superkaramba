@@ -1,3 +1,595 @@
+------------------------------------------------------------------------
+r417080 | nickell | 2005-05-22 15:17:29 -0400 (Sun, 22 May 2005) | 2 lines
+
+Initial upload of SuperKaramba to kdereview.  
+
+------------------------------------------------------------------------
+r417089 | nickell | 2005-05-22 15:38:16 -0400 (Sun, 22 May 2005) | 2 lines
+
+Removal of some generated files.
+
+------------------------------------------------------------------------
+r417105 | nickell | 2005-05-22 16:11:26 -0400 (Sun, 22 May 2005) | 2 lines
+
+Update/correct license information.
+
+------------------------------------------------------------------------
+r417170 | thiago | 2005-05-22 19:03:33 -0400 (Sun, 22 May 2005) | 7 lines
+
+Get it to compile.
+1) $(TOPSRCDIRS) is lot allowed anymore
+2) since the generated files were removed, the .ui file names have to be
+   listed
+
+CCMAIL:p0z3r@earthlink.net
+
+------------------------------------------------------------------------
+r417171 | thiago | 2005-05-22 19:04:17 -0400 (Sun, 22 May 2005) | 1 line
+
+Adding proper svn:ignores
+------------------------------------------------------------------------
+r417220 | mattr | 2005-05-22 23:17:34 -0400 (Sun, 22 May 2005) | 7 lines
+
+use $(XMMS_LDFLAGS) and $(XMMS_LDADD) instead of $(XMMS_LIBS) so that 
+unsermake doesn't give an error about -rdynamic in LDADD.
+
+Also remove all the .h files from the SOURCES line.
+
+
+
+------------------------------------------------------------------------
+r417373 | pdamsten | 2005-05-23 10:17:19 -0400 (Mon, 23 May 2005) | 1 line
+
+ui files should compile now.
+------------------------------------------------------------------------
+r417531 | pdamsten | 2005-05-23 17:13:15 -0400 (Mon, 23 May 2005) | 1 line
+
+more compatible with svn dir structure
+------------------------------------------------------------------------
+r417533 | pdamsten | 2005-05-23 17:13:38 -0400 (Mon, 23 May 2005) | 1 line
+
+XMMS_LDADD fix
+------------------------------------------------------------------------
+r417545 | pdamsten | 2005-05-23 17:38:27 -0400 (Mon, 23 May 2005) | 1 line
+
+Should work now
+------------------------------------------------------------------------
+r417548 | pdamsten | 2005-05-23 17:44:25 -0400 (Mon, 23 May 2005) | 1 line
+
+ThemeListWindow -> ThemeListWindowLayout
+------------------------------------------------------------------------
+r417640 | nickell | 2005-05-24 00:10:04 -0400 (Tue, 24 May 2005) | 2 lines
+
+Include xpm.h from X11 instead of redistributing it in our source.
+
+------------------------------------------------------------------------
+r417648 | pdamsten | 2005-05-24 02:24:03 -0400 (Tue, 24 May 2005) | 1 line
+
+more compatible with svn dir structure
+------------------------------------------------------------------------
+r417649 | binner | 2005-05-24 02:25:28 -0400 (Tue, 24 May 2005) | 2 lines
+
+Add GenericName
+
+------------------------------------------------------------------------
+r417650 | binner | 2005-05-24 02:28:33 -0400 (Tue, 24 May 2005) | 2 lines
+
+Fix layout (or better: give it one), style guide fixes
+
+------------------------------------------------------------------------
+r417653 | binner | 2005-05-24 02:32:14 -0400 (Tue, 24 May 2005) | 2 lines
+
+SVN_SILENT includemocs
+
+------------------------------------------------------------------------
+r417654 | binner | 2005-05-24 02:33:22 -0400 (Tue, 24 May 2005) | 2 lines
+
+missing i18n, style guide fixes
+
+------------------------------------------------------------------------
+r417655 | binner | 2005-05-24 02:35:22 -0400 (Tue, 24 May 2005) | 2 lines
+
+SVN_SILENT silence
+
+------------------------------------------------------------------------
+r417677 | pdamsten | 2005-05-24 05:02:26 -0400 (Tue, 24 May 2005) | 1 line
+
+Added LineParser class
+------------------------------------------------------------------------
+r417681 | pdamsten | 2005-05-24 05:16:42 -0400 (Tue, 24 May 2005) | 1 line
+
+Added LineParser class
+------------------------------------------------------------------------
+r417948 | nickell | 2005-05-24 21:46:18 -0400 (Tue, 24 May 2005) | 2 lines
+
+Making it clear what this example does and showing it exists in README.
+
+------------------------------------------------------------------------
+r417952 | nickell | 2005-05-24 22:10:22 -0400 (Tue, 24 May 2005) | 2 lines
+
+Get rid of the rectangle around the latest themes.
+
+------------------------------------------------------------------------
+r418293 | pdamsten | 2005-05-26 02:07:40 -0400 (Thu, 26 May 2005) | 1 line
+
+commandFinished callback added
+------------------------------------------------------------------------
+r418956 | pdamsten | 2005-05-28 04:13:01 -0400 (Sat, 28 May 2005) | 1 line
+
+ThemeFile class added
+------------------------------------------------------------------------
+r418972 | pdamsten | 2005-05-28 04:57:14 -0400 (Sat, 28 May 2005) | 1 line
+
+Old unneeded files
+------------------------------------------------------------------------
+r418973 | pdamsten | 2005-05-28 04:58:04 -0400 (Sat, 28 May 2005) | 1 line
+
+xml index file support to skz themes
+------------------------------------------------------------------------
+r419386 | pdamsten | 2005-05-29 06:24:45 -0400 (Sun, 29 May 2005) | 1 line
+
+KIO::NetAccess support for themes.
+------------------------------------------------------------------------
+r419557 | pdamsten | 2005-05-29 16:19:15 -0400 (Sun, 29 May 2005) | 1 line
+
+Use much simpler locateLocal to get local dir for themes.
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r421058 | nickell | 2005-06-01 22:39:54 -0400 (Wed, 01 Jun 2005) | 7 lines
+
+Adding options to display kilobytes and kilobits.
+network sensor kilobits example:
+FORMAT="%inkb"
+disk sensor kilobits and then kilobytes example:
+FORMAT="%fkb"
+FORMAT="%fk"
+
+------------------------------------------------------------------------
+r421194 | coles | 2005-06-02 09:02:06 -0400 (Thu, 02 Jun 2005) | 5 lines
+
+SVN_SILENT
+
+Corrected typo (missing question mark).
+
+
+------------------------------------------------------------------------
+r421446 | pdamsten | 2005-06-03 01:54:22 -0400 (Fri, 03 Jun 2005) | 1 line
+
+New theme list dialog.
+------------------------------------------------------------------------
+r421447 | pdamsten | 2005-06-03 01:55:32 -0400 (Fri, 03 Jun 2005) | 1 line
+
+icon support for skz files.
+------------------------------------------------------------------------
+r421448 | pdamsten | 2005-06-03 01:56:08 -0400 (Fri, 03 Jun 2005) | 1 line
+
+New theme list dialog.
+------------------------------------------------------------------------
+r421449 | pdamsten | 2005-06-03 01:56:44 -0400 (Fri, 03 Jun 2005) | 1 line
+
+These are not needed anymore because of the new theme list dialog.
+------------------------------------------------------------------------
+r421450 | pdamsten | 2005-06-03 01:57:49 -0400 (Fri, 03 Jun 2005) | 1 line
+
+New widget listbox class for the theme list window.
+------------------------------------------------------------------------
+r421457 | pdamsten | 2005-06-03 03:01:44 -0400 (Fri, 03 Jun 2005) | 1 line
+
+Save user added themes to config file.
+------------------------------------------------------------------------
+r421472 | pdamsten | 2005-06-03 03:58:55 -0400 (Fri, 03 Jun 2005) | 1 line
+
+KConfigXT files.
+------------------------------------------------------------------------
+r421480 | pdamsten | 2005-06-03 04:27:04 -0400 (Fri, 03 Jun 2005) | 1 line
+
+useless debug message removed.
+------------------------------------------------------------------------
+r421494 | pdamsten | 2005-06-03 05:16:17 -0400 (Fri, 03 Jun 2005) | 1 line
+
+fileExists function added.
+------------------------------------------------------------------------
+r421495 | pdamsten | 2005-06-03 05:17:04 -0400 (Fri, 03 Jun 2005) | 1 line
+
+Don't import python module unless it exists.
+------------------------------------------------------------------------
+r421518 | pdamsten | 2005-06-03 06:11:06 -0400 (Fri, 03 Jun 2005) | 1 line
+
+use id for config file name instead of name
+------------------------------------------------------------------------
+r421534 | pdamsten | 2005-06-03 06:58:50 -0400 (Fri, 03 Jun 2005) | 1 line
+
+minimum width for icon
+------------------------------------------------------------------------
+r421535 | pdamsten | 2005-06-03 07:01:09 -0400 (Fri, 03 Jun 2005) | 1 line
+
+Use canonical file paths.
+------------------------------------------------------------------------
+r421553 | pdamsten | 2005-06-03 08:17:39 -0400 (Fri, 03 Jun 2005) | 1 line
+
+more compatible with svn dir structure
+------------------------------------------------------------------------
+r421554 | markusb | 2005-06-03 08:19:10 -0400 (Fri, 03 Jun 2005) | 2 lines
+
+Fix "underquoted definition" warning
+
+------------------------------------------------------------------------
+r421590 | mlaurent | 2005-06-03 10:15:30 -0400 (Fri, 03 Jun 2005) | 2 lines
+
+Add const 
+
+------------------------------------------------------------------------
+r421988 | pdamsten | 2005-06-04 04:20:02 -0400 (Sat, 04 Jun 2005) | 1 line
+
+showItems function added.
+------------------------------------------------------------------------
+r421989 | pdamsten | 2005-06-04 04:21:39 -0400 (Sat, 04 Jun 2005) | 1 line
+
+Search added to theme dialog.
+------------------------------------------------------------------------
+r422015 | pdamsten | 2005-06-04 06:20:47 -0400 (Sat, 04 Jun 2005) | 1 line
+
+insertItem returns index
+------------------------------------------------------------------------
+r422017 | pdamsten | 2005-06-04 06:21:56 -0400 (Sat, 04 Jun 2005) | 1 line
+
+handle file with no path better.
+------------------------------------------------------------------------
+r422018 | pdamsten | 2005-06-04 06:23:57 -0400 (Sat, 04 Jun 2005) | 1 line
+
+Support for running multiple instances of theme.
+------------------------------------------------------------------------
+r422064 | pdamsten | 2005-06-04 08:51:27 -0400 (Sat, 04 Jun 2005) | 1 line
+
+more compatible with svn dir structure
+------------------------------------------------------------------------
+r422071 | pdamsten | 2005-06-04 09:13:12 -0400 (Sat, 04 Jun 2005) | 1 line
+
+All & Running items to show combo box in themes dialog.
+------------------------------------------------------------------------
+r422086 | pdamsten | 2005-06-04 09:43:58 -0400 (Sat, 04 Jun 2005) | 1 line
+
+Running indicator to the theme list.
+------------------------------------------------------------------------
+r422259 | nickell | 2005-06-04 18:05:33 -0400 (Sat, 04 Jun 2005) | 3 lines
+
+Fix the path returned for karamba.getThemePath() when using a zipped
+theme.
+
+------------------------------------------------------------------------
+r422283 | nickell | 2005-06-04 19:25:15 -0400 (Sat, 04 Jun 2005) | 3 lines
+
+Removing this fix, as this is not the solution to getThemePath not
+functioning in zipped themes.
+
+------------------------------------------------------------------------
+r422519 | pdamsten | 2005-06-05 14:09:40 -0400 (Sun, 05 Jun 2005) | 1 line
+
+readThemeFile added to python api.
+------------------------------------------------------------------------
+r422675 | nickell | 2005-06-06 00:57:45 -0400 (Mon, 06 Jun 2005) | 2 lines
+
+Initial support for KNewStuff.  Install code has not been completed yet.
+
+------------------------------------------------------------------------
+r422865 | pdamsten | 2005-06-06 14:54:37 -0400 (Mon, 06 Jun 2005) | 1 line
+
+Add warning when running non local theme.
+------------------------------------------------------------------------
+r422947 | nickell | 2005-06-06 20:14:17 -0400 (Mon, 06 Jun 2005) | 4 lines
+
+More knewstuff.  Install is now working, but it's limited to non-zipped
+themes and they get installed into:
+~/.kde/share/apps/superkaramba/themes/
+
+------------------------------------------------------------------------
+r423033 | pdamsten | 2005-06-07 05:22:49 -0400 (Tue, 07 Jun 2005) | 1 line
+
+Auto reload patch added and reload bug fixed.
+------------------------------------------------------------------------
+r423702 | pdamsten | 2005-06-09 08:22:20 -0400 (Thu, 09 Jun 2005) | 1 line
+
+i18n support for skz themes and .theme files
+------------------------------------------------------------------------
+r423703 | pdamsten | 2005-06-09 08:22:37 -0400 (Thu, 09 Jun 2005) | 1 line
+
+i18n support for skz themes and .theme files
+------------------------------------------------------------------------
+r423704 | pdamsten | 2005-06-09 08:22:58 -0400 (Thu, 09 Jun 2005) | 1 line
+
+i18n support for skz themes and .theme files
+------------------------------------------------------------------------
+r423706 | pdamsten | 2005-06-09 08:26:21 -0400 (Thu, 09 Jun 2005) | 1 line
+
+Show theme version
+------------------------------------------------------------------------
+r423941 | mlaurent | 2005-06-10 04:26:49 -0400 (Fri, 10 Jun 2005) | 2 lines
+
+Fixuifiles
+
+------------------------------------------------------------------------
+r424268 | pdamsten | 2005-06-11 06:18:25 -0400 (Sat, 11 Jun 2005) | 1 line
+
+Handle execute parameters as QString instead of char* to handle unicode chars correctly.
+------------------------------------------------------------------------
+r424540 | mlaurent | 2005-06-12 05:23:36 -0400 (Sun, 12 Jun 2005) | 2 lines
+
+Don't compile superkaramba when python header was not installed
+
+------------------------------------------------------------------------
+r425963 | nickell | 2005-06-15 20:52:40 -0400 (Wed, 15 Jun 2005) | 8 lines
+
+Now we can download and install .skz files into the install directory:
+$KDEHOME/share/apps/superkaramba/themes
+We also unpack any other type of archive into it's own directory in the 
+install directory.
+TODO: add the install directory to the theme dialog browser
+TODO: verify that a zipped archive is truly a .skz file by detecting
+the inventory xml file.
+
+------------------------------------------------------------------------
+r426202 | binner | 2005-06-16 13:41:03 -0400 (Thu, 16 Jun 2005) | 2 lines
+
+SVN_SILENT i18n style guide fixes, all sighted on planetkde.org :-|
+
+------------------------------------------------------------------------
+r426365 | scripty | 2005-06-17 00:14:17 -0400 (Fri, 17 Jun 2005) | 1 line
+
+SVN_SILENT made messages (.desktop file)
+------------------------------------------------------------------------
+r426378 | pdamsten | 2005-06-17 01:33:48 -0400 (Fri, 17 Jun 2005) | 1 line
+
+Add themes to the theme list after Get New Stuff download.
+------------------------------------------------------------------------
+r426385 | pdamsten | 2005-06-17 02:37:25 -0400 (Fri, 17 Jun 2005) | 1 line
+
+Fixed bug in saveUserAddedThemes
+------------------------------------------------------------------------
+r426496 | pdamsten | 2005-06-17 09:38:15 -0400 (Fri, 17 Jun 2005) | 1 line
+
+Removed debug messages.
+------------------------------------------------------------------------
+r426497 | pdamsten | 2005-06-17 09:39:35 -0400 (Fri, 17 Jun 2005) | 1 line
+
+Select downloaded theme from list to find it more easily.
+------------------------------------------------------------------------
+r426677 | scripty | 2005-06-18 00:10:29 -0400 (Sat, 18 Jun 2005) | 1 line
+
+SVN_SILENT made messages (.desktop file)
+------------------------------------------------------------------------
+r427009 | pdamsten | 2005-06-19 02:25:49 -0400 (Sun, 19 Jun 2005) | 1 line
+
+New InputBox meter.
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+r427283 | pdamsten | 2005-06-20 04:42:47 -0400 (Mon, 20 Jun 2005) | 1 line
+
+Use python as basename for mo files instead of skz file.
+------------------------------------------------------------------------
+r427558 | nickell | 2005-06-20 20:49:24 -0400 (Mon, 20 Jun 2005) | 3 lines
+
+Implicitly show the qlineedit box upon creation.
+createInputBox() now works.
+
+------------------------------------------------------------------------
+r427600 | pdamsten | 2005-06-21 03:35:21 -0400 (Tue, 21 Jun 2005) | 1 line
+
+Update thems list on show (fixes unvisible buttons).
+------------------------------------------------------------------------
+r427617 | mlaurent | 2005-06-21 05:21:48 -0400 (Tue, 21 Jun 2005) | 2 lines
+
+karamba.pot is into l10n directory
+
+------------------------------------------------------------------------
+r427783 | pdamsten | 2005-06-21 16:17:34 -0400 (Tue, 21 Jun 2005) | 1 line
+
+Make 'keyPressed' working with input box.
+------------------------------------------------------------------------
+r427868 | pdamsten | 2005-06-22 04:15:57 -0400 (Wed, 22 Jun 2005) | 1 line
+
+Make richtext obey the user set width and height.
+------------------------------------------------------------------------
+r428035 | pdamsten | 2005-06-22 15:46:41 -0400 (Wed, 22 Jun 2005) | 1 line
+
+Support for license in maindata.xml
+------------------------------------------------------------------------
+r428039 | pdamsten | 2005-06-22 15:55:14 -0400 (Wed, 22 Jun 2005) | 1 line
+
+Trying to fix key press event problems.
+------------------------------------------------------------------------
+r428109 | pdamsten | 2005-06-23 02:00:34 -0400 (Thu, 23 Jun 2005) | 1 line
+
+Get input box test properties from theme.
+------------------------------------------------------------------------
+r428431 | scripty | 2005-06-24 00:19:17 -0400 (Fri, 24 Jun 2005) | 1 line
+
+SVN_SILENT made messages (.desktop file)
+------------------------------------------------------------------------
+r429260 | nickell | 2005-06-26 22:04:12 -0400 (Sun, 26 Jun 2005) | 6 lines
+
+Thanks to Alex Wiedenbruch, we can now hide the systray icon.
+There is a dcop function hideSystemTray(bool) that can be called, 
+a theme's right click menu or by clicking on the systray icon 
+itself will allow you to hide the system tray icon.
+
+
+------------------------------------------------------------------------
+r429276 | scripty | 2005-06-27 00:03:59 -0400 (Mon, 27 Jun 2005) | 1 line
+
+SVN_SILENT made messages (.desktop file)
+------------------------------------------------------------------------
+r429448 | pdamsten | 2005-06-27 14:17:22 -0400 (Mon, 27 Jun 2005) | 1 line
+
+Patch from A. Wiedenbruch to show non-theme specific menu items in theme menu only when sytray icon hidden.
+------------------------------------------------------------------------
+r429492 | mueller | 2005-06-27 17:20:33 -0400 (Mon, 27 Jun 2005) | 2 lines
+
+unbreak compilation. does anyone review apps that don't compile?
+
+------------------------------------------------------------------------
+r429581 | pdamsten | 2005-06-28 03:13:58 -0400 (Tue, 28 Jun 2005) | 1 line
+
+Start themes by double clicking them.
+------------------------------------------------------------------------
+r429585 | pdamsten | 2005-06-28 03:43:02 -0400 (Tue, 28 Jun 2005) | 1 line
+
+Show scrollbar only when enough lines.
+------------------------------------------------------------------------
+r429605 | pdamsten | 2005-06-28 05:06:43 -0400 (Tue, 28 Jun 2005) | 1 line
+
+New icons
+------------------------------------------------------------------------
+r429606 | pdamsten | 2005-06-28 05:07:11 -0400 (Tue, 28 Jun 2005) | 1 line
+
+mimetype
+------------------------------------------------------------------------
+r429610 | pdamsten | 2005-06-28 05:16:13 -0400 (Tue, 28 Jun 2005) | 1 line
+
+Renamed some files: karamba -> superkaramba
+------------------------------------------------------------------------
+r429611 | pdamsten | 2005-06-28 05:17:08 -0400 (Tue, 28 Jun 2005) | 1 line
+
+Icons now in icon directory.
+------------------------------------------------------------------------
+r429612 | pdamsten | 2005-06-28 05:19:41 -0400 (Tue, 28 Jun 2005) | 1 line
+
+icons and mimetype dirs.
+------------------------------------------------------------------------
+r429614 | pdamsten | 2005-06-28 05:28:43 -0400 (Tue, 28 Jun 2005) | 1 line
+
+Removed skicon icon.
+------------------------------------------------------------------------
+r429616 | pdamsten | 2005-06-28 05:37:03 -0400 (Tue, 28 Jun 2005) | 1 line
+
+Oops, wrong name...
+------------------------------------------------------------------------
+r429851 | scripty | 2005-06-29 00:36:37 -0400 (Wed, 29 Jun 2005) | 1 line
+
+SVN_SILENT made messages (.desktop file)
+------------------------------------------------------------------------
+r429924 | pdamsten | 2005-06-29 08:35:12 -0400 (Wed, 29 Jun 2005) | 1 line
+
+Patch from A. Wiedenbruch that fixes the not shown menu when starting from a session. Also added: Loading themes from relative path and not only from absolute path when using command line arguments.
+------------------------------------------------------------------------
+r429962 | coles | 2005-06-29 10:57:23 -0400 (Wed, 29 Jun 2005) | 5 lines
+
+SVN_SILENT
+
+Corrected typo (runningin -> running in).
+
+
+------------------------------------------------------------------------
+r430073 | nickell | 2005-06-29 21:16:59 -0400 (Wed, 29 Jun 2005) | 2 lines
+
+Make the icons install.  It at least fixed it for me.
+
+------------------------------------------------------------------------
+r430082 | nickell | 2005-06-29 22:28:11 -0400 (Wed, 29 Jun 2005) | 3 lines
+
+Finally get rid of tooltips when an image has been deleted.
+Now we'll no longer have phantom tooltips!
+
+------------------------------------------------------------------------
+r430088 | nickell | 2005-06-29 23:47:48 -0400 (Wed, 29 Jun 2005) | 2 lines
+
+Update template for keyPressed callback.
+
+------------------------------------------------------------------------
+r430095 | scripty | 2005-06-30 00:16:41 -0400 (Thu, 30 Jun 2005) | 1 line
+
+SVN_SILENT made messages (.desktop file)
+------------------------------------------------------------------------
+r430112 | pdamsten | 2005-06-30 02:06:19 -0400 (Thu, 30 Jun 2005) | 1 line
+
+add mimetype to SUBDIRS
+------------------------------------------------------------------------
+r430113 | pdamsten | 2005-06-30 02:16:00 -0400 (Thu, 30 Jun 2005) | 1 line
+
+Oops typo...
+------------------------------------------------------------------------
+r430122 | pdamsten | 2005-06-30 03:05:02 -0400 (Thu, 30 Jun 2005) | 1 line
+
+Use SuperKaramba instead of Superkaramba
+------------------------------------------------------------------------
+r430124 | pdamsten | 2005-06-30 03:18:41 -0400 (Thu, 30 Jun 2005) | 1 line
+
+Trying to fix hideMenuExtension crash
+------------------------------------------------------------------------
+r430219 | pdamsten | 2005-06-30 10:43:49 -0400 (Thu, 30 Jun 2005) | 1 line
+
+Save ShowSystrayIcon to configure file.
+------------------------------------------------------------------------
+r430351 | nickell | 2005-06-30 21:37:45 -0400 (Thu, 30 Jun 2005) | 4 lines
+
+Added new examples for the input box.
+Cleaned up the test_all.sh so it would work.
+
+
+------------------------------------------------------------------------
+r430374 | scripty | 2005-06-30 23:59:45 -0400 (Thu, 30 Jun 2005) | 1 line
+
+SVN_SILENT made messages (.desktop file)
+------------------------------------------------------------------------
+r430653 | scripty | 2005-07-02 00:06:13 -0400 (Sat, 02 Jul 2005) | 1 line
+
+SVN_SILENT made messages (.desktop file)
+------------------------------------------------------------------------
+r430988 | nickell | 2005-07-02 18:16:38 -0400 (Sat, 02 Jul 2005) | 2 lines
+
+Unbreak MANAGED mode for themes. Alex's theme didn't check for !managed.
+
+------------------------------------------------------------------------
+r431197 | nickell | 2005-07-03 11:19:32 -0400 (Sun, 03 Jul 2005) | 3 lines
+
+Now clicking on .theme's and .skz's causes them to open with
+SuperKaramba.
+
+------------------------------------------------------------------------
+r431381 | nickell | 2005-07-04 02:13:15 -0400 (Mon, 04 Jul 2005) | 4 lines
+
+Add a tooltip to the system tray icon.
+TODO: add some useful information such as the number of running themes.
+
+
+------------------------------------------------------------------------
+r431391 | nickell | 2005-07-04 04:06:59 -0400 (Mon, 04 Jul 2005) | 2 lines
+
+Forgot the i18n for the systray tooltip text.
+
+------------------------------------------------------------------------
+r431753 | pdamsten | 2005-07-05 02:43:16 -0400 (Tue, 05 Jul 2005) | 1 line
+
+Reloading bug fixed.
+------------------------------------------------------------------------
+r431758 | pdamsten | 2005-07-05 03:01:14 -0400 (Tue, 05 Jul 2005) | 1 line
+
+Xpm lib not needed anymore.
+------------------------------------------------------------------------
+r431759 | pdamsten | 2005-07-05 03:01:49 -0400 (Tue, 05 Jul 2005) | 1 line
+
+Updated name and version.
+------------------------------------------------------------------------
+r432054 | nickell | 2005-07-05 20:44:02 -0400 (Tue, 05 Jul 2005) | 3 lines
+
+In all of it's glory I present to you release 0.37!
+
+
+------------------------------------------------------------------------
+r432566 | binner | 2005-07-07 16:42:18 -0400 (Thu, 07 Jul 2005) | 2 lines
+
+SVN_SILENT i18n style guide fix
+
+------------------------------------------------------------------------
+r432567 | binner | 2005-07-07 16:42:35 -0400 (Thu, 07 Jul 2005) | 2 lines
+
+kdereview reviewed for Yes/No buttons
+
+------------------------------------------------------------------------
+r432643 | nickell | 2005-07-07 22:33:56 -0400 (Thu, 07 Jul 2005) | 2 lines
+
+This is really the first release candiate before 0.37 final.
+
+------------------------------------------------------------------------
 SuperKaramba v0.36
 
 2005-04-19 22:19  p0z3r
