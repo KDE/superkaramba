@@ -307,6 +307,18 @@ void ThemeFile::parseXml()
   }
 }
 
+bool ThemeFile::canUninstall() const
+{
+  if(!isZipTheme())
+    return false;
+  QFileInfo fi(file());
+  if(fi.permission(QFileInfo::WriteUser) ||
+     fi.permission(QFileInfo::WriteGroup) ||
+     fi.permission(QFileInfo::WriteOther))
+    return true;
+  return false;
+}
+
 bool ThemeFile::isThemeFile(const QString& filename) const
 {
   QFileInfo fileInfo(filename);

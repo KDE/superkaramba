@@ -38,6 +38,8 @@
 #include <qdir.h>
 #include <qlabel.h>
 #include <qcombobox.h>
+#include <kio/job.h>
+#include <kprotocolinfo.h>
 
 ThemesDlg::ThemesDlg(QWidget *parent, const char *name)
  : ThemesLayout(parent, name)
@@ -135,8 +137,11 @@ void ThemesDlg::populateListbox()
     t = dir.entryList("*.skz; *.theme");
     for(QStringList::Iterator it = t.begin(); it != t.end(); ++it )
     {
-      tableThemes->insertItem(
-          new ThemeWidget(new ThemeFile(dir.filePath(*it))));
+      item = new ThemeWidget(new ThemeFile(dir.filePath(*it)));
+      tableThemes->insertItem(item);
+      item->buttonGo->setText(i18n("Uninstall"));
+      connect(item->buttonGo, SIGNAL(clicked()),
+              this, SLOT(uninstall()));
     }
   }
   t = SuperKarambaSettings::userAddedThemes();
@@ -145,7 +150,13 @@ void ThemesDlg::populateListbox()
     ThemeFile* file = new ThemeFile(*it);
 
     if(file->isValid())
-      tableThemes->insertItem(new ThemeWidget(file));
+    {
+      item = new ThemeWidget(file);
+      tableThemes->insertItem(item);
+      item->buttonGo->setText(i18n("Uninstall"));
+      connect(item->buttonGo, SIGNAL(clicked()),
+              this, SLOT(uninstall()));
+    }
     else
       delete file;
   }
@@ -196,6 +207,16 @@ void ThemesDlg::getNewStuff()
 void ThemesDlg::selectionChanged(int index)
 {
   buttonAddToDesktop->setEnabled(index > 1);
+
+  for(uint i=2; i < tableThemes->count(); ++i)
+  {
+    ThemeWidget* w = static_cast<ThemeWidget*>(tableThemes->item(i));
+    w->buttonGo->hide();
+  }
+  ThemeWidget* w = static_cast<ThemeWidget*>(tableThemes->item(index));
+  ThemeFile* themeFile = w->themeFile();
+  if(themeFile && themeFile->canUninstall())
+      w->buttonGo->show();
 }
 
 void ThemesDlg::quitSuperKaramba()
@@ -283,6 +304,20 @@ bool ThemesDlg::filter(int index, QWidget* widget, void* data)
       return true;
   }
   return false;
+}
+
+void ThemesDlg::uninstall()
+{
+  ThemeWidget* w = static_cast<ThemeWidget*>(tableThemes->selectedItem());
+  ThemeFile* tf = w->themeFile();
+  KURL trash("trash:/");
+  KURL theme(tf->file());
+
+  karambaApp->dcopIface()->closeTheme(tf->name());
+  if(!KProtocolInfo::isKnownProtocol(trash))
+    trash = KGlobalSettings::trashPath();
+  KIO::move(theme, trash);
+  tableThemes->removeItem(w);
 }
 
 #include "themesdlg.moc"

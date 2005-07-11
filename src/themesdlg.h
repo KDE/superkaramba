@@ -49,6 +49,7 @@ class ThemesDlg : public ThemesLayout
     virtual void openLocalTheme();
     virtual void getNewStuff();
     virtual void search(const QString& text);
+    virtual void uninstall();
 
   protected:
     static bool filter(int index, QWidget* widget, void* data);

@@ -67,6 +67,7 @@ class ThemeFile
     QByteArray readThemeFile(const QString& filename) const;
     bool fileExists(const QString& filename) const;
     const ThemeLocale* locale() const { return m_locale; };
+    bool canUninstall() const;
 
     bool set(const KURL& url);
     bool open();
