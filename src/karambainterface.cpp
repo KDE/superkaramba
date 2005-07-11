@@ -76,8 +76,9 @@ void KarambaIface::openTheme(QString filename)
 
 void KarambaIface::closeTheme(QString name)
 {
-  karamba* k = getKaramba(name);
-  if(k)
+  karamba* k;
+
+  while(k = getKaramba(name))
   {
     k->writeConfigData();
     k->close();
