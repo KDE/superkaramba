@@ -39,6 +39,8 @@ class KWidgetListbox : public QTable
     int insertItem(QWidget* item, int index = -1);
     void setSelected(QWidget* item);
     void setSelected(int index);
+    void removeItem(QWidget* item);
+    void removeItem(int index);
     void clear();
     int selected() const;
     QWidget* selectedItem() const;

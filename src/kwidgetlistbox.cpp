@@ -81,6 +81,17 @@ void KWidgetListbox::selectionChanged(int row, int col)
   emit selected(row);
 }
 
+void KWidgetListbox::removeItem(QWidget* item)
+{
+  removeItem(index(item));
+}
+
+void KWidgetListbox::removeItem(int index)
+{
+  removeRow(index);
+  updateColors();
+}
+
 void KWidgetListbox::setSelected(int index)
 {
   setCurrentCell(index, 0);
