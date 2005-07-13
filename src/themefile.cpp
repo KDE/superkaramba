@@ -241,7 +241,7 @@ bool ThemeFile::set(const KURL &url)
   }
   else
   {
-    if(url.directory().isEmpty() or url.directory() == "/")
+    if(url.directory().isEmpty() || url.directory() == "/")
       m_file = canonicalFile(QDir::current().filePath(url.fileName()));
     else
       m_file = canonicalFile(url.path());
