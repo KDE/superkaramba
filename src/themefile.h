@@ -34,6 +34,7 @@
 class LineParser;
 class QTextStream;
 class ThemeLocale;
+class ZipFile;
 
 /**
 @author See README for the list of authors
@@ -100,6 +101,7 @@ class ThemeFile
     QString m_authorEmail;
     QString m_homepage;
     ThemeLocale* m_locale;
+    ZipFile* m_zip;
 };
 
 #endif

@@ -40,14 +40,29 @@
 class ZipFile
 {
   public:
-    ZipFile(const QString& zipfile, const QString& filename) :
-      m_zip(0), m_file(0), m_filename(filename)
+    ZipFile() :
+      m_zip(0), m_file(0)
     {
+    }
+    void setFile(const QString& filename)
+    {
+      m_filename = filename;
       if(filename.isEmpty())
         return;
 
-      const KArchiveDirectory* dir;
       const KArchiveEntry* entry;
+
+      entry = m_dir->entry(filename);
+      if(entry == 0 || !entry->isFile())
+      {
+        m_file = 0;
+        return;
+      }
+      m_file = static_cast<const KArchiveFile*>(entry);
+    }
+    void setZip(const QString& zipfile)
+    {
+      closeZip();
 
       m_zip = new KZip(zipfile);
 
@@ -56,21 +71,20 @@ class ZipFile
         qDebug("Unable to open '%s' for reading.", zipfile.ascii());
         return;
       }
-      dir = m_zip->directory();
-      if(dir == 0)
+      m_dir = m_zip->directory();
+      if(m_dir == 0)
       {
         qDebug("Error reading directory contents of file %s", zipfile.ascii());
         return;
       }
-
-      entry = dir->entry(filename);
-      if(entry == 0 || !entry->isFile())
-        return;
-
-      m_file = static_cast<const KArchiveFile*>(entry);
     }
 
     virtual ~ZipFile()
+    {
+      closeZip();
+    }
+
+    void closeZip()
     {
       if(m_zip)
       {
@@ -100,10 +114,11 @@ class ZipFile
     KZip* m_zip;
     const KArchiveFile* m_file;
     QString m_filename;
+    const KArchiveDirectory* m_dir;
 };
 
 ThemeFile::ThemeFile(const KURL& url)
-  : m_stream(0), m_locale(0)
+  : m_stream(0), m_locale(0), m_zip(0)
 {
   if(url.isValid())
     set(url);
@@ -113,6 +128,7 @@ ThemeFile::~ThemeFile()
 {
   delete m_stream;
   delete m_locale;
+  delete m_zip;
 }
 
 bool ThemeFile::open()
@@ -123,8 +139,8 @@ bool ThemeFile::open()
 
   if(m_zipTheme)
   {
-    ZipFile zf(m_file, m_theme);
-    m_ba = zf.data();
+    m_zip->setFile(m_theme);
+    m_ba = m_zip->data();
     if(m_ba.size() > 0)
     {
       m_stream = new QTextStream(m_ba, IO_ReadOnly);
@@ -244,6 +260,8 @@ bool ThemeFile::set(const KURL &url)
   {
     m_path = m_file;
     m_zipTheme = true;
+    m_zip = new ZipFile();
+    m_zip->setZip(m_file);
   }
   else
   {
@@ -332,8 +350,8 @@ bool ThemeFile::fileExists(const QString& filename) const
   {
     if(isZipTheme())
     {
-      ZipFile zf(m_file, filename);
-      return zf.exists();
+      m_zip->setFile(filename);
+      return m_zip->exists();
     }
     else
       return QFileInfo(path() + "/" + filename).exists();
@@ -344,12 +362,14 @@ bool ThemeFile::fileExists(const QString& filename) const
 
 QByteArray ThemeFile::readThemeFile(const QString& filename) const
 {
+  QTime time;
+  time.start();
   QByteArray ba;
 
   if(isZipTheme())
   {
-    ZipFile zf(m_file, filename);
-    ba = zf.data();
+    m_zip->setFile(filename);
+    ba = m_zip->data();
   }
   else
   {
@@ -361,6 +381,8 @@ QByteArray ThemeFile::readThemeFile(const QString& filename) const
       file.close();
     }
   }
+  kdDebug() << "Read theme file: " << filename << ", " << time.elapsed()
+      << "ms" << endl;
   return ba;
 }
 
