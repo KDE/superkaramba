@@ -25,6 +25,8 @@
  *  along with SuperKaramba; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  ****************************************************************************/
+#include <config.h>
+
 #include "themelocale.h"
 #include "themefile.h"
 #include <kdebug.h>
@@ -35,6 +37,10 @@
 #include <qglobal.h>
 #include <qiodevice.h>
 #include <stdlib.h>
+
+#ifdef HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
 
 #ifndef W
 # define W(flag, data) ((flag) ? SWAP (data) : (data))
