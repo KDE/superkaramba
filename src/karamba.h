@@ -158,7 +158,7 @@ public:
 
     void makeActive();
   void makePassive();
-  
+
   void showMenuExtension();
   void hideMenuExtension();
 
@@ -226,11 +226,12 @@ private:
 
     int  desktop;
     ThemeFile m_theme;
-  
+
   int trayMenuSeperatorId;
   int trayMenuQuitId;
   int trayMenuToggleId;
   int trayMenuThemeId;
+  void start();
 
 public slots:
     void step();
@@ -249,7 +250,7 @@ public slots:
 
     // Systray
     void systrayUpdated();
-  
+
     // Task Manager
     void startupAdded(Startup*);
     void startupRemoved(Startup*);
@@ -261,6 +262,7 @@ public slots:
 
 private:
     bool m_reloading;
+    int m_interval;
 
 private slots:
     void initPythonInterface();
@@ -271,7 +273,7 @@ private slots:
     void slotToggleFastTransforms();
     void popupNotify(int);
     void slotFileChanged( const QString & );
-  
+
     void slotToggleSystemTray();
     void slotQuit();
     void slotShowTheme();

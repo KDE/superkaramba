@@ -239,7 +239,6 @@ karamba::karamba(QString fn, bool reloading, int instance) :
   if( !(onTop || managed))
     this->lower();
 
-
   if( !parseConfig() )
   {
     setFixedSize(0,0);
@@ -355,8 +354,6 @@ karamba::~karamba()
 bool karamba::parseConfig()
 {
   //qDebug("karamba::parseConfig");
-  QTimer *m_sysTimer = new QTimer(this);
-  int interval = 0;
   bool passive = true;
 
   if(m_theme.open())
@@ -414,7 +411,7 @@ bool karamba::parseConfig()
         }
 
         move(x,y);
-        pm = QPixmap(size());
+        //pm = QPixmap(size());
 
         if(lineParser.getBoolean("ONTOP"))
         {
@@ -501,8 +498,8 @@ bool karamba::parseConfig()
         widgetMask = new QBitmap(path);
         setMask(*widgetMask);
 
-        interval = lineParser.getInt("INTERVAL");
-        interval = (interval == 0) ? 5000 : interval;
+        m_interval = lineParser.getInt("INTERVAL");
+        m_interval = (m_interval == 0) ? 1000 : m_interval;
 
         QString temp = lineParser.getString("TEMPUNIT", "C").upper();
         tempUnit = temp.ascii()[0];
@@ -751,19 +748,23 @@ bool karamba::parseConfig()
   }
   else
   {
-    connect(m_sysTimer, SIGNAL(timeout()), SLOT(step()));
-
-    interval = interval == 0 ? 1000 : interval;
-    m_sysTimer->start(interval);
-
-    //Start the widget running
-    QTimer::singleShot( 0, this, SLOT(step()) );
-
-    if( !(onTop || managed) )
-      lowerTimer.start();
-
     return true;
   }
+}
+
+void karamba::start()
+{
+  QTimer *m_sysTimer = new QTimer(this);
+
+  connect(m_sysTimer, SIGNAL(timeout()), SLOT(step()));
+
+  m_sysTimer->start(m_interval);
+
+    //Start the widget running
+  QTimer::singleShot( 0, this, SLOT(step()) );
+
+  if( !(onTop || managed) )
+    lowerTimer.start();
 }
 
 void karamba::makeActive()
@@ -1149,8 +1150,7 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
       sensorList->append( sensor );
     }
     SensorParams *sp = new SensorParams(meter);
-    sp->addParam( "LINE", QString::number( lineParser.getInt("LINE"))
-);
+    sp->addParam( "LINE", QString::number(lineParser.getInt("LINE")));
     sp->addParam( "THEMAPATH", m_theme.path() );
     sensor->addMeter(sp);
   }
@@ -1213,7 +1213,7 @@ void karamba::meterClicked(QMouseEvent* e, Meter* meter)
     if (RichTextLabel* richText = dynamic_cast<RichTextLabel*>(meter))
     {
       pythonIface->meterClicked(this, richText->anchorAt(e->x(), e->y()),
-button);
+                                button);
     }
     else
     {
@@ -1405,7 +1405,9 @@ void karamba::closeEvent ( QCloseEvent *  qc)
 
 void karamba::paintEvent ( QPaintEvent *e)
 {
-  //qDebug("karamba::paintEvent");
+  //kdDebug() << k_funcinfo << pm.size() << endl;
+  if(pm.width() == 0)
+    return;
   if( !(onTop || managed))
   {
     if( lowerTimer.elapsed() > 100 )
@@ -1432,7 +1434,11 @@ void karamba::updateSensors()
 
 void karamba::updateBackground(KSharedPixmap* kpm)
 {
-  //qDebug("karamba::updateBackground");
+  //kdDebug() << k_funcinfo << pm.size() << endl;
+  // if pm width == 0 this is the first time we come here and we should start
+  // the theme. This is because we need the background before starting.
+  if(pm.width() == 0)
+    start();
   background = QPixmap(*kpm);
 
   QPixmap buffer = QPixmap(size());
@@ -1497,7 +1503,7 @@ void karamba::currentWallpaperChanged(int i )
 
 void karamba::externalStep()
 {
-  //qDebug("karamba::externalStep");
+  //kdDebug() << k_funcinfo << pm.size() << endl;
   if (widgetUpdate)
   {
     QPixmap buffer = QPixmap(size());
@@ -1523,7 +1529,7 @@ void karamba::externalStep()
 
 void karamba::step()
 {
-  //qDebug("karamba::step");
+  //kdDebug() << k_funcinfo << pm.size() << endl;
   if (widgetUpdate && haveUpdated)
   {
     pm = QPixmap(size());
