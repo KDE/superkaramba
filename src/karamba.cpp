@@ -781,6 +781,9 @@ void karamba::makeActive()
 
 void karamba::makePassive()
 {
+  if(managed)
+    return;
+  
   QObject *meter;
   for (meter = meterList->first(); meter; meter = meterList->next())
   {
