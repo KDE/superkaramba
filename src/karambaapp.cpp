@@ -188,9 +188,41 @@ void KarambaApplication::setToolTip(const QString &tip)
   QToolTip::remove(sysTrayIcon);
   if(tip.isNull())
     QToolTip::add(sysTrayIcon, i18n("SuperKaramba"));
-  //TODO: implement a slot to call setToolTip with the number of running themes
   else
     QToolTip::add(sysTrayIcon, tip);
+}
+
+void KarambaApplication::buildToolTip()
+{
+  if(karambaList->isEmpty())
+  {
+    setToolTip();
+    return;
+  }
+  
+  QString toolTip("<b><center>" + i18n("SuperKaramba") + "</center></b>");
+
+  toolTip += "<table width=300>";
+  
+  bool firstRun = true;
+  QObject *k;
+  for (k = karambaList->first(); k; k = karambaList->next())
+  {
+    if(firstRun) 
+    {
+      toolTip += "<tr><td align=right>" + i18n("Running Theme:", "Running Themes:", karambaList->count()) + 
+        "</td><td align=left>" + ((karamba*)k)->theme().name() + "</td></tr>";
+      firstRun = false;
+    }
+    else
+    {
+      toolTip += "<tr><td></td><td align=left>" + ((karamba*)k)->theme().name() + "</td></tr>";
+    }
+  }
+
+  toolTip += "</table>";
+  
+  setToolTip(toolTip);
 }
 
 bool KarambaApplication::sysTrayIconShown()
@@ -256,6 +288,9 @@ bool KarambaApplication::startThemes(QStringList &lst)
     mainWin->show();
     result = true;
   }
+  
+  buildToolTip();
+  
   return result;
 }
 
@@ -268,6 +303,8 @@ void KarambaApplication::addKaramba(karamba* k, bool reloading)
     k->setInstance(instance);
   }
   karambaList->append(k);
+  
+  buildToolTip();
 }
 
 void KarambaApplication::deleteKaramba(karamba* k, bool reloading)
@@ -276,6 +313,8 @@ void KarambaApplication::deleteKaramba(karamba* k, bool reloading)
     karambaApp->dcopStub()->themeClosed(
         karambaApp->dcopClient()->appId(), k->theme().file(), k->instance());
   karambaList->removeRef(k);
+  
+  buildToolTip();
 }
 
 bool KarambaApplication::hasKaramba(karamba* k)

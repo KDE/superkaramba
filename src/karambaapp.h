@@ -79,6 +79,7 @@ public:
   
 public slots:
   void hideSysTray(bool hide = true);
+  void buildToolTip();
 };
 
 #endif // KARAMBAAPP_H
