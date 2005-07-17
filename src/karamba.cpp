@@ -492,10 +492,10 @@ bool karamba::parseConfig()
         QString path = lineParser.getString("MASK");
 
         QFileInfo info(path);
-        if( info.isRelative())
-          path = m_theme.path() +"/" + path;
-
-        widgetMask = new QBitmap(path);
+        if(info.isRelative())
+          widgetMask = new QBitmap(m_theme.readThemeFile(path));
+        else
+          widgetMask = new QBitmap(path);
         setMask(*widgetMask);
 
         m_interval = lineParser.getInt("INTERVAL");
