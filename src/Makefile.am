@@ -13,8 +13,6 @@ messages: rc.cpp
 	$(EXTRACTRC) *.ui >> rc.cpp
 	$(XGETTEXT) *.cpp -o $(podir)/superkaramba.pot
 
-KDE_ICON = superkaramba
-
 #########################################################################
 # APPLICATION SECTION
 #########################################################################
