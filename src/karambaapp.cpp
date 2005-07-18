@@ -8,7 +8,6 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qdir.h>
@@ -17,6 +16,7 @@
 #include <fcntl.h>
 #include <klocale.h>
 #include <kmessagebox.h>
+#include <kdebug.h>
 
 #include <qtooltip.h>
 
@@ -70,16 +70,6 @@ QString KarambaApplication::getMainKaramba()
   return QString::null;
 }
 
-void KarambaApplication::setupKaramba(QCString app)
-{
-  if(app.isEmpty())
-    return;
-
-  dcopIface_stub dcop(app, iface->objId());
-
-  dcop.hideSystemTray(false);
-}
-
 QStringList KarambaApplication::getKarambas()
 {
   QCStringList applst = dcopClient()->registeredApplications();
@@ -115,6 +105,7 @@ void KarambaApplication::checkSuperKarambaDir()
 
 void KarambaApplication::setUpSysTray()
 {
+  //kdDebug() << k_funcinfo << endl;
   //Create theme list window.
   //This will function as the main window for the tray icon
   themeListWindow = new ThemesDlg();
@@ -125,42 +116,19 @@ void KarambaApplication::setUpSysTray()
   KPopupMenu *menu = sysTrayIcon->contextMenu();
   menu->insertItem(SmallIconSet("superkaramba"),
                    i18n("Hide System Tray Icon"), this,
-                   SLOT(hideSysTray()));
+                   SLOT(globalHideSysTray()));
 
   sysTrayIcon->setPixmap(sysTrayIcon->loadIcon("superkaramba"));
   setToolTip();
 
-  bool showSysTrayIcon = SuperKarambaSettings::showSysTray();
-
-  if(showSysTrayIcon)
-  {
+  if(sysTrayIconShown())
     sysTrayIcon->show();
-  }
+  else
+    sysTrayIcon->hide();
 
   //Connect Systray icon's quit event
   QObject::connect(sysTrayIcon, SIGNAL(quitSelected()),
-                   this, SLOT(quitSuperKaramba()));
-}
-
-void KarambaApplication::hideSysTray(bool hide)
-{
-  if(hide)
-  {
-    KMessageBox::information(0,
-        i18n("<qt>Hiding the system tray icon will keep SuperKaramba running "
-             "in background. To show it again use the theme menu.</qt>"),
-             i18n("Hiding System Tray Icon"), "hideIcon");
-
-    showKarambaMenuExtension();
-    sysTrayIcon->hide();
-  }
-  else
-  {
-    showKarambaMenuExtension(false);
-    sysTrayIcon->show();
-  }
-  SuperKarambaSettings::setShowSysTray(!hide);
-  SuperKarambaSettings::writeConfig();
+                   this, SLOT(globalQuitSuperKaramba()));
 }
 
 void KarambaApplication::showKarambaMenuExtension(bool show)
@@ -194,45 +162,51 @@ void KarambaApplication::setToolTip(const QString &tip)
 
 void KarambaApplication::buildToolTip()
 {
-  if(karambaList->isEmpty())
+  if(!sysTrayIcon || !themeListWindow)
+    return;
+
+  QStringList list = themeListWindow->runningThemes();
+
+  if(list.isEmpty())
   {
     setToolTip();
     return;
   }
-  
-  QString toolTip("<b><center>" + i18n("SuperKaramba") + "</center></b>");
 
+  QString toolTip("<b><center>" + i18n("SuperKaramba") + "</center></b>");
   toolTip += "<table width=300>";
-  
+
   bool firstRun = true;
-  QObject *k;
-  for (k = karambaList->first(); k; k = karambaList->next())
+  for(QStringList::Iterator it = list.begin(); it != list.end(); ++it )
   {
-    if(firstRun) 
+    if(firstRun)
     {
-      toolTip += "<tr><td align=right>" + i18n("Running Theme:", "Running Themes:", karambaList->count()) + 
-        "</td><td align=left>" + ((karamba*)k)->theme().name() + "</td></tr>";
+      toolTip +=
+          "<tr><td align=right>" +
+          i18n("Running Theme:", "Running Themes:", list.count()) +
+          "</td><td align=left>" + (*it) + "</td></tr>";
       firstRun = false;
     }
     else
     {
-      toolTip += "<tr><td></td><td align=left>" + ((karamba*)k)->theme().name() + "</td></tr>";
+      toolTip += "<tr><td></td><td align=left>" + (*it) + "</td></tr>";
     }
   }
 
   toolTip += "</table>";
-  
+
   setToolTip(toolTip);
 }
 
 bool KarambaApplication::sysTrayIconShown()
 {
-  if(sysTrayIcon)
-    return sysTrayIcon->isVisible();
-  return false;
+  bool showSysTrayIcon = SuperKarambaSettings::showSysTray();
+  //kdDebug() << k_funcinfo << showSysTrayIcon << endl;
+  return showSysTrayIcon;
 }
 
-void KarambaApplication::checkPreviousSession(KApplication &app, QStringList &lst)
+void KarambaApplication::checkPreviousSession(KApplication &app,
+                                              QStringList &lst)
 {
   /******
   Try to restore a previous session if applicable.
@@ -267,15 +241,6 @@ void KarambaApplication::checkCommandLine(KCmdLineArgs *args, QStringList &lst)
   }
 }
 
-void KarambaApplication::showWelcomeDialog()
-{
-  //No themes given on command line and no saved session.
-  //Show welcome dialog.
-
-  if(themeListWindow)
-    themeListWindow->show();
-}
-
 bool KarambaApplication::startThemes(QStringList &lst)
 {
   bool result = false;
@@ -288,9 +253,8 @@ bool KarambaApplication::startThemes(QStringList &lst)
     mainWin->show();
     result = true;
   }
-  
+
   buildToolTip();
-  
   return result;
 }
 
@@ -303,8 +267,6 @@ void KarambaApplication::addKaramba(karamba* k, bool reloading)
     k->setInstance(instance);
   }
   karambaList->append(k);
-  
-  buildToolTip();
 }
 
 void KarambaApplication::deleteKaramba(karamba* k, bool reloading)
@@ -313,8 +275,6 @@ void KarambaApplication::deleteKaramba(karamba* k, bool reloading)
     karambaApp->dcopStub()->themeClosed(
         karambaApp->dcopClient()->appId(), k->theme().file(), k->instance());
   karambaList->removeRef(k);
-  
-  buildToolTip();
 }
 
 bool KarambaApplication::hasKaramba(karamba* k)
@@ -355,11 +315,82 @@ void KarambaApplication::unlockKaramba()
   }
 }
 
+void KarambaApplication::hideSysTray(bool hide)
+{
+  //kdDebug() << k_funcinfo << endl;
+  if(hide)
+  {
+    if(sysTrayIcon)
+    {
+      KMessageBox::information(0,
+          i18n("<qt>Hiding the system tray icon will keep SuperKaramba running "
+              "in background. To show it again use the theme menu.</qt>"),
+          i18n("Hiding System Tray Icon"), "hideIcon");
+      sysTrayIcon->hide();
+    }
+    showKarambaMenuExtension();
+  }
+  else
+  {
+    showKarambaMenuExtension(false);
+    if(sysTrayIcon)
+      sysTrayIcon->show();
+  }
+}
+
+void KarambaApplication::showThemeDialog()
+{
+  //kdDebug() << k_funcinfo << endl;
+  if(themeListWindow)
+    themeListWindow->show();
+}
+
 void KarambaApplication::quitSuperKaramba()
 {
-  //qDebug("quitSuperKaramba called");
+  if(themeListWindow)
+    themeListWindow->saveUserAddedThemes();
+  qApp->closeAllWindows();
+  qApp->quit();
+}
 
-  themeListWindow->quitSuperKaramba();
+void KarambaApplication::globalQuitSuperKaramba()
+{
+  QStringList apps = getKarambas();
+  QStringList::Iterator it;
+
+  for (it = apps.begin(); it != apps.end(); ++it)
+  {
+    dcopIface_stub dcop((*it).ascii(), dcopIface()->objId());
+    dcop.quit();
+  }
+}
+
+void KarambaApplication::globalShowThemeDialog()
+{
+  QStringList apps = getKarambas();
+  QStringList::Iterator it;
+
+  for (it = apps.begin(); it != apps.end(); ++it)
+  {
+    dcopIface_stub dcop((*it).ascii(), dcopIface()->objId());
+    dcop.showThemeDialog();
+  }
+}
+
+void KarambaApplication::globalHideSysTray(bool hide)
+{
+  //kdDebug() << k_funcinfo << endl;
+  QStringList apps = getKarambas();
+  QStringList::Iterator it;
+
+  SuperKarambaSettings::setShowSysTray(!hide);
+  SuperKarambaSettings::writeConfig();
+
+  for (it = apps.begin(); it != apps.end(); ++it)
+  {
+    dcopIface_stub dcop((*it).ascii(), dcopIface()->objId());
+    dcop.hideSystemTray(hide);
+  }
 }
 
 #include "karambaapp.moc"

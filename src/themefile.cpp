@@ -362,8 +362,8 @@ bool ThemeFile::fileExists(const QString& filename) const
 
 QByteArray ThemeFile::readThemeFile(const QString& filename) const
 {
-  QTime time;
-  time.start();
+  //QTime time;
+  //time.start();
   QByteArray ba;
 
   if(isZipTheme())
@@ -381,8 +381,8 @@ QByteArray ThemeFile::readThemeFile(const QString& filename) const
       file.close();
     }
   }
-  kdDebug() << "Read theme file: " << filename << ", " << time.elapsed()
-      << "ms" << endl;
+  //kdDebug() << "Read theme file: " << filename << ", " << time.elapsed()
+  //    << "ms" << endl;
   return ba;
 }
 

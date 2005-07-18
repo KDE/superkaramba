@@ -85,12 +85,6 @@ void KarambaIface::closeTheme(QString name)
   }
 }
 
-void KarambaIface::quit()
-{
-  qApp->closeAllWindows();
-  qApp->quit();
-}
-
 int KarambaIface::themeAdded(QString appId, QString file)
 {
   ThemesDlg* tw = getThemeWnd();
@@ -113,11 +107,17 @@ bool KarambaIface::isMainKaramba()
   return false;
 }
 
-void KarambaIface::hideSystemTray(bool hide)
+void KarambaIface::quit()
 {
-  ((KarambaApplication*)qApp)->hideSysTray(hide);
+  karambaApp->quitSuperKaramba();
 }
 
+void KarambaIface::hideSystemTray(bool hide)
+{
+  karambaApp->hideSysTray(hide);
+}
 
-
-
+void KarambaIface::showThemeDialog()
+{
+  karambaApp->showThemeDialog();
+}

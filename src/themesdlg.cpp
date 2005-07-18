@@ -50,7 +50,7 @@ ThemesDlg::ThemesDlg(QWidget *parent, const char *name)
 
 ThemesDlg::~ThemesDlg()
 {
-  kdDebug() << k_funcinfo << endl;
+  //kdDebug() << k_funcinfo << endl;
   saveUserAddedThemes();
   delete mNewStuff;
 }
@@ -219,23 +219,6 @@ void ThemesDlg::selectionChanged(int index)
       w->buttonGo->show();
 }
 
-void ThemesDlg::quitSuperKaramba()
-{
-  kdDebug() << k_funcinfo << endl;
-
-  saveUserAddedThemes();
-
-  KarambaApplication* app = karambaApp;
-  QStringList apps = app->getKarambas();
-  QStringList::Iterator it;
-
-  for (it = apps.begin(); it != apps.end(); ++it)
-  {
-    dcopIface_stub dcop((*it).ascii(), app->dcopIface()->objId());
-    dcop.quit();
-  }
-}
-
 int ThemesDlg::themeIndex(QString file)
 {
   ThemeWidget* w;
@@ -263,18 +246,23 @@ int ThemesDlg::addThemeToList(const QString &file)
 int ThemesDlg::addTheme(const QString& , const QString &file)
 {
   int i = addThemeToList(file);
+  int result = -1;
+
   ThemeWidget* w = static_cast<ThemeWidget*>(tableThemes->item(i));
   if(w)
-    return w->addInstance();
-  return -1;
+    result = w->addInstance();
+  karambaApp->buildToolTip();
+  return result;
 }
 
 void ThemesDlg::removeTheme(const QString&, const QString& file, int instance)
 {
   int i = themeIndex(file);
+
   ThemeWidget* w = static_cast<ThemeWidget*>(tableThemes->item(i));
   if(w)
-    return w->removeInstance(instance);
+    w->removeInstance(instance);
+  karambaApp->buildToolTip();
 }
 
 void ThemesDlg::search(const QString&)
@@ -321,6 +309,21 @@ void ThemesDlg::uninstall()
     trash = KGlobalSettings::trashPath();
   KIO::move(theme, trash);
   tableThemes->removeItem(w);
+}
+
+QStringList ThemesDlg::runningThemes()
+{
+  QStringList list;
+  ThemeWidget* w;
+
+  for(uint i = 2; i < tableThemes->count(); ++i)
+  {
+    w = static_cast<ThemeWidget*>(tableThemes->item(i));
+
+    if(w->instances() > 0)
+      list.append(w->themeFile()->name());
+  }
+  return list;
 }
 
 #include "themesdlg.moc"

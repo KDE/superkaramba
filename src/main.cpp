@@ -115,12 +115,10 @@ int main(int argc, char **argv)
     if(!mainAppId.isEmpty())
     {
       app.initDcopStub(mainAppId.ascii());
-      app.setupKaramba(mainAppId.ascii());
     }
     else
     {
       //Set up systray icon
-      //if(args->isSet("systray"))
       app.setUpSysTray();
       app.initDcopStub();
     }
@@ -140,8 +138,7 @@ int main(int argc, char **argv)
       {
         //No themes given on command line and no saved session.
         //Show welcome dialog.
-        if(mainAppId.isEmpty())
-          app.showWelcomeDialog();
+        app.globalShowThemeDialog();
       }
     }
 

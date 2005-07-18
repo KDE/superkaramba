@@ -22,12 +22,13 @@ k_dcop:
     virtual ASYNC openTheme(QString file) = 0;
     virtual ASYNC closeTheme(QString name) = 0;
     virtual ASYNC quit() = 0;
+    virtual ASYNC hideSystemTray(bool hide) = 0;
+    virtual ASYNC showThemeDialog() = 0;
 
     virtual int themeAdded(QString appId, QString file) = 0;
     virtual ASYNC themeClosed(QString appId, QString file, int instance) = 0;
     virtual bool isMainKaramba() = 0;
-  
-    virtual void hideSystemTray(bool hide) = 0;
+
 };
 
 #endif // DCOPINTERFACE_H

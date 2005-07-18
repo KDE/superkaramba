@@ -39,9 +39,8 @@ class ThemesDlg : public ThemesLayout
     int addTheme(const QString &appId, const QString &file);
     void removeTheme(const QString &appId, const QString &file, int instance);
     int addThemeToList(const QString &file);
-
-  public slots:
-    virtual void quitSuperKaramba();
+    void saveUserAddedThemes();
+    QStringList runningThemes();
 
   protected slots:
     virtual void addToDesktop();
@@ -55,7 +54,6 @@ class ThemesDlg : public ThemesLayout
     static bool filter(int index, QWidget* widget, void* data);
     void populateListbox();
     int themeIndex(QString file);
-    void saveUserAddedThemes();
     QStringList themes();
 
   private:

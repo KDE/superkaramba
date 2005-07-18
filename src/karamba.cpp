@@ -783,7 +783,7 @@ void karamba::makePassive()
 {
   if(managed)
     return;
-  
+
   QObject *meter;
   for (meter = meterList->first(); meter; meter = meterList->next())
   {
@@ -1892,18 +1892,6 @@ int DesktopChangeSlot::menuId()
   return menuid;
 }
 
-void karamba::slotToggleSystemTray()
-{
-  //qDebug("karamba::slotToggleSystemTray");
-  karambaApp->hideSysTray(karambaApp->sysTrayIconShown());
-}
-
-void karamba::slotQuit()
-{
-  //qDebug("karamba::slotQuit");
-  karambaApp->quitSuperKaramba();
-}
-
 void karamba::showMenuExtension()
 {
   kglobal = new KPopupMenu(this);
@@ -1941,10 +1929,19 @@ void karamba::hideMenuExtension()
   }
 }
 
+void karamba::slotToggleSystemTray()
+{
+  karambaApp->globalHideSysTray(karambaApp->sysTrayIconShown());
+}
+
+void karamba::slotQuit()
+{
+  karambaApp->globalQuitSuperKaramba();
+}
+
 void karamba::slotShowTheme()
 {
-  //qDebug("karamba::slotShowTheme");
-  karambaApp->showWelcomeDialog();
+  karambaApp->globalShowThemeDialog();
 }
 
 #include "karamba.moc"

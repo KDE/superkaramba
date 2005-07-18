@@ -28,12 +28,12 @@ public slots:
   virtual void openTheme(QString filename);
   virtual void closeTheme(QString name);
   virtual void quit();
+  virtual void hideSystemTray(bool show);
+  virtual void showThemeDialog();
 
   virtual int themeAdded(QString appId, QString file);
   virtual void themeClosed(QString appId, QString file, int instance);
   virtual bool isMainKaramba();
-  
-  virtual void hideSystemTray(bool show);
 };
 
 #endif // KARAMBAINTERFACE_H

@@ -36,51 +36,57 @@ class dcopIface_stub;
 
 class KarambaApplication : public KApplication
 {
-  Q_OBJECT
+    Q_OBJECT
 
-private:
-  static int fd;
-  void showKarambaMenuExtension(bool show = true);
-  void setToolTip(const QString &tip = QString::null);
+    friend class KarambaIface;
 
-protected:
-  KarambaIface* iface;
-  ThemesDlg* themeListWindow;
-  dcopIface_stub* dcopIfaceStub;
-  QObjectList *karambaList;
-  KSystemTray* sysTrayIcon;
+  private:
+    static int fd;
+    void showKarambaMenuExtension(bool show = true);
+    void setToolTip(const QString &tip = QString::null);
 
-public:
-  KarambaApplication();
-  ~KarambaApplication();
+  protected:
+    KarambaIface* iface;
+    ThemesDlg* themeListWindow;
+    dcopIface_stub* dcopIfaceStub;
+    QObjectList *karambaList;
+    KSystemTray* sysTrayIcon;
 
-  QString getMainKaramba();
-  void setupKaramba(QCString app);
-  QStringList getKarambas();
-  void initDcopStub(QCString app = "");
-  void setUpSysTray();
-  void checkPreviousSession(KApplication &app, QStringList &lst);
-  void checkCommandLine(KCmdLineArgs *args, QStringList &lst);
-  void showWelcomeDialog();
-  bool startThemes(QStringList &lst);
-  KarambaIface* dcopIface() { return iface; };
-  dcopIface_stub* dcopStub() { return dcopIfaceStub; };
-  QWidget* parentWindow() { return (QWidget*)themeListWindow; };
+  public:
+    KarambaApplication();
+    ~KarambaApplication();
 
-  void addKaramba(karamba* k, bool reloading = false);
-  void deleteKaramba(karamba* k, bool reloading = false);
-  bool hasKaramba(karamba* k);
+    QString getMainKaramba();
+    QStringList getKarambas();
+    void initDcopStub(QCString app = "");
+    void setUpSysTray();
+    void checkPreviousSession(KApplication &app, QStringList &lst);
+    void checkCommandLine(KCmdLineArgs *args, QStringList &lst);
+    bool startThemes(QStringList &lst);
+    KarambaIface* dcopIface() { return iface; };
+    dcopIface_stub* dcopStub() { return dcopIfaceStub; };
+    QWidget* parentWindow() { return (QWidget*)themeListWindow; };
 
-  static bool lockKaramba();
-  static void unlockKaramba();
-  static void checkSuperKarambaDir();
+    void addKaramba(karamba* k, bool reloading = false);
+    void deleteKaramba(karamba* k, bool reloading = false);
+    bool hasKaramba(karamba* k);
 
-  bool sysTrayIconShown();
+    static bool lockKaramba();
+    static void unlockKaramba();
+    static void checkSuperKarambaDir();
 
-public slots:
-  void hideSysTray(bool hide = true);
-  void buildToolTip();
-  void quitSuperKaramba();
+    bool sysTrayIconShown();
+
+  public slots:
+    void buildToolTip();
+    void globalQuitSuperKaramba();
+    void globalShowThemeDialog();
+    void globalHideSysTray(bool hide = true);
+
+  protected slots:
+    void quitSuperKaramba();
+    void showThemeDialog();
+    void hideSysTray(bool hide = true);
 };
 
 #endif // KARAMBAAPP_H
