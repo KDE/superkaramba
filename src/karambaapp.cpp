@@ -113,7 +113,7 @@ void KarambaApplication::checkSuperKarambaDir()
   }
 }
 
-void KarambaApplication::setUpSysTray(KApplication&)
+void KarambaApplication::setUpSysTray()
 {
   //Create theme list window.
   //This will function as the main window for the tray icon
@@ -139,7 +139,7 @@ void KarambaApplication::setUpSysTray(KApplication&)
 
   //Connect Systray icon's quit event
   QObject::connect(sysTrayIcon, SIGNAL(quitSelected()),
-                   themeListWindow, SLOT(quitSuperKaramba()));
+                   this, SLOT(quitSuperKaramba()));
 }
 
 void KarambaApplication::hideSysTray(bool hide)
@@ -353,6 +353,13 @@ void KarambaApplication::unlockKaramba()
     close(fd);
     fd = -1;
   }
+}
+
+void KarambaApplication::quitSuperKaramba()
+{
+  //qDebug("quitSuperKaramba called");
+
+  themeListWindow->quitSuperKaramba();
 }
 
 #include "karambaapp.moc"

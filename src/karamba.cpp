@@ -1901,7 +1901,7 @@ void karamba::slotToggleSystemTray()
 void karamba::slotQuit()
 {
   //qDebug("karamba::slotQuit");
-  exit(0);
+  karambaApp->quitSuperKaramba();
 }
 
 void karamba::showMenuExtension()

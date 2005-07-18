@@ -222,6 +222,9 @@ void ThemesDlg::selectionChanged(int index)
 void ThemesDlg::quitSuperKaramba()
 {
   kdDebug() << k_funcinfo << endl;
+
+  saveUserAddedThemes();
+
   KarambaApplication* app = karambaApp;
   QStringList apps = app->getKarambas();
   QStringList::Iterator it;

@@ -121,7 +121,7 @@ int main(int argc, char **argv)
     {
       //Set up systray icon
       //if(args->isSet("systray"))
-      app.setUpSysTray(app);
+      app.setUpSysTray();
       app.initDcopStub();
     }
 

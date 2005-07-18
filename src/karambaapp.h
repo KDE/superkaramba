@@ -37,12 +37,12 @@ class dcopIface_stub;
 class KarambaApplication : public KApplication
 {
   Q_OBJECT
-    
+
 private:
   static int fd;
   void showKarambaMenuExtension(bool show = true);
   void setToolTip(const QString &tip = QString::null);
-  
+
 protected:
   KarambaIface* iface;
   ThemesDlg* themeListWindow;
@@ -58,7 +58,7 @@ public:
   void setupKaramba(QCString app);
   QStringList getKarambas();
   void initDcopStub(QCString app = "");
-  void setUpSysTray(KApplication &app);
+  void setUpSysTray();
   void checkPreviousSession(KApplication &app, QStringList &lst);
   void checkCommandLine(KCmdLineArgs *args, QStringList &lst);
   void showWelcomeDialog();
@@ -74,12 +74,13 @@ public:
   static bool lockKaramba();
   static void unlockKaramba();
   static void checkSuperKarambaDir();
-  
+
   bool sysTrayIconShown();
-  
+
 public slots:
   void hideSysTray(bool hide = true);
   void buildToolTip();
+  void quitSuperKaramba();
 };
 
 #endif // KARAMBAAPP_H
