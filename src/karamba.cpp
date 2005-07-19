@@ -28,6 +28,7 @@
 #include "themesdlg.h"
 #include "lineparser.h"
 #include "themelocale.h"
+#include "superkarambasettings.h"
 
 #include <kdebug.h>
 #include <kmessagebox.h>
@@ -205,7 +206,7 @@ karamba::karamba(QString fn, bool reloading, int instance) :
   kpop->insertItem( SmallIconSet("fileclose"),i18n("&Close This Theme"), this,
                     SLOT(killWidget()), CTRL+Key_C );
 
-  if(!karambaApp->sysTrayIconShown())
+  if(!SuperKarambaSettings::showSysTray())
     showMenuExtension();
 
   kpop->polish();
@@ -1931,7 +1932,7 @@ void karamba::hideMenuExtension()
 
 void karamba::slotToggleSystemTray()
 {
-  karambaApp->globalHideSysTray(karambaApp->sysTrayIconShown());
+  karambaApp->globalHideSysTray(false);
 }
 
 void karamba::slotQuit()

@@ -75,8 +75,6 @@ class KarambaApplication : public KApplication
     static void unlockKaramba();
     static void checkSuperKarambaDir();
 
-    bool sysTrayIconShown();
-
   public slots:
     void buildToolTip();
     void globalQuitSuperKaramba();

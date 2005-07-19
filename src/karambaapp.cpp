@@ -121,7 +121,7 @@ void KarambaApplication::setUpSysTray()
   sysTrayIcon->setPixmap(sysTrayIcon->loadIcon("superkaramba"));
   setToolTip();
 
-  if(sysTrayIconShown())
+  if(SuperKarambaSettings::showSysTray())
     sysTrayIcon->show();
   else
     sysTrayIcon->hide();
@@ -196,13 +196,6 @@ void KarambaApplication::buildToolTip()
   toolTip += "</table>";
 
   setToolTip(toolTip);
-}
-
-bool KarambaApplication::sysTrayIconShown()
-{
-  bool showSysTrayIcon = SuperKarambaSettings::showSysTray();
-  //kdDebug() << k_funcinfo << showSysTrayIcon << endl;
-  return showSysTrayIcon;
 }
 
 void KarambaApplication::checkPreviousSession(KApplication &app,
