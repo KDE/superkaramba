@@ -40,7 +40,15 @@ ImageLabel* createImageLabel(karamba *theme, long x, long y,
   QString file;
   //QString fakefile;
 
+  //FIXME: This is an ugly hack to ensure a unique reference
+  //to add to the meterList.  It is a workaround for when a clickarea
+  //is attached to an image, the image is deleted, and a new image is
+  //created. A correct solution would be have dictionaries with a key/value
+  //pair of ints->refs.
+  ImageLabel *tmp2 = new ImageLabel(theme, x, y, 0, 0);
   ImageLabel *tmp = new ImageLabel(theme, x, y, 0, 0);
+  delete tmp2;
+  
   if(path)
   {
     file.setAscii(path);
