@@ -32,7 +32,7 @@ bool ClickArea::click( QMouseEvent *e )
             program = onClick;
         program.replace( QRegExp("%v", false), value );
 
-        if( program != "" )
+        if( !program.isEmpty())
         {
             //qDebug(program);
           KRun::runCommand(program);

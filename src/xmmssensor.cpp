@@ -52,7 +52,7 @@ void XMMSSensor::update()
         qDebug("unicode start");
         title = codec->toUnicode( QCString( xmms_remote_get_playlist_title( 0, pos ) )  );
         qDebug("unicode end");
-        if( title == "" )
+        if( title.isEmpty() )
             title = "XMMS";
 
         qDebug("Title: %s", title.ascii());

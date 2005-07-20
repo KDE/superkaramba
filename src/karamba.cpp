@@ -566,7 +566,7 @@ bool karamba::parseConfig()
         if(!file_roll.isEmpty())
           tmp->parseImages(file, file_roll, x,y, xon, yon);
         tmp->setBackground(bg);
-        if (name != "")
+        if (!name.isEmpty())
           tmp->setName(name.ascii());
         if (!tiptext.isEmpty())
           tmp->setTooltip(tiptext);
@@ -631,7 +631,7 @@ bool karamba::parseConfig()
               m_theme.locale()->translate(lineParser.getString("VALUE")));
 
           QString name = lineParser.getString("NAME");
-          if (name != "")
+          if (!name.isEmpty())
             tmp->setName(name.ascii());
 
           setSensor(lineParser, (Meter*)tmp);
@@ -665,7 +665,7 @@ bool karamba::parseConfig()
           tmp->setHeight(h);
 
           QString name = lineParser.getString("NAME");
-          if (name != "")
+          if (!name.isEmpty())
             tmp->setName(name.ascii());
 
           setSensor(lineParser, (Meter*)tmp);
@@ -678,7 +678,7 @@ bool karamba::parseConfig()
           Input *tmp = new Input(this, x, y, w, h);
 
           QString name = lineParser.getString("NAME");
-          if (name != "")
+          if (!name.isEmpty())
             tmp->setName(name.ascii());
 
           tmp->setTextProps(tmpText);
@@ -699,7 +699,7 @@ bool karamba::parseConfig()
         tmp->setMin(lineParser.getInt("MIN", 0));
         tmp->setValue(lineParser.getInt("VALUE"));
         QString name = lineParser.getString("NAME");
-        if (name != "")
+        if (!name.isEmpty())
           tmp->setName(name.ascii());
         setSensor(lineParser, (Meter*)tmp );
         meterList->append ( tmp );
@@ -713,7 +713,7 @@ bool karamba::parseConfig()
         tmp->setMax(lineParser.getInt("MAX", 100));
         tmp->setMin(lineParser.getInt("MIN", 0));
         QString name = lineParser.getString("NAME");
-        if (name != "")
+        if (!name.isEmpty())
           tmp->setName(name.ascii());
 
         tmp->setColor(lineParser.getColor("COLOR"));
@@ -988,7 +988,7 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
     // meter->setMax( ((DiskSensor*)sensor)->getTotalSpace(mntPt)/1024 );
     SensorParams *sp = new SensorParams(meter);
     QString mntPt = lineParser.getString("MOUNTPOINT");
-    if( mntPt == ""  )
+    if( mntPt.isEmpty()  )
     {
         mntPt = "/";
     }

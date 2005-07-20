@@ -38,7 +38,7 @@ void NoatunSensor::update()
     {
         title = getTitle();
 
-       if( title == "" )
+       if( title.isEmpty() )
             title = "Noatun";
         currentTime = getTime();
         if( currentTime == -1 )

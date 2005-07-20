@@ -63,7 +63,7 @@ NetworkSensor::NetworkSensor( QString dev, int interval ):Sensor( interval )
    if ((if_number == -1) && (if_gw != -1))
       if_number = if_gw;
 #else
-   if( device == "" )
+   if( device.isEmpty() )
     device = "eth0";
 #endif
      getInOutBytes(receivedBytes,transmittedBytes);

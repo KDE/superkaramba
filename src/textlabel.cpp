@@ -134,7 +134,7 @@ int TextLabel::getFontSize() const
 void TextLabel::setAlignment( QString align )
 {
     QString a = align.upper();
-    if( a == "LEFT" || a == "" )
+    if( a == "LEFT" || a.isEmpty() )
         alignment = Qt::AlignLeft;
     if( a == "RIGHT" )
         alignment = Qt::AlignRight;
@@ -355,7 +355,7 @@ bool TextLabel::click(QMouseEvent* e)
             program = rightButtonAction;
         }
 
-        if( program != "" )
+        if( !program.isEmpty() )
         {
             KRun::runCommand(program);
         }

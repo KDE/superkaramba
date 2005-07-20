@@ -400,7 +400,7 @@ bool ImageLabel::click(QMouseEvent* e)
             program = rightButtonAction;
         }
 
-        if( program != "" )
+        if( !program.isEmpty() )
         {
             KRun::runCommand(program);
         }
