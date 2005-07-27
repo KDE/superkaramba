@@ -80,7 +80,8 @@ void Systemtray::initSystray( void )
 
   kwin_module = new KWinModule();
   systemTrayWindows = kwin_module->systemTrayWindows();
-  for (QValueList<WId>::ConstIterator it = systemTrayWindows.begin(); it!=systemTrayWindows.end(); it++)
+  QValueList<WId>::ConstIterator end(systemTrayWindows.end());
+  for (QValueList<WId>::ConstIterator it = systemTrayWindows.begin(); it!=end; ++it)
   {
     no_of_systray_windows++;
     QXEmbed *emb;
