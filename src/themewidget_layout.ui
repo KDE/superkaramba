@@ -19,9 +19,6 @@
             <blue>241</blue>
         </color>
     </property>
-    <property name="caption">
-        <string>ThemeWidgetLayout</string>
-    </property>
     <hbox>
         <property name="name">
             <cstring>unnamed</cstring>
