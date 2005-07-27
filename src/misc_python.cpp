@@ -42,7 +42,7 @@ long acceptDrops(long widget)
 {
   karamba* currTheme = (karamba*)widget;
 
-  currTheme->setAcceptDrops(TRUE);
+  currTheme->setAcceptDrops(true);
 
   return 1;
 }

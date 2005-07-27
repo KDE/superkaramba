@@ -17,7 +17,7 @@ Bar::Bar(karamba* k, int x, int y, int w, int h) : Meter(k, x, y, w, h)
   minValue = 0;
   maxValue = 100;
   barValue = 0;
-  vertical = FALSE;
+  vertical = false;
 }
 
 Bar::~Bar()
