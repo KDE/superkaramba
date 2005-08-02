@@ -21,19 +21,13 @@
 #ifndef SKNEWSTUFF_H
 #define SKNEWSTUFF_H
 
-#ifdef KDE_3_3
 #include "knewstuff/knewstuff.h"
 #include "knewstuff/entry.h"
-#endif
 
 class ThemesDlg;
 class KArchiveDirectory;
 
-#ifdef KDE_3_3
 class SKNewStuff : public KNewStuff
-#else
-class SKNewStuff
-#endif
 {
   public:
     SKNewStuff( ThemesDlg * );

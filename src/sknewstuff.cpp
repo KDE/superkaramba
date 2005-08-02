@@ -33,9 +33,7 @@
 #include "sknewstuff.h"
 
 SKNewStuff::SKNewStuff( ThemesDlg *dlg ) :
-#ifdef KDE_3_3
   KNewStuff( "superkaramba/themes", dlg ),
-#endif
   mDlg( dlg )
 {
 }
