@@ -33,7 +33,9 @@
 #include "sknewstuff.h"
 
 SKNewStuff::SKNewStuff( ThemesDlg *dlg ) :
+#ifdef KDE_3_3
   KNewStuff( "superkaramba/themes", dlg ),
+#endif
   mDlg( dlg )
 {
 }
@@ -121,6 +123,7 @@ bool SKNewStuff::createUploadFile( const QString &fileName )
   return true;
 }
 
+#ifdef KDE_3_3
 QString SKNewStuff::downloadDestination( KNS::Entry *entry )
 {
   KURL source = entry->payload();
@@ -128,3 +131,4 @@ QString SKNewStuff::downloadDestination( KNS::Entry *entry )
     << source.fileName() << endl;
   return KGlobal::dirs()->saveLocation( "tmp" ) + source.fileName();
 }
+#endif

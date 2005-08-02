@@ -113,10 +113,12 @@ void ThemesDlg::populateListbox()
   item->themeName->setText(i18n("Get New Stuff"));
   item->description->setText(i18n("Download new themes."));
 
-  item->buttonGo->setEnabled(true);
   item->buttonGo->setText(i18n("New Stuff..."));
+#ifdef KDE_3_3
+  item->buttonGo->setEnabled(true);
   connect(item->buttonGo, SIGNAL(clicked()),
           this, SLOT(getNewStuff()));
+#endif
   tableThemes->insertItem(item);
 
   item = new ThemeWidget;
@@ -125,6 +127,7 @@ void ThemesDlg::populateListbox()
   item->themeName->setText(i18n("Open Local Theme"));
   item->description->setText(i18n("Add local theme to the list."));
   item->buttonGo->setProperty("stdItem", 18);
+  item->buttonGo->setText(i18n("Open..."));
   connect(item->buttonGo, SIGNAL(clicked()),
           this, SLOT(openLocalTheme()));
   tableThemes->insertItem(item);
@@ -201,7 +204,9 @@ void ThemesDlg::getNewStuff()
   {
     mNewStuff = new SKNewStuff(this);
   }
+#ifdef KDE_3_3
   mNewStuff->download();
+#endif
 }
 
 void ThemesDlg::selectionChanged(int index)

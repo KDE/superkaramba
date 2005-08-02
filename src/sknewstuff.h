@@ -21,20 +21,28 @@
 #ifndef SKNEWSTUFF_H
 #define SKNEWSTUFF_H
 
+#ifdef KDE_3_3
 #include "knewstuff/knewstuff.h"
 #include "knewstuff/entry.h"
+#endif
 
 class ThemesDlg;
 class KArchiveDirectory;
 
+#ifdef KDE_3_3
 class SKNewStuff : public KNewStuff
+#else
+class SKNewStuff
+#endif
 {
   public:
     SKNewStuff( ThemesDlg * );
 
     bool install( const QString &fileName );
     bool createUploadFile( const QString &fileName );
+#ifdef KDE_3_3
     QString downloadDestination( KNS::Entry *entry );
+#endif
 
   protected:
     void addThemes(const KArchiveDirectory *archiveDir,
