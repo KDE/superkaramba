@@ -21,6 +21,8 @@
 #ifndef SKNEWSTUFF_H
 #define SKNEWSTUFF_H
 
+#include "karambaapp.h"
+#ifdef KDE_3_3
 #include "knewstuff/knewstuff.h"
 #include "knewstuff/entry.h"
 
@@ -34,9 +36,7 @@ class SKNewStuff : public KNewStuff
 
     bool install( const QString &fileName );
     bool createUploadFile( const QString &fileName );
-#ifdef KDE_3_3
     QString downloadDestination( KNS::Entry *entry );
-#endif
 
   protected:
     void addThemes(const KArchiveDirectory *archiveDir,
@@ -46,4 +46,5 @@ class SKNewStuff : public KNewStuff
     ThemesDlg *mDlg;
 };
 
-#endif
+#endif //SKNEWSTUFF_H
+#endif //KDE_3_3

@@ -24,7 +24,11 @@
 #include "themewidget.h"
 #include "kwidgetlistbox.h"
 #include "karamba.h"
-#include "sknewstuff.h"
+
+#ifdef KDE_3_3
+  #include "sknewstuff.h"
+#endif
+
 #include "superkarambasettings.h"
 #include <kdebug.h>
 #include <kfiledialog.h>
@@ -45,14 +49,21 @@ ThemesDlg::ThemesDlg(QWidget *parent, const char *name)
  : ThemesLayout(parent, name)
 {
   populateListbox();
+#ifdef KDE_3_3
   mNewStuff = 0;
+#endif
 }
 
 ThemesDlg::~ThemesDlg()
 {
   //kdDebug() << k_funcinfo << endl;
   saveUserAddedThemes();
-  delete mNewStuff;
+#ifdef KDE_3_3
+  if(mNewStuff)
+  {
+    delete mNewStuff;
+  }
+#endif
 }
 
 void ThemesDlg::saveUserAddedThemes()
@@ -118,6 +129,8 @@ void ThemesDlg::populateListbox()
   item->buttonGo->setEnabled(true);
   connect(item->buttonGo, SIGNAL(clicked()),
           this, SLOT(getNewStuff()));
+#else
+  item->buttonGo->setEnabled(false);
 #endif
   tableThemes->insertItem(item);
 
@@ -195,6 +208,7 @@ void ThemesDlg::openLocalTheme()
 
 void ThemesDlg::getNewStuff()
 {
+#ifdef KDE_3_3
   KConfig* config = KGlobal::config();
   config->setGroup("KNewStuff");
   config->writeEntry( "ProvidersUrl", "http://download.kde.org/khotnewstuff/karamba-providers.xml" );
@@ -202,9 +216,10 @@ void ThemesDlg::getNewStuff()
 
   if ( !mNewStuff )
   {
+    qDebug("superkaramba themesdlg mNewStuff=%i",mNewStuff);
     mNewStuff = new SKNewStuff(this);
+    qDebug("superkaramba themesdlg mNewStuff=%i",mNewStuff);
   }
-#ifdef KDE_3_3
   mNewStuff->download();
 #endif
 }

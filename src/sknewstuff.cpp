@@ -29,7 +29,9 @@
 #include <qdir.h>
 #include <qfileinfo.h>
 
+#include "karambaapp.h"
 #include "themesdlg.h"
+#ifdef KDE_3_3
 #include "sknewstuff.h"
 
 SKNewStuff::SKNewStuff( ThemesDlg *dlg ) :
@@ -121,7 +123,6 @@ bool SKNewStuff::createUploadFile( const QString &fileName )
   return true;
 }
 
-#ifdef KDE_3_3
 QString SKNewStuff::downloadDestination( KNS::Entry *entry )
 {
   KURL source = entry->payload();
@@ -129,4 +130,4 @@ QString SKNewStuff::downloadDestination( KNS::Entry *entry )
     << source.fileName() << endl;
   return KGlobal::dirs()->saveLocation( "tmp" ) + source.fileName();
 }
-#endif
+#endif //KDE_3_3
