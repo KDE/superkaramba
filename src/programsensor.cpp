@@ -15,7 +15,7 @@ ProgramSensor::ProgramSensor(const QString &progName, int interval, QString enco
 {
      if( !encoding.isEmpty())
     {
-        codec = QTextCodec::codecForName( encoding );
+        codec = QTextCodec::codecForName( encoding.ascii() );
         if ( codec == 0)
             codec = QTextCodec::codecForLocale();
     }

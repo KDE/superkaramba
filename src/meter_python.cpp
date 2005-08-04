@@ -149,7 +149,7 @@ PyObject* py_getThemeMeter(PyObject *, PyObject *args, QString type)
   if(!name)
     return NULL;
   meter = getMeter(widget, name);
-  if (!checkMeter(widget, meter, type))
+  if (!checkMeter(widget, meter, type.ascii()))
     return NULL;
   return (Py_BuildValue((char*)"l", meter));
 }
@@ -160,7 +160,7 @@ PyObject* py_getSize(PyObject *, PyObject *args, QString type)
   long meter;
   if (!PyArg_ParseTuple(args, (char*)"ll", &widget, &meter))
     return NULL;
-  if (!checkKarambaAndMeter(widget, meter, type))
+  if (!checkKarambaAndMeter(widget, meter, type.ascii()))
     return NULL;
   return Py_BuildValue((char*)"(i,i)", ((Meter*)meter)->getWidth(),
                                 ((Meter*)meter)->getHeight());
@@ -171,7 +171,7 @@ PyObject* py_resize(PyObject *, PyObject *args, QString type)
   long widget, meter, x, y;
   if (!PyArg_ParseTuple(args, (char*)"llll", &widget, &meter, &x, &y))
     return NULL;
-  if (!checkKarambaAndMeter(widget, meter, type))
+  if (!checkKarambaAndMeter(widget, meter, type.ascii()))
     return NULL;
   ((Meter*)meter)->setSize(((Meter*)meter)->getX(), ((Meter*)meter)->getY(),
                            x, y);
@@ -183,7 +183,7 @@ PyObject* py_getPos(PyObject *, PyObject *args, QString type)
   long widget, meter;
   if (!PyArg_ParseTuple(args, (char*)"ll", &widget, &meter))
     return NULL;
-  if (!checkKarambaAndMeter(widget, meter, type))
+  if (!checkKarambaAndMeter(widget, meter, type.ascii()))
     return NULL;
   return Py_BuildValue((char*)"(i,i)", ((Meter*)meter)->getX(),
                                 ((Meter*)meter)->getY());
@@ -194,7 +194,7 @@ PyObject* py_move(PyObject *, PyObject *args, QString type)
   long widget, meter, x, y;
   if (!PyArg_ParseTuple(args, (char*)"llll", &widget, &meter, &x, &y))
     return NULL;
-  if (!checkKarambaAndMeter(widget, meter, type))
+  if (!checkKarambaAndMeter(widget, meter, type.ascii()))
     return NULL;
   ((Meter*)meter)->setSize(x, y,
                            ((Meter*)meter)->getWidth(),
@@ -207,7 +207,7 @@ PyObject* py_hide(PyObject *, PyObject *args, QString type)
   long widget, meter;
   if (!PyArg_ParseTuple(args, (char*)"ll", &widget, &meter))
     return NULL;
-  if (!checkKarambaAndMeter(widget, meter, type))
+  if (!checkKarambaAndMeter(widget, meter, type.ascii()))
     return NULL;
   ((Meter*)meter)->hide();
   return Py_BuildValue((char*)"l", 1);
@@ -218,7 +218,7 @@ PyObject* py_show(PyObject *, PyObject *args, QString type)
   long widget, meter;
   if (!PyArg_ParseTuple(args, (char*)"ll", &widget, &meter))
     return NULL;
-  if (!checkKarambaAndMeter(widget, meter, type))
+  if (!checkKarambaAndMeter(widget, meter, type.ascii()))
     return NULL;
   ((Meter*)meter)->show();
   return Py_BuildValue((char*)"l", 1);
@@ -229,7 +229,7 @@ PyObject* py_getValue(PyObject *, PyObject *args, QString type)
   long widget, meter;
   if (!PyArg_ParseTuple(args, (char*)"ll", &widget, &meter))
     return NULL;
-  if (!checkKarambaAndMeter(widget, meter, type))
+  if (!checkKarambaAndMeter(widget, meter, type.ascii()))
     return NULL;
   return Py_BuildValue((char*)"l", ((Meter*)meter)->getValue());
 }
@@ -239,7 +239,7 @@ PyObject* py_setValue(PyObject *, PyObject *args, QString type)
   long widget, meter, l;
   if (!PyArg_ParseTuple(args, (char*)"lll", &widget, &meter, &l))
     return NULL;
-  if (!checkKarambaAndMeter(widget, meter, type))
+  if (!checkKarambaAndMeter(widget, meter, type.ascii()))
     return NULL;
   ((Meter*)meter)->setValue(l);
   return Py_BuildValue((char*)"l", ((long)meter));
@@ -250,7 +250,7 @@ PyObject* py_getStringValue(PyObject *, PyObject *args, QString type)
   long widget, meter;
   if (!PyArg_ParseTuple(args, (char*)"ll", &widget, &meter))
     return NULL;
-  if (!checkKarambaAndMeter(widget, meter, type))
+  if (!checkKarambaAndMeter(widget, meter, type.ascii()))
     return NULL;
   return Py_BuildValue((char*)"O",
       QString2PyString(((Meter*)meter)->getStringValue()));
@@ -264,7 +264,7 @@ PyObject* py_setStringValue(PyObject *, PyObject *args, QString type)
     return NULL;
   if (!s)
     return NULL;
-  if (!checkKarambaAndMeter(widget, meter, type))
+  if (!checkKarambaAndMeter(widget, meter, type.ascii()))
     return NULL;
   ((Meter*)meter)->setValue(PyString2QString(s));
   return Py_BuildValue((char*)"l", ((long)meter));
@@ -275,7 +275,7 @@ PyObject* py_getMinMax(PyObject *, PyObject *args, QString type)
   long widget, meter;
   if (!PyArg_ParseTuple(args, (char*)"ll", &widget, &meter))
     return NULL;
-  if (!checkKarambaAndMeter(widget, meter, type))
+  if (!checkKarambaAndMeter(widget, meter, type.ascii()))
     return NULL;
   return Py_BuildValue((char*)"(i,i)", ((Meter*)meter)->getMin(),
                                 ((Meter*)meter)->getMax());
@@ -286,7 +286,7 @@ PyObject* py_setMinMax(PyObject *, PyObject *args, QString type)
   long widget, meter, x, y;
   if (!PyArg_ParseTuple(args, (char*)"llll", &widget, &meter, &x, &y))
     return NULL;
-  if (!checkKarambaAndMeter(widget, meter, type))
+  if (!checkKarambaAndMeter(widget, meter, type.ascii()))
     return NULL;
   ((Meter*)meter)->setMin(x);
   ((Meter*)meter)->setMax(y);
@@ -299,7 +299,7 @@ PyObject* py_getSensor(PyObject *, PyObject *args, QString type)
   QString s;
   if (!PyArg_ParseTuple(args, (char*)"ll", &widget, &meter))
     return NULL;
-  if (!checkKarambaAndMeter(widget, meter, type))
+  if (!checkKarambaAndMeter(widget, meter, type.ascii()))
     return NULL;
   return Py_BuildValue((char*)"s",
                        ((karamba*)widget)->getSensor((Meter*)meter).ascii());
@@ -312,7 +312,7 @@ PyObject* py_setSensor(PyObject *, PyObject *args, QString type)
 
   if (!PyArg_ParseTuple(args, (char*)"lls", &widget, &meter, &s))
     return NULL;
-  if (!checkKarambaAndMeter(widget, meter, type))
+  if (!checkKarambaAndMeter(widget, meter, type.ascii()))
     return NULL;
   ((karamba*)widget)->setSensor(LineParser(s), (Meter*)meter);
   return Py_BuildValue((char*)"l", 1);
@@ -324,7 +324,7 @@ PyObject* py_setColor(PyObject *, PyObject *args, QString type)
   long r, g, b;
   if (!PyArg_ParseTuple(args, (char*)"lllll", &widget, &meter, &r, &g, &b))
     return NULL;
-  if (!checkKarambaAndMeter(widget, meter, type))
+  if (!checkKarambaAndMeter(widget, meter, type.ascii()))
     return NULL;
   ((Meter*)meter)->setColor(QColor(r, g, b));
   return Py_BuildValue((char*)"l", 1);
@@ -335,7 +335,7 @@ PyObject* py_getColor(PyObject *, PyObject *args, QString type)
   long widget, meter;
   if (!PyArg_ParseTuple(args, (char*)"ll", &widget, &meter))
     return NULL;
-  if (!checkKarambaAndMeter(widget, meter, type))
+  if (!checkKarambaAndMeter(widget, meter, type.ascii()))
     return NULL;
   QColor color = ((Meter*)meter)->getColor();
   return Py_BuildValue((char*)"(i,i,i)", color.red(), color.green(), color.blue());

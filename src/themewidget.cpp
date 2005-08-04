@@ -39,9 +39,9 @@ ThemeWidget::ThemeWidget(ThemeFile* tf)
   if(!m_themeFile->version().isEmpty())
     version = " - " + m_themeFile->version();
   themeName->setText(
-      m_themeFile->locale()->translate(m_themeFile->name()) + version);
+      m_themeFile->locale()->translate(m_themeFile->name().ascii()) + version);
   description->setText(
-      m_themeFile->locale()->translate(m_themeFile->description()));
+      m_themeFile->locale()->translate(m_themeFile->description().ascii()));
   running->setText("");
   buttonGo->hide();
 }

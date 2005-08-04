@@ -28,7 +28,7 @@ RssSensor::RssSensor( const QString &src, int interval, const QString &form, con
 
     if( !encoding.isEmpty() )
     {
-        codec = QTextCodec::codecForName( encoding );
+        codec = QTextCodec::codecForName( encoding.ascii() );
         if ( codec == 0)
             codec = QTextCodec::codecForLocale();
     }

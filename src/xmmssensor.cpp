@@ -18,7 +18,7 @@ XMMSSensor::XMMSSensor( int interval, const QString &encoding )
 {
      if( !encoding.isEmpty() )
     {
-        codec = QTextCodec::codecForName( encoding );
+        codec = QTextCodec::codecForName( encoding.ascii() );
         if ( codec == 0)
             codec = QTextCodec::codecForLocale();
     }
