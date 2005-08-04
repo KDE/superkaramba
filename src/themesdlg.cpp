@@ -216,9 +216,7 @@ void ThemesDlg::getNewStuff()
 
   if ( !mNewStuff )
   {
-    qDebug("superkaramba themesdlg mNewStuff=%i",mNewStuff);
     mNewStuff = new SKNewStuff(this);
-    qDebug("superkaramba themesdlg mNewStuff=%i",mNewStuff);
   }
   mNewStuff->download();
 #endif
