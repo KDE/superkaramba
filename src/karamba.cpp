@@ -72,7 +72,8 @@ karamba::karamba(QString fn, bool reloading, int instance) :
     return;
   }
   kdDebug() << "Starting theme: " << m_theme.name() << endl;
-  setName("karamba - " + m_theme.name());
+  QString qName = "karamba - " + m_theme.name();
+  setName(qName.ascii());
 
   //Add self to list of open themes
   karambaApp->addKaramba(this, reloading);
@@ -628,7 +629,7 @@ bool karamba::parseConfig()
           TextLabel *tmp = new TextLabel(this, x, y, w, h );
           tmp->setTextProps(tmpText);
           tmp->setValue(
-              m_theme.locale()->translate(lineParser.getString("VALUE")));
+              m_theme.locale()->translate(lineParser.getString("VALUE").ascii()));
 
           QString name = lineParser.getString("NAME");
           if (!name.isEmpty())
@@ -659,7 +660,7 @@ bool karamba::parseConfig()
           bool dUl = lineParser.getBoolean("UNDERLINE");
 
           tmp->setText(
-              m_theme.locale()->translate(lineParser.getString("VALUE")), dUl);
+              m_theme.locale()->translate(lineParser.getString("VALUE").ascii()), dUl);
           tmp->setTextProps( tmpText );
           tmp->setWidth(w);
           tmp->setHeight(h);
@@ -683,7 +684,7 @@ bool karamba::parseConfig()
 
           tmp->setTextProps(tmpText);
           tmp->setValue(
-              m_theme.locale()->translate(lineParser.getString("VALUE")));
+              m_theme.locale()->translate(lineParser.getString("VALUE").ascii()));
 
           meterList->append(tmp);
           passive = false;
@@ -693,7 +694,7 @@ bool karamba::parseConfig()
       if(lineParser.meter() == "BAR")
       {
         Bar *tmp = new Bar(this, x, y, w, h );
-        tmp->setImage(lineParser.getString("PATH"));
+        tmp->setImage(lineParser.getString("PATH").ascii());
         tmp->setVertical(lineParser.getBoolean("VERTICAL"));
         tmp->setMax(lineParser.getInt("MAX", 100));
         tmp->setMin(lineParser.getInt("MIN", 0));
@@ -947,7 +948,7 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
     }
     SensorParams *sp = new SensorParams(meter);
     sp->addParam("FORMAT",
-                 m_theme.locale()->translate(lineParser.getString("FORMAT")));
+                 m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
     sp->addParam("DECIMALS",lineParser.getString("DECIMALS"));
 
     sensor->addMeter(sp);
@@ -967,7 +968,7 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
     }
     SensorParams *sp = new SensorParams(meter);
     sp->addParam("FORMAT",
-        m_theme.locale()->translate(lineParser.getString("FORMAT")));
+        m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
 
     sensor->addMeter(sp);
     sensor->setMaxValue(sp);
@@ -1000,7 +1001,7 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
     }
     sp->addParam("MOUNTPOINT",mntPt);
     sp->addParam("FORMAT",
-                 m_theme.locale()->translate(lineParser.getString("FORMAT")));
+                 m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
     sensor->addMeter(sp);
     sensor->setMaxValue(sp);
   }
@@ -1019,7 +1020,7 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
     }
     SensorParams *sp = new SensorParams(meter);
     sp->addParam("FORMAT",
-                 m_theme.locale()->translate(lineParser.getString("FORMAT")));
+                 m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
     sp->addParam("DECIMALS", lineParser.getString("DECIMALS"));
     sensor->addMeter(sp);
   }
@@ -1037,7 +1038,7 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
     }
     SensorParams *sp = new SensorParams(meter);
     sp->addParam("FORMAT",
-                 m_theme.locale()->translate(lineParser.getString("FORMAT")));
+                 m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
     sensor->addMeter(sp);
   }
 
@@ -1053,7 +1054,7 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
     }
     SensorParams *sp = new SensorParams(meter);
     sp->addParam("FORMAT",
-                 m_theme.locale()->translate(lineParser.getString("FORMAT")));
+                 m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
     sp->addParam("TYPE", lineParser.getString("TYPE"));
     sensor->addMeter(sp);
   }
@@ -1093,7 +1094,7 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
     }
     SensorParams *sp = new SensorParams(meter);
     sp->addParam("FORMAT",
-                 m_theme.locale()->translate(lineParser.getString("FORMAT")));
+                 m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
     sp->addParam("CALWIDTH",lineParser.getString("CALWIDTH"));
     sp->addParam("CALHEIGHT",lineParser.getString("CALHEIGHT"));
     sensor->addMeter(sp);
@@ -1115,7 +1116,7 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
     }
     SensorParams *sp = new SensorParams(meter);
     sp->addParam("FORMAT",
-                 m_theme.locale()->translate(lineParser.getString("FORMAT")));
+                 m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
     sensor->addMeter(sp);
     sensor->setMaxValue(sp);
   }
@@ -1134,7 +1135,7 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
     }
     SensorParams *sp = new SensorParams(meter);
     sp->addParam("FORMAT",
-                 m_theme.locale()->translate(lineParser.getString("FORMAT")));
+                 m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
     sensor->addMeter(sp);
     sensor->setMaxValue(sp);
   }
@@ -1163,7 +1164,7 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
   {
     QString source = lineParser.getString("SOURCE");
     QString format =
-        m_theme.locale()->translate(lineParser.getString("FORMAT"));
+        m_theme.locale()->translate(lineParser.getString("FORMAT").ascii());
 
     sensor = sensorMap["RSS"+source];
     if (sensor == 0)
@@ -1647,10 +1648,10 @@ void karamba::addMenuConfigOption(QString key, QString name)
   kpop -> setItemEnabled(THEMECONF, true);
 
   SignalBridge* action = new SignalBridge(this, key, menuAccColl);
-  KToggleAction* confItem = new KToggleAction (name, KShortcut::null(),
+  KToggleAction* confItem = new KToggleAction (name.ascii(), KShortcut::null(),
                                                action, SLOT(receive()),
-                                               menuAccColl, key);
-  confItem -> setName(key);
+                                               menuAccColl, key.ascii());
+  confItem -> setName(key.ascii());
 
   menuAccColl -> insert(confItem);
 
@@ -1668,7 +1669,7 @@ void karamba::addMenuConfigOption(QString key, QString name)
 bool karamba::setMenuConfigOption(QString key, bool value)
 {
   //qDebug("karamba::setMenuConfigOption");
-  KToggleAction* menuAction = ((KToggleAction*)menuAccColl -> action(key));
+  KToggleAction* menuAction = ((KToggleAction*)menuAccColl -> action(key.ascii()));
   if (menuAction == NULL)
   {
     qWarning("Menu action %s not found.", key.ascii());
@@ -1684,7 +1685,7 @@ bool karamba::setMenuConfigOption(QString key, bool value)
 bool karamba::readMenuConfigOption(QString key)
 {
   //qDebug("karamba::readMenuConfigOption");
-  KToggleAction* menuAction = ((KToggleAction*)menuAccColl -> action(key));
+  KToggleAction* menuAction = ((KToggleAction*)menuAccColl -> action(key.ascii()));
   if (menuAction == NULL)
   {
     qWarning("Menu action %s not found.", key.ascii());
@@ -1857,9 +1858,9 @@ void karamba::toggleWidgetUpdate( bool b)
 }
 
 SignalBridge::SignalBridge(QObject* parent, QString name, KActionCollection* ac)
-  : QObject(parent, name), collection(ac)
+  : QObject(parent, name.ascii()), collection(ac)
 {
-  setName(name);
+  setName(name.ascii());
 }
 
 void SignalBridge::receive()
