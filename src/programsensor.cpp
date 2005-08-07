@@ -47,7 +47,8 @@ void ProgramSensor::processExited(KProcess *)
     Meter *meter;
     QValueVector<QString> lines;
     QStringList stringList = QStringList::split('\n',sensorResult,true);
-    for ( QStringList::Iterator it = stringList.begin(); it != stringList.end(); ++it )
+    QStringList::ConstIterator end( stringList.end() );
+    for ( QStringList::ConstIterator it = stringList.begin(); it != end; ++it )
     {
         lines.push_back(*it);
     }

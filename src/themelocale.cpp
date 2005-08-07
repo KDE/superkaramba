@@ -206,7 +206,8 @@ QStringList ThemeLocale::languageList()
   }
   languageList += langs;
   // Remove empty strings
-  for(QStringList::Iterator it=languageList.begin(); it!=languageList.end();)
+  QStringList::Iterator end( languageList.end() );
+  for(QStringList::Iterator it=languageList.begin(); it!=end;)
   {
     if((*it).isEmpty())
       it = languageList.remove(it);

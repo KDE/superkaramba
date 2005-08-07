@@ -63,7 +63,8 @@ TaskManager::TaskManager(QObject *parent, const char *name)
 
     // register existing windows
     const QValueList<WId> windows = kwin_module->windows();
-    for (QValueList<WId>::ConstIterator it = windows.begin(); it != windows.end(); ++it )
+    QValueList<WId>::ConstIterator end( windows.end() );
+    for (QValueList<WId>::ConstIterator it = windows.begin(); it != end; ++it )
   windowAdded(*it);
 
     // set active window

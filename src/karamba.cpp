@@ -875,9 +875,9 @@ void karamba::editScript()
 QString karamba::findSensorFromMap(Sensor* sensor)
 {
   //qDebug("karamba::findSensorFromMap");
-  QMap<QString,Sensor*>::Iterator it;
-
-  for ( it = sensorMap.begin(); it != sensorMap.end(); ++it )
+  QMap<QString,Sensor*>::ConstIterator it;
+  QMap<QString,Sensor*>::ConstIterator end( sensorMap.end() );
+  for ( it = sensorMap.begin(); it != end; ++it )
   {
     if (it.data() == sensor)
       return it.key();

@@ -77,7 +77,8 @@ void ThemesDlg::saveUserAddedThemes()
   while(it != t.end())
   {
     remove = false;
-    for(QStringList::Iterator jt = dirs.begin(); jt != dirs.end(); ++jt)
+    QStringList::Iterator jtend( dirs.end() );
+    for(QStringList::Iterator jt = dirs.begin(); jt != jtend; ++jt)
     {
       if(QFileInfo(*it).dir().path() + "/" == *jt)
       {
@@ -147,7 +148,8 @@ void ThemesDlg::populateListbox()
 
   dirs = ksd.findDirs("data", QString(kapp->name()) + "/themes");
   // Get custom dirs from config here?
-  for(QStringList::Iterator it = dirs.begin(); it != dirs.end(); ++it )
+  QStringList::Iterator itend( dirs.end() );
+  for(QStringList::Iterator it = dirs.begin(); it != itend; ++it )
   {
     dir.setPath(*it);
     t = dir.entryList("*.skz; *.theme");

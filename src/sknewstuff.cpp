@@ -45,7 +45,8 @@ void SKNewStuff::addThemes(const KArchiveDirectory *archiveDir,
 {
   QStringList entries = archiveDir->entries();
 
-  for(QStringList::Iterator it = entries.begin(); it != entries.end(); ++it)
+  QStringList::Iterator end( entries.end() );
+  for(QStringList::Iterator it = entries.begin(); it != end; ++it)
   {
     if(archiveDir->entry(*it)->isDirectory())
     {
