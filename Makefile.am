@@ -21,3 +21,7 @@ EXTRA_DIST = admin COPYING configure.in.in
 dist-hook:
 	cd $(top_distdir) && perl admin/am_edit -padmin
 	cd $(top_distdir) && $(MAKE) -f admin/Makefile.common subdirs
+
+
+include $(top_srcdir)/admin/Doxyfile.am
+
