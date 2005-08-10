@@ -1,21 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=SuperKaramba
-Name[sv]=Superkaramba
 Exec=superkaramba %U
 Icon=superkaramba
 Type=Application
 MimeType=application/x-superkaramba
 Comment=An engine for cool desktop eyecandy.
-Comment[et]=Vahva töölaualisanduse mootor.
-Comment[fr]=Un moteur de dessin de beaux effets pour le bureau.
-Comment[pt]=Um motor para elementos no ecrã.
-Comment[sv]=Ett gränssnitt för häftigt ögongodis på skrivbordet
-Comment[tr]=Masaüstü için güzel bir araç.
 GenericName=Desktop Widgets
-GenericName[et]=Töölauavidinad
-GenericName[fr]=Éléments du bureau
-GenericName[pt]=Elementos no Ecrã
-GenericName[sv]=Skrivbordskomponenter
-GenericName[tr]=Masaüstü Parçacıkları
 DocPath=superkaramba/index.html
