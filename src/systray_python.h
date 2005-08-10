@@ -27,90 +27,90 @@
 struct _object;
 typedef _object PyObject;
 
-//****p* Systray/moveSystray
-//
-// SYNOPSIS
-//   long moveSystray(widget, x, y, w, h)
-// DESCRIPTION
-//   ??
-// ARGUMENTS
-//   * long widget -- karamba
-//   * long x -- x coordinate
-//   * long y -- y coordinate
-//   * long w -- width
-//   * long h -- height
-// RETURN VALUE
-//   1 if successful
-//***
+/** Systray/moveSystray
+*
+* SYNOPSIS
+*   long moveSystray(widget, x, y, w, h)
+* DESCRIPTION
+*   ??
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long x -- x coordinate
+*   * long y -- y coordinate
+*   * long w -- width
+*   * long h -- height
+* RETURN VALUE
+*   1 if successful
+*/
 PyObject* py_move_systray(PyObject *self, PyObject *args);
 
-//****p* Systray/showSystray
-//
-// SYNOPSIS
-//   long showSystray(widget)
-// DESCRIPTION
-//   ??
-// ARGUMENTS
-//   * long widget -- karamba
-// RETURN VALUE
-//   1 if successful
-//***
+/** Systray/showSystray
+*
+* SYNOPSIS
+*   long showSystray(widget)
+* DESCRIPTION
+*   ??
+* ARGUMENTS
+*   * long widget -- karamba
+* RETURN VALUE
+*   1 if successful
+*/
 PyObject* py_show_systray(PyObject *self, PyObject *args);
 
-//****p* Systray/hideSystray
-//
-// SYNOPSIS
-//   long hideSystray(widget)
-// DESCRIPTION
-//   ??
-// ARGUMENTS
-//   * long widget -- karamba
-// RETURN VALUE
-//   1 if successful
-//***
+/** Systray/hideSystray
+*
+* SYNOPSIS
+*   long hideSystray(widget)
+* DESCRIPTION
+*   ??
+* ARGUMENTS
+*   * long widget -- karamba
+* RETURN VALUE
+*   1 if successful
+*/
 PyObject* py_hide_systray(PyObject *self, PyObject *args);
 
-//****p* Systray/createSystray
-//
-// SYNOPSIS
-//   long createSystray(widget, x, y, w, h)
-// DESCRIPTION
-//   ??
-// ARGUMENTS
-//   * long widget -- karamba
-//   * long x -- x coordinate
-//   * long y -- y coordinate
-//   * long w -- width
-//   * long h -- height
-// RETURN VALUE
-//   1 if successful
-//***
+/** Systray/createSystray
+*
+* SYNOPSIS
+*   long createSystray(widget, x, y, w, h)
+* DESCRIPTION
+*   ??
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long x -- x coordinate
+*   * long y -- y coordinate
+*   * long w -- width
+*   * long h -- height
+* RETURN VALUE
+*   1 if successful
+*/
 PyObject* py_create_systray(PyObject *self, PyObject *args);
 
-//****p* Systray/getCurrentWindowCount
-//
-// SYNOPSIS
-//   long getCurrentWindowCount(widget)
-// DESCRIPTION
-//   ??
-// ARGUMENTS
-//   * long widget -- karamba
-// RETURN VALUE
-//   window count
-//***
+/** Systray/getCurrentWindowCount
+*
+* SYNOPSIS
+*   long getCurrentWindowCount(widget)
+* DESCRIPTION
+*   ??
+* ARGUMENTS
+*   * long widget -- karamba
+* RETURN VALUE
+*   window count
+*/
 PyObject* py_get_current_window_count(PyObject *self, PyObject *args);
 
-//****p* Systray/updateSystrayLayout
-//
-// SYNOPSIS
-//   long getCurrentWindowCount(widget)
-// DESCRIPTION
-//   ??
-// ARGUMENTS
-//   * long widget -- karamba
-// RETURN VALUE
-//   1 if successful
-//***
+/** Systray/updateSystrayLayout
+*
+* SYNOPSIS
+*   long getCurrentWindowCount(widget)
+* DESCRIPTION
+*   ??
+* ARGUMENTS
+*   * long widget -- karamba
+* RETURN VALUE
+*   1 if successful
+*/
 PyObject* py_update_systray_layout(PyObject *self, PyObject *args);
 
 #endif // SYSTRAY_PYTHON_H

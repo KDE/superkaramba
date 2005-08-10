@@ -26,409 +26,409 @@
 #ifndef INPUT_PYTHON_H
 #define INPUT_PYTHON_H
 
-//****p* InputBox/createInputBox
-//
-// SYNOPSIS
-//   long createInputBox(widget, x, y, w, h, text)
-// DESCRIPTION
-//   This creates a Input Box at x, y with width and height w, h. You need to save
-//   the return value of this function to call other functions on your Input Box
-//   field, such as changeInputBox().
-//   The karamba widget is automatically set active, to allow user interactions.
-// ARGUMENTS
-//   * long widget -- karamba
-//   * long x -- x coordinate
-//   * long y -- y coordinate
-//   * long w -- width
-//   * long h -- height
-//   * string text -- text for the Input Box
-// RETURN VALUE
-//   Pointer to new Input Box
-//***
+/** InputBox/createInputBox
+*
+* SYNOPSIS
+*   long createInputBox(widget, x, y, w, h, text)
+* DESCRIPTION
+*   This creates a Input Box at x, y with width and height w, h. You need to save
+*   the return value of this function to call other functions on your Input Box
+*   field, such as changeInputBox().
+*   The karamba widget is automatically set active, to allow user interactions.
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long x -- x coordinate
+*   * long y -- y coordinate
+*   * long w -- width
+*   * long h -- height
+*   * string text -- text for the Input Box
+* RETURN VALUE
+*   Pointer to new Input Box
+*/
 PyObject* py_createInputBox(PyObject *, PyObject *args);
 
-//****p* InputBox/deleteInputBox
-//
-// SYNOPSIS
-//   long deleteInputBox(widget, inputBox)
-// DESCRIPTION
-//   This removes a Input Box object from memory. Please do not call functions of
-//   the Input Box after calling deleteInputBox, as it does not exist anymore and that
-//   could cause crashes in some cases.
-//   The karamba widget ist automatically set passive, when no more Input Boxes are on
-//   the karamba widget.
-// ARGUMENTS
-//   * long widget -- karamba
-//   * long widget -- inputBox
-// RETURN VALUE
-//   1 if successful
-//***
+/** InputBox/deleteInputBox
+*
+* SYNOPSIS
+*   long deleteInputBox(widget, inputBox)
+* DESCRIPTION
+*   This removes a Input Box object from memory. Please do not call functions of
+*   the Input Box after calling deleteInputBox, as it does not exist anymore and that
+*   could cause crashes in some cases.
+*   The karamba widget ist automatically set passive, when no more Input Boxes are on
+*   the karamba widget.
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long widget -- inputBox
+* RETURN VALUE
+*   1 if successful
+*/
 PyObject* py_deleteInputBox(PyObject *, PyObject *args);
 
-//****p* InputBox/getThemeInputBox
-//
-// SYNOPSIS
-//   long getThemeInputBox(widget, name)
-// DESCRIPTION
-//   You can reference text in your python code that was created in the
-//   theme file. Basically, you just add a NAME= value to the INPUT line in
-//   the .theme file. Then if you want to use that object, instead of calling
-//   createInputBox, you can call this function.
-//
-//   The name you pass to the function is the same one that you gave it for
-//   the NAME= parameter in the .theme file.
-// ARGUMENTS
-//   * long widget -- karamba
-//   * string name -- name of the Input Box to get
-// RETURN VALUE
-//   Pointer to Input Box
-//***
+/** InputBox/getThemeInputBox
+*
+* SYNOPSIS
+*   long getThemeInputBox(widget, name)
+* DESCRIPTION
+*   You can reference text in your python code that was created in the
+*   theme file. Basically, you just add a NAME= value to the INPUT line in
+*   the .theme file. Then if you want to use that object, instead of calling
+*   createInputBox, you can call this function.
+*
+*   The name you pass to the function is the same one that you gave it for
+*   the NAME= parameter in the .theme file.
+* ARGUMENTS
+*   * long widget -- karamba
+*   * string name -- name of the Input Box to get
+* RETURN VALUE
+*   Pointer to Input Box
+*/
 PyObject* py_getThemeInputBox(PyObject *self, PyObject *args);
 
-//****p* InputBox/getInputBoxValue
-//
-// SYNOPSIS
-//   string getInputBoxValue(widget, inputBox)
-// DESCRIPTION
-//   Returns current Input Box text.
-// ARGUMENTS
-//   * long widget -- karamba
-//   * long inputBox -- pointer to text
-// RETURN VALUE
-//   value
-//***
+/** InputBox/getInputBoxValue
+*
+* SYNOPSIS
+*   string getInputBoxValue(widget, inputBox)
+* DESCRIPTION
+*   Returns current Input Box text.
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long inputBox -- pointer to text
+* RETURN VALUE
+*   value
+*/
 PyObject* py_getInputBoxValue(PyObject *self, PyObject *args);
 
-//****p* InputBox/changeInputBox
-//
-// SYNOPSIS
-//   long changeInputBox(widget, inputBox, value)
-// DESCRIPTION
-//   This will change the contents of a input box widget.
-// ARGUMENTS
-//   * long widget -- karamba
-//   * long text -- pointer to Input Box
-//   * long value -- new value
-// RETURN VALUE
-//   1 if successful
-//***
+/** InputBox/changeInputBox
+*
+* SYNOPSIS
+*   long changeInputBox(widget, inputBox, value)
+* DESCRIPTION
+*   This will change the contents of a input box widget.
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long text -- pointer to Input Box
+*   * long value -- new value
+* RETURN VALUE
+*   1 if successful
+*/
 PyObject* py_setInputBoxValue(PyObject *self, PyObject *args);
 
-//****p* InputBox/hideInputBox
-//
-// SYNOPSIS
-//   long hideInputBox(widget, inputBox)
-// DESCRIPTION
-//   Hides a Input Box that is visible.
-// ARGUMENTS
-//   * long widget -- karamba
-//   * long inputBox -- pointer to Input Box
-// RETURN VALUE
-//   1 if successful
-//***
+/** InputBox/hideInputBox
+*
+* SYNOPSIS
+*   long hideInputBox(widget, inputBox)
+* DESCRIPTION
+*   Hides a Input Box that is visible.
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long inputBox -- pointer to Input Box
+* RETURN VALUE
+*   1 if successful
+*/
 PyObject* py_hideInputBox(PyObject *self, PyObject *args);
 
-//****p* InputBox/showInputBox
-//
-// SYNOPSIS
-//   long showInputBox(widget, inputBox)
-// DESCRIPTION
-//   Shows Input Box that has been hidden with hideInputBox()
-// ARGUMENTS
-//   * long widget -- karamba
-//   * long inputBox -- pointer to Input Box
-// RETURN VALUE
-//   1 if successful
-//***
+/** InputBox/showInputBox
+*
+* SYNOPSIS
+*   long showInputBox(widget, inputBox)
+* DESCRIPTION
+*   Shows Input Box that has been hidden with hideInputBox()
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long inputBox -- pointer to Input Box
+* RETURN VALUE
+*   1 if successful
+*/
 PyObject* py_showInputBox(PyObject *self, PyObject *args);
 
-//****p* InputBox/getInputBoxPos
-//
-// SYNOPSIS
-//   tuple getInputBoxPos(widget, inputBox)
-// DESCRIPTION
-//   Given a reference to a Input Box object, this will return a tuple
-//   containing the x and y coordinate of a Input Box object.
-// ARGUMENTS
-//   * long widget -- karamba
-//   * long inputBox -- pointer to Input Box
-// RETURN VALUE
-//   pos
-//***
+/** InputBox/getInputBoxPos
+*
+* SYNOPSIS
+*   tuple getInputBoxPos(widget, inputBox)
+* DESCRIPTION
+*   Given a reference to a Input Box object, this will return a tuple
+*   containing the x and y coordinate of a Input Box object.
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long inputBox -- pointer to Input Box
+* RETURN VALUE
+*   pos
+*/
 PyObject* py_getInputBoxPos(PyObject *self, PyObject *args);
 
-//****p* InputBox/moveInputBox
-//
-// SYNOPSIS
-//   long moveInputBox(widget, inputBox, x, y)
-// DESCRIPTION
-//   This moves a Input Box object to a new x, y relative to your widget. In other
-//   words, (0,0) is the top corner of your widget, not the screen.
-// ARGUMENTS
-//   * long widget -- karamba
-//   * long inputBox -- pointer to Input Box
-//   * long x -- x coordinate
-//   * long y -- y coordinate
-// RETURN VALUE
-//   1 if successful
-//***
+/** InputBox/moveInputBox
+*
+* SYNOPSIS
+*   long moveInputBox(widget, inputBox, x, y)
+* DESCRIPTION
+*   This moves a Input Box object to a new x, y relative to your widget. In other
+*   words, (0,0) is the top corner of your widget, not the screen.
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long inputBox -- pointer to Input Box
+*   * long x -- x coordinate
+*   * long y -- y coordinate
+* RETURN VALUE
+*   1 if successful
+*/
 PyObject* py_moveInputBox(PyObject *self, PyObject *args);
 
-//****p* InputBox/getInputBoxSize
-//
-// SYNOPSIS
-//   tuple getInputBoxSize(widget, inputBox)
-// DESCRIPTION
-//   Given a reference to a Input Box object, this will return a tuple
-//   containing the height and width of a Input Box object.
-// ARGUMENTS
-//   * long widget -- karamba
-//   * long inputBox -- pointer to Input Box
-// RETURN VALUE
-//   size
-//***
+/** InputBox/getInputBoxSize
+*
+* SYNOPSIS
+*   tuple getInputBoxSize(widget, inputBox)
+* DESCRIPTION
+*   Given a reference to a Input Box object, this will return a tuple
+*   containing the height and width of a Input Box object.
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long inputBox -- pointer to Input Box
+* RETURN VALUE
+*   size
+*/
 PyObject* py_getInputBoxSize(PyObject *self, PyObject *args);
 
-//****p* InputBox/resizeInputBox
-//
-// SYNOPSIS
-//   long resizeInputBox(widget, inputBox, w, h)
-// DESCRIPTION
-//   This will resize Input Box to new height and width.
-// ARGUMENTS
-//   * long widget -- karamba
-//   * long inputBox -- pointer to Input Box
-//   * long w -- new width
-//   * long h -- new height
-// RETURN VALUE
-//   1 if successful
-//***
+/** InputBox/resizeInputBox
+*
+* SYNOPSIS
+*   long resizeInputBox(widget, inputBox, w, h)
+* DESCRIPTION
+*   This will resize Input Box to new height and width.
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long inputBox -- pointer to Input Box
+*   * long w -- new width
+*   * long h -- new height
+* RETURN VALUE
+*   1 if successful
+*/
 PyObject* py_resizeInputBox(PyObject *self, PyObject *args);
 
-//****p* InputBox/changeInputBoxFont
-//
-// SYNOPSIS
-//   long changeInputBoxFont(widget, inputBox, font)
-// DESCRIPTION
-//   This will change the font of a Input Box widget. InputBox is the reference to the
-//   Input Box object to change. Font is a string the the name of the font to use.
-// ARGUMENTS
-//   * long widget -- karamba
-//   * long inputBox -- pointer to inputBox
-//   * string font -- font name
-// RETURN VALUE
-//   1 if successful
-//***
+/** InputBox/changeInputBoxFont
+*
+* SYNOPSIS
+*   long changeInputBoxFont(widget, inputBox, font)
+* DESCRIPTION
+*   This will change the font of a Input Box widget. InputBox is the reference to the
+*   Input Box object to change. Font is a string the the name of the font to use.
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long inputBox -- pointer to inputBox
+*   * string font -- font name
+* RETURN VALUE
+*   1 if successful
+*/
 PyObject* py_setInputBoxFont(PyObject *, PyObject *args);
 
-//****p* InputBox/getInputBoxFont
-//
-// SYNOPSIS
-//   string getInputBoxFont(widget, inputBox)
-// DESCRIPTION
-//   Get current Input Box font name
-// ARGUMENTS
-//   * long widget -- karamba
-//   * long inputBox -- pointer to Input Box
-// RETURN VALUE
-//   font name
-//***
+/** InputBox/getInputBoxFont
+*
+* SYNOPSIS
+*   string getInputBoxFont(widget, inputBox)
+* DESCRIPTION
+*   Get current Input Box font name
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long inputBox -- pointer to Input Box
+* RETURN VALUE
+*   font name
+*/
 PyObject* py_getInputBoxFont(PyObject *, PyObject *args);
 
-//****p* InputBox/changeInputBoxFontColor
-//
-// SYNOPSIS
-//   long changeInputBoxFontColor(widget, inputBox, r, g, b)
-// DESCRIPTION
-//   This will change the color of a text of a Input Box widget.
-//   InputBox is the reference to the text object to change
-//   r, g, b are ints from 0 to 255 that represent red, green, and blue.
-// ARGUMENTS
-//   * long widget -- karamba
-//   * long inputBox -- pointer to Input Box
-//   * long red -- red component of color
-//   * long green -- green component of color
-//   * long blue -- blue component of color
-// RETURN VALUE
-//   1 if successful
-//***
+/** InputBox/changeInputBoxFontColor
+*
+* SYNOPSIS
+*   long changeInputBoxFontColor(widget, inputBox, r, g, b)
+* DESCRIPTION
+*   This will change the color of a text of a Input Box widget.
+*   InputBox is the reference to the text object to change
+*   r, g, b are ints from 0 to 255 that represent red, green, and blue.
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long inputBox -- pointer to Input Box
+*   * long red -- red component of color
+*   * long green -- green component of color
+*   * long blue -- blue component of color
+* RETURN VALUE
+*   1 if successful
+*/
 PyObject* py_setInputBoxFontColor(PyObject *, PyObject *args);
 
-//****p* InputBox/getInputBoxFontColor
-//
-// SYNOPSIS
-//   tuple getInputBoxFontColor(widget, inputBox)
-// DESCRIPTION
-//   Get current text color of a Input Box
-// ARGUMENTS
-//   * long widget -- karamba
-//   * long inputBox -- pointer to Input Box
-// RETURN VALUE
-//   (red, green, blue)
-//***
+/** InputBox/getInputBoxFontColor
+*
+* SYNOPSIS
+*   tuple getInputBoxFontColor(widget, inputBox)
+* DESCRIPTION
+*   Get current text color of a Input Box
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long inputBox -- pointer to Input Box
+* RETURN VALUE
+*   (red, green, blue)
+*/
 PyObject* py_getInputBoxFontColor(PyObject *, PyObject *args);
 
-//****p* InputBox/changeInputBoxSelectionColor
-//
-// SYNOPSIS
-//   long changeInputBoxSelectionColor(widget, inputBox, r, g, b)
-// DESCRIPTION
-//   This will change the color of the selection of a Input Box widget.
-//   InputBox is the reference to the text object to change
-//   r, g, b are ints from 0 to 255 that represent red, green, and blue.
-// ARGUMENTS
-//   * long widget -- karamba
-//   * long inputBox -- pointer to Input Box
-//   * long red -- red component of color
-//   * long green -- green component of color
-//   * long blue -- blue component of color
-// RETURN VALUE
-//   1 if successful
-//***
+/** InputBox/changeInputBoxSelectionColor
+*
+* SYNOPSIS
+*   long changeInputBoxSelectionColor(widget, inputBox, r, g, b)
+* DESCRIPTION
+*   This will change the color of the selection of a Input Box widget.
+*   InputBox is the reference to the text object to change
+*   r, g, b are ints from 0 to 255 that represent red, green, and blue.
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long inputBox -- pointer to Input Box
+*   * long red -- red component of color
+*   * long green -- green component of color
+*   * long blue -- blue component of color
+* RETURN VALUE
+*   1 if successful
+*/
 PyObject* py_setInputBoxSelectionColor(PyObject *, PyObject *args);
 
-//****p* InputBox/getInputBoxSelectionColor
-//
-// SYNOPSIS
-//   tuple getInputBoxSelectionColor(widget, inputBox)
-// DESCRIPTION
-//   Get current selection color of a Input Box
-// ARGUMENTS
-//   * long widget -- karamba
-//   * long inputBox -- pointer to Input Box
-// RETURN VALUE
-//   (red, green, blue)
-//***
+/** InputBox/getInputBoxSelectionColor
+*
+* SYNOPSIS
+*   tuple getInputBoxSelectionColor(widget, inputBox)
+* DESCRIPTION
+*   Get current selection color of a Input Box
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long inputBox -- pointer to Input Box
+* RETURN VALUE
+*   (red, green, blue)
+*/
 PyObject* py_getInputBoxSelectionColor(PyObject *, PyObject *args);
 
-//****p* InputBox/changeInputBoxBackgroundColor
-//
-// SYNOPSIS
-//   long changeInputBoxBackgroundColor(widget, inputBox, r, g, b)
-// DESCRIPTION
-//   This will change the background color of a Input Box widget.
-//   InputBox is the reference to the text object to change
-//   r, g, b are ints from 0 to 255 that represent red, green, and blue.
-// ARGUMENTS
-//   * long widget -- karamba
-//   * long inputBox -- pointer to Input Box
-//   * long red -- red component of color
-//   * long green -- green component of color
-//   * long blue -- blue component of color
-// RETURN VALUE
-//   1 if successful
-//***
+/** InputBox/changeInputBoxBackgroundColor
+*
+* SYNOPSIS
+*   long changeInputBoxBackgroundColor(widget, inputBox, r, g, b)
+* DESCRIPTION
+*   This will change the background color of a Input Box widget.
+*   InputBox is the reference to the text object to change
+*   r, g, b are ints from 0 to 255 that represent red, green, and blue.
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long inputBox -- pointer to Input Box
+*   * long red -- red component of color
+*   * long green -- green component of color
+*   * long blue -- blue component of color
+* RETURN VALUE
+*   1 if successful
+*/
 PyObject* py_setInputBoxBGColor(PyObject *, PyObject *args);
 
-//****p* InputBox/getInputBoxBackgroundColor
-//
-// SYNOPSIS
-//   tuple getInputBoxBackgroundColor(widget, inputBox)
-// DESCRIPTION
-//   Get current background color of a Input Box
-// ARGUMENTS
-//   * long widget -- karamba
-//   * long inputBox -- pointer to Input Box
-// RETURN VALUE
-//   (red, green, blue)
-//***
+/** InputBox/getInputBoxBackgroundColor
+*
+* SYNOPSIS
+*   tuple getInputBoxBackgroundColor(widget, inputBox)
+* DESCRIPTION
+*   Get current background color of a Input Box
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long inputBox -- pointer to Input Box
+* RETURN VALUE
+*   (red, green, blue)
+*/
 PyObject* py_getInputBoxBGColor(PyObject *, PyObject *args);
 
-//****p* InputBox/changeInputBoxFrameColor
-//
-// SYNOPSIS
-//   long changeInputBoxFrameColor(widget, inputBox, r, g, b)
-// DESCRIPTION
-//   This will change the frame color of a Input Box widget.
-//   InputBox is the reference to the text object to change
-//   r, g, b are ints from 0 to 255 that represent red, green, and blue.
-// ARGUMENTS
-//   * long widget -- karamba
-//   * long inputBox -- pointer to Input Box
-//   * long red -- red component of color
-//   * long green -- green component of color
-//   * long blue -- blue component of color
-// RETURN VALUE
-//   1 if successful
-//***
+/** InputBox/changeInputBoxFrameColor
+*
+* SYNOPSIS
+*   long changeInputBoxFrameColor(widget, inputBox, r, g, b)
+* DESCRIPTION
+*   This will change the frame color of a Input Box widget.
+*   InputBox is the reference to the text object to change
+*   r, g, b are ints from 0 to 255 that represent red, green, and blue.
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long inputBox -- pointer to Input Box
+*   * long red -- red component of color
+*   * long green -- green component of color
+*   * long blue -- blue component of color
+* RETURN VALUE
+*   1 if successful
+*/
 PyObject* py_setInputBoxFrameColor(PyObject *, PyObject *args);
 
-//****p* InputBox/getInputBoxFrameColor
-//
-// SYNOPSIS
-//   tuple getInputBoxFrameColor(widget, inputBox)
-// DESCRIPTION
-//   Get current frame color of a Input Box
-// ARGUMENTS
-//   * long widget -- karamba
-//   * long inputBox -- pointer to Input Box
-// RETURN VALUE
-//   (red, green, blue)
-//***
+/** InputBox/getInputBoxFrameColor
+*
+* SYNOPSIS
+*   tuple getInputBoxFrameColor(widget, inputBox)
+* DESCRIPTION
+*   Get current frame color of a Input Box
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long inputBox -- pointer to Input Box
+* RETURN VALUE
+*   (red, green, blue)
+*/
 PyObject* py_getInputBoxFrameColor(PyObject *, PyObject *args);
 
-//****p* InputBox/changeInputBoxSelectedTextColor
-//
-// SYNOPSIS
-//   long changeInputBoxSelectedTextColor(widget, inputBox, r, g, b)
-// DESCRIPTION
-//   This will change the selected text color of a Input Box widget.
-//   InputBox is the reference to the text object to change
-//   r, g, b are ints from 0 to 255 that represent red, green, and blue.
-// ARGUMENTS
-//   * long widget -- karamba
-//   * long inputBox -- pointer to Input Box
-//   * long red -- red component of color
-//   * long green -- green component of color
-//   * long blue -- blue component of color
-// RETURN VALUE
-//   1 if successful
-//***
+/** InputBox/changeInputBoxSelectedTextColor
+*
+* SYNOPSIS
+*   long changeInputBoxSelectedTextColor(widget, inputBox, r, g, b)
+* DESCRIPTION
+*   This will change the selected text color of a Input Box widget.
+*   InputBox is the reference to the text object to change
+*   r, g, b are ints from 0 to 255 that represent red, green, and blue.
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long inputBox -- pointer to Input Box
+*   * long red -- red component of color
+*   * long green -- green component of color
+*   * long blue -- blue component of color
+* RETURN VALUE
+*   1 if successful
+*/
 PyObject* py_setInputBoxSelectedTextColor(PyObject *, PyObject *args);
 
-//****p* InputBox/getInputBoxSelectedTextColor
-//
-// SYNOPSIS
-//   tuple getInputBoxSelectedTextColor(widget, inputBox)
-// DESCRIPTION
-//   Get current selected text color of a Input Box
-// ARGUMENTS
-//   * long widget -- karamba
-//   * long inputBox -- pointer to Input Box
-// RETURN VALUE
-//   (red, green, blue)
-//***
+/** InputBox/getInputBoxSelectedTextColor
+*
+* SYNOPSIS
+*   tuple getInputBoxSelectedTextColor(widget, inputBox)
+* DESCRIPTION
+*   Get current selected text color of a Input Box
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long inputBox -- pointer to Input Box
+* RETURN VALUE
+*   (red, green, blue)
+*/
 PyObject* py_getInputBoxSelectedTextColor(PyObject *, PyObject *args);
 
-//****p* InputBox/changeInputBoxFontSize
-//
-// SYNOPSIS
-//   long changeInputBoxFontSize(widget, text, size)
-// DESCRIPTION
-//   This will change the font size of a Input Box widget.
-//   InputBox is the reference to the text object to change.
-//   Size is the new font point size.
-// ARGUMENTS
-//   * long widget -- karamba
-//   * long inputBox -- pointer to Input Box
-//   * long size -- new size for text
-// RETURN VALUE
-//   1 if successful
-//***
+/** InputBox/changeInputBoxFontSize
+*
+* SYNOPSIS
+*   long changeInputBoxFontSize(widget, text, size)
+* DESCRIPTION
+*   This will change the font size of a Input Box widget.
+*   InputBox is the reference to the text object to change.
+*   Size is the new font point size.
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long inputBox -- pointer to Input Box
+*   * long size -- new size for text
+* RETURN VALUE
+*   1 if successful
+*/
 PyObject* py_setInputBoxFontSize(PyObject *, PyObject *args);
 
-//****p* InputBox/getInputBoxFontSize
-//
-// SYNOPSIS
-//   long getInputBoxFontSize(widget, inputBox)
-// DESCRIPTION
-//   Get current text font size
-// ARGUMENTS
-//   * long widget -- karamba
-//   * long inputBox -- pointer to Input Box
-// RETURN VALUE
-//   text font size
-//***
+/** InputBox/getInputBoxFontSize
+*
+* SYNOPSIS
+*   long getInputBoxFontSize(widget, inputBox)
+* DESCRIPTION
+*   Get current text font size
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long inputBox -- pointer to Input Box
+* RETURN VALUE
+*   text font size
+*/
 PyObject* py_getInputBoxFontSize(PyObject *, PyObject *args);
 
 #endif
