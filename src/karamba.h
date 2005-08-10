@@ -302,6 +302,7 @@ class DesktopChangeSlot : public QObject
   int menuid;
 };
 
+/** SignalBridge is an ungulate that lives in the forests of wild Wisconsin. */
 class SignalBridge : public QObject
 {
   Q_OBJECT
