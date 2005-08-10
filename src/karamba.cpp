@@ -254,11 +254,10 @@ karamba::karamba(QString fn, bool reloading, int instance) :
   }
 
   // Karamba specific Config Entries
-  if (!config -> readBoolEntry("lockedPosition", true))
-  {
-    toggleLocked -> setChecked(false);
-    slotToggleLocked();
-  }
+  bool locked = toggleLocked->isChecked();
+  locked = config->readBoolEntry("lockedPosition", locked);
+  toggleLocked->setChecked(locked);
+  slotToggleLocked();
 
   if (!config -> readBoolEntry("fastTransforms", true))
   {
