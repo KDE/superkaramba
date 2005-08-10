@@ -25,6 +25,12 @@
 #ifndef MISC_PYTHON_H
 #define MISC_PYTHON_H
 
+/** @file 
+*
+* These are global functions that are used to interpret
+* certain Python calls.
+*/
+
 //****p* Misc/acceptDrops
 //
 // SYNOPSIS
@@ -90,13 +96,14 @@ PyObject* py_execute_command(PyObject* self, PyObject* args);
 //***
 PyObject* py_execute_command_interactive(PyObject* self, PyObject* args);
 
-//****p* Misc/attachClickArea
-//
-// SYNOPSIS
-//   long attachClickArea(widget, meter, lB, mB, rB)
-// DESCRIPTION
+/**
 //   It is possible to attach a clickarea to a meter (image or text field),
 //   which is moved and resized correctly if the meter is moved or resized.
+//
+//   This method corresponds to the Python call
+     @code
+     long attachClickArea(widget, meter, lB, mB, rB)
+     @endcode
 //
 //   There is also a callback meterClicked(widget, meter, button) which is
 //   called whenever a meter is clicked (if something is attached to it).
@@ -113,15 +120,16 @@ PyObject* py_execute_command_interactive(PyObject* self, PyObject* args);
 //
 //   For now the command given to RightButton has obviosly no effect (because
 //   that brings up the SuperKaramba menu).
-// ARGUMENTS
-//   * long widget -- karamba
-//   * long meter -- pointer to meter
-//   * string lB -- command to left mouse button
-//   * string mB -- command to middle mouse button
-//   * string rB -- command to right mouse button
-// RETURN VALUE
-//   1 if successful
-//***
+//
+//   The Python arguments are as follows:
+//   - long widget -- karamba
+//   - long meter -- pointer to meter
+//   - string lB -- command to left mouse button
+//   - string mB -- command to middle mouse button
+//   - string rB -- command to right mouse button
+//
+// @return  1 if successful
+*/
 PyObject* py_attach_clickArea(PyObject* self, PyObject* args, PyObject* dict);
 
 //****p* Misc/toggleShowDesktop
