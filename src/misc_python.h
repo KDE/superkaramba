@@ -1,4 +1,4 @@
-/****************************************************************************
+/*
 *  misc_python.h  -  Misc Functions for python api
 *
 *  Copyright (C) 2003 Hans Karlsson <karlsson.h@home.se>
