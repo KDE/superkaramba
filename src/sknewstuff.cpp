@@ -73,6 +73,8 @@ bool SKNewStuff::install( const QString &fileName )
   const QString destDir =myStdDir.saveLocation("data", kapp->instanceName() + "/themes/", true);
   KStandardDirs::makeDir( destDir );
 
+  kdDebug() << "SKNewStuff::install() mimetype: " << result->name() << endl;
+
   if( result->name() == "application/x-gzip" ||
       result->name() == "application/x-tgz" ||
       result->name() == "application/x-bzipi2" ||
@@ -90,7 +92,8 @@ bool SKNewStuff::install( const QString &fileName )
     addThemes(archiveDir, destDir);
     archive.close();
   }
-  else if(result->name() == "application/x-zip")
+  else if(result->name() == "application/x-zip" ||
+          result->name() == "application/x-superkaramba")
   {
     kdDebug() << "SKNewStuff::install() zip mimetype encountered" << endl;
     //TODO: write a routine to check if this is a valid .skz file
