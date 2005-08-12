@@ -493,11 +493,35 @@ bool karamba::parseConfig()
         QString path = lineParser.getString("MASK");
 
         QFileInfo info(path);
-        if(info.isRelative())
-          widgetMask = new QBitmap(m_theme.readThemeFile(path));
+        QString absPath;
+        QBitmap bmMask;
+        QByteArray ba;
+        if( info.isRelative() )
+        {
+          absPath.setAscii(m_theme.path().ascii());
+          absPath.append(path.ascii());
+          ba = m_theme.readThemeFile(path);
+        }
         else
-          widgetMask = new QBitmap(path);
-        setMask(*widgetMask);
+        {
+          absPath.setAscii(path.ascii());
+          ba = m_theme.readThemeFile(info.fileName());
+        }
+        if(m_theme.isZipTheme())
+        {
+          /*
+          if( !info.isRelative() )
+            ba = m_theme.readThemeFile(info.fileName());
+          else
+            ba = m_theme.readThemeFile(path);
+          */
+          bmMask.loadFromData(ba);
+        }
+        else
+        {
+          bmMask.load(absPath);
+        }
+        setMask(bmMask);
 
         m_interval = lineParser.getInt("INTERVAL");
         m_interval = (m_interval == 0) ? 1000 : m_interval;

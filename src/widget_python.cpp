@@ -62,30 +62,31 @@ PyObject* py_get_widget_position(PyObject *, PyObject *args)
 long createWidgetMask(long widget, char* path)
 {
   karamba* currTheme = (karamba*)widget;
+  QBitmap bm;
+  QString maskpath;
+  QString rootPath;
+  rootPath.setAscii(currTheme->theme().path().ascii());
 
   currTheme->clearMask();
-
-  if (currTheme->widgetMask != 0)
-  {
-    delete currTheme->widgetMask;
-  }
-
-  QString maskpath;
+  
+  //currTheme->kroot->stop();
+  //delete currTheme->kroot;
+  
   maskpath.setAscii(path);
+  rootPath.append(maskpath.ascii());
+  if(currTheme->theme().isZipTheme())
+  {
+    QByteArray ba = currTheme->theme().readThemeFile(path);
+    bm.loadFromData(ba);
+  }
+  else
+  {
+    bm.load(rootPath);
+  }
+  currTheme->setMask(bm);
 
-  currTheme->widgetMask = new QBitmap(path);
-
-  currTheme->kroot->stop();
-  delete currTheme->kroot;
-
-  //  currTheme->setMask(*(currTheme->widgetMask));
-
-  QBitmap blah = QBitmap("/home/ageitgey/mask.png");
-  currTheme->setMask(blah);
-
-
-  currTheme->kroot = new KarambaRootPixmap((QWidget*)currTheme);
-  currTheme->kroot->start();
+  //currTheme->kroot = new KarambaRootPixmap((QWidget*)currTheme);
+  //currTheme->kroot->start();
 
   return (long)currTheme->widgetMask;
 }
