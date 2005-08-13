@@ -482,7 +482,6 @@ bool karamba::parseConfig()
 
         if(lineParser.getBoolean("LEFTBAR"))
         {
-          //int dw = QApplication::desktop()->width();
           move( 0, y );
           KWin::setStrut( winId(), w, 0, 0, 0 );
           toggleLocked->setChecked( true );
@@ -509,12 +508,6 @@ bool karamba::parseConfig()
         }
         if(m_theme.isZipTheme())
         {
-          /*
-          if( !info.isRelative() )
-            ba = m_theme.readThemeFile(info.fileName());
-          else
-            ba = m_theme.readThemeFile(path);
-          */
           bmMask.loadFromData(ba);
         }
         else
@@ -537,7 +530,6 @@ bool karamba::parseConfig()
         QFileInfo info(path);
         if( info.isRelative())
           path = m_theme.path() +"/" + path;
-        //qDebug("new theme from theme. path: " + path);
         (new karamba( path, false ))->show();
       }
 

@@ -69,11 +69,9 @@ long createWidgetMask(long widget, char* path)
 
   currTheme->clearMask();
   
-  //currTheme->kroot->stop();
-  //delete currTheme->kroot;
-  
   maskpath.setAscii(path);
   rootPath.append(maskpath.ascii());
+
   if(currTheme->theme().isZipTheme())
   {
     QByteArray ba = currTheme->theme().readThemeFile(path);
@@ -84,9 +82,6 @@ long createWidgetMask(long widget, char* path)
     bm.load(rootPath);
   }
   currTheme->setMask(bm);
-
-  //currTheme->kroot = new KarambaRootPixmap((QWidget*)currTheme);
-  //currTheme->kroot->start();
 
   return (long)currTheme->widgetMask;
 }
