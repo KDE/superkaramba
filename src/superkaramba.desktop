@@ -8,3 +8,5 @@ MimeType=application/x-superkaramba
 Comment=An engine for cool desktop eyecandy.
 GenericName=Desktop Widgets
 DocPath=superkaramba/index.html
+Categories=Qt;KDE;Utility;X-KDE-Utilities-Desktop;
+
