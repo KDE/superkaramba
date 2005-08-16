@@ -29,11 +29,11 @@ class ThemeFile;
 @author See README for the list of authors
 */
 
-struct kde_loaded_l10nfile
+struct sk_kde_loaded_l10nfile
 {
   int decided;
   const void *data;
-  kde_loaded_l10nfile() : decided(0), data(0) {}
+  sk_kde_loaded_l10nfile() : decided(0), data(0) {}
 };
 
 class ThemeLocale
@@ -49,7 +49,7 @@ class ThemeLocale
     static QStringList languageList();
 
   private:
-    kde_loaded_l10nfile m_domain;
+    sk_kde_loaded_l10nfile m_domain;
     ThemeFile* m_theme;
     QString m_language;
 

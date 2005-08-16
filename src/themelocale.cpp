@@ -109,8 +109,8 @@ struct string_desc
 };
 
 void tl_nl_load_domain(QIODevice* device, int size,
-                       struct kde_loaded_l10nfile *domain_file);
-char* tl_nl_find_msg(const struct kde_loaded_l10nfile *domain_file,
+                       struct sk_kde_loaded_l10nfile *domain_file);
+char* tl_nl_find_msg(const struct sk_kde_loaded_l10nfile *domain_file,
                      const char *msgid);
 void tl_nl_unload_domain(struct loaded_domain *domain);
 
@@ -217,7 +217,7 @@ QStringList ThemeLocale::languageList()
   return languageList;
 }
 
-char* tl_nl_find_msg (const struct kde_loaded_l10nfile *domain_file,
+char* tl_nl_find_msg (const struct sk_kde_loaded_l10nfile *domain_file,
                        const char *msgid)
 {
   size_t top, act, bottom;
@@ -331,7 +331,7 @@ hash_string (const char *str_param)
 /* Load the message catalogs specified by device.  If it is no valid
    message catalog do nothing.  */
 void tl_nl_load_domain (QIODevice* device, int size,
-                         struct kde_loaded_l10nfile *domain_file)
+                         struct sk_kde_loaded_l10nfile *domain_file)
 {
   struct mo_file_header *data = (struct mo_file_header *) -1;
   struct loaded_domain *domain;
