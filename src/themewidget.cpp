@@ -20,13 +20,16 @@
 #include "themewidget.h"
 #include "themelocale.h"
 #include <kpushbutton.h>
+#include <kdebug.h>
 #include <klocale.h>
 #include <qlabel.h>
+#include <qlayout.h>
 
 ThemeWidget::ThemeWidget(QWidget *parent, const char *name)
   : ThemeWidgetLayout(parent, name), m_themeFile(0)
 {
   running->setText("");
+  setDescriptionMaxHeight();
 }
 
 ThemeWidget::ThemeWidget(ThemeFile* tf)
@@ -44,6 +47,7 @@ ThemeWidget::ThemeWidget(ThemeFile* tf)
       m_themeFile->locale()->translate(m_themeFile->description().ascii()));
   running->setText("");
   buttonGo->hide();
+  setDescriptionMaxHeight();
 }
 
 ThemeWidget::~ThemeWidget()
@@ -74,6 +78,36 @@ void ThemeWidget::updateRunning()
     running->setText(i18n("<p align=\"center\">%1 running</p>").arg(i));
   else
     running->setText("");
+}
+
+void ThemeWidget::setDescriptionText(QString text)
+{
+  description->setText(text);
+}
+
+void ThemeWidget::setHeaderText(QString text)
+{
+  themeName->setText(text);
+}
+
+void ThemeWidget::showButton(bool show)
+{
+  if(show)
+    buttonGo->show();
+  else
+    buttonGo->hide();
+  setDescriptionMaxHeight();
+}
+
+void ThemeWidget::setDescriptionMaxHeight()
+{
+  if(layoutText->geometry().height() <= 0)
+    return;
+  int height = layoutText->geometry().height() - themeName->height() -
+               layoutText->spacing();
+  if(buttonGo->isVisible())
+    height -= layoutButton->geometry().height() + layoutText->spacing();
+  description->setMaximumHeight(height);
 }
 
 #include "themewidget.moc"

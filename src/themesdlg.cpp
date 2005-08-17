@@ -122,8 +122,8 @@ void ThemesDlg::populateListbox()
   item = new ThemeWidget;
   item->icon->setPixmap(KGlobal::iconLoader()->loadIcon("knewstuff",
                         KIcon::NoGroup, KIcon::SizeHuge));
-  item->themeName->setText(i18n("Get New Stuff"));
-  item->description->setText(i18n("Download new themes."));
+  item->setHeaderText(i18n("Get New Stuff"));
+  item->setDescriptionText(i18n("Download new themes."));
 
   item->buttonGo->setText(i18n("New Stuff..."));
 #ifdef KDE_3_3
@@ -138,8 +138,8 @@ void ThemesDlg::populateListbox()
   item = new ThemeWidget;
   item->icon->setPixmap(KGlobal::iconLoader()->loadIcon("ksysguard",
                         KIcon::NoGroup, KIcon::SizeHuge));
-  item->themeName->setText(i18n("Open Local Theme"));
-  item->description->setText(i18n("Add local theme to the list."));
+  item->setHeaderText(i18n("Open Local Theme"));
+  item->setDescriptionText(i18n("Add local theme to the list."));
   item->buttonGo->setProperty("stdItem", 18);
   item->buttonGo->setText(i18n("Open..."));
   connect(item->buttonGo, SIGNAL(clicked()),
@@ -213,7 +213,8 @@ void ThemesDlg::getNewStuff()
 #ifdef KDE_3_3
   KConfig* config = KGlobal::config();
   config->setGroup("KNewStuff");
-  config->writeEntry( "ProvidersUrl", "http://download.kde.org/khotnewstuff/karamba-providers.xml" );
+  config->writeEntry("ProvidersUrl",
+      "http://download.kde.org/khotnewstuff/karamba-providers.xml");
   config->sync();
 
   if ( !mNewStuff )
@@ -231,12 +232,12 @@ void ThemesDlg::selectionChanged(int index)
   for(uint i=2; i < tableThemes->count(); ++i)
   {
     ThemeWidget* w = static_cast<ThemeWidget*>(tableThemes->item(i));
-    w->buttonGo->hide();
+    w->showButton(false);
   }
   ThemeWidget* w = static_cast<ThemeWidget*>(tableThemes->item(index));
   ThemeFile* themeFile = w->themeFile();
   if(themeFile && themeFile->canUninstall())
-      w->buttonGo->show();
+      w->showButton(true);
 }
 
 int ThemesDlg::themeIndex(QString file)

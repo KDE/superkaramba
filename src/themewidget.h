@@ -41,8 +41,13 @@ class ThemeWidget : public ThemeWidgetLayout
     int  instances() const { return m_instancePool.count(); };
     void removeInstance(int instance);
 
+    void setDescriptionText(QString text);
+    void setHeaderText(QString text);
+    void showButton(bool show);
+
   protected:
     void updateRunning();
+    void setDescriptionMaxHeight();
 
   private:
     ThemeFile* m_themeFile;
