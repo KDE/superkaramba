@@ -94,10 +94,12 @@ int main(int argc, char **argv)
                      KAboutData::License_GPL,
                      "(C) 2003-2004 Adam Geitgey", 0, 0,
                      "adam@rootnode.org");
-    about.addAuthor( "Adam Geitgey", 0, "adam@rootnode.org" );
-    about.addAuthor( "Hans Karlsson", 0, "karlsson.h@home.se" );
+    about.addAuthor("Adam Geitgey", 0, "adam@rootnode.org");
+    about.addAuthor("Hans Karlsson", 0, "karlsson.h@home.se");
+    about.addAuthor("Ryan Nickell", 0, "p0z3r@earthlink.net");
+    about.addAuthor("Petri Damstén", 0, "petri.damsten@iki.fi");
     KCmdLineArgs::init(argc, argv, &about);
-    KCmdLineArgs::addCmdLineOptions( options );
+    KCmdLineArgs::addCmdLineOptions(options);
     KSessionManaged ksm;
     //karamba *mainWin = 0;
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
@@ -119,7 +121,7 @@ int main(int argc, char **argv)
     else
     {
       //Set up systray icon
-      app.setUpSysTray();
+      app.setUpSysTray(&about);
       app.initDcopStub();
     }
 

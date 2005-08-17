@@ -17,6 +17,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
+#include <khelpmenu.h>
 
 #include <qtooltip.h>
 
@@ -30,7 +31,8 @@
 int KarambaApplication::fd = -1;
 
 KarambaApplication::KarambaApplication() :
-    iface(0), themeListWindow(0), dcopIfaceStub(0), sysTrayIcon(0)
+    m_helpMenu(0), iface(0), themeListWindow(0), dcopIfaceStub(0),
+    sysTrayIcon(0)
 {
   iface = new KarambaIface();
   karambaList = new QObjectList();
@@ -45,6 +47,7 @@ KarambaApplication::~KarambaApplication()
   delete karambaList;
   delete themeListWindow;
   delete dcopIfaceStub;
+  delete m_helpMenu;
 }
 
 void KarambaApplication::initDcopStub(QCString app)
@@ -103,9 +106,11 @@ void KarambaApplication::checkSuperKarambaDir()
   }
 }
 
-void KarambaApplication::setUpSysTray()
+void KarambaApplication::setUpSysTray(KAboutData* about)
 {
   //kdDebug() << k_funcinfo << endl;
+  KAction* action;
+
   //Create theme list window.
   //This will function as the main window for the tray icon
   themeListWindow = new ThemesDlg();
@@ -117,6 +122,18 @@ void KarambaApplication::setUpSysTray()
   menu->insertItem(SmallIconSet("superkaramba"),
                    i18n("Hide System Tray Icon"), this,
                    SLOT(globalHideSysTray()));
+  menu->insertSeparator();
+
+  m_helpMenu = new KHelpMenu(themeListWindow, about);
+  action = KStdAction::help(m_helpMenu, SLOT(appHelpActivated()),
+                            sysTrayIcon->actionCollection());
+  action->plug(menu);
+  action = KStdAction::aboutApp(m_helpMenu, SLOT(aboutApplication()),
+                                sysTrayIcon->actionCollection());
+  action->plug(menu);
+  action = KStdAction::aboutKDE(m_helpMenu, SLOT(aboutKDE()),
+                                sysTrayIcon->actionCollection());
+  action->plug(menu);
 
   sysTrayIcon->setPixmap(sysTrayIcon->loadIcon("superkaramba"));
   setToolTip();

@@ -33,6 +33,8 @@ class KarambaIface;
 class KCmdLineArgs;
 class ThemesDlg;
 class dcopIface_stub;
+class KHelpMenu;
+class KAboutData;
 
 class KarambaApplication : public KApplication
 {
@@ -42,6 +44,8 @@ class KarambaApplication : public KApplication
 
   private:
     static int fd;
+    KHelpMenu* m_helpMenu;
+
     void showKarambaMenuExtension(bool show = true);
     void setToolTip(const QString &tip = QString::null);
 
@@ -59,7 +63,7 @@ class KarambaApplication : public KApplication
     QString getMainKaramba();
     QStringList getKarambas();
     void initDcopStub(QCString app = "");
-    void setUpSysTray();
+    void setUpSysTray(KAboutData* about);
     void checkPreviousSession(KApplication &app, QStringList &lst);
     void checkCommandLine(KCmdLineArgs *args, QStringList &lst);
     bool startThemes(QStringList &lst);
