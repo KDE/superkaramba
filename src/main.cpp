@@ -92,8 +92,7 @@ int main(int argc, char **argv)
     KAboutData about("superkaramba", I18N_NOOP("SuperKaramba"),
                      version, description,
                      KAboutData::License_GPL,
-                     "(C) 2003-2004 Adam Geitgey", 0, 0,
-                     "adam@rootnode.org");
+                     "(c) 2003-2005 The SuperKaramba developers");
     about.addAuthor("Adam Geitgey", 0, "adam@rootnode.org");
     about.addAuthor("Hans Karlsson", 0, "karlsson.h@home.se");
     about.addAuthor("Ryan Nickell", 0, "p0z3r@earthlink.net");
