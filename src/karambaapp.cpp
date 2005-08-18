@@ -32,7 +32,7 @@ int KarambaApplication::fd = -1;
 
 KarambaApplication::KarambaApplication() :
     m_helpMenu(0), iface(0), themeListWindow(0), dcopIfaceStub(0),
-    sysTrayIcon(0)
+    karambaList(0), sysTrayIcon(0)
 {
   iface = new KarambaIface();
   karambaList = new QObjectList();
@@ -47,7 +47,7 @@ KarambaApplication::~KarambaApplication()
   delete karambaList;
   delete themeListWindow;
   delete dcopIfaceStub;
-  delete m_helpMenu;
+  //delete m_helpMenu;
 }
 
 void KarambaApplication::initDcopStub(QCString app)
