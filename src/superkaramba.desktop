@@ -6,7 +6,9 @@ Icon=superkaramba
 Type=Application
 MimeType=application/x-superkaramba
 Comment=An engine for cool desktop eyecandy.
+Comment[es]=Un motor para añadir vistosidad al escritorio.
 GenericName=Desktop Widgets
+GenericName[es]=Elementos visuales para el escritorio
 DocPath=superkaramba/index.html
 Categories=Qt;KDE;Utility;X-KDE-Utilities-Desktop;
 
