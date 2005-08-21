@@ -574,6 +574,8 @@ bool karamba::parseConfig()
         QString tiptext = lineParser.getString("TOOLTIP");
         QString name = lineParser.getString("NAME");
         bool bg = lineParser.getBoolean("BACKGROUND");
+        bool bgfx = lineParser.getBoolean("BGEFFECT");
+        bg|=bgfx; //BGEFFECT implies BACKGROUND
         xon = ( xon <= 0 ) ? x:xon;
         yon = ( yon <= 0 ) ? y:yon;
 
@@ -582,6 +584,7 @@ bool karamba::parseConfig()
         if(!file_roll.isEmpty())
           tmp->parseImages(file, file_roll, x,y, xon, yon);
         tmp->setBackground(bg);
+        tmp->setBGFX(bgfx);
         if (!name.isEmpty())
           tmp->setName(name.ascii());
         if (!tiptext.isEmpty())
@@ -1472,9 +1475,16 @@ void karamba::updateBackground(KSharedPixmap* kpm)
 
   while ( it != 0 )
   {
-  if (((ImageLabel*) *it)->background == 1)
-    ((ImageLabel*) *it)->mUpdate(&p, 1);
-    ++it;
+    if (((ImageLabel*) *it)->background == 1)
+    {
+      if(((ImageLabel*) *it)->isBGFX())
+      {  
+        ((ImageLabel*) *it)->updateContent(&p, buffer); 
+      }
+     
+      ((ImageLabel*) *it)->mUpdate(&p, 1);
+    }
+     ++it;
   }
   p.end();
 

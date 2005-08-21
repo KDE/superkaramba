@@ -65,6 +65,27 @@ PyObject* py_createImage(PyObject *self, PyObject *args);
 */
 PyObject* py_createBackgroundImage(PyObject *self, PyObject *args);
 
+/* Image/createBackgroundFXImage
+*
+* SYNOPSIS
+*   long createBackgroundFXImage(widget, x, y, w, h, image)
+* DESCRIPTION
+*   This creates an background image on your widget at x, y. The filename
+*   should be given as the path parameter. In theory the image could be
+*   local or could be a url. Color pixels are copied from the background
+*   and only the alpha channel is used from the given image. You will need 
+*   to save the return value to be able to call other functions on your 
+*   image, such as moveImage()
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long x -- x coordinate
+*   * long y -- y coordinate
+*   * string image -- image for the imagelabel
+* RETURN VALUE
+*   Pointer to new image meter
+*/
+PyObject* py_createBackgroundFXImage(PyObject *self, PyObject *args);
+
 /** Image/createTaskIcon
 *
 * SYNOPSIS
@@ -356,6 +377,32 @@ PyObject* py_changeImageChannelIntensity(PyObject *self, PyObject *args);
 *   1 if successful
 */
 PyObject* py_changeImageToGray(PyObject *self, PyObject *args);
+
+/** Image/changeImageToBlur
+*
+* SYNOPSIS
+*   long changeImageToBlur(widget, image, right, down, left, up, devx, devy, millisec)
+* DESCRIPTION
+*   Filters the image to obtain blurry look. If left or up are omited then 
+*   right and down will be used as their respective values. If devx or devy
+*   are omited then zero is used instead. Millisec specifies how long in 
+*   milliseconds before the image is restored to it's original form.
+*   This is useful for "mouse over" type animations. Using 0 for millisec
+*   disables this feature and leaves the image permanently affected.
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long image -- pointer to image
+*   * float right -- amount of blur from left to right (0 for no blur and 1 for complete and utter blur)
+*   * float down -- amount of blur from top to bottom
+*   * float left -- amount of blur from right to left
+*   * float up -- amount of blur from bottom to up
+*   * float devx -- amount of randomness to apply to vars right and left per line
+*   * float devy -- amount of randomness to apply to vars up and down per row
+*   * long millisec -- milliseconds before the image is restored
+* RETURN VALUE
+*   1 if successful
+*/
+PyObject* py_changeImageToBlur(PyObject *self, PyObject *args);
 
 /** Image/removeImageTransformations
 *
