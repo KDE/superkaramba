@@ -81,7 +81,7 @@ void KarambaIface::closeTheme(QString name)
   while(k = getKaramba(name))
   {
     k->writeConfigData();
-    k->close();
+    k->close(true);
   }
 }
 
