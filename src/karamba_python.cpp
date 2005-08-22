@@ -149,7 +149,6 @@ static PyMethodDef karamba_methods[] = {
     {(char*)"createImage", py_createImage, METH_VARARGS, (char*)"Create an Image"},
     {(char*)"createTaskIcon", py_createTaskIcon, METH_VARARGS, (char*)"Create an Image of the Icon for a Task"},
     {(char*)"createBackgroundImage", py_createBackgroundImage, METH_VARARGS, (char*)"Create an Image (only redraw it when background changes)"},
-    {(char*)"createBackgroundFXImage", py_createBackgroundFXImage, METH_VARARGS, (char*)"Create an background effect Image (only redraw it when background changes)"},
     {(char*)"deleteImage", py_deleteImage, METH_VARARGS, (char*)"Delete an Image"},
     {(char*)"getThemeImage", py_getThemeImage, METH_VARARGS, (char*)"Get image meter from .theme using it's name"},
     {(char*)"getImageSize", py_getImageSize, METH_VARARGS, (char*)"Get Image size."},
@@ -172,7 +171,6 @@ static PyMethodDef karamba_methods[] = {
     {(char*)"changeImageIntensity", py_changeImageIntensity, METH_VARARGS, (char*)"Change Intensity of an Image"},
     {(char*)"changeImageChannelIntensity", py_changeImageChannelIntensity, METH_VARARGS, (char*)"Change Intensity of an Image Channel"},
     {(char*)"changeImageToGray", py_changeImageToGray, METH_VARARGS, (char*)"Converts an Image to Grayscale"},
-    {(char*)"changeImageToBlur", py_changeImageToBlur, METH_VARARGS, (char*)"Blurs image in various ways"},
 
     // Menu - menu_python.cpp
     {(char*)"createMenu", py_create_menu, METH_VARARGS, (char*)"Create a popup menu"},

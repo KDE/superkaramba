@@ -73,37 +73,6 @@ private:
   float ratio;
 };
 
-//Added by Jani Huhtanen, 18.08.2005
-//Blur effect
-void blurline(QImage &im, int line, float amount, bool reverse);
-void blurrow(QImage &im, int row, float amount, bool reverse);
-
-class Blur : public Effect
-{
-public:
-  /**
-   * Constructor for the blur effect. For traditional gaussian blur like
-   * effect use right=left, down=up and devx=devy=0
-   * @param img pointer to the ImageLabel this Effect is going to be applied to
-   * @param millisec how long effect is kept applied (0 for forever)
-   * @param right how much blur in direction left-to-right (0 for none, 1 for complete blur)
-   * @param left how much blur in direction right-to-left
-   * @param down how much blur in direction top-to-bottom
-   * @param up how much blur in direction bottom-to-up
-   * @param devx how much random per line variation is added to blur(0..1)
-   * @param devy how much random per row variation is added to blur(0..1)
-   */
-  Blur(ImageLabel *img, int millisec , float right,float left,  float down, float up ,float devx = 0, float devy = 0);
-  KPixmap apply(KPixmap pixmap);
-private:
-  float right;
-  float left;
-  float down;
-  float up;
-  float devx;
-  float devy;
-};
-//Added by Jani Huhtanen, 18.08.2005 </end>
 
 // ChannelIntensity
 class ChannelIntensity : public Effect
@@ -148,8 +117,7 @@ public:
   void removeImageTransformations();
   void mUpdate( QPainter * );
   void mUpdate( QPainter *, int );
-  void updateContent(QPainter *, const QPixmap &bg); //used for updating the content of a pixmap on the fly, Jani Huhtanen 18.08.2005
-
+  
   void rolloverImage(QMouseEvent *e);
   void parseImages( QString fn, QString fn_roll, int, int, int, int );
   virtual void show();
@@ -163,16 +131,12 @@ public:
   void intensity(float ratio, int millisec);
   void channelIntensity(float ratio, QString channel, int millisec);
   void toGray(int millisec);
-  void toBlur(int millisec,float right,float left,  float down, float up ,float devx = 0, float devy = 0); //for explanation of the parameters see class Blur
   void setBackground(int b);
 
   void attachClickArea(QString leftMouseButton, QString middleMouseButton,
                        QString rightMouseButton);
 
   virtual bool click(QMouseEvent*);
-
-  void setBGFX(bool inUse);
-  bool isBGFX();
 
 private slots:
 
@@ -222,7 +186,6 @@ private:
   int xoff,xon;
   int yoff,yon;
   QString imagePath;
-  bool bgfx;
 };
 
 #endif // IMAGELABEL_H

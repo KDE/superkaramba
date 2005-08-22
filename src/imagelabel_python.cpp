@@ -90,21 +90,6 @@ PyObject* py_createBackgroundImage(PyObject *, PyObject *args)
   return (Py_BuildValue((char*)"l", (long)tmp));
 }
 
-PyObject* py_createBackgroundFXImage(PyObject *, PyObject *args)
-{
-  long widget, x, y;
-  char *text;
-  if (!PyArg_ParseTuple(args, (char*)"llls:createBackgroundFXImage", &widget, &x, &y,
-                        &text))
-    return NULL;
-  if (!checkKaramba(widget))
-    return NULL;
-  ImageLabel *tmp = createImageLabel((karamba*)widget, x, y, text, 1);
-  tmp->setBGFX(true);
-  qDebug("createBackgroundFXImage");
-  return (Py_BuildValue((char*)"l", (long)tmp));
-}
-
 //Matthew Kay: new function for creating icons for tasks
 /**
  * creates the icon for the specified task as a karamba image
@@ -261,27 +246,6 @@ PyObject* py_changeImageToGray(PyObject *, PyObject *args)
   if (!checkKarambaAndMeter(widget, meter, "ImageLabel"))
     return NULL;
   ((ImageLabel*)meter)->toGray(millisec);
-  return Py_BuildValue((char*)"l", 1);
-}
-
-PyObject* py_changeImageToBlur(PyObject *, PyObject *args)
-{
- // qDebug("py_changeImageToBlur");
-  long widget, meter;
-  long millisec = 0;
-  float right, down; //user has to provide these
-  float left=-1, up=-1, devx=0, devy=0; //these are optional
-  if (!PyArg_ParseTuple(args, (char*)"llff|ffffl:changeImageToBlur", &widget, &meter,
-                        &right, &down, &left, &up, &devx, &devy, &millisec))
-    return NULL;
-  if (!checkKarambaAndMeter(widget, meter, "ImageLabel"))
-    return NULL;
-
-  //if user did not suply "left" or "up" then..
-  if(left<0)  left = right; 
-  if(up<0) up = down;
-
-  ((ImageLabel*)meter)->toBlur(millisec,right,left,down,up,devx,devy);
   return Py_BuildValue((char*)"l", 1);
 }
 

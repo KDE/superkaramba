@@ -21,9 +21,6 @@
 *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ****************************************************************************/
 
-#include <cmath>
-#include <cstdlib>
-#include <qcolor.h>
 #include <qpixmap.h>
 #include <qtimer.h>
 #include <qtooltip.h>
@@ -119,141 +116,10 @@ KPixmap ToGray::apply(KPixmap pixmap)
   return KPixmapEffect::toGray(pixmap);
 }
 
-/********* Blur effect - Added by Jani Huhtanen, 18.08.2005 *****/
-// Blur effect
-Blur::Blur( ImageLabel *img, int millisec, float right,float left, float down, float up, float devx , float devy  ) :
-  Effect(img,millisec)
-{
-  // let's clamp the values to the closed interval 0..1
-  if(right<0 || right>1)
-    right=0.5f;
-  if(left<0 || left>1)
-    left=0.5f;
-  if(up<0 || up>1)
-    up=0.5f;
-  if(down<0 || down>1)
-    down=0.5f;
-  if(devx<0 || devx>1)
-    devx=0.f;
-  if(devy<0 || devy>1)
-    devy=0.f;
-
-  // apply log for better "feel" for the amount of blur
-  this->right = log(1.f+right*100.f)/4.61512f;
-  this->left = log(1.f+left*100.f)/4.61512f;
-  this->down = log(1.f+down*100.f)/4.61512f;
-  this->up = log(1.f+up*100.f)/4.61512f;
-  this->devx = devx;
-  this->devy = devy;
-}
-
-KPixmap Blur::apply( KPixmap pixmap )
-{
-  //qDebug("apply Blur");
-  //use local seed for thread safety 
-  //(we want the same numbers at every run!) 
-  unsigned int seed = 1; 
-  float noise;
-  QImage img = pixmap.convertToImage();
-  for(int line=0;line<img.height();line++)
-  {
-    noise = ((float)rand_r(&seed))/RAND_MAX;
-    blurline(img,line,right+(noise-right)*devx,false);
-    blurline(img,line,left+(noise-left)*devx,true);
-  }
-  for(int row=0;row<img.width();row++)
-  {
-    noise = ((float)rand_r(&seed))/RAND_MAX;
-    blurrow(img,row,down+(noise-down)*devy,false);
-    blurrow(img,row,up+(noise-up)*devy,true);
-  }
-  return KPixmap(QPixmap(img));
-}
-
-static const unsigned int Rmask = 0xff;
-static const unsigned int Gmask = 0xff00;
-static const unsigned int Bmask = 0xff0000;
-static const unsigned int Amask = 0xff000000;
-static inline void blurinner(QRgb &ptr, float &zR, float &zG, float &zB, const float &amount)
-{
-  unsigned int R,G,B;
-  R = ptr&Rmask;
-  G = ptr&Gmask;
-  B = ptr&Bmask;
-  
-  zR = R+(zR-R)*amount;
-  zG = G+(zG-G)*amount;
-  zB = B+(zB-B)*amount;
-  
-  R = ((int)zR);
-  G = ((int)zG)&Gmask;
-  B = ((int)zB)&Bmask;
-  
-  ptr = R|G|B|(ptr&Amask);
-}
-
-void blurline( QImage & im, int line, float amount, bool reverse )
-{
-  float zR,zG,zB;
-
-  QRgb *ptr = reinterpret_cast<QRgb *>(im.scanLine(line));
-  if(!reverse)
-  {
-    zR = ptr[0]&Rmask;
-    zG = ptr[0]&Gmask;
-    zB = ptr[0]&Bmask;
-    for(int index=1; index<im.width(); index++)
-    {
-      blurinner(ptr[index],zR,zG,zB,amount);
-    }
-  } else
-  {
-    zR = ptr[im.width()-1]&Rmask;
-    zG = ptr[im.width()-1]&Gmask;
-    zB = ptr[im.width()-1]&Bmask;
-    for(int index=im.width()-2; index>=0; index--)
-    {
-      blurinner(ptr[index],zR,zG,zB,amount);
-    }
-  }
-
-}
-
-
-void blurrow( QImage & im, int row, float amount, bool reverse )
-{
-  float zR,zG,zB;
-
-  QRgb *ptr = reinterpret_cast<QRgb *>(im.bits());
-  ptr+=row;
-  if(!reverse)
-  {
-    zR = ptr[0]&Rmask;
-    zG = ptr[0]&Gmask;
-    zB = ptr[0]&Bmask;
-    for(int index=im.width(); index<(im.height()-1)*im.width(); index+=im.width())
-    {
-      blurinner(ptr[index],zR,zG,zB,amount);
-    }
-  } else
-  {
-    zR = ptr[(im.height()-1)*im.width()]&Rmask;
-    zG = ptr[(im.height()-1)*im.width()]&Gmask;
-    zB = ptr[(im.height()-1)*im.width()]&Bmask;
-    for(int index=(im.height()-2)*im.width(); index>=0; index-=im.width())
-    {
-      blurinner(ptr[index],zR,zG,zB,amount);
-    }
-  }
-
-}
-/********* Blur effect - Added by Jani Huhtanen, 18.08.2005 ***** </end> */
-
-
 /***********************************************************************/
 
 ImageLabel::ImageLabel(karamba* k, int ix,int iy,int iw,int ih) :
-  Meter(k, ix,iy,iw,ih), zoomed(false), rollover(false), bgfx(true)
+  Meter(k, ix,iy,iw,ih), zoomed(false), rollover(false)
 {
    background = 0;
   cblend = 0;
@@ -270,7 +136,7 @@ ImageLabel::ImageLabel(karamba* k, int ix,int iy,int iw,int ih) :
 }
 
 ImageLabel::ImageLabel(karamba* k) :
-  Meter(k), zoomed(false), rollover(false), bgfx(false)
+  Meter(k), zoomed(false), rollover(false)
 {
   cblend = 0;
   background = 0;
@@ -748,21 +614,6 @@ void ImageLabel::toGray(int millisec)
   applyTransformations();
 }
 
-// Added by Jani Huhtanen, 18.08.2005
-void ImageLabel::toBlur(int millisec,float right, float left, float down, float up, float devx, float devy)
-{
- // qDebug("toBlur");
-  if (imageEffect != 0)
-  {
-    delete imageEffect;
-    imageEffect = 0;
-  }
-
-  imageEffect = new Blur(this, millisec, right, left, down, up, devx, devy);
-  applyTransformations();
-}
-//
-
 void ImageLabel::slotEffectExpired()
 {
   removeEffects();
@@ -777,67 +628,5 @@ void ImageLabel::attachClickArea(QString leftMouseButton,
     middleButtonAction = middleMouseButton;
     rightButtonAction = rightMouseButton;
 }
-
-/*
-  Added by Jani Huhtanen, 18.08.2005 
-  copies the alpha channel of src image to alpha
-  channel of dst image. Used by ImageLabel::updateContent
-*/
-static void copyAlphaChannel(QImage &dst, QImage &src)
-{
-  if(dst.height() < src.height() || dst.width() < src.height() || !(src.hasAlphaBuffer()))
-    return;
-  dst.setAlphaBuffer(true);
-  QRgb *pdst = reinterpret_cast<QRgb *>(dst.bits()); //first pixel
-  QRgb *psrc = reinterpret_cast<QRgb *>(src.bits());
-  int pixels = src.height()*src.width();
-  for(int index=0;index<pixels;index++)
-  {
-    pdst[index] = (pdst[index]&0xffffff)|(psrc[index]&0xff000000);
-  }
-}
-
-/*
-    Used for dynamically updating the content of realpixmap to
-    current pixels in buffer under the pixmap (think of pseudotransparency)
-*/
-void ImageLabel::updateContent(QPainter *p,const QPixmap &buffer)
-{
-  bool wasActive = p->isActive();
-  //only draw image if not hidden and it's a background effect
-  if (hidden == 0 && isBGFX())
-  {
-    //qDebug("updateContent: BackgroundFXImage");
-
-    if(wasActive) p->end(); //end drawing so we can copy a portion of the buffer
-
-    QPixmap tmp_pix(getWidth(), getHeight());
-    QImage result,image;
-
-    copyBlt(&tmp_pix,0,0,&buffer,getX(),getY(),getWidth(),getHeight()); //copies the area under the pixmap from buffer
-
-    if(wasActive)  p->begin(&buffer);
-
-    result = tmp_pix; //convert to image
-    image = realpixmap; //convert to image
-
-    copyAlphaChannel(result,image); //copy the alpha buffer of the real pixmap
-    tmp_pix = result;
-
-    setValue(tmp_pix); //let's update the realpixmap and pixmap
-    applyTransformations(); //and apply the transformations and effects
-  }
-}
-
-void ImageLabel::setBGFX(bool inUse)
-{
-  bgfx = inUse;
-}
-
-bool ImageLabel::isBGFX()
-{
-  return bgfx;
-}
-/**** Added by Jani Huhtanen, 18.08.2005 </end> **/
 
 #include "imagelabel.moc"
