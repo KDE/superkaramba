@@ -42,6 +42,7 @@ class ThemesDlg : public ThemesLayout
     int addTheme(const QString &appId, const QString &file);
     void removeTheme(const QString &appId, const QString &file, int instance);
     int addThemeToList(const QString &file);
+    void newSkzTheme(const QString &file);
     void saveUserAddedThemes();
     QStringList runningThemes();
 
@@ -62,6 +63,7 @@ class ThemesDlg : public ThemesLayout
 #ifdef KDE_3_3
   private:
     SKNewStuff *mNewStuff;
+    QStringList m_newStuffStatus;
 #endif
 };
 

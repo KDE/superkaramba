@@ -216,6 +216,7 @@ void ThemesDlg::getNewStuff()
   config->writeEntry("ProvidersUrl",
       "http://download.kde.org/khotnewstuff/karamba-providers.xml");
   config->sync();
+  m_newStuffStatus = config->entryMap("KNewStuffStatus").keys();
 
   if ( !mNewStuff )
   {
@@ -253,6 +254,27 @@ int ThemesDlg::themeIndex(QString file)
       return i;
   }
   return -1;
+}
+
+void ThemesDlg::newSkzTheme(const QString &file)
+{
+  addThemeToList(file);
+
+#ifdef KDE_3_3
+  KConfig* config = KGlobal::config();
+  QStringList keys = config->entryMap("KNewStuffStatus").keys();
+
+  for(QStringList::Iterator it = m_newStuffStatus.begin();
+      it != m_newStuffStatus.end(); ++it)
+  {
+    keys.remove(*it);
+  }
+  if(!keys.isEmpty())
+  {
+    config->setGroup("KNewStuffNames");
+    config->writeEntry(file, keys[0]);
+  }
+#endif
 }
 
 int ThemesDlg::addThemeToList(const QString &file)
@@ -330,6 +352,20 @@ void ThemesDlg::uninstall()
     trash = KGlobalSettings::trashPath();
   KIO::move(theme, trash);
   tableThemes->removeItem(w);
+#ifdef KDE_3_3
+  // Remove theme from KNewStuffStatus
+  KConfig* config = KGlobal::config();
+
+  config->setGroup("KNewStuffNames");
+  QString name = config->readEntry(theme.path());
+  kdDebug() << theme.path() << name << endl;
+  if(!name.isEmpty())
+  {
+    kapp->config()->deleteEntry(theme.path());
+    config->setGroup("KNewStuffStatus");
+    kapp->config()->deleteEntry(name);
+  }
+#endif
 }
 
 QStringList ThemesDlg::runningThemes()

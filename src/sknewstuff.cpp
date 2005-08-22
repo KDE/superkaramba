@@ -106,7 +106,7 @@ bool SKNewStuff::install( const QString &fileName )
       return false;
     }
     KIO::NetAccess::removeTempFile( sourceFile.url() );
-    mDlg->addThemeToList(destFile.path());
+    mDlg->newSkzTheme(destFile.path());
   }
   else if(result->name() == "plaint/text")
   {
