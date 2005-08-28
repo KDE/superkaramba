@@ -281,7 +281,14 @@ int ThemesDlg::addThemeToList(const QString &file)
 {
   int i = themeIndex(file);
   if(i < 0)
-    i = tableThemes->insertItem(new ThemeWidget(new ThemeFile(file)));
+  {
+    ThemeWidget* item = new ThemeWidget(new ThemeFile(file));
+
+    i = tableThemes->insertItem(item);
+    item->buttonGo->setText(i18n("Uninstall"));
+    connect(item->buttonGo, SIGNAL(clicked()),
+            this, SLOT(uninstall()));
+  }
   tableThemes->setSelected(i);
   return i;
 }
