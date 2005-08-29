@@ -1,6 +1,8 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=SuperKaramba
+Name[sr]=СуперКарамба
+Name[sr@Latn]=СуперКарамба
 Exec=superkaramba %U
 Icon=superkaramba
 Type=Application
@@ -10,11 +12,15 @@ Comment[el]=Μία μηχανή για εντυπωσιακές διακοσμή
 Comment[es]=Un motor para añadir vistosidad al escritorio.
 Comment[it]=Un motore per rendere il desktop più gradevole.
 Comment[pt_BR]=Mecanismo para recursos gráficos interessantes.
+Comment[sr]=Машина за лицкање радне површине.
+Comment[sr@Latn]=Машина за лицкање радне површине.
 GenericName=Desktop Widgets
 GenericName[el]=Γραφικά συστατικά επιφάνειας εργασίας
 GenericName[es]=Elementos visuales para el escritorio
 GenericName[it]=Elementi desktop
 GenericName[pt_BR]=Componentes para o Desktop
+GenericName[sr]=Додаци десктопа
+GenericName[sr@Latn]=Додаци десктопа
 GenericName[zh_CN]=桌面部件
 DocPath=superkaramba/index.html
 Categories=Qt;KDE;Utility;X-KDE-Utilities-Desktop;
