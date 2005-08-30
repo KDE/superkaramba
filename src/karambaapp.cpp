@@ -200,7 +200,7 @@ void KarambaApplication::buildToolTip()
     {
       toolTip +=
           "<tr><td align=right>" +
-          i18n("Running Theme:", "Running Themes:", list.count()) +
+          i18n("1 Running Theme:", "%n Running Themes:", list.count()) +
           "</td><td align=left>" + (*it) + "</td></tr>";
       firstRun = false;
     }
