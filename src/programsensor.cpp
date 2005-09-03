@@ -10,8 +10,11 @@
 #include "programsensor.h"
 
 #include <qstringlist.h>
+#include <Q3ValueVector>
+#include <QByteArray>
+
 ProgramSensor::ProgramSensor(const QString &progName, int interval, QString encoding )
-        : Sensor( interval )
+: Sensor( interval )
 {
      if( !encoding.isEmpty())
     {
@@ -37,7 +40,7 @@ ProgramSensor::~ProgramSensor()
 void ProgramSensor::receivedStdout(KProcess *, char *buffer, int len)
 {
     buffer[len] = 0;
-    sensorResult += codec->toUnicode( QCString(buffer) );
+    sensorResult += codec->toUnicode( QByteArray(buffer) );
 }
 
 void ProgramSensor::processExited(KProcess *)
@@ -45,7 +48,7 @@ void ProgramSensor::processExited(KProcess *)
     int lineNbr;
     SensorParams *sp;
     Meter *meter;
-    QValueVector<QString> lines;
+    Q3ValueVector<QString> lines;
     QStringList stringList = QStringList::split('\n',sensorResult,true);
     QStringList::ConstIterator end( stringList.end() );
     for ( QStringList::ConstIterator it = stringList.begin(); it != end; ++it )
@@ -54,10 +57,9 @@ void ProgramSensor::processExited(KProcess *)
     }
 
     int count = (int) lines.size();
-    QObjectListIt it( *objList );
-    while (it != 0)
+    foreach (QObject *it, objList)
     {
-        sp = (SensorParams*)(*it);
+        sp = (SensorParams*)(it);
         meter = sp->getMeter();
         if( meter != 0)
         {
@@ -75,7 +77,6 @@ void ProgramSensor::processExited(KProcess *)
                 meter->setValue(sensorResult);
             }
         }
-        ++it;
     }
 
     sensorResult = "";

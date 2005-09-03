@@ -21,6 +21,7 @@
 
 #include <qtooltip.h>
 #include <QByteArray>
+#include <QtAlgorithms>
 
 #include "themesdlg.h"
 #include "karambainterface.h"
@@ -33,10 +34,9 @@ int KarambaApplication::fd = -1;
 
 KarambaApplication::KarambaApplication() :
     m_helpMenu(0), iface(0), themeListWindow(0), dcopIfaceStub(0),
-    karambaList(0), sysTrayIcon(0)
+    sysTrayIcon(0)
 {
   iface = new KarambaIface();
-  karambaList = new QObjectList();
   // register ourselves as a dcop client
   dcopClient()->registerAs(name());
   dcopClient()->setDefaultObject(dcopIface()->objId());
@@ -44,8 +44,10 @@ KarambaApplication::KarambaApplication() :
 
 KarambaApplication::~KarambaApplication()
 {
+  qDeleteAll(karambaList);
+  karambaList.clear();
+
   delete iface;
-  delete karambaList;
   delete themeListWindow;
   delete dcopIfaceStub;
   //delete m_helpMenu;
@@ -76,15 +78,18 @@ QString KarambaApplication::getMainKaramba()
 
 QStringList KarambaApplication::getKarambas()
 {
-  QCStringList applst = dcopClient()->registeredApplications();
-  QCStringList::Iterator it;
-  QCString s;
+  DCOPCStringList applst = dcopClient()->registeredApplications();
+  DCOPCStringList::Iterator it;
+  DCOPCString s;
   QStringList result;
 
-  for (it = applst.begin(); (s = *it) != 0; ++it)
+  foreach (DCOPCString s, applst)
   {
     if (s.left(strlen(name())) == name())
+    {
       result.append(s);
+
+    }
   }
   return result;
 }
@@ -151,18 +156,16 @@ void KarambaApplication::setUpSysTray(KAboutData* about)
 
 void KarambaApplication::showKarambaMenuExtension(bool show)
 {
-  QObject *k;
-
   if(show)
   {
-    for (k = karambaList->first(); k; k = karambaList->next())
+    foreach (QObject *k, karambaList)
     {
       ((karamba*)k)->showMenuExtension();
     }
   }
   else
   {
-    for (k = karambaList->first(); k; k = karambaList->next())
+    foreach (QObject *k, karambaList)
     {
       ((karamba*)k)->hideMenuExtension();
     }
@@ -277,7 +280,7 @@ void KarambaApplication::addKaramba(karamba* k, bool reloading)
         karambaApp->dcopClient()->appId(), k->theme().file());
     k->setInstance(instance);
   }
-  karambaList->append(k);
+  karambaList.append(k);
 }
 
 void KarambaApplication::deleteKaramba(karamba* k, bool reloading)
@@ -285,12 +288,12 @@ void KarambaApplication::deleteKaramba(karamba* k, bool reloading)
   if(!reloading && karambaApp->dcopStub())
     karambaApp->dcopStub()->themeClosed(
         karambaApp->dcopClient()->appId(), k->theme().file(), k->instance());
-  karambaList->removeRef(k);
+  karambaList.removeAll(k);
 }
 
 bool KarambaApplication::hasKaramba(karamba* k)
 {
-  return karambaList->containsRef(k) > 0;
+  return karambaList.count(k) > 0;
 }
 
 // XXX: I guess this should be made with mutex/semaphores

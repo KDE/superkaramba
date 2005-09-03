@@ -38,7 +38,7 @@ long createMenu(long widget)
   karamba* currTheme = (karamba*)widget;
 
   KPopupMenu* tmp = new KPopupMenu(currTheme);
-  currTheme->menuList->append (tmp );
+  currTheme->menuList.append (tmp );
 
   currTheme->connect(tmp, SIGNAL(activated(int)), currTheme,
                      SLOT(passMenuItemClicked(int)));
@@ -59,16 +59,9 @@ bool menuExists(karamba* currTheme, KPopupMenu* menu)
   bool foundMenu = false;
   KPopupMenu* tmp;
 
-  for(int i = 0; i < (int)currTheme->menuList->count(); i++)
+  for(int i = 0; i < (int)currTheme->menuList.count(); i++)
   {
-    if(i==0)
-    {
-      tmp = (KPopupMenu*) currTheme->menuList->first();
-    }
-    else
-    {
-      tmp = (KPopupMenu*) currTheme->menuList->next();
-    }
+    tmp = (KPopupMenu*) currTheme->menuList.at(i);
     if(tmp != 0)
     {
       if(tmp == menu)
@@ -86,7 +79,7 @@ long deleteMenu(long widget, long menu)
   karamba* currTheme = (karamba*)widget;
   KPopupMenu* tmp = (KPopupMenu*)menu;
 
-  currTheme->menuList->removeRef(tmp);
+  currTheme->menuList.removeAll(tmp);
 
   return 1;
 }

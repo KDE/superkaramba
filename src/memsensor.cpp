@@ -231,7 +231,6 @@ void MemSensor::update()
     QString format;
     SensorParams *sp;
     Meter *meter;
-    QObjectListIt it( *objList );
 #if (defined(__FreeBSD__) && __FreeBSD_version < 500018)
     bool set = false;
 #endif
@@ -242,9 +241,9 @@ void MemSensor::update()
     int totalSwap = getSwapTotal();
     int usedSwap = totalSwap - getSwapFree();
 
-    while (it != 0)
+    foreach (QObject *it, objList)
     {
-        sp = (SensorParams*)(*it);
+        sp = (SensorParams*)(it);
 #if (defined(__FreeBSD__) && __FreeBSD_version < 500018)
         if ( (!MaxSet) && (totalSwap > 0) ) {
            setMaxValue(sp);

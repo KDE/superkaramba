@@ -82,10 +82,9 @@ void UptimeSensor::update()
         SensorParams *sp;
         Meter *meter;
 
-        QObjectListIt it( *objList );
-        while (it != 0)
-        {
-            sp = (SensorParams*)(*it);
+     	foreach (QObject *it, objList)
+	{
+            sp = (SensorParams*)(it);
             meter = sp->getMeter();
             format = sp->getParam("FORMAT");
 
@@ -102,7 +101,6 @@ void UptimeSensor::update()
             format.replace( QRegExp("%s"), QString::number(secs));
 
             meter->setValue(format);
-            ++it;
         }
 #ifndef __FreeBSD__
     }

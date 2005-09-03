@@ -12,6 +12,7 @@
 #define KARAMBAAPP_H
 
 #include <kapplication.h>
+#include <ksystemtray.h>
 
 #define karambaApp ((KarambaApplication*)qApp)
 
@@ -41,8 +42,8 @@ class KarambaApplication : public KApplication
     KarambaIface* iface;
     ThemesDlg* themeListWindow;
     dcopIface_stub* dcopIfaceStub;
-    QObjectList *karambaList;
-//    KSystemTray* sysTrayIcon;
+    QList<QObject *> karambaList;
+    KSystemTray* sysTrayIcon;
 
   public:
     KarambaApplication();

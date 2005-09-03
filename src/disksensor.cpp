@@ -9,6 +9,7 @@
  ***************************************************************************/
 #include "disksensor.h"
 
+#include <QByteArray>
 #include <qfile.h>
 #include <qtextstream.h>
 #include <qstring.h>
@@ -72,7 +73,7 @@ void DiskSensor::receivedStdout(KProcess *, char *buffer, int len )
 {
 
     buffer[len] = 0;
-    sensorResult += QString( QCString(buffer) );
+    sensorResult += QString( QByteArray(buffer) );
 
 }
 
@@ -100,10 +101,9 @@ void DiskSensor::processExited(KProcess *)
     SensorParams *sp;
     Meter *meter;
 
-    QObjectListIt lit( *objList );
-    while (lit != 0)
+    foreach (QObject *it, objList)
     {
-        sp = (SensorParams*)(*lit);
+        sp = (SensorParams*)(it);
         meter = sp->getMeter();
         format = sp->getParam("FORMAT");
         mntPt = sp->getParam("MOUNTPOINT");
@@ -140,7 +140,6 @@ void DiskSensor::processExited(KProcess *)
                         QString::number(getTotalSpace(mntPt)));
         format.replace( QRegExp("%t", false),QString::number(getTotalSpace(mntPt)/1024));
         meter->setValue(format);
-        ++lit;
     }
     if ( init == 1 )
     {

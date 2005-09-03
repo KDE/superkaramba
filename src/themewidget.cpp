@@ -37,7 +37,7 @@ ThemeWidget::ThemeWidget(ThemeFile* tf)
 {
   QPixmap pixmap = m_themeFile->icon();
   if(!pixmap.isNull())
-    icon->setPixmap(pixmap);
+    micon->setPixmap(pixmap);
   QString version;
   if(!m_themeFile->version().isEmpty())
     version = " - " + m_themeFile->version();
@@ -101,13 +101,15 @@ void ThemeWidget::showButton(bool show)
 
 void ThemeWidget::setDescriptionMaxHeight()
 {
-  if(layoutText->geometry().height() <= 0)
+/* TODO: FIX THIS
+ * if(layoutText->geometry().height() <= 0)
     return;
   int height = layoutText->geometry().height() - themeName->height() -
                layoutText->spacing();
   if(buttonGo->isVisible())
     height -= layoutButton->geometry().height() + layoutText->spacing();
   description->setMaximumHeight(height);
+*/
 }
 
 #include "themewidget.moc"

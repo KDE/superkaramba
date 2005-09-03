@@ -110,14 +110,15 @@ class karamba :  public QWidget
 
 public:
     karamba(QString fn, bool reloading = false, int instance = -1);
-    QObjectList *menuList;
+    QList<QObject *> menuList;
 
     virtual ~karamba();
     const ThemeFile& theme() const { return m_theme; };
 
-    QObjectList *meterList;
-    QObjectList *imageList;
-    QObjectList *clickList;
+    // TODO: Make sure to clear and delete these when your done later!
+    QList<QObject *> meterList;
+    QList<QObject *> imageList;
+    QList<QObject *> clickList;
     void setSensor(const LineParser& lineParser, Meter* meter);
     QString getSensor(Meter* meter);
     QString findSensorFromMap(Sensor* sensor);
@@ -134,7 +135,7 @@ public:
 
     void setWidgetUpdate(bool wu) { widgetUpdate = wu; };
     bool getWidgetUpdate() { return widgetUpdate; };
-    bool hasMeter(Meter* meter) { return meterList->count(meter) > 0; };
+    bool hasMeter(Meter* meter) { return meterList.count(meter) > 0; };
     char getTempUnit() { return tempUnit; };
     void addMenuConfigOption(QString key, QString name);
     bool setMenuConfigOption(QString key, bool value);
@@ -192,8 +193,8 @@ private:
     void meterClicked(QMouseEvent*, Meter*);
 
     QMap<QString, Sensor*> sensorMap;
-    QObjectList *sensorList;
-    QObjectList *timeList;
+    QList<QObject *> sensorList;
+    QList<QObject *> timeList;
 
     QTime lowerTimer;
     // use only the first occurance of KARAMBA in a config file

@@ -13,6 +13,8 @@
 #include <xmmsctrl.h>
 #endif // HAVE_XMMS
 
+#include <QByteArray>
+
 XMMSSensor::XMMSSensor( int interval, const QString &encoding )
     : Sensor( interval )
 {
@@ -34,7 +36,6 @@ void XMMSSensor::update()
     QString format;
     SensorParams *sp;
     Meter *meter;
-    QObjectListIt it( *objList );
 
 #ifdef HAVE_XMMS
 
@@ -50,7 +51,7 @@ void XMMSSensor::update()
         isPlaying = xmms_remote_is_playing(0);
         pos = xmms_remote_get_playlist_pos(0);
         qDebug("unicode start");
-        title = codec->toUnicode( QCString( xmms_remote_get_playlist_title( 0, pos ) )  );
+        title = codec->toUnicode( QByteArray( xmms_remote_get_playlist_title( 0, pos ) )  );
         qDebug("unicode end");
         if( title.isEmpty() )
             title = "XMMS";
@@ -61,9 +62,9 @@ void XMMSSensor::update()
     }
 #endif // HAVE_XMMS
 
-    while (it != 0)
+    foreach (QObject *it, objList)
     {
-        sp = (SensorParams*)(*it);
+        sp = (SensorParams*)(it);
         meter = sp->getMeter();
 
 #ifdef HAVE_XMMS
@@ -126,8 +127,6 @@ void XMMSSensor::update()
         {
             meter->setValue("");
         }
-        ++it;
-
     }
 
 }

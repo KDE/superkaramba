@@ -33,6 +33,7 @@
 #include <kconfig.h>
 #include <kglobal.h>
 #include <klocale.h>
+#include <kinstance.h>
 #include <qbuffer.h>
 #include <qglobal.h>
 #include <qiodevice.h>
@@ -161,7 +162,7 @@ void ThemeLocale::setLanguage(const QStringList &languages)
 
     if(m_theme->fileExists(file))
     {
-      QBuffer buffer(m_theme->readThemeFile(file));
+      QBuffer buffer(&m_theme->readThemeFile(file));
       tl_nl_load_domain(&buffer, buffer.size(), &m_domain);
       m_language = *it;
       return;

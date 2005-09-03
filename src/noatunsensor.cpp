@@ -8,6 +8,8 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 #include "noatunsensor.h"
+#include <QByteArray>
+#include <QTime>
 
 NoatunSensor::NoatunSensor( int interval,  DCOPClient *c)
         : Sensor( interval )
@@ -26,7 +28,6 @@ void NoatunSensor::update()
     QString format;
     SensorParams *sp;
     Meter *meter;
-    QObjectListIt it( *objList );
 
     QString title;
     int songLength = 0;
@@ -49,10 +50,9 @@ void NoatunSensor::update()
             songLength = 0;
     }
 
-
-    while (it != 0)
+    foreach (QObject *it, objList)
     {
-        sp = (SensorParams*)(*it);
+        sp = (SensorParams*)(it);
         meter = sp->getMeter();
 
         if( running )
@@ -100,9 +100,6 @@ void NoatunSensor::update()
         {
             meter->setValue("");
         }
-        ++it;
-
-
     }
 
 }
@@ -110,8 +107,8 @@ void NoatunSensor::update()
 bool NoatunSensor::isRunning()
 {
     QRegExp rx("(noatun)|(noatun-\\d+)");
-    QCStringList list = client->registeredApplications();
-    QValueList<QCString>::iterator it;
+    DCOPCStringList list = client->registeredApplications();
+    DCOPCStringList::iterator it;
     it = list.begin();
     bool foundNoatun = false;
     noatunID = "noatun";
@@ -130,12 +127,12 @@ bool NoatunSensor::isRunning()
 
 QString NoatunSensor::getTitle()
 {
-    QByteArray data, replyData;
-    QCString replyType;
+ /*   DCOPCString data, replyData;
+    QByteArray replyType;
     QString result;
-    QDataStream arg(data, IO_WriteOnly);
+    QDataStream arg(&data, IO_WriteOnly);
     arg << 5;
-    if (!client->call( noatunID, "Noatun", "title()",
+    if (!client->call( noatunID, DCOPCString("Noatun"), DCOPCString("title()"),
                        data, replyType, replyData))
     {
         result = "";
@@ -143,7 +140,7 @@ QString NoatunSensor::getTitle()
     }
     else
     {
-        QDataStream reply(replyData, IO_ReadOnly);
+        QDataStream reply(&replyData, IO_ReadOnly);
         if (replyType == "QString")
         {
             reply >> result;
@@ -158,6 +155,7 @@ QString NoatunSensor::getTitle()
         }
     }
     return result;
+*/
 }
 
 

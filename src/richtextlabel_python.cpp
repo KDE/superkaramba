@@ -45,8 +45,8 @@ PyObject* py_createRichText(PyObject *, PyObject *args)
   RichTextLabel *tmp = new RichTextLabel((karamba*)widget);
   tmp->setText(PyString2QString(text), underline);
   tmp->setTextProps(((karamba*)widget)->getDefaultTextProps());
-  ((karamba*)widget)->meterList->append(tmp);
-  ((karamba*)widget)->clickList->append(tmp);
+  ((karamba*)widget)->meterList.append(tmp);
+  ((karamba*)widget)->clickList.append(tmp);
   return (Py_BuildValue((char*)"l", (long)tmp));
 }
 
@@ -59,9 +59,9 @@ PyObject* py_deleteRichText(PyObject *, PyObject *args)
     return NULL;
 
   ((karamba*)widget)->deleteMeterFromSensors((Meter*)meter);
-  ((karamba*)widget)->clickList->removeRef((Meter*)meter);
+  ((karamba*)widget)->clickList.removeAll((Meter*)meter);
   return Py_BuildValue((char*)"l",
-      ((karamba*)widget)->meterList->removeRef((Meter*)meter));
+      ((karamba*)widget)->meterList.removeAll((Meter*)meter));
 }
 
 PyObject* py_getThemeRichText(PyObject *self, PyObject *args)

@@ -38,7 +38,7 @@ private:
 
 protected:
 // TODO: Make sure to delete and clear this list later on!
-    QList<QObject*> objList;
+    QList<QObject *> objList;
 
 public slots:
     virtual void update()=0;

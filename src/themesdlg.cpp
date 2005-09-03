@@ -38,7 +38,6 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <qlineedit.h>
-#include <qtable.h>
 #include <qdir.h>
 #include <qlabel.h>
 #include <qcombobox.h>
@@ -120,7 +119,7 @@ void ThemesDlg::populateListbox()
   tableThemes->clear();
 
   item = new ThemeWidget;
-  item->icon->setPixmap(KGlobal::iconLoader()->loadIcon("knewstuff",
+  item->micon->setPixmap(KGlobal::iconLoader()->loadIcon("knewstuff",
                         KIcon::NoGroup, KIcon::SizeHuge));
   item->setHeaderText(i18n("Get New Stuff"));
   item->setDescriptionText(i18n("Download new themes."));
@@ -136,7 +135,7 @@ void ThemesDlg::populateListbox()
   tableThemes->insertItem(item);
 
   item = new ThemeWidget;
-  item->icon->setPixmap(KGlobal::iconLoader()->loadIcon("ksysguard",
+  item->micon->setPixmap(KGlobal::iconLoader()->loadIcon("ksysguard",
                         KIcon::NoGroup, KIcon::SizeHuge));
   item->setHeaderText(i18n("Open Local Theme"));
   item->setDescriptionText(i18n("Add local theme to the list."));

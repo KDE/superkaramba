@@ -22,6 +22,7 @@
 
 #include "themefile.h"
 #include <themewidget_layout.h>
+#include <Q3ValueList>
 
 /**
 @author See README for the list of authors
@@ -51,7 +52,7 @@ class ThemeWidget : public ThemeWidgetLayout
 
   private:
     ThemeFile* m_themeFile;
-    QValueList<int> m_instancePool;
+    Q3ValueList<int> m_instancePool;
 };
 
 #endif

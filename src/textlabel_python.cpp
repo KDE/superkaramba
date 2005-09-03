@@ -45,7 +45,7 @@ PyObject* py_createText(PyObject *, PyObject *args)
       new TextLabel((karamba*)widget, (int)x, (int)y, (int)w, (int)h);
   tmp->setValue(PyString2QString(text));
   tmp->setTextProps(((karamba*)widget)->getDefaultTextProps());
-  ((karamba*)widget)->meterList->append(tmp);
+  ((karamba*)widget)->meterList.append(tmp);
   return (Py_BuildValue((char*)"l", (long)tmp));
 }
 
@@ -58,9 +58,9 @@ PyObject* py_deleteText(PyObject *, PyObject *args)
     return NULL;
 
   ((karamba*)widget)->deleteMeterFromSensors((Meter*)meter);
-  ((karamba*)widget)->clickList->removeRef((Meter*)meter);
+  ((karamba*)widget)->clickList.removeAll((Meter*)meter);
   return Py_BuildValue((char*)"l",
-      ((karamba*)widget)->meterList->removeRef((Meter*)meter));
+      ((karamba*)widget)->meterList.removeAll((Meter*)meter));
 }
 
 PyObject* py_getThemeText(PyObject *self, PyObject *args)

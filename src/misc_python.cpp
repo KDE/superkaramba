@@ -131,7 +131,7 @@ long attachClickArea(long widget, long meter, QString LeftButton, QString Middle
   Meter* currMeter = (Meter*) meter;
 
   // Look if currMeter has an ClickArea attached.
-  bool meterAlreadyClickable = currTheme->clickList->containsRef(currMeter);
+  bool meterAlreadyClickable = currTheme->clickList.count(currMeter);
 
   // if currMeter is of type ImageLabel*
   if (ImageLabel* image = dynamic_cast<ImageLabel*>(currMeter))
@@ -140,7 +140,7 @@ long attachClickArea(long widget, long meter, QString LeftButton, QString Middle
       if (!meterAlreadyClickable)
       {
           //qWarning("attachClickArea : meter is image");
-          currTheme -> clickList -> append(image);
+          currTheme->clickList.append(image);
       }
   }
   // else if currMeter is of type TextLabel*
@@ -150,7 +150,7 @@ long attachClickArea(long widget, long meter, QString LeftButton, QString Middle
       if (!meterAlreadyClickable)
       {
           //qWarning("attachClickArea : meter is text");
-          currTheme -> clickList -> append(text);
+          currTheme->clickList.append(text);
       }
   }
   else
@@ -275,7 +275,7 @@ long createClickArea(long widget, long x, long y, long w, long h, char* text) {
 
   tmp->setOnClick(onclick );
 
-  currTheme -> clickList -> append(tmp);
+  currTheme->clickList.append(tmp);
   return (long)tmp;
 }
 
@@ -353,15 +353,12 @@ int translateAll(long widget, int x, int y)
 {
   karamba* currTheme = (karamba*)widget;
 
-  QObjectListIt it2( *currTheme->meterList ); // iterate over meters
-
-  while ( it2 != 0 )
+  foreach (QObject *it2, currTheme->meterList)
   {
-    ((Meter*) *it2)->setSize(((Meter*) *it2)->getX()+x,
-                             ((Meter*) *it2)->getY()+y,
-                             ((Meter*) *it2)->getWidth(),
-                             ((Meter*) *it2)->getHeight());
-    ++it2;
+    ((Meter*) it2)->setSize(((Meter*) it2)->getX()+x,
+                             ((Meter*) it2)->getY()+y,
+                             ((Meter*) it2)->getWidth(),
+                             ((Meter*) it2)->getHeight());
   }
 
   if (currTheme->systray != 0)

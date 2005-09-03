@@ -42,7 +42,7 @@ PyObject* py_createGraph(PyObject *, PyObject *args)
 
   Graph *tmp =
       new Graph((karamba*)widget, (int)x, (int)y, (int)w, (int)h, (int)points);
-  ((karamba*)widget)->meterList->append(tmp);
+  ((karamba*)widget)->meterList.append(tmp);
   return (Py_BuildValue((char*)"l", (long)tmp));
 }
 
@@ -56,7 +56,7 @@ PyObject* py_deleteGraph(PyObject *, PyObject *args)
 
   ((karamba*)widget)->deleteMeterFromSensors((Meter*)meter);
   return Py_BuildValue((char*)"l",
-      ((karamba*)widget)->meterList->removeRef((Meter*)meter));
+      ((karamba*)widget)->meterList.removeAll((Meter*)meter));
 }
 
 PyObject* py_getThemeGraph(PyObject *self, PyObject *args)

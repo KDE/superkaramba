@@ -57,8 +57,8 @@ ImageLabel* createImageLabel(karamba *theme, long x, long y,
   }
   tmp->setBackground(bg);
   theme->setSensor(LineParser(file), tmp);
-  theme->meterList->append (tmp);
-  theme->imageList->append (tmp);
+  theme->meterList.append (tmp);
+  theme->imageList.append (tmp);
   if(bg)
     theme->kroot->repaint(true);
   return tmp;
@@ -140,10 +140,10 @@ PyObject* py_deleteImage(PyObject *, PyObject *args)
     return NULL;
 
   ((karamba*)widget)->deleteMeterFromSensors((Meter*)meter);
-  ((karamba*)widget)->clickList->removeRef((Meter*)meter);
-  ((karamba*)widget)->imageList->removeRef((Meter*)meter);
+  ((karamba*)widget)->clickList.removeAll((Meter*)meter);
+  ((karamba*)widget)->imageList.removeAll((Meter*)meter);
   return Py_BuildValue((char*)"l",
-      ((karamba*)widget)->meterList->removeRef((Meter*)meter));
+      ((karamba*)widget)->meterList.removeAll((Meter*)meter));
 }
 
 PyObject* py_getThemeImage(PyObject *self, PyObject *args)

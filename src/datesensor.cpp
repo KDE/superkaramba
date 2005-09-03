@@ -10,6 +10,8 @@
 #include "datesensor.h"
 
 #include <qapplication.h>
+#include <QDesktopWidget>
+
 DateSensor::DateSensor( int interval ) : Sensor( interval )
 {
 	hidden = true;
@@ -25,10 +27,9 @@ void DateSensor::update()
     SensorParams *sp;
     Meter *meter;
 
-    QObjectListIt it( *objList );
-    while (it != 0)
+    foreach (QObject *it, objList)
     {
-        sp = (SensorParams*)(*it);
+        sp = (SensorParams*)(it);
         meter = sp->getMeter();
         format = sp->getParam("FORMAT");
 
@@ -37,7 +38,6 @@ void DateSensor::update()
 	   format = "hh:mm";
         }
         meter->setValue(qdt.toString(format));
-        ++it;
     }
 }
 
@@ -47,11 +47,10 @@ void DateSensor::slotCalendarDeleted()
 	cal = 0L;
 }
 
-
 DatePicker::DatePicker(QWidget *parent)
-    : QVBox( parent, 0, WType_TopLevel | WDestructiveClose |
-             WStyle_Customize | WStyle_StaysOnTop | WStyle_NoBorder )
+    : Q3VBox( parent, 0, Qt::Window | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint )
 {
+    setAttribute(Qt::WA_DeleteOnClose);
     setFrameStyle( QFrame::PopupPanel | QFrame::Raised );
     //KWin::setOnAllDesktops( handle(), true );
     picker = new KDatePicker(this);
@@ -64,17 +63,16 @@ DatePicker::DatePicker(QWidget *parent)
 
 void DatePicker::keyReleaseEvent(QKeyEvent *e)
 {
-        QVBox::keyReleaseEvent(e);
+        Q3VBox::keyReleaseEvent(e);
         if (e->key() == Qt::Key_Escape)
                 close();
 }
 
 void DateSensor::toggleCalendar(QMouseEvent *ev)
 {
-	QObjectListIt it(*objList);
-	while (it != 0)
+	foreach (QObject *it, objList)
 	{
-		SensorParams *sp = (SensorParams*)(*it);
+		SensorParams *sp = (SensorParams*)(it);
 		Meter *meter = sp->getMeter();
 		QString width = sp->getParam("CALWIDTH");
 		QString height = sp->getParam("CALHEIGHT");
@@ -108,8 +106,6 @@ void DateSensor::toggleCalendar(QMouseEvent *ev)
 				cal->close();
 			}
 		}
-
-		++it;
 	}
 }
 
@@ -117,7 +113,7 @@ void DateSensor::mousePressEvent(QMouseEvent *ev)
 {
 	switch (ev->button()) 
 	{
-		case QMouseEvent::LeftButton:
+		case Qt::LeftButton:
 			toggleCalendar(ev);
 			break;
 		default:

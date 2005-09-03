@@ -16,6 +16,8 @@
 #include <sys/resource.h>
 #endif
 
+#include <QTextStream>
+
 #include "cpusensor.h"
 
 CPUSensor::CPUSensor( QString cpu, int interval ) : 
@@ -112,10 +114,9 @@ void CPUSensor::update()
     QString format;
     int load = getCPULoad();
 
-    QObjectListIt it( *objList );
-    while (it != 0)
+    foreach (QObject *it, objList)
     {
-        sp = (SensorParams*)(*it);
+        sp = (SensorParams*)(it);
         meter = sp->getMeter();
         format = sp->getParam( "FORMAT" );
 
@@ -131,7 +132,6 @@ void CPUSensor::update()
         format.replace( QRegExp("%v", false), QString::number( load ) );
 
         meter->setValue( format );
-        ++it;
     }
 }
 

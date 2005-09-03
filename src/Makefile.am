@@ -25,9 +25,9 @@ superkaramba_SOURCES = main.cpp karamba.cpp meter.cpp bar.cpp sensor.cpp \
 					datesensor.cpp textlabel.cpp memsensor.cpp uptimesensor.cpp cpusensor.cpp \
 					networksensor.cpp imagelabel.cpp graph.cpp xmmssensor.cpp programsensor.cpp \
 					disksensor.cpp sensorparams.cpp sensorsensor.cpp textfilesensor.cpp clickarea.cpp \
-					noatunsensor.cpp karambarootpixmap.cpp clickmap.cpp rsssensor.cpp textfield.cpp \
-					taskmanager.cpp showdesktop.cpp richtextlabel.cpp karambasessionmanaged.cpp \
-					systemtray.cpp bar_python.cpp meter_python.cpp textlabel_python.cpp \
+					karambarootpixmap.cpp clickmap.cpp rsssensor.cpp textfield.cpp \
+					showdesktop.cpp richtextlabel.cpp karambasessionmanaged.cpp \
+					taskmanager.cpp bar_python.cpp meter_python.cpp textlabel_python.cpp \
 					richtextlabel_python.cpp imagelabel_python.cpp config_python.cpp misc_python.cpp \
 					systray_python.cpp task_python.cpp widget_python.cpp menu_python.cpp \
 					karambalistboxitem.cpp graph_python.cpp dcopinterface.skel dcopinterface.stub \
@@ -35,6 +35,7 @@ superkaramba_SOURCES = main.cpp karamba.cpp meter.cpp bar.cpp sensor.cpp \
 					themesdlg.cpp themes_layout.ui themewidget_layout.ui themewidget.cpp \
 					kwidgetlistbox.cpp sknewstuff.h sknewstuff.cpp superkarambasettings.kcfgc themelocale.cpp \
 			input.cpp sklineedit.cpp input_python.cpp
+# \ noatunsensor.cpp systemtray.cpp
 
 # kde_cfg_DATA = superkaramba.kcfg
 

@@ -43,22 +43,27 @@
 
 #include <qdir.h>
 #include <q3valuestack.h>
+#include <QDesktopWidget>
+#include <QtAlgorithms>
+#include <Q3TextDrag>
+#include <QX11Info>
 
 // Menu IDs
 #define EDITSCRIPT 1
 #define THEMECONF  2
 
 karamba::karamba(QString fn, bool reloading, int instance) :
-    QWidget(0, Qt::WA_GroupLeader | Qt::FramelessWindowHint | Qt::WA_DeleteOnClose ),
-    meterList(0), imageList(0), clickList(0), kpop(0), widgetMask(0),
+    QWidget(0, Qt::FramelessWindowHint ),
+    kpop(0), widgetMask(0),
     config(0), kWinModule(0), tempUnit('C'), m_instance(instance),
-    sensorList(0), timeList(0),
     themeConfMenu(0), toDesktopMenu(0), kglobal(0), clickPos(0, 0), accColl(0),
     menuAccColl(0), toggleLocked(0), pythonIface(0), defaultTextField(0),
     trayMenuSeperatorId(-1), trayMenuQuitId(-1), trayMenuToggleId(-1),
     trayMenuThemeId(-1)
 {
   setObjectName("karamba");
+  setAttribute(Qt::WA_GroupLeader);
+  setAttribute(Qt::WA_DeleteOnClose);
   KURL url;
 
   if(fn.find('/') == -1)
@@ -118,7 +123,7 @@ karamba::karamba(QString fn, bool reloading, int instance) :
   }
 
   widgetMask = 0;
-  info = new NETWinInfo( qt_xdisplay(), winId(), qt_xrootwin(), NET::WMState );
+  info = new NETWinInfo( QX11Info::display(), winId(), QX11Info::appRootWindow(), NET::WMState );
 
   // could be replaced with TaskManager
   kWinModule = new KWinModule();
@@ -221,16 +226,6 @@ karamba::karamba(QString fn, bool reloading, int instance) :
   fixedPosition = false;
   defaultTextField = new TextField();
 
-  meterList = new QObjectList();
-  //meterList->setAutoDelete( true );
-  sensorList = new QObjectList();
-  //sensorList->setAutoDelete( true );
-  clickList = new QObjectList();
-  timeList = new QObjectList();
-  imageList = new QObjectList();
-  menuList = new QObjectList();
-  //menuList->setAutoDelete( true );
-
   client = kapp->dcopClient();
   if (!client->isAttached())
     client->attach();
@@ -311,35 +306,16 @@ karamba::~karamba()
 
   delete config;
 
-  if(meterList != 0)
-  {
-    meterList->clear();
-    delete meterList;
-  }
-
-  if( sensorList != 0 )
-  {
-    sensorList->clear();
-    delete sensorList;
-  }
-
-  if( imageList != 0 )
-  {
-    imageList->clear();
-    delete imageList;
-  }
-
-  if( clickList != 0 )
-  {
-    clickList->clear();
-    delete clickList;
-  }
-
-  if( timeList != 0 )
-  {
-    timeList->clear();
-    delete timeList;
-  }
+  qDeleteAll(meterList);
+  meterList.clear();
+  qDeleteAll(sensorList);
+  sensorList.clear();
+  qDeleteAll(imageList);
+  imageList.clear();
+  qDeleteAll(clickList);
+  clickList.clear();
+  qDeleteAll(timeList);
+  timeList.clear();
 
   delete toggleLocked;
   delete accColl;
@@ -423,9 +399,9 @@ bool karamba::parseConfig()
         if(lineParser.getBoolean("MANAGED"))
         {
           managed = true;
-          reparent(0, Qt::WType_Dialog | WStyle_Customize | WStyle_NormalBorder
-                      |  WRepaintNoErase | WDestructiveClose, pos());
-        }
+          reparent(0, Qt::Dialog , pos()); 
+          setAttribute(Qt::WA_DeleteOnClose);
+	}
         else
         {
           info->setState( NETWinInfo::SkipTaskbar
@@ -554,9 +530,9 @@ bool karamba::parseConfig()
         tmp->setOnClick(lineParser.getString("ONCLICK"));
 
         setSensor(lineParser, (Meter*)tmp);
-        clickList->append( tmp );
+        clickList.append( tmp );
         if( lineParser.getBoolean("PREVIEW"))
-          meterList->append( tmp );
+          meterList.append( tmp );
       }
 
       // program sensor without a meter
@@ -589,8 +565,8 @@ bool karamba::parseConfig()
 
         connect(tmp, SIGNAL(pixmapLoaded()), this, SLOT(externalStep()));
         setSensor(lineParser, (Meter*) tmp );
-        meterList->append (tmp );
-        imageList->append (tmp );
+        meterList.append (tmp );
+        imageList.append (tmp );
       }
 
       if(lineParser.meter() == "DEFAULTFONT" )
@@ -651,7 +627,7 @@ bool karamba::parseConfig()
             tmp->setName(name.ascii());
 
           setSensor(lineParser, (Meter*)tmp);
-          meterList->append ( tmp );
+          meterList.append ( tmp );
         }
 
         if(lineParser.meter() == "CLICKMAP")
@@ -663,8 +639,8 @@ bool karamba::parseConfig()
 
           setSensor(lineParser, (Meter*)tmp);
           // set all params
-          clickList -> append(tmp);
-          meterList->append( tmp );
+          clickList.append(tmp);
+          meterList.append( tmp );
 
         }
 
@@ -685,8 +661,8 @@ bool karamba::parseConfig()
             tmp->setName(name.ascii());
 
           setSensor(lineParser, (Meter*)tmp);
-          clickList -> append(tmp);
-          meterList->append ( tmp );
+          clickList.append(tmp);
+          meterList.append ( tmp );
         }
 
         if(lineParser.meter() == "INPUT")
@@ -701,7 +677,7 @@ bool karamba::parseConfig()
           tmp->setValue(
               m_theme.locale()->translate(lineParser.getString("VALUE").ascii()));
 
-          meterList->append(tmp);
+          meterList.append(tmp);
           passive = false;
         }
       }
@@ -718,7 +694,7 @@ bool karamba::parseConfig()
         if (!name.isEmpty())
           tmp->setName(name.ascii());
         setSensor(lineParser, (Meter*)tmp );
-        meterList->append ( tmp );
+        meterList.append ( tmp );
       }
 
       if(lineParser.meter() == "GRAPH")
@@ -735,7 +711,7 @@ bool karamba::parseConfig()
         tmp->setColor(lineParser.getColor("COLOR"));
 
         setSensor(lineParser, (Graph*)tmp);
-        meterList->append ( tmp );
+        meterList.append ( tmp );
       }
     }
 
@@ -801,11 +777,10 @@ void karamba::makePassive()
   if(managed)
     return;
 
-  QObject *meter;
-  for (meter = meterList->first(); meter; meter = meterList->next())
+  foreach (QObject *meter, meterList)
   {
     if((meter)->isA("Input"))
-      return;
+    return;
   }
 
   // Matthew Kay: set window type to "dock" (plays better with taskbar themes
@@ -903,13 +878,11 @@ QString karamba::findSensorFromMap(Sensor* sensor)
 Sensor* karamba::findSensorFromList(Meter* meter)
 {
   //qDebug("karamba::findSensorFromList");
-  QObjectListIt it( *sensorList ); // iterate over meters
-
-  while ( it != 0 )
+  QListIterator<QObject *> it( sensorList ); // iterate over meters
+  while ( it.hasNext() )
   {
-    if (((Sensor*) *it)->hasMeter(meter))
-      return ((Sensor*)*it);
-    ++it;
+    if (((Sensor*) it.next())->hasMeter(meter))
+      return ((Sensor*) it.next());
   }
   return NULL;
 }
@@ -936,7 +909,7 @@ void karamba::deleteMeterFromSensors(Meter* meter)
     {
       QString s = findSensorFromMap(sensor);
       sensorMap.erase(s);
-      sensorList->removeRef(sensor);
+      sensorList.removeAll(sensor);
     }
   }
 }
@@ -959,7 +932,7 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
       int interval = lineParser.getInt("INTERVAL");
       interval = (interval == 0)?1000:interval;
       sensor = ( sensorMap["CPU"+cpuNbr] = new CPUSensor( cpuNbr, interval ) );
-      sensorList->append( sensor );
+      sensorList.append( sensor );
     }
     SensorParams *sp = new SensorParams(meter);
     sp->addParam("FORMAT",
@@ -979,7 +952,7 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
       int interval = lineParser.getInt("INTERVAL");
       interval = (interval == 0)?3000:interval;
       sensor = ( sensorMap["MEMORY"] = new MemSensor( interval ) );
-      sensorList->append( sensor );
+      sensorList.append( sensor );
     }
     SensorParams *sp = new SensorParams(meter);
     sp->addParam("FORMAT",
@@ -999,7 +972,7 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
       interval = (interval == 0)?5000:interval;
       sensor = ( sensorMap["DISK"] = new DiskSensor( interval ) );
       connect( sensor, SIGNAL(initComplete()), this, SLOT(externalStep()) );
-      sensorList->append( sensor );
+      sensorList.append( sensor );
     }
     // meter->setMax( ((DiskSensor*)sensor)->getTotalSpace(mntPt)/1024 );
     SensorParams *sp = new SensorParams(meter);
@@ -1031,7 +1004,7 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
     {
       sensor = ( sensorMap["NETWORK"+device] =
           new NetworkSensor(device, interval));
-      sensorList->append( sensor );
+      sensorList.append( sensor );
     }
     SensorParams *sp = new SensorParams(meter);
     sp->addParam("FORMAT",
@@ -1048,7 +1021,7 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
       int interval = lineParser.getInt("INTERVAL");
       interval = (interval == 0)?60000:interval;
       sensor = ( sensorMap["UPTIME"] = new UptimeSensor( interval ));
-      sensorList->append( sensor );
+      sensorList.append( sensor );
 
     }
     SensorParams *sp = new SensorParams(meter);
@@ -1065,7 +1038,7 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
       int interval = lineParser.getInt("INTERVAL");
       interval = (interval == 0)?30000:interval;
       sensor = (sensorMap["SENSOR"] = new SensorSensor(interval, tempUnit));
-      sensorList->append( sensor );
+      sensorList.append( sensor );
     }
     SensorParams *sp = new SensorParams(meter);
     sp->addParam("FORMAT",
@@ -1088,7 +1061,7 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
 
       sensor = ( sensorMap["TEXTFILE"+path] =
                    new TextFileSensor( path, rdf, interval, encoding ) );
-      sensorList->append( sensor );
+      sensorList.append( sensor );
     }
     SensorParams *sp = new SensorParams(meter);
     sp->addParam("LINE",QString::number(lineParser.getInt("LINE")));
@@ -1104,8 +1077,8 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
       int interval = lineParser.getInt("INTERVAL");
       interval = (interval == 0)?60000:interval;
       sensor = ( sensorMap["DATE"] = new DateSensor( interval ) );
-      sensorList->append( sensor );
-      timeList->append( sensor );
+      sensorList.append( sensor );
+      timeList.append( sensor );
     }
     SensorParams *sp = new SensorParams(meter);
     sp->addParam("FORMAT",
@@ -1127,7 +1100,7 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
       QString encoding = lineParser.getString("ENCODING");
 
       sensor = ( sensorMap["XMMS"] = new XMMSSensor( interval, encoding ) );
-      sensorList->append( sensor );
+      sensorList.append( sensor );
     }
     SensorParams *sp = new SensorParams(meter);
     sp->addParam("FORMAT",
@@ -1146,7 +1119,7 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
       int interval = lineParser.getInt("INTERVAL");
       interval = (interval == 0)?1000:interval;
       sensor = ( sensorMap["NOATUN"] = new NoatunSensor( interval, client ) );
-      sensorList->append( sensor );
+      sensorList.append( sensor );
     }
     SensorParams *sp = new SensorParams(meter);
     sp->addParam("FORMAT",
@@ -1167,7 +1140,7 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
 
       sensor = (sensorMap["PROGRAM"+progName] =
                   new ProgramSensor( progName, interval, encoding ) );
-      sensorList->append( sensor );
+      sensorList.append( sensor );
     }
     SensorParams *sp = new SensorParams(meter);
     sp->addParam( "LINE", QString::number(lineParser.getInt("LINE")));
@@ -1190,7 +1163,7 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
 
       sensor = ( sensorMap["RSS"+source] =
                    new RssSensor( source, interval, format, encoding ) );
-      sensorList->append( sensor );
+      sensorList.append( sensor );
     }
     SensorParams *sp = new SensorParams(meter);
     sp->addParam("SOURCE",lineParser.getString("SOURCE"));
@@ -1245,28 +1218,26 @@ void karamba::meterClicked(QMouseEvent* e, Meter* meter)
 void karamba::passClick(QMouseEvent *e)
 {
   //qDebug("karamba::passClick");
-  QObjectListIt it2( *timeList ); // iterate over meters
-  while ( it2 != 0 )
+  QListIterator<QObject *> it2( timeList ); // iterate over meters
+  while ( it2.hasNext() )
   {
-    (( DateSensor* ) *it2)->toggleCalendar( e );
-    ++it2;
+    (( DateSensor* ) it2.next())->toggleCalendar( e );
   }
 
 
   // We create a temporary click list here because original
   // can change during the loop (infinite loop Bug 994359)
-  QObjectList clickListTmp(*clickList);
-  QObjectListIt it(clickListTmp);
-  while (it != 0)
+  QList<QObject *> clickListTmp(clickList);
+  QListIterator<QObject *> it(clickListTmp);
+  while (it.hasNext())
   {
-    Meter* meter = (Meter*)(*it);
+    Meter* meter = (Meter*)(it.next());
     // Check if meter is still in list
-    if (clickList->containsRef(meter) && meter->click(e))
+    if (clickList.count(meter) && meter->click(e))
     {
       // callback
       meterClicked(e, meter);
     }
-    ++it;
   }
 
   //Everything below is to call the python callback function
@@ -1305,7 +1276,7 @@ void karamba::passWheelClick( QWheelEvent *e )
 void karamba::mousePressEvent( QMouseEvent *e )
 {
   //qDebug("karamba::mousePressEvent");
-  if( e->button() == RightButton )
+  if( e->button() == Qt::RightButton )
   {
     kpop->exec(QCursor::pos());
   }
@@ -1362,35 +1333,33 @@ void karamba::mouseMoveEvent( QMouseEvent *e )
   else
   {
     // Change cursor over ClickArea
-    QObjectListIt it(*clickList);
+    QListIterator<QObject *> it(clickList);
     bool insideArea = false;
 
-    while (it != 0)
+    while (it.hasNext())
     {
-      insideArea = ((Meter*)(*it)) -> insideActiveArea(e -> x(), e ->y());
+      insideArea = ((Meter*) it.next()) -> insideActiveArea(e -> x(), e ->y());
       if (insideArea)
       {
          break;
       }
-      ++it;
     }
 
     if(insideArea)
     {
-      if( cursor().shape() != PointingHandCursor )
-        setCursor( PointingHandCursor );
+      if( cursor().shape() != Qt::PointingHandCursor )
+        setCursor( Qt::PointingHandCursor );
     }
     else
     {
-      if( cursor().shape() != ArrowCursor )
-        setCursor( ArrowCursor );
+      if( cursor().shape() != Qt::ArrowCursor )
+        setCursor( Qt::ArrowCursor );
     }
 
-    QObjectListIt image_it( *imageList);        // iterate over image sensors
-    while ( image_it != 0 )
+    QListIterator<QObject *> image_it( imageList);        // iterate over image sensors
+    while ( image_it.hasNext() )
     {
-      ((ImageLabel*) *image_it)->rolloverImage(e);
-      ++image_it;
+      ((ImageLabel*) image_it.next())->rolloverImage(e);
     }
   }
 
@@ -1402,13 +1371,13 @@ void karamba::mouseMoveEvent( QMouseEvent *e )
     // This will work now, but only when you move at least
     // one pixel in any direction with your mouse.
     //if( e->button() == Qt::LeftButton )
-    if( e->state() == LeftButton)
+    if( e->state() == Qt::LeftButton)
       button = 1;
     //else if( e->button() == Qt::MidButton )
-    else if( e->state() == MidButton )
+    else if( e->state() == Qt::MidButton )
       button = 2;
     //else if( e->button() == Qt::RightButton )
-    else if( e->state() == RightButton )
+    else if( e->state() == Qt::RightButton )
       button = 3;
 
     pythonIface->widgetMouseMoved(this, e->x(), e->y(), button);
@@ -1437,17 +1406,18 @@ void karamba::paintEvent ( QPaintEvent *e)
     }
   }
   QRect rect = e->rect();
-  bitBlt(this,rect.topLeft(),&pm,rect,Qt::CopyROP);
+  QPainter p(this);
+  p.drawPixmap(rect.topLeft(), pm, rect);
+  p.end();
 }
 
 void karamba::updateSensors()
 {
   //qDebug("karamba::updateSensors");
-  QObjectListIt it( *sensorList ); // iterate over meters
-  while ( it != 0 )
+  QListIterator<QObject *> it( sensorList ); // iterate over meters
+  while ( it.hasNext() )
   {
-    ((Sensor*) *it)->update();
-    ++it;
+    ((Sensor*) it.next())->update();
   }
   QTimer::singleShot( 500, this, SLOT(step()) );
 }
@@ -1466,21 +1436,24 @@ void karamba::updateBackground(KSharedPixmap* kpm)
   pm = QPixmap(size());
   buffer.fill(Qt::black);
 
-  QObjectListIt it( *imageList ); // iterate over meters
+  QListIterator<QObject *> it( imageList ); // iterate over meters
   p.begin(&buffer);
-  bitBlt(&buffer,0,0,&background,0,Qt::CopyROP);
+  p.drawPixmap(0, 0, background);
 
-  while ( it != 0 )
+  while ( it.hasNext() ) 
   {
-    if (((ImageLabel*) *it)->background == 1)
+    ImageLabel *tmp = qobject_cast<ImageLabel *>(it.next());
+    if (tmp->background == 1)
     {
-      ((ImageLabel*) *it)->mUpdate(&p, 1);
+      tmp->mUpdate(&p, 1);
     }
-    ++it;
   }
   p.end();
 
-  bitBlt(&pm,0,0,&buffer,0,Qt::CopyROP);
+  p.begin(&pm);
+  p.drawPixmap(0, 0, buffer);
+  p.end();
+  
   background = pm;
 
   QPixmap buffer2 = QPixmap(size());
@@ -1488,18 +1461,20 @@ void karamba::updateBackground(KSharedPixmap* kpm)
   pm = QPixmap(size());
   buffer2.fill(Qt::black);
 
-  QObjectListIt it2( *meterList ); // iterate over meters
+  QListIterator<QObject *> it2( meterList ); // iterate over meters
   p.begin(&buffer2);
-  bitBlt(&buffer2,0,0,&background,0,Qt::CopyROP);
+  p.drawPixmap(0, 0, background);
 
-  while ( it2 != 0 )
+  while ( it2.hasNext() )
   {
-    ((Meter*) *it2)->mUpdate(&p);
-    ++it2;
+    ((Meter*) it2.next())->mUpdate(&p);
   }
   p.end();
 
-  bitBlt(&pm,0,0,&buffer2,0,Qt::CopyROP);
+  p.begin(&pm);
+  p.drawPixmap(0, 0, buffer2);
+  p.end();
+  
   if (systray != 0)
   {
     systray->updateBackgroundPixmap(buffer2);
@@ -1533,18 +1508,20 @@ void karamba::externalStep()
     pm = QPixmap(size());
     buffer.fill(Qt::black);
 
-    QObjectListIt it( *meterList ); // iterate over meters
+    QListIterator<QObject *> it( meterList ); // iterate over meters
     p.begin(&buffer);
-    bitBlt(&buffer,0,0,&background,0,Qt::CopyROP);
+    p.drawPixmap(0, 0, background);
 
-    while ( it != 0 )
+    while ( it.hasNext()  )
     {
-      ((Meter*) *it)->mUpdate(&p);
-      ++it;
+      ((Meter*) it.next())->mUpdate(&p);
     }
     p.end();
 
-    bitBlt(&pm,0,0,&buffer,0,Qt::CopyROP);
+    p.begin(&pm);
+    p.drawPixmap(0, 0, buffer);
+    p.end();
+
     repaint();
   }
 }
@@ -1558,19 +1535,20 @@ void karamba::step()
     QPixmap buffer = QPixmap(size());
     buffer.fill(Qt::black);
 
-    QObjectListIt it( *meterList ); // iterate over meters
+    QListIterator<QObject *> it( meterList ); // iterate over meters
     p.begin(&buffer);
+    p.drawPixmap(0, 0, background);
 
-    bitBlt(&buffer,0,0,&background,0,Qt::CopyROP);
-
-    while (it != 0)
+    while (it.hasNext())
     {
-      ((Meter*) *it)->mUpdate(&p);
-      ++it;
+      ((Meter*) it.next())->mUpdate(&p);
     }
     p.end();
 
-    bitBlt(&pm,0,0,&buffer,0,Qt::CopyROP);
+    p.begin(&pm);
+    p.drawPixmap(0, 0, buffer);
+    p.end();
+    
     update();
   }
 
@@ -1721,17 +1699,11 @@ void karamba::passMenuItemClicked(int id)
   if (pythonIface && pythonIface->isExtensionLoaded())
   {
     KPopupMenu* menu = 0;
-    for(int i = 0; i < (int)menuList->count(); i++)
+    for(int i = 0; i < (int)menuList.count(); i++)
     {
       KPopupMenu* tmp;
-      if(i==0)
-      {
-        tmp = (KPopupMenu*) menuList->first();
-      }
-      else
-      {
-        tmp = (KPopupMenu*) menuList->next();
-      }
+      tmp = (KPopupMenu*) menuList.at(i);
+      
       if(tmp != 0)
       {
         if(tmp->isItemVisible(id))
@@ -1821,7 +1793,7 @@ void karamba::readProperties(KConfig* config)
 void karamba::dragEnterEvent(QDragEnterEvent* event)
 {
   //qDebug("karamba::dragEnterEvent");
-  event->accept(QTextDrag::canDecode(event));
+  event->accept(Q3TextDrag::canDecode(event));
 }
 
 //Handle the drop part of a drag and drop event.
@@ -1830,7 +1802,7 @@ void karamba::dropEvent(QDropEvent* event)
   //qDebug("karamba::dropEvent");
   QString text;
 
-  if ( QTextDrag::decode(event, text) )
+  if ( Q3TextDrag::decode(event, text) )
   {
     //Everything below is to call the python callback function
     if (pythonIface && pythonIface->isExtensionLoaded())

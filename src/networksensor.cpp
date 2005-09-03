@@ -14,6 +14,8 @@
 #include <net/route.h>
 #endif
 
+#include <QTextStream>
+
 #include "networksensor.h"
 
 NetworkSensor::NetworkSensor( QString dev, int interval ):Sensor( interval )
@@ -128,7 +130,6 @@ void NetworkSensor::update()
 {
     SensorParams *sp;
     Meter *meter;
-    QObjectListIt it( *objList );
     QString format;
     int decimals;
 
@@ -137,9 +138,9 @@ void NetworkSensor::update()
     getInOutBytes( inB, outB );
     netTimer.restart();
 
-    while( it != 0 )
+    foreach (QObject *it, objList)
     {
-        sp = (SensorParams*)(*it);
+        sp = (SensorParams*)(it);
         meter = sp->getMeter();
         format = sp->getParam( "FORMAT" );
         decimals = ( sp->getParam( "DECIMALS" ) ).toInt();
@@ -155,7 +156,6 @@ void NetworkSensor::update()
         format.replace( QRegExp("%out", false), QString::number( (outB - transmittedBytes)/delay, 'f', decimals ) );
 
         meter->setValue( format );
-        ++it;
     }
     receivedBytes = inB;
     transmittedBytes = outB;

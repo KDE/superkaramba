@@ -29,6 +29,7 @@
 #include <qpixmap.h>
 #include <qfile.h>
 #include <q3valuevector.h>
+#include <QDir>
 
 class LineParser;
 class QTextStream;

@@ -10,7 +10,6 @@
 
 #include "karamba.h"
 #include "karambainterface.h"
-#include "qwidgetlist.h"
 #include "themesdlg.h"
 
 KarambaIface::KarambaIface(): DCOPObject("KarambaIface")
@@ -23,14 +22,10 @@ KarambaIface::~KarambaIface()
 
 karamba* KarambaIface::getKaramba(QString name)
 {
-  QWidgetList *list = QApplication::allWidgets();
-  QWidgetListIt it(*list);  // iterate over the widgets
-  QWidget* w;
   karamba* result = 0;
 
-  while ( (w=it.current()) != 0 )  // for each widget...
+  foreach (QWidget *w, QApplication::allWidgets())
   {
-    ++it;
     if (QString(w->name()).startsWith("karamba"))
     {
       karamba* k = (karamba*) w;
@@ -41,27 +36,21 @@ karamba* KarambaIface::getKaramba(QString name)
       }
     }
   }
-  delete list;
   return result;
 }
 
 ThemesDlg* KarambaIface::getThemeWnd()
 {
-  QWidgetList  *list = QApplication::allWidgets();
-  QWidgetListIt it( *list );         // iterate over the widgets
-  QWidget* w;
   ThemesDlg* result = 0;
 
-  while ( (w=it.current()) != 0 ) // for each widget...
+  foreach (QWidget *w, QApplication::allWidgets())
   {
-    ++it;
     if (QString(w->name()) == "ThemesLayout")
     {
       result = (ThemesDlg*) w;
       break;
     }
   }
-  delete list;                      // delete the list, not the widgets
   return result;
 }
 

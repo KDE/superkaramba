@@ -79,10 +79,9 @@ void RssSensor::update()
         SensorParams *sp;
         Meter *meter;
 
-        QObjectListIt it( *objList );
-        while (it != 0)
-        {
-            sp = (SensorParams*)(*it);
+        foreach (QObject *it, objList)
+	{
+            sp = (SensorParams*)(it);
             meter = sp->getMeter();
 
             // this is a hack to force the
@@ -124,8 +123,6 @@ void RssSensor::update()
             {
                 qDebug ("Document Node was null!!");
             }
-
-            ++it;
         }
     }
     // Cleanup

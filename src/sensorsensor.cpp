@@ -8,7 +8,7 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 #include "sensorsensor.h"
-
+#include <QByteArray>
 
 SensorSensor::SensorSensor(int interval, char tempUnit) : Sensor( interval )
 {
@@ -45,7 +45,7 @@ SensorSensor::~SensorSensor()
 void SensorSensor::receivedStdout(KProcess *, char *buffer, int len )
 {
     buffer[len] = 0;
-    sensorResult += QString( QCString(buffer) );
+    sensorResult += QString( QByteArray(buffer) );
 }
 
 void SensorSensor::processExited(KProcess *)
@@ -74,10 +74,9 @@ void SensorSensor::processExited(KProcess *)
     SensorParams *sp;
     Meter *meter;
 
-    QObjectListIt lit( *objList );
-    while (lit != 0)
+    foreach (QObject *lit, objList)
     {
-        sp = (SensorParams*)(*lit);
+        sp = (SensorParams*)(lit);
         meter = sp->getMeter();
         format = sp->getParam("FORMAT");
         type = sp->getParam("TYPE");
@@ -96,7 +95,6 @@ void SensorSensor::processExited(KProcess *)
         format.replace( QRegExp("%v", false), sensorMap[type]);
 #endif
         meter->setValue(format);
-        ++lit;
     }
 }
 

@@ -127,13 +127,11 @@ PyObject* QString2PyString(QString string)
 long getMeter(long widget, char* name)
 {
   karamba* theme = (karamba*)widget;
-  QObjectListIt it( *theme->meterList ); // iterate over meters
-
-  while ( it != 0 )
+  
+  foreach (QObject *it, theme->meterList)
   {
-    if (strcmp(((Meter*) *it)->name(), name) == 0)
-      return (long)*it;
-    ++it;
+    if (strcmp(((Meter*) it)->name(), name) == 0)
+      return (long)it;
   }
   return 0;
 }

@@ -7,11 +7,10 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
+#include <QtAlgorithms>
 #include "sensor.h"
 Sensor::Sensor(int iMsec)
 {
-    objList = new QObjectList();
-    objList->setAutoDelete( true );
     msec = iMsec;
 }
 
@@ -26,26 +25,26 @@ void Sensor::start()
 
 Sensor::~Sensor()
 {
-objList->clear();
-delete objList;
+	qDeleteAll(objList);
+	objList.clear();
 }
 
 void Sensor::addMeter( SensorParams *sp )
 {
-  objList->append(sp);
+  objList.append(sp);
 }
 
 SensorParams* Sensor::hasMeter( Meter *meter )
 {
-  QObjectListIt it( *objList );
-  while ( it != 0 )
-    {
-      if (((SensorParams*) *it)->getMeter() == meter)
+  QListIterator<QObject *> it( objList );
+
+  foreach (QObject *it, objList)
+  {
+      if (((SensorParams*) it)->getMeter() == meter)
         {
-          return (SensorParams*) *it;
+          return ((SensorParams*) it);
         }
-      ++it;
-    }
+  }
   return NULL;
 }
 
@@ -54,7 +53,7 @@ void Sensor::deleteMeter( Meter *meter )
   SensorParams* sp = hasMeter(meter);
 
   if (sp)
-    objList->removeRef(sp);
+    objList.removeAll(sp);
 }
 
 void Sensor::setMaxValue( SensorParams* )

@@ -9,6 +9,7 @@
  ***************************************************************************/
 #include "textfilesensor.h"
 #include "qdom.h"
+#include <Q3ValueVector>
 
 TextFileSensor::TextFileSensor( const QString &fn, bool iRdf, int interval, const QString &encoding )
         : Sensor( interval )
@@ -31,7 +32,7 @@ TextFileSensor::~TextFileSensor()
 
 void TextFileSensor::update()
 {
-    QValueVector<QString> lines;
+    Q3ValueVector<QString> lines;
     QFile file(fileName);
     QString line;
     if ( file.open(IO_ReadOnly | IO_Translate) )
@@ -78,10 +79,9 @@ void TextFileSensor::update()
     Meter *meter;
 
     int count = (int) lines.size();
-    QObjectListIt it( *objList );
-    while (it != 0)
+    foreach (QObject *it, objList)
     {
-        sp = (SensorParams*)(*it);
+        sp = (SensorParams*)(it);
         meter = sp->getMeter();
         lineNbr = (sp->getParam("LINE")).toInt();
         if ( lineNbr >= 1  && lineNbr <=  (int) count )
@@ -102,7 +102,6 @@ void TextFileSensor::update()
             }
             meter->setValue( text );
         }
-        ++it;
     }
 }
 

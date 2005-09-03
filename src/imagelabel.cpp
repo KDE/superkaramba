@@ -151,7 +151,8 @@ ImageLabel::~ImageLabel()
   }
   if(!old_tip_rect.isNull())
   {
-    QToolTip::remove(m_karamba, old_tip_rect);
+//    QToolTip::remove(m_karamba, old_tip_rect);
+     QToolTip::remove(m_karamba);
   }
 }
 

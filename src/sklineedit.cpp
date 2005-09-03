@@ -35,12 +35,12 @@ SKLineEdit::~SKLineEdit()
 void SKLineEdit::drawFrame(QPainter *p)
 {
   p->setPen(frameColor);
-  p->drawRect(frameRect());
+  p->drawRect(frameGeometry());
 }
 
 void SKLineEdit::drawContents(QPainter *p)
 {
-  QLineEdit::drawContents(p);
+  //QLineEdit::drawContents(p);
 }
 
 void SKLineEdit::setFrameColor(QColor c)

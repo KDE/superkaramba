@@ -47,7 +47,7 @@ PyObject* py_createInputBox(PyObject *, PyObject *args)
   Input *tmp = new Input((karamba*)widget, (int)x, (int)y, (int)w, (int)h);
   tmp->setValue(PyString2QString(text));
   tmp->setTextProps(((karamba*)widget)->getDefaultTextProps());
-  ((karamba*)widget)->meterList->append(tmp);
+  ((karamba*)widget)->meterList.append(tmp);
   tmp->show();
 
   ((karamba*)widget)->makeActive();
@@ -64,7 +64,7 @@ PyObject* py_deleteInputBox(PyObject *, PyObject *args)
   if (!checkKarambaAndMeter(widget, meter, "Input"))
     return NULL;
 
-  bool result = ((karamba*)widget)->meterList->removeRef((Meter*)meter);
+  bool result = ((karamba*)widget)->meterList.removeAll((Meter*)meter);
 
   ((karamba*)widget)->makePassive();
 
