@@ -28,13 +28,13 @@
 @author See README for the list of authors
 */
 
-class ThemeWidget : public ThemeWidgetLayout
+class ThemeWidget : public Ui::ThemeWidgetLayout
 {
     Q_OBJECT
   public:
     ThemeWidget(QWidget *parent = 0, const char *name = 0);
     ThemeWidget(ThemeFile* tf);
-    ~ThemeWidget();
+    virtual ~ThemeWidget();
 
     ThemeFile* themeFile() const { return m_themeFile; };
 

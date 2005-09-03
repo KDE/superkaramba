@@ -24,10 +24,7 @@
 #include "themewidget.h"
 #include "kwidgetlistbox.h"
 #include "karamba.h"
-
-#ifdef KDE_3_3
-  #include "sknewstuff.h"
-#endif
+#include "sknewstuff.h"
 
 #include "superkarambasettings.h"
 #include <kdebug.h>
@@ -45,24 +42,21 @@
 #include <kprotocolinfo.h>
 
 ThemesDlg::ThemesDlg(QWidget *parent, const char *name)
- : ThemesLayout(parent, name)
+ : Ui::ThemesLayout(parent, name)
 {
   populateListbox();
-#ifdef KDE_3_3
   mNewStuff = 0;
-#endif
 }
 
 ThemesDlg::~ThemesDlg()
 {
   //kdDebug() << k_funcinfo << endl;
   saveUserAddedThemes();
-#ifdef KDE_3_3
+  
   if(mNewStuff)
   {
     delete mNewStuff;
   }
-#endif
 }
 
 void ThemesDlg::saveUserAddedThemes()

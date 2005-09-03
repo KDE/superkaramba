@@ -119,7 +119,7 @@ void KarambaApplication::setUpSysTray(KAboutData* about)
 
   //Create theme list window.
   //This will function as the main window for the tray icon
-  themeListWindow = new ThemesDlg();
+  themeListWindow = new ThemesDlg;
 
   //Set up systray icon
   sysTrayIcon = new KSystemTray(themeListWindow);

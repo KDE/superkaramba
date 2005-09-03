@@ -21,7 +21,7 @@
 #ifndef THEMESDLG_H
 #define THEMESDLG_H
 
-#include <themes_layout.h>
+#include "themes_layout.h"
 #include "karambaapp.h"
 
 /**
@@ -29,13 +29,13 @@
 */
 class SKNewStuff;
 
-class ThemesDlg : public ThemesLayout
+class ThemesDlg : public Ui::ThemesLayout
 {
     Q_OBJECT
 
   public:
     ThemesDlg(QWidget *parent = 0, const char *name = 0);
-    ~ThemesDlg();
+    virtual ~ThemesDlg();
 
     int addTheme(const QString &appId, const QString &file);
     void removeTheme(const QString &appId, const QString &file, int instance);
