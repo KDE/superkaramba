@@ -23,9 +23,8 @@
 
 #include <qobject.h>
 #include <qpixmap.h>
-#include <q3ptrlist.h>
-#include <q3valuelist.h>
 #include <QX11EmbedWidget>
+#include <QList>
 
 class KWinModule;
 
@@ -56,9 +55,9 @@ signals:
 
 private:
     KWinModule *kwin_module;
-    Q3ValueList<WId> systemTrayWindows;
+    QList<WId> systemTrayWindows;
 
-    Q3PtrList<QX11EmbedWidget> m_Wins;
+    QList<QX11EmbedWidget> m_Wins;
 
     Atom net_system_tray_selection;
     Atom net_system_tray_opcode;

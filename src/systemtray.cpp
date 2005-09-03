@@ -18,7 +18,7 @@
 
 #include "systemtray.h"
 
-
+#include <QtAlgorithms>
 #include <qobject.h>
 #include <kiconloader.h>
 #include <klocale.h>
@@ -27,11 +27,10 @@
 #include <kdebug.h>
 #include <kwin.h>
 
-#include <qpopupmenu.h>
-#include <qdragobject.h>
 #include <qlayout.h>
 #include <qstringlist.h>
 #include <qpixmap.h>
+#include <QX11Info>
 
 #include <X11/Xlib.h>
 
@@ -39,19 +38,24 @@ Systemtray::Systemtray(QWidget* parent)
   : QWidget(parent,0,0)
 {
   setBackgroundOrigin(ParentOrigin);
-  setBackgroundMode(FixedPixmap);
-  m_Wins.setAutoDelete(true);
+  setBackgroundMode(Qt::FixedPixmap);
 }
 
 
 Systemtray::~Systemtray()
 {
+/*
+ * qDeleteAll(m_Wins);
   m_Wins.clear();
+  qDeleteAll(systemTrayWindows);
+  systemTrayWindows.clear();
+*/
 }
 
 
 void Systemtray::updateBackgroundPixmap ( const QPixmap & pixmap) {
-  QXEmbed *emb;
+/* TODO: Port this shite
+ * QXEmbed *emb;
   setPaletteBackgroundPixmap (pixmap);
     for (emb = m_Wins.first(); emb != 0L; emb = m_Wins.next()) {
 
@@ -69,33 +73,33 @@ void Systemtray::updateBackgroundPixmap ( const QPixmap & pixmap) {
     XMapWindow(qt_xdisplay(), hack);
     XUnmapWindow(qt_xdisplay(), hack);
     XDestroyWindow(qt_xdisplay(), hack);
+*/
 }
 
 void Systemtray::initSystray( void )
 {
+  /*
   bool existing = false;
   //bool content = false;
-  Display *display = qt_xdisplay();
+  Display *display = QX11Info::display();
   no_of_systray_windows = 0;
 
   kwin_module = new KWinModule();
   systemTrayWindows = kwin_module->systemTrayWindows();
-  QValueList<WId>::ConstIterator end(systemTrayWindows.end());
-  for (QValueList<WId>::ConstIterator it = systemTrayWindows.begin(); it!=end; ++it)
+  QList<WId>::ConstIterator end(systemTrayWindows.end());
+  for (QList<WId>::ConstIterator it = systemTrayWindows.begin(); it!=end; ++it)
   {
     no_of_systray_windows++;
-    QXEmbed *emb;
+    QX11EmbedWidget *emb;
 
-    emb = new QXEmbed(this);
-    emb->setBackgroundMode(FixedPixmap);
-
-    emb->setAutoDelete(false);
+    emb = new QX11EmbedWidget(this);
+    emb->setBackgroundMode(Qt::FixedPixmap);
 
     connect(emb, SIGNAL(embeddedWindowDestroyed()), SLOT(updateTrayWindows()));
 
     m_Wins.append(emb);
 
-    emb->embed(*it);
+    emb->embedInto(*it);
     emb->resize(24, 24);
     emb->show();
     existing = true;
@@ -134,16 +138,18 @@ void Systemtray::initSystray( void )
     xev.data.l[0] = CurrentTime;
     xev.data.l[1] = net_system_tray_selection;
     xev.data.l[2] = winId();
-    xev.data.l[3] = 0;       /* Manager specific data */
-    xev.data.l[4] = 0;       /* Manager specific data */
+    xev.data.l[3] = 0;       // Manager specific data 
+    xev.data.l[4] = 0;       // Manager specific data 
 
     XSendEvent( display, root, false, StructureNotifyMask, (XEvent *)&xev );
   }
+  */
 }
 
 void Systemtray::updateTrayWindows( void )
 {
-  QXEmbed *emb;
+/*
+ * QXEmbed *emb;
 
   emb = m_Wins.first();
   while ((emb = m_Wins.current()) != 0L)
@@ -155,10 +161,12 @@ void Systemtray::updateTrayWindows( void )
       m_Wins.next();
   }
   layoutSystray();
+*/
 }
 void Systemtray::layoutSystray()
 {
-  int i = 0, a = 0;
+/*
+ * int i = 0, a = 0;
 
   QXEmbed* emb;
   int x = 0;
@@ -169,8 +177,8 @@ void Systemtray::layoutSystray()
 
   if(aa < 1)
   {
-    /* The place is to small to display a icon we make than one line with
-       icons that we display at the top */
+    // The place is to small to display a icon we make than one line with
+    //   icons that we display at the top
     aa = 1;
   }
 
@@ -188,10 +196,12 @@ void Systemtray::layoutSystray()
     count++;
     emb->repaint();
   }
+  */
 }
 
 void Systemtray::systemTrayWindowAdded( WId w )
 {
+  /*
   //bool content = false;
   QXEmbed *emb;
   no_of_systray_windows++;
@@ -210,13 +220,16 @@ void Systemtray::systemTrayWindowAdded( WId w )
   emb->show();
 
   layoutSystray();
+*/
 }
 
 void Systemtray::systemTrayWindowRemoved(WId)
 {
+/*
   no_of_systray_windows--;
   emit updated();
   updateTrayWindows();
+*/
 }
 
 int Systemtray::getCurrentWindowCount()

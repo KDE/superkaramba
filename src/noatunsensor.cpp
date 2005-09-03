@@ -161,60 +161,28 @@ QString NoatunSensor::getTitle()
 
 int NoatunSensor::getTime()
 {
-    QByteArray data, replyData;
-    QCString replyType;
     int result;
-    QDataStream arg(data, IO_WriteOnly);
-    arg << 5;
-    if (!client->call( noatunID, "Noatun", "position()",
-                       data, replyType, replyData))
+    DCOPReply dcopResult = DCOPRef( noatunID, "Noatun").call("position()");
+    if (!dcopResult.get(result))
     {
-        result = 0;
-        qDebug("there was some error using DCOP.");
+        qDebug("Something went wrong with the call!");
+	result = 0;
     }
-    else
-    {
-        QDataStream reply(replyData, IO_ReadOnly);
-        if (replyType == "int")
-        {
-            reply >> result;
-        }
-        else
-        {
-            result = 0;
-            qDebug("title returned an unexpected type of reply!");
-        }
-    }
+
     return result;
 }
 
 
 int NoatunSensor::getLength()
 {
-    QByteArray data, replyData;
-    QCString replyType;
     int result;
-    QDataStream arg(data, IO_WriteOnly);
-    arg << 5;
-    if (!client->call( noatunID, "Noatun", "length()",
-                       data, replyType, replyData))
+    DCOPReply dcopResult = DCOPRef( noatunID, "Noatun").call("length()");
+    if (!dcopResult.get(result))
     {
+        qDebug("Something went wrong with the call!");
         result = 0;
-        qDebug("there was some error using DCOP.");
     }
-    else
-    {
-        QDataStream reply(replyData, IO_ReadOnly);
-        if (replyType == "int")
-        {
-            reply >> result;
-        }
-        else
-        {
-            result = 0;
-            qDebug("title returned an unexpected type of reply!");
-        }
-    }
+
     return result;
 }
 

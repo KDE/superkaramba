@@ -33,6 +33,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <Q3PtrList>
 #include <Q3ValueList>
 #include <QX11Info>
+#include <QDesktopWidget>
 
 #include <X11/X.h>
 #include <X11/Xlib.h>
@@ -342,11 +343,7 @@ Task::Task(WId win, TaskManager * parent, const char *name) :
   _lastWidth(0), _lastHeight(0), _lastResize(false), _lastIcon(),
   _thumbSize(0.2), _thumb(), _grab()
 {
-#ifdef KDE_3_2
   _info = KWin::windowInfo(_win, 0, 0);
-#else
-  _info = KWin::info(_win);
-#endif
   // try to load icon via net_wm
   _pixmap = KWin::icon(_win, 16, 16, true);
 
@@ -367,11 +364,7 @@ Task::~Task()
 
 void Task::refresh(bool icon)
 {
-#ifdef KDE_3_2
   _info = KWin::windowInfo(_win, 0, 0);
-#else
-  _info = KWin::info(_win);
-#endif
   if (icon)
   {
     // try to load icon via net_wm
@@ -406,56 +399,32 @@ void Task::setActive(bool a)
 
 bool Task::isMaximized() const
 {
-#ifdef KDE_3_2
   return(_info.state() & NET::Max);
-#else
-  return(_info.state & NET::Max);
-#endif
 }
 
 bool Task::isIconified() const
 {
-#ifdef KDE_3_2
   return (_info.mappingState() == NET::Iconic);
-#else
-  return (_info.mappingState == NET::Iconic);
-#endif
 }
 
 bool Task::isAlwaysOnTop() const
 {
-#ifdef KDE_3_2
   return (_info.state() & NET::StaysOnTop);
-#else
-  return (_info.state & NET::StaysOnTop);
-#endif
 }
 
 bool Task::isShaded() const
 {
-#ifdef KDE_3_2
   return (_info.state() & NET::Shaded);
-#else
-  return (_info.state & NET::Shaded);
-#endif
 }
 
 bool Task::isOnCurrentDesktop() const
 {
-#ifdef KDE_3_2
   return (_info.onAllDesktops() || _info.desktop() == kwin_module->currentDesktop());
-#else
-  return (_info.onAllDesktops || _info.desktop == kwin_module->currentDesktop());
-#endif
 }
 
 bool Task::isOnAllDesktops() const
 {
-#ifdef KDE_3_2
   return _info.onAllDesktops();
-#else
-  return _info.onAllDesktops;
-#endif
 }
 
 bool Task::isActive() const
@@ -471,11 +440,7 @@ bool Task::isOnTop() const
 bool Task::isModified() const
 {
   static QString modStr = QString::fromUtf8("[") + i18n("modified") + QString::fromUtf8("]");
-#ifdef KDE_3_2
   int modStrPos = _info.visibleName().find(modStr);
-#else
-  int modStrPos = _info.visibleName.find(modStr);
-#endif
 
   return ( modStrPos != -1 );
 }
@@ -631,23 +596,15 @@ void Task::maximize()
   NETWinInfo ni( QX11Info::display(),  _win, QX11Info::appRootWindow(), NET::WMState);
   ni.setState( NET::Max, NET::Max );
 
-#ifdef KDE_3_2
   if (_info.mappingState() == NET::Iconic)
-#else
-  if (_info.mappingState == NET::Iconic)
-#endif
-    activate();
+  activate();
 }
 
 void Task::restore()
 {
   NETWinInfo ni( QX11Info::display(),  _win, QX11Info::appRootWindow(), NET::WMState);
   ni.setState( 0, NET::Max );
-#ifdef KDE_3_2
   if (_info.mappingState() == NET::Iconic)
-#else
-  if (_info.mappingState == NET::Iconic)
-#endif
     activate();
 }
 
@@ -694,33 +651,21 @@ void Task::activateRaiseOrIconify()
 
 void Task::toDesktop(int desk)
 {
-  NETWinInfo ni(QX11Info::display(), _win, QX11Info::appRootWindow()(), NET::WMDesktop);
+  NETWinInfo ni(QX11Info::display(), _win, QX11Info::appRootWindow(), NET::WMDesktop);
   if (desk == 0)
   {
-#ifdef KDE_3_2
     if (_info.onAllDesktops())
     {
         ni.setDesktop(kwin_module->currentDesktop());
         KWin::forceActiveWindow(_win);
     }
-#else
-    if (_info.onAllDesktops)
-    {
-        ni.setDesktop(kwin_module->currentDesktop());
-        KWin::setActiveWindow(_win);
-    }
-#endif
     else
         ni.setDesktop(NETWinInfo::OnAllDesktops);
     return;
   }
   ni.setDesktop(desk);
   if (desk == kwin_module->currentDesktop())
-#ifdef KDE_3_2
     KWin::forceActiveWindow(_win);
-#else
-    KWin::setActiveWindow(_win);
-#endif
 }
 
 void Task::toCurrentDesktop()
@@ -781,12 +726,8 @@ void Task::updateThumbnail()
    // by the thumbnail generation. This makes things much smoother
    // on slower machines.
    //
-  QWidget *rootWin = qApp->desktop();
-#ifdef KDE_3_2
+  QDesktopWidget *rootWin = qApp->desktop();
   QRect geom = _info.geometry();
-#else
-  QRect geom = _info.geometry;
-#endif
    _grab = QPixmap::grabWindow( rootWin->winId(),
         geom.x(), geom.y(),
         geom.width(), geom.height() );

@@ -27,9 +27,7 @@
 /**
 @author See README for the list of authors
 */
-#ifdef KDE_3_3
 class SKNewStuff;
-#endif
 
 class ThemesDlg : public ThemesLayout
 {
@@ -60,11 +58,9 @@ class ThemesDlg : public ThemesLayout
     int themeIndex(QString file);
     QStringList themes();
 
-#ifdef KDE_3_3
   private:
     SKNewStuff *mNewStuff;
     QStringList m_newStuffStatus;
-#endif
 };
 
 #endif
