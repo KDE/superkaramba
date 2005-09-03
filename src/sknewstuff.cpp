@@ -77,8 +77,10 @@ bool SKNewStuff::install( const QString &fileName )
 
   if( result->name() == "application/x-gzip" ||
       result->name() == "application/x-tgz" ||
-      result->name() == "application/x-bzipi2" ||
+      result->name() == "application/x-bzip" ||
+      result->name() == "application/x-bzip2" ||
       result->name() == "application/x-tbz" ||
+      result->name() == "application/x-tbz2" ||
       result->name() == "application/x-tar" ||
       result->name() == "application/x-tarz")
   {
