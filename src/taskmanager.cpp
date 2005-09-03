@@ -28,6 +28,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <kiconloader.h>
 #include <kwinmodule.h>
 #include <netwm.h>
+#include <qdesktopwidget.h>
 #include <qtimer.h>
 #include <qimage.h>
 #include <Q3PtrList>
@@ -120,11 +121,7 @@ void TaskManager::windowAdded(WId w )
 {
   NETWinInfo info(QX11Info::display(),  w, QX11Info::appRootWindow(),
                   NET::WMWindowType | NET::WMPid | NET::WMState );
-  #ifdef KDE_3_2
-  NET::WindowType windowType = info.windowType(NET_ALL_TYPES_MASK);
-  #else
-  NET::WindowType windowType = info.windowType();
-  #endif
+  NET::WindowType windowType = info.windowType(NET::AllTypesMask);
   // ignore NET::Tool and other special window types
   if (windowType != NET::Normal && windowType != NET::Override
       && windowType != NET::Unknown && windowType != NET::Dialog)
@@ -597,7 +594,7 @@ void Task::maximize()
   ni.setState( NET::Max, NET::Max );
 
   if (_info.mappingState() == NET::Iconic)
-  activate();
+    activate();
 }
 
 void Task::restore()
