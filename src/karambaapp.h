@@ -11,20 +11,7 @@
 #ifndef KARAMBAAPP_H
 #define KARAMBAAPP_H
 
-#include "kapplication.h"
-#include <kdeversion.h>
-#include <ksystemtray.h>
-
-#undef KDE_3_2
-#undef KDE_3_3
-#if defined(KDE_MAKE_VERSION)
-#if KDE_VERSION >= KDE_MAKE_VERSION(3,2,0)
-#define KDE_3_2
-#endif
-#if KDE_VERSION >= KDE_MAKE_VERSION(3,3,0)
-#define KDE_3_3
-#endif
-#endif
+#include <kapplication.h>
 
 #define karambaApp ((KarambaApplication*)qApp)
 
@@ -35,6 +22,7 @@ class ThemesDlg;
 class dcopIface_stub;
 class KHelpMenu;
 class KAboutData;
+class QByteArray;
 
 class KarambaApplication : public KApplication
 {
@@ -54,7 +42,7 @@ class KarambaApplication : public KApplication
     ThemesDlg* themeListWindow;
     dcopIface_stub* dcopIfaceStub;
     QObjectList *karambaList;
-    KSystemTray* sysTrayIcon;
+//    KSystemTray* sysTrayIcon;
 
   public:
     KarambaApplication();
@@ -62,7 +50,7 @@ class KarambaApplication : public KApplication
 
     QString getMainKaramba();
     QStringList getKarambas();
-    void initDcopStub(QCString app = "");
+    void initDcopStub(QByteArray app = "");
     void setUpSysTray(KAboutData* about);
     void checkPreviousSession(KApplication &app, QStringList &lst);
     void checkCommandLine(KCmdLineArgs *args, QStringList &lst);

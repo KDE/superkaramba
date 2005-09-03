@@ -20,6 +20,7 @@
 #include <khelpmenu.h>
 
 #include <qtooltip.h>
+#include <QByteArray>
 
 #include "themesdlg.h"
 #include "karambainterface.h"
@@ -50,7 +51,7 @@ KarambaApplication::~KarambaApplication()
   //delete m_helpMenu;
 }
 
-void KarambaApplication::initDcopStub(QCString app)
+void KarambaApplication::initDcopStub(QByteArray app)
 {
   if(app.isEmpty())
     app = dcopClient()->appId();

@@ -50,7 +50,3 @@ shelldesktop_DATA = superkaramba.desktop
 shellrcdir = $(kde_datadir)/superkaramba
 shellrc_DATA = superkarambaui.rc
 
-AM_CFLAGS =
-AM_CXXFLAGS =
-AM_FFLAGS =
-SUBDIRS =

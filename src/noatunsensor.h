@@ -13,9 +13,9 @@
 #include "sensor.h"
 #include <dcopclient.h>
 #include <qregexp.h>
-#include <qcstring.h>
 #include <qdatastream.h>
 #include <qstringlist.h>
+#include <QByteArray>
 
 /**
 @author Hans Karlsson
@@ -33,7 +33,7 @@ public:
 
 
 private:
-    QCString noatunID;
+    QByteArray noatunID;
 
     bool isRunning();
     QString getTitle();
@@ -42,7 +42,7 @@ private:
 
 
     DCOPClient *client;
-    QCString appId;
+    QByteArray appId;
 };
 
 #endif

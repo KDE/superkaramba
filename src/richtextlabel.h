@@ -13,7 +13,7 @@
 
 #include "meter.h"
 #include <qstring.h>
-#include <qsimplerichtext.h>
+#include <q3simplerichtext.h>
 #include <qpainter.h>
 #include <qfont.h>
 #include <qfontmetrics.h>
@@ -53,7 +53,7 @@ class RichTextLabel : public Meter
     QString anchorAt(int, int);
 
   private:
-    QSimpleRichText* text;
+    Q3SimpleRichText* text;
     QString source;
     QFont font;
     QColorGroup colorGrp;

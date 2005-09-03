@@ -28,7 +28,7 @@
 #include <qtextstream.h>
 #include <qstring.h>
 #include <qtextcodec.h>
-#include <qvaluevector.h>
+
 /**
  *
  * Hans Karlsson

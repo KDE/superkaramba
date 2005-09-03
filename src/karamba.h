@@ -40,17 +40,15 @@
 #include <qtimer.h>
 #include <qpixmap.h>
 #include <qpainter.h>
+#include <QByteArray>
 
 //#include <krootpixmap.h>
 
 #include <qregexp.h>
 #include <qlabel.h>
-#include <qobjectlist.h>
 #include <qstring.h>
 #include <qstringlist.h>
 #include <ksharedpixmap.h>
-#include <qvaluestack.h>
-#include <dcopclient.h>
 #include <kpopupmenu.h>
 #include <qcursor.h>
 #include <netwm.h>
@@ -63,7 +61,6 @@
 #include <qbitmap.h>
 #include <kconfig.h>
 #include  <kprocess.h>
-#include <qdragobject.h>
 
 #include "karambarootpixmap.h"
 
@@ -137,7 +134,7 @@ public:
 
     void setWidgetUpdate(bool wu) { widgetUpdate = wu; };
     bool getWidgetUpdate() { return widgetUpdate; };
-    bool hasMeter(Meter* meter) { return meterList->containsRef(meter) > 0; };
+    bool hasMeter(Meter* meter) { return meterList->count(meter) > 0; };
     char getTempUnit() { return tempUnit; };
     void addMenuConfigOption(QString key, QString name);
     bool setMenuConfigOption(QString key, bool value);
@@ -207,7 +204,7 @@ private:
     KPopupMenu* kglobal;
 
     DCOPClient *client;
-    QCString appId;
+    QByteArray appId;
 
     QPixmap pm;
     QPixmap background;

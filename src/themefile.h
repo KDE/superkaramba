@@ -26,10 +26,9 @@
 
 #include <kurl.h>
 #include <qstring.h>
-#include <qcstring.h>
 #include <qpixmap.h>
 #include <qfile.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 
 class LineParser;
 class QTextStream;
@@ -42,7 +41,7 @@ class ZipFile;
 class ThemeFile
 {
   public:
-    typedef QValueVector<ThemeFile> List;
+    typedef Q3ValueVector<ThemeFile> List;
 
     ThemeFile(const KURL& url = KURL());
     ~ThemeFile();

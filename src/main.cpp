@@ -115,7 +115,7 @@ int main(int argc, char **argv)
     QString mainAppId = app.getMainKaramba();
     if(!mainAppId.isEmpty())
     {
-      app.initDcopStub(mainAppId.ascii());
+      app.initDcopStub(mainAppId.toAscii());
     }
     else
     {

@@ -22,6 +22,8 @@
 #ifndef __showdesktop_h__
 #define __showdesktop_h__
 
+#include <q3valuelist.h>
+
 class KWinModule;
 
 /**
@@ -51,7 +53,7 @@ private:
 
     bool              showingDesktop;
     KWinModule*       kWinModule;
-    QValueList<WId>   iconifiedList;
+    Q3ValueList<WId>   iconifiedList;
 
 };
 

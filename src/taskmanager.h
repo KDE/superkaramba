@@ -29,8 +29,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <qpoint.h>
 #include <qobject.h>
-#include <qvaluelist.h>
-#include <qptrlist.h>
+#include <q3valuelist.h>
+#include <q3ptrlist.h>
 #include <qpixmap.h>
 
 #include <dcopobject.h>
@@ -75,21 +75,12 @@ public:
     TaskManager* taskManager() const { return (TaskManager*) parent(); }
 
     WId window() const { return _win; }
-#ifdef KDE_3_2
     QString name() const { return _info.name(); }
     QString visibleName() const { return _info.visibleName(); }
     /**
      * Returns the desktop on which this task's window resides.
      */
     int desktop() const { return _info.desktop(); }
-#else
-    QString name() const { return _info.name; }
-    QString visibleName() const { return _info.visibleName; }
-    /**
-     * Returns the desktop on which this task's window resides.
-     */
-    int desktop() const { return _info.desktop; }
-#endif
     QString visibleNameWithState() const { return _info.visibleNameWithState(); }
     QString iconName() const;
     QString visibleIconName() const;
@@ -100,7 +91,7 @@ public:
      * A list of the window ids of all transient windows (dialogs) associated
      * with this task.
      */
-    QValueList<WId> transients() const { return _transients; }
+    Q3ValueList<WId> transients() const { return _transients; }
 
     /**
      * Returns a 16x16 (KIcon::Small) icon for the task. This method will
@@ -348,12 +339,8 @@ private:
     bool                _active;
     WId                 _win;
     QPixmap             _pixmap;
-#ifdef KDE_3_2
     KWin::WindowInfo    _info;
-#else
-    KWin::Info          _info;
-#endif
-    QValueList<WId>     _transients;
+    Q3ValueList<WId>     _transients;
 
     int                 _lastWidth;
     int                 _lastHeight;
@@ -413,8 +400,8 @@ private:
     class StartupPrivate *d;
 };
 
-typedef QPtrList<Task> TaskList;
-typedef QPtrList<Startup> StartupList;
+typedef Q3PtrList<Task> TaskList;
+typedef Q3PtrList<Startup> StartupList;
 
 
 /**
@@ -540,7 +527,7 @@ protected:
 private:
     Task*               _active;
     TaskList           _tasks;
-    QValueList< WId >   _skiptaskbar_windows;
+    Q3ValueList< WId >   _skiptaskbar_windows;
     StartupList         _startups;
     KStartupInfo*       _startup_info;
 

@@ -14,8 +14,8 @@
 #include <kprocio.h>
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qvaluevector.h>
 #include <qtextcodec.h>
+
 class ProgramSensor :  public Sensor
 {
     Q_OBJECT

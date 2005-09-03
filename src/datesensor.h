@@ -13,9 +13,9 @@
 #include "sensorparams.h"
 #include <qdatetime.h>
 #include <kdatepicker.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 
-class DatePicker : public QVBox
+class DatePicker : public Q3VBox
 {
 public:
 	DatePicker(QWidget*);

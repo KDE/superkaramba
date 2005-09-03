@@ -42,15 +42,14 @@
 #include <kparts/part.h>
 
 #include <qdir.h>
-#include <qwidgetlist.h>
+#include <q3valuestack.h>
 
 // Menu IDs
 #define EDITSCRIPT 1
 #define THEMECONF  2
 
 karamba::karamba(QString fn, bool reloading, int instance) :
-    QWidget(0,"karamba", Qt::WGroupLeader | WStyle_Customize |
-            WRepaintNoErase| WStyle_NoBorder | WDestructiveClose  ),
+    QWidget(0, Qt::WA_GroupLeader | Qt::FramelessWindowHint | Qt::WA_DeleteOnClose ),
     meterList(0), imageList(0), clickList(0), kpop(0), widgetMask(0),
     config(0), kWinModule(0), tempUnit('C'), m_instance(instance),
     sensorList(0), timeList(0),
@@ -59,6 +58,7 @@ karamba::karamba(QString fn, bool reloading, int instance) :
     trayMenuSeperatorId(-1), trayMenuQuitId(-1), trayMenuToggleId(-1),
     trayMenuThemeId(-1)
 {
+  setObjectName("karamba");
   KURL url;
 
   if(fn.find('/') == -1)
@@ -175,10 +175,10 @@ karamba::karamba(QString fn, bool reloading, int instance) :
   menuAccColl = new KActionCollection( this );
 
   kpop->insertItem( SmallIconSet("reload"),i18n("Update"), this,
-                    SLOT(updateSensors()), Key_F5 );
+                    SLOT(updateSensors()), Qt::Key_F5 );
   toggleLocked = new KToggleAction (  i18n("Toggle &Locked Position"),
                                       SmallIconSet("locked"),
-                                      CTRL+Key_L, this,
+                                      Qt::CTRL + Qt::Key_L, this,
                                       SLOT( slotToggleLocked() ),
                                       accColl, "Locked position" );
   accColl->insert(toggleLocked);
@@ -187,7 +187,7 @@ karamba::karamba(QString fn, bool reloading, int instance) :
   toggleLocked->plug(kpop);
 
   toggleFastTransforms = new KToggleAction(i18n("Use &Fast Image Scaling"),
-                         CTRL+Key_F, this,
+                         Qt::CTRL + Qt::Key_F, this,
                          SLOT( slotToggleFastTransforms() ),
                          accColl, "Fast transformations");
 
@@ -203,9 +203,9 @@ karamba::karamba(QString fn, bool reloading, int instance) :
   kpop->insertItem(i18n("To Des&ktop"), toDesktopMenu);
 
   kpop->insertItem( SmallIconSet("reload3"),i18n("&Reload Theme"),this,
-                    SLOT(reloadConfig()), CTRL+Key_R );
+                    SLOT(reloadConfig()), Qt::CTRL + Qt::Key_R );
   kpop->insertItem( SmallIconSet("fileclose"),i18n("&Close This Theme"), this,
-                    SLOT(killWidget()), CTRL+Key_C );
+                    SLOT(killWidget()), Qt::CTRL + Qt::Key_C );
 
   if(!SuperKarambaSettings::showSysTray())
     showMenuExtension();
@@ -222,14 +222,14 @@ karamba::karamba(QString fn, bool reloading, int instance) :
   defaultTextField = new TextField();
 
   meterList = new QObjectList();
-  meterList->setAutoDelete( true );
+  //meterList->setAutoDelete( true );
   sensorList = new QObjectList();
-  sensorList->setAutoDelete( true );
+  //sensorList->setAutoDelete( true );
   clickList = new QObjectList();
   timeList = new QObjectList();
   imageList = new QObjectList();
   menuList = new QObjectList();
-  menuList->setAutoDelete( true );
+  //menuList->setAutoDelete( true );
 
   client = kapp->dcopClient();
   if (!client->isAttached())
@@ -237,7 +237,7 @@ karamba::karamba(QString fn, bool reloading, int instance) :
   appId = client->registerAs(qApp->name());
 
 
-  this->setBackgroundMode( NoBackground);
+  this->setBackgroundMode(Qt::NoBackground);
   if( !(onTop || managed))
     this->lower();
 
@@ -296,7 +296,7 @@ karamba::karamba(QString fn, bool reloading, int instance) :
   this->setMouseTracking(true);
 
 
-  setFocusPolicy(QWidget::StrongFocus);
+  setFocusPolicy(Qt::StrongFocus);
 }
 
 karamba::~karamba()
@@ -359,7 +359,7 @@ bool karamba::parseConfig()
 
   if(m_theme.open())
   {
-    QValueStack<QPoint> offsetStack;
+    Q3ValueStack<QPoint> offsetStack;
     LineParser lineParser;
     int x=0;
     int y=0;
@@ -1918,15 +1918,15 @@ void karamba::showMenuExtension()
   trayMenuToggleId = kglobal->insertItem(SmallIconSet("superkaramba"),
                                          i18n("Show System Tray Icon"), this,
                                          SLOT(slotToggleSystemTray()),
-                                         CTRL+Key_S);
+                                         Qt::CTRL + Qt::Key_S);
 
   trayMenuThemeId = kglobal->insertItem(SmallIconSet("knewstuff"),
                                         i18n("&Manage Themes..."), this,
-                                        SLOT(slotShowTheme()), CTRL+Key_M);
+                                        SLOT(slotShowTheme()), Qt::CTRL + Qt::Key_M);
 
   trayMenuQuitId = kglobal->insertItem(SmallIconSet("exit"),
                                        i18n("&Quit SuperKaramba"), this,
-                                       SLOT(slotQuit()), CTRL+Key_Q);
+                                       SLOT(slotQuit()), Qt::CTRL + Qt::Key_Q);
 
   kglobal->polish();
 

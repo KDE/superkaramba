@@ -11,10 +11,10 @@
 #define SENSOR_H
 #include <qstring.h>
 #include <qobject.h>
-#include <qobjectlist.h>
 #include <qstringlist.h>
 #include <qmap.h>
 #include <qtimer.h>
+#include <QList>
 
 #include "sensorparams.h"
 
@@ -29,7 +29,7 @@ public:
     void addMeter( SensorParams *s );
     SensorParams* hasMeter( Meter *meter );
     void deleteMeter( Meter *meter );
-    int isEmpty() { return objList->isEmpty(); };
+    int isEmpty() { return objList.isEmpty(); };
     virtual void setMaxValue( SensorParams *s );
 
 private:
@@ -37,7 +37,8 @@ private:
     QTimer timer;
 
 protected:
-    QObjectList *objList;
+// TODO: Make sure to delete and clear this list later on!
+    QList<QObject*> objList;
 
 public slots:
     virtual void update()=0;

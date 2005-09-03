@@ -15,6 +15,7 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qobject.h>
+#include <QMouseEvent>
 
 #include <qfileinfo.h>
 
