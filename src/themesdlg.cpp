@@ -249,7 +249,6 @@ void ThemesDlg::newSkzTheme(const QString &file)
 {
   addThemeToList(file);
 
-#ifdef KDE_3_3
   KConfig* config = KGlobal::config();
   QStringList keys = config->entryMap("KNewStuffStatus").keys();
 
@@ -263,7 +262,6 @@ void ThemesDlg::newSkzTheme(const QString &file)
     config->setGroup("KNewStuffNames");
     config->writeEntry(file, keys[0]);
   }
-#endif
 }
 
 int ThemesDlg::addThemeToList(const QString &file)
@@ -348,7 +346,7 @@ void ThemesDlg::uninstall()
     trash = KGlobalSettings::trashPath();
   KIO::move(theme, trash);
   tableThemes->removeItem(w);
-#ifdef KDE_3_3
+  
   // Remove theme from KNewStuffStatus
   KConfig* config = KGlobal::config();
 
@@ -361,7 +359,6 @@ void ThemesDlg::uninstall()
     config->setGroup("KNewStuffStatus");
     kapp->config()->deleteEntry(name);
   }
-#endif
 }
 
 QStringList ThemesDlg::runningThemes()

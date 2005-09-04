@@ -47,11 +47,7 @@ void RssSensor::update()
     QString tmpFile;
     bool OK = false;
 
-#if defined(KDE_3_3)
     if(KIO::NetAccess::download(KURL(source), tmpFile, karambaApp->parentWindow()))
-#else
-    if(KIO::NetAccess::download(KURL(source), tmpFile))
-#endif
     {
         file.setName(tmpFile);
         if ( file.open(IO_ReadOnly | IO_Translate) )

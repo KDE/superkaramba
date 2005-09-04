@@ -20,9 +20,10 @@
 #ifndef THEMEWIDGET_H
 #define THEMEWIDGET_H
 
+#include <QList>
+
 #include "themefile.h"
-#include <themewidget_layout.h>
-#include <Q3ValueList>
+#include "themewidget_layout.h"
 
 /**
 @author See README for the list of authors
@@ -52,7 +53,7 @@ class ThemeWidget : public QWidget, public Ui::ThemeWidgetLayout
 
   private:
     ThemeFile* m_themeFile;
-    Q3ValueList<int> m_instancePool;
+    QList<int> m_instancePool;
 };
 
 #endif

@@ -7,9 +7,11 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
-#include "textfilesensor.h"
+#include <QVector>
 #include "qdom.h"
-#include <Q3ValueVector>
+
+#include "textfilesensor.h"
+#include "textfilesensor.moc"
 
 TextFileSensor::TextFileSensor( const QString &fn, bool iRdf, int interval, const QString &encoding )
         : Sensor( interval )
@@ -32,7 +34,7 @@ TextFileSensor::~TextFileSensor()
 
 void TextFileSensor::update()
 {
-    Q3ValueVector<QString> lines;
+    QVector<QString> lines;
     QFile file(fileName);
     QString line;
     if ( file.open(IO_ReadOnly | IO_Translate) )
@@ -105,4 +107,3 @@ void TextFileSensor::update()
     }
 }
 
-#include "textfilesensor.moc"

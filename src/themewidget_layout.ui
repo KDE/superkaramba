@@ -154,7 +154,8 @@
         </spacer>
        </item>
        <item>
-        <widget class="KPushButton" name="buttonGo" />
+        <widget class="KPushButton" name="buttonGo">
+        </widget>
        </item>
       </layout>
      </item>

@@ -21,6 +21,13 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ******************************************************************/
 
+#include <QDesktopWidget>
+#include <QTimer>
+#include <QImage>
+#include <QX11Info>
+#include <QDesktopWidget>
+#include <QList>
+
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -28,13 +35,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <kiconloader.h>
 #include <kwinmodule.h>
 #include <netwm.h>
-#include <qdesktopwidget.h>
-#include <qtimer.h>
-#include <qimage.h>
-#include <Q3PtrList>
-#include <Q3ValueList>
-#include <QX11Info>
-#include <QDesktopWidget>
 
 #include <X11/X.h>
 #include <X11/Xlib.h>
@@ -43,7 +43,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "taskmanager.h"
 #include "taskmanager.moc"
 
-template class Q3PtrList<Task>;
+template class QList<Task*>;
 
 // Hack: create a global KWinModule without a parent. We
 // can't make it a child of TaskManager because more than one
@@ -67,11 +67,13 @@ TaskManager::TaskManager(QObject *parent, const char *name)
     connect(kwin_module, SIGNAL(windowChanged(WId,unsigned int)), SLOT(windowChanged(WId,unsigned int)));
 
     // register existing windows
-    const Q3ValueList<WId> windows = kwin_module->windows();
-    Q3ValueList<WId>::ConstIterator end( windows.end() );
-    for (Q3ValueList<WId>::ConstIterator it = windows.begin(); it != end; ++it )
-  windowAdded(*it);
+    const QList<WId> windows = kwin_module->windows();
+    foreach (WId it, windows)
+    {
+        windowAdded(it);
+    }
 
+    
     // set active window
     WId win = kwin_module->activeWindow();
     activeWindowChanged(win);
@@ -105,17 +107,18 @@ void TaskManager::configure_startup()
 
 Task* TaskManager::findTask(WId w)
 {
-    for (Task* t = _tasks.first(); t != 0; t = _tasks.next())
-        if (t->window() == w  || t->hasTransient(w))
+    foreach (Task *t, _tasks)
+    {
+        if (t->window() == w || t->hasTransient(w))
+	{
             return t;
+	}
+    }
+    
     return 0;
 }
 
-#ifdef KDE_3_3
 #define NET_ALL_TYPES_MASK (NET::AllTypesMask)
-#else
-#define NET_ALL_TYPES_MASK (-1LU)
-#endif
 
 void TaskManager::windowAdded(WId w )
 {
@@ -172,13 +175,14 @@ void TaskManager::windowRemoved(WId w )
     if (!t) return;
 
     if (t->window() == w) {
-        _tasks.removeRef(t);
-
+        _tasks.removeAll(t);
         emit taskRemoved(t);
 
         if(t == _active) _active = 0;
-        delete t;
+	{
+            delete t;
         //kdDebug() << "TM: Task for WId " << w << " removed." << endl;
+        }
     }
     else {
         t->removeTransient( w );
@@ -263,9 +267,11 @@ void TaskManager::gotNewStartup( const KStartupInfoId& id, const KStartupInfoDat
 
 void TaskManager::gotStartupChange( const KStartupInfoId& id, const KStartupInfoData& data )
 {
-    for( Startup* s = _startups.first(); s != 0; s = _startups.next()) {
-        if ( s->id() == id ) {
-            s->update( data );
+    foreach (Startup *s, _startups)
+    {
+        if (s->id() == id)
+	{
+            s->update(data);
             return;
         }
     }
@@ -279,22 +285,33 @@ void TaskManager::gotRemoveStartup( const KStartupInfoId& id )
 void TaskManager::killStartup( const KStartupInfoId& id )
 {
     Startup* s = 0;
-    for(s = _startups.first(); s != 0; s = _startups.next()) {
-        if (s->id() == id)
+    foreach (Startup *x, _startups)
+    {
+        if (x->id() == id)
+	{
+	    s = x;
             break;
+        }
     }
-    if (s == 0) return;
 
-    _startups.removeRef(s);
+    if (!s)
+    {
+        return;
+    }
+    
+    _startups.removeAll(s);
     emit startupRemoved(s);
     delete s;
 }
 
 void TaskManager::killStartup(Startup* s)
 {
-    if (s == 0) return;
-
-    _startups.removeRef(s);
+    if (!s)
+    {
+        return;
+    }
+    
+    _startups.removeAll(s);
     emit startupRemoved(s);
     delete s;
 }

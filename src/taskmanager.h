@@ -27,15 +27,15 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <sys/types.h>
 
-#include <qpoint.h>
-#include <qobject.h>
-#include <q3valuelist.h>
-#include <q3ptrlist.h>
-#include <qpixmap.h>
+#include <QPoint>
+#include <QObject>
+#include <QList>
+#include <QPixmap>
 
 #include <dcopobject.h>
 #include <kwin.h>
 #include <kstartupinfo.h>
+
 #include "karambaapp.h"
 
 class TaskManager;
@@ -91,7 +91,7 @@ public:
      * A list of the window ids of all transient windows (dialogs) associated
      * with this task.
      */
-    Q3ValueList<WId> transients() const { return _transients; }
+    QList<WId> transients() const { return _transients; }
 
     /**
      * Returns a 16x16 (KIcon::Small) icon for the task. This method will
@@ -340,7 +340,7 @@ private:
     WId                 _win;
     QPixmap             _pixmap;
     KWin::WindowInfo    _info;
-    Q3ValueList<WId>     _transients;
+    QList<WId>     _transients;
 
     int                 _lastWidth;
     int                 _lastHeight;
@@ -400,8 +400,8 @@ private:
     class StartupPrivate *d;
 };
 
-typedef Q3PtrList<Task> TaskList;
-typedef Q3PtrList<Startup> StartupList;
+typedef QList<Task*> TaskList;
+typedef QList<Startup*> StartupList;
 
 
 /**
@@ -526,8 +526,8 @@ protected:
 
 private:
     Task*               _active;
-    TaskList           _tasks;
-    Q3ValueList< WId >   _skiptaskbar_windows;
+    TaskList            _tasks;
+    QList<WId>          _skiptaskbar_windows;
     StartupList         _startups;
     KStartupInfo*       _startup_info;
 

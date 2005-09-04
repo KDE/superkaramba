@@ -106,9 +106,8 @@ PyObject* py_createTaskIcon(PyObject *, PyObject *args)
 
   //get the specified task and insure it exists
   TaskList taskList = ((karamba*)widget)->taskManager.tasks();
-  Task* task = 0;
   Task* currTask = 0;
-  for (task = taskList.first(); task; task = taskList.next())
+  foreach (Task *task, taskList)
   {
     if ((long)task == (long)ctask)
     {

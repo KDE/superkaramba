@@ -18,11 +18,13 @@
  *  along with SuperKaramba; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  ****************************************************************************/
-#include <kwinmodule.h>
-#include <netwm.h>
-#include <kwin.h>
-#include <Q3ValueList>
+
+#include <QList>
 #include <QX11Info>
+
+#include <kwinmodule.h>
+#include <kwin.h>
+#include <netwm.h>
 
 #include "karambaapp.h"
 #include "showdesktop.h"
@@ -53,11 +55,7 @@ void ShowDesktop::slotCurrentDesktopChanged(int)
     showDesktop( false );
 }
 
-#ifdef KDE_3_3
 #define NET_ALL_TYPES_MASK (NET::AllTypesMask)
-#else
-#define NET_ALL_TYPES_MASK (-1LU)
-#endif
 
 void ShowDesktop::slotWindowChanged(WId w, unsigned int dirty)
 {
@@ -91,9 +89,9 @@ void ShowDesktop::showDesktop( bool b )
     if ( b ) {
         // this code should move to KWin after supporting NETWM1.2
         iconifiedList.clear();
-        const Q3ValueList<WId> windows = kWinModule->windows();
-        Q3ValueList<WId>::ConstIterator it;
-        Q3ValueList<WId>::ConstIterator end( windows.end() );
+        const QList<WId> windows = kWinModule->windows();
+        QList<WId>::ConstIterator it;
+        QList<WId>::ConstIterator end( windows.end() );
         for ( it=windows.begin(); it!=end; ++it ) {
             WId w = *it;
             NETWinInfo info( QX11Info::display(), w, QX11Info::appRootWindow(),
@@ -107,16 +105,15 @@ void ShowDesktop::showDesktop( bool b )
         }
         // find first, hide later, otherwise transients may get minimized
         // with the window they're transient for
-        Q3ValueList<WId>::ConstIterator endInconifiedList( iconifiedList.end() );
-        for ( it=iconifiedList.begin(); it!=endInconifiedList; ++it ) {
-            KWin::iconifyWindow( *it, false );
-        }
+	foreach (WId it, iconifiedList)
+	{
+	    KWin::iconifyWindow(it, false);
+	}
     } else {
-        Q3ValueList<WId>::ConstIterator it;
-        Q3ValueList<WId>::ConstIterator end( iconifiedList.end() );
-        for ( it=iconifiedList.begin(); it!=end; ++it ) {
-            KWin::deIconifyWindow( *it, false  );
-        }
+        foreach (WId it, iconifiedList)
+	{
+	    KWin::deIconifyWindow(it, false);
+	}
     }
 
     emit desktopShown( showingDesktop );

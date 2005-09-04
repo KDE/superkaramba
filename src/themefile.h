@@ -25,10 +25,10 @@
 #define THEMEFILE_H
 
 #include <kurl.h>
-#include <qstring.h>
-#include <qpixmap.h>
-#include <qfile.h>
-#include <q3valuevector.h>
+#include <QString>
+#include <QPixmap>
+#include <QFile>
+#include <QVector>
 #include <QDir>
 
 class LineParser;
@@ -42,7 +42,7 @@ class ZipFile;
 class ThemeFile
 {
   public:
-    typedef Q3ValueVector<ThemeFile> List;
+    typedef QVector<ThemeFile> List;
 
     ThemeFile(const KURL& url = KURL());
     ~ThemeFile();

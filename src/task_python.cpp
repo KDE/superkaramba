@@ -38,11 +38,10 @@ int performTaskAction(long widget, long ctask, long action)
 {
   karamba* currTheme = (karamba*)widget;
   Task* currTask = 0;
-  Task* task;
 
   TaskList taskList = currTheme -> taskManager.tasks();
 
-  for (task = taskList.first(); task; task = taskList.next())
+  foreach (Task *task, taskList)
   {
     if ((long)task == (long)ctask)
     {
@@ -123,17 +122,13 @@ PyObject* getTaskInfo(long widget, long ctask)
 {
   karamba* currTheme = (karamba*)widget;
   Task* currTask = 0;
-  Task* task;
-
   TaskList taskList = currTheme -> taskManager.tasks();
-
-  for (task = taskList.first(); task; task = taskList.next())
+  foreach (Task *task, taskList)
   {
     if ((long)task == (long)ctask)
     {
       currTask = task;
     }
-
   }
 
   if (currTask != 0)
@@ -214,14 +209,14 @@ PyObject* getStartupInfo(long widget, long cstartup)
 {
     karamba* currTheme = (karamba*)widget;
     Startup* currentStartup = (Startup*) cstartup;
-    Startup* startup;
+    Startup* startup = 0;
 
     StartupList startupList = currTheme -> taskManager.startups();
-
-    for (startup = startupList.first(); startup; startup = startupList.next())
+    foreach (Startup *x, startupList)
     {
-        if ((long)startup == (long)cstartup)
+        if ((long)x == (long)cstartup)
         {
+            startup = x;
             break;
         }
     }
@@ -293,9 +288,7 @@ PyObject* getTaskNames(long widget)
     PyObject* pString;
 
     TaskList taskList = currTheme -> taskManager.tasks();
-
-    Task* task;
-    for (task = taskList.first(); task; task = taskList.next())
+    foreach (Task *task, taskList)
     {
         const char* tmp = task->name().latin1();
         if(tmp == 0)
@@ -326,8 +319,7 @@ PyObject* getTaskList(long widget)
 
     TaskList taskList = currTheme -> taskManager.tasks();
 
-    Task* task;
-    for (task = taskList.first(); task; task = taskList.next())
+    foreach (Task *task, taskList)
     {
         pString = PyInt_FromLong((long)task);
         PyList_Append(pList, pString);
@@ -353,12 +345,9 @@ PyObject* getStartupList(long widget)
     PyObject* pString;
 
     StartupList startupList = currTheme -> taskManager.startups();
-
-    Startup* startup;
-
-    for (startup = startupList.first(); startup; startup = startupList.next())
+    foreach (Startup *startup, startupList)
     {
-        pString = PyInt_FromLong((long) startup);
+	pString = PyInt_FromLong((long) startup);
         PyList_Append(pList, pString);
     }
     return pList;

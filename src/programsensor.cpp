@@ -7,11 +7,12 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
-#include "programsensor.h"
-
-#include <qstringlist.h>
-#include <Q3ValueVector>
+#include <QStringList>
+#include <QVector>
 #include <QByteArray>
+
+#include "programsensor.h"
+#include "programsensor.moc"
 
 ProgramSensor::ProgramSensor(const QString &progName, int interval, QString encoding )
 : Sensor( interval )
@@ -48,7 +49,7 @@ void ProgramSensor::processExited(KProcess *)
     int lineNbr;
     SensorParams *sp;
     Meter *meter;
-    Q3ValueVector<QString> lines;
+    QVector<QString> lines;
     QStringList stringList = QStringList::split('\n',sensorResult,true);
     QStringList::ConstIterator end( stringList.end() );
     for ( QStringList::ConstIterator it = stringList.begin(); it != end; ++it )
@@ -91,4 +92,3 @@ void ProgramSensor::update()
     ksp.start( KProcIO::NotifyOnExit,KProcIO::Stdout);
 }
 
-#include "programsensor.moc"

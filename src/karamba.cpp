@@ -41,8 +41,8 @@
 #include <kparts/componentfactory.h>
 #include <kparts/part.h>
 
-#include <qdir.h>
-#include <q3valuestack.h>
+#include <QDir>
+#include <QStack>
 #include <QDesktopWidget>
 #include <QtAlgorithms>
 #include <Q3TextDrag>
@@ -335,7 +335,7 @@ bool karamba::parseConfig()
 
   if(m_theme.open())
   {
-    Q3ValueStack<QPoint> offsetStack;
+    QStack<QPoint> offsetStack;
     LineParser lineParser;
     int x=0;
     int y=0;

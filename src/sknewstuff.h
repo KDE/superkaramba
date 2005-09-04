@@ -45,4 +45,4 @@ class SKNewStuff : public KNewStuff
     ThemesDlg *mDlg;
 };
 
-#endif //KDE_3_3
+#endif
