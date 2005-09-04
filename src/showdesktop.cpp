@@ -69,11 +69,9 @@ void ShowDesktop::slotWindowChanged(WId w, unsigned int dirty)
   {
     NETWinInfo inf(QX11Info::display(), w, QX11Info::appRootWindow(),
                    NET::XAWMState | NET::WMWindowType);
-#ifdef KDE_3_2
+
     NET::WindowType windowType = inf.windowType(NET_ALL_TYPES_MASK);
-#else
-    NET::WindowType windowType = inf.windowType();
-#endif
+
     if ((windowType == NET::Normal || windowType == NET::Unknown)
         && inf.mappingState() == NET::Visible )
     {
