@@ -8,18 +8,23 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
+#include <QString>
+
 #include "graph.h"
-#include <qstring.h>
+#include "graph.moc"
 
-Graph::Graph(karamba* k, int x, int y, int w, int h, int nbrPts):
-  Meter(k, x, y, w, h), lastValue(0)
+Graph::Graph(karamba* k, int x, int y, int w, int h, int nbrPts)
+    :   Meter(k, x, y, w, h),
+        lastValue(0),
+        ptPtr(0)
 {
-
     nbrPoints = (nbrPts==0)? 50:nbrPts ;
-    ptPtr = 0;
     values = new int[nbrPoints];
     for(int i = 0; i < nbrPoints; i++)
+    {
         values[i] = 0;
+    }
+
     minValue = 0;
     maxValue = 100;
 }
@@ -29,46 +34,46 @@ Graph::~Graph()
     delete[] values;
 }
 
-void Graph::setValue( int v)
+void Graph::setValue(int v)
 {
-    if( v > maxValue)
+    if (v > maxValue)
     {
         // maxValue = v;
         v = maxValue;
     }
-    if( v < minValue)
+    if (v < minValue)
     {
         //minValue = v;
         v = minValue;
     }
+
     lastValue = v;
     values[ptPtr] = (int) (v / (maxValue + 0.0001) * getHeight());
     ptPtr = (ptPtr + 1) % nbrPoints;
 }
 
-void Graph::setValue( QString v )
+void Graph::setValue(QString v)
 {
-  setValue((int)(v.toDouble() + 0.5));
+    setValue((int)(v.toDouble() + 0.5));
 }
 
 void Graph::mUpdate(QPainter *p)
 {
-  if (hidden == 0)
-  {
-    double step = (getWidth() / (nbrPoints-1.001));
-    double xPos = 0;
-    double nextXPos = 0;
-    p->setPen(color);
-    for (int i = 0; i < nbrPoints - 1 ; i ++)
+    if (hidden == 0)
     {
-      nextXPos = xPos + step;
-      p->drawLine(getX() + (int)xPos, getY()+getHeight() -
-                    (int) values[(ptPtr+i) % nbrPoints] ,
-                  getX() + (int)nextXPos, getY()+getHeight() -
-                    (int) values[(ptPtr + i +1) % nbrPoints] );
-      xPos = nextXPos;
-    }
-  }
-}
+        double step = (getWidth() / (nbrPoints-1.001));
+        double xPos = 0;
+        double nextXPos = 0;
+        p->setPen(color);
 
-#include "graph.moc"
+        for (int i = 0; i < nbrPoints - 1 ; i ++)
+        {
+            nextXPos = xPos + step;
+            p->drawLine(getX() + (int)xPos, getY()+getHeight() -
+                            (int) values[(ptPtr+i) % nbrPoints] ,
+                        getX() + (int)nextXPos, getY()+getHeight() -
+                            (int) values[(ptPtr + i +1) % nbrPoints] );
+            xPos = nextXPos;
+        }
+    }
+}

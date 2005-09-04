@@ -27,7 +27,8 @@
 #endif
 
 #include <Python.h>
-#include <qobject.h>
+#include <QObject>
+
 #include "karamba.h"
 #include "meter.h"
 #include "meter_python.h"
@@ -35,159 +36,183 @@
 
 long createMenu(long widget)
 {
-  karamba* currTheme = (karamba*)widget;
+    karamba* currTheme = (karamba*)widget;
 
-  KPopupMenu* tmp = new KPopupMenu(currTheme);
-  currTheme->menuList.append (tmp );
+    KPopupMenu* tmp = new KPopupMenu(currTheme);
+    currTheme->menuList.append (tmp );
 
-  currTheme->connect(tmp, SIGNAL(activated(int)), currTheme,
-                     SLOT(passMenuItemClicked(int)));
+    currTheme->connect(tmp, SIGNAL(activated(int)), currTheme,
+                        SLOT(passMenuItemClicked(int)));
 
-  return (long)tmp;
+    return (long)tmp;
 }
 
 PyObject* py_create_menu(PyObject *, PyObject *args)
 {
-  long widget;
-  if (!PyArg_ParseTuple(args, (char*)"l:createMenu", &widget))
-    return NULL;
-  return Py_BuildValue((char*)"l", createMenu(widget));
+    long widget;
+
+    if (!PyArg_ParseTuple(args, (char*)"l:createMenu", &widget))
+    {
+        return NULL;
+    }
+
+    return Py_BuildValue((char*)"l", createMenu(widget));
 }
 
 bool menuExists(karamba* currTheme, KPopupMenu* menu)
 {
-  bool foundMenu = false;
-  KPopupMenu* tmp;
+    bool foundMenu = false;
+    KPopupMenu* tmp;
 
-  for(int i = 0; i < (int)currTheme->menuList.count(); i++)
-  {
-    tmp = (KPopupMenu*) currTheme->menuList.at(i);
-    if(tmp != 0)
+    for(int i = 0; i < (int)currTheme->menuList.count(); i++)
     {
-      if(tmp == menu)
-      {
-        foundMenu = true;
-        break;
-      }
+        tmp = (KPopupMenu*) currTheme->menuList.at(i);
+        if(tmp != 0)
+        {
+            if(tmp == menu)
+            {
+                foundMenu = true;
+                break;
+            }
+        }
     }
-  }
-  return foundMenu;
+
+    return foundMenu;
 }
 
 long deleteMenu(long widget, long menu)
 {
-  karamba* currTheme = (karamba*)widget;
-  KPopupMenu* tmp = (KPopupMenu*)menu;
+    karamba* currTheme = (karamba*)widget;
+    KPopupMenu* tmp = (KPopupMenu*)menu;
 
-  currTheme->menuList.removeAll(tmp);
+    currTheme->menuList.removeAll(tmp);
 
-  return 1;
+    return 1;
 }
 
 PyObject* py_delete_menu(PyObject *, PyObject *args)
 {
-  long widget, menu;
-  if (!PyArg_ParseTuple(args, (char*)"ll:deleteMenu", &widget, &menu))
-    return NULL;
-  return Py_BuildValue((char*)"l", deleteMenu(widget, menu));
+    long widget, menu;
+
+    if (!PyArg_ParseTuple(args, (char*)"ll:deleteMenu", &widget, &menu))
+    {
+        return NULL;
+    }
+
+    return Py_BuildValue((char*)"l", deleteMenu(widget, menu));
 }
 
 long addMenuItem(long widget, long menu, QString text, QString icon)
 {
-  karamba* currTheme = (karamba*)widget;
-  KPopupMenu* tmp = (KPopupMenu*)menu;
+    karamba* currTheme = (karamba*)widget;
+    KPopupMenu* tmp = (KPopupMenu*)menu;
 
-  long id = 0;
-  if(menuExists(currTheme, tmp))
-  {
-    id = tmp->insertItem(SmallIconSet(icon), text);
-  }
-  return id;
+    long id = 0;
+    if(menuExists(currTheme, tmp))
+    {
+        id = tmp->insertItem(SmallIconSet(icon), text);
+    }
+
+    return id;
 }
 
 PyObject* py_add_menu_item(PyObject *, PyObject *args)
 {
-  long widget, menu;
-  char* i;
-  PyObject* t;
-  if (!PyArg_ParseTuple(args, (char*)"llOs:addMenuItem", &widget, &menu, &t, &i))
-    return NULL;
-  QString icon;
-  QString text;
-  icon.setAscii(i);
-  text = PyString2QString(t);
-  return Py_BuildValue((char*)"l", addMenuItem(widget, menu, text, icon));
+    long widget, menu;
+    char* i;
+    PyObject* t;
+
+    if (!PyArg_ParseTuple(args, (char*)"llOs:addMenuItem", &widget, &menu, &t, &i))
+    {
+        return NULL;
+    }
+
+    QString icon;
+    QString text;
+    icon.setAscii(i);
+    text = PyString2QString(t);
+
+    return Py_BuildValue((char*)"l", addMenuItem(widget, menu, text, icon));
 }
 
 long addMenuSeparator(long widget, long menu)
 {
-  karamba* currTheme = (karamba*)widget;
-  KPopupMenu* tmp = (KPopupMenu*)menu;
+    karamba* currTheme = (karamba*)widget;
+    KPopupMenu* tmp = (KPopupMenu*)menu;
 
-  long id = 0;
-  if(menuExists(currTheme, tmp))
-  {
-    id = tmp->insertSeparator();
-  }
+    long id = 0;
+    if(menuExists(currTheme, tmp))
+    {
+        id = tmp->insertSeparator();
+    }
 
-  return id;
+    return id;
 }
 
 PyObject* py_add_menu_separator(PyObject *, PyObject *args)
 {
-  long widget, menu;
+    long widget, menu;
 
-  if (!PyArg_ParseTuple(args, (char*)"ll:addMenuSeparator", &widget, &menu))
-    return NULL;
+    if (!PyArg_ParseTuple(args, (char*)"ll:addMenuSeparator", &widget, &menu))
+    {
+        return NULL;
+    }
 
-  return Py_BuildValue((char*)"l", addMenuSeparator(widget, menu));
+    return Py_BuildValue((char*)"l", addMenuSeparator(widget, menu));
 }
 
 long removeMenuItem(long widget, long menu, long id)
 {
-  karamba* currTheme = (karamba*)widget;
-  KPopupMenu* tmp = (KPopupMenu*)menu;
+    karamba* currTheme = (karamba*)widget;
+    KPopupMenu* tmp = (KPopupMenu*)menu;
 
-  if(menuExists(currTheme,tmp))
-  {
-    tmp->removeItem(id);
-    return 1;
-  }
-  else
-  {
-    return 0;
-  }
+    if(menuExists(currTheme,tmp))
+    {
+        tmp->removeItem(id);
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 PyObject* py_remove_menu_item(PyObject *, PyObject *args)
 {
-  long widget, menu, id;
-  if (!PyArg_ParseTuple(args, (char*)"lll:removeMenuItem", &widget, &menu, &id))
-    return NULL;
-  return Py_BuildValue((char*)"l", removeMenuItem(widget, menu, id));
+    long widget, menu, id;
+
+    if (!PyArg_ParseTuple(args, (char*)"lll:removeMenuItem", &widget, &menu, &id))
+    {
+        return NULL;
+    }
+
+    return Py_BuildValue((char*)"l", removeMenuItem(widget, menu, id));
 }
 
 long popupMenu(long widget, long menu, long x, long y)
 {
-  karamba* currTheme = (karamba*)widget;
-  KPopupMenu* tmp = (KPopupMenu*)menu;
+    karamba* currTheme = (karamba*)widget;
+    KPopupMenu* tmp = (KPopupMenu*)menu;
 
-  if(menuExists(currTheme,tmp))
-  {
-    tmp->popup(currTheme->mapToGlobal( QPoint(x,y) ));
-    return 1;
-  }
-  else
-  {
-    return 0;
-  }
+    if(menuExists(currTheme,tmp))
+    {
+        tmp->popup(currTheme->mapToGlobal( QPoint(x,y) ));
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 PyObject* py_popup_menu(PyObject *, PyObject *args)
 {
-  long widget, menu, x, y;
-  if (!PyArg_ParseTuple(args, (char*)"llll:popupMenu", &widget, &menu, &x, &y))
-    return NULL;
-  return Py_BuildValue((char*)"l", popupMenu(widget, menu, x, y));
-}
+    long widget, menu, x, y;
 
+    if (!PyArg_ParseTuple(args, (char*)"llll:popupMenu", &widget, &menu, &x, &y))
+    {
+        return NULL;
+    }
+
+    return Py_BuildValue((char*)"l", popupMenu(widget, menu, x, y));
+}

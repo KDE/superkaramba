@@ -293,8 +293,11 @@ static PyMethodDef karamba_methods[] = {
 
 PyThreadState* KarambaPython::mainThreadState = 0;
 
-KarambaPython::KarambaPython(const ThemeFile& theme, bool reloading):
-  pythonThemeExtensionLoaded(false), pName(0), pModule(0), pDict(0)
+KarambaPython::KarambaPython(const ThemeFile& theme, bool reloading)
+    :   pythonThemeExtensionLoaded(false),
+        pName(0),
+        pModule(0),
+        pDict(0)
 {
   PyThreadState* myThreadState;
   char pypath[1024];

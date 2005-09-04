@@ -28,8 +28,10 @@ XMMSSensor::XMMSSensor( int interval, const QString &encoding )
         codec = QTextCodec::codecForLocale();
 
 }
+
 XMMSSensor::~XMMSSensor()
-{}
+{
+}
 
 void XMMSSensor::update()
 {
@@ -38,7 +40,6 @@ void XMMSSensor::update()
     Meter *meter;
 
 #ifdef HAVE_XMMS
-
     int pos;
     QString title;
     int songLength = 0;
@@ -142,7 +143,5 @@ void XMMSSensor::setMaxValue( SensorParams *sp)
         meter->setMax( 1 );
 
 }
-
-
 
 #include "xmmssensor.moc"

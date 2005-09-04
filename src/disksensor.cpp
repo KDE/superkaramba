@@ -7,17 +7,21 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
-#include "disksensor.h"
 
 #include <QByteArray>
-#include <qfile.h>
-#include <qtextstream.h>
-#include <qstring.h>
-#include <qregexp.h>
+#include <QFile>
+#include <QTextStream>
+#include <QString>
+#include <QRegExp>
+
 #include <kprocess.h>
 #include <kprocio.h>
 
-DiskSensor::DiskSensor( int msec ) : Sensor( msec )
+#include "disksensor.h"
+#include "disksensor.moc"
+
+DiskSensor::DiskSensor(int msec)
+    :   Sensor(msec)
 {
     connect(&ksp, SIGNAL(receivedStdout(KProcess *, char *, int )),
             this,SLOT(receivedStdout(KProcess *, char *, int )));
@@ -30,69 +34,68 @@ DiskSensor::DiskSensor( int msec ) : Sensor( msec )
     ksp.start( KProcIO::Block,KProcIO::Stdout);
     init = 1;
 }
+
 DiskSensor::~DiskSensor()
-{}
+{
+}
 
 int DiskSensor::getFreeSpace(QString mntPt) const
 {
-    QRegExp rx( "^\\S*\\s*\\d+\\s+\\d+\\s+(\\d+)");
+    QRegExp rx("^\\S*\\s*\\d+\\s+\\d+\\s+(\\d+)");
     rx.search(mntMap[mntPt]);
+
     return rx.cap(1).toInt();
 }
 
 int DiskSensor::getUsedSpace(QString mntPt) const
 {
-    QRegExp rx( "^\\S*\\s*\\d+\\s+(\\d+)\\s+\\d+");
+    QRegExp rx("^\\S*\\s*\\d+\\s+(\\d+)\\s+\\d+");
     rx.search(mntMap[mntPt]);
+
     return rx.cap(1).toInt();
 }
 
 int DiskSensor::getTotalSpace(QString mntPt) const
 {
-
-    QRegExp rx( "^\\S*\\s*(\\d+)\\s+\\d+\\s+\\d+");
+    QRegExp rx("^\\S*\\s*(\\d+)\\s+\\d+\\s+\\d+");
     rx.search(mntMap[mntPt]);
 
     return rx.cap(1).toInt();
-
 }
 
 int DiskSensor::getPercentUsed(QString mntPt) const
 {
-    QRegExp rx( "\\s+(\\d+)%\\s+");
+    QRegExp rx("\\s+(\\d+)%\\s+");
     rx.search(mntMap[mntPt]);
+
     return rx.cap(1).toInt();
 }
 
 int DiskSensor::getPercentFree(QString mntPt) const
 {
-    return ( 100 - getPercentUsed( mntPt ) );
+    return (100 - getPercentUsed( mntPt ));
 }
 
 void DiskSensor::receivedStdout(KProcess *, char *buffer, int len )
 {
-
     buffer[len] = 0;
-    sensorResult += QString( QByteArray(buffer) );
-
+    sensorResult += QString(QByteArray(buffer));
 }
 
 void DiskSensor::processExited(KProcess *)
 {
-    QStringList stringList = QStringList::split('\n',sensorResult);
-    sensorResult = "";
-    QStringList::Iterator it = stringList.begin();
     //QRegExp rx( "^(/dev/).*(/\\S*)$");
     QRegExp rx( ".*\\s+(/\\S*)$");
+    sensorResult = "";
 
-    while( it != stringList.end())
+    QStringList stringList = QStringList::split('\n',sensorResult);
+    foreach (QString it, stringList)
     {
-        rx.search( *it );
-        if ( !rx.cap(0).isEmpty())
+        rx.search(it);
+        if (!rx.cap(0).isEmpty())
         {
-            mntMap[rx.cap(1)] = *it;
+            mntMap[rx.cap(1)] = it;
         }
-        it++;
     }
     stringList.clear();
 
@@ -122,7 +125,7 @@ void DiskSensor::processExited(KProcess *)
         format.replace( QRegExp("%fk",false),
                         QString::number(getFreeSpace(mntPt)) );
         format.replace( QRegExp("%f", false),QString::number(getFreeSpace(mntPt)/1024));
-        
+
         format.replace( QRegExp("%up", false),QString::number(getPercentUsed(mntPt)));
         format.replace( QRegExp("%ug",false),
                         QString::number(getUsedSpace(mntPt)/(1024*1024)));
@@ -164,11 +167,12 @@ void DiskSensor::setMaxValue( SensorParams *sp )
     QString f;
     f = sp->getParam("FORMAT");
     if( f == "%fp" || f == "%up" )
+    {
         meter->setMax( 100 );
+    }
     else
+    {
         meter->setMax( getTotalSpace( mntPt ) / 1024 );
+    }
 }
 
-
-
-#include "disksensor.moc"

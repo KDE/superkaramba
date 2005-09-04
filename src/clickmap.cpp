@@ -8,9 +8,12 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-#include "clickmap.h"
-#include <qregexp.h>
+#include <QRegExp>
+
 #include <krun.h>
+
+#include "clickmap.h"
+#include "clickmap.moc"
 
 ClickMap::ClickMap(karamba* k, int x, int y, int w, int h )
     :Meter(k, x, y, w, h )
@@ -38,22 +41,24 @@ void ClickMap::setTextProps( TextField *t )
     text = *t;
 }
 
-bool ClickMap::click( QMouseEvent *e ) {
-
-  //Don't load the web page if the click isn't for us
-  if (boundingBox.contains(e->x(), e->y())) {
-
-    int index = ((e -> y() - getY()) / text.getLineHeight()) + 1;
-    if (index >= 1 && index <= (int)displays.count()) {
-      // qDebug( "You clicked item " + QString::number( index ) + ", " +
-      //  displays[index - 1] + " " + links[index - 1] );
-      KRun::runCommand("konqueror " + links[index - 1]);
+bool ClickMap::click( QMouseEvent *e )
+{
+    //Don't load the web page if the click isn't for us
+    if (boundingBox.contains(e->x(), e->y()))
+    {
+        int index = ((e -> y() - getY()) / text.getLineHeight()) + 1;
+        if (index >= 1 && index <= (int)displays.count())
+        {
+            // qDebug( "You clicked item " + QString::number( index ) + ", " +
+            //  displays[index - 1] + " " + links[index - 1] );
+            KRun::runCommand("konqueror " + links[index - 1]);
+        }
     }
-  }
-  return false;
+
+    return false;
 }
 
-void ClickMap::mUpdate( QPainter *p )
+void ClickMap::mUpdate(QPainter *p)
 {
     int i = 0; //text.getLineHeight();
     int row = 1;
@@ -71,26 +76,24 @@ void ClickMap::mUpdate( QPainter *p )
     }
 }
 
-void ClickMap::setValue( QString v )
+void ClickMap::setValue(QString v)
 {
     QRegExp rx("^http://", false );
-    if ( rx.search( v ) == -1 )
+    if (rx.search( v ) == -1)
     {
-        displays.append( v );
+        displays.append(v);
     }
     else
     {
-        links.append( v );
+        links.append(v);
     }
 }
 
-void ClickMap::setValue( int v )
+void ClickMap::setValue(int v)
 {
-    if ( v == 0 )
+    if (v == 0)
     {
         links.clear();
         displays.clear();
     }
 }
-
-#include "clickmap.moc"

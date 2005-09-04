@@ -7,8 +7,9 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
-#include "clickarea.h"
 
+#include "clickarea.h"
+#include "clickarea.moc"
 
 ClickArea::ClickArea(karamba* k, int x, int y, int w, int h )
         : Meter(k, x, y, w, h )
@@ -18,8 +19,8 @@ ClickArea::ClickArea(karamba* k, int x, int y, int w, int h )
 }
 
 ClickArea::~ClickArea()
-{}
-
+{
+}
 
 bool ClickArea::click( QMouseEvent *e )
 {
@@ -29,7 +30,9 @@ bool ClickArea::click( QMouseEvent *e )
 	//KShellProcess ksp;
         QString program;
         if( e->button() == Qt::LeftButton )
+        {
             program = onClick;
+        }
         program.replace( QRegExp("%v", false), value );
 
         if( !program.isEmpty())
@@ -66,7 +69,6 @@ void ClickArea::mUpdate( QPainter *p )
 
 }
 
-
 void ClickArea::setValue( int v)
 {
 
@@ -79,9 +81,3 @@ void ClickArea::setValue( QString v )
 {
     value = v;
 }
-
-
-
-
-
-#include "clickarea.moc"

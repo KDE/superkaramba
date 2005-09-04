@@ -29,140 +29,173 @@
 #include "karamba.h"
 #include "meter.h"
 #include "meter_python.h"
+
 #include "bar_python.h"
 
 PyObject* py_createBar(PyObject *, PyObject *args)
 {
-  long widget, x, y, w, h;
-  char *text;
-  if (!PyArg_ParseTuple(args, (char*)"lllll|s", &widget, &x, &y, &w, &h, &text))
-    return NULL;
-  if (!checkKaramba(widget))
-    return NULL;
+    long widget, x, y, w, h;
+    char *text;
+    if (!PyArg_ParseTuple(args, (char*)"lllll|s", &widget, &x, &y, &w, &h, &text))
+    {
+        return NULL;
+    }
+    if (!checkKaramba(widget))
+    {
+        return NULL;
+    }
 
-  Bar *tmp = new Bar((karamba*)widget, x,y,w,h);
-  if (text && text[0] != '\0')
-    tmp->setImage(text);
-  ((karamba*)widget)->meterList.append(tmp);
-  return (Py_BuildValue((char*)"l", (long)tmp));
+    Bar *tmp = new Bar((karamba*)widget, x,y,w,h);
+    if (text && text[0] != '\0')
+    {
+        tmp->setImage(text);
+    }
+
+    ((karamba*)widget)->meterList.append(tmp);
+    return (Py_BuildValue((char*)"l", (long)tmp));
 }
 
 PyObject* py_deleteBar(PyObject *, PyObject *args)
 {
-  long widget, meter;
-  if (!PyArg_ParseTuple(args, (char*)"ll", &widget, &meter))
-    return NULL;
-  if (!checkKarambaAndMeter(widget, meter, "Bar"))
-    return NULL;
+    long widget, meter;
+    if (!PyArg_ParseTuple(args, (char*)"ll", &widget, &meter))
+    {
+        return NULL;
+    }
+    if (!checkKarambaAndMeter(widget, meter, "Bar"))
+    {
+        return NULL;
+    }
 
-  ((karamba*)widget)->deleteMeterFromSensors((Meter*)meter);
-  return Py_BuildValue((char*)"l",
-      ((karamba*)widget)->meterList.removeAll((Meter*)meter));
+    ((karamba*)widget)->deleteMeterFromSensors((Meter*)meter);
+
+    return Py_BuildValue((char*)"l",
+        ((karamba*)widget)->meterList.removeAll((Meter*)meter));
 }
 
 PyObject* py_getThemeBar(PyObject *self, PyObject *args)
 {
-  return py_getThemeMeter(self, args, "Bar");
+    return py_getThemeMeter(self, args, "Bar");
 }
 
 PyObject* py_getBarSize(PyObject *self, PyObject *args)
 {
-  return py_getSize(self, args, "Bar");
+    return py_getSize(self, args, "Bar");
 }
 
 PyObject* py_resizeBar(PyObject *self, PyObject *args)
 {
-  return py_resize(self, args, "Bar");
+    return py_resize(self, args, "Bar");
 }
 
 PyObject* py_getBarPos(PyObject *self, PyObject *args)
 {
-  return py_getPos(self, args, "Bar");
+    return py_getPos(self, args, "Bar");
 }
 
 PyObject* py_moveBar(PyObject *self, PyObject *args)
 {
-  return py_move(self, args, "Bar");
+    return py_move(self, args, "Bar");
 }
 
 PyObject* py_hideBar(PyObject *self, PyObject *args)
 {
-  return py_hide(self, args, "Bar");
+    return py_hide(self, args, "Bar");
 }
 
 PyObject* py_showBar(PyObject *self, PyObject *args)
 {
-  return py_show(self, args, "Bar");
+    return py_show(self, args, "Bar");
 }
 
 PyObject* py_getBarMinMax(PyObject *self, PyObject *args)
 {
-  return py_getMinMax(self, args, "Bar");
+    return py_getMinMax(self, args, "Bar");
 }
 
 PyObject* py_setBarMinMax(PyObject *self, PyObject *args)
 {
-  return py_setMinMax(self, args, "Bar");
+    return py_setMinMax(self, args, "Bar");
 }
 
 PyObject* py_getBarValue(PyObject *self, PyObject *args)
 {
-  return py_getValue(self, args, "Bar");
+    return py_getValue(self, args, "Bar");
 }
 
 PyObject* py_setBarValue(PyObject *self, PyObject *args)
 {
-  return py_setValue(self, args, "Bar");
+    return py_setValue(self, args, "Bar");
 }
 
 PyObject* py_getBarSensor(PyObject *self, PyObject *args)
 {
-  return py_getSensor(self, args, "Bar");
+    return py_getSensor(self, args, "Bar");
 }
 
 PyObject* py_setBarSensor(PyObject *self, PyObject *args)
 {
-  return py_setSensor(self, args, "Bar");
+    return py_setSensor(self, args, "Bar");
 }
 
 PyObject* py_getBarImage(PyObject *, PyObject *args)
 {
-  long widget, meter;
-  if (!PyArg_ParseTuple(args, (char*)"ll", &widget, &meter))
-    return NULL;
-  if (!checkKarambaAndMeter(widget, meter, "Bar"))
-    return NULL;
-  return Py_BuildValue((char*)"s", ((Bar*)meter)->getImage().ascii());
+    long widget, meter;
+    if (!PyArg_ParseTuple(args, (char*)"ll", &widget, &meter))
+    {
+        return NULL;
+    }
+    if (!checkKarambaAndMeter(widget, meter, "Bar"))
+    {
+        return NULL;
+    }
+
+    return Py_BuildValue((char*)"s", ((Bar*)meter)->getImage().ascii());
 }
 
 PyObject* py_setBarImage(PyObject *, PyObject *args)
 {
-  long widget, meter;
-  char* s;
-  if (!PyArg_ParseTuple(args, (char*)"lls", &widget, &meter, &s))
-    return NULL;
-  if (!checkKarambaAndMeter(widget, meter, "Bar"))
-    return NULL;
-  return Py_BuildValue((char*)"l", ((Bar*)meter)->setImage(s));
+    long widget, meter;
+    char* s;
+    if (!PyArg_ParseTuple(args, (char*)"lls", &widget, &meter, &s))
+    {
+        return NULL;
+    }
+    if (!checkKarambaAndMeter(widget, meter, "Bar"))
+    {
+        return NULL;
+    }
+
+    return Py_BuildValue((char*)"l", ((Bar*)meter)->setImage(s));
 }
 
 PyObject* py_getBarVertical(PyObject *, PyObject *args)
 {
-  long widget, meter;
-  if (!PyArg_ParseTuple(args, (char*)"ll", &widget, &meter))
-    return NULL;
-  if (!checkKarambaAndMeter(widget, meter, "Bar"))
-    return NULL;
-  return Py_BuildValue((char*)"l", ((Bar*)meter)->getVertical());
+    long widget, meter;
+    if (!PyArg_ParseTuple(args, (char*)"ll", &widget, &meter))
+    {
+        return NULL;
+    }
+    if (!checkKarambaAndMeter(widget, meter, "Bar"))
+    {
+        return NULL;
+    }
+
+    return Py_BuildValue((char*)"l", ((Bar*)meter)->getVertical());
 }
 
 PyObject* py_setBarVertical(PyObject *, PyObject *args)
 {
-  long widget, meter, l;
-  if (!PyArg_ParseTuple(args, (char*)"lll", &widget, &meter, &l))
-    return NULL;
-  if (!checkKarambaAndMeter(widget, meter, "Bar"))
-    return NULL;
-  ((Bar*)meter)->setVertical(l);
-  return Py_BuildValue((char*)"l", 1);
+    long widget, meter, l;
+    if (!PyArg_ParseTuple(args, (char*)"lll", &widget, &meter, &l))
+    {
+        return NULL;
+    }
+    if (!checkKarambaAndMeter(widget, meter, "Bar"))
+    {
+        return NULL;
+    }
+
+    ((Bar*)meter)->setVertical(l);
+    return Py_BuildValue((char*)"l", 1);
 }

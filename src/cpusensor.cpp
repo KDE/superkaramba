@@ -19,14 +19,21 @@
 #include <QTextStream>
 
 #include "cpusensor.h"
+#include "cpusensor.moc"
 
-CPUSensor::CPUSensor( QString cpu, int interval ) : 
-  Sensor(interval), userTicks(0), sysTicks(0), niceTicks(0), idleTicks(0)
+CPUSensor::CPUSensor( QString cpu, int interval )
+    :   Sensor(interval),
+        userTicks(0),
+        sysTicks(0),
+        niceTicks(0),
+        idleTicks(0)
 {
     cpuNbr = cpu;
     QRegExp rx("^\\d+$");
     if( rx.search( cpu.lower() ) == -1)
+    {
         cpuNbr = "";
+    }
     cpuNbr = "cpu"+cpuNbr;
     getCPULoad();
 }
@@ -141,5 +148,3 @@ void CPUSensor::setMaxValue( SensorParams *sp )
     meter = sp->getMeter();
     meter->setMax( 100 );
 }
-
-#include "cpusensor.moc"
