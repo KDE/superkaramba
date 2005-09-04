@@ -26,8 +26,11 @@
 #include <qlayout.h>
 
 ThemeWidget::ThemeWidget(QWidget *parent, const char *name)
-  : Ui::ThemeWidgetLayout(parent, name), m_themeFile(0)
+  : QWidget(parent, name),
+    Ui::ThemeWidgetLayout(), 
+    m_themeFile(0)
 {
+  setupUi(this);
   running->setText("");
   setDescriptionMaxHeight();
 }

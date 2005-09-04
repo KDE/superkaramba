@@ -42,8 +42,10 @@
 #include <kprotocolinfo.h>
 
 ThemesDlg::ThemesDlg(QWidget *parent, const char *name)
- : Ui::ThemesLayout(parent, name)
+ : QDialog(parent, name),
+   Ui::ThemesLayout()
 {
+  setupUi(this);
   populateListbox();
   mNewStuff = 0;
 }

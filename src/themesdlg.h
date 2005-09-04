@@ -29,7 +29,7 @@
 */
 class SKNewStuff;
 
-class ThemesDlg : public Ui::ThemesLayout
+class ThemesDlg : public QDialog, private Ui::ThemesLayout
 {
     Q_OBJECT
 
