@@ -109,16 +109,17 @@ class karamba :  public QWidget
     Q_OBJECT
 
 public:
-    karamba(QString fn, bool reloading = false, int instance = -1);
-    QList<QObject *> menuList;
-
-    virtual ~karamba();
-    const ThemeFile& theme() const { return m_theme; };
-
     // TODO: Make sure to clear and delete these when your done later!
     QList<QObject *> meterList;
     QList<QObject *> imageList;
     QList<QObject *> clickList;
+    QList<QObject *> menuList;
+
+    karamba(QString fn, bool reloading = false, int instance = -1);
+    virtual ~karamba();
+
+    const ThemeFile& theme() const { return m_theme; };
+
     void setSensor(const LineParser& lineParser, Meter* meter);
     QString getSensor(Meter* meter);
     QString findSensorFromMap(Sensor* sensor);
@@ -155,10 +156,37 @@ public:
     KWinModule*    kWinModule;
 
     void makeActive();
-  void makePassive();
+    void makePassive();
 
-  void showMenuExtension();
-  void hideMenuExtension();
+    void showMenuExtension();
+    void hideMenuExtension();
+
+public slots:
+    void step();
+    void externalStep();
+    void widgetClosed();
+    void updateSensors();
+    void currentDesktopChanged(int);
+    void currentWallpaperChanged(int);
+    void slotToggleConfigOption(QString key, bool);
+    void updateBackground(KSharedPixmap*);
+    void passMenuOptionChanged(QString key, bool);
+    void passMenuItemClicked(int);
+    void processExited (KProcess *proc);
+    void receivedStdout (KProcess *proc, char *buffer, int buflen);
+    void toDesktop(int desktopid, int menuid);
+
+    // Systray
+    void systrayUpdated();
+
+    // Task Manager
+    void startupAdded(Startup*);
+    void startupRemoved(Startup*);
+
+    void taskAdded(Task*);
+    void taskRemoved(Task*);
+    void activeTaskChanged(Task*);
+    void reloadConfig();
 
 protected:
     void mousePressEvent( QMouseEvent *);
@@ -174,7 +202,30 @@ protected:
     void dragEnterEvent(QDragEnterEvent* event);
     void dropEvent(QDropEvent* event);
 
+private slots:
+    void initPythonInterface();
+    void killWidget();
+    void editConfig();
+    void editScript();
+    void slotToggleLocked();
+    void slotToggleFastTransforms();
+    void popupNotify(int);
+    void slotFileChanged( const QString & );
+
+    void slotToggleSystemTray();
+    void slotQuit();
+    void slotShowTheme();
+
+
 private:
+    void start();
+
+    bool parseConfig();
+
+    void passClick( QMouseEvent* );
+    void passWheelClick( QWheelEvent* );
+    void meterClicked(QMouseEvent*, Meter*);
+
     bool widgetUpdate;
     bool repaintInProgress;
 
@@ -186,11 +237,6 @@ private:
     char tempUnit;
     int m_instance;
 
-    bool parseConfig();
-
-    void passClick( QMouseEvent* );
-    void passWheelClick( QWheelEvent* );
-    void meterClicked(QMouseEvent*, Meter*);
 
     QMap<QString, Sensor*> sensorMap;
     QList<QObject *> sensorList;
@@ -225,56 +271,14 @@ private:
     int  desktop;
     ThemeFile m_theme;
 
-  int trayMenuSeperatorId;
-  int trayMenuQuitId;
-  int trayMenuToggleId;
-  int trayMenuThemeId;
-  void start();
+    int trayMenuSeperatorId;
+    int trayMenuQuitId;
+    int trayMenuToggleId;
+    int trayMenuThemeId;
 
-public slots:
-    void step();
-    void externalStep();
-    void widgetClosed();
-    void updateSensors();
-    void currentDesktopChanged(int);
-    void currentWallpaperChanged(int);
-    void slotToggleConfigOption(QString key, bool);
-    void updateBackground(KSharedPixmap*);
-    void passMenuOptionChanged(QString key, bool);
-    void passMenuItemClicked(int);
-    void processExited (KProcess *proc);
-    void receivedStdout (KProcess *proc, char *buffer, int buflen);
-    void toDesktop(int desktopid, int menuid);
-
-    // Systray
-    void systrayUpdated();
-
-    // Task Manager
-    void startupAdded(Startup*);
-    void startupRemoved(Startup*);
-
-    void taskAdded(Task*);
-    void taskRemoved(Task*);
-    void activeTaskChanged(Task*);
-    void reloadConfig();
-
-private:
     bool m_reloading;
     int m_interval;
 
-private slots:
-    void initPythonInterface();
-    void killWidget();
-    void editConfig();
-    void editScript();
-    void slotToggleLocked();
-    void slotToggleFastTransforms();
-    void popupNotify(int);
-    void slotFileChanged( const QString & );
-
-    void slotToggleSystemTray();
-    void slotQuit();
-    void slotShowTheme();
 };
 
 /*
