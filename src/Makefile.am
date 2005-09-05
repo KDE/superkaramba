@@ -1,4 +1,5 @@
-INCLUDES = $(all_includes) $(XMMS_INCLUDES) $(PYTHONINC)
+INCLUDES = -I$(srcdir)/sensors \
+	   $(all_includes) $(XMMS_INCLUDES) $(PYTHONINC)
 
 SUBDIRS = sensors 
 
@@ -21,7 +22,7 @@ noinst_HEADERS = karamba.h karambaapp.h karamba_python.h lineparser.h \
 		 
 superkaramba_SOURCES = main.cpp karamba.cpp meter.cpp bar.cpp sensor.cpp \
                        textlabel.cpp imagelabel.cpp graph.cpp sensorparams.cpp \
-		       sensorsensor.cpp clickarea.cpp karambarootpixmap.cpp clickmap.cpp \
+		       clickarea.cpp karambarootpixmap.cpp clickmap.cpp \
 		       textfield.cpp showdesktop.cpp richtextlabel.cpp \ 
 		       karambasessionmanaged.cpp taskmanager.cpp bar_python.cpp \
 		       meter_python.cpp textlabel_python.cpp richtextlabel_python.cpp \
