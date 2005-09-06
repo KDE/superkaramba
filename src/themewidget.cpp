@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005 Petri Damstén <petri.damsten@iki.fi>
+ * Copyright (C) 2005 Petri Damstï¿½ <petri.damsten@iki.fi>
  *
  * This file is part of SuperKaramba.
  *
@@ -38,6 +38,7 @@ ThemeWidget::ThemeWidget(QWidget *parent, const char *name)
 ThemeWidget::ThemeWidget(ThemeFile* tf)
   : m_themeFile(tf)
 {
+    setupUi(this);
   QPixmap pixmap = m_themeFile->icon();
   if(!pixmap.isNull())
     micon->setPixmap(pixmap);

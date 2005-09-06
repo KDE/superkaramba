@@ -182,7 +182,7 @@ QStringList ThemeLocale::languageList()
 
   // same order as setlocale use
   // HPB: Only run splitLocale on the environment variables..
-  QStringList langs;
+  QStringList langs,splitLangs;
 
   langs << QFile::decodeName(::getenv("LC_ALL"));
   langs << QFile::decodeName(::getenv("LC_MESSAGES"));
@@ -203,9 +203,9 @@ QStringList ThemeLocale::languageList()
         langs.insert(it, ln + '_' + ct + '.' + chrset);
     }
     */
-    langs.insert(it, ln);
+    splitLangs.append(ln);
   }
-  languageList += langs;
+  languageList += splitLangs;
   // Remove empty strings
   QStringList::Iterator end( languageList.end() );
   for(QStringList::Iterator it=languageList.begin(); it!=end;)
@@ -348,7 +348,7 @@ void tl_nl_load_domain (QIODevice* device, int size,
     return;
 
   /* Try to open the addressed file.  */
-  if (device->open(IO_ReadOnly) == false)
+  if (device->open(QIODevice::ReadOnly) == false)
     return;
 
   /* We must know about the size of the file.  */
