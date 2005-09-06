@@ -28,14 +28,14 @@
 
 #include <Python.h>
 #include <qobject.h>
-#include "karamba.h"
+#include "karambawidget.h"
 #include "meter.h"
 #include "meter_python.h"
 #include "systray_python.h"
 
 long moveSystray(long widget, long x, long y, long w, long h)
 {
-  karamba* currTheme = (karamba*)widget;
+  KarambaWidget* currTheme = (KarambaWidget*)widget;
 
   if (currTheme->systray != 0) {
     currTheme->systray->move((int)x,(int)y);
@@ -59,7 +59,7 @@ PyObject* py_move_systray(PyObject *, PyObject *args)
 /* now a method we need to expose to Python */
 long showSystray(long widget)
 {
-  karamba* currTheme = (karamba*)widget;
+  KarambaWidget* currTheme = (KarambaWidget*)widget;
 
   if (currTheme->systray != 0)
   {
@@ -81,7 +81,7 @@ PyObject* py_show_systray(PyObject *, PyObject *args)
 /* now a method we need to expose to Python */
 long hideSystray(long widget)
 {
-  karamba* currTheme = (karamba*)widget;
+  KarambaWidget* currTheme = (KarambaWidget*)widget;
 
   if (currTheme->systray != 0)
   {
@@ -103,7 +103,7 @@ PyObject* py_hide_systray(PyObject *, PyObject *args)
 /* now a method we need to expose to Python */
 long createSystray(long widget, long x, long y, long w, long h)
 {
-  karamba* currTheme = (karamba*)widget;
+  KarambaWidget* currTheme = (KarambaWidget*)widget;
 
   //Don't create more than one systray
   if (currTheme->systray == 0) {
@@ -132,7 +132,7 @@ PyObject* py_create_systray(PyObject *, PyObject *args)
 /* now a method we need to expose to Python */
 long getCurrentWindowCount(long widget)
 {
-  karamba* currTheme = (karamba*)widget;
+  KarambaWidget* currTheme = (KarambaWidget*)widget;
   int num;
 
   num = 0;
@@ -157,7 +157,7 @@ PyObject* py_get_current_window_count(PyObject *, PyObject *args)
 /* now a method we need to expose to Python */
 long updateSystrayLayout(long widget)
 {
-  karamba* currTheme = (karamba*)widget;
+  KarambaWidget* currTheme = (KarambaWidget*)widget;
 
   if (currTheme->systray != 0)
   {

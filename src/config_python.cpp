@@ -28,7 +28,7 @@
 
 #include <Python.h>
 #include <qobject.h>
-#include "karamba.h"
+#include "karambawidget.h"
 #include "meter.h"
 #include "meter_python.h"
 
@@ -37,7 +37,7 @@
 // API-Function addMenuConfigOption
 long addMenuConfigOption(long widget, QString key, QString name)
 {
-    karamba* currTheme = (karamba*)widget;
+    KarambaWidget* currTheme = (KarambaWidget*)widget;
     currTheme -> addMenuConfigOption(key, name);
 
     return 1;
@@ -67,7 +67,7 @@ PyObject* py_add_menu_config_option(PyObject *, PyObject *args)
 
 long setMenuConfigOption(long widget, QString key, bool value)
 {
-    karamba* currTheme = (karamba*)widget;
+    KarambaWidget* currTheme = (KarambaWidget*)widget;
 
     return currTheme->setMenuConfigOption(key, value);
 }
@@ -95,7 +95,7 @@ PyObject* py_set_menu_config_option(PyObject *, PyObject *args)
 
 long readMenuConfigOption(long widget, QString key)
 {
-    karamba* currTheme = (karamba*)widget;
+    KarambaWidget* currTheme = (KarambaWidget*)widget;
 
     return currTheme -> readMenuConfigOption(key);
 }
@@ -123,7 +123,7 @@ PyObject* py_read_menu_config_option(PyObject *, PyObject *args)
 // API-Function writeConfigEntry
 long writeConfigEntry(long widget, QString key, QString value)
 {
-    karamba* currTheme = (karamba*)widget;
+    KarambaWidget* currTheme = (KarambaWidget*)widget;
 
     currTheme -> config -> setGroup("theme");
     currTheme -> config -> writeEntry(key, value);
@@ -156,7 +156,7 @@ PyObject* py_write_config_entry(PyObject *, PyObject *args)
 // API-Function readConfigEntry
 QVariant readConfigEntry(long widget, QString key)
 {
-    karamba* currTheme = (karamba*)widget;
+    KarambaWidget* currTheme = (KarambaWidget*)widget;
 
     currTheme->config->setGroup("theme");
     return currTheme->config->readEntry(key);

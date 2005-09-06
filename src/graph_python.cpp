@@ -27,7 +27,7 @@
 #include <Python.h>
 #include <QObject>
 
-#include "karamba.h"
+#include "karambawidget.h"
 #include "meter.h"
 #include "meter_python.h"
 
@@ -47,8 +47,8 @@ PyObject* py_createGraph(PyObject *, PyObject *args)
     }
 
     Graph *tmp =
-        new Graph((karamba*)widget, (int)x, (int)y, (int)w, (int)h, (int)points);
-    ((karamba*)widget)->meterList.append(tmp);
+        new Graph((KarambaWidget*)widget, (int)x, (int)y, (int)w, (int)h, (int)points);
+    ((KarambaWidget*)widget)->meterList.append(tmp);
 
     return (Py_BuildValue((char*)"l", (long)tmp));
 }
@@ -65,10 +65,10 @@ PyObject* py_deleteGraph(PyObject *, PyObject *args)
         return NULL;
     }
 
-    ((karamba*)widget)->deleteMeterFromSensors((Meter*)meter);
+    ((KarambaWidget*)widget)->deleteMeterFromSensors((Meter*)meter);
 
     return Py_BuildValue((char*)"l",
-        ((karamba*)widget)->meterList.removeAll((Meter*)meter));
+        ((KarambaWidget*)widget)->meterList.removeAll((Meter*)meter));
 }
 
 PyObject* py_getThemeGraph(PyObject *self, PyObject *args)

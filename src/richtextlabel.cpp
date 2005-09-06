@@ -10,10 +10,10 @@
 
 #include <krun.h>
 #include <kdebug.h>
-#include "karamba.h"
+#include "karambawidget.h"
 #include "richtextlabel.h"
 
-RichTextLabel::RichTextLabel(karamba* k) :
+RichTextLabel::RichTextLabel(KarambaWidget* k) :
     Meter(k, 0, 0, 100, 100),
     text(0),
     source(""),
@@ -23,7 +23,7 @@ RichTextLabel::RichTextLabel(karamba* k) :
   originalSize = QSize(0, 0);
 }
 
-RichTextLabel::RichTextLabel(karamba* k, int x, int y, int w, int h) :
+RichTextLabel::RichTextLabel(KarambaWidget* k, int x, int y, int w, int h) :
     Meter(k, x, y, w, h),
     text(0),
     source(""),

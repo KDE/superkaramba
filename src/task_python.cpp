@@ -28,7 +28,7 @@
 
 #include <Python.h>
 #include <qobject.h>
-#include "karamba.h"
+#include "karambawidget.h"
 #include "meter.h"
 #include "meter_python.h"
 #include "task_python.h"
@@ -36,7 +36,7 @@
 // This does something with a task, such as minimize or close it
 int performTaskAction(long widget, long ctask, long action)
 {
-  karamba* currTheme = (karamba*)widget;
+  KarambaWidget* currTheme = (KarambaWidget*)widget;
   Task* currTask = 0;
 
   TaskList taskList = currTheme -> taskManager.tasks();
@@ -120,7 +120,7 @@ PyObject* py_perform_task_action(PyObject *, PyObject *args)
 // Return type is a Python List
 PyObject* getTaskInfo(long widget, long ctask)
 {
-  karamba* currTheme = (karamba*)widget;
+  KarambaWidget* currTheme = (KarambaWidget*)widget;
   Task* currTask = 0;
   TaskList taskList = currTheme -> taskManager.tasks();
   foreach (Task *task, taskList)
@@ -207,7 +207,7 @@ PyObject* py_get_task_info(PyObject *, PyObject *args)
 // Return type is a Python List
 PyObject* getStartupInfo(long widget, long cstartup)
 {
-    karamba* currTheme = (karamba*)widget;
+    KarambaWidget* currTheme = (KarambaWidget*)widget;
     Startup* currentStartup = (Startup*) cstartup;
     Startup* startup = 0;
 
@@ -283,7 +283,7 @@ PyObject* py_get_startup_info(PyObject*, PyObject* args)
 // It returns a String List of task names
 PyObject* getTaskNames(long widget)
 {
-    karamba* currTheme = (karamba*)widget;
+    KarambaWidget* currTheme = (KarambaWidget*)widget;
     PyObject* pList = PyList_New(0);
     PyObject* pString;
 
@@ -313,7 +313,7 @@ PyObject* py_get_task_names(PyObject *, PyObject *args)
 // This gets a system task list
 PyObject* getTaskList(long widget)
 {
-    karamba* currTheme = (karamba*)widget;
+    KarambaWidget* currTheme = (KarambaWidget*)widget;
     PyObject* pList = PyList_New(0);
     PyObject* pString;
 
@@ -340,7 +340,7 @@ PyObject* py_get_task_list(PyObject *, PyObject *args)
 // This gets a system startup list
 PyObject* getStartupList(long widget)
 {
-    karamba* currTheme = (karamba*)widget;
+    KarambaWidget* currTheme = (KarambaWidget*)widget;
     PyObject* pList = PyList_New(0);
     PyObject* pString;
 

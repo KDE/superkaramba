@@ -8,7 +8,7 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-#include "karamba.h"
+#include "karambawidget.h"
 #include "karambainterface.h"
 #include "themesdlg.h"
 
@@ -20,15 +20,15 @@ KarambaIface::~KarambaIface()
 {
 }
 
-karamba* KarambaIface::getKaramba(QString name)
+KarambaWidget* KarambaIface::getKaramba(QString name)
 {
-  karamba* result = 0;
+  KarambaWidget* result = 0;
 
   foreach (QWidget *w, QApplication::allWidgets())
   {
     if (QString(w->name()).startsWith("karamba"))
     {
-      karamba* k = (karamba*) w;
+      KarambaWidget* k = (KarambaWidget*) w;
       if(k->theme().name() == name)
       {
         result = k;
@@ -59,13 +59,13 @@ void KarambaIface::openTheme(QString filename)
   QFileInfo file(filename);
   if(file.exists())
   {
-    (new karamba(filename, false))->show();
+    (new KarambaWidget(filename, false))->show();
   }
 }
 
 void KarambaIface::closeTheme(QString name)
 {
-  karamba* k;
+  KarambaWidget* k;
 
   while(k = getKaramba(name))
   {

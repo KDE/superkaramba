@@ -19,14 +19,14 @@
 #include <qfontmetrics.h>
 #include <qrect.h>
 #include <qsize.h>
-#include "karamba.h"
+#include "karambawidget.h"
 
 class RichTextLabel : public Meter
 {
     Q_OBJECT
   public:
-    RichTextLabel(karamba*);
-    RichTextLabel(karamba* k, int x, int y, int w, int h);
+    RichTextLabel(KarambaWidget*);
+    RichTextLabel(KarambaWidget* k, int x, int y, int w, int h);
     ~RichTextLabel();
 
     void setText(QString text, bool linkUnderline = false);

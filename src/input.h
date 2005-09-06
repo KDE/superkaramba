@@ -37,7 +37,7 @@ class Input : public Meter
 {
 Q_OBJECT
 public:
-  Input(karamba* k, int ix, int iy, int iw, int ih);
+  Input(KarambaWidget* k, int ix, int iy, int iw, int ih);
   Input();
 
   ~Input();

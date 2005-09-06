@@ -28,7 +28,7 @@
 
 #include <Python.h>
 #include <qobject.h>
-#include "karamba.h"
+#include "karambawidget.h"
 #include "textlabel.h"
 #include "meter_python.h"
 #include "textlabel_python.h"
@@ -42,10 +42,10 @@ PyObject* py_createText(PyObject *, PyObject *args)
   if (!checkKaramba(widget))
     return NULL;
   TextLabel *tmp =
-      new TextLabel((karamba*)widget, (int)x, (int)y, (int)w, (int)h);
+      new TextLabel((KarambaWidget*)widget, (int)x, (int)y, (int)w, (int)h);
   tmp->setValue(PyString2QString(text));
-  tmp->setTextProps(((karamba*)widget)->getDefaultTextProps());
-  ((karamba*)widget)->meterList.append(tmp);
+  tmp->setTextProps(((KarambaWidget*)widget)->getDefaultTextProps());
+  ((KarambaWidget*)widget)->meterList.append(tmp);
   return (Py_BuildValue((char*)"l", (long)tmp));
 }
 
@@ -57,10 +57,10 @@ PyObject* py_deleteText(PyObject *, PyObject *args)
   if (!checkKarambaAndMeter(widget, meter, "TextLabel"))
     return NULL;
 
-  ((karamba*)widget)->deleteMeterFromSensors((Meter*)meter);
-  ((karamba*)widget)->clickList.removeAll((Meter*)meter);
+  ((KarambaWidget*)widget)->deleteMeterFromSensors((Meter*)meter);
+  ((KarambaWidget*)widget)->clickList.removeAll((Meter*)meter);
   return Py_BuildValue((char*)"l",
-      ((karamba*)widget)->meterList.removeAll((Meter*)meter));
+      ((KarambaWidget*)widget)->meterList.removeAll((Meter*)meter));
 }
 
 PyObject* py_getThemeText(PyObject *self, PyObject *args)

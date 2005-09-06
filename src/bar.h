@@ -19,7 +19,7 @@ class Bar : public Meter
 {
 Q_OBJECT
 public:
-    Bar(karamba* k,int ix,int iy,int iw,int ih );
+    Bar(KarambaWidget* k,int ix,int iy,int iw,int ih );
     ~Bar();
 
     void mUpdate( QPainter * );

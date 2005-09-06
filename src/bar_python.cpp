@@ -26,7 +26,7 @@
 
 #include <Python.h>
 #include <qobject.h>
-#include "karamba.h"
+#include "karambawidget.h"
 #include "meter.h"
 #include "meter_python.h"
 
@@ -45,13 +45,13 @@ PyObject* py_createBar(PyObject *, PyObject *args)
         return NULL;
     }
 
-    Bar *tmp = new Bar((karamba*)widget, x,y,w,h);
+    Bar *tmp = new Bar((KarambaWidget*)widget, x,y,w,h);
     if (text && text[0] != '\0')
     {
         tmp->setImage(text);
     }
 
-    ((karamba*)widget)->meterList.append(tmp);
+    ((KarambaWidget*)widget)->meterList.append(tmp);
     return (Py_BuildValue((char*)"l", (long)tmp));
 }
 
@@ -67,10 +67,10 @@ PyObject* py_deleteBar(PyObject *, PyObject *args)
         return NULL;
     }
 
-    ((karamba*)widget)->deleteMeterFromSensors((Meter*)meter);
+    ((KarambaWidget*)widget)->deleteMeterFromSensors((Meter*)meter);
 
     return Py_BuildValue((char*)"l",
-        ((karamba*)widget)->meterList.removeAll((Meter*)meter));
+        ((KarambaWidget*)widget)->meterList.removeAll((Meter*)meter));
 }
 
 PyObject* py_getThemeBar(PyObject *self, PyObject *args)

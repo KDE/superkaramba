@@ -28,7 +28,7 @@
 
 #include <Python.h>
 #include <qobject.h>
-#include "karamba.h"
+#include "karambawidget.h"
 #include "meter.h"
 #include "meter_python.h"
 #include "widget_python.h"
@@ -36,14 +36,14 @@
 /* now a method we need to expose to Python */
 int getWidgetXCoordinate(long widget)
 {
-  karamba* currTheme = (karamba*)widget;
+  KarambaWidget* currTheme = (KarambaWidget*)widget;
   return currTheme->x();
 }
 
 /* now a method we need to expose to Python */
 int getWidgetYCoordinate(long widget)
 {
-  karamba* currTheme = (karamba*)widget;
+  KarambaWidget* currTheme = (KarambaWidget*)widget;
   return currTheme->y();
 }
 
@@ -61,7 +61,7 @@ PyObject* py_get_widget_position(PyObject *, PyObject *args)
 /* now a method we need to expose to Python */
 long createWidgetMask(long widget, char* path)
 {
-  karamba* currTheme = (karamba*)widget;
+  KarambaWidget* currTheme = (KarambaWidget*)widget;
   QBitmap bm;
   QString maskpath;
   QString rootPath;
@@ -100,7 +100,7 @@ PyObject* py_create_widget_mask(PyObject *, PyObject *args)
 /* now a method we need to expose to Python */
 long redrawWidgetBackground(long widget)
 {
-  karamba* currTheme = (karamba*)widget;
+  KarambaWidget* currTheme = (KarambaWidget*)widget;
   currTheme->kroot->repaint(true);
   return 1;
 }
@@ -118,7 +118,7 @@ PyObject* py_redraw_widget_background(PyObject *, PyObject *args)
 /* now a method we need to expose to Python */
 long redrawWidget(long widget)
 {
-  karamba* currTheme = (karamba*)widget;
+  KarambaWidget* currTheme = (KarambaWidget*)widget;
   currTheme->externalStep();
   return 1;
 }
@@ -136,7 +136,7 @@ PyObject* py_redraw_widget(PyObject *, PyObject *args)
 /* now a method we need to expose to Python */
 long resizeWidget(long widget, long x, long y)
 {
-  karamba* currTheme = (karamba*)widget;
+  KarambaWidget* currTheme = (KarambaWidget*)widget;
   //currTheme->test = true;
   currTheme->setFixedSize((int)x,(int)y);
   //currTheme->test = false;
@@ -156,7 +156,7 @@ PyObject* py_resize_widget(PyObject *, PyObject *args)
 /* now a method we need to expose to Python */
 long moveWidget(long widget, long x, long y)
 {
-  karamba* currTheme = (karamba*)widget;
+  KarambaWidget* currTheme = (KarambaWidget*)widget;
   currTheme->move((int)x, (int)y);
   return 1;
 }
@@ -174,7 +174,7 @@ PyObject* py_move_widget(PyObject *, PyObject *args)
 /* now a method we need to expose to Python */
 long toggleWidgetRedraw(long widget, bool b)
 {
-  karamba* currTheme = (karamba*)widget;
+  KarambaWidget* currTheme = (KarambaWidget*)widget;
   if (currTheme != 0)
   {
     currTheme->toggleWidgetUpdate( b );

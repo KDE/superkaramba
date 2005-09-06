@@ -27,8 +27,8 @@ public:
     typedef enum ScrollType { ScrollNone, ScrollNormal,
                               ScrollBackAndForth, ScrollOnePass };
 
-    TextLabel(karamba *k, int x,int y,int w,int h);
-    TextLabel(karamba *k);
+    TextLabel(KarambaWidget *k, int x,int y,int w,int h);
+    TextLabel(KarambaWidget *k);
     ~TextLabel();
 
     void setTextProps( TextField* );

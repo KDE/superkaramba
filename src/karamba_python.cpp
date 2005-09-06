@@ -450,128 +450,128 @@ bool KarambaPython::callObject(const char* func, PyObject* pArgs)
   return result;
 }
 
-bool KarambaPython::initWidget(karamba* k)
+bool KarambaPython::initWidget(KarambaWidget* k)
 {
   PyObject* pArgs = Py_BuildValue((char*)"(l)", k);
   return callObject("initWidget", pArgs);
 }
 
-bool KarambaPython::widgetUpdated(karamba* k)
+bool KarambaPython::widgetUpdated(KarambaWidget* k)
 {
   PyObject* pArgs = Py_BuildValue((char*)"(l)", k);
   return callObject("widgetUpdated", pArgs);
 }
 
-bool KarambaPython::widgetClosed(karamba* k)
+bool KarambaPython::widgetClosed(KarambaWidget* k)
 {
   PyObject* pArgs = Py_BuildValue((char*)"(l)", k);
   return callObject("widgetClosed", pArgs);
 }
 
-bool KarambaPython::menuOptionChanged(karamba* k, QString key, bool value)
+bool KarambaPython::menuOptionChanged(KarambaWidget* k, QString key, bool value)
 {
   PyObject* pArgs = Py_BuildValue((char*)"(lsi)", k, key.ascii(), (int)value);
   return callObject("menuOptionChanged", pArgs);
 }
 
-bool KarambaPython::menuItemClicked(karamba* k, KPopupMenu* menu, long id)
+bool KarambaPython::menuItemClicked(KarambaWidget* k, KPopupMenu* menu, long id)
 {
   PyObject* pArgs = Py_BuildValue((char*)"(lll)", k, menu, id);
   return callObject("menuItemClicked", pArgs);
 }
 
-bool KarambaPython::meterClicked(karamba* k, Meter* meter, int button)
+bool KarambaPython::meterClicked(KarambaWidget* k, Meter* meter, int button)
 {
   PyObject* pArgs = Py_BuildValue((char*)"(lli)", k, meter, button);
   return callObject("meterClicked", pArgs);
 }
 
-bool KarambaPython::meterClicked(karamba* k, QString anchor, int button)
+bool KarambaPython::meterClicked(KarambaWidget* k, QString anchor, int button)
 {
   PyObject* pArgs = Py_BuildValue((char*)"(lsi)", k, anchor.ascii(), button);
   return callObject("meterClicked", pArgs);
 }
 
-bool KarambaPython::widgetClicked(karamba* k, int x, int y, int button)
+bool KarambaPython::widgetClicked(KarambaWidget* k, int x, int y, int button)
 {
   PyObject* pArgs = Py_BuildValue((char*)"(liii)", k, x, y, button);
   return callObject("widgetClicked", pArgs);
 }
 
-bool KarambaPython::keyPressed(karamba* k, const Meter* meter,
+bool KarambaPython::keyPressed(KarambaWidget* k, const Meter* meter,
                                const QString& text)
 {
   PyObject* pArgs = Py_BuildValue((char*)"(lls)", k, meter, text.ascii());
   return callObject("keyPressed", pArgs);
 }
 
-bool KarambaPython::widgetMouseMoved(karamba* k, int x, int y, int button)
+bool KarambaPython::widgetMouseMoved(KarambaWidget* k, int x, int y, int button)
 {
   PyObject* pArgs = Py_BuildValue((char*)"(liii)", k, x, y, button);
   return callObject("widgetMouseMoved", pArgs);
 }
 
-bool KarambaPython::activeTaskChanged(karamba* k, Task* t)
+bool KarambaPython::activeTaskChanged(KarambaWidget* k, Task* t)
 {
   PyObject* pArgs = Py_BuildValue((char*)"(ll)", k, t);
   return callObject("activeTaskChanged", pArgs);
 }
 
-bool KarambaPython::taskAdded(karamba* k, Task* t)
+bool KarambaPython::taskAdded(KarambaWidget* k, Task* t)
 {
   PyObject* pArgs = Py_BuildValue((char*)"(ll)", k, t);
   return callObject("taskAdded", pArgs);
 }
 
-bool KarambaPython::taskRemoved(karamba* k, Task* t)
+bool KarambaPython::taskRemoved(KarambaWidget* k, Task* t)
 {
   PyObject* pArgs = Py_BuildValue((char*)"(ll)", k, t);
   return callObject("taskRemoved", pArgs);
 }
 
-bool KarambaPython::startupAdded(karamba* k, Startup* t)
+bool KarambaPython::startupAdded(KarambaWidget* k, Startup* t)
 {
   PyObject* pArgs = Py_BuildValue((char*)"(ll)", k, t);
   return callObject("startupAdded", pArgs);
 }
 
-bool KarambaPython::startupRemoved(karamba* k, Startup* t)
+bool KarambaPython::startupRemoved(KarambaWidget* k, Startup* t)
 {
   PyObject* pArgs = Py_BuildValue((char*)"(ll)", k, t);
   return callObject("startupRemoved", pArgs);
 }
 
-bool KarambaPython::commandOutput(karamba* k, int pid, char *buffer)
+bool KarambaPython::commandOutput(KarambaWidget* k, int pid, char *buffer)
 {
   PyObject* pArgs = Py_BuildValue((char*)"(lis)", k, pid, buffer);
   return callObject("commandOutput", pArgs);
 }
 
-bool KarambaPython::commandFinished(karamba* k, int pid)
+bool KarambaPython::commandFinished(KarambaWidget* k, int pid)
 {
   PyObject* pArgs = Py_BuildValue((char*)"(li)", k, pid);
   return callObject("commandFinished", pArgs);
 }
 
-bool KarambaPython::itemDropped(karamba* k, QString text)
+bool KarambaPython::itemDropped(KarambaWidget* k, QString text)
 {
   PyObject* pArgs = Py_BuildValue((char*)"(ls)", k, text.ascii());
   return callObject("itemDropped", pArgs);
 }
 
-bool KarambaPython::systrayUpdated(karamba* k)
+bool KarambaPython::systrayUpdated(KarambaWidget* k)
 {
   PyObject* pArgs = Py_BuildValue((char*)"(l)", k);
   return callObject("systrayUpdated", pArgs);
 }
 
-bool KarambaPython::desktopChanged(karamba* k, int desktop)
+bool KarambaPython::desktopChanged(KarambaWidget* k, int desktop)
 {
   PyObject* pArgs = Py_BuildValue((char*)"(li)", k, desktop);
   return callObject("desktopChanged", pArgs);
 }
 
-bool KarambaPython::wallpaperChanged(karamba* k, int desktop)
+bool KarambaPython::wallpaperChanged(KarambaWidget* k, int desktop)
 {
   PyObject* pArgs = Py_BuildValue((char*)"(li)", k, desktop);
   return callObject("wallpaperChanged", pArgs);

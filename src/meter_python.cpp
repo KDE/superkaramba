@@ -14,7 +14,7 @@
 
 #include <Python.h>
 #include <qobject.h>
-#include "karamba.h"
+#include "karambawidget.h"
 #include "karambaapp.h"
 #include "meter.h"
 #include "meter_python.h"
@@ -34,7 +34,7 @@ bool checkKaramba(long widget)
     PyErr_SetString(PyExc_ValueError, "widget pointer was 0.");
     return false;
   }
-  if (!karambaApp->hasKaramba((karamba*)widget))
+  if (!karambaApp->hasKaramba((KarambaWidget*)widget))
   {
     QString tmp;
 
@@ -52,7 +52,7 @@ bool checkMeter(long widget, long meter, const char* type)
     PyErr_SetString(PyExc_ValueError, "meter pointer was 0.");
     return false;
   }
-  if (!((karamba*)widget)->hasMeter((Meter*)meter))
+  if (!((KarambaWidget*)widget)->hasMeter((Meter*)meter))
   {
     QString tmp;
 
@@ -126,7 +126,7 @@ PyObject* QString2PyString(QString string)
 
 long getMeter(long widget, char* name)
 {
-  karamba* theme = (karamba*)widget;
+  KarambaWidget* theme = (KarambaWidget*)widget;
   
   foreach (QObject *it, theme->meterList)
   {
@@ -300,7 +300,7 @@ PyObject* py_getSensor(PyObject *, PyObject *args, QString type)
   if (!checkKarambaAndMeter(widget, meter, type.ascii()))
     return NULL;
   return Py_BuildValue((char*)"s",
-                       ((karamba*)widget)->getSensor((Meter*)meter).ascii());
+                       ((KarambaWidget*)widget)->getSensor((Meter*)meter).ascii());
 }
 
 PyObject* py_setSensor(PyObject *, PyObject *args, QString type)
@@ -312,7 +312,7 @@ PyObject* py_setSensor(PyObject *, PyObject *args, QString type)
     return NULL;
   if (!checkKarambaAndMeter(widget, meter, type.ascii()))
     return NULL;
-  ((karamba*)widget)->setSensor(LineParser(s), (Meter*)meter);
+  ((KarambaWidget*)widget)->setSensor(LineParser(s), (Meter*)meter);
   return Py_BuildValue((char*)"l", 1);
 }
 

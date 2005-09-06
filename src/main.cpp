@@ -34,7 +34,7 @@
 #include <kstandarddirs.h>
 #include <kdeversion.h>
 
-#include "karamba.h"
+#include "karambawidget.h"
 #include "karambasessionmanaged.h"
 #include "karambainterface.h"
 #include "karamba_python.h"

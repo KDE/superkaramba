@@ -11,7 +11,7 @@
 #include "clickarea.h"
 #include "clickarea.moc"
 
-ClickArea::ClickArea(karamba* k, int x, int y, int w, int h )
+ClickArea::ClickArea(KarambaWidget* k, int x, int y, int w, int h )
         : Meter(k, x, y, w, h )
 {
     value = "";

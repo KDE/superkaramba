@@ -14,7 +14,7 @@
 #include <krootpixmap.h>
 #include <ksharedpixmap.h>
 
-//#include "karamba.h"
+//#include "karambawidget.h"
 
 /**
 @author Hans Karlsson

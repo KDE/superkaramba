@@ -13,7 +13,7 @@
 
 #include "dcopinterface.h"
 
-class karamba;
+class KarambaWidget;
 class ThemeListWindow;
 
 class KarambaIface: virtual public dcopIface
@@ -21,7 +21,7 @@ class KarambaIface: virtual public dcopIface
 public:
   KarambaIface();
   ~KarambaIface();
-  karamba* getKaramba(QString name);
+  KarambaWidget* getKaramba(QString name);
   ThemesDlg* getThemeWnd();
 
 public slots:

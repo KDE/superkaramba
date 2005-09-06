@@ -21,7 +21,7 @@
 #include "input.h"
 #include "kdebug.h"
 
-Input::Input(karamba* k, int x, int y, int w, int h):
+Input::Input(KarambaWidget* k, int x, int y, int w, int h):
   Meter(k, x, y, w, h)
 {
   edit = new SKLineEdit((QWidget*)k, this);

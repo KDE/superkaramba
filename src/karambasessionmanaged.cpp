@@ -23,7 +23,7 @@
 #include <kapplication.h>
 #include <kconfig.h>
 #include "karambasessionmanaged.h"
-#include "karamba.h"
+#include "karambawidget.h"
 
 bool KSessionManaged::saveState(QSessionManager&)
 {
@@ -37,7 +37,7 @@ bool KSessionManaged::saveState(QSessionManager&)
   {
     if (QString(w->name()).startsWith("karamba"))
     {
-      karamba* k = (karamba*) w;
+      KarambaWidget* k = (KarambaWidget*) w;
       openThemes += QFileInfo(k->theme().file()).absFilePath();
       k->writeConfigData();
       openThemes += ";";

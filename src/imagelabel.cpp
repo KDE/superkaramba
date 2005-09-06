@@ -122,7 +122,7 @@ KPixmap ToGray::apply(KPixmap pixmap)
 
 /***********************************************************************/
 
-ImageLabel::ImageLabel(karamba* k, int ix,int iy,int iw,int ih)
+ImageLabel::ImageLabel(KarambaWidget* k, int ix,int iy,int iw,int ih)
     :   Meter(k, ix,iy,iw,ih),
         zoomed(false),
         rollover(false),
@@ -137,7 +137,7 @@ ImageLabel::ImageLabel(karamba* k, int ix,int iy,int iw,int ih)
 {
 }
 
-ImageLabel::ImageLabel(karamba* k)
+ImageLabel::ImageLabel(KarambaWidget* k)
     :   Meter(k),
         zoomed(false),
         rollover(false),

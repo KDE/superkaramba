@@ -12,7 +12,7 @@
 #include <stdlib.h>
 #include "textlabel.h"
 
-TextLabel::TextLabel(karamba *k, int x,int y,int w,int h):
+TextLabel::TextLabel(KarambaWidget *k, int x,int y,int w,int h):
   Meter(k, x,y,w,h), alignment(Qt::AlignLeft), clip(0), bgColor(0, 0, 0),
   lineHeight(0), shadow(0), scrollSpeed(0, 0), scrollPos(0, 0), scrollGap(0),
   scrollPause(0), pauseCounter(0), scrollType(ScrollNone)
@@ -30,7 +30,7 @@ TextLabel::TextLabel(karamba *k, int x,int y,int w,int h):
     }
 }
 
-TextLabel::TextLabel(karamba *k):
+TextLabel::TextLabel(KarambaWidget *k):
   Meter(k, 0, 0, 0, 0), alignment(Qt::AlignLeft), clip(0), bgColor(0, 0, 0),
   lineHeight(0), shadow(0), scrollSpeed(0, 0), scrollPos(0, 0), scrollGap(0),
   scrollPause(0), pauseCounter(0), scrollType(ScrollNone)

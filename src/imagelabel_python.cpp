@@ -29,14 +29,14 @@
 #include <Python.h>
 #include <QObject>
 
-#include "karamba.h"
+#include "karambawidget.h"
 #include "imagelabel.h"
 #include "meter_python.h"
 #include "lineparser.h"
 
 #include "imagelabel_python.h"
 
-ImageLabel* createImageLabel(karamba *theme, long x, long y,
+ImageLabel* createImageLabel(KarambaWidget *theme, long x, long y,
                              char* path, bool bg)
 {
     QString file;
@@ -84,7 +84,7 @@ PyObject* py_createImage(PyObject *, PyObject *args)
         return NULL;
     }
 
-    ImageLabel *tmp = createImageLabel((karamba*)widget, x, y, text, 0);
+    ImageLabel *tmp = createImageLabel((KarambaWidget*)widget, x, y, text, 0);
 
     return (Py_BuildValue((char*)"l", (long)tmp));
 }
@@ -103,7 +103,7 @@ PyObject* py_createBackgroundImage(PyObject *, PyObject *args)
         return NULL;
     }
 
-    ImageLabel *tmp = createImageLabel((karamba*)widget, x, y, text, 1);
+    ImageLabel *tmp = createImageLabel((KarambaWidget*)widget, x, y, text, 1);
 
     return (Py_BuildValue((char*)"l", (long)tmp));
 }
@@ -127,7 +127,7 @@ PyObject* py_createTaskIcon(PyObject *, PyObject *args)
     }
 
     //get the specified task and insure it exists
-    TaskList taskList = ((karamba*)widget)->taskManager.tasks();
+    TaskList taskList = ((KarambaWidget*)widget)->taskManager.tasks();
     Task* currTask = 0;
     foreach (Task *task, taskList)
     {
@@ -148,7 +148,7 @@ PyObject* py_createTaskIcon(PyObject *, PyObject *args)
 
     //retrieve the QPixmap that represents this image
     QPixmap iconPixmap = KWin::icon(currTask->window());
-    ImageLabel *tmp = createImageLabel((karamba*)widget, x, y, 0, 0);
+    ImageLabel *tmp = createImageLabel((KarambaWidget*)widget, x, y, 0, 0);
     tmp->setValue(iconPixmap);
 
     return (Py_BuildValue((char*)"l", (long)tmp));
@@ -166,12 +166,12 @@ PyObject* py_deleteImage(PyObject *, PyObject *args)
         return NULL;
     }
 
-    ((karamba*)widget)->deleteMeterFromSensors((Meter*)meter);
-    ((karamba*)widget)->clickList.removeAll((Meter*)meter);
-    ((karamba*)widget)->imageList.removeAll((Meter*)meter);
+    ((KarambaWidget*)widget)->deleteMeterFromSensors((Meter*)meter);
+    ((KarambaWidget*)widget)->clickList.removeAll((Meter*)meter);
+    ((KarambaWidget*)widget)->imageList.removeAll((Meter*)meter);
 
     return Py_BuildValue((char*)"l",
-        ((karamba*)widget)->meterList.removeAll((Meter*)meter));
+        ((KarambaWidget*)widget)->meterList.removeAll((Meter*)meter));
 }
 
 PyObject* py_getThemeImage(PyObject *self, PyObject *args)

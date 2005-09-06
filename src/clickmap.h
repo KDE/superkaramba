@@ -24,7 +24,7 @@ class ClickMap : public Meter
 {
 Q_OBJECT
 public:
-    ClickMap(karamba* k, int x, int y, int w, int h);
+    ClickMap(KarambaWidget* k, int x, int y, int w, int h);
     ~ClickMap();
 
     virtual bool click( QMouseEvent* );

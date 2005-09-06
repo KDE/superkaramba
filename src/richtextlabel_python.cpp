@@ -28,7 +28,7 @@
 
 #include <Python.h>
 #include <qobject.h>
-#include "karamba.h"
+#include "karambawidget.h"
 #include "richtextlabel.h"
 #include "meter_python.h"
 #include "richtextlabel_python.h"
@@ -42,11 +42,11 @@ PyObject* py_createRichText(PyObject *, PyObject *args)
     return NULL;
   if (!checkKaramba(widget))
     return NULL;
-  RichTextLabel *tmp = new RichTextLabel((karamba*)widget);
+  RichTextLabel *tmp = new RichTextLabel((KarambaWidget*)widget);
   tmp->setText(PyString2QString(text), underline);
-  tmp->setTextProps(((karamba*)widget)->getDefaultTextProps());
-  ((karamba*)widget)->meterList.append(tmp);
-  ((karamba*)widget)->clickList.append(tmp);
+  tmp->setTextProps(((KarambaWidget*)widget)->getDefaultTextProps());
+  ((KarambaWidget*)widget)->meterList.append(tmp);
+  ((KarambaWidget*)widget)->clickList.append(tmp);
   return (Py_BuildValue((char*)"l", (long)tmp));
 }
 
@@ -58,10 +58,10 @@ PyObject* py_deleteRichText(PyObject *, PyObject *args)
   if (!checkKarambaAndMeter(widget, meter, "RichTextLabel"))
     return NULL;
 
-  ((karamba*)widget)->deleteMeterFromSensors((Meter*)meter);
-  ((karamba*)widget)->clickList.removeAll((Meter*)meter);
+  ((KarambaWidget*)widget)->deleteMeterFromSensors((Meter*)meter);
+  ((KarambaWidget*)widget)->clickList.removeAll((Meter*)meter);
   return Py_BuildValue((char*)"l",
-      ((karamba*)widget)->meterList.removeAll((Meter*)meter));
+      ((KarambaWidget*)widget)->meterList.removeAll((Meter*)meter));
 }
 
 PyObject* py_getThemeRichText(PyObject *self, PyObject *args)

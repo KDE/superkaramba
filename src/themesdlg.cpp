@@ -23,7 +23,7 @@
 #include "themesdlg.h"
 #include "themewidget.h"
 #include "kwidgetlistbox.h"
-#include "karamba.h"
+#include "karambawidget.h"
 #include "sknewstuff.h"
 
 #include "superkarambasettings.h"
@@ -180,7 +180,7 @@ void ThemesDlg::addToDesktop()
     ThemeFile* tf = w->themeFile();
     if(tf)
     {
-      (new karamba(tf->file(), false))->show();
+      (new KarambaWidget(tf->file(), false))->show();
     }
   }
 }
@@ -195,7 +195,7 @@ void ThemesDlg::openLocalTheme()
   {
     ThemeFile file(*it);
     if(file.isValid())
-      (new karamba(*it, false))->show();
+      (new KarambaWidget(*it, false))->show();
   }
 }
 

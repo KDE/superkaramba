@@ -41,7 +41,7 @@ class ClickArea : public Meter
 {
     Q_OBJECT
 public:
-    ClickArea(karamba* k, int x, int y, int w, int h );
+    ClickArea(KarambaWidget* k, int x, int y, int w, int h );
 
     ~ClickArea();
 

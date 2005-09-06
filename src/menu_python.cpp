@@ -29,14 +29,14 @@
 #include <Python.h>
 #include <QObject>
 
-#include "karamba.h"
+#include "karambawidget.h"
 #include "meter.h"
 #include "meter_python.h"
 #include "menu_python.h"
 
 long createMenu(long widget)
 {
-    karamba* currTheme = (karamba*)widget;
+    KarambaWidget* currTheme = (KarambaWidget*)widget;
 
     KPopupMenu* tmp = new KPopupMenu(currTheme);
     currTheme->menuList.append (tmp );
@@ -59,7 +59,7 @@ PyObject* py_create_menu(PyObject *, PyObject *args)
     return Py_BuildValue((char*)"l", createMenu(widget));
 }
 
-bool menuExists(karamba* currTheme, KPopupMenu* menu)
+bool menuExists(KarambaWidget* currTheme, KPopupMenu* menu)
 {
     bool foundMenu = false;
     KPopupMenu* tmp;
@@ -82,7 +82,7 @@ bool menuExists(karamba* currTheme, KPopupMenu* menu)
 
 long deleteMenu(long widget, long menu)
 {
-    karamba* currTheme = (karamba*)widget;
+    KarambaWidget* currTheme = (KarambaWidget*)widget;
     KPopupMenu* tmp = (KPopupMenu*)menu;
 
     currTheme->menuList.removeAll(tmp);
@@ -104,7 +104,7 @@ PyObject* py_delete_menu(PyObject *, PyObject *args)
 
 long addMenuItem(long widget, long menu, QString text, QString icon)
 {
-    karamba* currTheme = (karamba*)widget;
+    KarambaWidget* currTheme = (KarambaWidget*)widget;
     KPopupMenu* tmp = (KPopupMenu*)menu;
 
     long id = 0;
@@ -137,7 +137,7 @@ PyObject* py_add_menu_item(PyObject *, PyObject *args)
 
 long addMenuSeparator(long widget, long menu)
 {
-    karamba* currTheme = (karamba*)widget;
+    KarambaWidget* currTheme = (KarambaWidget*)widget;
     KPopupMenu* tmp = (KPopupMenu*)menu;
 
     long id = 0;
@@ -163,7 +163,7 @@ PyObject* py_add_menu_separator(PyObject *, PyObject *args)
 
 long removeMenuItem(long widget, long menu, long id)
 {
-    karamba* currTheme = (karamba*)widget;
+    KarambaWidget* currTheme = (KarambaWidget*)widget;
     KPopupMenu* tmp = (KPopupMenu*)menu;
 
     if(menuExists(currTheme,tmp))
@@ -191,7 +191,7 @@ PyObject* py_remove_menu_item(PyObject *, PyObject *args)
 
 long popupMenu(long widget, long menu, long x, long y)
 {
-    karamba* currTheme = (karamba*)widget;
+    KarambaWidget* currTheme = (KarambaWidget*)widget;
     KPopupMenu* tmp = (KPopupMenu*)menu;
 
     if(menuExists(currTheme,tmp))

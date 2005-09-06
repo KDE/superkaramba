@@ -9,14 +9,14 @@
  ***************************************************************************/
 #include "meter.h"
 
-Meter::Meter(karamba* k, int ix, int iy, int iw, int ih):
+Meter::Meter(KarambaWidget* k, int ix, int iy, int iw, int ih):
   boundingBox(ix, iy, iw, ih), leftButtonAction(""), middleButtonAction(""),
   rightButtonAction(""), clickable(true), hidden(0), minValue(0), maxValue(0),
   color(0,0,0), m_karamba(k)
 {
 }
 
-Meter::Meter(karamba* k):
+Meter::Meter(KarambaWidget* k):
   boundingBox(0, 0, 0, 0), leftButtonAction(""), middleButtonAction(""),
   rightButtonAction(""), clickable(true), hidden(0), minValue(0), maxValue(0),
   color(0,0,0), m_karamba(k)

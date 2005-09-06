@@ -35,7 +35,7 @@
 #include <kio/netaccess.h>
 #include <qregexp.h>
 #include <qtimer.h>
-#include "karamba.h"
+#include "karambawidget.h"
 
 class ImageLabel;
 class KIO::CopyJob;
@@ -102,8 +102,8 @@ class ImageLabel : public Meter
 Q_OBJECT
 
 public:
-  ImageLabel(karamba* k, int ix,int iy,int iw,int ih );
-  ImageLabel(karamba* k);
+  ImageLabel(KarambaWidget* k, int ix,int iy,int iw,int ih );
+  ImageLabel(KarambaWidget* k);
   ~ImageLabel();
   void setValue( QString imagePath );
 

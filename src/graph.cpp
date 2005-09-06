@@ -13,7 +13,7 @@
 #include "graph.h"
 #include "graph.moc"
 
-Graph::Graph(karamba* k, int x, int y, int w, int h, int nbrPts)
+Graph::Graph(KarambaWidget* k, int x, int y, int w, int h, int nbrPts)
     :   Meter(k, x, y, w, h),
         lastValue(0),
         ptPtr(0)

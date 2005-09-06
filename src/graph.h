@@ -20,7 +20,7 @@ class Graph : public Meter
 Q_OBJECT
 
 public:
-  Graph(karamba* k, int ix, int iy, int iw, int ih, int nbrPoints);
+  Graph(KarambaWidget* k, int ix, int iy, int iw, int ih, int nbrPoints);
   Graph();
   ~Graph();
 

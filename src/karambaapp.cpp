@@ -27,7 +27,7 @@
 #include "karambainterface.h"
 #include "karambaapp.h"
 #include "dcopinterface_stub.h"
-#include "karamba.h"
+#include "karambawidget.h"
 #include "superkarambasettings.h"
 
 int KarambaApplication::fd = -1;
@@ -119,7 +119,7 @@ void KarambaApplication::setUpSysTray(KAboutData* about)
 
   //Create theme list window.
   //This will function as the main window for the tray icon
-  themeListWindow = new ThemesDlg;
+  themeListWindow = new ThemesDlg();
 
   //Set up systray icon
   sysTrayIcon = new KSystemTray(themeListWindow);
@@ -160,14 +160,14 @@ void KarambaApplication::showKarambaMenuExtension(bool show)
   {
     foreach (QObject *k, karambaList)
     {
-      ((karamba*)k)->showMenuExtension();
+      ((KarambaWidget*)k)->showMenuExtension();
     }
   }
   else
   {
     foreach (QObject *k, karambaList)
     {
-      ((karamba*)k)->hideMenuExtension();
+      ((KarambaWidget*)k)->hideMenuExtension();
     }
   }
 }
@@ -261,9 +261,9 @@ bool KarambaApplication::startThemes(QStringList &lst)
 
   for(QStringList::Iterator it = lst.begin(); it != lst.end(); ++it )
   {
-    karamba *mainWin = 0;
+    KarambaWidget *mainWin = 0;
 
-    mainWin = new karamba(*it , false);
+    mainWin = new KarambaWidget(*it , false);
     mainWin->show();
     result = true;
   }
@@ -272,7 +272,7 @@ bool KarambaApplication::startThemes(QStringList &lst)
   return result;
 }
 
-void KarambaApplication::addKaramba(karamba* k, bool reloading)
+void KarambaApplication::addKaramba(KarambaWidget* k, bool reloading)
 {
   if(!reloading && karambaApp->dcopStub())
   {
@@ -283,7 +283,7 @@ void KarambaApplication::addKaramba(karamba* k, bool reloading)
   karambaList.append(k);
 }
 
-void KarambaApplication::deleteKaramba(karamba* k, bool reloading)
+void KarambaApplication::deleteKaramba(KarambaWidget* k, bool reloading)
 {
   if(!reloading && karambaApp->dcopStub())
     karambaApp->dcopStub()->themeClosed(
@@ -291,7 +291,7 @@ void KarambaApplication::deleteKaramba(karamba* k, bool reloading)
   karambaList.removeAll(k);
 }
 
-bool KarambaApplication::hasKaramba(karamba* k)
+bool KarambaApplication::hasKaramba(KarambaWidget* k)
 {
   return karambaList.count(k) > 0;
 }

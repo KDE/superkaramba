@@ -16,7 +16,7 @@
 
 #define karambaApp ((KarambaApplication*)qApp)
 
-class karamba;
+class KarambaWidget;
 class KarambaIface;
 class KCmdLineArgs;
 class ThemesDlg;
@@ -60,9 +60,9 @@ class KarambaApplication : public KApplication
     dcopIface_stub* dcopStub() { return dcopIfaceStub; };
     QWidget* parentWindow() { return (QWidget*)themeListWindow; };
 
-    void addKaramba(karamba* k, bool reloading = false);
-    void deleteKaramba(karamba* k, bool reloading = false);
-    bool hasKaramba(karamba* k);
+    void addKaramba(KarambaWidget* k, bool reloading = false);
+    void deleteKaramba(KarambaWidget* k, bool reloading = false);
+    bool hasKaramba(KarambaWidget* k);
 
     static bool lockKaramba();
     static void unlockKaramba();

@@ -15,7 +15,7 @@
 #include "clickmap.h"
 #include "clickmap.moc"
 
-ClickMap::ClickMap(karamba* k, int x, int y, int w, int h )
+ClickMap::ClickMap(KarambaWidget* k, int x, int y, int w, int h )
     :Meter(k, x, y, w, h )
 {
 /*

@@ -30,7 +30,7 @@
 #include <Python.h>
 #include <QObject>
 
-#include "karamba.h"
+#include "karambawidget.h"
 #include "meter.h"
 #include "meter_python.h"
 
@@ -50,13 +50,13 @@ PyObject* py_createInputBox(PyObject *, PyObject *args)
         return NULL;
     }
 
-    Input *tmp = new Input((karamba*)widget, (int)x, (int)y, (int)w, (int)h);
+    Input *tmp = new Input((KarambaWidget*)widget, (int)x, (int)y, (int)w, (int)h);
     tmp->setValue(PyString2QString(text));
-    tmp->setTextProps(((karamba*)widget)->getDefaultTextProps());
-    ((karamba*)widget)->meterList.append(tmp);
+    tmp->setTextProps(((KarambaWidget*)widget)->getDefaultTextProps());
+    ((KarambaWidget*)widget)->meterList.append(tmp);
     tmp->show();
 
-    ((karamba*)widget)->makeActive();
+    ((KarambaWidget*)widget)->makeActive();
 
     return (Py_BuildValue((char*)"l", (long)tmp));
 }
@@ -74,9 +74,9 @@ PyObject* py_deleteInputBox(PyObject *, PyObject *args)
         return NULL;
     }
 
-    bool result = ((karamba*)widget)->meterList.removeAll((Meter*)meter);
+    bool result = ((KarambaWidget*)widget)->meterList.removeAll((Meter*)meter);
 
-    ((karamba*)widget)->makePassive();
+    ((KarambaWidget*)widget)->makePassive();
 
     return Py_BuildValue((char*)"l", result);
 }

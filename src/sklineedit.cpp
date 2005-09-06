@@ -19,7 +19,7 @@
  ****************************************************************************/
 
 #include "sklineedit.h"
-#include "karamba.h"
+#include "karambawidget.h"
 #include "kdebug.h"
 
 SKLineEdit::SKLineEdit(QWidget *w, Input *i) : QLineEdit(w), m_input(i)
@@ -68,7 +68,7 @@ void SKLineEdit::keyPressEvent(QKeyEvent* e)
 
 void SKLineEdit::keyReleaseEvent(QKeyEvent* e)
 {
-  karamba* k = static_cast<karamba*>(parent());
+  KarambaWidget* k = static_cast<KarambaWidget*>(parent());
   // e->text() is empty ?
   k->keyPressed(m_key, m_input);
   QLineEdit::keyReleaseEvent(e);

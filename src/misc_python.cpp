@@ -29,7 +29,7 @@
 #include <Python.h>
 #include <qobject.h>
 #include "kdebug.h"
-#include "karamba.h"
+#include "karambawidget.h"
 #include "karambaapp.h"
 #include "themefile.h"
 #include "themelocale.h"
@@ -40,7 +40,7 @@
 /* now a method we need to expose to Python */
 long acceptDrops(long widget)
 {
-  karamba* currTheme = (karamba*)widget;
+  KarambaWidget* currTheme = (KarambaWidget*)widget;
 
   currTheme->setAcceptDrops(true);
 
@@ -88,7 +88,7 @@ PyObject* py_execute_command_interactive(PyObject *, PyObject* args)
   if (!checkKaramba(widget))
     return NULL;
 
-  karamba* currTheme = (karamba*)widget;
+  KarambaWidget* currTheme = (KarambaWidget*)widget;
 
   currTheme->currProcess = new KProcess;
 
@@ -127,7 +127,7 @@ PyObject* py_execute_command_interactive(PyObject *, PyObject* args)
 
 long attachClickArea(long widget, long meter, QString LeftButton, QString MiddleButton, QString RightButton)
 {
-  karamba* currTheme = (karamba*) widget;
+  KarambaWidget* currTheme = (KarambaWidget*) widget;
   Meter* currMeter = (Meter*) meter;
 
   // Look if currMeter has an ClickArea attached.
@@ -225,7 +225,7 @@ PyObject* py_toggle_show_desktop(PyObject *, PyObject *args)
 /* now a method we need to expose to Python */
 const char* getThemePath(long widget)
 {
-  karamba* currTheme = (karamba*)widget;
+  KarambaWidget* currTheme = (KarambaWidget*)widget;
 
   return currTheme->theme().path().ascii();
 }
@@ -248,7 +248,7 @@ PyObject* py_language(PyObject *, PyObject *args)
   if (!checkKaramba(widget))
     return NULL;
   return Py_BuildValue((char*)"s",
-      ((karamba*)widget)->theme().locale()->language().ascii());
+      ((KarambaWidget*)widget)->theme().locale()->language().ascii());
 }
 
 PyObject* py_read_theme_file(PyObject *, PyObject *args)
@@ -259,7 +259,7 @@ PyObject* py_read_theme_file(PyObject *, PyObject *args)
     return NULL;
   if (!checkKaramba(widget))
     return NULL;
-  karamba* k = (karamba*)widget;
+  KarambaWidget* k = (KarambaWidget*)widget;
   QByteArray ba = k->theme().readThemeFile(file);
   return PyString_FromStringAndSize(ba.data(), ba.size());
 }
@@ -267,7 +267,7 @@ PyObject* py_read_theme_file(PyObject *, PyObject *args)
 /* now a method we need to expose to Python */
 long createClickArea(long widget, long x, long y, long w, long h, char* text) {
 
-  karamba* currTheme = (karamba*)widget;
+  KarambaWidget* currTheme = (KarambaWidget*)widget;
   ClickArea *tmp = new ClickArea(currTheme, x, y, w, h );
   QString onclick;
 
@@ -296,7 +296,7 @@ long openTheme(char* path)
 {
 
   QString filename;
-  karamba* currTheme = 0;
+  KarambaWidget* currTheme = 0;
 
   filename.setAscii(path);
 
@@ -304,7 +304,7 @@ long openTheme(char* path)
 
   if( file.exists() )
     {
-      currTheme = new karamba( filename, false );
+      currTheme = new KarambaWidget( filename, false );
       currTheme->show();
     }
 
@@ -326,14 +326,14 @@ PyObject* py_reload_theme(PyObject *, PyObject *args)
     return NULL;
   if (!checkKaramba(widget))
     return NULL;
-  ((karamba*)widget)->reloadConfig();
+  ((KarambaWidget*)widget)->reloadConfig();
   return Py_BuildValue((char*)"l", 1);
 }
 
 /* now a method we need to expose to Python */
 int getNumberOfDesktops(long widget)
 {
-  karamba* currTheme = (karamba*)widget;
+  KarambaWidget* currTheme = (KarambaWidget*)widget;
 
   return currTheme->kWinModule->numberOfDesktops();
 }
@@ -351,7 +351,7 @@ PyObject* py_get_number_of_desktops(PyObject *, PyObject *args)
 /* now a method we need to expose to Python */
 int translateAll(long widget, int x, int y)
 {
-  karamba* currTheme = (karamba*)widget;
+  KarambaWidget* currTheme = (KarambaWidget*)widget;
 
   foreach (QObject *it2, currTheme->meterList)
   {
@@ -383,7 +383,7 @@ PyObject* py_translate_all(PyObject *, PyObject *args)
 /* now a method we need to expose to Python */
 int show(long widget)
 {
-  karamba* currTheme = (karamba*)widget;
+  KarambaWidget* currTheme = (KarambaWidget*)widget;
   currTheme->show();
   return 0;
 }
@@ -401,7 +401,7 @@ PyObject* py_show(PyObject *, PyObject *args)
 /* now a method we need to expose to Python */
 int hide(long widget)
 {
-  karamba* currTheme = (karamba*)widget;
+  KarambaWidget* currTheme = (KarambaWidget*)widget;
   currTheme->hide();
   return 0;
 }

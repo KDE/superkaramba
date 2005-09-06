@@ -19,15 +19,15 @@
 
 #include <qfileinfo.h>
 
-class karamba;
+class KarambaWidget;
 
 class Meter : public QObject
 {
 Q_OBJECT
 public:
 
-  Meter(karamba* k, int ix,int iy,int iw,int ih);
-  Meter(karamba* k);
+  Meter(KarambaWidget* k, int ix,int iy,int iw,int ih);
+  Meter(KarambaWidget* k);
   virtual ~Meter();
   virtual int getX();
   virtual int getY();
@@ -90,7 +90,7 @@ protected: // Protected attributes
   int maxValue;
 
   QColor color;
-  karamba* m_karamba;
+  KarambaWidget* m_karamba;
 };
 
 #endif // METER_H

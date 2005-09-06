@@ -16,11 +16,11 @@ superkaramba_LDFLAGS = -Wl,-export-dynamic \
 
 
 # these are the headers for your project
-noinst_HEADERS = karamba.h karambaapp.h karamba_python.h lineparser.h \
+noinst_HEADERS = karambawidget.h karambaapp.h karamba_python.h lineparser.h \
 		 themefile.h themesdlg.h themewidget.h kwidgetlistbox.h themelocale.h input.h \
 		 sklineedit.h input_python.h
 		 
-superkaramba_SOURCES = main.cpp karamba.cpp meter.cpp bar.cpp sensor.cpp \
+superkaramba_SOURCES = main.cpp karambawidget.cpp meter.cpp bar.cpp sensor.cpp \
                        textlabel.cpp imagelabel.cpp graph.cpp sensorparams.cpp \
 		       clickarea.cpp karambarootpixmap.cpp clickmap.cpp \
 		       textfield.cpp showdesktop.cpp richtextlabel.cpp \ 

@@ -8,12 +8,12 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-#include "karamba.h"
+#include "karambawidget.h"
 
 #include "bar.h"
 #include "bar.moc"
 
-Bar::Bar(karamba* k, int x, int y, int w, int h)
+Bar::Bar(KarambaWidget* k, int x, int y, int w, int h)
     : Meter(k, x, y, w, h),
       value(0),
       barValue(0),
