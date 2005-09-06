@@ -1,0 +1,3 @@
+KARAMBA X=5 Y=850 W=167 H=111 MASK="pics/mask.png" LOCKED=false INTERVAL=100
+
+IMAGE X=0 Y=0 PATH="pics/eyes.png"

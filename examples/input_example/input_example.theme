@@ -1,0 +1,5 @@
+KARAMBA x=0 y=0 w=100 h=50 INTERVAL=1000 LOCKED=true
+DEFAULTFONT font="Bitstream Vera Sans" fontsize=16 color=200,200,200
+
+#INPUT x=0 y=0 w=100 h=25 name=input01
+TEXT x=0 y=30 w=100 h=25 name=output01

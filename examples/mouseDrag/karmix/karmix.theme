@@ -1,0 +1,17 @@
+# Karmix 0.1
+# Written by Tian ( http://www.c-sait.net )
+
+karamba  x=0 y=0 w=160 h=139 locked=true
+image x=0 y=0 path="images/bg.png"
+
+text x=10 y=15 value="Vol" color=252,252,252 fontsize=12 font="sans"
+image x=40 y=17 path="images/bar.png" name="vol_main"
+
+text x=10 y=45 value="Pcm" color=252,252,252 fontsize=12 font="sans"
+image x=40 y=47 path="images/bar.png" name="vol_pcm"
+
+text x=10 y=75 value="CD" color=252,252,252 fontsize=12 font="sans"
+image x=40 y=77 path="images/bar.png" name="vol_cd"
+
+text x=10 y=105 value="Mic" color=252,252,252 fontsize=12 font="sans"
+image x=40 y=107 path="images/bar.png" name="vol_mic"

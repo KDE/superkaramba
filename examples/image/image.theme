@@ -1,0 +1,34 @@
+KARAMBA x=100 y=10 w=600 h=580 INTERVAL=1000 LOCKED=true
+DEFAULTFONT font="Bitstream Vera Sans" fontsize=16 color=200,200,200
+
+TEXT x=0 Y=0 w=600 h=20 VALUE="createImage & deleteImage" name=ttext0
+IMAGE x=0 Y=20 path="flag.png" name=image0
+
+TEXT x=0 Y=40 w=600 h=20 VALUE="showImage & hideImage" name=ttext1
+IMAGE x=0 Y=60 path="flag.png" name=image1
+
+TEXT x=0 Y=80 w=600 h=20 VALUE="getImagePos & moveImage" name=ttext2
+IMAGE x=0 Y=100 path="flag.png" name=image2
+
+TEXT x=0 Y=120 w=600 h=20 VALUE="getImageSensor & setImageSensor" name=ttext3
+IMAGE x=0 Y=140 path="flag.png" name=image3
+
+TEXT x=0 Y=160 w=600 h=20 VALUE="getImagePath & setImagePath" name=ttext4
+IMAGE x=0 Y=180 path="flag.png" name=image4
+
+TEXT x=0 Y=200 w=600 h=20 VALUE="removeImageEffects, changeImageIntensity, changeImageChannelIntensity, changeImageToGray" name=ttext5 fontsize=10
+IMAGE x=0 Y=220 path="flag.png" name=image5
+IMAGE x=50 Y=220 path="flag.png" name=image6
+IMAGE x=100 Y=220 path="flag.png" name=image7
+
+TEXT x=0 Y=240 w=600 h=20 VALUE="removeImageTransformations, rotateImage, resizeImageSmooth, resizeImage" name=ttext6 fontsize=10
+IMAGE x=0 Y=260 path="flag.png" name=image8
+IMAGE x=80 Y=260 path="flag.png" name=image9
+IMAGE x=160 Y=260 path="flag.png" name=image10
+
+TEXT x=0 Y=280 w=600 h=20 VALUE="addImageTooltip" name=ttext7
+IMAGE x=0 Y=300 path="flag.png" name=image11
+
+TEXT x=0 Y=320 w=600 h=20 VALUE="createBackgroundImage & createTaskIcon" name=ttext7
+IMAGE x=0 Y=340 path="flag.png" name=image12 BACKGROUND=1
+IMAGE x=50 Y=340 path="flag.png" name=image13
