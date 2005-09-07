@@ -23,7 +23,7 @@
 #include "karamba_python.h"
 #include "dcopinterface_stub.h"
 #include "richtextlabel.h"
-#include "karamba.h"
+#include "karambawidget.h"
 #include "karambaapp.h"
 #include "themesdlg.h"
 #include "lineparser.h"
@@ -52,7 +52,7 @@
 #define EDITSCRIPT 1
 #define THEMECONF  2
 
-karamba::karamba(QString fn, bool reloading, int instance) :
+KarambaWidget::KarambaWidget(QString fn, bool reloading, int instance) :
     QWidget(0, Qt::FramelessWindowHint ),
     kpop(0), widgetMask(0),
     config(0), kWinModule(0), tempUnit('C'), m_instance(instance),
@@ -294,9 +294,9 @@ karamba::karamba(QString fn, bool reloading, int instance) :
   setFocusPolicy(Qt::StrongFocus);
 }
 
-karamba::~karamba()
+KarambaWidget::~KarambaWidget()
 {
-  //qDebug("karamba::~karamba");
+  //qDebug("KarambaWidget::~karamba");
   //Remove self from list of open themes
   karambaApp->deleteKaramba(this, m_reloading);
 
@@ -328,9 +328,9 @@ karamba::~karamba()
   delete pythonIface;
 }
 
-bool karamba::parseConfig()
+bool KarambaWidget::parseConfig()
 {
-  //qDebug("karamba::parseConfig");
+  //qDebug("KarambaWidget::parseConfig");
   bool passive = true;
 
   if(m_theme.open())
@@ -506,7 +506,7 @@ bool karamba::parseConfig()
         QFileInfo info(path);
         if( info.isRelative())
           path = m_theme.path() +"/" + path;
-        (new karamba( path, false ))->show();
+        (new KarambaWidget( path, false ))->show();
       }
 
       if(lineParser.meter() == "<GROUP>")
@@ -745,7 +745,7 @@ bool karamba::parseConfig()
   }
 }
 
-void karamba::start()
+void KarambaWidget::start()
 {
   QTimer *m_sysTimer = new QTimer(this);
 
@@ -760,7 +760,7 @@ void karamba::start()
     lowerTimer.start();
 }
 
-void karamba::makeActive()
+void KarambaWidget::makeActive()
 {
   KWin::setType(winId(), NET::Normal);
 
@@ -772,7 +772,7 @@ void karamba::makeActive()
   #endif
 }
 
-void karamba::makePassive()
+void KarambaWidget::makePassive()
 {
   if(managed)
     return;
@@ -795,41 +795,41 @@ void karamba::makePassive()
   #endif
 }
 
-void karamba::popupNotify(int)
+void KarambaWidget::popupNotify(int)
 {
-  //qDebug("karamba::popupNotify");
+  //qDebug("KarambaWidget::popupNotify");
 }
 
-void karamba::reloadConfig()
+void KarambaWidget::reloadConfig()
 {
-  //qDebug("karamba::reloadConfig: %s", m_theme.file().ascii());
+  //qDebug("KarambaWidget::reloadConfig: %s", m_theme.file().ascii());
   writeConfigData();
   if(m_theme.exists())
   {
-    (new karamba(m_theme.file(), true, m_instance))->show();
+    (new KarambaWidget(m_theme.file(), true, m_instance))->show();
   }
   closeTheme(true);
 }
 
-void karamba::closeTheme(bool reloading)
+void KarambaWidget::closeTheme(bool reloading)
 {
   m_reloading = reloading;
   close();
 }
 
-void karamba::killWidget()
+void KarambaWidget::killWidget()
 {
   closeTheme();
 }
 
-void karamba::initPythonInterface()
+void KarambaWidget::initPythonInterface()
 {
   pythonIface = new KarambaPython(m_theme, m_reloading);
 }
 
-void karamba::editConfig()
+void KarambaWidget::editConfig()
 {
-  //qDebug("karamba::editConfig");
+  //qDebug("KarambaWidget::editConfig");
   QFileInfo fileInfo( m_theme.file() );
   QString path;
 
@@ -845,9 +845,9 @@ void karamba::editConfig()
   KRun::runURL( KURL( path ), "text/plain" );
 }
 
-void karamba::editScript()
+void KarambaWidget::editScript()
 {
-  //qDebug("karamba::editScript");
+  //qDebug("KarambaWidget::editScript");
   QFileInfo fileInfo( m_theme.file() );
   QString path;
 
@@ -862,9 +862,9 @@ void karamba::editScript()
   KRun::runURL( KURL( path ), "text/plain" );
 }
 
-QString karamba::findSensorFromMap(Sensor* sensor)
+QString KarambaWidget::findSensorFromMap(Sensor* sensor)
 {
-  //qDebug("karamba::findSensorFromMap");
+  //qDebug("KarambaWidget::findSensorFromMap");
   QMap<QString,Sensor*>::ConstIterator it;
   QMap<QString,Sensor*>::ConstIterator end( sensorMap.end() );
   for ( it = sensorMap.begin(); it != end; ++it )
@@ -875,9 +875,9 @@ QString karamba::findSensorFromMap(Sensor* sensor)
   return "";
 }
 
-Sensor* karamba::findSensorFromList(Meter* meter)
+Sensor* KarambaWidget::findSensorFromList(Meter* meter)
 {
-  //qDebug("karamba::findSensorFromList");
+  //qDebug("KarambaWidget::findSensorFromList");
   QListIterator<QObject *> it( sensorList ); // iterate over meters
   while ( it.hasNext() )
   {
@@ -887,9 +887,9 @@ Sensor* karamba::findSensorFromList(Meter* meter)
   return NULL;
 }
 
-QString karamba::getSensor(Meter* meter)
+QString KarambaWidget::getSensor(Meter* meter)
 {
-  //qDebug("karamba::getSensor");
+  //qDebug("KarambaWidget::getSensor");
   QString s;
   Sensor* sensor = findSensorFromList(meter);
   if (sensor)
@@ -897,9 +897,9 @@ QString karamba::getSensor(Meter* meter)
   return s;
 }
 
-void karamba::deleteMeterFromSensors(Meter* meter)
+void KarambaWidget::deleteMeterFromSensors(Meter* meter)
 {
-  //qDebug("karamba::deleteMeterFromSensors");
+  //qDebug("KarambaWidget::deleteMeterFromSensors");
   Sensor* sensor = findSensorFromList(meter);
 
   if (sensor)
@@ -914,9 +914,9 @@ void karamba::deleteMeterFromSensors(Meter* meter)
   }
 }
 
-void karamba::setSensor(const LineParser& lineParser, Meter* meter)
+void KarambaWidget::setSensor(const LineParser& lineParser, Meter* meter)
 {
-  //qDebug("karamba::setSensor");
+  //qDebug("KarambaWidget::setSensor");
   Sensor* sensor = 0;
 
   deleteMeterFromSensors(meter);
@@ -1177,21 +1177,21 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
   }
 }
 
-void karamba::slotFileChanged( const QString & )
+void KarambaWidget::slotFileChanged( const QString & )
 {
   reloadConfig();
 }
 
-void karamba::passMenuOptionChanged(QString key, bool value)
+void KarambaWidget::passMenuOptionChanged(QString key, bool value)
 {
   //Everything below is to call the python callback function
   if (pythonIface && pythonIface->isExtensionLoaded())
     pythonIface->menuOptionChanged(this, key, value);
 }
 
-void karamba::meterClicked(QMouseEvent* e, Meter* meter)
+void KarambaWidget::meterClicked(QMouseEvent* e, Meter* meter)
 {
-  //qWarning("karamba::meterClicked");
+  //qWarning("KarambaWidget::meterClicked");
   if (pythonIface && pythonIface->isExtensionLoaded() && haveUpdated)
   {
     int button = 0;
@@ -1215,9 +1215,9 @@ void karamba::meterClicked(QMouseEvent* e, Meter* meter)
   }
 }
 
-void karamba::passClick(QMouseEvent *e)
+void KarambaWidget::passClick(QMouseEvent *e)
 {
-  //qDebug("karamba::passClick");
+  //qDebug("KarambaWidget::passClick");
   QListIterator<QObject *> it2( timeList ); // iterate over meters
   while ( it2.hasNext() )
   {
@@ -1256,9 +1256,9 @@ void karamba::passClick(QMouseEvent *e)
   }
 }
 
-void karamba::passWheelClick( QWheelEvent *e )
+void KarambaWidget::passWheelClick( QWheelEvent *e )
 {
-  //qDebug("karamba::passWheelClick");
+  //qDebug("KarambaWidget::passWheelClick");
   //Everything below is to call the python callback function
   if (pythonIface && pythonIface->isExtensionLoaded() && haveUpdated)
   {
@@ -1273,9 +1273,9 @@ void karamba::passWheelClick( QWheelEvent *e )
   }
 }
 
-void karamba::mousePressEvent( QMouseEvent *e )
+void KarambaWidget::mousePressEvent( QMouseEvent *e )
 {
-  //qDebug("karamba::mousePressEvent");
+  //qDebug("KarambaWidget::mousePressEvent");
   if( e->button() == Qt::RightButton )
   {
     kpop->exec(QCursor::pos());
@@ -1290,42 +1290,42 @@ void karamba::mousePressEvent( QMouseEvent *e )
   }
 }
 
-void karamba::wheelEvent( QWheelEvent *e )
+void KarambaWidget::wheelEvent( QWheelEvent *e )
 {
-  //qDebug("karamba::wheelEvent");
+  //qDebug("KarambaWidget::wheelEvent");
   passWheelClick( e );
 }
 
-void karamba::mouseReleaseEvent( QMouseEvent *e )
+void KarambaWidget::mouseReleaseEvent( QMouseEvent *e )
 {
-  //qDebug("karamba::mouseReleaseEvent");
+  //qDebug("KarambaWidget::mouseReleaseEvent");
   clickPos = e->pos();
 }
 
-void karamba::mouseDoubleClickEvent( QMouseEvent *e )
+void KarambaWidget::mouseDoubleClickEvent( QMouseEvent *e )
 {
-  //qDebug("karamba::mouseDoubleClickEvent");
+  //qDebug("KarambaWidget::mouseDoubleClickEvent");
   if( !toggleLocked -> isChecked() )
   {
     passClick( e );
   }
 }
 
-void karamba::keyPressEvent(QKeyEvent *e)
+void KarambaWidget::keyPressEvent(QKeyEvent *e)
 {
-  //qDebug("karamba::keyPressEvent");
+  //qDebug("KarambaWidget::keyPressEvent");
   keyPressed(e->text(), 0);
 }
 
-void karamba::keyPressed(const QString& s, const Meter* meter)
+void KarambaWidget::keyPressed(const QString& s, const Meter* meter)
 {
   if (pythonIface && pythonIface->isExtensionLoaded())
     pythonIface->keyPressed(this, meter, s);
 }
 
-void karamba::mouseMoveEvent( QMouseEvent *e )
+void KarambaWidget::mouseMoveEvent( QMouseEvent *e )
 {
-  //qDebug("karamba::mouseMoveEvent");
+  //qDebug("KarambaWidget::mouseMoveEvent");
   if( e->state() !=  0 && e->state() < 16 && !toggleLocked -> isChecked() )
   {
     move( e->globalPos() - clickPos );
@@ -1384,15 +1384,15 @@ void karamba::mouseMoveEvent( QMouseEvent *e )
   }
 }
 
-void karamba::closeEvent ( QCloseEvent *  qc)
+void KarambaWidget::closeEvent ( QCloseEvent *  qc)
 {
-  //qDebug("karamba::closeEvent");
+  //qDebug("KarambaWidget::closeEvent");
   qc->accept();
   //  this->close(true);
   //  delete this;
 }
 
-void karamba::paintEvent ( QPaintEvent *e)
+void KarambaWidget::paintEvent ( QPaintEvent *e)
 {
   //kdDebug() << k_funcinfo << pm.size() << endl;
   if(pm.width() == 0)
@@ -1411,9 +1411,9 @@ void karamba::paintEvent ( QPaintEvent *e)
   p.end();
 }
 
-void karamba::updateSensors()
+void KarambaWidget::updateSensors()
 {
-  //qDebug("karamba::updateSensors");
+  //qDebug("KarambaWidget::updateSensors");
   QListIterator<QObject *> it( sensorList ); // iterate over meters
   while ( it.hasNext() )
   {
@@ -1422,7 +1422,7 @@ void karamba::updateSensors()
   QTimer::singleShot( 500, this, SLOT(step()) );
 }
 
-void karamba::updateBackground(KSharedPixmap* kpm)
+void KarambaWidget::updateBackground(KSharedPixmap* kpm)
 {
   //kdDebug() << k_funcinfo << pm.size() << endl;
   // if pm width == 0 this is the first time we come here and we should start
@@ -1482,23 +1482,23 @@ void karamba::updateBackground(KSharedPixmap* kpm)
   repaint();
 }
 
-void karamba::currentDesktopChanged( int i )
+void KarambaWidget::currentDesktopChanged( int i )
 {
-  //qDebug("karamba::currentDesktopChanged");
+  //qDebug("KarambaWidget::currentDesktopChanged");
   kroot->repaint( true );
   if (pythonIface && pythonIface->isExtensionLoaded())
     pythonIface->desktopChanged(this, i);
 }
 
-void karamba::currentWallpaperChanged(int i )
+void KarambaWidget::currentWallpaperChanged(int i )
 {
-  //qDebug("karamba::currentWallpaperChanged");
+  //qDebug("KarambaWidget::currentWallpaperChanged");
   kroot->repaint( true );
   if (pythonIface && pythonIface->isExtensionLoaded())
     pythonIface->wallpaperChanged(this, i);
 }
 
-void karamba::externalStep()
+void KarambaWidget::externalStep()
 {
   //kdDebug() << k_funcinfo << pm.size() << endl;
   if (widgetUpdate)
@@ -1526,7 +1526,7 @@ void karamba::externalStep()
   }
 }
 
-void karamba::step()
+void KarambaWidget::step()
 {
   //kdDebug() << k_funcinfo << pm.size() << endl;
   if (widgetUpdate && haveUpdated)
@@ -1564,16 +1564,16 @@ void karamba::step()
     haveUpdated = 1;
 }
 
-void karamba::widgetClosed()
+void KarambaWidget::widgetClosed()
 {
-  //qDebug("karamba::widgetClosed");
+  //qDebug("KarambaWidget::widgetClosed");
   if (pythonIface && pythonIface->isExtensionLoaded())
     pythonIface->widgetClosed(this);
 }
 
-void karamba::slotToggleLocked()
+void KarambaWidget::slotToggleLocked()
 {
-  //qDebug("karamba::slotToggleLocked");
+  //qDebug("KarambaWidget::slotToggleLocked");
   if(toggleLocked->isChecked())
   {
     toggleLocked->setIconSet(SmallIconSet("lock"));
@@ -1584,9 +1584,9 @@ void karamba::slotToggleLocked()
   }
 }
 
-void karamba::slotToggleFastTransforms()
+void KarambaWidget::slotToggleFastTransforms()
 {
-  //qDebug("karamba::slotToggleFastTransforms");
+  //qDebug("KarambaWidget::slotToggleFastTransforms");
   //    bool fastTransforms = toggleFastTransforms -> isChecked();
   //    if (toggleFastTransforms -> isChecked())
   //    {
@@ -1602,15 +1602,15 @@ void karamba::slotToggleFastTransforms()
 }
 
 
-bool karamba::useSmoothTransforms()
+bool KarambaWidget::useSmoothTransforms()
 {
-  //qDebug("karamba::useSmoothTransforms");
+  //qDebug("KarambaWidget::useSmoothTransforms");
   return !toggleFastTransforms -> isChecked();
 }
 
-void karamba::writeConfigData()
+void KarambaWidget::writeConfigData()
 {
-  //qDebug("karamba::writeConfigData");
+  //qDebug("KarambaWidget::writeConfigData");
   config -> setGroup("internal");
   config -> writeEntry("lockedPosition", toggleLocked -> isChecked() );
   config -> writeEntry("fastTransforms", toggleFastTransforms -> isChecked() );
@@ -1629,17 +1629,17 @@ void karamba::writeConfigData()
   //         m_theme.name().ascii());
 }
 
-void karamba::slotToggleConfigOption(QString key, bool value)
+void KarambaWidget::slotToggleConfigOption(QString key, bool value)
 {
-  //qDebug("karamba::slotToggleConfigOption");
+  //qDebug("KarambaWidget::slotToggleConfigOption");
   config -> setGroup("config menu");
   config -> writeEntry(key, value);
   passMenuOptionChanged(key, value);
 }
 
-void karamba::addMenuConfigOption(QString key, QString name)
+void KarambaWidget::addMenuConfigOption(QString key, QString name)
 {
-  //qDebug("karamba::addMenuConfigOption");
+  //qDebug("KarambaWidget::addMenuConfigOption");
   kpop -> setItemEnabled(THEMECONF, true);
 
   SignalBridge* action = new SignalBridge(this, key, menuAccColl);
@@ -1661,9 +1661,9 @@ void karamba::addMenuConfigOption(QString key, QString name)
   numberOfConfMenuItems++;
 }
 
-bool karamba::setMenuConfigOption(QString key, bool value)
+bool KarambaWidget::setMenuConfigOption(QString key, bool value)
 {
-  //qDebug("karamba::setMenuConfigOption");
+  //qDebug("KarambaWidget::setMenuConfigOption");
   KToggleAction* menuAction = ((KToggleAction*)menuAccColl -> action(key.ascii()));
   if (menuAction == NULL)
   {
@@ -1677,9 +1677,9 @@ bool karamba::setMenuConfigOption(QString key, bool value)
   }
 }
 
-bool karamba::readMenuConfigOption(QString key)
+bool KarambaWidget::readMenuConfigOption(QString key)
 {
-  //qDebug("karamba::readMenuConfigOption");
+  //qDebug("KarambaWidget::readMenuConfigOption");
   KToggleAction* menuAction = ((KToggleAction*)menuAccColl -> action(key.ascii()));
   if (menuAction == NULL)
   {
@@ -1692,9 +1692,9 @@ bool karamba::readMenuConfigOption(QString key)
   }
 }
 
-void karamba::passMenuItemClicked(int id)
+void KarambaWidget::passMenuItemClicked(int id)
 {
-  //qDebug("karamba::passMenuItemClicked");
+  //qDebug("KarambaWidget::passMenuItemClicked");
   //Everything below is to call the python callback function
   if (pythonIface && pythonIface->isExtensionLoaded())
   {
@@ -1717,89 +1717,89 @@ void karamba::passMenuItemClicked(int id)
   }
 }
 
-void karamba::activeTaskChanged(Task* t)
+void KarambaWidget::activeTaskChanged(Task* t)
 {
-  //qDebug("karamba::activeTaskChanged");
+  //qDebug("KarambaWidget::activeTaskChanged");
   //Everything below is to call the python callback function
   if (pythonIface && pythonIface->isExtensionLoaded())
     pythonIface->activeTaskChanged(this, t);
 }
 
-void karamba::taskAdded(Task* t)
+void KarambaWidget::taskAdded(Task* t)
 {
-  //qDebug("karamba::taskAdded");
+  //qDebug("KarambaWidget::taskAdded");
   //Everything below is to call the python callback function
   if (pythonIface && pythonIface->isExtensionLoaded())
     pythonIface->taskAdded(this, t);
 }
 
-void karamba::taskRemoved(Task* t)
+void KarambaWidget::taskRemoved(Task* t)
 {
-  //qDebug("karamba::taskRemoved");
+  //qDebug("KarambaWidget::taskRemoved");
   //Everything below is to call the python callback function
   if (pythonIface && pythonIface->isExtensionLoaded())
     pythonIface->taskRemoved(this, t);
 }
 
-void karamba::startupAdded(Startup* t)
+void KarambaWidget::startupAdded(Startup* t)
 {
-  //qDebug("karamba::startupAdded");
+  //qDebug("KarambaWidget::startupAdded");
   //Everything below is to call the python callback function
   if (pythonIface && pythonIface->isExtensionLoaded())
     pythonIface->startupAdded(this, t);
 }
 
-void karamba::startupRemoved(Startup* t)
+void KarambaWidget::startupRemoved(Startup* t)
 {
-  //qDebug("karamba::startupRemoved");
+  //qDebug("KarambaWidget::startupRemoved");
   //Everything below is to call the python callback function
   if (pythonIface && pythonIface->isExtensionLoaded())
     pythonIface->startupRemoved(this, t);
 }
 
-void  karamba::processExited (KProcess* proc)
+void  KarambaWidget::processExited (KProcess* proc)
 {
-  //qDebug("karamba::processExited");
+  //qDebug("KarambaWidget::processExited");
   if (pythonIface && pythonIface->isExtensionLoaded())
     pythonIface->commandFinished(this, (int)proc->pid());
 }
 
-void  karamba::receivedStdout (KProcess *proc, char *buffer, int)
+void  KarambaWidget::receivedStdout (KProcess *proc, char *buffer, int)
 {
-  //qDebug("karamba::receivedStdout");
+  //qDebug("KarambaWidget::receivedStdout");
   //Everything below is to call the python callback function
   if (pythonIface && pythonIface->isExtensionLoaded())
     pythonIface->commandOutput(this, (int)proc->pid(), buffer);
 }
 
 //For KDE session management
-void karamba::saveProperties(KConfig* config)
+void KarambaWidget::saveProperties(KConfig* config)
 {
-  //qDebug("karamba::saveProperties");
+  //qDebug("KarambaWidget::saveProperties");
   config->setGroup("session");
   config->writeEntry("theme", m_theme.file());
   writeConfigData();
 }
 
 //For KDE session management
-void karamba::readProperties(KConfig* config)
+void KarambaWidget::readProperties(KConfig* config)
 {
-  //qDebug("karamba::readProperties");
+  //qDebug("KarambaWidget::readProperties");
   config->setGroup("session");
   QString atheme = config->readEntry("theme","");
 }
 
 //Register types of events that can be dragged on our widget
-void karamba::dragEnterEvent(QDragEnterEvent* event)
+void KarambaWidget::dragEnterEvent(QDragEnterEvent* event)
 {
-  //qDebug("karamba::dragEnterEvent");
+  //qDebug("KarambaWidget::dragEnterEvent");
   event->accept(Q3TextDrag::canDecode(event));
 }
 
 //Handle the drop part of a drag and drop event.
-void karamba::dropEvent(QDropEvent* event)
+void KarambaWidget::dropEvent(QDropEvent* event)
 {
-  //qDebug("karamba::dropEvent");
+  //qDebug("KarambaWidget::dropEvent");
   QString text;
 
   if ( Q3TextDrag::decode(event, text) )
@@ -1810,9 +1810,9 @@ void karamba::dropEvent(QDropEvent* event)
   }
 }
 
-void karamba::toDesktop(int id, int menuid)
+void KarambaWidget::toDesktop(int id, int menuid)
 {
-  //qDebug("karamba::toDesktop");
+  //qDebug("KarambaWidget::toDesktop");
   int i;
 
   desktop = id;
@@ -1832,16 +1832,16 @@ void karamba::toDesktop(int id, int menuid)
     info->setDesktop( NETWinInfo::OnAllDesktops );
 }
 
-void karamba::systrayUpdated()
+void KarambaWidget::systrayUpdated()
 {
-  //qDebug("karamba::systrayUpdated");
+  //qDebug("KarambaWidget::systrayUpdated");
   if (pythonIface && pythonIface->isExtensionLoaded())
     pythonIface->systrayUpdated(this);
 }
 
-void karamba::toggleWidgetUpdate( bool b)
+void KarambaWidget::toggleWidgetUpdate( bool b)
 {
-  //qDebug("karamba::toggleWidgetUpdate");
+  //qDebug("KarambaWidget::toggleWidgetUpdate");
   if (pythonIface && pythonIface->isExtensionLoaded())
     widgetUpdate = b;
 }
@@ -1866,7 +1866,7 @@ DesktopChangeSlot::DesktopChangeSlot(QObject *parent, int id)
 
 void DesktopChangeSlot::receive()
 {
-  karamba *k = (karamba *)parent();
+  KarambaWidget *k = (KarambaWidget *)parent();
 
   // XXX - check type cast
 
@@ -1883,7 +1883,7 @@ int DesktopChangeSlot::menuId()
   return menuid;
 }
 
-void karamba::showMenuExtension()
+void KarambaWidget::showMenuExtension()
 {
   kglobal = new KPopupMenu(this);
 
@@ -1906,7 +1906,7 @@ void karamba::showMenuExtension()
   kpop->insertItem("SuperKaramba", kglobal);
 }
 
-void karamba::hideMenuExtension()
+void KarambaWidget::hideMenuExtension()
 {
   if(kglobal)
   {
@@ -1920,19 +1920,19 @@ void karamba::hideMenuExtension()
   }
 }
 
-void karamba::slotToggleSystemTray()
+void KarambaWidget::slotToggleSystemTray()
 {
   karambaApp->globalHideSysTray(false);
 }
 
-void karamba::slotQuit()
+void KarambaWidget::slotQuit()
 {
   karambaApp->globalQuitSuperKaramba();
 }
 
-void karamba::slotShowTheme()
+void KarambaWidget::slotShowTheme()
 {
   karambaApp->globalShowThemeDialog();
 }
 
-#include "karamba.moc"
+#include "karambawidget.moc"

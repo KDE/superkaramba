@@ -20,8 +20,8 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  ****************************************************************************/
 
-#ifndef _KARAMBA_H_
-#define _KARAMBA_H_
+#ifndef _KARAMBAWIDGET_H_
+#define _KARAMBAWIDGET_H_
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -104,7 +104,7 @@
 class KarambaPython;
 class LineParser;
 
-class karamba :  public QWidget
+class KarambaWidget :  public QWidget
 {
     Q_OBJECT
 
@@ -115,8 +115,8 @@ public:
     QList<QObject *> clickList;
     QList<QObject *> menuList;
 
-    karamba(QString fn, bool reloading = false, int instance = -1);
-    virtual ~karamba();
+    KarambaWidget(QString fn, bool reloading = false, int instance = -1);
+    virtual ~KarambaWidget();
 
     const ThemeFile& theme() const { return m_theme; };
 
