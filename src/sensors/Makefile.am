@@ -1,4 +1,4 @@
-INCLUDES = -I$(srcdir)/.. \
+INCLUDES = -I$(srcdir)/.. -I$(srcdir)/../libpython  \
            $(all_includes) $(XMMS_INCLUDES) 
 
 noinst_LTLIBRARIES = libsk_sensors.la
