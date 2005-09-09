@@ -9,6 +9,7 @@
  ***************************************************************************/
 #include <QtAlgorithms>
 #include "sensor.h"
+#include "kdebug.h"
 Sensor::Sensor(int iMsec)
 {
     msec = iMsec;
@@ -36,10 +37,9 @@ void Sensor::addMeter( SensorParams *sp )
 
 SensorParams* Sensor::hasMeter( Meter *meter )
 {
-  QListIterator<QObject *> it( objList );
-
   foreach (QObject *it, objList)
   {
+      kdDebug() << "METER: " << ((SensorParams*)it)->getMeter()->getX();
       if (((SensorParams*) it)->getMeter() == meter)
         {
           return ((SensorParams*) it);

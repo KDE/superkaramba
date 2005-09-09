@@ -1,5 +1,5 @@
 INCLUDES = -I$(srcdir)/.. -I$(srcdir)/../sensors  \
-           $(all_includes) $(PYTHONINC) 
+           -I$(srcdir)/../meters $(all_includes) $(PYTHONINC) 
 
 noinst_LTLIBRARIES = libsk_python.la
 
