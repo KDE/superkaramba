@@ -1,4 +1,4 @@
-INCLUDES = -I$(srcdir)/.. -I$(srcdir)/../bindings  \
+INCLUDES = -I$(srcdir)/.. -I$(srcdir)/../bindings/python \
            $(all_includes) $(XMMS_INCLUDES) 
 
 noinst_LTLIBRARIES = libsk_sensors.la

@@ -1,4 +1,4 @@
-INCLUDES = -I$(srcdir)/sensors -I$(srcdir)/bindings -I$(srcdir)/meters \
+INCLUDES = -I$(srcdir)/sensors -I$(srcdir)/bindings/python -I$(srcdir)/meters \
 	   $(all_includes) $(XMMS_INCLUDES) $(PYTHONINC)
 
 SUBDIRS = sensors bindings meters
@@ -8,7 +8,7 @@ lib_LITLIBRARIES =
 kdeinit_LTLIBRARIES = 
 
 superkaramba_LDADD = sensors/libsk_sensors.la meters/libsk_meters.la \
-                     bindings/libsk_python.la \
+                     bindings/python/libsk_python.la \
 		     $(all_libraries) $(LIB_KDEUI) $(LIB_KDEIO) $(XMMS_LIBS) \
 		     $(LIBPYTHON) $(LIBKVM) $(MY_LIBKNEWSTUFF)
 
