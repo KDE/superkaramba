@@ -32,4 +32,4 @@ GenericName[xx]=xxDesktop Widgetsxx
 GenericName[zh_CN]=桌面部件
 DocPath=superkaramba/index.html
 Categories=Qt;KDE;Utility;X-KDE-Utilities-Desktop;
-
+OnlyShowIn=KDE;
