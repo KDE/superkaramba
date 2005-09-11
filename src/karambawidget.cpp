@@ -881,8 +881,9 @@ Sensor* KarambaWidget::findSensorFromList(Meter* meter)
   QListIterator<QObject *> it( sensorList ); // iterate over meters
   while ( it.hasNext() )
   {
-    if (((Sensor*) it.next())->hasMeter(meter))
-      return ((Sensor*) it.next());
+    Sensor* sensor = (Sensor*) it.next();
+    if (sensor->hasMeter(meter))
+      return sensor;
   }
   return NULL;
 }
