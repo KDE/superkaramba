@@ -6,6 +6,8 @@ noinst_HEADERS = karamba.h karambaapp.h karamba_python.h lineparser.h \
 							themefile.h themesdlg.h themewidget.h kwidgetlistbox.h themelocale.h input.h \
 		sklineedit.h input_python.h
 
+KDE_OPTIONS = nofinal
+
 # let automoc handle all of the meta source files (moc)
 METASOURCES = AUTO
 
@@ -50,7 +52,3 @@ shelldesktop_DATA = superkaramba.desktop
 shellrcdir = $(kde_datadir)/superkaramba
 shellrc_DATA = superkarambaui.rc
 
-AM_CFLAGS =
-AM_CXXFLAGS =
-AM_FFLAGS =
-SUBDIRS =
