@@ -19,6 +19,11 @@ UptimeSensor::UptimeSensor( int interval ) : Sensor( interval )
 UptimeSensor::~UptimeSensor()
 {}
 
+void UptimeSensor::addMeter(Meter* meter)
+{
+    connect(this, SIGNAL(uptimeValues(QVariant)), meter, SLOT(update(QVariant)));
+}
+
 void UptimeSensor::update()
 {
 #ifdef __FreeBSD__
@@ -77,31 +82,13 @@ void UptimeSensor::update()
         uptime -= mins * 60;
         int secs = uptime;
 #endif
+        QMap<QString, QVariant> map;
+        map["%d"] = days;
+        map["%h"] = hours;
+        map["%m"] = mins;
+        map["%s"] = secs;
 
-        QString format;
-        SensorParams *sp;
-        Meter *meter;
-
-     	foreach (QObject *it, objList)
-	{
-            sp = (SensorParams*)(it);
-            meter = sp->getMeter();
-            format = sp->getParam("FORMAT");
-
-            if (format.length() == 0 )
-            {
-                format = "%dd %h:%M";
-            }
-            format.replace( QRegExp("%d"), QString::number(days));
-            format.replace( QRegExp("%H"), QString::number(hours).rightJustify(2,'0'));
-            format.replace( QRegExp("%M"), QString::number(mins).rightJustify(2,'0'));
-            format.replace( QRegExp("%S"), QString::number(secs).rightJustify(2,'0'));
-            format.replace( QRegExp("%h"), QString::number(hours));
-            format.replace( QRegExp("%m"), QString::number(mins));
-            format.replace( QRegExp("%s"), QString::number(secs));
-
-            meter->setValue(format);
-        }
+        emit uptimeValues(QVariant(map));
 #ifndef __FreeBSD__
     }
 #endif

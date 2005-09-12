@@ -28,6 +28,10 @@ public:
     ~XMMSSensor();
     void update();
     void setMaxValue( SensorParams *);
+    void addMeter(Meter*);
+
+signals:
+    void xmmsValues(QVariant);
 
 private:
     QTextCodec *codec;

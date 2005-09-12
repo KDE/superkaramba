@@ -24,6 +24,10 @@ public:
   ~DiskSensor();
   void update();
   void setMaxValue( SensorParams *sp );
+  void addMeter(Meter *);
+
+signals:
+    void diskValues(QVariant);
 
 private:
   int getFreeSpace(QString mntPt) const;

@@ -114,32 +114,25 @@ int CPUSensor::getCPULoad()
     return load;
 }
 
+void CPUSensor::addMeter(Meter* meter)
+{
+    connect(this, SIGNAL(cpuValues(QVariant)), meter, SLOT(update(QVariant)));
+}
+
 void CPUSensor::update()
 {
-    SensorParams *sp;
-    Meter *meter;
-    QString format;
+    QMap<QString, QVariant> map;
+
     int load = getCPULoad();
 
-    foreach (QObject *it, objList)
-    {
-        sp = (SensorParams*)(it);
-        meter = sp->getMeter();
-        format = sp->getParam( "FORMAT" );
+    map["%load"] = QVariant(load);
+    map["%user"] = QVariant(user);
+    map["%nice"] = QVariant(nice);
+    map["%idle"] = QVariant(idle);
+    map["%system"] = QVariant(system);
+    map["%v"] = QVariant(load);
 
-        if( format.length() == 0)
-        {
-            format = "%v";
-        }
-        format.replace( QRegExp("%load", false), QString::number( load ) );
-        format.replace( QRegExp("%user", false), QString::number( user ) );
-        format.replace( QRegExp("%nice", false), QString::number( nice ) );
-        format.replace( QRegExp("%idle", false), QString::number( idle ) );
-        format.replace( QRegExp("%system", false), QString::number( system ) );
-        format.replace( QRegExp("%v", false), QString::number( load ) );
-
-        meter->setValue( format );
-    }
+    emit cpuValues(QVariant(map));
 }
 
 void CPUSensor::setMaxValue( SensorParams *sp )

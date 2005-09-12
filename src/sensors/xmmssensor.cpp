@@ -33,12 +33,13 @@ XMMSSensor::~XMMSSensor()
 {
 }
 
+void XMMSSensor::addMeter(Meter* meter)
+{
+    connect(this, SIGNAL(xmmsValues(QVariant)), meter, SLOT(update(QVariant)));
+}
+
 void XMMSSensor::update()
 {
-    QString format;
-    SensorParams *sp;
-    Meter *meter;
-
 #ifdef HAVE_XMMS
     int pos;
     QString title;
@@ -63,75 +64,32 @@ void XMMSSensor::update()
     }
 #endif // HAVE_XMMS
 
-    foreach (QObject *it, objList)
-    {
-        sp = (SensorParams*)(it);
-        meter = sp->getMeter();
 
 #ifdef HAVE_XMMS
+    QMap<QString, QVariant> map;
+    if( isRunning )
+    {
+        map["%title"] = title;
+        map["%length"] = QTime( 0,0,0 ).addMSecs( songLength ).toString( "h:mm:ss" );
+        map["%time"] = QTime( 0,0,0 ).addMSecs( currentTime ).toString( "h:mm:ss" );
 
-        if( isRunning )
+        if( isPlaying  )
         {
-
-            format = sp->getParam("FORMAT");
-
-
-            if (format.length() == 0 )
-            {
-                format = "%title %time / %length";
-            }
-
-            if( format == "%ms" )
-            {
-                meter->setMax( songLength );
-                meter->setValue( currentTime );
-            }
-            else
-
-                if ( format == "%full" )
-                {
-                    meter->setValue( 1 );
-                }
-                else
-
-                {
-
-
-                    format.replace( QRegExp("%title", false), title );
-
-                    format.replace( QRegExp("%length", false), QTime( 0,0,0 ).
-                                    addMSecs( songLength )
-                                    .toString( "h:mm:ss" ) );
-
-                    format.replace( QRegExp("%time", false), QTime( 0,0,0 ).
-                                    addMSecs( currentTime )
-                                    .toString( "h:mm:ss" ) );
-
-                    if( isPlaying  )
-                    {
-                        format.replace( QRegExp("%remain", false), QTime( 0,0,0 ).
-                                        addMSecs( songLength )
-                                        .addMSecs(-currentTime )
-                                        .toString( "h:mm:ss" ) );
-                    }
-
-                    else
-                    {
-                        format.replace( QRegExp("%remain", false), QTime( 0,0,0 ).toString("h:mm:ss" ) );
-                    }
-                    meter->setValue(format);
-                }
+            map["%remain"] = QTime( 0,0,0 ).addMSecs( songLength ).addMSecs(-currentTime ).toString( "h:mm:ss" );
         }
         else
-#endif // HAVE_XMMS
-
         {
-            meter->setValue("");
+            map["%remain"] = QTime( 0,0,0 ).toString("h:mm:ss" );
         }
+        emit xmmsValues(QVariant(map));
     }
-
+    else
+#endif // HAVE_XMMS
+    {
+        emit xmmsValues(QVariant());
+    }
 }
-
+/*
 void XMMSSensor::setMaxValue( SensorParams *sp)
 {
     Meter *meter;
@@ -143,5 +101,5 @@ void XMMSSensor::setMaxValue( SensorParams *sp)
         meter->setMax( 1 );
 
 }
-
+*/
 #include "xmmssensor.moc"

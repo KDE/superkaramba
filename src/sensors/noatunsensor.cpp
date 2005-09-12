@@ -25,9 +25,7 @@ NoatunSensor::~NoatunSensor()
 
 void NoatunSensor::update()
 {
-    QString format;
-    SensorParams *sp;
-    Meter *meter;
+    QMap<QString, QVariant> map;
 
     QString title;
     int songLength = 0;
@@ -39,7 +37,7 @@ void NoatunSensor::update()
     {
         title = getTitle();
 
-       if( title.isEmpty() )
+        if( title.isEmpty() )
             title = "Noatun";
         currentTime = getTime();
         if( currentTime == -1 )
@@ -48,60 +46,26 @@ void NoatunSensor::update()
         songLength = getLength();
         if( songLength == -1 )
             songLength = 0;
-    }
 
-    foreach (QObject *it, objList)
+        map["%title"] = title;
+        map["%id"] = noatunID;
+
+        map["%length"] = QTime( 0,0,0 ).addMSecs( songLength ).toString( "h:mm:ss" );
+
+        map["%time"] = QTime( 0,0,0 ).addMSecs( currentTime ).toString( "h:mm:ss" );
+        map["%remain"] = QTime( 0,0,0 ).addMSecs( songLength ).addMSecs(-currentTime ).toString( "h:mm:ss" );
+
+        emit noatunValues(QVariant(map));
+    }
+    else
     {
-        sp = (SensorParams*)(it);
-        meter = sp->getMeter();
-
-        if( running )
-        {
-
-            format = sp->getParam("FORMAT");
-            if (format.length() == 0 )
-            {
-                format = "%title %time / %length";
-            }
-
-            if( format.lower() == "%ms" )
-            {
-                meter->setMax( songLength );
-                meter->setValue( currentTime );
-            }
-            else
-                if ( format.lower() == "%full" )
-                {
-                    meter->setValue( 1 );
-                }
-                else
-
-                {
-                   format.replace( QRegExp("%title", false), title );
-		   format.replace( QRegExp("%id", false), noatunID );
-
-                    format.replace( QRegExp("%length", false), QTime( 0,0,0 ).
-                                    addMSecs( songLength )
-                                    .toString( "h:mm:ss" ) );
-
-                    format.replace( QRegExp("%time", false), QTime( 0,0,0 ).
-                                    addMSecs( currentTime )
-                                    .toString( "h:mm:ss" ) );
-                    format.replace( QRegExp("%remain", false), QTime( 0,0,0 ).
-                                    addMSecs( songLength )
-                                    .addMSecs(-currentTime )
-                                    .toString( "h:mm:ss" ) );
-
-                    meter->setValue(format);
-                }
-        }
-        else
-
-        {
-            meter->setValue("");
-        }
+        emit noatunValues(QVariant());
     }
+}
 
+void NoatunSensor::addMeter(Meter* meter)
+{
+    connect(this, SIGNAL(noatunValues(QVariant)), meter, SLOT(update(QVariant)));
 }
 
 bool NoatunSensor::isRunning()

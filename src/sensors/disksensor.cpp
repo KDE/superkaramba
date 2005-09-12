@@ -39,6 +39,11 @@ DiskSensor::~DiskSensor()
 {
 }
 
+void DiskSensor::addMeter(Meter* meter)
+{
+    connect(this, SIGNAL(diskValues(QVariant)), meter, SLOT(update(QVariant)));
+}
+
 int DiskSensor::getFreeSpace(QString mntPt) const
 {
     QRegExp rx("^\\S*\\s*\\d+\\s+\\d+\\s+(\\d+)");
@@ -84,6 +89,7 @@ void DiskSensor::receivedStdout(KProcess *, char *buffer, int len )
 
 void DiskSensor::processExited(KProcess *)
 {
+    QMap<QString, QVariant> map;
     //QRegExp rx( "^(/dev/).*(/\\S*)$");
     QRegExp rx( ".*\\s+(/\\S*)$");
     sensorResult = "";
@@ -101,49 +107,24 @@ void DiskSensor::processExited(KProcess *)
 
     QString format;
     QString mntPt;
-    SensorParams *sp;
-    Meter *meter;
 
-    foreach (QObject *it, objList)
-    {
-        sp = (SensorParams*)(it);
-        meter = sp->getMeter();
-        format = sp->getParam("FORMAT");
-        mntPt = sp->getParam("MOUNTPOINT");
-        if (mntPt.length() == 0)
-            mntPt="/";
+    map["%fp"] = getPercentFree(mntPt);
+    map["%fg"] = getFreeSpace(mntPt)/(1024*1024);
+    map["%fkb"] = getFreeSpace(mntPt)*8;
+    map["%fk"] = getFreeSpace(mntPt);
+    map["%f"] = getFreeSpace(mntPt)/1024;
+    map["%up"] = getPercentUsed(mntPt);
+    map["%ug"] = getUsedSpace(mntPt)/(1024*1024);
+    map["%ukb"] = getUsedSpace(mntPt)*8;
+    map["%uk"] = getUsedSpace(mntPt);
+    map["%u"] = getUsedSpace(mntPt)/1024;
+    map["%tg"] = getTotalSpace(mntPt)/(1024*1024);
+    map["%tkb"] = getTotalSpace(mntPt)*8;
+    map["%tk"] = getTotalSpace(mntPt);
+    map["%t"] = getTotalSpace(mntPt)/1024;
 
-        if (format.length() == 0 )
-        {
-            format = "%u";
-        }
-        format.replace( QRegExp("%fp", false),QString::number(getPercentFree(mntPt)));
-        format.replace( QRegExp("%fg",false),
-                        QString::number(getFreeSpace(mntPt)/(1024*1024)));
-        format.replace( QRegExp("%fkb",false),
-                        QString::number(getFreeSpace(mntPt)*8) );
-        format.replace( QRegExp("%fk",false),
-                        QString::number(getFreeSpace(mntPt)) );
-        format.replace( QRegExp("%f", false),QString::number(getFreeSpace(mntPt)/1024));
+    emit diskValues(QVariant(map));
 
-        format.replace( QRegExp("%up", false),QString::number(getPercentUsed(mntPt)));
-        format.replace( QRegExp("%ug",false),
-                        QString::number(getUsedSpace(mntPt)/(1024*1024)));
-        format.replace( QRegExp("%ukb",false),
-                        QString::number(getUsedSpace(mntPt)*8) );
-        format.replace( QRegExp("%uk",false),
-                        QString::number(getUsedSpace(mntPt)) );
-        format.replace( QRegExp("%u", false),QString::number(getUsedSpace(mntPt)/1024));
-
-        format.replace( QRegExp("%tg",false),
-                        QString::number(getTotalSpace(mntPt)/(1024*1024)));
-        format.replace( QRegExp("%tkb",false),
-                        QString::number(getTotalSpace(mntPt)*8));
-        format.replace( QRegExp("%tk",false),
-                        QString::number(getTotalSpace(mntPt)));
-        format.replace( QRegExp("%t", false),QString::number(getTotalSpace(mntPt)/1024));
-        meter->setValue(format);
-    }
     if ( init == 1 )
     {
         emit initComplete();
@@ -157,7 +138,7 @@ void DiskSensor::update()
     ksp << "df";
     ksp.start( KProcIO::NotifyOnExit,KProcIO::Stdout);
 }
-
+/*
 void DiskSensor::setMaxValue( SensorParams *sp )
 {
     Meter *meter;
@@ -176,3 +157,4 @@ void DiskSensor::setMaxValue( SensorParams *sp )
     }
 }
 
+*/

@@ -225,12 +225,15 @@ void MemSensor::readValues()
 #endif
 }
 
+void MemSensor::addMeter(Meter* meter)
+{
+    connect(this, SIGNAL(memValues(QVariant)), meter, SLOT(update(QVariant)));
+}
+
 void MemSensor::update()
 {
+    QMap<QString, QVariant> map;
     readValues();
-    QString format;
-    SensorParams *sp;
-    Meter *meter;
 #if (defined(__FreeBSD__) && __FreeBSD_version < 500018)
     bool set = false;
 #endif
@@ -241,37 +244,27 @@ void MemSensor::update()
     int totalSwap = getSwapTotal();
     int usedSwap = totalSwap - getSwapFree();
 
-    foreach (QObject *it, objList)
-    {
-        sp = (SensorParams*)(it);
 #if (defined(__FreeBSD__) && __FreeBSD_version < 500018)
-        if ( (!MaxSet) && (totalSwap > 0) ) {
-           setMaxValue(sp);
-           bool set = true;
-        }
-#endif
-        meter = sp->getMeter();
-        format = sp->getParam("FORMAT");
-        if (format.length() == 0 )
-        {
-            format = "%um";
-        }
-
-        format.replace( QRegExp("%fmb", false), QString::number( (int)(( totalMem - usedMemNoBuffers)/1024.0+0.5)));
-        format.replace( QRegExp("%fm", false), QString::number( (int)( ( totalMem - usedMem  )/1024.0+0.5) ));
-
-        format.replace( QRegExp("%umb", false), QString::number( (int)((usedMemNoBuffers)/1024.0+0.5)));
-        format.replace( QRegExp("%um", false), QString::number( (int)((usedMem)/1024.0+0.5 )));
-
-        format.replace( QRegExp("%tm", false), QString::number( (int)( (totalMem)/1024.0+0.5)));
-
-        format.replace( QRegExp("%fs", false), QString::number( (int)((totalSwap - usedSwap)/1024.0+0.5)));
-        format.replace( QRegExp("%us", false), QString::number( (int)(usedSwap/1024.0+0.5)));
-        format.replace( QRegExp("%ts", false), QString::number( (int)(totalSwap/1024.0+0.5)));
-
-        meter->setValue(format);
-        ++it;
+    if ( (!MaxSet) && (totalSwap > 0) ) {
+       setMaxValue(sp);
+       bool set = true;
     }
+#endif
+
+    map["%fmb"] = (int)(( totalMem - usedMemNoBuffers)/1024.0+0.5);
+    map["%fm"] = (int)( ( totalMem - usedMem  )/1024.0+0.5);
+
+    map["%umb"] = (int)((usedMemNoBuffers)/1024.0+0.5);
+    map["%um"] = (int)((usedMem)/1024.0+0.5 );
+
+    map["%tm"] = (int)( (totalMem)/1024.0+0.5);
+
+    map["%fs"] = (int)((totalSwap - usedSwap)/1024.0+0.5);
+    map["%us"] = (int)(usedSwap/1024.0+0.5);
+    map["%ts"] = (int)(totalSwap/1024.0+0.5);
+
+    emit memValues(QVariant(map));
+
 #if (defined(__FreeBSD__) && __FreeBSD_version < 500018)
     if (set)
         MaxSet = true;

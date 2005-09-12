@@ -40,6 +40,11 @@ RssSensor::~RssSensor()
 {
 }
 
+void RssSensor::addMeter(Meter* meter)
+{
+    connect(this, SIGNAL(rssValues(QVariant)), meter, SLOT(update(QVariant)));
+}
+
 void RssSensor::update()
 {
     QDomDocument doc;
@@ -72,53 +77,44 @@ void RssSensor::update()
 
     if ( OK )
     {
-        SensorParams *sp;
-        Meter *meter;
-
-        foreach (QObject *it, objList)
-	{
-            sp = (SensorParams*)(it);
-            meter = sp->getMeter();
-
-            // this is a hack to force the
-            // clickmap to reset its data lists
-            meter->setValue(0);
-
-            QDomElement docElem = doc.documentElement();
-            QDomNode n = docElem.firstChild();
-            if (!n.isNull())
+        QDomElement docElem = doc.documentElement();
+        QDomNode n = docElem.firstChild();
+        if (!n.isNull())
+        {
+            QDomNodeList links = docElem.elementsByTagName( "link" );
+            QDomNodeList displays;
+            if ( format.contains( "%d", false ) > 0 )
             {
-                QDomNodeList links = docElem.elementsByTagName( "link" );
-                QDomNodeList displays;
-                if ( format.contains( "%d", false ) > 0 )
-                {
-                    displays = docElem.elementsByTagName( "description" );
-                }
-                else
-                {
-                    displays = docElem.elementsByTagName( "title" );
-                }
-
-                QRegExp rx("^http://", false );
-                for (uint i=1; i < displays.count(); ++i )
-                {
-                    QString dispTxt = displays.item( i ).toElement().text();
-                    QString linkTxt = links.item( i ).toElement().text();
-                    if( (rx.search(dispTxt) == -1) && (rx.search(linkTxt) != -1) )
-                    {
-                        meter->setValue( dispTxt );
-                        meter->setValue( linkTxt );
-                    }
-                    else
-                    {
-                        qDebug("Skipping");
-                    }
-                }
+                displays = docElem.elementsByTagName( "description" );
             }
             else
             {
-                qDebug ("Document Node was null!!");
+                displays = docElem.elementsByTagName( "title" );
             }
+
+            QRegExp rx("^http://", false );
+            QList<QVariant> list;
+            for (uint i=1; i < displays.count(); ++i )
+            {
+                QString dispTxt = displays.item( i ).toElement().text();
+                QString linkTxt = links.item( i ).toElement().text();
+                if( (rx.search(dispTxt) == -1) && (rx.search(linkTxt) != -1) )
+                {
+                    QMap<QString, QVariant> e;
+                    e["%text"] = dispTxt;
+                    e["%link"] = linkTxt;
+                    list << QVariant(e);
+                }
+                else
+                {
+                    qDebug("Skipping");
+                }
+            }
+            emit rssValues(QVariant(list));
+        }
+        else
+        {
+            qDebug ("Document Node was null!!");
         }
     }
     // Cleanup

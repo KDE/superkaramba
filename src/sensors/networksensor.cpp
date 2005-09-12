@@ -126,37 +126,28 @@ void NetworkSensor::getInOutBytes ( unsigned long &in,unsigned long &out) const
 #endif
 }
 
+void NetworkSensor::addMeter(Meter* meter)
+{
+    connect(this, SIGNAL(networkValues(QVariant)), meter, SLOT(update(QVariant)));
+}
+
 void NetworkSensor::update()
 {
-    SensorParams *sp;
-    Meter *meter;
-    QString format;
-    int decimals;
+    QMap<QString, QVariant> map;
 
     unsigned long inB, outB;
     const double delay = (double) netTimer.elapsed(); // msec elapsed since last update
     getInOutBytes( inB, outB );
     netTimer.restart();
 
-    foreach (QObject *it, objList)
-    {
-        sp = (SensorParams*)(it);
-        meter = sp->getMeter();
-        format = sp->getParam( "FORMAT" );
-        decimals = ( sp->getParam( "DECIMALS" ) ).toInt();
-        if (format.length() == 0 )
-        {
-            format = "%in";
-        }
+    map["%inkb"] = ((inB - receivedBytes)*8)/delay;
+    map["%in"] = (inB - receivedBytes)/delay;
 
-        format.replace( QRegExp("%inkb", false), QString::number( ((inB - receivedBytes)*8)/delay, 'f', decimals ) );
-        format.replace( QRegExp("%in", false), QString::number( (inB - receivedBytes)/delay, 'f', decimals ) );
+    map["%outkb"] = ((outB - transmittedBytes)*8)/delay;
+    map["%out"] = (outB - transmittedBytes)/delay;
 
-        format.replace( QRegExp("%outkb", false), QString::number( ((outB - transmittedBytes)*8)/delay, 'f', decimals ) );
-        format.replace( QRegExp("%out", false), QString::number( (outB - transmittedBytes)/delay, 'f', decimals ) );
+    emit networkValues(QVariant(map));
 
-        meter->setValue( format );
-    }
     receivedBytes = inB;
     transmittedBytes = outB;
 }

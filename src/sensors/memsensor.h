@@ -39,6 +39,10 @@ public:
   void update();
   void setMaxValue( SensorParams *sp );
   QString getMemLine();
+    void addMeter(Meter*);
+
+signals:
+    void memValues(QVariant);
 
 private:
   QString meminfo;

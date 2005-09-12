@@ -29,7 +29,10 @@ public:
 
     void update();
     void setMaxValue( SensorParams *);
+    void addMeter(Meter*);
 
+signals:
+    void noatunValues(QVariant);
 
 
 private:

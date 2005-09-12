@@ -57,6 +57,10 @@ void Graph::setValue(QString v)
     setValue((int)(v.toDouble() + 0.5));
 }
 
+void Graph::update(QVariant values)
+{
+}
+
 void Graph::mUpdate(QPainter *p)
 {
     if (hidden == 0)

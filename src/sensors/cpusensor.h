@@ -24,6 +24,10 @@ public:
     void setMaxValue( SensorParams *sp );
 
     int getCPULoad();
+    void addMeter(Meter *);
+
+signals:
+    void cpuValues(QVariant);
 
 private:
     long userTicks;

@@ -27,7 +27,12 @@ public:
 
     ~RssSensor();
 
+    void addMeter(Meter*);
     void update();
+
+signals:
+    void rssValues(QVariant);
+
 private:
     QTextCodec *codec;
     QString source;

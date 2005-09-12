@@ -24,7 +24,10 @@ public:
   UptimeSensor(int interval);
   ~UptimeSensor();
   void update();
+    void addMeter(Meter*);
 
+signals:
+    void uptimeValues(QVariant);
 };
 
 #endif // UPTIMESENSOR_H

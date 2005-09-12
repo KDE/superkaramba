@@ -26,13 +26,16 @@ public:
     ~SensorSensor();
 
     void update();
+    void addMeter(Meter*);
 
+signals:
+    void sensorValues(QVariant);
 
 private:
     KShellProcess ksp;
     QString extraParams;
 
-    QMap<QString,QString> sensorMap;
+    QMap<QString,QVariant> sensorMap;
 #ifdef __FreeBSD__
     QMap<QString,QString> sensorMapBSD;
 #endif

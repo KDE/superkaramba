@@ -42,6 +42,11 @@ SensorSensor::~SensorSensor()
 {
 }
 
+void SensorSensor::addMeter(Meter* meter)
+{
+    connect(this, SIGNAL(sensorValues(QVariant)), meter, SLOT(update(QVariant)));
+}
+
 void SensorSensor::receivedStdout(KProcess *, char *buffer, int len )
 {
     buffer[len] = 0;
@@ -64,38 +69,17 @@ void SensorSensor::processExited(KProcess *)
 
         if ( !rx.cap(0).isEmpty())
         {
-            sensorMap[rx.cap(1)] = rx.cap(2);
+            sensorMap[rx.cap(1)] = QVariant(rx.cap(2));
         }
         it++;
     }
 
-    QString format;
-    QString type;
-    SensorParams *sp;
-    Meter *meter;
-
-    foreach (QObject *lit, objList)
-    {
-        sp = (SensorParams*)(lit);
-        meter = sp->getMeter();
-        format = sp->getParam("FORMAT");
-        type = sp->getParam("TYPE");
-
-        if (type.length() == 0)
-            type = "temp2";
-
-        if (format.length() == 0 )
-        {
-            format = "%v";
-        }
-
 #ifdef __FreeBSD__
-        format.replace( QRegExp("%v", false), sensorMap[sensorMapBSD[type]]);
+    //format.replace( QRegExp("%v", false), sensorMap[sensorMapBSD[type]]);
+    emit sensorValues(QVariant(sensorMap));
 #else
-        format.replace( QRegExp("%v", false), sensorMap[type]);
+    emit sensorValues(QVariant(sensorMap));
 #endif
-        meter->setValue(format);
-    }
 }
 
 void SensorSensor::update()

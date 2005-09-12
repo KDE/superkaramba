@@ -38,6 +38,11 @@ ProgramSensor::ProgramSensor(const QString &progName, int interval, QString enco
 ProgramSensor::~ProgramSensor()
 {}
 
+void ProgramSensor::addMeter(Meter* meter)
+{
+    connect(this, SIGNAL(programValues(QVariant)), meter, SLOT(update(QVariant)));
+}
+
 void ProgramSensor::receivedStdout(KProcess *, char *buffer, int len)
 {
     buffer[len] = 0;
@@ -46,39 +51,15 @@ void ProgramSensor::receivedStdout(KProcess *, char *buffer, int len)
 
 void ProgramSensor::processExited(KProcess *)
 {
-    int lineNbr;
-    SensorParams *sp;
-    Meter *meter;
-    QVector<QString> lines;
+    QStringList lines;
     QStringList stringList = QStringList::split('\n',sensorResult,true);
     QStringList::ConstIterator end( stringList.end() );
     for ( QStringList::ConstIterator it = stringList.begin(); it != end; ++it )
     {
-        lines.push_back(*it);
+        lines << *it;
     }
 
-    int count = (int) lines.size();
-    foreach (QObject *it, objList)
-    {
-        sp = (SensorParams*)(it);
-        meter = sp->getMeter();
-        if( meter != 0)
-        {
-            lineNbr = (sp->getParam("LINE")).toInt();
-            if ( lineNbr >= 1  && lineNbr <=  (int) count )
-            {
-                meter->setValue(lines[lineNbr-1]);
-            }
-            if ( -lineNbr >= 1 && -lineNbr <= (int) count )
-            {
-                meter->setValue(lines[count+lineNbr]);
-            }
-            if (lineNbr == 0)
-            {
-                meter->setValue(sensorResult);
-            }
-        }
-    }
+    emit programValues(QVariant(lines));
 
     sensorResult = "";
 }

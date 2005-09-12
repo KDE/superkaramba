@@ -31,9 +31,11 @@ public:
   DateSensor( int interval );
   ~DateSensor();
 
-  void toggleCalendar(QMouseEvent *ev);
-  void mousePressEvent(QMouseEvent *ev);
   void update();
+  void addMeter(Meter*);
+
+signals:
+  void dateValue(QVariant);
 
 protected slots:
   void slotCalendarDeleted();

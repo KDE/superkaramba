@@ -23,6 +23,10 @@ public:
     ProgramSensor(const QString &programName, int msec=1000, QString encoding="" );
     ~ProgramSensor();
     void update();
+    void addMeter(Meter*);
+
+signals:
+    void programValues(QVariant);
 
 private:
     QTextCodec *codec;

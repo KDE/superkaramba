@@ -27,22 +27,12 @@ DateSensor::~DateSensor()
 void DateSensor::update()
 {
     QDateTime qdt  =  QDateTime::currentDateTime();
-    QString format;
-    SensorParams *sp;
-    Meter *meter;
+    emit dateValue(QVariant(qdt));
+}
 
-    foreach (QObject *it, objList)
-    {
-        sp = (SensorParams*)(it);
-        meter = sp->getMeter();
-        format = sp->getParam("FORMAT");
-
-        if (format.length() == 0 )
-        {
-            format = "hh:mm";
-        }
-        meter->setValue(qdt.toString(format));
-    }
+void DateSensor::addMeter(Meter* meter)
+{
+    connect(this, SIGNAL(dateValue(QVariant)), meter, SLOT(update(QVariant)));
 }
 
 void DateSensor::slotCalendarDeleted()
@@ -74,7 +64,7 @@ void DatePicker::keyReleaseEvent(QKeyEvent *e)
     }
 }
 
-void DateSensor::toggleCalendar(QMouseEvent *ev)
+/*void DateSensor::toggleCalendar(QMouseEvent *ev)
 {
     foreach (QObject *it, objList)
     {
@@ -119,9 +109,9 @@ void DateSensor::toggleCalendar(QMouseEvent *ev)
             }
         }
     }
-}
+}*/
 
-void DateSensor::mousePressEvent(QMouseEvent *ev)
+/*void DateSensor::mousePressEvent(QMouseEvent *ev)
 {
     switch (ev->button()) 
     {
@@ -131,5 +121,5 @@ void DateSensor::mousePressEvent(QMouseEvent *ev)
         default:
             break;
     }
-}
+}*/
 

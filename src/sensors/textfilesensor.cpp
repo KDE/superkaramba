@@ -32,9 +32,14 @@ TextFileSensor::TextFileSensor( const QString &fn, bool iRdf, int interval, cons
 TextFileSensor::~TextFileSensor()
 {}
 
+void TextFileSensor::addMeter(Meter* meter)
+{
+    connect(this, SIGNAL(textfileValues(QVariant)), meter, SLOT(update(QVariant)));
+}
+
 void TextFileSensor::update()
 {
-    QVector<QString> lines;
+    QStringList lines;
     QFile file(fileName);
     QString line;
     if ( file.open(IO_ReadOnly | IO_Translate) )
@@ -58,10 +63,10 @@ void TextFileSensor::update()
                 for ( i = 0; i < titles.count(); ++i )
                 {
                     QDomElement element = titles.item( i ).toElement();
-                    lines.push_back(element.text());
+                    lines << element.text();
 
                     element = links.item( i ).toElement();
-                    lines.push_back(element.text());
+                    lines << element.text();
                 }
             }
         }
@@ -76,34 +81,6 @@ void TextFileSensor::update()
         file.close();
     }
 
-    int lineNbr;
-    SensorParams *sp;
-    Meter *meter;
-
-    int count = (int) lines.size();
-    foreach (QObject *it, objList)
-    {
-        sp = (SensorParams*)(it);
-        meter = sp->getMeter();
-        lineNbr = (sp->getParam("LINE")).toInt();
-        if ( lineNbr >= 1  && lineNbr <=  (int) count )
-        {
-            meter->setValue(lines[lineNbr-1]);
-        }
-        if ( -lineNbr >= 1 && -lineNbr <= (int) count )
-        {
-            meter->setValue(lines[count+lineNbr]);
-        }
-
-        if ( lineNbr == 0 )
-        {
-            QString text;
-            for( int i=0; i < count; i++ )
-            {
-                text += lines[i] + "\n";
-            }
-            meter->setValue( text );
-        }
-    }
+    emit textfileValues(QVariant(lines));
 }
 

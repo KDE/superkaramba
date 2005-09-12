@@ -24,21 +24,16 @@ class Sensor : public QObject
 
 public:
     Sensor( int msec = 1000 );
-    void start();
     virtual ~Sensor();
-    void addMeter( SensorParams *s );
-    SensorParams* hasMeter( Meter *meter );
+
+    void start();
     void deleteMeter( Meter *meter );
-    int isEmpty() { return objList.isEmpty(); };
-    virtual void setMaxValue( SensorParams *s );
+    virtual void addMeter( Meter * )=0;
+    virtual int isEmpty()=0;
 
 private:
-    int msec;
-    QTimer timer;
-
-protected:
-// TODO: Make sure to delete and clear this list later on!
-    QList<QObject *> objList;
+    int m_msec;
+    QTimer m_timer;
 
 public slots:
     virtual void update()=0;

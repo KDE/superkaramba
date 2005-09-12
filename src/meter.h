@@ -39,14 +39,14 @@ public:
   virtual void setHeight(int);
 
   virtual void setSize(int ix, int iy, int iw, int ih);
-
+/*
   virtual void setMax(int max) { maxValue = max; };
   virtual void setMin(int min) { minValue = min; };
   virtual int getMax() { return minValue; };
   virtual int getMin() { return maxValue; };
-
+*/
   virtual void mUpdate(QPainter *)=0 ;
-
+/*
   virtual void setValue(int) {};
   virtual int getValue() { return -1; };
   virtual void setValue(QString) {};
@@ -55,7 +55,7 @@ public:
 
   virtual void setColor(QColor clr) { color = clr; };
   virtual QColor getColor() { return color; };
-
+*/
   virtual void show() { hidden = 0; };
   virtual void hide() { hidden = 1; };
 
@@ -75,6 +75,8 @@ public:
   void setOnClick( QString );
   void setOnMiddleClick( QString );
   */
+public slots:
+  void update(QVariant* value);
 
 protected: // Protected attributes
   QRect boundingBox;
@@ -89,6 +91,7 @@ protected: // Protected attributes
   int minValue;
   int maxValue;
 
+    QString m_format;
   QColor color;
   KarambaWidget* m_karamba;
 };

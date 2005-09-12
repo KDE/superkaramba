@@ -29,7 +29,10 @@ public:
     NetworkSensor( QString device, int interval );
     ~NetworkSensor();
     void update();
+    void addMeter(Meter*);
 
+signals:
+    void networkValues(QVariant);
 
 private:
     unsigned long receivedBytes;

@@ -43,6 +43,10 @@ public:
     ~TextFileSensor();
 
     void update();
+    void addMeter(Meter*);
+
+signals:
+    void textfileValues(QVariant);
 
 private:
 QTextCodec *codec;
