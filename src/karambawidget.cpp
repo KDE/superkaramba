@@ -878,24 +878,17 @@ QString KarambaWidget::findSensorFromMap(Sensor* sensor)
 Sensor* KarambaWidget::findSensorFromList(Meter* meter)
 {
   //qDebug("KarambaWidget::findSensorFromList");
-  QListIterator<QObject *> it( meterList ); // iterate over meters
-  while ( it.hasNext() )
-  {
-    Meter* m = (Meter*) it.next();
-    if (m == meter)
-      return m->getSensor();
-  }
-  return NULL;
+    return meter->getSensor();
 }
 
 QString KarambaWidget::getSensor(Meter* meter)
 {
   //qDebug("KarambaWidget::getSensor");
-  QString s;
-  Sensor* sensor = findSensorFromList(meter);
-  if (sensor)
-    s = findSensorFromMap(sensor);
-  return s;
+    QString s;
+    Sensor* sensor = meter->getSensor();
+    if(sensor)
+        s = findSensorFromMap(sensor);
+    return s;
 }
 
 void KarambaWidget::deleteMeterFromSensors(Meter* meter)
