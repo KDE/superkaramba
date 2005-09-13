@@ -81,7 +81,7 @@ public:
   void setOnMiddleClick( QString );
   */
 public slots:
-  void update(QVariant* value);
+  void update(QVariant value);
 
 protected: // Protected attributes
   QRect boundingBox;
