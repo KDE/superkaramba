@@ -72,10 +72,10 @@ public:
   void setEnabled(bool);
   bool isEnabled();
 
-    void acceptSensor(Sensor*);
-    QString getFormat() { return m_format; }
-    void setFormat(QString f) { m_format = f; }
-    Sensor* getSensor() { return m_sensor; }
+  void acceptSensor(Sensor*);
+  QString getFormat() { return m_format; }
+  void setFormat(QString f) { m_format = f; }
+  Sensor* getSensor() { return m_sensor; }
   /*
   void setOnClick( QString );
   void setOnMiddleClick( QString );
@@ -94,8 +94,8 @@ protected: // Protected attributes
   bool clickable;
   int hidden;
 
-    QString m_format;
-    Sensor* m_sensor;
+  QString m_format;
+  Sensor* m_sensor;
   KarambaWidget* m_karamba;
 };
 
