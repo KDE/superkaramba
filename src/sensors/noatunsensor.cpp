@@ -7,9 +7,9 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
-#include "noatunsensor.h"
 #include <QByteArray>
 #include <QTime>
+#include "noatunsensor.h"
 
 NoatunSensor::NoatunSensor( int interval,  DCOPClient *c)
         : Sensor( interval )
@@ -163,4 +163,4 @@ void NoatunSensor::setMaxValue( SensorParams *sp)
 
 }
 */
-
+#include "noatunsensor.moc"

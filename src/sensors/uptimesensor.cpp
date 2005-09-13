@@ -93,3 +93,5 @@ void UptimeSensor::update()
     }
 #endif
 }
+
+#include "uptimesensor.moc"
