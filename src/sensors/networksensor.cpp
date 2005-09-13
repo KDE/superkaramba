@@ -128,6 +128,7 @@ void NetworkSensor::getInOutBytes ( unsigned long &in,unsigned long &out) const
 
 void NetworkSensor::addMeter(Meter* meter)
 {
+    disconnect(0, 0, meter, SLOT(update(QVariant)));
     connect(this, SIGNAL(networkValues(QVariant)), meter, SLOT(update(QVariant)));
 }
 

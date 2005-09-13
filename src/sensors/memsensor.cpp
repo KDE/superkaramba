@@ -227,6 +227,7 @@ void MemSensor::readValues()
 
 void MemSensor::addMeter(Meter* meter)
 {
+    disconnect(0, 0, meter, SLOT(update(QVariant)));
     connect(this, SIGNAL(memValues(QVariant)), meter, SLOT(update(QVariant)));
 }
 

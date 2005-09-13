@@ -12,14 +12,14 @@
 
 Meter::Meter(KarambaWidget* k, int ix, int iy, int iw, int ih):
   boundingBox(ix, iy, iw, ih), leftButtonAction(""), middleButtonAction(""),
-  rightButtonAction(""), clickable(true), hidden(0),
+  rightButtonAction(""), clickable(true), hidden(0), m_sensor(0),
   m_karamba(k)
 {
 }
 
 Meter::Meter(KarambaWidget* k):
   boundingBox(0, 0, 0, 0), leftButtonAction(""), middleButtonAction(""),
-  rightButtonAction(""), clickable(true), hidden(0),
+  rightButtonAction(""), clickable(true), hidden(0), m_sensor(0),
   m_karamba(k)
 {
 }
@@ -28,10 +28,16 @@ Meter::~Meter()
 {
 }
 
-void Meter::acceptSensor(Sensor* sensor)
+void Meter::attachToSensor(Sensor* sensor)
 {
     sensor->addMeter(this);
     m_sensor = sensor;
+}
+
+void Meter::detachFromSensor()
+{
+    m_sensor->deleteMeter(this);
+    m_sensor = 0;
 }
 
 bool Meter::click(QMouseEvent*)

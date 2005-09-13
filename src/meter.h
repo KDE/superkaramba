@@ -72,7 +72,8 @@ public:
   void setEnabled(bool);
   bool isEnabled();
 
-  void acceptSensor(Sensor*);
+  void attachToSensor(Sensor*);
+  void detachFromSensor();
   QString getFormat() { return m_format; }
   void setFormat(QString f) { m_format = f; }
   Sensor* getSensor() { return m_sensor; }
@@ -81,7 +82,7 @@ public:
   void setOnMiddleClick( QString );
   */
 public slots:
-  void update(QVariant value);
+  virtual void update(QVariant value);
 
 protected: // Protected attributes
   QRect boundingBox;

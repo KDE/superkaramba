@@ -44,6 +44,7 @@ SensorSensor::~SensorSensor()
 
 void SensorSensor::addMeter(Meter* meter)
 {
+    disconnect(0, 0, meter, SLOT(update(QVariant)));
     connect(this, SIGNAL(sensorValues(QVariant)), meter, SLOT(update(QVariant)));
 }
 

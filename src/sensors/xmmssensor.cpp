@@ -35,6 +35,7 @@ XMMSSensor::~XMMSSensor()
 
 void XMMSSensor::addMeter(Meter* meter)
 {
+    disconnect(0, 0, meter, SLOT(update(QVariant)));
     connect(this, SIGNAL(xmmsValues(QVariant)), meter, SLOT(update(QVariant)));
 }
 

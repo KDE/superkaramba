@@ -900,8 +900,9 @@ QString KarambaWidget::getSensor(Meter* meter)
 
 void KarambaWidget::deleteMeterFromSensors(Meter* meter)
 {
+    meter->detachFromSensor();
   //qDebug("KarambaWidget::deleteMeterFromSensors");
-  Sensor* sensor = findSensorFromList(meter);
+  /*Sensor* sensor = findSensorFromList(meter);
 
   if (sensor)
   {
@@ -912,7 +913,7 @@ void KarambaWidget::deleteMeterFromSensors(Meter* meter)
       sensorMap.erase(s);
       sensorList.removeAll(sensor);
     }
-  }
+  }*/
 }
 
 void KarambaWidget::setSensor(const LineParser& lineParser, Meter* meter)
@@ -940,7 +941,7 @@ void KarambaWidget::setSensor(const LineParser& lineParser, Meter* meter)
                  m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
     sp->addParam("DECIMALS",lineParser.getString("DECIMALS"));*/
     meter->setFormat(m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
-    sensor->addMeter(meter);
+    meter->attachToSensor(sensor);
     //sensor->setMaxValue(sp);
 
   }
@@ -960,7 +961,7 @@ void KarambaWidget::setSensor(const LineParser& lineParser, Meter* meter)
         m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
 */
     meter->setFormat(m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
-    sensor->addMeter(meter);
+    meter->attachToSensor(sensor);
     //sensor->setMaxValue(sp);
   }
 
@@ -993,7 +994,7 @@ void KarambaWidget::setSensor(const LineParser& lineParser, Meter* meter)
     sp->addParam("FORMAT",
                  m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));*/
     meter->setFormat(m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
-    sensor->addMeter(meter);
+    meter->attachToSensor(sensor);
     //sensor->setMaxValue(sp);
   }
 
@@ -1014,7 +1015,7 @@ void KarambaWidget::setSensor(const LineParser& lineParser, Meter* meter)
                  m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
     sp->addParam("DECIMALS", lineParser.getString("DECIMALS"));*/
     meter->setFormat(m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
-    sensor->addMeter(meter);
+    meter->attachToSensor(sensor);
   }
 
   if( sens == "UPTIME" )
@@ -1032,7 +1033,7 @@ void KarambaWidget::setSensor(const LineParser& lineParser, Meter* meter)
     sp->addParam("FORMAT",
                  m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));*/
     meter->setFormat(m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
-    sensor->addMeter(meter);
+    meter->attachToSensor(sensor);
   }
 
   if( sens == "SENSOR" )
@@ -1050,7 +1051,7 @@ void KarambaWidget::setSensor(const LineParser& lineParser, Meter* meter)
                  m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
     sp->addParam("TYPE", lineParser.getString("TYPE"));*/
     meter->setFormat(m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
-    sensor->addMeter(meter);
+    meter->attachToSensor(sensor);
   }
 
 
@@ -1071,7 +1072,7 @@ void KarambaWidget::setSensor(const LineParser& lineParser, Meter* meter)
     }
     /*SensorParams *sp = new SensorParams(meter);
     sp->addParam("LINE",QString::number(lineParser.getInt("LINE")));*/
-    sensor->addMeter(meter);
+    meter->attachToSensor(sensor);
   }
 
 
@@ -1092,7 +1093,7 @@ void KarambaWidget::setSensor(const LineParser& lineParser, Meter* meter)
     sp->addParam("CALWIDTH",lineParser.getString("CALWIDTH"));
     sp->addParam("CALHEIGHT",lineParser.getString("CALHEIGHT"));*/
     meter->setFormat(m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
-    sensor->addMeter(meter);
+    meter->attachToSensor(sensor);
   }
 
 #ifdef HAVE_XMMS
@@ -1113,7 +1114,7 @@ void KarambaWidget::setSensor(const LineParser& lineParser, Meter* meter)
     sp->addParam("FORMAT",
                  m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));*/
     meter->setFormat(m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
-    sensor->addMeter(meter);
+    meter->attachToSensor(sensor);
     //sensor->setMaxValue(sp);
   }
 #endif // HAVE_XMMS
@@ -1133,7 +1134,7 @@ void KarambaWidget::setSensor(const LineParser& lineParser, Meter* meter)
     sp->addParam("FORMAT",
                  m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));*/
     meter->setFormat(m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
-    sensor->addMeter(meter);
+    meter->attachToSensor(sensor);
     //sensor->setMaxValue(sp);
   }
 
@@ -1154,7 +1155,7 @@ void KarambaWidget::setSensor(const LineParser& lineParser, Meter* meter)
     /*SensorParams *sp = new SensorParams(meter);
     sp->addParam( "LINE", QString::number(lineParser.getInt("LINE")));
     sp->addParam( "THEMAPATH", m_theme.path() );*/
-    sensor->addMeter(meter);
+    meter->attachToSensor(sensor);
   }
 
   if( sens == "RSS" )
@@ -1176,7 +1177,7 @@ void KarambaWidget::setSensor(const LineParser& lineParser, Meter* meter)
     }
     /*SensorParams *sp = new SensorParams(meter);
     sp->addParam("SOURCE",lineParser.getString("SOURCE"));*/
-    sensor->addMeter(meter);
+    meter->attachToSensor(sensor);
   }
 
   if (sensor != 0)
