@@ -12,15 +12,15 @@
 
 Sensor::Sensor(int iMsec)
 {
-    msec = iMsec;
+    m_msec = iMsec;
 }
 
 void Sensor::start()
 {
-    if (!timer.isActive())
+    if (!m_timer.isActive())
     {
         connect (&m_timer,SIGNAL(timeout()),this,SLOT(update()));
-        timer.start( (m_msec == 0)?1000:msec);
+        m_timer.start( (m_msec == 0)?1000:m_msec);
     }
 }
 
@@ -40,13 +40,18 @@ Sensor::~Sensor()
 //  return NULL;
 //}
 
+void Sensor::addMeter(Meter* meter)
+{
+    connect(this, SIGNAL(valueChanged(QVariant)), meter, SLOT(update(QVariant)));
+}
+
 void Sensor::deleteMeter( Meter *meter )
 {
-    disconnect(this, 0, meter, update(QVariant));
+    disconnect(this, 0, meter, SLOT(update(QVariant)));
 }
 
-void Sensor::setMaxValue( SensorParams* )
+/*void Sensor::setMaxValue( SensorParams* )
 {
 }
-
+*/
 #include "sensor.moc"

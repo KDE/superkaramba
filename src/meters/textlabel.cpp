@@ -376,4 +376,9 @@ void TextLabel::attachClickArea(QString leftMouseButton,
     rightButtonAction = rightMouseButton;
 }
 
+void TextLabel::update(QVariant)
+{
+    // TODO Set a correct value depending on the FORMAT string
+}
+
 #include "textlabel.moc"

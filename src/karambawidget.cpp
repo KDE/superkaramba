@@ -878,12 +878,12 @@ QString KarambaWidget::findSensorFromMap(Sensor* sensor)
 Sensor* KarambaWidget::findSensorFromList(Meter* meter)
 {
   //qDebug("KarambaWidget::findSensorFromList");
-  QListIterator<QObject *> it( sensorList ); // iterate over meters
+  QListIterator<QObject *> it( meterList ); // iterate over meters
   while ( it.hasNext() )
   {
-    Sensor* sensor = (Sensor*) it.next();
-    if (sensor->hasMeter(meter))
-      return sensor;
+    Meter* m = (Meter*) it.next();
+    if (m == meter)
+      return m->getSensor();
   }
   return NULL;
 }
@@ -935,13 +935,13 @@ void KarambaWidget::setSensor(const LineParser& lineParser, Meter* meter)
       sensor = ( sensorMap["CPU"+cpuNbr] = new CPUSensor( cpuNbr, interval ) );
       sensorList.append( sensor );
     }
-    SensorParams *sp = new SensorParams(meter);
+    /*SensorParams *sp = new SensorParams(meter);
     sp->addParam("FORMAT",
                  m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
-    sp->addParam("DECIMALS",lineParser.getString("DECIMALS"));
-
-    sensor->addMeter(sp);
-    sensor->setMaxValue(sp);
+    sp->addParam("DECIMALS",lineParser.getString("DECIMALS"));*/
+    meter->setFormat(m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
+    sensor->addMeter(meter);
+    //sensor->setMaxValue(sp);
 
   }
 
@@ -955,12 +955,13 @@ void KarambaWidget::setSensor(const LineParser& lineParser, Meter* meter)
       sensor = ( sensorMap["MEMORY"] = new MemSensor( interval ) );
       sensorList.append( sensor );
     }
-    SensorParams *sp = new SensorParams(meter);
+    /*SensorParams *sp = new SensorParams(meter);
     sp->addParam("FORMAT",
         m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
-
-    sensor->addMeter(sp);
-    sensor->setMaxValue(sp);
+*/
+    meter->setFormat(m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
+    sensor->addMeter(meter);
+    //sensor->setMaxValue(sp);
   }
 
 
@@ -988,11 +989,12 @@ void KarambaWidget::setSensor(const LineParser& lineParser, Meter* meter)
     {
         mntPt.remove( mntPt.length()-1, 1 );
     }
-    sp->addParam("MOUNTPOINT",mntPt);
+    /*sp->addParam("MOUNTPOINT",mntPt);
     sp->addParam("FORMAT",
-                 m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
-    sensor->addMeter(sp);
-    sensor->setMaxValue(sp);
+                 m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));*/
+    meter->setFormat(m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
+    sensor->addMeter(meter);
+    //sensor->setMaxValue(sp);
   }
 
   if( sens == "NETWORK")
@@ -1007,11 +1009,12 @@ void KarambaWidget::setSensor(const LineParser& lineParser, Meter* meter)
           new NetworkSensor(device, interval));
       sensorList.append( sensor );
     }
-    SensorParams *sp = new SensorParams(meter);
+    /*SensorParams *sp = new SensorParams(meter);
     sp->addParam("FORMAT",
                  m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
-    sp->addParam("DECIMALS", lineParser.getString("DECIMALS"));
-    sensor->addMeter(sp);
+    sp->addParam("DECIMALS", lineParser.getString("DECIMALS"));*/
+    meter->setFormat(m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
+    sensor->addMeter(meter);
   }
 
   if( sens == "UPTIME" )
@@ -1025,10 +1028,11 @@ void KarambaWidget::setSensor(const LineParser& lineParser, Meter* meter)
       sensorList.append( sensor );
 
     }
-    SensorParams *sp = new SensorParams(meter);
+    /*SensorParams *sp = new SensorParams(meter);
     sp->addParam("FORMAT",
-                 m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
-    sensor->addMeter(sp);
+                 m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));*/
+    meter->setFormat(m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
+    sensor->addMeter(meter);
   }
 
   if( sens == "SENSOR" )
@@ -1041,11 +1045,12 @@ void KarambaWidget::setSensor(const LineParser& lineParser, Meter* meter)
       sensor = (sensorMap["SENSOR"] = new SensorSensor(interval, tempUnit));
       sensorList.append( sensor );
     }
-    SensorParams *sp = new SensorParams(meter);
+    /*SensorParams *sp = new SensorParams(meter);
     sp->addParam("FORMAT",
                  m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
-    sp->addParam("TYPE", lineParser.getString("TYPE"));
-    sensor->addMeter(sp);
+    sp->addParam("TYPE", lineParser.getString("TYPE"));*/
+    meter->setFormat(m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
+    sensor->addMeter(meter);
   }
 
 
@@ -1064,9 +1069,9 @@ void KarambaWidget::setSensor(const LineParser& lineParser, Meter* meter)
                    new TextFileSensor( path, rdf, interval, encoding ) );
       sensorList.append( sensor );
     }
-    SensorParams *sp = new SensorParams(meter);
-    sp->addParam("LINE",QString::number(lineParser.getInt("LINE")));
-    sensor->addMeter(sp);
+    /*SensorParams *sp = new SensorParams(meter);
+    sp->addParam("LINE",QString::number(lineParser.getInt("LINE")));*/
+    sensor->addMeter(meter);
   }
 
 
@@ -1081,12 +1086,13 @@ void KarambaWidget::setSensor(const LineParser& lineParser, Meter* meter)
       sensorList.append( sensor );
       timeList.append( sensor );
     }
-    SensorParams *sp = new SensorParams(meter);
+    /*SensorParams *sp = new SensorParams(meter);
     sp->addParam("FORMAT",
                  m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
     sp->addParam("CALWIDTH",lineParser.getString("CALWIDTH"));
-    sp->addParam("CALHEIGHT",lineParser.getString("CALHEIGHT"));
-    sensor->addMeter(sp);
+    sp->addParam("CALHEIGHT",lineParser.getString("CALHEIGHT"));*/
+    meter->setFormat(m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
+    sensor->addMeter(meter);
   }
 
 #ifdef HAVE_XMMS
@@ -1103,11 +1109,12 @@ void KarambaWidget::setSensor(const LineParser& lineParser, Meter* meter)
       sensor = ( sensorMap["XMMS"] = new XMMSSensor( interval, encoding ) );
       sensorList.append( sensor );
     }
-    SensorParams *sp = new SensorParams(meter);
+    /*SensorParams *sp = new SensorParams(meter);
     sp->addParam("FORMAT",
-                 m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
-    sensor->addMeter(sp);
-    sensor->setMaxValue(sp);
+                 m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));*/
+    meter->setFormat(m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
+    sensor->addMeter(meter);
+    //sensor->setMaxValue(sp);
   }
 #endif // HAVE_XMMS
 
@@ -1122,11 +1129,12 @@ void KarambaWidget::setSensor(const LineParser& lineParser, Meter* meter)
       sensor = ( sensorMap["NOATUN"] = new NoatunSensor( interval, client ) );
       sensorList.append( sensor );
     }
-    SensorParams *sp = new SensorParams(meter);
+    /*SensorParams *sp = new SensorParams(meter);
     sp->addParam("FORMAT",
-                 m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
-    sensor->addMeter(sp);
-    sensor->setMaxValue(sp);
+                 m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));*/
+    meter->setFormat(m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
+    sensor->addMeter(meter);
+    //sensor->setMaxValue(sp);
   }
 
   if( sens == "PROGRAM")
@@ -1143,10 +1151,10 @@ void KarambaWidget::setSensor(const LineParser& lineParser, Meter* meter)
                   new ProgramSensor( progName, interval, encoding ) );
       sensorList.append( sensor );
     }
-    SensorParams *sp = new SensorParams(meter);
+    /*SensorParams *sp = new SensorParams(meter);
     sp->addParam( "LINE", QString::number(lineParser.getInt("LINE")));
-    sp->addParam( "THEMAPATH", m_theme.path() );
-    sensor->addMeter(sp);
+    sp->addParam( "THEMAPATH", m_theme.path() );*/
+    sensor->addMeter(meter);
   }
 
   if( sens == "RSS" )
@@ -1166,9 +1174,9 @@ void KarambaWidget::setSensor(const LineParser& lineParser, Meter* meter)
                    new RssSensor( source, interval, format, encoding ) );
       sensorList.append( sensor );
     }
-    SensorParams *sp = new SensorParams(meter);
-    sp->addParam("SOURCE",lineParser.getString("SOURCE"));
-    sensor->addMeter(sp);
+    /*SensorParams *sp = new SensorParams(meter);
+    sp->addParam("SOURCE",lineParser.getString("SOURCE"));*/
+    sensor->addMeter(meter);
   }
 
   if (sensor != 0)
@@ -1222,7 +1230,7 @@ void KarambaWidget::passClick(QMouseEvent *e)
   QListIterator<QObject *> it2( timeList ); // iterate over meters
   while ( it2.hasNext() )
   {
-    (( DateSensor* ) it2.next())->toggleCalendar( e );
+    //(( DateSensor* ) it2.next())->toggleCalendar( e );
   }
 
 

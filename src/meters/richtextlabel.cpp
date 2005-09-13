@@ -209,4 +209,9 @@ const QColorGroup & RichTextLabel::getColorGroup() const
   return colorGrp;
 }
 
+void RichTextLabel::update(QVariant)
+{
+    // TODO Set a correct value depending on the FORMAT string
+}
+
 #include "richtextlabel.moc"

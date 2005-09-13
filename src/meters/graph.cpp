@@ -25,8 +25,8 @@ Graph::Graph(KarambaWidget* k, int x, int y, int w, int h, int nbrPts)
         values[i] = 0;
     }
 
-    minValue = 0;
-    maxValue = 100;
+    m_minValue = 0;
+    m_maxValue = 100;
 }
 
 Graph::~Graph()
@@ -36,19 +36,19 @@ Graph::~Graph()
 
 void Graph::setValue(int v)
 {
-    if (v > maxValue)
+    if (v > m_maxValue)
     {
         // maxValue = v;
-        v = maxValue;
+        v = m_maxValue;
     }
-    if (v < minValue)
+    if (v < m_minValue)
     {
         //minValue = v;
-        v = minValue;
+        v = m_minValue;
     }
 
     lastValue = v;
-    values[ptPtr] = (int) (v / (maxValue + 0.0001) * getHeight());
+    values[ptPtr] = (int) (v / (m_maxValue + 0.0001) * getHeight());
     ptPtr = (ptPtr + 1) % nbrPoints;
 }
 
@@ -59,6 +59,8 @@ void Graph::setValue(QString v)
 
 void Graph::update(QVariant values)
 {
+    QVariantMap map = values.toMap();
+    setValue(map[m_format].toInt());
 }
 
 void Graph::mUpdate(QPainter *p)
@@ -68,7 +70,7 @@ void Graph::mUpdate(QPainter *p)
         double step = (getWidth() / (nbrPoints-1.001));
         double xPos = 0;
         double nextXPos = 0;
-        p->setPen(color);
+        p->setPen(m_color);
 
         for (int i = 0; i < nbrPoints - 1 ; i ++)
         {

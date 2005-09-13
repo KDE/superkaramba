@@ -19,8 +19,8 @@ Bar::Bar(KarambaWidget* k, int x, int y, int w, int h)
       barValue(0),
       vertical(false)
 {
-    minValue = 0;
-    maxValue = 100;
+    m_minValue = 0;
+    m_maxValue = 100;
 }
 
 Bar::~Bar()
@@ -61,30 +61,30 @@ bool Bar::setImage(QString fileName)
 
 void Bar::setValue(int v)
 {
-    if(v > maxValue)
+    if(v > m_maxValue)
     {
         // maxValue = v;
-        v = maxValue;
+        v = m_maxValue;
     }
 
-    if(v < minValue)
+    if(v < m_minValue)
     {
         //minValue = v;
-        v = minValue;
+        v = m_minValue;
     }
 
     barValue = v;
 
-    int diff = maxValue - minValue;
+    int diff = m_maxValue - m_minValue;
     if(diff != 0)
     {
         if(vertical)
         {
-            value = int((v-minValue)*getHeight() / diff + 0.5);
+            value = int((v-m_minValue)*getHeight() / diff + 0.5);
         }
         else // horizontal
         {
-            value = int((v-minValue)*getWidth() / diff + 0.5);
+            value = int((v-m_minValue)*getWidth() / diff + 0.5);
         }
     }
     else
@@ -100,13 +100,13 @@ void Bar::setValue(QString v)
 
 void Bar::setMax(int m)
 {
-    Meter::setMax(m);
+    m_maxValue = m;
     recalculateValue();
 }
 
 void Bar::setMin(int m)
 {
-    Meter::setMin(m);
+    m_minValue = m;
     recalculateValue();
 }
 
@@ -137,4 +137,10 @@ void Bar::mUpdate(QPainter *p)
             p->drawTiledPixmap(x, y, value, height, pixmap);
         }
     }
+}
+
+void Bar::update(QVariant value)
+{
+    QVariantMap map = value.toMap();
+    setValue(map[m_format].toInt());
 }

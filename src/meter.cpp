@@ -8,23 +8,30 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 #include "meter.h"
+#include "sensor.h"
 
 Meter::Meter(KarambaWidget* k, int ix, int iy, int iw, int ih):
   boundingBox(ix, iy, iw, ih), leftButtonAction(""), middleButtonAction(""),
-  rightButtonAction(""), clickable(true), hidden(0), minValue(0), maxValue(0),
-  color(0,0,0), m_karamba(k)
+  rightButtonAction(""), clickable(true), hidden(0),
+  m_karamba(k)
 {
 }
 
 Meter::Meter(KarambaWidget* k):
   boundingBox(0, 0, 0, 0), leftButtonAction(""), middleButtonAction(""),
-  rightButtonAction(""), clickable(true), hidden(0), minValue(0), maxValue(0),
-  color(0,0,0), m_karamba(k)
+  rightButtonAction(""), clickable(true), hidden(0),
+  m_karamba(k)
 {
 }
 
 Meter::~Meter()
 {
+}
+
+void Meter::acceptSensor(Sensor* sensor)
+{
+    sensor->addMeter(this);
+    m_sensor = sensor;
 }
 
 bool Meter::click(QMouseEvent*)

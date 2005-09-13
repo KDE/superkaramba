@@ -271,7 +271,7 @@ void MemSensor::update()
 #endif
 
 }
-
+/*
 void MemSensor::setMaxValue( SensorParams *sp )
 {
     Meter *meter;
@@ -288,5 +288,5 @@ void MemSensor::setMaxValue( SensorParams *sp )
     if( f=="%fs" || f== "%us" )
         meter->setMax( getSwapTotal() / 1024 );
 }
-
+*/
 #include "memsensor.moc"

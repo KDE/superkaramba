@@ -20,6 +20,7 @@
 #include <qfileinfo.h>
 
 class KarambaWidget;
+class Sensor;
 
 class Meter : public QObject
 {
@@ -39,23 +40,23 @@ public:
   virtual void setHeight(int);
 
   virtual void setSize(int ix, int iy, int iw, int ih);
-/*
-  virtual void setMax(int max) { maxValue = max; };
-  virtual void setMin(int min) { minValue = min; };
-  virtual int getMax() { return minValue; };
-  virtual int getMin() { return maxValue; };
-*/
+
   virtual void mUpdate(QPainter *)=0 ;
-/*
+
+    // TODO Review this methods and change python ifaces //
+  virtual void setMax(int max) {};
+  virtual void setMin(int min) {};
+  virtual int getMax() { return 0; };
+  virtual int getMin() { return 0; };
   virtual void setValue(int) {};
   virtual int getValue() { return -1; };
   virtual void setValue(QString) {};
   virtual QString getStringValue() const { return QString::null; };
   virtual void recalculateValue() {};
 
-  virtual void setColor(QColor clr) { color = clr; };
-  virtual QColor getColor() { return color; };
-*/
+  virtual void setColor(QColor clr) {};
+  virtual QColor getColor() { return Qt::black; };
+   ////////////////////////////////////////////////////////
   virtual void show() { hidden = 0; };
   virtual void hide() { hidden = 1; };
 
@@ -71,6 +72,10 @@ public:
   void setEnabled(bool);
   bool isEnabled();
 
+    void acceptSensor(Sensor*);
+    QString getFormat() { return m_format; }
+    void setFormat(QString f) { m_format = f; }
+    Sensor* getSensor() { return m_sensor; }
   /*
   void setOnClick( QString );
   void setOnMiddleClick( QString );
@@ -88,11 +93,9 @@ protected: // Protected attributes
 
   bool clickable;
   int hidden;
-  int minValue;
-  int maxValue;
 
     QString m_format;
-  QColor color;
+    Sensor* m_sensor;
   KarambaWidget* m_karamba;
 };
 

@@ -150,7 +150,7 @@ int NoatunSensor::getLength()
     return result;
 }
 
-
+/*
 void NoatunSensor::setMaxValue( SensorParams *sp)
 {
     Meter *meter;
@@ -162,3 +162,5 @@ void NoatunSensor::setMaxValue( SensorParams *sp)
         meter->setMax( 1 );
 
 }
+*/
+

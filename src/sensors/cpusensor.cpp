@@ -134,10 +134,11 @@ void CPUSensor::update()
 
     emit cpuValues(QVariant(map));
 }
-
+/*
 void CPUSensor::setMaxValue( SensorParams *sp )
 {
     Meter *meter;
     meter = sp->getMeter();
     meter->setMax( 100 );
 }
+*/

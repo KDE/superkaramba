@@ -55,7 +55,6 @@ void Input::setBGColor(QColor c)
 
 void Input::setColor(QColor c)
 {
-  Meter::setColor(c);
   edit->setFrameColor(c);
 }
 

@@ -28,8 +28,11 @@ public:
 
     void start();
     void deleteMeter( Meter *meter );
-    virtual void addMeter( Meter * )=0;
-    virtual int isEmpty()=0;
+    virtual void addMeter( Meter * );
+    virtual int isEmpty() { return 0; };
+
+signals:
+    void valueChanged(QVariant);
 
 private:
     int m_msec;

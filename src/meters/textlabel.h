@@ -60,6 +60,12 @@ public:
 
     virtual bool click(QMouseEvent*);
 
+    void setColor(QColor clr) { m_color = clr; };
+    QColor getColor() { return m_color; };
+
+public slots:
+    void update(QVariant);
+
 private:
     int alignment;
     int clip;
@@ -82,6 +88,8 @@ private:
     bool calculateScrollCoords(QRect meterRect, QRect &textRect,
                                QPoint &next, int &x, int &y);
     void calculateTextSize();
+
+    QColor m_color;
 };
 
 #endif // TEXTLABEL_H

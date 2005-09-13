@@ -52,6 +52,9 @@ class RichTextLabel : public Meter
 
     QString anchorAt(int, int);
 
+public slots:
+    void update(QVariant);
+
   private:
     Q3SimpleRichText* text;
     QString source;

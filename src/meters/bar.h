@@ -24,8 +24,10 @@ public:
 
     void mUpdate( QPainter * );
 
-    virtual void setMax( int m );
-    virtual void setMin( int m );
+    virtual void setMax(int max);
+    virtual void setMin(int min);
+    virtual int getMax() { return m_minValue; };
+    virtual int getMin() { return m_maxValue; };
 
 public slots:
     bool setImage( QString imagePath );
@@ -39,6 +41,8 @@ public slots:
     void setVertical( bool );
     int  getVertical() { return vertical; };
 
+    void update(QVariant);
+
 private:
     int barValue;
     int value;
@@ -50,6 +54,9 @@ private:
 
     QString imagePath;
     QPixmap pixmap;
+
+    int m_minValue;
+    int m_maxValue;
 }
 ;
 #endif // BAR_H

@@ -19,7 +19,7 @@
 
 class UptimeSensor :  public Sensor
 {
-
+    Q_OBJECT
 public:
   UptimeSensor(int interval);
   ~UptimeSensor();
