@@ -22,7 +22,7 @@
 #include "cpusensor.moc"
 
 CPUSensor::CPUSensor( QString cpu, int interval )
-    :   Sensor(interval),
+        :   Sensor(interval),
         userTicks(0),
         sysTicks(0),
         niceTicks(0),
@@ -39,23 +39,23 @@ CPUSensor::CPUSensor( QString cpu, int interval )
 }
 
 CPUSensor::~CPUSensor()
-{
-}
+{}
 
 void CPUSensor::getTicks (long &u,long &s,long &n,long &i)
 {
 #ifdef __FreeBSD__
-      static long cp_time[CPUSTATES];
+    static long cp_time[CPUSTATES];
 
-        size_t size = sizeof(cp_time);
+    size_t size = sizeof(cp_time);
 
-      /* get the cp_time array */
-      if (sysctlbyname("kern.cp_time", &cp_time, &size, NULL, 0) != -1) {
-              u = cp_time[CP_USER];
-              s = cp_time[CP_SYS] + cp_time[CP_INTR];
-              n = cp_time[CP_NICE];
-              i = cp_time[CP_IDLE];
-      }
+    /* get the cp_time array */
+    if (sysctlbyname("kern.cp_time", &cp_time, &size, NULL, 0) != -1)
+    {
+        u = cp_time[CP_USER];
+        s = cp_time[CP_SYS] + cp_time[CP_INTR];
+        n = cp_time[CP_NICE];
+        i = cp_time[CP_IDLE];
+    }
 #else
     QFile file("/proc/stat");
     QString line;

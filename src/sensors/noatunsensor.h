@@ -22,7 +22,7 @@
 */
 class NoatunSensor : public Sensor
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     NoatunSensor( int interval, DCOPClient *client);
 

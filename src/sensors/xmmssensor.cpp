@@ -16,9 +16,9 @@
 #include <QByteArray>
 
 XMMSSensor::XMMSSensor( int interval, const QString &encoding )
-    : Sensor( interval )
+        : Sensor( interval )
 {
-     if( !encoding.isEmpty() )
+    if( !encoding.isEmpty() )
     {
         codec = QTextCodec::codecForName( encoding.ascii() );
         if ( codec == 0)
@@ -30,8 +30,7 @@ XMMSSensor::XMMSSensor( int interval, const QString &encoding )
 }
 
 XMMSSensor::~XMMSSensor()
-{
-}
+{}
 
 void XMMSSensor::addMeter(Meter* meter)
 {
@@ -86,6 +85,7 @@ void XMMSSensor::update()
     }
     else
 #endif // HAVE_XMMS
+
     {
         emit xmmsValues(QVariant());
     }
@@ -97,10 +97,10 @@ void XMMSSensor::setMaxValue( SensorParams *sp)
     meter = sp->getMeter();
     QString f;
     f = sp->getParam("FORMAT");
-
+ 
     if ( f == "%full" )
         meter->setMax( 1 );
-
+ 
 }
 */
 #include "xmmssensor.moc"

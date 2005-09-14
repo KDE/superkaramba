@@ -3,7 +3,7 @@
 *
 *  Copyright (C) 2003 Hans Karlsson <karlsson.h@home.se>
 *  Copyright (C) 2003-2004 Adam Geitgey <adam@rootnode.org>
-*  Copyright (c) 2004 Petri Damstén <damu@iki.fi>
+*  Copyright (c) 2004 Petri Damstï¿½ <damu@iki.fi>
 *
 *  This file is part of SuperKaramba.
 *
@@ -25,7 +25,7 @@
 #ifndef MISC_PYTHON_H
 #define MISC_PYTHON_H
 
-/** @file 
+/** @file
 *
 * These are global functions that are used to interpret
 * certain Python calls.

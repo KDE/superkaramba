@@ -7,7 +7,7 @@
                   2001      Carsten Pfeiffer <pfeiffer@kde.org>
                   2001      Martijn Klingens <mklingens@yahoo.com>
  ***************************************************************************
-
+ 
  ***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -37,7 +37,7 @@ class Systemtray : public QWidget
 public:
     Systemtray(QWidget* parent);
     ~Systemtray();
-    
+
     void updateBackgroundPixmap ( const QPixmap & );
 
     int getCurrentWindowCount();
@@ -49,7 +49,7 @@ public slots:
     void systemTrayWindowAdded( WId w );
     void systemTrayWindowRemoved( WId w );
     void layoutSystray();
-    
+
 signals:
     void updated();
 

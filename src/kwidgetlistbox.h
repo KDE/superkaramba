@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005 Petri Damstén <petri.damsten@iki.fi>
+ * Copyright (C) 2005 Petri Damstï¿½ <petri.damsten@iki.fi>
  *
  * This file is part of SuperKaramba.
  *
@@ -32,7 +32,7 @@ class KWidgetListbox : public Q3Table
 {
     Q_OBJECT
 
-  public:
+public:
     KWidgetListbox(QWidget *parent = 0, const char *name = 0);
     ~KWidgetListbox();
 
@@ -46,22 +46,25 @@ class KWidgetListbox : public Q3Table
     QWidget* selectedItem() const;
     QWidget* item(int index) const;
     int index(QWidget* itm) const;
-    uint count() const { return numRows(); };
+    uint count() const
+    {
+        return numRows();
+    };
 
     void showItems(show_callback func = 0, void* data = 0);
 
     void paintCell(QPainter* p, int row, int col, const QRect& cr,
                    bool selected, const QColorGroup& cg);
-  protected:
+protected:
     void setItemColors(int index, bool even);
     void updateColors();
     bool even(int index);
     virtual void showEvent(QShowEvent* e);
 
-  protected slots:
+protected slots:
     void selectionChanged(int row, int col);
 
-  signals:
+signals:
     void selected(int index);
 };
 

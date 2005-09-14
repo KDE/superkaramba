@@ -40,9 +40,11 @@ private:
     QTime netTimer;
     QString device;
 #ifdef __FreeBSD__
+
     int if_number;
     ifmibdata if_mib;
 #endif
+
     void getInOutBytes (unsigned long &in,unsigned long &out) const;
 
 };

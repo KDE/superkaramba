@@ -24,52 +24,51 @@
 
 SKLineEdit::SKLineEdit(QWidget *w, Input *i) : QLineEdit(w), m_input(i)
 {
-  frameColor = Qt::gray;
-  setBackgroundColor(Qt::white);
+    frameColor = Qt::gray;
+    setBackgroundColor(Qt::white);
 }
 
 SKLineEdit::~SKLineEdit()
-{
-}
+{}
 
 void SKLineEdit::drawFrame(QPainter *p)
 {
-  p->setPen(frameColor);
-  p->drawRect(frameGeometry());
+    p->setPen(frameColor);
+    p->drawRect(frameGeometry());
 }
 
 void SKLineEdit::drawContents(QPainter *p)
 {
-  //QLineEdit::drawContents(p);
+    //QLineEdit::drawContents(p);
 }
 
 void SKLineEdit::setFrameColor(QColor c)
 {
-  frameColor = c;
-  repaint();
+    frameColor = c;
+    repaint();
 }
 
 void SKLineEdit::setBackgroundColor(QColor c)
 {
-  QLineEdit::setBackgroundColor(c);
-  repaint();
+    QLineEdit::setBackgroundColor(c);
+    repaint();
 }
 
 QColor SKLineEdit::getFrameColor() const
 {
-  return frameColor;
+    return frameColor;
 }
 
 void SKLineEdit::keyPressEvent(QKeyEvent* e)
 {
-  m_key = e->text();
-  QLineEdit::keyPressEvent(e);
+    m_key = e->text();
+    QLineEdit::keyPressEvent(e);
 }
 
 void SKLineEdit::keyReleaseEvent(QKeyEvent* e)
 {
-  KarambaWidget* k = static_cast<KarambaWidget*>(parent());
-  // e->text() is empty ?
-  k->keyPressed(m_key, m_input);
-  QLineEdit::keyReleaseEvent(e);
+    KarambaWidget* k = static_cast<KarambaWidget*>(parent());
+    // e->text() is empty ?
+    k->keyPressed(m_key, m_input);
+    QLineEdit::keyReleaseEvent(e);
 }

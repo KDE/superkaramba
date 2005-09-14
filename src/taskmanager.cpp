@@ -1,24 +1,24 @@
 /*****************************************************************
-
+ 
 Copyright (c) 2000 Matthias Elter <elter@kde.org>
-
+ 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
-
+ 
 The above copyright notice and this permission notice shall be included in
 all copies or substantial portions of the Software.
-
+ 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
 AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN
 AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
+ 
 ******************************************************************/
 
 #include <QDesktopWidget>
@@ -43,7 +43,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "taskmanager.h"
 #include "taskmanager.moc"
 
-template class QList<Task*>;
+template class QList<Task*>
+;
 
 // Hack: create a global KWinModule without a parent. We
 // can't make it a child of TaskManager because more than one
@@ -54,12 +55,12 @@ template class QList<Task*>;
 KWinModule* kwin_module = 0;
 
 TaskManager::TaskManager(QObject *parent, const char *name)
-    : QObject(parent, name), _active(0), _startup_info( NULL )
+        : QObject(parent, name), _active(0), _startup_info( NULL )
 {
 
     kwin_module = new KWinModule();
 
-//    KGlobal::locale()->insertCatalogue("libtaskmanager");
+    //    KGlobal::locale()->insertCatalogue("libtaskmanager");
     connect(kwin_module, SIGNAL(windowAdded(WId)), SLOT(windowAdded(WId)));
     connect(kwin_module, SIGNAL(windowRemoved(WId)), SLOT(windowRemoved(WId)));
     connect(kwin_module, SIGNAL(activeWindowChanged(WId)), SLOT(activeWindowChanged(WId)));
@@ -73,7 +74,7 @@ TaskManager::TaskManager(QObject *parent, const char *name)
         windowAdded(it);
     }
 
-    
+
     // set active window
     WId win = kwin_module->activeWindow();
     activeWindowChanged(win);
@@ -82,8 +83,7 @@ TaskManager::TaskManager(QObject *parent, const char *name)
 }
 
 TaskManager::~TaskManager()
-{
-}
+{}
 
 void TaskManager::configure_startup()
 {
@@ -93,14 +93,14 @@ void TaskManager::configure_startup()
         return;
     _startup_info = new KStartupInfo( true, this );
     connect( _startup_info,
-        SIGNAL( gotNewStartup( const KStartupInfoId&, const KStartupInfoData& )),
-        SLOT( gotNewStartup( const KStartupInfoId&, const KStartupInfoData& )));
+             SIGNAL( gotNewStartup( const KStartupInfoId&, const KStartupInfoData& )),
+             SLOT( gotNewStartup( const KStartupInfoId&, const KStartupInfoData& )));
     connect( _startup_info,
-        SIGNAL( gotStartupChange( const KStartupInfoId&, const KStartupInfoData& )),
-        SLOT( gotStartupChange( const KStartupInfoId&, const KStartupInfoData& )));
+             SIGNAL( gotStartupChange( const KStartupInfoId&, const KStartupInfoData& )),
+             SLOT( gotStartupChange( const KStartupInfoId&, const KStartupInfoData& )));
     connect( _startup_info,
-        SIGNAL( gotRemoveStartup( const KStartupInfoId&, const KStartupInfoData& )),
-        SLOT( gotRemoveStartup( const KStartupInfoId& )));
+             SIGNAL( gotRemoveStartup( const KStartupInfoId&, const KStartupInfoData& )),
+             SLOT( gotRemoveStartup( const KStartupInfoId& )));
     c.setGroup( "TaskbarButtonSettings" );
     _startup_info->setTimeout( c.readUnsignedNumEntry( "Timeout", 30 ));
 }
@@ -110,11 +110,11 @@ Task* TaskManager::findTask(WId w)
     foreach (Task *t, _tasks)
     {
         if (t->window() == w || t->hasTransient(w))
-	{
+        {
             return t;
-	}
+        }
     }
-    
+
     return 0;
 }
 
@@ -122,49 +122,49 @@ Task* TaskManager::findTask(WId w)
 
 void TaskManager::windowAdded(WId w )
 {
-  NETWinInfo info(QX11Info::display(),  w, QX11Info::appRootWindow(),
-                  NET::WMWindowType | NET::WMPid | NET::WMState );
-  NET::WindowType windowType = info.windowType(NET::AllTypesMask);
-  // ignore NET::Tool and other special window types
-  if (windowType != NET::Normal && windowType != NET::Override
-      && windowType != NET::Unknown && windowType != NET::Dialog)
-    return;
-  // ignore windows that want to be ignored by the taskbar
-  if ((info.state() & NET::SkipTaskbar) != 0)
-  {
-      _skiptaskbar_windows.push_front( w ); // remember them though
-    return;
-  }
-
-  Window transient_for_tmp;
-  if (XGetTransientForHint(QX11Info::display(), (Window) w, &transient_for_tmp))
-  {
-    WId transient_for = (WId) transient_for_tmp;
-
-    // check if it's transient for a skiptaskbar window
-    if (_skiptaskbar_windows.contains(transient_for))
-      return;
-
-    // lets see if this is a transient for an existing task
-    if (transient_for != QX11Info::appRootWindow() && transient_for != 0 )
-    {
-      Task* t = findTask(transient_for);
-      if (t)
-      {
-        if (t->window() != w)
-        {
-          t->addTransient(w);
-          // kdDebug() << "TM: Transient " << w << " added for Task: " << t->window() << endl;
-        }
+    NETWinInfo info(QX11Info::display(),  w, QX11Info::appRootWindow(),
+                    NET::WMWindowType | NET::WMPid | NET::WMState );
+    NET::WindowType windowType = info.windowType(NET::AllTypesMask);
+    // ignore NET::Tool and other special window types
+    if (windowType != NET::Normal && windowType != NET::Override
+            && windowType != NET::Unknown && windowType != NET::Dialog)
         return;
-      }
+    // ignore windows that want to be ignored by the taskbar
+    if ((info.state() & NET::SkipTaskbar) != 0)
+    {
+        _skiptaskbar_windows.push_front( w ); // remember them though
+        return;
     }
-  }
-  Task* t = new Task(w, this);
-  _tasks.append(t);
 
-  // kdDebug() << "TM: Task added for WId: " << w << endl;
-  emit taskAdded(t);
+    Window transient_for_tmp;
+    if (XGetTransientForHint(QX11Info::display(), (Window) w, &transient_for_tmp))
+    {
+        WId transient_for = (WId) transient_for_tmp;
+
+        // check if it's transient for a skiptaskbar window
+        if (_skiptaskbar_windows.contains(transient_for))
+            return;
+
+        // lets see if this is a transient for an existing task
+        if (transient_for != QX11Info::appRootWindow() && transient_for != 0 )
+        {
+            Task* t = findTask(transient_for);
+            if (t)
+            {
+                if (t->window() != w)
+                {
+                    t->addTransient(w);
+                    // kdDebug() << "TM: Transient " << w << " added for Task: " << t->window() << endl;
+                }
+                return;
+            }
+        }
+    }
+    Task* t = new Task(w, this);
+    _tasks.append(t);
+
+    // kdDebug() << "TM: Task added for WId: " << w << endl;
+    emit taskAdded(t);
 }
 
 void TaskManager::windowRemoved(WId w )
@@ -172,19 +172,23 @@ void TaskManager::windowRemoved(WId w )
     _skiptaskbar_windows.remove( w );
     // find task
     Task* t = findTask(w);
-    if (!t) return;
+    if (!t)
+        return;
 
-    if (t->window() == w) {
+    if (t->window() == w)
+    {
         _tasks.removeAll(t);
         emit taskRemoved(t);
 
-        if(t == _active) _active = 0;
-	{
+        if(t == _active)
+            _active = 0;
+        {
             delete t;
-        //kdDebug() << "TM: Task for WId " << w << " removed." << endl;
+            //kdDebug() << "TM: Task for WId " << w << " removed." << endl;
         }
     }
-    else {
+    else
+    {
         t->removeTransient( w );
         //kdDebug() << "TM: Transient " << w << " for Task " << t->window() << " removed." << endl;
     }
@@ -192,14 +196,17 @@ void TaskManager::windowRemoved(WId w )
 
 void TaskManager::windowChanged(WId w, unsigned int dirty)
 {
-    if( dirty & NET::WMState ) {
+    if( dirty & NET::WMState )
+    {
         NETWinInfo info ( QX11Info::display(),  w, QX11Info::appRootWindow(), NET::WMState );
-        if ( (info.state() & NET::SkipTaskbar) != 0 ) {
+        if ( (info.state() & NET::SkipTaskbar) != 0 )
+        {
             windowRemoved( w );
             _skiptaskbar_windows.push_front( w );
             return;
         }
-        else {
+        else
+        {
             _skiptaskbar_windows.remove( w );
             if( !findTask( w ))
                 windowAdded( w ); // skipTaskBar state was removed, so add this window
@@ -212,7 +219,8 @@ void TaskManager::windowChanged(WId w, unsigned int dirty)
 
     // find task
     Task* t = findTask( w );
-    if (!t) return;
+    if (!t)
+        return;
 
     //kdDebug() << "TaskManager::windowChanged " << w << " " << dirty << endl;
 
@@ -232,8 +240,10 @@ void TaskManager::activeWindowChanged(WId w )
     //kdDebug() << "TaskManager::activeWindowChanged" << endl;
 
     Task* t = findTask( w );
-    if (!t) {
-        if (_active) {
+    if (!t)
+    {
+        if (_active)
+        {
             _active->setActive(false);
             _active = 0;
 
@@ -241,7 +251,8 @@ void TaskManager::activeWindowChanged(WId w )
             emit activeTaskChanged(0);
         }
     }
-    else {
+    else
+    {
         if (_active)
             _active->setActive(false);
 
@@ -270,7 +281,7 @@ void TaskManager::gotStartupChange( const KStartupInfoId& id, const KStartupInfo
     foreach (Startup *s, _startups)
     {
         if (s->id() == id)
-	{
+        {
             s->update(data);
             return;
         }
@@ -288,8 +299,8 @@ void TaskManager::killStartup( const KStartupInfoId& id )
     foreach (Startup *x, _startups)
     {
         if (x->id() == id)
-	{
-	    s = x;
+        {
+            s = x;
             break;
         }
     }
@@ -298,7 +309,7 @@ void TaskManager::killStartup( const KStartupInfoId& id )
     {
         return;
     }
-    
+
     _startups.removeAll(s);
     emit startupRemoved(s);
     delete s;
@@ -310,7 +321,7 @@ void TaskManager::killStartup(Startup* s)
     {
         return;
     }
-    
+
     _startups.removeAll(s);
     emit startupRemoved(s);
     delete s;
@@ -330,75 +341,74 @@ bool TaskManager::isOnTop(const Task* task)
 {
     if(!task)
     {
-       return false;
+        return false;
     }
 
-  /*  
-    for (QList<WId>::ConstIterator it = kwin_module->stackingOrder().last();
-         it != kwin_module->stackingOrder().end(); --it ) {
-        for (Task* t = _tasks.first(); t != 0; t = _tasks.next() ) {
-            if ( (*it) == t->window() ) {
-                if ( t == task )
-                    return true;
-                if ( !t->isIconified() && (t->isAlwaysOnTop() == task->isAlwaysOnTop()) )
-                    return false;
-                break;
-             }
-        }
-    }
-    */
+    /*
+      for (QList<WId>::ConstIterator it = kwin_module->stackingOrder().last();
+           it != kwin_module->stackingOrder().end(); --it ) {
+          for (Task* t = _tasks.first(); t != 0; t = _tasks.next() ) {
+              if ( (*it) == t->window() ) {
+                  if ( t == task )
+                      return true;
+                  if ( !t->isIconified() && (t->isAlwaysOnTop() == task->isAlwaysOnTop()) )
+                      return false;
+                  break;
+               }
+          }
+      }
+      */
     return false;
 }
 
 
 Task::Task(WId win, TaskManager * parent, const char *name) :
-  QObject(parent, name),
-  _active(false), _win(win),
-  _lastWidth(0), _lastHeight(0), _lastResize(false), _lastIcon(),
-  _thumbSize(0.2), _thumb(), _grab()
+        QObject(parent, name),
+        _active(false), _win(win),
+        _lastWidth(0), _lastHeight(0), _lastResize(false), _lastIcon(),
+        _thumbSize(0.2), _thumb(), _grab()
 {
-  _info = KWin::windowInfo(_win, 0, 0);
-  // try to load icon via net_wm
-  _pixmap = KWin::icon(_win, 16, 16, true);
-
-  // try to guess the icon from the classhint
-  if(_pixmap.isNull())
-    KGlobal::instance()->iconLoader()->loadIcon(className().lower(),
-            KIcon::Small,KIcon::Small,
-            KIcon::DefaultState, 0, true);
-
-  // load xapp icon
-  if (_pixmap.isNull())
-    _pixmap = SmallIcon("kcmx");
-}
-
-Task::~Task()
-{
-}
-
-void Task::refresh(bool icon)
-{
-  _info = KWin::windowInfo(_win, 0, 0);
-  if (icon)
-  {
+    _info = KWin::windowInfo(_win, 0, 0);
     // try to load icon via net_wm
     _pixmap = KWin::icon(_win, 16, 16, true);
 
     // try to guess the icon from the classhint
     if(_pixmap.isNull())
-    {
         KGlobal::instance()->iconLoader()->loadIcon(className().lower(),
-            KIcon::Small, KIcon::Small, KIcon::DefaultState, 0, true);
-    }
+                KIcon::Small,KIcon::Small,
+                KIcon::DefaultState, 0, true);
 
     // load xapp icon
     if (_pixmap.isNull())
-      _pixmap = SmallIcon("kcmx");
+        _pixmap = SmallIcon("kcmx");
+}
 
-    _lastIcon.resize(0,0);
-    emit iconChanged();
-  }
-  emit changed();
+Task::~Task()
+{}
+
+void Task::refresh(bool icon)
+{
+    _info = KWin::windowInfo(_win, 0, 0);
+    if (icon)
+    {
+        // try to load icon via net_wm
+        _pixmap = KWin::icon(_win, 16, 16, true);
+
+        // try to guess the icon from the classhint
+        if(_pixmap.isNull())
+        {
+            KGlobal::instance()->iconLoader()->loadIcon(className().lower(),
+                    KIcon::Small, KIcon::Small, KIcon::DefaultState, 0, true);
+        }
+
+        // load xapp icon
+        if (_pixmap.isNull())
+            _pixmap = SmallIcon("kcmx");
+
+        _lastIcon.resize(0,0);
+        emit iconChanged();
+    }
+    emit changed();
 }
 
 void Task::setActive(bool a)
@@ -406,57 +416,57 @@ void Task::setActive(bool a)
     _active = a;
     emit changed();
     if ( a )
-      emit activated();
+        emit activated();
     else
-      emit deactivated();
+        emit deactivated();
 }
 
 bool Task::isMaximized() const
 {
-  return(_info.state() & NET::Max);
+    return(_info.state() & NET::Max);
 }
 
 bool Task::isIconified() const
 {
-  return (_info.mappingState() == NET::Iconic);
+    return (_info.mappingState() == NET::Iconic);
 }
 
 bool Task::isAlwaysOnTop() const
 {
-  return (_info.state() & NET::StaysOnTop);
+    return (_info.state() & NET::StaysOnTop);
 }
 
 bool Task::isShaded() const
 {
-  return (_info.state() & NET::Shaded);
+    return (_info.state() & NET::Shaded);
 }
 
 bool Task::isOnCurrentDesktop() const
 {
-  return (_info.onAllDesktops() || _info.desktop() == kwin_module->currentDesktop());
+    return (_info.onAllDesktops() || _info.desktop() == kwin_module->currentDesktop());
 }
 
 bool Task::isOnAllDesktops() const
 {
-  return _info.onAllDesktops();
+    return _info.onAllDesktops();
 }
 
 bool Task::isActive() const
 {
-  return _active;
+    return _active;
 }
 
 bool Task::isOnTop() const
 {
-  return taskManager()->isOnTop( this );
+    return taskManager()->isOnTop( this );
 }
 
 bool Task::isModified() const
 {
-  static QString modStr = QString::fromUtf8("[") + i18n("modified") + QString::fromUtf8("]");
-  int modStrPos = _info.visibleName().find(modStr);
+    static QString modStr = QString::fromUtf8("[") + i18n("modified") + QString::fromUtf8("]");
+    int modStrPos = _info.visibleName().find(modStr);
 
-  return ( modStrPos != -1 );
+    return ( modStrPos != -1 );
 }
 
 QString Task::iconName() const
@@ -473,11 +483,12 @@ QString Task::visibleIconName() const
 QString Task::className()
 {
     XClassHint hint;
-    if(XGetClassHint(QX11Info::display(), _win, &hint)) {
-  QString nh( hint.res_name );
-  XFree( hint.res_name );
-  XFree( hint.res_class );
-  return nh;
+    if(XGetClassHint(QX11Info::display(), _win, &hint))
+    {
+        QString nh( hint.res_name );
+        XFree( hint.res_name );
+        XFree( hint.res_class );
+        return nh;
     }
     return QString::null;
 }
@@ -485,146 +496,156 @@ QString Task::className()
 QString Task::classClass()
 {
     XClassHint hint;
-    if(XGetClassHint(QX11Info::display(), _win, &hint)) {
-  QString ch( hint.res_class );
-  XFree( hint.res_name );
-  XFree( hint.res_class );
-  return ch;
+    if(XGetClassHint(QX11Info::display(), _win, &hint))
+    {
+        QString ch( hint.res_class );
+        XFree( hint.res_name );
+        XFree( hint.res_class );
+        return ch;
     }
     return QString::null;
 }
 
 QPixmap Task::icon( int width, int height, bool allowResize )
 {
-  if ( (width == _lastWidth)
-       && (height == _lastHeight)
-       && (allowResize == _lastResize )
-       && (!_lastIcon.isNull()) )
-    return _lastIcon;
+    if ( (width == _lastWidth)
+            && (height == _lastHeight)
+            && (allowResize == _lastResize )
+            && (!_lastIcon.isNull()) )
+        return _lastIcon;
 
-  QPixmap newIcon = KWin::icon( _win, width, height, allowResize );
-  if ( !newIcon.isNull() ) {
-    _lastIcon = newIcon;
-    _lastWidth = width;
-    _lastHeight = height;
-    _lastResize = allowResize;
-  }
+    QPixmap newIcon = KWin::icon( _win, width, height, allowResize );
+    if ( !newIcon.isNull() )
+    {
+        _lastIcon = newIcon;
+        _lastWidth = width;
+        _lastHeight = height;
+        _lastResize = allowResize;
+    }
 
-  return newIcon;
+    return newIcon;
 }
 
 QPixmap Task::bestIcon( int size, bool &isStaticIcon )
 {
-  QPixmap pixmap;
-  isStaticIcon = false;
+    QPixmap pixmap;
+    isStaticIcon = false;
 
-  switch( size ) {
-  case KIcon::SizeSmall:
+    switch( size )
     {
-      pixmap = icon( 16, 16, true  );
+    case KIcon::SizeSmall:
+        {
+            pixmap = icon( 16, 16, true  );
 
-      // Icon of last resort
-      if( pixmap.isNull() ) {
-  pixmap = KGlobal::iconLoader()->loadIcon( "go",
-              KIcon::NoGroup,
-              KIcon::SizeSmall );
-  isStaticIcon = true;
-      }
+            // Icon of last resort
+            if( pixmap.isNull() )
+            {
+                pixmap = KGlobal::iconLoader()->loadIcon( "go",
+                         KIcon::NoGroup,
+                         KIcon::SizeSmall );
+                isStaticIcon = true;
+            }
+        }
+        break;
+    case KIcon::SizeMedium:
+        {
+            //
+            // Try 34x34 first for KDE 2.1 icons with shadows, if we don't
+            // get one then try 32x32.
+            //
+            pixmap = icon( 34, 34, false  );
+
+            if ( ( pixmap.width() != 34 ) || ( pixmap.height() != 34 ) )
+            {
+                if ( ( pixmap.width() != 32 ) || ( pixmap.height() != 32 ) )
+                {
+                    pixmap = icon( 32, 32, true  );
+                }
+            }
+
+            // Icon of last resort
+            if( pixmap.isNull() )
+            {
+                pixmap = KGlobal::iconLoader()->loadIcon( "go",
+                         KIcon::NoGroup,
+                         KIcon::SizeMedium );
+                isStaticIcon = true;
+            }
+        }
+        break;
+    case KIcon::SizeLarge:
+        {
+            // If there's a 48x48 icon in the hints then use it
+            pixmap = icon( size, size, false  );
+
+            // If not, try to get one from the classname
+            if ( pixmap.isNull() || pixmap.width() != size || pixmap.height() != size )
+            {
+                pixmap = KGlobal::iconLoader()->loadIcon( className(),
+                         KIcon::NoGroup,
+                         size,
+                         KIcon::DefaultState,
+                         0L,
+                         true );
+                isStaticIcon = true;
+            }
+
+            // If we still don't have an icon then scale the one in the hints
+            if ( pixmap.isNull() || ( pixmap.width() != size ) || ( pixmap.height() != size ) )
+            {
+                pixmap = icon( size, size, true  );
+                isStaticIcon = false;
+            }
+
+            // Icon of last resort
+            if( pixmap.isNull() )
+            {
+                pixmap = KGlobal::iconLoader()->loadIcon( "go",
+                         KIcon::NoGroup,
+                         size );
+                isStaticIcon = true;
+            }
+        }
     }
-    break;
-  case KIcon::SizeMedium:
-    {
-      //
-      // Try 34x34 first for KDE 2.1 icons with shadows, if we don't
-      // get one then try 32x32.
-      //
-      pixmap = icon( 34, 34, false  );
 
-      if ( ( pixmap.width() != 34 ) || ( pixmap.height() != 34 ) ) {
-  if ( ( pixmap.width() != 32 ) || ( pixmap.height() != 32 ) ) {
-    pixmap = icon( 32, 32, true  );
-  }
-      }
-
-      // Icon of last resort
-      if( pixmap.isNull() ) {
-  pixmap = KGlobal::iconLoader()->loadIcon( "go",
-              KIcon::NoGroup,
-              KIcon::SizeMedium );
-  isStaticIcon = true;
-      }
-    }
-    break;
-  case KIcon::SizeLarge:
-    {
-      // If there's a 48x48 icon in the hints then use it
-      pixmap = icon( size, size, false  );
-
-      // If not, try to get one from the classname
-      if ( pixmap.isNull() || pixmap.width() != size || pixmap.height() != size ) {
-  pixmap = KGlobal::iconLoader()->loadIcon( className(),
-              KIcon::NoGroup,
-              size,
-              KIcon::DefaultState,
-              0L,
-              true );
-  isStaticIcon = true;
-      }
-
-      // If we still don't have an icon then scale the one in the hints
-      if ( pixmap.isNull() || ( pixmap.width() != size ) || ( pixmap.height() != size ) ) {
-  pixmap = icon( size, size, true  );
-  isStaticIcon = false;
-      }
-
-      // Icon of last resort
-      if( pixmap.isNull() ) {
-  pixmap = KGlobal::iconLoader()->loadIcon( "go",
-              KIcon::NoGroup,
-              size );
-  isStaticIcon = true;
-      }
-    }
-  }
-
-  return pixmap;
+    return pixmap;
 }
 
 bool Task::idMatch( const QString& id1, const QString& id2 )
 {
-  if ( id1.isEmpty() || id2.isEmpty() )
+    if ( id1.isEmpty() || id2.isEmpty() )
+        return false;
+
+    if ( id1.contains( id2 ) > 0 )
+        return true;
+
+    if ( id2.contains( id1 ) > 0 )
+        return true;
+
     return false;
-
-  if ( id1.contains( id2 ) > 0 )
-    return true;
-
-  if ( id2.contains( id1 ) > 0 )
-    return true;
-
-  return false;
 }
 
 
 void Task::maximize()
 {
-  NETWinInfo ni( QX11Info::display(),  _win, QX11Info::appRootWindow(), NET::WMState);
-  ni.setState( NET::Max, NET::Max );
+    NETWinInfo ni( QX11Info::display(),  _win, QX11Info::appRootWindow(), NET::WMState);
+    ni.setState( NET::Max, NET::Max );
 
-  if (_info.mappingState() == NET::Iconic)
-    activate();
+    if (_info.mappingState() == NET::Iconic)
+        activate();
 }
 
 void Task::restore()
 {
-  NETWinInfo ni( QX11Info::display(),  _win, QX11Info::appRootWindow(), NET::WMState);
-  ni.setState( 0, NET::Max );
-  if (_info.mappingState() == NET::Iconic)
-    activate();
+    NETWinInfo ni( QX11Info::display(),  _win, QX11Info::appRootWindow(), NET::WMState);
+    ni.setState( 0, NET::Max );
+    if (_info.mappingState() == NET::Iconic)
+        activate();
 }
 
 void Task::iconify()
 {
-  XIconifyWindow( QX11Info::display(), _win, QX11Info::appScreen() );
+    XIconifyWindow( QX11Info::display(), _win, QX11Info::appScreen() );
 }
 
 void Task::close()
@@ -635,51 +656,56 @@ void Task::close()
 
 void Task::raise()
 {
-//    kdDebug(1210) << "Task::raise(): " << name() << endl;
+    //    kdDebug(1210) << "Task::raise(): " << name() << endl;
     XRaiseWindow( QX11Info::display(), _win );
 }
 
 void Task::lower()
 {
-//    kdDebug(1210) << "Task::lower(): " << name() << endl;
+    //    kdDebug(1210) << "Task::lower(): " << name() << endl;
     XLowerWindow( QX11Info::display(), _win );
 }
 
 void Task::activate()
 {
-//    kdDebug(1210) << "Task::activate():" << name() << endl;
+    //    kdDebug(1210) << "Task::activate():" << name() << endl;
     NETRootInfo ri( QX11Info::display(), 0 );
     ri.setActiveWindow( _win );
 }
 
 void Task::activateRaiseOrIconify()
 {
-    if ( !isActive() || isIconified() ) {
+    if ( !isActive() || isIconified() )
+    {
         activate();
-    } else if ( !isOnTop() ) {
-       raise();
-    } else {
-       iconify();
+    }
+    else if ( !isOnTop() )
+    {
+        raise();
+    }
+    else
+    {
+        iconify();
     }
 }
 
 void Task::toDesktop(int desk)
 {
-  NETWinInfo ni(QX11Info::display(), _win, QX11Info::appRootWindow(), NET::WMDesktop);
-  if (desk == 0)
-  {
-    if (_info.onAllDesktops())
+    NETWinInfo ni(QX11Info::display(), _win, QX11Info::appRootWindow(), NET::WMDesktop);
+    if (desk == 0)
     {
-        ni.setDesktop(kwin_module->currentDesktop());
-        KWin::forceActiveWindow(_win);
+        if (_info.onAllDesktops())
+        {
+            ni.setDesktop(kwin_module->currentDesktop());
+            KWin::forceActiveWindow(_win);
+        }
+        else
+            ni.setDesktop(NETWinInfo::OnAllDesktops);
+        return;
     }
-    else
-        ni.setDesktop(NETWinInfo::OnAllDesktops);
-    return;
-  }
-  ni.setDesktop(desk);
-  if (desk == kwin_module->currentDesktop())
-    KWin::forceActiveWindow(_win);
+    ni.setDesktop(desk);
+    if (desk == kwin_module->currentDesktop())
+        KWin::forceActiveWindow(_win);
 }
 
 void Task::toCurrentDesktop()
@@ -728,57 +754,54 @@ void Task::publishIconGeometry(QRect rect)
 
 void Task::updateThumbnail()
 {
-  if ( !isOnCurrentDesktop() )
-    return;
-  if ( !isActive() )
-    return;
-  if ( !_grab.isNull() ) // We're already processing one...
-    return;
+    if ( !isOnCurrentDesktop() )
+        return;
+    if ( !isActive() )
+        return;
+    if ( !_grab.isNull() ) // We're already processing one...
+        return;
 
-   //
-   // We do this as a two stage process to remove the delay caused
-   // by the thumbnail generation. This makes things much smoother
-   // on slower machines.
-   //
-  QDesktopWidget *rootWin = qApp->desktop();
-  QRect geom = _info.geometry();
-   _grab = QPixmap::grabWindow( rootWin->winId(),
-        geom.x(), geom.y(),
-        geom.width(), geom.height() );
+    //
+    // We do this as a two stage process to remove the delay caused
+    // by the thumbnail generation. This makes things much smoother
+    // on slower machines.
+    //
+    QDesktopWidget *rootWin = qApp->desktop();
+    QRect geom = _info.geometry();
+    _grab = QPixmap::grabWindow( rootWin->winId(),
+                                 geom.x(), geom.y(),
+                                 geom.width(), geom.height() );
 
-   if ( !_grab.isNull() )
-     QTimer::singleShot( 200, this, SLOT( generateThumbnail() ) );
+    if ( !_grab.isNull() )
+        QTimer::singleShot( 200, this, SLOT( generateThumbnail() ) );
 }
 
 void Task::generateThumbnail()
 {
-   if ( _grab.isNull() )
-      return;
+    if ( _grab.isNull() )
+        return;
 
-   QImage img = _grab.convertToImage();
+    QImage img = _grab.convertToImage();
 
-   double width = img.width();
-   double height = img.height();
-   width = width * _thumbSize;
-   height = height * _thumbSize;
+    double width = img.width();
+    double height = img.height();
+    width = width * _thumbSize;
+    height = height * _thumbSize;
 
-   img = img.smoothScale( (int) width, (int) height );
-   _thumb = img;
-   _grab.resize( 0, 0 ); // Makes grab a null image.
+    img = img.smoothScale( (int) width, (int) height );
+    _thumb = img;
+    _grab.resize( 0, 0 ); // Makes grab a null image.
 
-   emit thumbnailChanged();
+    emit thumbnailChanged();
 }
 
 Startup::Startup( const KStartupInfoId& id, const KStartupInfoData& data,
-    QObject * parent, const char *name)
-    : QObject(parent, name), _id( id ), _data( data )
-{
-}
+                  QObject * parent, const char *name)
+        : QObject(parent, name), _id( id ), _data( data )
+{}
 
 Startup::~Startup()
-{
-
-}
+{}
 
 void Startup::update( const KStartupInfoData& data )
 {

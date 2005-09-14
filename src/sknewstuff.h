@@ -30,18 +30,18 @@ class KArchiveDirectory;
 
 class SKNewStuff : public KNewStuff
 {
-  public:
+public:
     SKNewStuff( ThemesDlg * );
 
     bool install( const QString &fileName );
     bool createUploadFile( const QString &fileName );
     QString downloadDestination( KNS::Entry *entry );
 
-  protected:
+protected:
     void addThemes(const KArchiveDirectory *archiveDir,
                    const QString& destDir);
 
-  private:
+private:
     ThemesDlg *mDlg;
 };
 

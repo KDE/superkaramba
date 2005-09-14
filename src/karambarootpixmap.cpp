@@ -12,25 +12,24 @@
 #include "karambawidget.h"
 
 KarambaRootPixmap::KarambaRootPixmap(QWidget *w) :
-  KRootPixmap( w)
+        KRootPixmap( w)
 {
-  widget = w;
+    widget = w;
 }
 
 /*KarambaRootPixmap::KarambaRootPixmap()
  : KRootPixmap(0)
  {
-
+ 
 //widget = w;
 }
 */
 
 KarambaRootPixmap::~KarambaRootPixmap()
-{
-}
+{}
 
 void  KarambaRootPixmap::updateBackground (KSharedPixmap *kpm)
 {
-  ((KarambaWidget*)widget)->updateBackground(kpm);
+    ((KarambaWidget*)widget)->updateBackground(kpm);
 }
 

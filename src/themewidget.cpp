@@ -26,94 +26,92 @@
 #include <qlayout.h>
 
 ThemeWidget::ThemeWidget(QWidget *parent, const char *name)
-  : QWidget(parent, name),
-    Ui::ThemeWidgetLayout(), 
-    m_themeFile(0)
+        : QWidget(parent, name),
+        Ui::ThemeWidgetLayout(),
+        m_themeFile(0)
 {
-  setupUi(this);
-  running->setText("");
-  setDescriptionMaxHeight();
+    setupUi(this);
+    running->setText("");
+    setDescriptionMaxHeight();
 }
 
 ThemeWidget::ThemeWidget(ThemeFile* tf)
-  : m_themeFile(tf)
+        : m_themeFile(tf)
 {
     setupUi(this);
-  QPixmap pixmap = m_themeFile->icon();
-  if(!pixmap.isNull())
-    micon->setPixmap(pixmap);
-  QString version;
-  if(!m_themeFile->version().isEmpty())
-    version = " - " + m_themeFile->version();
-  themeName->setText(
-      m_themeFile->locale()->translate(m_themeFile->name().ascii()) + version);
-  description->setText(
-      m_themeFile->locale()->translate(m_themeFile->description().ascii()));
-  running->setText("");
-  buttonGo->hide();
-  setDescriptionMaxHeight();
+    QPixmap pixmap = m_themeFile->icon();
+    if(!pixmap.isNull())
+        micon->setPixmap(pixmap);
+    QString version;
+    if(!m_themeFile->version().isEmpty())
+        version = " - " + m_themeFile->version();
+    themeName->setText(
+        m_themeFile->locale()->translate(m_themeFile->name().ascii()) + version);
+    description->setText(
+        m_themeFile->locale()->translate(m_themeFile->description().ascii()));
+    running->setText("");
+    buttonGo->hide();
+    setDescriptionMaxHeight();
 }
 
 ThemeWidget::~ThemeWidget()
 {
-  delete m_themeFile;
+    delete m_themeFile;
 }
 
 int ThemeWidget::addInstance()
 {
-  int i = 1;
-  while(m_instancePool.find(i) != m_instancePool.end())
-    ++i;
-  m_instancePool.append(i);
-  updateRunning();
-  return i;
+    int i = 1;
+    while(m_instancePool.find(i) != m_instancePool.end())
+        ++i;
+    m_instancePool.append(i);
+    updateRunning();
+    return i;
 }
 
 void ThemeWidget::removeInstance(int instance)
 {
-  m_instancePool.remove(instance);
-  updateRunning();
+    m_instancePool.remove(instance);
+    updateRunning();
 }
 
 void ThemeWidget::updateRunning()
 {
-  int i = instances();
-  if(i > 0)
-    running->setText(i18n("<p align=\"center\">%1 running</p>").arg(i));
-  else
-    running->setText("");
+    int i = instances();
+    if(i > 0)
+        running->setText(i18n("<p align=\"center\">%1 running</p>").arg(i));
+    else
+        running->setText("");
 }
 
 void ThemeWidget::setDescriptionText(QString text)
 {
-  description->setText(text);
+    description->setText(text);
 }
 
 void ThemeWidget::setHeaderText(QString text)
 {
-  themeName->setText(text);
+    themeName->setText(text);
 }
 
 void ThemeWidget::showButton(bool show)
 {
-  if(show)
-    buttonGo->show();
-  else
-    buttonGo->hide();
-  setDescriptionMaxHeight();
+    if(show)
+        buttonGo->show();
+    else
+        buttonGo->hide();
+    setDescriptionMaxHeight();
 }
 
 void ThemeWidget::setDescriptionMaxHeight()
 {
-/* TODO: FIX THIS
- * if(layoutText->geometry().height() <= 0)
-    return;
-  int height = layoutText->geometry().height() - themeName->height() -
-               layoutText->spacing();
-  if(buttonGo->isVisible())
-    height -= layoutButton->geometry().height() + layoutText->spacing();
-  description->setMaximumHeight(height);
-*/
+    if(vboxLayout1->geometry().height() <= 0)
+        return;
+    int height = vboxLayout1->geometry().height() - themeName->height() -
+                 vboxLayout1->spacing();
+    if(buttonGo->isVisible())
+        height -= hboxLayout1->geometry().height() + vboxLayout1->spacing();
+    description->setMaximumHeight(height);
 }
 
 #include "themewidget.moc"

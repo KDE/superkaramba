@@ -29,7 +29,10 @@ public:
     void start();
     void deleteMeter( Meter *meter );
     virtual void addMeter( Meter * );
-    virtual int isEmpty() { return 0; };
+    virtual int isEmpty()
+    {
+        return 0;
+    };
 
 signals:
     void valueChanged(QVariant);

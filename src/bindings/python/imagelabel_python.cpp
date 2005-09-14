@@ -3,7 +3,7 @@
 *
 *  Copyright (C) 2003 Hans Karlsson <karlsson.h@home.se>
 *  Copyright (C) 2003-2004 Adam Geitgey <adam@rootnode.org>
-*  Copyright (c) 2004 Petri Damstén <damu@iki.fi>
+*  Copyright (c) 2004 Petri Damstï¿½ <damu@iki.fi>
 *
 *  This file is part of SuperKaramba.
 *
@@ -94,7 +94,7 @@ PyObject* py_createBackgroundImage(PyObject *, PyObject *args)
     long widget, x, y;
     char *text;
     if (!PyArg_ParseTuple(args, (char*)"llls:createBackgroundImage", &widget, &x, &y,
-                            &text))
+                          &text))
     {
         return NULL;
     }
@@ -133,9 +133,9 @@ PyObject* py_createTaskIcon(PyObject *, PyObject *args)
     {
         if ((long)task == (long)ctask)
         {
-        //task found
-        currTask = task;
-        break;
+            //task found
+            currTask = task;
+            break;
         }
     }
 
@@ -171,7 +171,7 @@ PyObject* py_deleteImage(PyObject *, PyObject *args)
     ((KarambaWidget*)widget)->imageList.removeAll((Meter*)meter);
 
     return Py_BuildValue((char*)"l",
-        ((KarambaWidget*)widget)->meterList.removeAll((Meter*)meter));
+                         ((KarambaWidget*)widget)->meterList.removeAll((Meter*)meter));
 }
 
 PyObject* py_getThemeImage(PyObject *self, PyObject *args)
@@ -248,7 +248,7 @@ PyObject* py_changeImageIntensity(PyObject *, PyObject *args)
     float ratio;
 
     if (!PyArg_ParseTuple(args, (char*)"llf|l:changeImageIntensity", &widget, &meter,
-                            &ratio, &millisec))
+                          &ratio, &millisec))
     {
         return NULL;
     }
@@ -270,7 +270,7 @@ PyObject* py_changeImageChannelIntensity(PyObject *, PyObject *args)
     long millisec = 0;
 
     if (!PyArg_ParseTuple(args, (char*)"llfs|l:changeImageChannelIntensity", &widget,
-                            &meter, &ratio, &channel, &millisec))
+                          &meter, &ratio, &channel, &millisec))
     {
         return NULL;
     }
@@ -290,7 +290,7 @@ PyObject* py_changeImageToGray(PyObject *, PyObject *args)
     long millisec = 0;
 
     if (!PyArg_ParseTuple(args, (char*)"ll|l:changeImageToGray", &widget, &meter,
-                            &millisec))
+                          &millisec))
     {
         return NULL;
     }
@@ -378,7 +378,7 @@ PyObject* py_resizeImageSmooth(PyObject *, PyObject *args)
     long w, h;
 
     if (!PyArg_ParseTuple(args, (char*)"llll:resizeImageSmooth", &widget, &meter,
-                            &w, &h))
+                          &w, &h))
     {
         return NULL;
     }
@@ -397,7 +397,7 @@ PyObject* py_resizeImage(PyObject *, PyObject *args)
     long widget, meter, w, h;
 
     if (!PyArg_ParseTuple(args, (char*)"llll:resizeImage", &widget, &meter,
-                            &w, &h))
+                          &w, &h))
     {
         return NULL;
     }

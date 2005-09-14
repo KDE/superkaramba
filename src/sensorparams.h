@@ -40,8 +40,8 @@ public:
 
     Meter* getMeter() const;
 private:
-Meter *meter;
-QMap<QString,QString> params;
+    Meter *meter;
+    QMap<QString,QString> params;
 
 };
 

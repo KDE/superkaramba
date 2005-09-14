@@ -15,14 +15,12 @@
 #include "datesensor.moc"
 
 DateSensor::DateSensor(int interval)
-    :   Sensor( interval ),
+        :   Sensor( interval ),
         hidden(true)
-{
-}
+{}
 
 DateSensor::~DateSensor()
-{
-}
+{}
 
 void DateSensor::update()
 {
@@ -43,7 +41,7 @@ void DateSensor::slotCalendarDeleted()
 }
 
 DatePicker::DatePicker(QWidget *parent)
-    : Q3VBox(parent, 0, Qt::Window | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint)
+        : Q3VBox(parent, 0, Qt::Window | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint)
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setFrameStyle( QFrame::PopupPanel | QFrame::Raised );
@@ -73,7 +71,7 @@ void DatePicker::keyReleaseEvent(QKeyEvent *e)
         Meter *meter = sp->getMeter();
         QString width = sp->getParam("CALWIDTH");
         QString height = sp->getParam("CALHEIGHT");
-
+ 
         QRect rect(meter->getX(),meter->getY(),width.toInt(), height.toInt());
         if (rect.contains( ev->x(), ev->y() ))
         {
@@ -81,16 +79,16 @@ void DatePicker::keyReleaseEvent(QKeyEvent *e)
             {
                 hidden = false;
                 cal = new DatePicker(0);
-
+ 
                 connect(cal, SIGNAL(destroyed()), SLOT(slotCalendarDeleted()));
                 QPoint c = (QPoint(ev->x(), ev->y()));
-
+ 
                 int w = cal->sizeHint().width();
                 int h = cal->sizeHint().height();
-
+ 
                 // make calendar fully visible
                 QRect deskR = QApplication::desktop()->screenGeometry(QApplication::desktop()->screenNumber(c));
-
+ 
                 if (c.y()+h > deskR.bottom())
                 {
                     c.setY(deskR.bottom()-h-1);
@@ -99,10 +97,10 @@ void DatePicker::keyReleaseEvent(QKeyEvent *e)
                 {
                     c.setX(deskR.right()-w-1);
                 }
-
+ 
                 cal->move(c);
                 cal->show();
-
+ 
             }
             else
             {

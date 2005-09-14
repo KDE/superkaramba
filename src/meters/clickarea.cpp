@@ -19,15 +19,14 @@ ClickArea::ClickArea(KarambaWidget* k, int x, int y, int w, int h )
 }
 
 ClickArea::~ClickArea()
-{
-}
+{}
 
 bool ClickArea::click( QMouseEvent *e )
 {
     if( rect.contains( e->x(), e->y() ) )
     {
         //qDebug(QString::number(e->type()));
-	//KShellProcess ksp;
+        //KShellProcess ksp;
         QString program;
         if( e->button() == Qt::LeftButton )
         {
@@ -38,9 +37,9 @@ bool ClickArea::click( QMouseEvent *e )
         if( !program.isEmpty())
         {
             //qDebug(program);
-          KRun::runCommand(program);
-	  //  ksp << program;
-          //  ksp.start(KProcIO::DontCare, KProcIO::NoCommunication);
+            KRun::runCommand(program);
+            //  ksp << program;
+            //  ksp.start(KProcIO::DontCare, KProcIO::NoCommunication);
         }
     }
     return false;

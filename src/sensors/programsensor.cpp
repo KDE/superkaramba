@@ -15,9 +15,9 @@
 #include "programsensor.moc"
 
 ProgramSensor::ProgramSensor(const QString &progName, int interval, QString encoding )
-: Sensor( interval )
+        : Sensor( interval )
 {
-     if( !encoding.isEmpty())
+    if( !encoding.isEmpty())
     {
         codec = QTextCodec::codecForName( encoding.ascii() );
         if ( codec == 0)

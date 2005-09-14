@@ -3,7 +3,7 @@
 *
 *  Copyright (C) 2003 Hans Karlsson <karlsson.h@home.se>
 *  Copyright (C) 2003-2004 Adam Geitgey <adam@rootnode.org>
-*  Copyright (c) 2004 Petri Damstén <damu@iki.fi>
+*  Copyright (c) 2004 Petri Damstï¿½ <damu@iki.fi>
 *
 *  This file is part of SuperKaramba.
 *
@@ -42,7 +42,7 @@ long createMenu(long widget)
     currTheme->menuList.append (tmp );
 
     currTheme->connect(tmp, SIGNAL(activated(int)), currTheme,
-                        SLOT(passMenuItemClicked(int)));
+                       SLOT(passMenuItemClicked(int)));
 
     return (long)tmp;
 }

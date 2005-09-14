@@ -21,7 +21,7 @@
 #include "disksensor.moc"
 
 DiskSensor::DiskSensor(int msec)
-    :   Sensor(msec)
+        :   Sensor(msec)
 {
     connect(&ksp, SIGNAL(receivedStdout(KProcess *, char *, int )),
             this,SLOT(receivedStdout(KProcess *, char *, int )));
@@ -36,8 +36,7 @@ DiskSensor::DiskSensor(int msec)
 }
 
 DiskSensor::~DiskSensor()
-{
-}
+{}
 
 void DiskSensor::addMeter(Meter* meter)
 {
@@ -145,7 +144,7 @@ void DiskSensor::setMaxValue( SensorParams *sp )
     Meter *meter;
     meter = sp->getMeter();
     const QString mntPt = sp->getParam( "MOUNTPOINT" );
-
+ 
     QString f;
     f = sp->getParam("FORMAT");
     if( f == "%fp" || f == "%up" )
@@ -157,5 +156,5 @@ void DiskSensor::setMaxValue( SensorParams *sp )
         meter->setMax( getTotalSpace( mntPt ) / 1024 );
     }
 }
-
+ 
 */

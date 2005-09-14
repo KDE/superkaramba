@@ -28,10 +28,10 @@ public:
     ~KarambaRootPixmap();
 
 
-void  updateBackground ( KSharedPixmap * );
+    void  updateBackground ( KSharedPixmap * );
 
 private:
-QWidget *widget;
+    QWidget *widget;
 
 
 };

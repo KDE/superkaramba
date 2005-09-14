@@ -17,7 +17,7 @@
 
 class Bar : public Meter
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     Bar(KarambaWidget* k,int ix,int iy,int iw,int ih );
     ~Bar();
@@ -26,20 +26,38 @@ public:
 
     virtual void setMax(int max);
     virtual void setMin(int min);
-    virtual int getMax() { return m_minValue; };
-    virtual int getMin() { return m_maxValue; };
+    virtual int getMax()
+    {
+        return m_minValue;
+    };
+    virtual int getMin()
+    {
+        return m_maxValue;
+    };
 
 public slots:
     bool setImage( QString imagePath );
-    QString getImage() { return imagePath; };
+    QString getImage()
+    {
+        return imagePath;
+    };
 
     void setValue( int );
-    int  getValue() { return barValue; };
+    int  getValue()
+    {
+        return barValue;
+    };
     void setValue( QString );
-    void recalculateValue() {setValue(barValue); };
+    void recalculateValue()
+    {
+        setValue(barValue);
+    };
 
     void setVertical( bool );
-    int  getVertical() { return vertical; };
+    int  getVertical()
+    {
+        return vertical;
+    };
 
     void update(QVariant);
 

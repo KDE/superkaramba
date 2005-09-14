@@ -13,9 +13,9 @@
 #include "textlabel.h"
 
 TextLabel::TextLabel(KarambaWidget *k, int x,int y,int w,int h):
-  Meter(k, x,y,w,h), alignment(Qt::AlignLeft), clip(0), bgColor(0, 0, 0),
-  lineHeight(0), shadow(0), scrollSpeed(0, 0), scrollPos(0, 0), scrollGap(0),
-  scrollPause(0), pauseCounter(0), scrollType(ScrollNone)
+        Meter(k, x,y,w,h), alignment(Qt::AlignLeft), clip(0), bgColor(0, 0, 0),
+        lineHeight(0), shadow(0), scrollSpeed(0, 0), scrollPos(0, 0), scrollGap(0),
+        scrollPause(0), pauseCounter(0), scrollType(ScrollNone)
 {
     calculateTextSize();
     if( h != 0 || w != 0)
@@ -31,60 +31,58 @@ TextLabel::TextLabel(KarambaWidget *k, int x,int y,int w,int h):
 }
 
 TextLabel::TextLabel(KarambaWidget *k):
-  Meter(k, 0, 0, 0, 0), alignment(Qt::AlignLeft), clip(0), bgColor(0, 0, 0),
-  lineHeight(0), shadow(0), scrollSpeed(0, 0), scrollPos(0, 0), scrollGap(0),
-  scrollPause(0), pauseCounter(0), scrollType(ScrollNone)
-{
-}
+        Meter(k, 0, 0, 0, 0), alignment(Qt::AlignLeft), clip(0), bgColor(0, 0, 0),
+        lineHeight(0), shadow(0), scrollSpeed(0, 0), scrollPos(0, 0), scrollGap(0),
+        scrollPause(0), pauseCounter(0), scrollType(ScrollNone)
+{}
 
 TextLabel::~TextLabel()
-{
-}
+{}
 
 void TextLabel::show()
 {
-  Meter::show();
-  setEnabled(true);
+    Meter::show();
+    setEnabled(true);
 }
 
 void TextLabel::hide()
 {
-  Meter::hide();
-  setEnabled(false);
+    Meter::hide();
+    setEnabled(false);
 }
 
 void TextLabel::setTextProps( TextField* t )
 {
-  if(t)
-  {
-    text = *t;
-    //lineHeight = t->getLineHeight();
-    shadow = t->getShadow();
-    alignment = t->getAlignment();
-    setFontSize(t->getFontSize());
-    setFont(t->getFont());
+    if(t)
+    {
+        text = *t;
+        //lineHeight = t->getLineHeight();
+        shadow = t->getShadow();
+        alignment = t->getAlignment();
+        setFontSize(t->getFontSize());
+        setFont(t->getFont());
 
-    setColor(t->getColor());
-    setBGColor(t->getBGColor());
-  }
-  calculateTextSize();
+        setColor(t->getColor());
+        setBGColor(t->getBGColor());
+    }
+    calculateTextSize();
 }
 
 void TextLabel::calculateTextSize()
 {
-  int tmp;
-  QFontMetrics fm(font);
-  lineHeight = fm.height();
-  textSize.setWidth(0);
-  textSize.setHeight(lineHeight * value.count());
-  QStringList::Iterator it = value.begin();
-  while(it != value.end())
-  {
-    tmp = fm.width(*it);
-    if(tmp > textSize.width())
-      textSize.setWidth(tmp);
-    ++it;
-  }
+    int tmp;
+    QFontMetrics fm(font);
+    lineHeight = fm.height();
+    textSize.setWidth(0);
+    textSize.setHeight(lineHeight * value.count());
+    QStringList::Iterator it = value.begin();
+    while(it != value.end())
+    {
+        tmp = fm.width(*it);
+        if(tmp > textSize.width())
+            textSize.setWidth(tmp);
+        ++it;
+    }
 }
 
 void TextLabel::setValue( QString text)
@@ -174,167 +172,167 @@ int TextLabel::getShadow() const
 
 void TextLabel::setScroll(char* type, QPoint speed, int gap, int pause)
 {
-  ScrollType t = TextLabel::ScrollNone;
-  QString a = type;
-  a = a.upper();
-  if(a == "NONE")
-    t = TextLabel::ScrollNone;
-  else if( a == "NORMAL" )
-    t = TextLabel::ScrollNormal;
-  else if( a == "BACKANDFORTH" )
-    t = TextLabel::ScrollBackAndForth;
-  else if( a == "ONEPASS" )
-    t = TextLabel::ScrollOnePass;
-  setScroll(t, speed, gap, pause);
+    ScrollType t = TextLabel::ScrollNone;
+    QString a = type;
+    a = a.upper();
+    if(a == "NONE")
+        t = TextLabel::ScrollNone;
+    else if( a == "NORMAL" )
+        t = TextLabel::ScrollNormal;
+    else if( a == "BACKANDFORTH" )
+        t = TextLabel::ScrollBackAndForth;
+    else if( a == "ONEPASS" )
+        t = TextLabel::ScrollOnePass;
+    setScroll(t, speed, gap, pause);
 }
 
 void TextLabel::setScroll(ScrollType type, QPoint speed, int gap, int pause)
 {
-  scrollType = type;
-  scrollSpeed = speed;
-  switch(scrollType)
-  {
+    scrollType = type;
+    scrollSpeed = speed;
+    switch(scrollType)
+    {
     case ScrollNormal:
     case ScrollOnePass:
-    {
-      int x = 0, y = 0;
+        {
+            int x = 0, y = 0;
 
-      if(speed.x() > 0)
-        x = -1 * textSize.width();
-      else if(speed.x() < 0)
-        x = getWidth()-1;
-      if(speed.y() > 0)
-        x = -1 * textSize.height();
-      else if(speed.y() < 0)
-        x = getHeight()-1;
-      scrollPos = QPoint(x,y);
-      break;
-    }
+            if(speed.x() > 0)
+                x = -1 * textSize.width();
+            else if(speed.x() < 0)
+                x = getWidth()-1;
+            if(speed.y() > 0)
+                x = -1 * textSize.height();
+            else if(speed.y() < 0)
+                x = getHeight()-1;
+            scrollPos = QPoint(x,y);
+            break;
+        }
     case ScrollNone:
     case ScrollBackAndForth:
     default:
-      scrollPos = QPoint(0,0);
-      break;
-  }
-  scrollGap = gap;
-  scrollPause = pause;
-  pauseCounter = 1;
+        scrollPos = QPoint(0,0);
+        break;
+    }
+    scrollGap = gap;
+    scrollPause = pause;
+    pauseCounter = 1;
 }
 
 int TextLabel::drawText(QPainter *p, int x, int y, int width, int height,
                         QString text)
 {
-  if( shadow != 0)
-  {
-    p->setPen(getBGColor());
-    p->drawText(x + shadow, y + shadow, width, height,
-                alignment | clip | Qt::ExpandTabs, text);
-  }
-  p->setPen(getColor());
-  p->drawText(x, y, width, height, alignment | clip | Qt::ExpandTabs, text);
-  return 0;
+    if( shadow != 0)
+    {
+        p->setPen(getBGColor());
+        p->drawText(x + shadow, y + shadow, width, height,
+                    alignment | clip | Qt::ExpandTabs, text);
+    }
+    p->setPen(getColor());
+    p->drawText(x, y, width, height, alignment | clip | Qt::ExpandTabs, text);
+    return 0;
 }
 
 bool TextLabel::calculateScrollCoords(QRect meterRect, QRect &textRect,
-                                        QPoint &next, int &x, int &y)
+                                      QPoint &next, int &x, int &y)
 {
-  if(scrollType == ScrollBackAndForth &&
-     (scrollSpeed.x() != 0 && textSize.width() < getWidth() ||
-      scrollSpeed.y() != 0 && textSize.height() < getHeight()))
+    if(scrollType == ScrollBackAndForth &&
+            (scrollSpeed.x() != 0 && textSize.width() < getWidth() ||
+             scrollSpeed.y() != 0 && textSize.height() < getHeight()))
+        return true;
+
+    x += scrollPos.x();
+    y += scrollPos.y();
+
+    if(pauseCounter < 1)
+    {
+        scrollPos += scrollSpeed;
+
+        // -1 | 0 | 1
+        QPoint direction(scrollSpeed.x()/abs((scrollSpeed.x() == 0)?
+                                             1:scrollSpeed.x()),
+                         scrollSpeed.y()/abs((scrollSpeed.y() == 0)?
+                                             1:scrollSpeed.y()));
+        next = QPoint(-1 * direction.x() * (scrollGap + textSize.width()),
+                      -1 * direction.y() * (scrollGap + textSize.height()));
+        textRect.setCoords(x, y, x + textSize.width(), y + textSize.height());
+
+        if(scrollType == ScrollBackAndForth)
+        {
+            if(direction.x() < 0 && textRect.right() <= meterRect.right() ||
+                    direction.x() > 0 && textRect.left() >= meterRect.left())
+            {
+                scrollSpeed.setX(scrollSpeed.x() * -1);
+                pauseCounter = scrollPause;
+            }
+            if(direction.y() < 0 && textRect.bottom() <= meterRect.bottom() ||
+                    direction.y() > 0 && textRect.top() >= meterRect.top())
+            {
+                scrollSpeed.setY(scrollSpeed.y() * -1);
+                pauseCounter = scrollPause;
+            }
+        }
+        else if(!textRect.intersects(meterRect))
+        {
+            if(scrollType == ScrollNormal)
+                scrollPos += next;
+            else if(scrollType == ScrollOnePass)
+                return false;
+        }
+    }
+    else
+        --pauseCounter;
     return true;
-
-  x += scrollPos.x();
-  y += scrollPos.y();
-
-  if(pauseCounter < 1)
-  {
-    scrollPos += scrollSpeed;
-
-    // -1 | 0 | 1
-    QPoint direction(scrollSpeed.x()/abs((scrollSpeed.x() == 0)?
-                       1:scrollSpeed.x()),
-                     scrollSpeed.y()/abs((scrollSpeed.y() == 0)?
-                       1:scrollSpeed.y()));
-    next = QPoint(-1 * direction.x() * (scrollGap + textSize.width()),
-                  -1 * direction.y() * (scrollGap + textSize.height()));
-    textRect.setCoords(x, y, x + textSize.width(), y + textSize.height());
-
-    if(scrollType == ScrollBackAndForth)
-    {
-      if(direction.x() < 0 && textRect.right() <= meterRect.right() ||
-         direction.x() > 0 && textRect.left() >= meterRect.left())
-      {
-        scrollSpeed.setX(scrollSpeed.x() * -1);
-        pauseCounter = scrollPause;
-      }
-      if(direction.y() < 0 && textRect.bottom() <= meterRect.bottom() ||
-         direction.y() > 0 && textRect.top() >= meterRect.top())
-      {
-        scrollSpeed.setY(scrollSpeed.y() * -1);
-        pauseCounter = scrollPause;
-      }
-    }
-    else if(!textRect.intersects(meterRect))
-    {
-      if(scrollType == ScrollNormal)
-        scrollPos += next;
-      else if(scrollType == ScrollOnePass)
-        return false;
-    }
-  }
-  else
-    --pauseCounter;
-  return true;
 }
 
 void TextLabel::mUpdate(QPainter *p)
 {
-  if (hidden != 1)
-  {
-    int i = 0; //lineHeight;
-    int row = 1;
-    int x = getX();
-    int y = getY();
-    int width = getWidth();
-    int height = getHeight();
-    QRect meterRect(x, y, width, height);
-    QRect textRect;
-    QPoint next;
-
-    p->setFont(font);
-    if(scrollType != ScrollNone)
+    if (hidden != 1)
     {
-      p->setClipRect(x, y, width, height);
-      if(!calculateScrollCoords(meterRect, textRect, next, x, y))
-      {
-        p->setClipping(false);
-        return;
-      }
-      width = textSize.width();
-      height = textSize.height();
-    }
-    QStringList::Iterator it = value.begin();
-    while(it != value.end() && (row <= height || height == -1 ))
-    {
-      drawText(p, x, y + i, width, height, *it);
+        int i = 0; //lineHeight;
+        int row = 1;
+        int x = getX();
+        int y = getY();
+        int width = getWidth();
+        int height = getHeight();
+        QRect meterRect(x, y, width, height);
+        QRect textRect;
+        QPoint next;
 
-      // Draw more instances of text if scroll type is normal scroll
-      if(scrollType == ScrollNormal)
-      {
-        textRect.addCoords(next.x(), next.y(), next.x(), next.y());
-        while(textRect.intersects(meterRect))
+        p->setFont(font);
+        if(scrollType != ScrollNone)
         {
-          drawText(p, textRect.x(), textRect.y() + i, width, height, *it);
-          textRect.addCoords(next.x(), next.y(), next.x(), next.y());
+            p->setClipRect(x, y, width, height);
+            if(!calculateScrollCoords(meterRect, textRect, next, x, y))
+            {
+                p->setClipping(false);
+                return;
+            }
+            width = textSize.width();
+            height = textSize.height();
         }
-      }
-      i += lineHeight;
-      it++;
-      row++;
+        QStringList::Iterator it = value.begin();
+        while(it != value.end() && (row <= height || height == -1 ))
+        {
+            drawText(p, x, y + i, width, height, *it);
+
+            // Draw more instances of text if scroll type is normal scroll
+            if(scrollType == ScrollNormal)
+            {
+                textRect.addCoords(next.x(), next.y(), next.x(), next.y());
+                while(textRect.intersects(meterRect))
+                {
+                    drawText(p, textRect.x(), textRect.y() + i, width, height, *it);
+                    textRect.addCoords(next.x(), next.y(), next.x(), next.y());
+                }
+            }
+            i += lineHeight;
+            it++;
+            row++;
+        }
+        if(scrollType != ScrollNone)
+            p->setClipping(false);
     }
-    if(scrollType != ScrollNone)
-      p->setClipping(false);
-  }
 }
 
 bool TextLabel::click(QMouseEvent* e)
@@ -361,7 +359,7 @@ bool TextLabel::click(QMouseEvent* e)
         }
         else
         {
-          return true;
+            return true;
         }
     }
     return false;

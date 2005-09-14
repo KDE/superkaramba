@@ -28,40 +28,41 @@ void UptimeSensor::addMeter(Meter* meter)
 void UptimeSensor::update()
 {
 #ifdef __FreeBSD__
-      struct timeval  boottime;
-      time_t          now;            /* the current time of day */
+    struct timeval  boottime;
+    time_t          now;            /* the current time of day */
 
-      double avenrun[3];
-      time_t uptime;
-      int days, hours, i, mins, secs;
-      int mib[2];
-      size_t size;
-      char buf[256];
+    double avenrun[3];
+    time_t uptime;
+    int days, hours, i, mins, secs;
+    int mib[2];
+    size_t size;
+    char buf[256];
 
-        /*
-         * Get time of day.
-         */
-        (void)time(&now);
+    /*
+     * Get time of day.
+     */
+    (void)time(&now);
 
-        /*
-         * Determine how long system has been up.
-         * (Found by looking getting "boottime" from the kernel)
-         */
-        mib[0] = CTL_KERN;
-        mib[1] = KERN_BOOTTIME;
-        size = sizeof(boottime);
-        if (sysctl(mib, 2, &boottime, &size, NULL, 0) != -1 &&
-            boottime.tv_sec != 0) {
-                uptime = now - boottime.tv_sec;
-                if (uptime > 60)
-                        uptime += 30;
-                days = uptime / 86400;
-                uptime %= 86400;
-                hours = uptime / 3600;
-                uptime %= 3600;
-                mins = uptime / 60;
-                secs = uptime % 60;
-        }
+    /*
+     * Determine how long system has been up.
+     * (Found by looking getting "boottime" from the kernel)
+     */
+    mib[0] = CTL_KERN;
+    mib[1] = KERN_BOOTTIME;
+    size = sizeof(boottime);
+    if (sysctl(mib, 2, &boottime, &size, NULL, 0) != -1 &&
+            boottime.tv_sec != 0)
+    {
+        uptime = now - boottime.tv_sec;
+        if (uptime > 60)
+            uptime += 30;
+        days = uptime / 86400;
+        uptime %= 86400;
+        hours = uptime / 3600;
+        uptime %= 3600;
+        mins = uptime / 60;
+        secs = uptime % 60;
+    }
 #else
     QFile file("/proc/uptime");
     QString line;
@@ -83,15 +84,17 @@ void UptimeSensor::update()
         uptime -= mins * 60;
         int secs = uptime;
 #endif
-        QMap<QString, QVariant> map;
-        map["%d"] = days;
-        map["%h"] = hours;
-        map["%m"] = mins;
-        map["%s"] = secs;
 
-        emit uptimeValues(QVariant(map));
+    QMap<QString, QVariant> map;
+    map["%d"] = days;
+    map["%h"] = hours;
+    map["%m"] = mins;
+    map["%s"] = secs;
+
+    emit uptimeValues(QVariant(map));
 #ifndef __FreeBSD__
-    }
+
+}
 #endif
 }
 

@@ -18,31 +18,31 @@
 class DatePicker : public Q3VBox
 {
 public:
-	DatePicker(QWidget*);
+    DatePicker(QWidget*);
 private:
-	KDatePicker *picker;
-	void keyReleaseEvent(QKeyEvent *e);
+    KDatePicker *picker;
+    void keyReleaseEvent(QKeyEvent *e);
 };
 
 class DateSensor :  public Sensor
 {
-Q_OBJECT
+    Q_OBJECT
 public:
-  DateSensor( int interval );
-  ~DateSensor();
+    DateSensor( int interval );
+    ~DateSensor();
 
-  void update();
-  void addMeter(Meter*);
+    void update();
+    void addMeter(Meter*);
 
 signals:
-  void dateValue(QVariant);
+    void dateValue(QVariant);
 
 protected slots:
-  void slotCalendarDeleted();
+    void slotCalendarDeleted();
 
 private:
-  bool hidden;
-  DatePicker* cal;
+    bool hidden;
+    DatePicker* cal;
 
 };
 

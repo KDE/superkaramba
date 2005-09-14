@@ -16,10 +16,10 @@
 #include <kio/netaccess.h>
 
 RssSensor::RssSensor( const QString &src, int interval, const QString &form, const QString &enc)
-    : Sensor(interval),
-    source(src),
-    format(form),
-    encoding(enc)
+        : Sensor(interval),
+        source(src),
+        format(form),
+        encoding(enc)
 
 {
     // Format:
@@ -37,8 +37,7 @@ RssSensor::RssSensor( const QString &src, int interval, const QString &form, con
 }
 
 RssSensor::~RssSensor()
-{
-}
+{}
 
 void RssSensor::addMeter(Meter* meter)
 {
@@ -72,7 +71,8 @@ void RssSensor::update()
             qDebug("Error opening file");
         }
     }
-    else {
+    else
+    {
         qDebug( "Error Downloading: %s", source.ascii());
     }
 

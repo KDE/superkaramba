@@ -31,7 +31,7 @@ class Input;
 
 class SKLineEdit : public QLineEdit
 {
-  public:
+public:
     SKLineEdit(QWidget *w, Input *i);
     ~SKLineEdit();
 
@@ -43,11 +43,11 @@ class SKLineEdit : public QLineEdit
 
     void setBackgroundColor(QColor c);
 
-  protected:
+protected:
     virtual void keyReleaseEvent(QKeyEvent* e);
     virtual void keyPressEvent(QKeyEvent* e);
 
-  private:
+private:
     QColor frameColor;
     Input* m_input;
     QString m_key;

@@ -12,14 +12,14 @@
 
 SensorParams::SensorParams(Meter* m)
 {
-  meter = m;
+    meter = m;
 }
 
 SensorParams::~SensorParams()
-{
-}
+{}
 
-void SensorParams::addParam( const QString &name, const QString &value){
+void SensorParams::addParam( const QString &name, const QString &value)
+{
     params[name] = value;
 }
 
@@ -30,5 +30,5 @@ QString SensorParams::getParam( const QString &name ) const
 
 Meter* SensorParams::getMeter() const
 {
-   return meter;
+    return meter;
 }

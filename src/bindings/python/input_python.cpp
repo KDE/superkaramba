@@ -3,7 +3,7 @@
 *
 *  Copyright (C) 2003 Hans Karlsson <karlsson.h@home.se>
 *  Copyright (C) 2003-2004 Adam Geitgey <adam@rootnode.org>
-*  Copyright (c) 2004 Petri Damstén <damu@iki.fi>
+*  Copyright (c) 2004 Petri Damstï¿½ <damu@iki.fi>
 *  Copyright (c) 2005 Alexander Wiedenbruch <mail@wiedenbruch.de>
 *
 *  This file is part of SuperKaramba.
@@ -131,7 +131,7 @@ PyObject* py_setInputBoxFont(PyObject *, PyObject *args)
     long widget, inputBox;
     char* text;
     if (!PyArg_ParseTuple(args, (char*)"lls:changeInputBoxFont",
-                            &widget, &inputBox, &text))
+                          &widget, &inputBox, &text))
     {
         return NULL;
     }
@@ -352,7 +352,7 @@ PyObject* py_setInputBoxFontSize(PyObject *, PyObject *args)
     long widget, inputBox;
     long size;
     if (!PyArg_ParseTuple(args, (char*)"lll:changeInputBoxFontSize",
-                        &widget, &inputBox, &size))
+                          &widget, &inputBox, &size))
     {
         return NULL;
     }

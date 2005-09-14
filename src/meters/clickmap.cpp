@@ -16,14 +16,14 @@
 #include "clickmap.moc"
 
 ClickMap::ClickMap(KarambaWidget* k, int x, int y, int w, int h )
-    :Meter(k, x, y, w, h )
+        :Meter(k, x, y, w, h )
 {
-/*
-    if( h != 0 || w != 0)
-        clip = 0;
-    else
-        clip = Qt::DontClip;
-*/
+    /*
+        if( h != 0 || w != 0)
+            clip = 0;
+        else
+            clip = Qt::DontClip;
+    */
 
     if( h == 0 || w == 0)
     {
@@ -33,8 +33,7 @@ ClickMap::ClickMap(KarambaWidget* k, int x, int y, int w, int h )
 }
 
 ClickMap::~ClickMap()
-{
-}
+{}
 
 void ClickMap::setTextProps( TextField *t )
 {

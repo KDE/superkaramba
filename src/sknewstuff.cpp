@@ -34,104 +34,103 @@
 #include "sknewstuff.h"
 
 SKNewStuff::SKNewStuff( ThemesDlg *dlg ) :
-  KNewStuff( "superkaramba/themes", dlg ),
-  mDlg( dlg )
-{
-}
+        KNewStuff( "superkaramba/themes", dlg ),
+        mDlg( dlg )
+{}
 
 void SKNewStuff::addThemes(const KArchiveDirectory *archiveDir,
                            const QString& destDir)
 {
-  QStringList entries = archiveDir->entries();
+    QStringList entries = archiveDir->entries();
 
-  QStringList::Iterator end( entries.end() );
-  for(QStringList::Iterator it = entries.begin(); it != end; ++it)
-  {
-    if(archiveDir->entry(*it)->isDirectory())
+    QStringList::Iterator end( entries.end() );
+    for(QStringList::Iterator it = entries.begin(); it != end; ++it)
     {
-      addThemes(static_cast<const KArchiveDirectory*>(archiveDir->entry(*it)),
-                destDir + *it + "/");
+        if(archiveDir->entry(*it)->isDirectory())
+        {
+            addThemes(static_cast<const KArchiveDirectory*>(archiveDir->entry(*it)),
+                      destDir + *it + "/");
+        }
+        else
+        {
+            QFileInfo fi(*it);
+            if(fi.extension() == "theme")
+            {
+                mDlg->addThemeToList(destDir + *it);
+            }
+        }
     }
-    else
-    {
-      QFileInfo fi(*it);
-      if(fi.extension() == "theme")
-      {
-        mDlg->addThemeToList(destDir + *it);
-      }
-    }
-  }
 }
 
 bool SKNewStuff::install( const QString &fileName )
 {
-  kdDebug() << "SKNewStuff::install(): " << fileName << endl;
+    kdDebug() << "SKNewStuff::install(): " << fileName << endl;
 
-  KMimeType::Ptr result = KMimeType::findByURL(fileName);
-  KStandardDirs myStdDir;
-  const QString destDir =myStdDir.saveLocation("data", kapp->instanceName() + "/themes/", true);
-  KStandardDirs::makeDir( destDir );
+    KMimeType::Ptr result = KMimeType::findByURL(fileName);
+    KStandardDirs myStdDir;
+    const QString destDir =myStdDir.saveLocation("data", kapp->instanceName() + "/themes/", true);
+    KStandardDirs::makeDir( destDir );
 
-  kdDebug() << "SKNewStuff::install() mimetype: " << result->name() << endl;
+    kdDebug() << "SKNewStuff::install() mimetype: " << result->name() << endl;
 
-  if( result->name() == "application/x-gzip" ||
-      result->name() == "application/x-tgz" ||
-      result->name() == "application/x-bzip" ||
-      result->name() == "application/x-bzip2" ||
-      result->name() == "application/x-tbz" ||
-      result->name() == "application/x-tbz2" ||
-      result->name() == "application/x-tar" ||
-      result->name() == "application/x-tarz")
-  {
-    kdDebug() << "SKNewStuff::install() gzip/bzip2 mimetype encountered" <<
-        endl;
-    KTar archive( fileName );
-    if ( !archive.open( IO_ReadOnly ) )
-      return false;
-    const KArchiveDirectory *archiveDir = archive.directory();
-    archiveDir->copyTo(destDir);
-    addThemes(archiveDir, destDir);
-    archive.close();
-  }
-  else if(result->name() == "application/x-zip" ||
-          result->name() == "application/x-superkaramba")
-  {
-    kdDebug() << "SKNewStuff::install() zip mimetype encountered" << endl;
-    //TODO: write a routine to check if this is a valid .skz file
-    //otherwise we need to unpack it like it is an old theme that was packaged
-    //as a .zip instead of .bz2 or .tar.gz
-    KURL sourceFile(fileName);
-    KURL destFile( destDir + sourceFile.fileName() );
-    if(!KIO::NetAccess::file_copy( sourceFile, destFile ))
+    if( result->name() == "application/x-gzip" ||
+            result->name() == "application/x-tgz" ||
+            result->name() == "application/x-bzip" ||
+            result->name() == "application/x-bzip2" ||
+            result->name() == "application/x-tbz" ||
+            result->name() == "application/x-tbz2" ||
+            result->name() == "application/x-tar" ||
+            result->name() == "application/x-tarz")
     {
-      return false;
+        kdDebug() << "SKNewStuff::install() gzip/bzip2 mimetype encountered" <<
+        endl;
+        KTar archive( fileName );
+        if ( !archive.open( IO_ReadOnly ) )
+            return false;
+        const KArchiveDirectory *archiveDir = archive.directory();
+        archiveDir->copyTo(destDir);
+        addThemes(archiveDir, destDir);
+        archive.close();
     }
-    KIO::NetAccess::removeTempFile( sourceFile.url() );
-    mDlg->newSkzTheme(destFile.path());
-  }
-  else if(result->name() == "plaint/text")
-  {
-    kdDebug() << "SKNewStuff::install() plain text" << endl;
-  }
-  else
-  {
-    kdDebug() << "SKNewStuff::install() Error no compatible mimetype encountered to install"
-              << endl;
-    return false;
-  }
-  return true;
+    else if(result->name() == "application/x-zip" ||
+            result->name() == "application/x-superkaramba")
+    {
+        kdDebug() << "SKNewStuff::install() zip mimetype encountered" << endl;
+        //TODO: write a routine to check if this is a valid .skz file
+        //otherwise we need to unpack it like it is an old theme that was packaged
+        //as a .zip instead of .bz2 or .tar.gz
+        KURL sourceFile(fileName);
+        KURL destFile( destDir + sourceFile.fileName() );
+        if(!KIO::NetAccess::file_copy( sourceFile, destFile ))
+        {
+            return false;
+        }
+        KIO::NetAccess::removeTempFile( sourceFile.url() );
+        mDlg->newSkzTheme(destFile.path());
+    }
+    else if(result->name() == "plaint/text")
+    {
+        kdDebug() << "SKNewStuff::install() plain text" << endl;
+    }
+    else
+    {
+        kdDebug() << "SKNewStuff::install() Error no compatible mimetype encountered to install"
+        << endl;
+        return false;
+    }
+    return true;
 }
 
 bool SKNewStuff::createUploadFile( const QString &fileName )
 {
-  kdDebug() << "SKNewStuff::createUploadFile(): " << fileName << endl;
-  return true;
+    kdDebug() << "SKNewStuff::createUploadFile(): " << fileName << endl;
+    return true;
 }
 
 QString SKNewStuff::downloadDestination( KNS::Entry *entry )
 {
-  KURL source = entry->payload();
-  kdDebug() << "SKNewStuff::downloadDestination() fileName: "
+    KURL source = entry->payload();
+    kdDebug() << "SKNewStuff::downloadDestination() fileName: "
     << source.fileName() << endl;
-  return KGlobal::dirs()->saveLocation( "tmp" ) + source.fileName();
+    return KGlobal::dirs()->saveLocation( "tmp" ) + source.fileName();
 }

@@ -14,18 +14,17 @@
 #include "bar.moc"
 
 Bar::Bar(KarambaWidget* k, int x, int y, int w, int h)
-    : Meter(k, x, y, w, h),
-      value(0),
-      barValue(0),
-      vertical(false)
+        : Meter(k, x, y, w, h),
+        value(0),
+        barValue(0),
+        vertical(false)
 {
     m_minValue = 0;
     m_maxValue = 100;
 }
 
 Bar::~Bar()
-{
-}
+{}
 
 bool Bar::setImage(QString fileName)
 {
@@ -129,7 +128,7 @@ void Bar::mUpdate(QPainter *p)
         {
             //  int v = int( (value-minValue)*height / (maxValue-minValue) + 0.5 );
             p->drawTiledPixmap(x, y+height-value, width, value, pixmap, 0,
-                                pixmapHeight-value);
+                               pixmapHeight-value);
         }
         else // horizontal
         {

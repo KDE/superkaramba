@@ -45,12 +45,12 @@ static const char *description =
 static const char *version = "0.37-RC2";
 
 static KCmdLineOptions options[] =
-{
-  // { "+[URL]", I18N_NOOP( "Document to open" ), 0 },
-  // { "!nosystray", I18N_NOOP("Disable systray icon"), 0 },
-  { "+file", I18N_NOOP("A required argument 'file'"), 0 },
-  { 0, 0, 0 }
-};
+    {
+        // { "+[URL]", I18N_NOOP( "Document to open" ), 0 },
+        // { "!nosystray", I18N_NOOP("Disable systray icon"), 0 },
+        { "+file", I18N_NOOP("A required argument 'file'"), 0 },
+        { 0, 0, 0 }
+    };
 
 // This is for redirecting all qWarning, qDebug,... messages to file.
 // Usefull when testing session management issues etc.
@@ -60,26 +60,26 @@ static KCmdLineOptions options[] =
 
 void karambaMessageOutput(QtMsgType type, const char *msg)
 {
-  FILE* fp = fopen("/tmp/karamba.log", "a");
-  if(fp)
-  {
-    pid_t pid = getpid();
-
-    switch ( type )
+    FILE* fp = fopen("/tmp/karamba.log", "a");
+    if(fp)
     {
+        pid_t pid = getpid();
+
+        switch ( type )
+        {
         case QtDebugMsg:
             fprintf( fp, "Debug (%d): %s\n", pid, msg );
             break;
         case QtWarningMsg:
             if (strncmp(msg, "X Error", 7) != 0)
-              fprintf( fp, "Warning (%d): %s\n", pid, msg );
+                fprintf( fp, "Warning (%d): %s\n", pid, msg );
             break;
         case QtFatalMsg:
             fprintf( fp, "Fatal (%d): %s\n", pid, msg );
             abort();                    // deliberately core dump
+        }
+        fclose(fp);
     }
-    fclose(fp);
-  }
 }
 
 #endif
@@ -89,6 +89,7 @@ int main(int argc, char **argv)
 #ifdef KARAMBA_LOG
     qInstallMsgHandler(karambaMessageOutput);
 #endif
+
     KAboutData about("superkaramba", I18N_NOOP("SuperKaramba"),
                      version, description,
                      KAboutData::License_GPL,
@@ -115,13 +116,13 @@ int main(int argc, char **argv)
     QString mainAppId = app.getMainKaramba();
     if(!mainAppId.isEmpty())
     {
-      app.initDcopStub(mainAppId.toAscii());
+        app.initDcopStub(mainAppId.toAscii());
     }
     else
     {
-      //Set up systray icon
-      app.setUpSysTray(&about);
-      app.initDcopStub();
+        //Set up systray icon
+        app.setUpSysTray(&about);
+        app.initDcopStub();
     }
 
     KarambaApplication::unlockKaramba();
@@ -132,15 +133,15 @@ int main(int argc, char **argv)
     app.checkPreviousSession(app, lst);
     if(lst.size() == 0)
     {
-      //Not a saved session - check for themes given on command line
-      app.checkCommandLine(args, lst);
+        //Not a saved session - check for themes given on command line
+        app.checkCommandLine(args, lst);
 
-      if(lst.size() == 0)
-      {
-        //No themes given on command line and no saved session.
-        //Show welcome dialog.
-        app.globalShowThemeDialog();
-      }
+        if(lst.size() == 0)
+        {
+            //No themes given on command line and no saved session.
+            //Show welcome dialog.
+            app.globalShowThemeDialog();
+        }
     }
 
     args->clear();
@@ -148,7 +149,7 @@ int main(int argc, char **argv)
     KarambaPython::initPython();
     //qDebug("startThemes");
     if(app.startThemes(lst) || mainAppId.isEmpty())
-      ret = app.exec();
+        ret = app.exec();
     KarambaPython::shutdownPython();
     return ret;
 }

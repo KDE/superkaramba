@@ -22,7 +22,7 @@
  **/
 class ClickMap : public Meter
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     ClickMap(KarambaWidget* k, int x, int y, int w, int h);
     ~ClickMap();

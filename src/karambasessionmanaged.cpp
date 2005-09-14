@@ -27,29 +27,29 @@
 
 bool KSessionManaged::saveState(QSessionManager&)
 {
-  KConfig* config = kapp->sessionConfig();
+    KConfig* config = kapp->sessionConfig();
 
-  config->setGroup("General Options");
+    config->setGroup("General Options");
 
-  QString openThemes="";
+    QString openThemes="";
 
-  foreach (QWidget *w, QApplication::allWidgets())
-  {
-    if (QString(w->name()).startsWith("karamba"))
+    foreach (QWidget *w, QApplication::allWidgets())
     {
-      KarambaWidget* k = (KarambaWidget*) w;
-      openThemes += QFileInfo(k->theme().file()).absFilePath();
-      k->writeConfigData();
-      openThemes += ";";
+        if (QString(w->name()).startsWith("karamba"))
+        {
+            KarambaWidget* k = (KarambaWidget*) w;
+            openThemes += QFileInfo(k->theme().file()).absFilePath();
+            k->writeConfigData();
+            openThemes += ";";
+        }
     }
-  }
 
-  qDebug("Open themes %s", openThemes.ascii());
-  config->writeEntry("OpenThemes", openThemes);
-  return true;
+    qDebug("Open themes %s", openThemes.ascii());
+    config->writeEntry("OpenThemes", openThemes);
+    return true;
 }
 
 bool KSessionManaged::commitData(QSessionManager&)
 {
-  return true;
+    return true;
 }

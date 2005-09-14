@@ -2,7 +2,7 @@
 *  imagelabel.cpp  -  ImageLabel meter
 *
 *  Copyright (C) 2003 Hans Karlsson <karlsson.h@home.se>
-*  Copyright (c) 2004 Petri Damstén <damu@iki.fi>
+*  Copyright (c) 2004 Petri Damstï¿½ <damu@iki.fi>
 *
 *  This file is part of SuperKaramba.
 *
@@ -37,7 +37,7 @@
 
 // Effect
 Effect::Effect(ImageLabel* img, int msec)
-    :   myImage(img)
+        :   myImage(img)
 {
     if (msec > 0)
     {
@@ -53,8 +53,7 @@ Effect::Effect(ImageLabel* img, int msec)
 }
 
 Effect::~Effect()
-{
-}
+{}
 
 void Effect::startTimer()
 {
@@ -67,7 +66,7 @@ void Effect::startTimer()
 
 // Intensity
 Intensity::Intensity(ImageLabel* img, float r, int millisec)
-    :   Effect(img, millisec)
+        :   Effect(img, millisec)
 {
     ratio = r;
     ratio = (ratio > 1)  ? 1 : ratio;
@@ -82,7 +81,7 @@ KPixmap Intensity::apply(KPixmap pixmap)
 // ChannelIntensity
 ChannelIntensity::ChannelIntensity(ImageLabel* img, float r, QString c,
                                    int millisec)
-    :   Effect(img, millisec)
+        :   Effect(img, millisec)
 {
     ratio = r;
     ratio = (ratio > 1)  ? 1 : ratio;
@@ -106,14 +105,13 @@ ChannelIntensity::ChannelIntensity(ImageLabel* img, float r, QString c,
 KPixmap ChannelIntensity::apply(KPixmap pixmap)
 {
     return KPixmapEffect::channelIntensity(pixmap, ratio,
-        (KPixmapEffect::RGBComponent)channel);
+                                           (KPixmapEffect::RGBComponent)channel);
 }
 
 // ToGray
 ToGray::ToGray(ImageLabel* img, int millisec)
-    :   Effect(img, millisec)
-{
-}
+        :   Effect(img, millisec)
+{}
 
 KPixmap ToGray::apply(KPixmap pixmap)
 {
@@ -123,7 +121,7 @@ KPixmap ToGray::apply(KPixmap pixmap)
 /***********************************************************************/
 
 ImageLabel::ImageLabel(KarambaWidget* k, int ix,int iy,int iw,int ih)
-    :   Meter(k, ix,iy,iw,ih),
+        :   Meter(k, ix,iy,iw,ih),
         zoomed(false),
         rollover(false),
         background(0),
@@ -134,17 +132,15 @@ ImageLabel::ImageLabel(KarambaWidget* k, int ix,int iy,int iw,int ih)
         doScale(false),
         doRotate(false),
         imageEffect(0)
-{
-}
+{}
 
 ImageLabel::ImageLabel(KarambaWidget* k)
-    :   Meter(k),
+        :   Meter(k),
         zoomed(false),
         rollover(false),
         cblend(0),
         background(0)
-{
-}
+{}
 
 ImageLabel::~ImageLabel()
 {
@@ -155,8 +151,9 @@ ImageLabel::~ImageLabel()
     }
     if(!old_tip_rect.isNull())
     {
-    //    QToolTip::remove(m_karamba, old_tip_rect);
-        QToolTip::remove(m_karamba);
+        //    QToolTip::remove(m_karamba, old_tip_rect);
+        QToolTip::remove
+            (m_karamba);
     }
 }
 
@@ -204,13 +201,13 @@ void ImageLabel::smoothScale(int w, int h)
 
     applyTransformations(true);
 
-//  double widthFactor = ((double)w) / ((double)realpixmap.width());
-//  double heightFactor = ((double)h) / ((double)realpixmap.height());
+    //  double widthFactor = ((double)w) / ((double)realpixmap.width());
+    //  double heightFactor = ((double)h) / ((double)realpixmap.height());
 
-//  pixmap.convertFromImage(realpixmap.convertToImage().smoothScale(w, h));
+    //  pixmap.convertFromImage(realpixmap.convertToImage().smoothScale(w, h));
 
-//  setWidth(pixmap.width());
-//  setHeight(pixmap.height());
+    //  setWidth(pixmap.width());
+    //  setHeight(pixmap.height());
 
 }
 
@@ -240,7 +237,7 @@ void ImageLabel::applyTransformations(bool useSmoothScale)
         if (m_karamba -> useSmoothTransforms() || useSmoothScale)
         {
             pixmap.convertFromImage(
-              pixmap.convertToImage().smoothScale(scale_w, scale_h));
+                pixmap.convertToImage().smoothScale(scale_w, scale_h));
         }
         else
         {
@@ -272,7 +269,7 @@ void ImageLabel::slotCopyResult(KIO::Job* job)
     else
     {
         qWarning("Error downloading (%s): %s", job->errorText().ascii(),
-                                            tempFile.ascii());
+                 tempFile.ascii());
     }
 
     KIO::NetAccess::removeTempFile(tempFile);
@@ -359,7 +356,7 @@ void ImageLabel::mUpdate(QPainter* p, int backgroundUpdate)
         // start Timer
         if (imageEffect != 0)
         {
-        imageEffect -> startTimer();
+            imageEffect -> startTimer();
         }
     }
 }
@@ -418,7 +415,7 @@ bool ImageLabel::click(QMouseEvent* e)
         }
         else
         {
-          return true;
+            return true;
         }
     }
     return false;
@@ -572,7 +569,8 @@ void ImageLabel::rolloverImage(QMouseEvent *e)
 void ImageLabel::setTooltip(QString txt)
 {
     QRect rect(getX(),getY(),pixmapWidth,pixmapHeight);
-    QToolTip::add(m_karamba, rect, txt);
+    QToolTip::add
+        (m_karamba, rect, txt);
     old_tip_rect = QRect(rect.topLeft(), rect.bottomRight());
 }
 

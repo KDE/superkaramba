@@ -37,8 +37,10 @@ private:
 
     QMap<QString,QVariant> sensorMap;
 #ifdef __FreeBSD__
+
     QMap<QString,QString> sensorMapBSD;
 #endif
+
     QString sensorResult;
 
 private slots:

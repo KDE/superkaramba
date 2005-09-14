@@ -37,9 +37,9 @@ ShowDesktop* ShowDesktop::the()
 }
 
 ShowDesktop::ShowDesktop()
-  : QObject()
-  , showingDesktop( false )
-  , kWinModule( 0 )
+        : QObject()
+        , showingDesktop( false )
+        , kWinModule( 0 )
 {
     kWinModule = new KWinModule( this );
 
@@ -59,59 +59,65 @@ void ShowDesktop::slotCurrentDesktopChanged(int)
 
 void ShowDesktop::slotWindowChanged(WId w, unsigned int dirty)
 {
-  if (!showingDesktop)
-    return;
+    if (!showingDesktop)
+        return;
 
-  // SELI this needs checking for kwin_iii (_NET_SHOWING_DESKTOP)
-  if ( dirty & NET::XAWMState )
-  {
-    NETWinInfo inf(QX11Info::display(), w, QX11Info::appRootWindow(),
-                   NET::XAWMState | NET::WMWindowType);
-    NET::WindowType windowType = inf.windowType(NET::AllTypesMask);
-    if ((windowType == NET::Normal || windowType == NET::Unknown)
-        && inf.mappingState() == NET::Visible )
+    // SELI this needs checking for kwin_iii (_NET_SHOWING_DESKTOP)
+    if ( dirty & NET::XAWMState )
     {
-      // a window was deiconified, abort the show desktop mode.
-      iconifiedList.clear();
-      showingDesktop = false;
-      emit desktopShown( false );
+        NETWinInfo inf(QX11Info::display(), w, QX11Info::appRootWindow(),
+                       NET::XAWMState | NET::WMWindowType);
+        NET::WindowType windowType = inf.windowType(NET::AllTypesMask);
+        if ((windowType == NET::Normal || windowType == NET::Unknown)
+                && inf.mappingState() == NET::Visible )
+        {
+            // a window was deiconified, abort the show desktop mode.
+            iconifiedList.clear();
+            showingDesktop = false;
+            emit desktopShown( false );
+        }
     }
-  }
 }
 
 void ShowDesktop::showDesktop( bool b )
 {
-    if( b == showingDesktop ) return;
+    if( b == showingDesktop )
+        return;
     showingDesktop = b;
 
-    if ( b ) {
+    if ( b )
+    {
         // this code should move to KWin after supporting NETWM1.2
         iconifiedList.clear();
         const QList<WId> windows = kWinModule->windows();
         QList<WId>::ConstIterator it;
         QList<WId>::ConstIterator end( windows.end() );
-        for ( it=windows.begin(); it!=end; ++it ) {
+        for ( it=windows.begin(); it!=end; ++it )
+        {
             WId w = *it;
             NETWinInfo info( QX11Info::display(), w, QX11Info::appRootWindow(),
                              NET::XAWMState | NET::WMDesktop );
             if ( info.mappingState() == NET::Visible &&
-                 ( info.desktop() == NETWinInfo::OnAllDesktops
-                   || info.desktop() == (int) kWinModule->currentDesktop() )
-                ) {
+                    ( info.desktop() == NETWinInfo::OnAllDesktops
+                      || info.desktop() == (int) kWinModule->currentDesktop() )
+               )
+            {
                 iconifiedList.append( w );
             }
         }
         // find first, hide later, otherwise transients may get minimized
         // with the window they're transient for
-	foreach (WId it, iconifiedList)
-	{
-	    KWin::iconifyWindow(it, false);
-	}
-    } else {
         foreach (WId it, iconifiedList)
-	{
-	    KWin::deIconifyWindow(it, false);
-	}
+        {
+            KWin::iconifyWindow(it, false);
+        }
+    }
+    else
+    {
+        foreach (WId it, iconifiedList)
+        {
+            KWin::deIconifyWindow(it, false);
+        }
     }
 
     emit desktopShown( showingDesktop );

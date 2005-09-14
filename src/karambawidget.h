@@ -118,7 +118,10 @@ public:
     KarambaWidget(QString fn, bool reloading = false, int instance = -1);
     virtual ~KarambaWidget();
 
-    const ThemeFile& theme() const { return m_theme; };
+    const ThemeFile& theme() const
+    {
+        return m_theme;
+    };
 
     void setSensor(const LineParser& lineParser, Meter* meter);
     QString getSensor(Meter* meter);
@@ -134,17 +137,38 @@ public:
     KProcess* currProcess;
     bool useSmoothTransforms();
 
-    void setWidgetUpdate(bool wu) { widgetUpdate = wu; };
-    bool getWidgetUpdate() { return widgetUpdate; };
-    bool hasMeter(Meter* meter) { return meterList.count(meter) > 0; };
-    char getTempUnit() { return tempUnit; };
+    void setWidgetUpdate(bool wu)
+    {
+        widgetUpdate = wu;
+    };
+    bool getWidgetUpdate()
+    {
+        return widgetUpdate;
+    };
+    bool hasMeter(Meter* meter)
+    {
+        return meterList.count(meter) > 0;
+    };
+    char getTempUnit()
+    {
+        return tempUnit;
+    };
     void addMenuConfigOption(QString key, QString name);
     bool setMenuConfigOption(QString key, bool value);
     bool readMenuConfigOption(QString key);
     void writeConfigData();
-    TextField* getDefaultTextProps() { return defaultTextField; };
-    int instance() const { return m_instance; };
-    void setInstance(int instance) { m_instance = instance; };
+    TextField* getDefaultTextProps()
+    {
+        return defaultTextField;
+    };
+    int instance() const
+    {
+        return m_instance;
+    };
+    void setInstance(int instance)
+    {
+        m_instance = instance;
+    };
     void closeTheme(bool reloading = false);
     void keyPressed(const QString& s, const Meter* meter);
 
@@ -287,38 +311,38 @@ private:
  */
 class DesktopChangeSlot : public QObject
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
-  DesktopChangeSlot(QObject *parent, int desktop_id);
-  /* Parent should be the karamba object
-   * desktop id of 0 indicates all desktops */
-  void setMenuId(int id);
-  int menuId();
+public:
+    DesktopChangeSlot(QObject *parent, int desktop_id);
+    /* Parent should be the karamba object
+     * desktop id of 0 indicates all desktops */
+    void setMenuId(int id);
+    int menuId();
 
-  public slots:
-      void receive();
+public slots:
+    void receive();
 
- protected:
-  int desktopid;
-  int menuid;
+protected:
+    int desktopid;
+    int menuid;
 };
 
 /** SignalBridge is an ungulate that lives in the forests of wild Wisconsin. */
 class SignalBridge : public QObject
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     SignalBridge(QObject* parent, QString, KActionCollection*);
 
-  signals:
+signals:
     void enabled(QString, bool);
 
-  public slots:
+public slots:
     void receive();
 
-  private:
+private:
     KActionCollection* collection;
 };
 

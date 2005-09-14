@@ -13,100 +13,98 @@
 #include "themesdlg.h"
 
 KarambaIface::KarambaIface(): DCOPObject("KarambaIface")
-{
-}
+{}
 
 KarambaIface::~KarambaIface()
-{
-}
+{}
 
 KarambaWidget* KarambaIface::getKaramba(QString name)
 {
-  KarambaWidget* result = 0;
+    KarambaWidget* result = 0;
 
-  foreach (QWidget *w, QApplication::allWidgets())
-  {
-    if (QString(w->name()).startsWith("karamba"))
+    foreach (QWidget *w, QApplication::allWidgets())
     {
-      KarambaWidget* k = (KarambaWidget*) w;
-      if(k->theme().name() == name)
-      {
-        result = k;
-        break;
-      }
+        if (QString(w->name()).startsWith("karamba"))
+        {
+            KarambaWidget* k = (KarambaWidget*) w;
+            if(k->theme().name() == name)
+            {
+                result = k;
+                break;
+            }
+        }
     }
-  }
-  return result;
+    return result;
 }
 
 ThemesDlg* KarambaIface::getThemeWnd()
 {
-  ThemesDlg* result = 0;
+    ThemesDlg* result = 0;
 
-  foreach (QWidget *w, QApplication::allWidgets())
-  {
-    if (QString(w->name()) == "ThemesLayout")
+    foreach (QWidget *w, QApplication::allWidgets())
     {
-      result = (ThemesDlg*) w;
-      break;
+        if (QString(w->name()) == "ThemesLayout")
+        {
+            result = (ThemesDlg*) w;
+            break;
+        }
     }
-  }
-  return result;
+    return result;
 }
 
 void KarambaIface::openTheme(QString filename)
 {
-  QFileInfo file(filename);
-  if(file.exists())
-  {
-    (new KarambaWidget(filename, false))->show();
-  }
+    QFileInfo file(filename);
+    if(file.exists())
+    {
+        (new KarambaWidget(filename, false))->show();
+    }
 }
 
 void KarambaIface::closeTheme(QString name)
 {
-  KarambaWidget* k;
+    KarambaWidget* k;
 
-  while(k = getKaramba(name))
-  {
-    k->writeConfigData();
-    k->close(true);
-  }
+    while(k = getKaramba(name))
+    {
+        k->writeConfigData();
+        k->close(true);
+    }
 }
 
 int KarambaIface::themeAdded(QString appId, QString file)
 {
-  ThemesDlg* tw = getThemeWnd();
-  if(tw)
-    return tw->addTheme(appId, file);
-  return -1;
+    ThemesDlg* tw = getThemeWnd();
+    if(tw)
+        return tw->addTheme(appId, file);
+    return -1;
 }
 
 void KarambaIface::themeClosed(QString appId, QString file, int instance)
 {
-  ThemesDlg* tw = getThemeWnd();
-  if(tw)
-    tw->removeTheme(appId, file, instance);
+    ThemesDlg* tw = getThemeWnd();
+    if(tw)
+        tw->removeTheme(appId, file, instance);
 }
 
 bool KarambaIface::isMainKaramba()
 {
-  if(getThemeWnd())
-    return true;
-  return false;
+    if(getThemeWnd())
+        return true;
+    return false;
 }
 
 void KarambaIface::quit()
 {
-  karambaApp->quitSuperKaramba();
+    karambaApp->quitSuperKaramba();
 }
 
 void KarambaIface::hideSystemTray(bool hide)
 {
-  karambaApp->hideSysTray(hide);
+    karambaApp->hideSysTray(hide);
 }
 
 void KarambaIface::showThemeDialog()
 {
-  karambaApp->showThemeDialog();
+    karambaApp->showThemeDialog();
 }

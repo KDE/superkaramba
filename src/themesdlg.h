@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005 Petri Damstén <petri.damsten@iki.fi>
+ * Copyright (C) 2005 Petri Damstï¿½ <petri.damsten@iki.fi>
  *
  * This file is part of SuperKaramba.
  *
@@ -33,7 +33,7 @@ class ThemesDlg : public QDialog, private Ui::ThemesLayout
 {
     Q_OBJECT
 
-  public:
+public:
     ThemesDlg(QWidget *parent = 0, const char *name = 0);
     virtual ~ThemesDlg();
 
@@ -44,7 +44,7 @@ class ThemesDlg : public QDialog, private Ui::ThemesLayout
     void saveUserAddedThemes();
     QStringList runningThemes();
 
-  protected slots:
+protected slots:
     virtual void addToDesktop();
     virtual void selectionChanged(int);
     virtual void openLocalTheme();
@@ -52,13 +52,13 @@ class ThemesDlg : public QDialog, private Ui::ThemesLayout
     virtual void search(const QString& text);
     virtual void uninstall();
 
-  protected:
+protected:
     static bool filter(int index, QWidget* widget, void* data);
     void populateListbox();
     int themeIndex(QString file);
     QStringList themes();
 
-  private:
+private:
     SKNewStuff *mNewStuff;
     QStringList m_newStuffStatus;
 };

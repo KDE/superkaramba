@@ -15,7 +15,7 @@
 
 class dcopIface : virtual public DCOPObject
 {
-  K_DCOP
+    K_DCOP
 public:
 
 k_dcop:

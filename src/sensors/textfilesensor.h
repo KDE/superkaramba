@@ -36,7 +36,7 @@
 class TextFileSensor : public Sensor
 {
 
-Q_OBJECT
+    Q_OBJECT
 public:
     TextFileSensor( const QString &fileName, bool rdf, int interval, const QString &encoding=QString::null );
 
@@ -49,9 +49,9 @@ signals:
     void textfileValues(QVariant);
 
 private:
-QTextCodec *codec;
-QString fileName;
-bool rdf;
+    QTextCodec *codec;
+    QString fileName;
+    bool rdf;
 };
 
 #endif // TEXTFILESENSOR_H

@@ -92,35 +92,35 @@ bool NoatunSensor::isRunning()
 
 QString NoatunSensor::getTitle()
 {
- /*   DCOPCString data, replyData;
-    QByteArray replyType;
-    QString result;
-    QDataStream arg(&data, IO_WriteOnly);
-    arg << 5;
-    if (!client->call( noatunID, DCOPCString("Noatun"), DCOPCString("title()"),
-                       data, replyType, replyData))
-    {
-        result = "";
-        qDebug("there was some error using DCOP.");
-    }
-    else
-    {
-        QDataStream reply(&replyData, IO_ReadOnly);
-        if (replyType == "QString")
-        {
-            reply >> result;
-            result.replace( QRegExp("_")," " );
-            result.replace( QRegExp(".mp3$"),"" );
+    /*   DCOPCString data, replyData;
+       QByteArray replyType;
+       QString result;
+       QDataStream arg(&data, IO_WriteOnly);
+       arg << 5;
+       if (!client->call( noatunID, DCOPCString("Noatun"), DCOPCString("title()"),
+                          data, replyType, replyData))
+       {
+           result = "";
+           qDebug("there was some error using DCOP.");
+       }
+       else
+       {
+           QDataStream reply(&replyData, IO_ReadOnly);
+           if (replyType == "QString")
+           {
+               reply >> result;
+               result.replace( QRegExp("_")," " );
+               result.replace( QRegExp(".mp3$"),"" );
 
-        }
-        else
-        {
-            result = "";
-            qDebug("title returned an unexpected type of reply!");
-        }
-    }
-    return result;
-*/
+           }
+           else
+           {
+               result = "";
+               qDebug("title returned an unexpected type of reply!");
+           }
+       }
+       return result;
+    */
 }
 
 
@@ -131,7 +131,7 @@ int NoatunSensor::getTime()
     if (!dcopResult.get(result))
     {
         qDebug("Something went wrong with the call!");
-	result = 0;
+        result = 0;
     }
 
     return result;
@@ -158,10 +158,10 @@ void NoatunSensor::setMaxValue( SensorParams *sp)
     meter = sp->getMeter();
     QString f;
     f = sp->getParam("FORMAT");
-
+ 
     if ( f == "%full" )
         meter->setMax( 1 );
-
+ 
 }
 */
 #include "noatunsensor.moc"

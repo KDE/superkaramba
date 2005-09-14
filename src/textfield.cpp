@@ -14,18 +14,17 @@
 
 TextField::TextField( )
 {
-  setFontSize(12);
-  setColor(QColor(192, 192, 192));
-  setBGColor(QColor(0, 0, 0));
-  setFont("Helvetica");
-  setAlignment(Qt::AlignLeft);
-  setFixedPitch(false);
-  setShadow(0);
+    setFontSize(12);
+    setColor(QColor(192, 192, 192));
+    setBGColor(QColor(0, 0, 0));
+    setFont("Helvetica");
+    setAlignment(Qt::AlignLeft);
+    setFixedPitch(false);
+    setShadow(0);
 }
 
 TextField::~TextField()
-{
-}
+{}
 
 TextField::TextField( const TextField& def )
 {
@@ -60,7 +59,7 @@ TextField& TextField::operator=(const TextField& rhs)
 
 void TextField::setColor(QColor clr)
 {
-  color = clr;
+    color = clr;
 }
 
 QColor TextField::getColor() const

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005 Petri Damstén <petri.damsten@iki.fi>
+ * Copyright (C) 2005 Petri Damstï¿½ <petri.damsten@iki.fi>
  *
  * This file is part of SuperKaramba.
  *
@@ -32,26 +32,32 @@
 class ThemeWidget : public QWidget, public Ui::ThemeWidgetLayout
 {
     Q_OBJECT
-  public:
+public:
     ThemeWidget(QWidget *parent = 0, const char *name = 0);
     ThemeWidget(ThemeFile* tf);
     virtual ~ThemeWidget();
 
-    ThemeFile* themeFile() const { return m_themeFile; };
+    ThemeFile* themeFile() const
+    {
+        return m_themeFile;
+    };
 
     int  addInstance();
-    int  instances() const { return m_instancePool.count(); };
+    int  instances() const
+    {
+        return m_instancePool.count();
+    };
     void removeInstance(int instance);
 
     void setDescriptionText(QString text);
     void setHeaderText(QString text);
     void showButton(bool show);
 
-  protected:
+protected:
     void updateRunning();
     void setDescriptionMaxHeight();
 
-  private:
+private:
     ThemeFile* m_themeFile;
     QList<int> m_instancePool;
 };

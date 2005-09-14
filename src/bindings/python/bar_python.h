@@ -1,7 +1,7 @@
 /****************************************************************************
 *  bar_python.cpp  -  Functions for bar python api
 *
-*  Copyright (c) 2004 Petri Damstén <damu@iki.fi>
+*  Copyright (c) 2004 Petri Damstï¿½ <damu@iki.fi>
 *
 *  This file is part of SuperKaramba.
 *

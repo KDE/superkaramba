@@ -25,8 +25,7 @@ void Sensor::start()
 }
 
 Sensor::~Sensor()
-{
-}
+{}
 
 //SensorParams* Sensor::hasMeter( Meter *meter )
 //{

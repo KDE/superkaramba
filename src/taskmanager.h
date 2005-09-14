@@ -1,25 +1,25 @@
 /*****************************************************************
-
+ 
 Copyright (c) 2000-2001 Matthias Elter <elter@kde.org>
 Copyright (c) 2001 Richard Moore <rich@kde.org>
-
+ 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
-
+ 
 The above copyright notice and this permission notice shall be included in
 all copies or substantial portions of the Software.
-
+ 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
 AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN
 AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
+ 
 ******************************************************************/
 
 #ifndef __taskmanager_h__
@@ -72,16 +72,34 @@ public:
     Task( WId win, TaskManager * parent, const char *name = 0 );
     virtual ~Task();
 
-    TaskManager* taskManager() const { return (TaskManager*) parent(); }
+    TaskManager* taskManager() const
+    {
+        return (TaskManager*) parent();
+    }
 
-    WId window() const { return _win; }
-    QString name() const { return _info.name(); }
-    QString visibleName() const { return _info.visibleName(); }
+    WId window() const
+    {
+        return _win;
+    }
+    QString name() const
+    {
+        return _info.name();
+    }
+    QString visibleName() const
+    {
+        return _info.visibleName();
+    }
     /**
      * Returns the desktop on which this task's window resides.
      */
-    int desktop() const { return _info.desktop(); }
-    QString visibleNameWithState() const { return _info.visibleNameWithState(); }
+    int desktop() const
+    {
+        return _info.desktop();
+    }
+    QString visibleNameWithState() const
+    {
+        return _info.visibleNameWithState();
+    }
     QString iconName() const;
     QString visibleIconName() const;
     QString className();
@@ -91,14 +109,20 @@ public:
      * A list of the window ids of all transient windows (dialogs) associated
      * with this task.
      */
-    QList<WId> transients() const { return _transients; }
+    QList<WId> transients() const
+    {
+        return _transients;
+    }
 
     /**
      * Returns a 16x16 (KIcon::Small) icon for the task. This method will
      * only fall back to a static icon if there is no icon of any size in
      * the WM hints.
      */
-    QPixmap pixmap() const { return _pixmap; }
+    QPixmap pixmap() const
+    {
+        return _pixmap;
+    }
 
     /**
      * Returns the best icon for any of the KIcon::StdSizes. If there is no
@@ -190,11 +214,20 @@ public:
     //* @internal
     void refresh(bool icon = false);
     //* @internal
-    void addTransient( WId w ) { _transients.append( w ); }
+    void addTransient( WId w )
+    {
+        _transients.append( w );
+    }
     //* @internal
-    void removeTransient( WId w ) { _transients.remove( w ); }
+    void removeTransient( WId w )
+    {
+        _transients.remove( w );
+    }
     //* @internal
-    bool hasTransient( WId w ) const { return _transients.contains( w ); }
+    bool hasTransient( WId w ) const
+    {
+        return _transients.contains( w );
+    }
     //* @internal
     void setActive(bool a);
 
@@ -203,26 +236,38 @@ public:
     /**
      * Returns the current thumbnail size.
      */
-    double thumbnailSize() const { return _thumbSize; }
+    double thumbnailSize() const
+    {
+        return _thumbSize;
+    }
 
     /**
      * Sets the size for the window thumbnail. For example a size of
      * 0.2 indicates the thumbnail will be 20% of the original window
      * size.
      */
-    void setThumbnailSize( double size ) { _thumbSize = size; }
+    void setThumbnailSize( double size )
+    {
+        _thumbSize = size;
+    }
 
     /**
      * Returns true if this task has a thumbnail. Note that this method
      * can only ever return true after a call to updateThumbnail().
      */
-    bool hasThumbnail() const { return !_thumb.isNull(); }
+    bool hasThumbnail() const
+    {
+        return !_thumb.isNull();
+    }
 
     /**
      * Returns the thumbnail for this task (or a null image if there is
      * none).
      */
-    const QPixmap &thumbnail() const { return _thumb; }
+    const QPixmap &thumbnail() const
+    {
+        return _thumb;
+    }
 
 public slots:
     // actions
@@ -257,9 +302,9 @@ public slots:
      */
     void lower();
 
-   /**
-     * Activate the task's window.
-     */
+    /**
+      * Activate the task's window.
+      */
     void activate();
 
     /**
@@ -368,25 +413,37 @@ class Startup: public QObject
 
 public:
     Startup( const KStartupInfoId& id, const KStartupInfoData& data, QObject * parent,
-        const char *name = 0);
+             const char *name = 0);
     virtual ~Startup();
 
     /**
      * The name of the starting task (if known).
      */
-    QString text() const { return _data.findName(); }
+    QString text() const
+    {
+        return _data.findName();
+    }
 
     /**
      * The name of the executable of the starting task.
      */
-    QString bin() const { return _data.bin(); }
+    QString bin() const
+    {
+        return _data.bin();
+    }
 
     /**
      * The name of the icon to be used for the starting task.
      */
-    QString icon() const { return _data.findIcon(); }
+    QString icon() const
+    {
+        return _data.findIcon();
+    }
     void update( const KStartupInfoData& data );
-    const KStartupInfoId& id() const { return _id; }
+    const KStartupInfoId& id() const
+    {
+        return _id;
+    }
 
 signals:
     /**
@@ -428,13 +485,19 @@ public:
      * Returns a list of all current tasks. Return type changed to
      * QPtrList in KDE 3.
      */
-    TaskList tasks() const { return _tasks; }
+    TaskList tasks() const
+    {
+        return _tasks;
+    }
 
     /**
      * Returns a list of all current startups. Return type changed to
      * QPtrList in KDE 3.
      */
-    StartupList startups() const { return _startups; }
+    StartupList startups() const
+    {
+        return _startups;
+    }
 
     /**
      * Returns the name of the nth desktop.

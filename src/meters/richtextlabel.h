@@ -24,7 +24,7 @@
 class RichTextLabel : public Meter
 {
     Q_OBJECT
-  public:
+public:
     RichTextLabel(KarambaWidget*);
     RichTextLabel(KarambaWidget* k, int x, int y, int w, int h);
     ~RichTextLabel();
@@ -32,7 +32,10 @@ class RichTextLabel : public Meter
     void setText(QString text, bool linkUnderline = false);
     void setValue(QString text);
     void setValue(int v);
-    QString getStringValue() { return source; };
+    QString getStringValue()
+    {
+        return source;
+    };
 
     void setFont(QString font);
     QString getFont() const;
@@ -55,7 +58,7 @@ class RichTextLabel : public Meter
 public slots:
     void update(QVariant);
 
-  private:
+private:
     Q3SimpleRichText* text;
     QString source;
     QFont font;

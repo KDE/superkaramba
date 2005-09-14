@@ -30,7 +30,7 @@
 MemSensor::MemSensor(int msec) : Sensor(msec)
 {
 #ifdef __FreeBSD__
-   /* get the page size with "getpagesize" and calculate pageshift from it */
+    /* get the page size with "getpagesize" and calculate pageshift from it */
     int pagesize = getpagesize();
     pageshift = 0;
     while (pagesize > 1)
@@ -43,6 +43,7 @@ MemSensor::MemSensor(int msec) : Sensor(msec)
     pageshift -= 10;
 
 # if __FreeBSD_version < 500018
+
     connect(&ksp, SIGNAL(receivedStdout(KProcess *, char *, int )),
             this,SLOT(receivedStdout(KProcess *, char *, int )));
     connect(&ksp, SIGNAL(processExited(KProcess *)),
@@ -54,9 +55,11 @@ MemSensor::MemSensor(int msec) : Sensor(msec)
 
     readValues();
 # else
+
     kd = kvm_open("/dev/null", "/dev/null", "/dev/null", O_RDONLY, "kvm_open");
 # endif
 #else
+
     readValues();
 #endif
 }
@@ -72,8 +75,7 @@ void MemSensor::receivedStdout(KProcess *, char *buffer, int len )
 }
 #else
 void MemSensor::receivedStdout(KProcess *, char *, int)
-{
-}
+{}
 #endif
 
 void MemSensor::processExited(KProcess *)
@@ -97,6 +99,7 @@ int MemSensor::getMemTotal()
     sysctlbyname("hw.physmem", &mem, &size, NULL, 0);
     return (mem / 1024);
 #else
+
     QRegExp rx( "MemTotal:\\s*(\\d+)" );
     rx.search( meminfo );
     return ( rx.cap(1).toInt() );
@@ -112,6 +115,7 @@ int MemSensor::getMemFree()
     sysctlbyname("vm.stats.vm.v_free_count", &mem, &size, NULL, 0);
     return (pagetok(mem));
 #else
+
     QRegExp rx( "MemFree:\\s*(\\d+)" );
     rx.search( meminfo );
     return ( rx.cap(1).toInt() );
@@ -128,6 +132,7 @@ int MemSensor::getBuffers()
     sysctlbyname("vfs.bufspace", &mem, &size, NULL, 0);
     return (mem / 1024);
 #else
+
     QRegExp rx( "Buffers:\\s*(\\d+)" );
     rx.search( meminfo );
     return ( rx.cap(1).toInt() );
@@ -143,6 +148,7 @@ int MemSensor::getCached()
     sysctlbyname("vm.stats.vm.v_cache_count", &mem, &size, NULL, 0);
     return (pagetok(mem));
 #else
+
     QRegExp rx1( "Cached:\\s*(\\d+)" );
     QRegExp rx2( "SwapCached:\\s*(\\d+)" );
     rx1.search( meminfo );
@@ -158,6 +164,7 @@ int MemSensor::getSwapTotal()
 # if __FreeBSD_version < 500018
     return(swapTotal);
 # else
+
     int n = -1;
     int pagesize = getpagesize();
     int retavail = 0;
@@ -173,6 +180,7 @@ int MemSensor::getSwapTotal()
     return(retavail);
 # endif
 #else
+
     QRegExp rx( "SwapTotal:\\s*(\\d+)" );
     rx.search( meminfo );
     return ( rx.cap(1).toInt() );
@@ -185,6 +193,7 @@ int MemSensor::getSwapFree()
 # if __FreeBSD_version < 500018
     return(swapTotal - swapUsed);
 # else
+
     int n = -1;
     int pagesize = getpagesize();
     int retfree = 0;
@@ -199,6 +208,7 @@ int MemSensor::getSwapFree()
     return(retfree);
 # endif
 #else
+
     QRegExp rx( "SwapFree:\\s*(\\d+)" );
     rx.search( meminfo );
     return ( rx.cap(1).toInt() );
@@ -214,6 +224,7 @@ void MemSensor::readValues()
     ksp.start( KProcess::NotifyOnExit,KProcIO::Stdout);
 # endif
 #else
+
     QFile file("/proc/meminfo");
     QString line;
     if ( file.open(IO_ReadOnly | IO_Translate) )
@@ -236,7 +247,9 @@ void MemSensor::update()
     QMap<QString, QVariant> map;
     readValues();
 #if (defined(__FreeBSD__) && __FreeBSD_version < 500018)
-    bool set = false;
+
+    bool set
+        = false;
 #endif
 
     int totalMem = getMemTotal();
@@ -246,9 +259,12 @@ void MemSensor::update()
     int usedSwap = totalSwap - getSwapFree();
 
 #if (defined(__FreeBSD__) && __FreeBSD_version < 500018)
-    if ( (!MaxSet) && (totalSwap > 0) ) {
-       setMaxValue(sp);
-       bool set = true;
+
+    if ( (!MaxSet) && (totalSwap > 0) )
+    {
+        setMaxValue(sp);
+        bool set
+            = true;
     }
 #endif
 
@@ -267,7 +283,9 @@ void MemSensor::update()
     emit memValues(QVariant(map));
 
 #if (defined(__FreeBSD__) && __FreeBSD_version < 500018)
-    if (set)
+
+    if (set
+       )
         MaxSet = true;
 #endif
 
@@ -279,7 +297,7 @@ void MemSensor::setMaxValue( SensorParams *sp )
     meter = sp->getMeter();
     QString f;
     f = sp->getParam("FORMAT");
-
+ 
     if (f.length() == 0 )
     {
         f = "%um";

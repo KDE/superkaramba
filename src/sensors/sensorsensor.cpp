@@ -27,8 +27,9 @@ SensorSensor::SensorSensor(int interval, char tempUnit) : Sensor( interval )
     sensorMapBSD["temp2"] = "TEMP1";
     sensorMapBSD["temp3"] = "TEMP2";
 #endif
+
     if(tempUnit == 'F')
-      extraParams = " -f";
+        extraParams = " -f";
     connect(&ksp, SIGNAL(receivedStdout(KProcess *, char *, int )),
             this,SLOT(receivedStdout(KProcess *, char *, int )));
     connect(&ksp, SIGNAL(processExited(KProcess *)),
@@ -39,8 +40,7 @@ SensorSensor::SensorSensor(int interval, char tempUnit) : Sensor( interval )
 
 
 SensorSensor::~SensorSensor()
-{
-}
+{}
 
 void SensorSensor::addMeter(Meter* meter)
 {
@@ -60,10 +60,13 @@ void SensorSensor::processExited(KProcess *)
     sensorResult = "";
     QStringList::Iterator it = stringList.begin();
 #ifdef __FreeBSD__
+
     QRegExp rx( "^(\\S+)\\s+:\\s+[\\+\\-]?(\\d+\\.?\\d*)");
 #else
+
     QRegExp rx( "^(.+):\\s+[\\+\\-]?(\\d+\\.?\\d*)");
 #endif
+
     while( it != stringList.end())
     {
         rx.search( *it );
@@ -79,6 +82,7 @@ void SensorSensor::processExited(KProcess *)
     //format.replace( QRegExp("%v", false), sensorMap[sensorMapBSD[type]]);
     emit sensorValues(QVariant(sensorMap));
 #else
+
     emit sensorValues(QVariant(sensorMap));
 #endif
 }
@@ -87,10 +91,13 @@ void SensorSensor::update()
 {
     ksp.clearArguments();
 #ifdef __FreeBSD__
+
     ksp << "mbmon -r -c 1" << extraParams;
 #else
+
     ksp << "sensors" << extraParams;
 #endif
+
     ksp.start( KProcess::NotifyOnExit,KProcIO::Stdout);
 }
 

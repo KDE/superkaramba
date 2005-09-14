@@ -21,11 +21,11 @@
 #include "karambawidget.h"
 #include <q3listbox.h>
 
-class KarambaListBoxItem : public Q3ListBoxText 
+class KarambaListBoxItem : public Q3ListBoxText
 {
 
 public:
-  QString appId; 
-  KarambaListBoxItem( Q3ListBox* listbox, const QString & text=QString::null );
+    QString appId;
+    KarambaListBoxItem( Q3ListBox* listbox, const QString & text=QString::null );
 
 };

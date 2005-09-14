@@ -11,22 +11,19 @@
 #include "sensor.h"
 
 Meter::Meter(KarambaWidget* k, int ix, int iy, int iw, int ih):
-  boundingBox(ix, iy, iw, ih), leftButtonAction(""), middleButtonAction(""),
-  rightButtonAction(""), clickable(true), hidden(0), m_sensor(0),
-  m_karamba(k)
-{
-}
+        boundingBox(ix, iy, iw, ih), leftButtonAction(""), middleButtonAction(""),
+        rightButtonAction(""), clickable(true), hidden(0), m_sensor(0),
+        m_karamba(k)
+{}
 
 Meter::Meter(KarambaWidget* k):
-  boundingBox(0, 0, 0, 0), leftButtonAction(""), middleButtonAction(""),
-  rightButtonAction(""), clickable(true), hidden(0), m_sensor(0),
-  m_karamba(k)
-{
-}
+        boundingBox(0, 0, 0, 0), leftButtonAction(""), middleButtonAction(""),
+        rightButtonAction(""), clickable(true), hidden(0), m_sensor(0),
+        m_karamba(k)
+{}
 
 Meter::~Meter()
-{
-}
+{}
 
 void Meter::attachToSensor(Sensor* sensor)
 {
@@ -42,82 +39,81 @@ void Meter::detachFromSensor()
 
 bool Meter::click(QMouseEvent*)
 {
-  return false;
+    return false;
 }
 
 void Meter::setSize(int ix, int iy, int iw, int ih)
 {
-  boundingBox.setRect(ix, iy, iw, ih);
-  recalculateValue();
+    boundingBox.setRect(ix, iy, iw, ih);
+    recalculateValue();
 }
 
 int Meter::getX()
 {
-  return boundingBox.x();
+    return boundingBox.x();
 }
 
 int Meter::getY()
 {
-  return boundingBox.y();
+    return boundingBox.y();
 }
 
 void Meter::setX(int newx)
 {
-  int temp = boundingBox.width();
-  boundingBox.setX(newx);
-  boundingBox.setWidth(temp);
+    int temp = boundingBox.width();
+    boundingBox.setX(newx);
+    boundingBox.setWidth(temp);
 }
 
 void Meter::setY(int newy)
 {
-  int temp = boundingBox.height();
-  boundingBox.setY(newy);
-  boundingBox.setHeight(temp);
+    int temp = boundingBox.height();
+    boundingBox.setY(newy);
+    boundingBox.setHeight(temp);
 }
 
 int Meter::getWidth()
 {
-  return boundingBox.width();
+    return boundingBox.width();
 }
 int Meter::getHeight()
 {
-  return boundingBox.height();
+    return boundingBox.height();
 }
 
 void Meter::setWidth(int width)
 {
-  boundingBox.setWidth(width);
-  recalculateValue();
+    boundingBox.setWidth(width);
+    recalculateValue();
 }
 
 void Meter::setHeight(int height)
 {
-  boundingBox.setHeight(height);
-  recalculateValue();
+    boundingBox.setHeight(height);
+    recalculateValue();
 }
 
 QRect Meter::getBoundingBox()
 {
-  return boundingBox;
+    return boundingBox;
 }
 
 void Meter::setEnabled(bool e)
 {
-  clickable = e;
+    clickable = e;
 }
 
 bool Meter::isEnabled()
 {
-  return clickable;
+    return clickable;
 }
 
 bool Meter::insideActiveArea(int x, int y)
 {
-  return boundingBox.contains(x, y) && clickable;
+    return boundingBox.contains(x, y) && clickable;
 }
 
 void Meter::update(QVariant values)
-{
-}
+{}
 
 #include "meter.moc"

@@ -3,7 +3,7 @@
 *
 *  Copyright (C) 2003 Hans Karlsson <karlsson.h@home.se>
 *  Copyright (C) 2003-2004 Adam Geitgey <adam@rootnode.org>
-*  Copyright (c) 2004 Petri Damstén <damu@iki.fi>
+*  Copyright (c) 2004 Petri Damstï¿½ <damu@iki.fi>
 *
 *  This file is part of SuperKaramba.
 *
@@ -36,171 +36,171 @@
 // This does something with a task, such as minimize or close it
 int performTaskAction(long widget, long ctask, long action)
 {
-  KarambaWidget* currTheme = (KarambaWidget*)widget;
-  Task* currTask = 0;
+    KarambaWidget* currTheme = (KarambaWidget*)widget;
+    Task* currTask = 0;
 
-  TaskList taskList = currTheme -> taskManager.tasks();
+    TaskList taskList = currTheme -> taskManager.tasks();
 
-  foreach (Task *task, taskList)
-  {
-    if ((long)task == (long)ctask)
+    foreach (Task *task, taskList)
     {
-      currTask = task;
+        if ((long)task == (long)ctask)
+        {
+            currTask = task;
+        }
     }
-  }
 
-  if (currTask != 0)
-  {
-    switch (action)
+    if (currTask != 0)
     {
-      case 1:
-        currTask->maximize();
-        break;
+        switch (action)
+        {
+        case 1:
+            currTask->maximize();
+            break;
 
-      case 2:
-        currTask->restore();
-        break;
+        case 2:
+            currTask->restore();
+            break;
 
-      case 3:
-        currTask->iconify();
-        break;
+        case 3:
+            currTask->iconify();
+            break;
 
-      case 4:
-        currTask->close();
-        break;
+        case 4:
+            currTask->close();
+            break;
 
-      case 5:
-        currTask->activate();
-        break;
+        case 5:
+            currTask->activate();
+            break;
 
-      case 6:
-        currTask->raise();
-        break;
+        case 6:
+            currTask->raise();
+            break;
 
-      case 7:
-        currTask->lower();
-        break;
+        case 7:
+            currTask->lower();
+            break;
 
-      case 8:
-        currTask->activateRaiseOrIconify();
-        break;
+        case 8:
+            currTask->activateRaiseOrIconify();
+            break;
 
-      case 9:
-        currTask->toggleAlwaysOnTop();
-        break;
+        case 9:
+            currTask->toggleAlwaysOnTop();
+            break;
 
-      case 10:
-        currTask->toggleShaded();
-        break;
+        case 10:
+            currTask->toggleShaded();
+            break;
 
-      default:
-        printf("You are trying to perform an invalid action in \
-                performTaskAction\n");
+        default:
+            printf("You are trying to perform an invalid action in \
+                   performTaskAction\n");
+        }
+        return 1;
     }
-    return 1;
-  }
-  else
-  {
-    return 0;
-  }
+    else
+    {
+        return 0;
+    }
 }
 
 PyObject* py_perform_task_action(PyObject *, PyObject *args)
 {
-  long widget, task, action;
-  if (!PyArg_ParseTuple(args, (char*)"lll:performTaskAction",
-                        &widget, &task, &action))
-    return NULL;
-  if (!checkKaramba(widget))
-    return NULL;
-  return Py_BuildValue((char*)"l", performTaskAction(widget, task, action));
+    long widget, task, action;
+    if (!PyArg_ParseTuple(args, (char*)"lll:performTaskAction",
+                          &widget, &task, &action))
+        return NULL;
+    if (!checkKaramba(widget))
+        return NULL;
+    return Py_BuildValue((char*)"l", performTaskAction(widget, task, action));
 }
 
 // This returns all the info about a certain task
 // Return type is a Python List
 PyObject* getTaskInfo(long widget, long ctask)
 {
-  KarambaWidget* currTheme = (KarambaWidget*)widget;
-  Task* currTask = 0;
-  TaskList taskList = currTheme -> taskManager.tasks();
-  foreach (Task *task, taskList)
-  {
-    if ((long)task == (long)ctask)
+    KarambaWidget* currTheme = (KarambaWidget*)widget;
+    Task* currTask = 0;
+    TaskList taskList = currTheme -> taskManager.tasks();
+    foreach (Task *task, taskList)
     {
-      currTask = task;
+        if ((long)task == (long)ctask)
+        {
+            currTask = task;
+        }
     }
-  }
 
-  if (currTask != 0)
-  {
-    PyObject* pList = PyList_New(0);
-
-    //Task Name
-    if (currTask->name() != NULL)
+    if (currTask != 0)
     {
-      PyList_Append(pList, PyString_FromString(currTask->name().latin1()));
+        PyObject* pList = PyList_New(0);
+
+        //Task Name
+        if (currTask->name() != NULL)
+        {
+            PyList_Append(pList, PyString_FromString(currTask->name().latin1()));
+        }
+        else
+        {
+            PyList_Append(pList, PyString_FromString(""));
+        }
+
+        //Icon Name
+        if (currTask->iconName() != NULL)
+        {
+            PyList_Append(pList, PyString_FromString(currTask->iconName().latin1()));
+        }
+        else
+        {
+            PyList_Append(pList, PyString_FromString(""));
+        }
+
+        //Class Name
+        if (currTask->className() != NULL)
+        {
+            PyList_Append(pList, PyString_FromString(currTask->className().latin1()));
+        }
+        else
+        {
+            PyList_Append(pList, PyString_FromString(""));
+        }
+
+        // Desktop this task is on
+        PyList_Append(pList, PyInt_FromLong(currTask->desktop()));
+
+        // is it maximized?
+        PyList_Append(pList, PyInt_FromLong(currTask->isMaximized()));
+
+        // is it iconified?
+        PyList_Append(pList, PyInt_FromLong(currTask->isIconified()));
+
+        // is it shaded?
+        PyList_Append(pList, PyInt_FromLong(currTask->isShaded()));
+
+        // is it focused?
+        PyList_Append(pList, PyInt_FromLong(currTask->isActive()));
+
+        // a reference back to itself
+        PyList_Append(pList, PyInt_FromLong((long)currTask));
+
+        return pList;
+
     }
     else
     {
-      PyList_Append(pList, PyString_FromString(""));
+        qWarning("Task not found.");
+        return NULL;
     }
-
-    //Icon Name
-    if (currTask->iconName() != NULL)
-    {
-      PyList_Append(pList, PyString_FromString(currTask->iconName().latin1()));
-    }
-    else
-    {
-      PyList_Append(pList, PyString_FromString(""));
-    }
-
-    //Class Name
-    if (currTask->className() != NULL)
-    {
-      PyList_Append(pList, PyString_FromString(currTask->className().latin1()));
-    }
-    else
-    {
-      PyList_Append(pList, PyString_FromString(""));
-    }
-
-    // Desktop this task is on
-    PyList_Append(pList, PyInt_FromLong(currTask->desktop()));
-
-    // is it maximized?
-    PyList_Append(pList, PyInt_FromLong(currTask->isMaximized()));
-
-    // is it iconified?
-    PyList_Append(pList, PyInt_FromLong(currTask->isIconified()));
-
-    // is it shaded?
-    PyList_Append(pList, PyInt_FromLong(currTask->isShaded()));
-
-    // is it focused?
-    PyList_Append(pList, PyInt_FromLong(currTask->isActive()));
-
-    // a reference back to itself
-    PyList_Append(pList, PyInt_FromLong((long)currTask));
-
-    return pList;
-
-  }
-  else
-  {
-    qWarning("Task not found.");
-    return NULL;
-  }
 }
 
 PyObject* py_get_task_info(PyObject *, PyObject *args)
 {
-  long widget, task;
-  if (!PyArg_ParseTuple(args, (char*)"ll:getTaskInfo", &widget, &task))
-    return NULL;
-  if (!checkKaramba(widget))
-    return NULL;
-  return getTaskInfo(widget, task);
+    long widget, task;
+    if (!PyArg_ParseTuple(args, (char*)"ll:getTaskInfo", &widget, &task))
+        return NULL;
+    if (!checkKaramba(widget))
+        return NULL;
+    return getTaskInfo(widget, task);
 }
 
 // This returns all the info about a certain startup
@@ -271,12 +271,12 @@ PyObject* getStartupInfo(long widget, long cstartup)
 
 PyObject* py_get_startup_info(PyObject*, PyObject* args)
 {
-  long widget, startup;
-  if (!PyArg_ParseTuple(args, (char*)"ll:getStartupInfo", &widget, &startup))
-    return NULL;
-  if (!checkKaramba(widget))
-    return NULL;
-  return getStartupInfo(widget, startup);
+    long widget, startup;
+    if (!PyArg_ParseTuple(args, (char*)"ll:getStartupInfo", &widget, &startup))
+        return NULL;
+    if (!checkKaramba(widget))
+        return NULL;
+    return getStartupInfo(widget, startup);
 }
 
 // This gets a system task list
@@ -292,22 +292,22 @@ PyObject* getTaskNames(long widget)
     {
         const char* tmp = task->name().latin1();
         if(tmp == 0)
-          continue;
+            continue;
         pString = PyString_FromString(tmp);
         if(pString)
-          PyList_Append(pList, pString);
+            PyList_Append(pList, pString);
     }
     return pList;
 }
 
 PyObject* py_get_task_names(PyObject *, PyObject *args)
 {
-  long widget;
-  if(!PyArg_ParseTuple(args, (char*)"l:getTaskNames", &widget))
-    return NULL;
-  if (!checkKaramba(widget))
-    return NULL;
-  return getTaskNames(widget);
+    long widget;
+    if(!PyArg_ParseTuple(args, (char*)"l:getTaskNames", &widget))
+        return NULL;
+    if (!checkKaramba(widget))
+        return NULL;
+    return getTaskNames(widget);
 }
 
 // This gets a system task list
@@ -329,12 +329,12 @@ PyObject* getTaskList(long widget)
 
 PyObject* py_get_task_list(PyObject *, PyObject *args)
 {
-  long widget;
-  if(!PyArg_ParseTuple(args, (char*)"l:getTaskList", &widget))
-    return NULL;
-  if (!checkKaramba(widget))
-    return NULL;
-  return getTaskList(widget);
+    long widget;
+    if(!PyArg_ParseTuple(args, (char*)"l:getTaskList", &widget))
+        return NULL;
+    if (!checkKaramba(widget))
+        return NULL;
+    return getTaskList(widget);
 }
 
 // This gets a system startup list
@@ -347,7 +347,7 @@ PyObject* getStartupList(long widget)
     StartupList startupList = currTheme -> taskManager.startups();
     foreach (Startup *startup, startupList)
     {
-	pString = PyInt_FromLong((long) startup);
+        pString = PyInt_FromLong((long) startup);
         PyList_Append(pList, pString);
     }
     return pList;
@@ -355,10 +355,10 @@ PyObject* getStartupList(long widget)
 
 PyObject* py_get_startup_list(PyObject *, PyObject *args)
 {
-  long widget;
-  if(!PyArg_ParseTuple(args, (char*)"l:getStartupList", &widget))
-    return NULL;
-  if (!checkKaramba(widget))
-    return NULL;
-  return getStartupList(widget);
+    long widget;
+    if(!PyArg_ParseTuple(args, (char*)"l:getStartupList", &widget))
+        return NULL;
+    if (!checkKaramba(widget))
+        return NULL;
+    return getStartupList(widget);
 }

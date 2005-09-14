@@ -3,7 +3,7 @@
 *
 *  Copyright (C) 2003 Hans Karlsson <karlsson.h@home.se>
 *  Copyright (C) 2003-2004 Adam Geitgey <adam@rootnode.org>
-*  Copyright (c) 2004 Petri Damstén <damu@iki.fi>
+*  Copyright (c) 2004 Petri Damstï¿½ <damu@iki.fi>
 *
 *  This file is part of SuperKaramba.
 *
@@ -35,201 +35,201 @@
 
 PyObject* py_createText(PyObject *, PyObject *args)
 {
-  long widget, x, y, w, h;
-  PyObject *text;
-  if (!PyArg_ParseTuple(args, (char*)"lllllO:createText", &widget, &x, &y, &w, &h, &text))
-    return NULL;
-  if (!checkKaramba(widget))
-    return NULL;
-  TextLabel *tmp =
-      new TextLabel((KarambaWidget*)widget, (int)x, (int)y, (int)w, (int)h);
-  tmp->setValue(PyString2QString(text));
-  tmp->setTextProps(((KarambaWidget*)widget)->getDefaultTextProps());
-  ((KarambaWidget*)widget)->meterList.append(tmp);
-  return (Py_BuildValue((char*)"l", (long)tmp));
+    long widget, x, y, w, h;
+    PyObject *text;
+    if (!PyArg_ParseTuple(args, (char*)"lllllO:createText", &widget, &x, &y, &w, &h, &text))
+        return NULL;
+    if (!checkKaramba(widget))
+        return NULL;
+    TextLabel *tmp =
+        new TextLabel((KarambaWidget*)widget, (int)x, (int)y, (int)w, (int)h);
+    tmp->setValue(PyString2QString(text));
+    tmp->setTextProps(((KarambaWidget*)widget)->getDefaultTextProps());
+    ((KarambaWidget*)widget)->meterList.append(tmp);
+    return (Py_BuildValue((char*)"l", (long)tmp));
 }
 
 PyObject* py_deleteText(PyObject *, PyObject *args)
 {
-  long widget, meter;
-  if (!PyArg_ParseTuple(args, (char*)"ll:deleteText", &widget, &meter))
-    return NULL;
-  if (!checkKarambaAndMeter(widget, meter, "TextLabel"))
-    return NULL;
+    long widget, meter;
+    if (!PyArg_ParseTuple(args, (char*)"ll:deleteText", &widget, &meter))
+        return NULL;
+    if (!checkKarambaAndMeter(widget, meter, "TextLabel"))
+        return NULL;
 
-  ((KarambaWidget*)widget)->deleteMeterFromSensors((Meter*)meter);
-  ((KarambaWidget*)widget)->clickList.removeAll((Meter*)meter);
-  return Py_BuildValue((char*)"l",
-      ((KarambaWidget*)widget)->meterList.removeAll((Meter*)meter));
+    ((KarambaWidget*)widget)->deleteMeterFromSensors((Meter*)meter);
+    ((KarambaWidget*)widget)->clickList.removeAll((Meter*)meter);
+    return Py_BuildValue((char*)"l",
+                         ((KarambaWidget*)widget)->meterList.removeAll((Meter*)meter));
 }
 
 PyObject* py_getThemeText(PyObject *self, PyObject *args)
 {
-  return py_getThemeMeter(self, args, "TextLabel");
+    return py_getThemeMeter(self, args, "TextLabel");
 }
 
 PyObject* py_getTextSize(PyObject *self, PyObject *args)
 {
-  return py_getSize(self, args, "TextLabel");
+    return py_getSize(self, args, "TextLabel");
 }
 
 PyObject* py_resizeText(PyObject *self, PyObject *args)
 {
-  return py_resize(self, args, "TextLabel");
+    return py_resize(self, args, "TextLabel");
 }
 
 PyObject* py_getTextPos(PyObject *self, PyObject *args)
 {
-  return py_getPos(self, args, "TextLabel");
+    return py_getPos(self, args, "TextLabel");
 }
 
 PyObject* py_moveText(PyObject *self, PyObject *args)
 {
-  return py_move(self, args, "TextLabel");
+    return py_move(self, args, "TextLabel");
 }
 
 PyObject* py_hideText(PyObject *self, PyObject *args)
 {
-  return py_hide(self, args, "TextLabel");
+    return py_hide(self, args, "TextLabel");
 }
 
 PyObject* py_showText(PyObject *self, PyObject *args)
 {
-  return py_show(self, args, "TextLabel");
+    return py_show(self, args, "TextLabel");
 }
 
 PyObject* py_getTextValue(PyObject *self, PyObject *args)
 {
-  return py_getStringValue(self, args, "TextLabel");
+    return py_getStringValue(self, args, "TextLabel");
 }
 
 PyObject* py_setTextValue(PyObject *self, PyObject *args)
 {
-  return py_setStringValue(self, args, "TextLabel");
+    return py_setStringValue(self, args, "TextLabel");
 }
 
 PyObject* py_getTextSensor(PyObject *self, PyObject *args)
 {
-  return py_getSensor(self, args, "TextLabel");
+    return py_getSensor(self, args, "TextLabel");
 }
 
 PyObject* py_setTextSensor(PyObject *self, PyObject *args)
 {
-  return py_setSensor(self, args, "TextLabel");
+    return py_setSensor(self, args, "TextLabel");
 }
 
 PyObject* py_getTextColor(PyObject *self, PyObject *args)
 {
-  return py_getColor(self, args, "TextLabel");
+    return py_getColor(self, args, "TextLabel");
 }
 
 PyObject* py_setTextColor(PyObject *self, PyObject *args)
 {
-  return py_setColor(self, args, "TextLabel");
+    return py_setColor(self, args, "TextLabel");
 }
 
 PyObject* py_setTextShadow(PyObject *, PyObject *args)
 {
-  long widget, textSensor;
-  long shadow;
-  if (!PyArg_ParseTuple(args, (char*)"lll:changeTextShadow",
-      &widget, &textSensor, &shadow))
-    return NULL;
-  if (!checkKarambaAndMeter(widget, textSensor, "TextLabel"))
-    return NULL;
-  ((TextLabel*)textSensor)->setShadow( shadow );
-  return Py_BuildValue((char*)"l", 1);
+    long widget, textSensor;
+    long shadow;
+    if (!PyArg_ParseTuple(args, (char*)"lll:changeTextShadow",
+                          &widget, &textSensor, &shadow))
+        return NULL;
+    if (!checkKarambaAndMeter(widget, textSensor, "TextLabel"))
+        return NULL;
+    ((TextLabel*)textSensor)->setShadow( shadow );
+    return Py_BuildValue((char*)"l", 1);
 }
 
 PyObject* py_getTextShadow(PyObject *, PyObject *args)
 {
-  long widget, textSensor;
-  if (!PyArg_ParseTuple(args, (char*)"ll:getTextShadow", &widget, &textSensor))
-    return NULL;
-  if (!checkKarambaAndMeter(widget, textSensor, "TextLabel"))
-    return NULL;
-  return Py_BuildValue((char*)"l", ((TextLabel*)textSensor)->getShadow());
+    long widget, textSensor;
+    if (!PyArg_ParseTuple(args, (char*)"ll:getTextShadow", &widget, &textSensor))
+        return NULL;
+    if (!checkKarambaAndMeter(widget, textSensor, "TextLabel"))
+        return NULL;
+    return Py_BuildValue((char*)"l", ((TextLabel*)textSensor)->getShadow());
 }
 
 PyObject* py_setTextFontSize(PyObject *, PyObject *args)
 {
-  long widget, textSensor;
-  long size;
-  if (!PyArg_ParseTuple(args, (char*)"lll:changeTextSize",
-      &widget, &textSensor, &size))
-    return NULL;
-  if (!checkKarambaAndMeter(widget, textSensor, "TextLabel"))
-    return NULL;
-  ((TextLabel*)textSensor)->setFontSize( size );
-  return Py_BuildValue((char*)"l", 1);
+    long widget, textSensor;
+    long size;
+    if (!PyArg_ParseTuple(args, (char*)"lll:changeTextSize",
+                          &widget, &textSensor, &size))
+        return NULL;
+    if (!checkKarambaAndMeter(widget, textSensor, "TextLabel"))
+        return NULL;
+    ((TextLabel*)textSensor)->setFontSize( size );
+    return Py_BuildValue((char*)"l", 1);
 }
 
 PyObject* py_getTextFontSize(PyObject *, PyObject *args)
 {
-  long widget, textSensor;
-  if (!PyArg_ParseTuple(args, (char*)"ll:getTextSize", &widget, &textSensor))
-    return NULL;
-  if (!checkKarambaAndMeter(widget, textSensor, "TextLabel"))
-    return NULL;
-  return Py_BuildValue((char*)"l", ((TextLabel*)textSensor)->getFontSize());
+    long widget, textSensor;
+    if (!PyArg_ParseTuple(args, (char*)"ll:getTextSize", &widget, &textSensor))
+        return NULL;
+    if (!checkKarambaAndMeter(widget, textSensor, "TextLabel"))
+        return NULL;
+    return Py_BuildValue((char*)"l", ((TextLabel*)textSensor)->getFontSize());
 }
 
 PyObject* py_setTextFont(PyObject *, PyObject *args)
 {
-  long widget, textSensor;
-  char* text;
-  if (!PyArg_ParseTuple(args, (char*)"lls:changeTextFont",
-      &widget, &textSensor, &text))
-    return NULL;
-  if (!checkKarambaAndMeter(widget, textSensor, "TextLabel"))
-    return NULL;
-  ((TextLabel*)textSensor)->setFont( text );
-  return Py_BuildValue((char*)"l", 1);
+    long widget, textSensor;
+    char* text;
+    if (!PyArg_ParseTuple(args, (char*)"lls:changeTextFont",
+                          &widget, &textSensor, &text))
+        return NULL;
+    if (!checkKarambaAndMeter(widget, textSensor, "TextLabel"))
+        return NULL;
+    ((TextLabel*)textSensor)->setFont( text );
+    return Py_BuildValue((char*)"l", 1);
 }
 
 PyObject* py_getTextFont(PyObject *, PyObject *args)
 {
-  long widget, textSensor;
-  if (!PyArg_ParseTuple(args, (char*)"ll:getTextFont", &widget, &textSensor))
-    return NULL;
-  if (!checkKarambaAndMeter(widget, textSensor, "TextLabel"))
-    return NULL;
-  return Py_BuildValue((char*)"s", ((TextLabel*)textSensor)->getFont().ascii());
+    long widget, textSensor;
+    if (!PyArg_ParseTuple(args, (char*)"ll:getTextFont", &widget, &textSensor))
+        return NULL;
+    if (!checkKarambaAndMeter(widget, textSensor, "TextLabel"))
+        return NULL;
+    return Py_BuildValue((char*)"s", ((TextLabel*)textSensor)->getFont().ascii());
 }
 
 PyObject* py_setTextAlign(PyObject *, PyObject *args)
 {
-  long widget, textSensor;
-  char* text;
-  if (!PyArg_ParseTuple(args, (char*)"lls:changeTextFont",
-      &widget, &textSensor, &text))
-    return NULL;
-  if (!checkKarambaAndMeter(widget, textSensor, "TextLabel"))
-    return NULL;
-  ((TextLabel*)textSensor)->setAlignment( text );
-  return Py_BuildValue((char*)"l", 1);
+    long widget, textSensor;
+    char* text;
+    if (!PyArg_ParseTuple(args, (char*)"lls:changeTextFont",
+                          &widget, &textSensor, &text))
+        return NULL;
+    if (!checkKarambaAndMeter(widget, textSensor, "TextLabel"))
+        return NULL;
+    ((TextLabel*)textSensor)->setAlignment( text );
+    return Py_BuildValue((char*)"l", 1);
 }
 
 PyObject* py_getTextAlign(PyObject *, PyObject *args)
 {
-  long widget, textSensor;
-  if (!PyArg_ParseTuple(args, (char*)"ll:getTextFont", &widget, &textSensor))
-    return NULL;
-  if (!checkKarambaAndMeter(widget, textSensor, "TextLabel"))
-    return NULL;
-  return Py_BuildValue((char*)"s", ((TextLabel*)textSensor)->getAlignment().ascii());
+    long widget, textSensor;
+    if (!PyArg_ParseTuple(args, (char*)"ll:getTextFont", &widget, &textSensor))
+        return NULL;
+    if (!checkKarambaAndMeter(widget, textSensor, "TextLabel"))
+        return NULL;
+    return Py_BuildValue((char*)"s", ((TextLabel*)textSensor)->getAlignment().ascii());
 }
 
 PyObject* py_setTextScroll(PyObject *, PyObject *args)
 {
-  long widget, textSensor;
-  char* type;
-  int x=0, y=0, pause=0, gap=0;
-  if (!PyArg_ParseTuple(args, (char*)"lls|llll:setScroll",
-      &widget, &textSensor, &type, &x, &y, &gap, &pause))
-    return NULL;
-  if (!checkKarambaAndMeter(widget, textSensor, "TextLabel"))
-    return NULL;
-  ((TextLabel*)textSensor)->setScroll(type, QPoint(x,y), gap, pause);
-  return Py_BuildValue((char*)"l", 1);
+    long widget, textSensor;
+    char* type;
+    int x=0, y=0, pause=0, gap=0;
+    if (!PyArg_ParseTuple(args, (char*)"lls|llll:setScroll",
+                          &widget, &textSensor, &type, &x, &y, &gap, &pause))
+        return NULL;
+    if (!checkKarambaAndMeter(widget, textSensor, "TextLabel"))
+        return NULL;
+    ((TextLabel*)textSensor)->setScroll(type, QPoint(x,y), gap, pause);
+    return Py_BuildValue((char*)"l", 1);
 }

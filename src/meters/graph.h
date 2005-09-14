@@ -17,35 +17,56 @@
 
 class Graph : public Meter
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
-  Graph(KarambaWidget* k, int ix, int iy, int iw, int ih, int nbrPoints);
-  Graph();
-  ~Graph();
+    Graph(KarambaWidget* k, int ix, int iy, int iw, int ih, int nbrPoints);
+    Graph();
+    ~Graph();
 
-  void setValue( int );
-  int getValue() { return lastValue; };
-  void setValue( QString );
+    void setValue( int );
+    int getValue()
+    {
+        return lastValue;
+    };
+    void setValue( QString );
 
-    virtual void setMax(int max) { m_maxValue = max; };
-    virtual void setMin(int min) { m_minValue = min; };
-    virtual int getMax() { return m_minValue; };
-    virtual int getMin() { return m_maxValue; };
+    virtual void setMax(int max)
+    {
+        m_maxValue = max;
+    };
+    virtual void setMin(int min)
+    {
+        m_minValue = min;
+    };
+    virtual int getMax()
+    {
+        return m_minValue;
+    };
+    virtual int getMin()
+    {
+        return m_maxValue;
+    };
 
-    virtual void setColor(QColor clr) { m_color = clr; };
-    virtual QColor getColor() { return m_color; };
+    virtual void setColor(QColor clr)
+    {
+        m_color = clr;
+    };
+    virtual QColor getColor()
+    {
+        return m_color;
+    };
 
-  void mUpdate( QPainter * );
+    void mUpdate( QPainter * );
 
 public slots:
     void update(QVariant);
 
 private:
-  int lastValue;
-  int* values;
-  int nbrPoints;
-  int ptPtr;  // points to the array position
+    int lastValue;
+    int* values;
+    int nbrPoints;
+    int ptPtr;  // points to the array position
 
     int m_minValue;
     int m_maxValue;

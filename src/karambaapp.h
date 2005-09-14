@@ -31,21 +31,21 @@ class KarambaApplication : public KApplication
 
     friend class KarambaIface;
 
-  private:
+private:
     static int fd;
     KHelpMenu* m_helpMenu;
 
     void showKarambaMenuExtension(bool show = true);
     void setToolTip(const QString &tip = QString::null);
 
-  protected:
+protected:
     KarambaIface* iface;
     ThemesDlg* themeListWindow;
     dcopIface_stub* dcopIfaceStub;
     QList<QObject *> karambaList;
     KSystemTray* sysTrayIcon;
 
-  public:
+public:
     KarambaApplication();
     ~KarambaApplication();
 
@@ -56,9 +56,18 @@ class KarambaApplication : public KApplication
     void checkPreviousSession(KApplication &app, QStringList &lst);
     void checkCommandLine(KCmdLineArgs *args, QStringList &lst);
     bool startThemes(QStringList &lst);
-    KarambaIface* dcopIface() { return iface; };
-    dcopIface_stub* dcopStub() { return dcopIfaceStub; };
-    QWidget* parentWindow() { return (QWidget*)themeListWindow; };
+    KarambaIface* dcopIface()
+    {
+        return iface;
+    };
+    dcopIface_stub* dcopStub()
+    {
+        return dcopIfaceStub;
+    };
+    QWidget* parentWindow()
+    {
+        return (QWidget*)themeListWindow;
+    };
 
     void addKaramba(KarambaWidget* k, bool reloading = false);
     void deleteKaramba(KarambaWidget* k, bool reloading = false);
@@ -68,13 +77,13 @@ class KarambaApplication : public KApplication
     static void unlockKaramba();
     static void checkSuperKarambaDir();
 
-  public slots:
+public slots:
     void buildToolTip();
     void globalQuitSuperKaramba();
     void globalShowThemeDialog();
     void globalHideSysTray(bool hide = true);
 
-  protected slots:
+protected slots:
     void quitSuperKaramba();
     void showThemeDialog();
     void hideSysTray(bool hide = true);

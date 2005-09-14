@@ -14,7 +14,7 @@
 #include "graph.moc"
 
 Graph::Graph(KarambaWidget* k, int x, int y, int w, int h, int nbrPts)
-    :   Meter(k, x, y, w, h),
+        :   Meter(k, x, y, w, h),
         lastValue(0),
         ptPtr(0)
 {
@@ -76,9 +76,9 @@ void Graph::mUpdate(QPainter *p)
         {
             nextXPos = xPos + step;
             p->drawLine(getX() + (int)xPos, getY()+getHeight() -
-                            (int) values[(ptPtr+i) % nbrPoints] ,
+                        (int) values[(ptPtr+i) % nbrPoints] ,
                         getX() + (int)nextXPos, getY()+getHeight() -
-                            (int) values[(ptPtr + i +1) % nbrPoints] );
+                        (int) values[(ptPtr + i +1) % nbrPoints] );
             xPos = nextXPos;
         }
     }

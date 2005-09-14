@@ -1,7 +1,7 @@
 /****************************************************************************
 *  bar_python.cpp  -  Functions for bar python api
 *
-*  Copyright (c) 2004 Petri Damstén <damu@iki.fi>
+*  Copyright (c) 2004 Petri Damstï¿½ <damu@iki.fi>
 *
 *  This file is part of SuperKaramba.
 *
@@ -70,7 +70,7 @@ PyObject* py_deleteBar(PyObject *, PyObject *args)
     ((KarambaWidget*)widget)->deleteMeterFromSensors((Meter*)meter);
 
     return Py_BuildValue((char*)"l",
-        ((KarambaWidget*)widget)->meterList.removeAll((Meter*)meter));
+                         ((KarambaWidget*)widget)->meterList.removeAll((Meter*)meter));
 }
 
 PyObject* py_getThemeBar(PyObject *self, PyObject *args)

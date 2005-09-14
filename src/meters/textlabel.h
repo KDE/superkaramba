@@ -22,7 +22,7 @@
 
 class TextLabel : public Meter
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     typedef enum ScrollType { ScrollNone, ScrollNormal,
                               ScrollBackAndForth, ScrollOnePass };
@@ -35,7 +35,10 @@ public:
     void setValue( QString );
     void setValue( int );
     //virtual QString getStringValue() const { return value.join("\n"); };
-    QString getStringValue() const { return value.join("\n"); };
+    QString getStringValue() const
+    {
+        return value.join("\n");
+    };
     void setFontSize( int );
     void setBGColor(QColor clr);
     void setFont( QString );
@@ -60,8 +63,14 @@ public:
 
     virtual bool click(QMouseEvent*);
 
-    void setColor(QColor clr) { m_color = clr; };
-    QColor getColor() { return m_color; };
+    void setColor(QColor clr)
+    {
+        m_color = clr;
+    };
+    QColor getColor()
+    {
+        return m_color;
+    };
 
 public slots:
     void update(QVariant);
