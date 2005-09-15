@@ -374,9 +374,18 @@ void TextLabel::attachClickArea(QString leftMouseButton,
     rightButtonAction = rightMouseButton;
 }
 
-void TextLabel::update(QVariant)
+void TextLabel::update(QVariant values)
 {
-    // TODO Set a correct value depending on the FORMAT string
+    QVariantMap map = values.toMap();
+    QList<QString> keys = map.keys();
+    QListIterator<QString> it(keys);
+    QString format = QString(m_format);
+    while(it.hasNext())
+    {
+        QString k = it.next();
+        format.replace(k, map[k].toString());
+    }
+    setValue(format);
 }
 
 #include "textlabel.moc"

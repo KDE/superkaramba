@@ -105,8 +105,8 @@ void DiskSensor::processExited(KProcess *)
     }
     stringList.clear();
 
-    QString format;
-    QString mntPt;
+    #warning Fix this
+    QString mntPt = "/";
 
     map["%fp"] = getPercentFree(mntPt);
     map["%fg"] = getFreeSpace(mntPt)/(1024*1024);
