@@ -133,7 +133,7 @@ long attachClickArea(long widget, long meter, QString LeftButton, QString Middle
     Meter* currMeter = (Meter*) meter;
 
     // Look if currMeter has an ClickArea attached.
-    bool meterAlreadyClickable = currTheme->clickList.count(currMeter);
+    bool meterAlreadyClickable = currTheme->clickList.count((ClickMap *)currMeter);
 
     // if currMeter is of type ImageLabel*
     if (ImageLabel* image = dynamic_cast<ImageLabel*>(currMeter))
@@ -142,7 +142,7 @@ long attachClickArea(long widget, long meter, QString LeftButton, QString Middle
         if (!meterAlreadyClickable)
         {
             //qWarning("attachClickArea : meter is image");
-            currTheme->clickList.append(image);
+            currTheme->clickList.append((ClickMap *)image);
         }
     }
     // else if currMeter is of type TextLabel*
@@ -152,7 +152,7 @@ long attachClickArea(long widget, long meter, QString LeftButton, QString Middle
         if (!meterAlreadyClickable)
         {
             //qWarning("attachClickArea : meter is text");
-            currTheme->clickList.append(text);
+            currTheme->clickList.append((ClickMap *)text);
         }
     }
     else
@@ -280,7 +280,7 @@ long createClickArea(long widget, long x, long y, long w, long h, char* text)
 
     tmp->setOnClick(onclick );
 
-    currTheme->clickList.append(tmp);
+    currTheme->clickList.append((ClickMap *)tmp);
     return (long)tmp;
 }
 

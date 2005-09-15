@@ -46,7 +46,7 @@ PyObject* py_createRichText(PyObject *, PyObject *args)
     tmp->setText(PyString2QString(text), underline);
     tmp->setTextProps(((KarambaWidget*)widget)->getDefaultTextProps());
     ((KarambaWidget*)widget)->meterList.append(tmp);
-    ((KarambaWidget*)widget)->clickList.append(tmp);
+    ((KarambaWidget*)widget)->clickList.append((ClickMap *)tmp);
     return (Py_BuildValue((char*)"l", (long)tmp));
 }
 
@@ -59,7 +59,7 @@ PyObject* py_deleteRichText(PyObject *, PyObject *args)
         return NULL;
 
     ((KarambaWidget*)widget)->deleteMeterFromSensors((Meter*)meter);
-    ((KarambaWidget*)widget)->clickList.removeAll((Meter*)meter);
+    ((KarambaWidget*)widget)->clickList.removeAll((ClickMap *)meter);
     return Py_BuildValue((char*)"l",
                          ((KarambaWidget*)widget)->meterList.removeAll((Meter*)meter));
 }

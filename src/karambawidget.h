@@ -103,6 +103,7 @@
 
 class KarambaPython;
 class LineParser;
+class ImageLabel;
 
 class KarambaWidget :  public QWidget
 {
@@ -111,9 +112,9 @@ class KarambaWidget :  public QWidget
 public:
     // TODO: Make sure to clear and delete these when your done later!
     QList<QObject *> meterList;
-    QList<QObject *> imageList;
-    QList<QObject *> clickList;
-    QList<QObject *> menuList;
+    QList<ImageLabel *> imageList;
+    QList<ClickMap *> clickList;
+    QList<KPopupMenu *> menuList;
 
     KarambaWidget(QString fn, bool reloading = false, int instance = -1);
     virtual ~KarambaWidget();
@@ -263,8 +264,8 @@ private:
 
 
     QMap<QString, Sensor*> sensorMap;
-    QList<QObject *> sensorList;
-    QList<QObject *> timeList;
+    QList<Sensor *> sensorList;
+    QList<Sensor *> timeList;
 
     QTime lowerTimer;
     // use only the first occurance of KARAMBA in a config file

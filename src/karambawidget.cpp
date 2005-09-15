@@ -310,8 +310,8 @@ KarambaWidget::~KarambaWidget()
     meterList.clear();
     qDeleteAll(sensorList);
     sensorList.clear();
-    qDeleteAll(imageList);
-    imageList.clear();
+    //qDeleteAll(imageList);
+    //imageList.clear();
     qDeleteAll(clickList);
     clickList.clear();
     qDeleteAll(timeList);
@@ -530,7 +530,7 @@ bool KarambaWidget::parseConfig()
                 tmp->setOnClick(lineParser.getString("ONCLICK"));
 
                 setSensor(lineParser, (Meter*)tmp);
-                clickList.append( tmp );
+                clickList.append( (ClickMap *)tmp );
                 if( lineParser.getBoolean("PREVIEW"))
                     meterList.append( tmp );
             }
@@ -661,7 +661,7 @@ bool KarambaWidget::parseConfig()
                         tmp->setName(name.ascii());
 
                     setSensor(lineParser, (Meter*)tmp);
-                    clickList.append(tmp);
+                    clickList.append((ClickMap *)tmp);
                     meterList.append ( tmp );
                 }
 
@@ -1222,7 +1222,7 @@ void KarambaWidget::meterClicked(QMouseEvent* e, Meter* meter)
 void KarambaWidget::passClick(QMouseEvent *e)
 {
     //qDebug("KarambaWidget::passClick");
-    QListIterator<QObject *> it2( timeList ); // iterate over meters
+    QListIterator<Sensor *> it2( timeList ); // iterate over meters
     while ( it2.hasNext() )
     {
         //(( DateSensor* ) it2.next())->toggleCalendar( e );
@@ -1231,13 +1231,13 @@ void KarambaWidget::passClick(QMouseEvent *e)
 
     // We create a temporary click list here because original
     // can change during the loop (infinite loop Bug 994359)
-    QList<QObject *> clickListTmp(clickList);
-    QListIterator<QObject *> it(clickListTmp);
+    QList<ClickMap *> clickListTmp(clickList);
+    QListIterator<ClickMap *> it(clickListTmp);
     while (it.hasNext())
     {
         Meter* meter = (Meter*)(it.next());
         // Check if meter is still in list
-        if (clickList.count(meter) && meter->click(e))
+        if (clickList.count((ClickMap *)meter) && meter->click(e))
         {
             // callback
             meterClicked(e, meter);
@@ -1337,7 +1337,7 @@ void KarambaWidget::mouseMoveEvent( QMouseEvent *e )
     else
     {
         // Change cursor over ClickArea
-        QListIterator<QObject *> it(clickList);
+        QListIterator<ClickMap *> it(clickList);
         bool insideArea = false;
 
         while (it.hasNext())
@@ -1360,7 +1360,7 @@ void KarambaWidget::mouseMoveEvent( QMouseEvent *e )
                 setCursor( Qt::ArrowCursor );
         }
 
-        QListIterator<QObject *> image_it( imageList);        // iterate over image sensors
+        QListIterator<ImageLabel *> image_it( imageList);        // iterate over image sensors
         while ( image_it.hasNext() )
         {
             ((ImageLabel*) image_it.next())->rolloverImage(e);
@@ -1418,7 +1418,7 @@ void KarambaWidget::paintEvent ( QPaintEvent *e)
 void KarambaWidget::updateSensors()
 {
     //qDebug("KarambaWidget::updateSensors");
-    QListIterator<QObject *> it( sensorList ); // iterate over meters
+    QListIterator<Sensor *> it( sensorList ); // iterate over meters
     while ( it.hasNext() )
     {
         ((Sensor*) it.next())->update();
@@ -1440,7 +1440,7 @@ void KarambaWidget::updateBackground(KSharedPixmap* kpm)
     pm = QPixmap(size());
     buffer.fill(Qt::black);
 
-    QListIterator<QObject *> it( imageList ); // iterate over meters
+    QListIterator<ImageLabel *> it( imageList ); // iterate over meters
     p.begin(&buffer);
     p.drawPixmap(0, 0, background);
 

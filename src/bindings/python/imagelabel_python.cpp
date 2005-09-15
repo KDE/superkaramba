@@ -167,8 +167,8 @@ PyObject* py_deleteImage(PyObject *, PyObject *args)
     }
 
     ((KarambaWidget*)widget)->deleteMeterFromSensors((Meter*)meter);
-    ((KarambaWidget*)widget)->clickList.removeAll((Meter*)meter);
-    ((KarambaWidget*)widget)->imageList.removeAll((Meter*)meter);
+    ((KarambaWidget*)widget)->clickList.removeAll((ClickMap *)meter);
+    ((KarambaWidget*)widget)->imageList.removeAll((ImageLabel *)meter);
 
     return Py_BuildValue((char*)"l",
                          ((KarambaWidget*)widget)->meterList.removeAll((Meter*)meter));

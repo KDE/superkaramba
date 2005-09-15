@@ -58,7 +58,7 @@ PyObject* py_deleteText(PyObject *, PyObject *args)
         return NULL;
 
     ((KarambaWidget*)widget)->deleteMeterFromSensors((Meter*)meter);
-    ((KarambaWidget*)widget)->clickList.removeAll((Meter*)meter);
+    ((KarambaWidget*)widget)->clickList.removeAll((ClickMap *)meter);
     return Py_BuildValue((char*)"l",
                          ((KarambaWidget*)widget)->meterList.removeAll((Meter*)meter));
 }
