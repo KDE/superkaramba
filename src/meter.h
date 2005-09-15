@@ -10,6 +10,7 @@
 #ifndef METER_H
 #define METER_H
 
+#include <qvariant.h>
 #include <qpixmap.h>
 #include <qpainter.h>
 #include <qstring.h>
@@ -25,15 +26,24 @@ class Sensor;
 class Meter : public QObject
 {
     Q_OBJECT
+     /* So that for meter.x=50 we can use meter->setProperty(x,50) instead of
+             several if,else,switch statements, After change to QWidget, many property
+             will be vanished from here */
+            
+    Q_PROPERTY(int x READ getX WRITE setX)
+    Q_PROPERTY(int y READ getY WRITE setY)
+    Q_PROPERTY(int width READ getWidth WRITE setWidth)
+    Q_PROPERTY(int height READ getHeight WRITE setHeight)
+
 public:
 
     Meter(KarambaWidget* k, int ix,int iy,int iw,int ih);
     Meter(KarambaWidget* k);
     virtual ~Meter();
-    virtual int getX();
-    virtual int getY();
-    virtual int getWidth();
-    virtual int getHeight();
+    virtual int getX() const;
+    virtual int getY() const;
+    virtual int getWidth() const;
+    virtual int getHeight() const;
     virtual void setX(int);
     virtual void setY(int);
     virtual void setWidth(int);
@@ -46,52 +56,50 @@ public:
     // TODO Review this methods and change python ifaces //
     virtual void setMax(int max)
     {}
-    ;
     virtual void setMin(int min)
     {}
-    ;
     virtual int getMax()
     {
         return 0;
-    };
+    }
     virtual int getMin()
     {
         return 0;
-    };
+    }
     virtual void setValue(int)
     {}
-    ;
+    
     virtual int getValue()
     {
         return -1;
-    };
+    }
     virtual void setValue(QString)
     {}
-    ;
+    
     virtual QString getStringValue() const
     {
         return QString::null;
-    };
+    }
     virtual void recalculateValue()
     {}
-    ;
+    
 
     virtual void setColor(QColor clr)
     {}
-    ;
+    
     virtual QColor getColor()
     {
         return Qt::black;
-    };
+    }
     ////////////////////////////////////////////////////////
     virtual void show()
     {
         hidden = 0;
-    };
+    }
     virtual void hide()
     {
         hidden = 1;
-    };
+    }
 
     QRect getBoundingBox();
 
@@ -124,7 +132,8 @@ public:
     void setOnMiddleClick( QString );
     */
 public slots:
-    virtual void update(QVariant value);
+    virtual void update();
+    void storeData(QVariant value);
 
 protected: // Protected attributes
     QRect boundingBox;
@@ -136,7 +145,8 @@ protected: // Protected attributes
 
     bool clickable;
     int hidden;
-
+    bool autoUpdate; // the boolean to track , if signal of update will be ignored or honoured
+    QVariant data; //data from sensor storage
     QString m_format;
     Sensor* m_sensor;
     KarambaWidget* m_karamba;

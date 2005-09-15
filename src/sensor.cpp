@@ -10,19 +10,18 @@
 #include <QtAlgorithms>
 #include "sensor.h"
 
-Sensor::Sensor(int iMsec)
+Sensor::Sensor(int p_msec)
 {
-    m_msec = iMsec;
+    m_msec = p_msec; //intialization
 }
-
-void Sensor::start()
-{
-    if (!m_timer.isActive())
-    {
-        connect (&m_timer,SIGNAL(timeout()),this,SLOT(update()));
-        m_timer.start( (m_msec == 0)?1000:m_msec);
-    }
-}
+// void Sensor::start()
+// {
+//     if (!m_timer.isActive())
+//     {
+//         connect (&m_timer,SIGNAL(timeout()),this,SLOT(update()));
+//         m_timer.start( (m_msec == 0)?1000:m_msec);
+//     }
+// }
 
 Sensor::~Sensor()
 {}
@@ -41,13 +40,15 @@ Sensor::~Sensor()
 
 void Sensor::addMeter(Meter* meter)
 {
-    disconnect(0, 0, meter, SLOT(update(QVariant)));
-    connect(this, SIGNAL(valueChanged(QVariant)), meter, SLOT(update(QVariant)));
+    /*sensor doesn't know whether meter wants to update widget, when the data 
+    of sensor changes, refresh interval of meter may be different */
+//     disconnect(0, 0, meter, SLOT(update(QVariant)));
+//     connect(this, SIGNAL(valueChanged(QVariant)), meter, SLOT(update(QVariant)));
 }
 
 void Sensor::deleteMeter( Meter *meter )
 {
-    disconnect(this, 0, meter, SLOT(update(QVariant)));
+  //  disconnect(this, 0, meter, SLOT(update(QVariant)));
 }
 
 /*void Sensor::setMaxValue( SensorParams* )

@@ -23,10 +23,11 @@ class Sensor : public QObject
     Q_OBJECT
 
 public:
-    Sensor( int msec = 1000 );
+    Sensor(int msec=2000);
     virtual ~Sensor();
 
-    void start();
+//    void start();
+    /* we will discuss if addMeter/deleteMeter has any benefit. Right now after attachToSensor(), it is only a burden */
     void deleteMeter( Meter *meter );
     virtual void addMeter( Meter * );
     virtual int isEmpty()
@@ -37,12 +38,12 @@ public:
 signals:
     void valueChanged(QVariant);
 
-private:
+protected:
     int m_msec;
     QTimer m_timer;
 
 public slots:
-    virtual void update()=0;
+//    virtual void update()=0;
 
 };
 

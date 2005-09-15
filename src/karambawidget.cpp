@@ -1176,8 +1176,8 @@ void KarambaWidget::setSensor(const LineParser& lineParser, Meter* meter)
 
     if (sensor != 0)
     {
-        QTimer::singleShot( 0, sensor, SLOT(update()) );
-        sensor->start();
+//        QTimer::singleShot( 0, sensor, SLOT(update()) );
+//        sensor->start();
     }
 }
 
@@ -1418,12 +1418,13 @@ void KarambaWidget::paintEvent ( QPaintEvent *e)
 void KarambaWidget::updateSensors()
 {
     //qDebug("KarambaWidget::updateSensors");
-    QListIterator<Sensor *> it( sensorList ); // iterate over meters
+/*    QListIterator<Sensor *> it( sensorList ); // iterate over meters
     while ( it.hasNext() )
     {
         ((Sensor*) it.next())->update();
     }
     QTimer::singleShot( 500, this, SLOT(step()) );
+    */
 }
 
 void KarambaWidget::updateBackground(KSharedPixmap* kpm)

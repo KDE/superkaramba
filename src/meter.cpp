@@ -13,7 +13,7 @@
 Meter::Meter(KarambaWidget* k, int ix, int iy, int iw, int ih):
         boundingBox(ix, iy, iw, ih), leftButtonAction(""), middleButtonAction(""),
         rightButtonAction(""), clickable(true), hidden(0), m_sensor(0),
-        m_karamba(k)
+        m_karamba(k),autoUpdate(true)
 {}
 
 Meter::Meter(KarambaWidget* k):
@@ -27,13 +27,19 @@ Meter::~Meter()
 
 void Meter::attachToSensor(Sensor* sensor)
 {
-    sensor->addMeter(this);
+    /* Why sensor needs to know about meter connected? Only meters needs to know the
+     sensor connected, so that it can set its value using data provided by sensor.
+     the work of sensor is to only provide data through signal and functions */
+    //  sensor->addMeter(this);
+    connect(m_sensor,SIGNAL(valueChanged(QVariant )),this,SLOT(storeData(QVariant )));
+    
     m_sensor = sensor;
 }
 
 void Meter::detachFromSensor()
 {
-    m_sensor->deleteMeter(this);
+    //m_sensor->deleteMeter(this);
+    disconnect(m_sensor,SIGNAL(valueChanged(QVariant )),this,SLOT(storeData(QVariant )));
     m_sensor = 0;
 }
 
@@ -48,12 +54,12 @@ void Meter::setSize(int ix, int iy, int iw, int ih)
     recalculateValue();
 }
 
-int Meter::getX()
+int Meter::getX() const
 {
     return boundingBox.x();
 }
 
-int Meter::getY()
+int Meter::getY() const
 {
     return boundingBox.y();
 }
@@ -72,11 +78,11 @@ void Meter::setY(int newy)
     boundingBox.setHeight(temp);
 }
 
-int Meter::getWidth()
+int Meter::getWidth() const
 {
     return boundingBox.width();
 }
-int Meter::getHeight()
+int Meter::getHeight() const
 {
     return boundingBox.height();
 }
@@ -113,7 +119,16 @@ bool Meter::insideActiveArea(int x, int y)
     return boundingBox.contains(x, y) && clickable;
 }
 
-void Meter::update(QVariant values)
-{}
+void Meter::storeData(QVariant value)
+{
+    data=value;
+    if(autoUpdate)
+    {
+        update();
+    }
+}
+void Meter::update()
+{
+}
 
 #include "meter.moc"
