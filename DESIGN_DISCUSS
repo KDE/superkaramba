@@ -1,0 +1,32 @@
+* Sensors derived classes needs to be made singleton. Why do we need 2 cpusensor object? When values returned by them would be the same?
+  Exceptions:- The sensors, which need some parameter setting, would need to be instantiated by meters, which need them.
+  
+*Update Interval:- All Sensors dont need to set update interval at all. The sensors like tasksensor, dont even need to update in fact. 
+		  They would update data, only when system indicates that a task is changed. 
+		  
+		  In fact, those sensors need update interval, whose data change is not signaled by system. So they need to obtain
+		  current data at specific interval.
+		  But things like tasksensor, changing after certain interval of actual change by system, would look very odd.
+		  So they would change when system indicates.
+		  		  		  		  
+		  CPUSensor Will have default values for update. If the theme writer specifies any meter update interval, meter would
+		  set the update interval to be minimum of all meters connected. 
+		  Meters would refresh only when they want, although they will always have the updated data.
+
+* A Look at all sensors:-
+
+    CPUsensor:-  discussed already about updateInterval . needs singleton pattern. No parameters needed.
+    DiskSensor:- UpdateInterval just like CPUSensor. needs singleton pattern. MOUNTPOINT parameter not needed. It will return values of
+            all partition/mountpoint.
+    MemorySensor:- Just like cpusensor.
+    NetworkSensor:- updateinterval like CPU. Device parameter not needed. Need to be singleton. Decimal parameter can be set per meter.
+    NoAtun:- Singleton, no update needed. It will update only when Noatun changes (through signal)
+    Program:- Non Singleton because of PROGRAM and other  parameters. UpdateInterval has no meaning.
+    Sensor:- just like cpusensor
+    Textfile:- non-singletom. No update interval. Updates if textfile changes(through may be FAM possibly, or when meter wants)
+    Time:- cpusensor like.
+    uptime:- cpusensor like.
+    Xmms:- noatun like.
+
+* IS there any need of addMeter() after we have attachToSensor() ?
+  all the connection of sensor->meter would be done by meter themselves. 
