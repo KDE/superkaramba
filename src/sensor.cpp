@@ -40,15 +40,13 @@ Sensor::~Sensor()
 
 void Sensor::addMeter(Meter* meter)
 {
-    /*sensor doesn't know whether meter wants to update widget, when the data 
-    of sensor changes, refresh interval of meter may be different */
-//     disconnect(0, 0, meter, SLOT(update(QVariant)));
-//     connect(this, SIGNAL(valueChanged(QVariant)), meter, SLOT(update(QVariant)));
+     disconnect(0, 0, meter, SLOT(storeData(QVariant)));
+     connect(this, SIGNAL(valueChanged(QVariant)), meter, SLOT(storeData(QVariant)));
 }
 
 void Sensor::deleteMeter( Meter *meter )
 {
-  //  disconnect(this, 0, meter, SLOT(update(QVariant)));
+    disconnect(this, 0, meter, SLOT(storeData(QVariant)));
 }
 
 /*void Sensor::setMaxValue( SensorParams* )

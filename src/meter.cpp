@@ -27,19 +27,13 @@ Meter::~Meter()
 
 void Meter::attachToSensor(Sensor* sensor)
 {
-    /* Why sensor needs to know about meter connected? Only meters needs to know the
-     sensor connected, so that it can set its value using data provided by sensor.
-     the work of sensor is to only provide data through signal and functions */
-    //  sensor->addMeter(this);
-    connect(m_sensor,SIGNAL(valueChanged(QVariant )),this,SLOT(storeData(QVariant )));
-    
+    sensor->addMeter(this);    
     m_sensor = sensor;
 }
 
 void Meter::detachFromSensor()
 {
-    //m_sensor->deleteMeter(this);
-    disconnect(m_sensor,SIGNAL(valueChanged(QVariant )),this,SLOT(storeData(QVariant )));
+    m_sensor->deleteMeter(this);
     m_sensor = 0;
 }
 
