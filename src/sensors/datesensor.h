@@ -43,6 +43,7 @@ protected slots:
 private:
     bool hidden;
     DatePicker* cal;
+    QVariantMap data;
 
 };
 

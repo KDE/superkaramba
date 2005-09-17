@@ -89,41 +89,47 @@ void DiskSensor::receivedStdout(KProcess *, char *buffer, int len )
 
 void DiskSensor::processExited(KProcess *)
 {
-    QMap<QString, QVariant> map;
     //QRegExp rx( "^(/dev/).*(/\\S*)$");
     QRegExp rx( ".*\\s+(/\\S*)$");
     sensorResult = "";
+    data.clear();
 
     QStringList stringList = QStringList::split('\n',sensorResult);
     foreach (QString it, stringList)
     {
-        rx.search(it);
+        rx.indexIn(it);
         if (!rx.cap(0).isEmpty())
         {
             mntMap[rx.cap(1)] = it;
+            data[rx.cap(1)]=QVariant();
         }
     }
     stringList.clear();
 
     #warning Fix this
-    QString mntPt = "/";
+#warning Fixed :))
+    QList<QString> mntPts= data.keys();
+    foreach(QString mntPt, mntPts)
+    {
+        QMap<QString,QVariant> map;
+        map["fp"] = getPercentFree(mntPt);
+        map["fg"] = getFreeSpace(mntPt)/(1024*1024);
+        map["fkb"] = getFreeSpace(mntPt)*8;
+        map["fk"] = getFreeSpace(mntPt);
+        map["f"] = getFreeSpace(mntPt)/1024;
+        map["up"] = getPercentUsed(mntPt);
+        map["ug"] = getUsedSpace(mntPt)/(1024*1024);
+        map["ukb"] = getUsedSpace(mntPt)*8;
+        map["uk"] = getUsedSpace(mntPt);
+        map["u"] = getUsedSpace(mntPt)/1024;
+        map["tg"] = getTotalSpace(mntPt)/(1024*1024);
+        map["tkb"] = getTotalSpace(mntPt)*8;
+        map["tk"] = getTotalSpace(mntPt);
+        map["t"] = getTotalSpace(mntPt)/1024;
+        data[mntPt]=QVariant(map);
+    }
 
-    map["%fp"] = getPercentFree(mntPt);
-    map["%fg"] = getFreeSpace(mntPt)/(1024*1024);
-    map["%fkb"] = getFreeSpace(mntPt)*8;
-    map["%fk"] = getFreeSpace(mntPt);
-    map["%f"] = getFreeSpace(mntPt)/1024;
-    map["%up"] = getPercentUsed(mntPt);
-    map["%ug"] = getUsedSpace(mntPt)/(1024*1024);
-    map["%ukb"] = getUsedSpace(mntPt)*8;
-    map["%uk"] = getUsedSpace(mntPt);
-    map["%u"] = getUsedSpace(mntPt)/1024;
-    map["%tg"] = getTotalSpace(mntPt)/(1024*1024);
-    map["%tkb"] = getTotalSpace(mntPt)*8;
-    map["%tk"] = getTotalSpace(mntPt);
-    map["%t"] = getTotalSpace(mntPt)/1024;
-
-    emit diskValues(QVariant(map));
+    emit diskValues(QVariant(data));
 
     if ( init == 1 )
     {

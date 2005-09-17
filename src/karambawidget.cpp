@@ -927,7 +927,7 @@ void KarambaWidget::setSensor(const LineParser& lineParser, Meter* meter)
         {
             int interval = lineParser.getInt("INTERVAL");
             interval = (interval == 0)?1000:interval;
-            sensor = ( sensorMap["CPU"+cpuNbr] = new CPUSensor( cpuNbr, interval ) );
+            sensor = ( sensorMap["CPU"+cpuNbr] = new CPUSensor(interval ) );
             sensorList.append( sensor );
         }
         /*SensorParams *sp = new SensorParams(meter);

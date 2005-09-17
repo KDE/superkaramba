@@ -17,7 +17,8 @@
 DateSensor::DateSensor(int interval)
         :   Sensor( interval ),
         hidden(true)
-{}
+{
+}
 
 DateSensor::~DateSensor()
 {}
@@ -25,7 +26,27 @@ DateSensor::~DateSensor()
 void DateSensor::update()
 {
     QDateTime qdt  =  QDateTime::currentDateTime();
-    emit dateValue(QVariant(qdt));
+    data["d"]=QVariant(qdt.toString("d"));
+    data["dd"]=QVariant(qdt.toString("dd"));
+    data["ddd"]=QVariant(qdt.toString("ddd"));
+    data["dddd"]=QVariant(qdt.toString("ddddd"));
+    data["M"]=QVariant(qdt.toString("M"));
+    data["MM"]=QVariant(qdt.toString("MM"));
+    data["MMM"]=QVariant(qdt.toString("MMM"));
+    data["MMMM"]=QVariant(qdt.toString("MMMM"));
+    data["yy"]=QVariant(qdt.toString("yy"));
+    data["yyyy"]=QVariant(qdt.toString("yyyy"));
+    data["h"]=QVariant(qdt.toString("h"));
+    data["hh"]=QVariant(qdt.toString("hh"));
+    data["m"]=QVariant(qdt.toString("m"));
+    data["mm"]=QVariant(qdt.toString("mm"));
+    data["s"]=QVariant(qdt.toString("s"));
+    data["ss"]=QVariant(qdt.toString("ss"));
+    data["z"]=QVariant(qdt.toString("z"));
+    data["zzz"]=QVariant(qdt.toString("zzz"));
+    data["AP"]=QVariant(qdt.toString("AP"));
+    data["ap"]=QVariant(qdt.toString("ap"));
+    emit dateValue(QVariant(data));
 }
 
 void DateSensor::addMeter(Meter* meter)

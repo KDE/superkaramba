@@ -40,6 +40,7 @@ private:
     QString sensorResult;
 
     QMap<QString,QString> mntMap;
+    QMap<QString,QVariant> data;
     QStringList stringList;
 
     int init;

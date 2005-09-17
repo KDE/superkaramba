@@ -50,17 +50,7 @@ CPUSensor::CPUSensor(int interval )
             data[cpu]=QVariant(map);
         }
     }
-    QList<QString> cpus=data.keys();
-    foreach(QString cpu,cpus)
-    {
-        cpuNbr=cpu;
-        int load=getCPULoad();
-        (data[cpu]).toMap()["load"]=QVariant(load);
-        (data[cpu]).toMap()["user"]=QVariant(user);
-        (data[cpu]).toMap()["nice"]=QVariant(nice);
-        (data[cpu]).toMap()["idle"]=QVariant(idle);
-        (data[cpu]).toMap()["system"]=QVariant(system);
-    }
+    update();
 }
 
 CPUSensor::~CPUSensor()
