@@ -21,21 +21,46 @@
 #include "cpusensor.h"
 #include "cpusensor.moc"
 
-CPUSensor::CPUSensor( QString cpu, int interval )
+CPUSensor::CPUSensor(int interval )
         :   Sensor(interval),
         userTicks(0),
         sysTicks(0),
         niceTicks(0),
         idleTicks(0)
 {
-    cpuNbr = cpu;
-    QRegExp rx("^\\d+$");
-    if( rx.search( cpu.lower() ) == -1)
+#warning Inefficient propgramming
+/* actually, we are doing here the changing of cpu0 to cpu1 and so on and then getCPULoad(), but what we should have done actually is calling getCPULoad() once, which would fillup the data Map correctly.*/
+    QFile file("/proc/stat");
+    QString line;
+    //creating all the fields into data
+    if ( file.open(IO_ReadOnly | IO_Translate) )
     {
-        cpuNbr = "";
+        QTextStream t( &file );        // use a text stream
+        line = t.readLine();
+        while( (line = t.readLine()) !=0 )
+        {
+            QString cpu= line.left(line.indexOf(' '));
+            if(!cpu.startsWith("cpu")) break;                
+            QVariantMap map;
+            map["load"] =  QVariant();
+            map["user"] = QVariant();
+            map["nice"] = QVariant();
+            map["idle"] = QVariant();
+            map["system"] = QVariant();
+            data[cpu]=QVariant(map);
+        }
     }
-    cpuNbr = "cpu"+cpuNbr;
-    getCPULoad();
+    QList<QString> cpus=data.keys();
+    foreach(QString cpu,cpus)
+    {
+        cpuNbr=cpu;
+        int load=getCPULoad();
+        (data[cpu]).toMap()["load"]=QVariant(load);
+        (data[cpu]).toMap()["user"]=QVariant(user);
+        (data[cpu]).toMap()["nice"]=QVariant(nice);
+        (data[cpu]).toMap()["idle"]=QVariant(idle);
+        (data[cpu]).toMap()["system"]=QVariant(system);
+    }
 }
 
 CPUSensor::~CPUSensor()
@@ -122,18 +147,18 @@ void CPUSensor::addMeter(Meter* meter)
 
 void CPUSensor::update()
 {
-    QMap<QString, QVariant> map;
-
-    int load = getCPULoad();
-
-    map["%load"] = QVariant(load);
-    map["%user"] = QVariant(user);
-    map["%nice"] = QVariant(nice);
-    map["%idle"] = QVariant(idle);
-    map["%system"] = QVariant(system);
-    map["%v"] = QVariant(load);
-
-    emit cpuValues(QVariant(map));
+    QList<QString> cpus=data.keys();
+    foreach(QString cpu,cpus)
+    {
+        cpuNbr=cpu;
+        int load=getCPULoad();
+        (data[cpu]).toMap()["load"]=QVariant(load);
+        (data[cpu]).toMap()["user"]=QVariant(user);
+        (data[cpu]).toMap()["nice"]=QVariant(nice);
+        (data[cpu]).toMap()["idle"]=QVariant(idle);
+        (data[cpu]).toMap()["system"]=QVariant(system);
+    }
+    emit cpuValues(QVariant(data));
 }
 /*
 void CPUSensor::setMaxValue( SensorParams *sp )

@@ -13,12 +13,13 @@
 
 #include <qfile.h>
 #include <qregexp.h>
+#include <qmap.h>
 
 class CPUSensor :  public Sensor
 {
     Q_OBJECT
 public:
-    CPUSensor( QString cpuNbr, int interval );
+    CPUSensor(int interval);
     ~CPUSensor();
     void update();
     void setMaxValue( SensorParams *sp );
@@ -39,9 +40,10 @@ private:
     int system;
     int nice;
     int idle;
+    QString cpuNbr;
 
     void getTicks (long &u,long &s,long &n,long &i);
-    QString cpuNbr;
+    QVariantMap data;
 
 };
 
