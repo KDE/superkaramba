@@ -72,14 +72,15 @@ NetworkSensor::NetworkSensor( QString dev, int interval ):Sensor( interval )
         device = "eth0";
 #endif
 
-    getInOutBytes(receivedBytes,transmittedBytes);
+    getInOutBytes();
     netTimer.start();
 
 }
 NetworkSensor::~NetworkSensor()
 {}
-void NetworkSensor::getInOutBytes ( unsigned long &in,unsigned long &out) const
+void NetworkSensor::getInOutBytes ()
 {
+    unsigned long inB=0,outB=0;
 #ifdef __FreeBSD__
     if (if_number != -1)
     {
@@ -109,22 +110,26 @@ void NetworkSensor::getInOutBytes ( unsigned long &in,unsigned long &out) const
     {
         QTextStream t( &file );        // use a text stream
         line = t.readLine();
-        while(line !=0 && !line.contains(device))
+        while(line !=0 && !line.contains(':'))
         {
             line = t.readLine();
         }
-        if ( line.contains( device ) )
+        const double delay = (double) netTimer.elapsed(); // msec elapsed since last update
+        while(line !=0 && line.contains(':'))
         {
-            QRegExp rx( "\\W+"+device+":\\D*(\\d+)(?:\\D+\\d+){7}\\D+(\\d+)", false);
+            line = t.readLine();
+            line.simplified();
+            QString dev=line.left(line.indexOf(':'));
+            QRegExp rx( "\\W+"+dev+":\\D*(\\d+)(?:\\D+\\d+){7}\\D+(\\d+)", false);
             rx.search(line);
-            in = rx.cap(1).toULong();
-            out = rx.cap(2).toULong();
-        }
-        else
-        {
-            qDebug("Network sensor: can not find %s", device.ascii());
-            in = 0;
-            out = 0;
+            inB = rx.cap(1).toULong();
+            outB = rx.cap(2).toULong();
+            QMap<QString, QVariant> map;
+            map["inkb"] = ((inB - receivedBytes)*8)/delay;
+            map["in"] = (inB - receivedBytes)/delay;
+            map["outkb"] = ((outB - transmittedBytes)*8)/delay;
+            map["out"] = (outB - transmittedBytes)/delay;
+            data[dev]=map;
         }
         file.close();
     }
@@ -141,21 +146,11 @@ void NetworkSensor::update()
 {
     QMap<QString, QVariant> map;
 
-    unsigned long inB, outB;
-    const double delay = (double) netTimer.elapsed(); // msec elapsed since last update
-    getInOutBytes( inB, outB );
+    getInOutBytes();
     netTimer.restart();
-
-    map["%inkb"] = ((inB - receivedBytes)*8)/delay;
-    map["%in"] = (inB - receivedBytes)/delay;
-
-    map["%outkb"] = ((outB - transmittedBytes)*8)/delay;
-    map["%out"] = (outB - transmittedBytes)/delay;
-
-    emit networkValues(QVariant(map));
-
-    receivedBytes = inB;
-    transmittedBytes = outB;
+    emit networkValues(QVariant(data));
+/*    receivedBytes = inB;
+    transmittedBytes = outB;*/
 }
 
 #include "networksensor.moc"

@@ -37,6 +37,7 @@ signals:
 private:
     unsigned long receivedBytes;
     unsigned long transmittedBytes;
+    QMap<QString,QVariant> data;
     QTime netTimer;
     QString device;
 #ifdef __FreeBSD__
@@ -45,7 +46,7 @@ private:
     ifmibdata if_mib;
 #endif
 
-    void getInOutBytes (unsigned long &in,unsigned long &out) const;
+    void getInOutBytes () ;
 
 };
 #endif // NETWORKSENSOR_H

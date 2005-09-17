@@ -28,7 +28,7 @@ CPUSensor::CPUSensor(int interval )
         niceTicks(0),
         idleTicks(0)
 {
-#warning Inefficient propgramming
+#warning Inefficient propgramming, no freebsd support
 /* actually, we are doing here the changing of cpu0 to cpu1 and so on and then getCPULoad(), but what we should have done actually is calling getCPULoad() once, which would fillup the data Map correctly.*/
     QFile file("/proc/stat");
     QString line;

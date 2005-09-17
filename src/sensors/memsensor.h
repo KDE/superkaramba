@@ -46,6 +46,7 @@ signals:
 
 private:
     QString meminfo;
+    QVariantMap data;
     void readValues();
 #ifdef __FreeBSD__
 

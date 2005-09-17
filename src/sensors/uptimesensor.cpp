@@ -86,10 +86,10 @@ void UptimeSensor::update()
 #endif
 
     QMap<QString, QVariant> map;
-    map["%d"] = days;
-    map["%h"] = hours;
-    map["%m"] = mins;
-    map["%s"] = secs;
+    data["d"] = days;
+    data["h"] = hours;
+    data["m"] = mins;
+    data["s"] = secs;
 
     emit uptimeValues(QVariant(map));
 #ifndef __FreeBSD__

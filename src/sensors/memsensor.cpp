@@ -244,7 +244,6 @@ void MemSensor::addMeter(Meter* meter)
 
 void MemSensor::update()
 {
-    QMap<QString, QVariant> map;
     readValues();
 #if (defined(__FreeBSD__) && __FreeBSD_version < 500018)
 
@@ -268,19 +267,19 @@ void MemSensor::update()
     }
 #endif
 
-    map["%fmb"] = (int)(( totalMem - usedMemNoBuffers)/1024.0+0.5);
-    map["%fm"] = (int)( ( totalMem - usedMem  )/1024.0+0.5);
+    data["%fmb"] = (int)(( totalMem - usedMemNoBuffers)/1024.0+0.5);
+    data["%fm"] = (int)( ( totalMem - usedMem  )/1024.0+0.5);
 
-    map["%umb"] = (int)((usedMemNoBuffers)/1024.0+0.5);
-    map["%um"] = (int)((usedMem)/1024.0+0.5 );
+    data["%umb"] = (int)((usedMemNoBuffers)/1024.0+0.5);
+    data["%um"] = (int)((usedMem)/1024.0+0.5 );
 
-    map["%tm"] = (int)( (totalMem)/1024.0+0.5);
+    data["%tm"] = (int)( (totalMem)/1024.0+0.5);
 
-    map["%fs"] = (int)((totalSwap - usedSwap)/1024.0+0.5);
-    map["%us"] = (int)(usedSwap/1024.0+0.5);
-    map["%ts"] = (int)(totalSwap/1024.0+0.5);
+    data["%fs"] = (int)((totalSwap - usedSwap)/1024.0+0.5);
+    data["%us"] = (int)(usedSwap/1024.0+0.5);
+    data["%ts"] = (int)(totalSwap/1024.0+0.5);
 
-    emit memValues(QVariant(map));
+    emit memValues(QVariant(data));
 
 #if (defined(__FreeBSD__) && __FreeBSD_version < 500018)
 

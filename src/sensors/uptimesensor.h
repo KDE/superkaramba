@@ -28,6 +28,8 @@ public:
 
 signals:
     void uptimeValues(QVariant);
+private:
+    QVariantMap data;
 };
 
 #endif // UPTIMESENSOR_H
