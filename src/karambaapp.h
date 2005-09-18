@@ -11,7 +11,7 @@
 #ifndef KARAMBAAPP_H
 #define KARAMBAAPP_H
 
-#include <kapplication.h>
+#include <kuniqueapplication.h>
 #include <ksystemtray.h>
 
 #define karambaApp ((KarambaApplication*)qApp)
@@ -25,7 +25,7 @@ class KHelpMenu;
 class KAboutData;
 class QByteArray;
 
-class KarambaApplication : public KApplication
+class KarambaApplication : public KUniqueApplication
 {
     Q_OBJECT
 
@@ -54,16 +54,18 @@ public:
     void initDcopStub(QByteArray app = "");
     void setUpSysTray(KAboutData* about);
     void checkPreviousSession(KApplication &app, QStringList &lst);
-    void checkCommandLine(KCmdLineArgs *args, QStringList &lst);
     bool startThemes(QStringList &lst);
+
     KarambaIface* dcopIface()
     {
         return iface;
     };
+
     dcopIface_stub* dcopStub()
     {
         return dcopIfaceStub;
     };
+
     QWidget* parentWindow()
     {
         return (QWidget*)themeListWindow;
@@ -75,7 +77,6 @@ public:
 
     static bool lockKaramba();
     static void unlockKaramba();
-    static void checkSuperKarambaDir();
 
 public slots:
     void buildToolTip();

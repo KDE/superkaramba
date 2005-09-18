@@ -98,21 +98,32 @@ int main(int argc, char **argv)
     about.addAuthor("Hans Karlsson", 0, "karlsson.h@home.se");
     about.addAuthor("Ryan Nickell", 0, "p0z3r@earthlink.net");
     about.addAuthor("Petri Damstén", 0, "petri.damsten@iki.fi");
+
     KCmdLineArgs::init(argc, argv, &about);
-    KCmdLineArgs::addCmdLineOptions(options);
-    KSessionManaged ksm;
-    //karamba *mainWin = 0;
-    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+//    KCmdLineArgs::addCmdLineOptions(options);
+//    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     QStringList lst;
     int ret = 0;
 
-    // Create ~/.superkaramba if necessary
-    KarambaApplication::checkSuperKarambaDir();
 
-    KarambaApplication::lockKaramba();
+    // Create ~/.superkaramba if necessary
+    QDir configDir(QDir::home().absPath() + "/.superkaramba");
+    if (!configDir.exists())
+    {
+        qWarning("~/.superkaramba doesn't exist");
+        if(!configDir.mkdir(QDir::home().absPath() + "/.superkaramba"))
+        {
+            qWarning("Couldn't create Directory ~/.superkaramba");
+        }
+        else
+        {
+            qWarning("created ~/.superkaramba");
+        }
+    }
+
+//    KarambaApplication::lockKaramba();
 
     KarambaApplication app;
-
     QString mainAppId = app.getMainKaramba();
     if(!mainAppId.isEmpty())
     {
@@ -125,16 +136,30 @@ int main(int argc, char **argv)
         app.initDcopStub();
     }
 
-    KarambaApplication::unlockKaramba();
+//    KarambaApplication::unlockKaramba();
 
-    app.connect(qApp,SIGNAL(lastWindowClosed()),qApp,SLOT(quit()));
+    app.connect(kapp,SIGNAL(lastWindowClosed()),kapp,SLOT(quit()));
 
     // Try to restore a previous session if applicable.
     app.checkPreviousSession(app, lst);
     if(lst.size() == 0)
     {
+/*
         //Not a saved session - check for themes given on command line
-        app.checkCommandLine(args, lst);
+        if(args->count() > 0)
+        {
+            for(int i = 0; i < (args->count()); i++)
+            {
+                if( args->arg(i) != "" )
+                {
+                    KURL url = args->url(i);
+                    lst.push_back(url.path());
+                }
+            }
+        }
+*/
+
+  //      app.checkCommandLine(args, lst);
 
         if(lst.size() == 0)
         {
@@ -144,12 +169,11 @@ int main(int argc, char **argv)
         }
     }
 
-    args->clear();
+//    args->clear();
 
-    KarambaPython::initPython();
     //qDebug("startThemes");
     if(app.startThemes(lst) || mainAppId.isEmpty())
         ret = app.exec();
-    KarambaPython::shutdownPython();
+
     return ret;
 }

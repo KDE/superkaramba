@@ -28,22 +28,30 @@
 #include "karambaapp.h"
 #include "dcopinterface_stub.h"
 #include "karambawidget.h"
+#include "karamba_python.h"
 #include "superkarambasettings.h"
 
 int KarambaApplication::fd = -1;
 
-KarambaApplication::KarambaApplication() :
-        m_helpMenu(0), iface(0), themeListWindow(0), dcopIfaceStub(0),
+KarambaApplication::KarambaApplication()
+    :   KUniqueApplication(),
+        m_helpMenu(0),
+        iface(0),
+        themeListWindow(0),
+        dcopIfaceStub(0),
         sysTrayIcon(0)
 {
     iface = new KarambaIface();
     // register ourselves as a dcop client
     dcopClient()->registerAs(name());
     dcopClient()->setDefaultObject(dcopIface()->objId());
+    KarambaPython::initPython();
 }
 
 KarambaApplication::~KarambaApplication()
 {
+    KarambaPython::shutdownPython();
+
     qDeleteAll(karambaList);
     karambaList.clear();
 
@@ -92,24 +100,6 @@ QStringList KarambaApplication::getKarambas()
         }
     }
     return result;
-}
-
-void KarambaApplication::checkSuperKarambaDir()
-{
-    // Create ~/.superkaramba if necessary
-    QDir configDir(QDir::home().absPath() + "/.superkaramba");
-    if (!configDir.exists())
-    {
-        qWarning("~/.superkaramba doesn't exist");
-        if(!configDir.mkdir(QDir::home().absPath() + "/.superkaramba"))
-        {
-            qWarning("Couldn't create Directory ~/.superkaramba");
-        }
-        else
-        {
-            qWarning("created ~/.superkaramba");
-        }
-    }
 }
 
 void KarambaApplication::setUpSysTray(KAboutData* about)
@@ -236,25 +226,6 @@ void KarambaApplication::checkPreviousSession(KApplication &app,
 
         //Get themes that were running
         lst = QStringList::split(QString(";"), restartThemes);
-    }
-}
-
-void KarambaApplication::checkCommandLine(KCmdLineArgs *args, QStringList &lst)
-{
-    /******
-      Not a saved session - check for themes given on command line
-    */
-    if(args->count() > 0)
-    {
-        for(int i = 0; i < (args->count()); i++)
-        {
-            if( args->arg(i) != "" )
-            {
-                KURL url = args->url(i);
-
-                lst.push_back(url.path());
-            }
-        }
     }
 }
 
