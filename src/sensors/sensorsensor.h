@@ -9,6 +9,7 @@
 #include <qregexp.h>
 #include <kprocess.h>
 #include <kprocio.h>
+#include <kstaticdeleter.h>
 
 
 #include "sensor.h"
@@ -21,19 +22,22 @@ class SensorSensor : public Sensor
 {
     Q_OBJECT
 public:
-    SensorSensor(int interval, char tempUnit);
-
-    ~SensorSensor();
-
+    static SensorSensor* self();
     void update();
     void addMeter(Meter*);
+    static bool isSingleton() { return true; }
 
 signals:
     void sensorValues(QVariant);
 
 private:
+    friend class KStaticDeleter<SensorSensor>;
+    SensorSensor(int interval=2000);
+    virtual ~SensorSensor();
+
     KShellProcess ksp;
     QString extraParams;
+    static SensorSensor* m_self;
 
     QMap<QString,QVariant> sensorMap;
 #ifdef __FreeBSD__

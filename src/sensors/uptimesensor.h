@@ -16,20 +16,25 @@
 #include <qstring.h>
 #include <qregexp.h>
 #include <qdatetime.h>
+#include <kstaticdeleter.h>
 
 class UptimeSensor :  public Sensor
 {
     Q_OBJECT
 public:
-    UptimeSensor(int interval);
-    ~UptimeSensor();
     void update();
     void addMeter(Meter*);
+    static UptimeSensor* self();
+    static bool isSingleton() { return true; }
 
 signals:
     void uptimeValues(QVariant);
 private:
+    friend class KStaticDeleter<UptimeSensor>;
     QVariantMap data;
+    UptimeSensor(int interval=2000);
+    virtual ~UptimeSensor();
+    static UptimeSensor* m_self;
 };
 
 #endif // UPTIMESENSOR_H

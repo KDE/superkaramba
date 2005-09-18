@@ -34,13 +34,14 @@ public:
     {
         return 0;
     };
-
+    
 signals:
     void valueChanged(QVariant);
 
 protected:
     int m_msec;
     QTimer m_timer;
+    
 
 public slots:
 //    virtual void update()=0;

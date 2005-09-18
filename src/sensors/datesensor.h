@@ -14,6 +14,7 @@
 #include <qdatetime.h>
 #include <kdatepicker.h>
 #include <q3vbox.h>
+#include <kstaticdeleter.h>
 
 class DatePicker : public Q3VBox
 {
@@ -28,11 +29,11 @@ class DateSensor :  public Sensor
 {
     Q_OBJECT
 public:
-    DateSensor( int interval );
-    ~DateSensor();
-
     void update();
     void addMeter(Meter*);
+    static DateSensor* self();
+    static bool isSingleton() { return true; }
+
 
 signals:
     void dateValue(QVariant);
@@ -41,9 +42,13 @@ protected slots:
     void slotCalendarDeleted();
 
 private:
+    friend class KStaticDeleter<DateSensor>;
+    DateSensor( int interval=2000 );
+    virtual ~DateSensor();
     bool hidden;
     DatePicker* cal;
     QVariantMap data;
+    static DateSensor* m_self;
 
 };
 

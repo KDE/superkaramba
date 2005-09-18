@@ -11,6 +11,7 @@
 #define NETWORKSENSOR_H
 
 #include "sensor.h"
+#include <kstaticdeleter.h>
 
 #include <qdatetime.h>
 #include <qfile.h>
@@ -26,20 +27,24 @@ class NetworkSensor :  public Sensor
 {
     Q_OBJECT
 public:
-    NetworkSensor( QString device, int interval );
-    ~NetworkSensor();
     void update();
     void addMeter(Meter*);
+    static NetworkSensor* self();
+    static bool isSingleton() { return true; }
 
 signals:
     void networkValues(QVariant);
 
 private:
+    friend class KStaticDeleter<NetworkSensor>;
+    NetworkSensor(int interval=2000 );
+    virtual ~NetworkSensor();    
     unsigned long receivedBytes;
     unsigned long transmittedBytes;
     QMap<QString,QVariant> data;
     QTime netTimer;
     QString device;
+    static NetworkSensor* m_self;
 #ifdef __FreeBSD__
 
     int if_number;

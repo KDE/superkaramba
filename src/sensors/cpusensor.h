@@ -14,23 +14,27 @@
 #include <qfile.h>
 #include <qregexp.h>
 #include <qmap.h>
+#include <kstaticdeleter.h>
 
 class CPUSensor :  public Sensor
 {
     Q_OBJECT
 public:
-    CPUSensor(int interval);
-    ~CPUSensor();
     void update();
     void setMaxValue( SensorParams *sp );
 
     int getCPULoad();
     void addMeter(Meter *);
+    static CPUSensor* self();
+    static bool isSingleton() { return true; }
 
 signals:
     void cpuValues(QVariant);
 
 private:
+    friend class KStaticDeleter<CPUSensor>;
+    CPUSensor(int interval=2000);
+    virtual ~CPUSensor();
     long userTicks;
     long sysTicks;
     long niceTicks;
@@ -44,6 +48,7 @@ private:
 
     void getTicks (long &u,long &s,long &n,long &i);
     QVariantMap data;
+    static CPUSensor* m_self;
 
 };
 

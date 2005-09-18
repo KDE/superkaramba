@@ -20,6 +20,19 @@
 #include "disksensor.h"
 #include "disksensor.moc"
 
+static KStaticDeleter<DiskSensor> diskSensorDeleter;
+DiskSensor* DiskSensor::m_self = 0;
+
+DiskSensor* DiskSensor::self()
+{
+    if (!m_self)
+    {
+        diskSensorDeleter.setObject(m_self, new DiskSensor());
+    }
+
+    return m_self;
+}
+
 DiskSensor::DiskSensor(int msec)
         :   Sensor(msec)
 {

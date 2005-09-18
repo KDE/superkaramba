@@ -14,6 +14,19 @@
 
 #include "uptimesensor.h"
 
+static KStaticDeleter<UptimeSensor> uptimeSensorDeleter;
+UptimeSensor* UptimeSensor::m_self = 0;
+
+UptimeSensor* UptimeSensor::self()
+{
+    if (!m_self)
+    {
+        uptimeSensorDeleter.setObject(m_self, new UptimeSensor());
+    }
+
+    return m_self;
+}
+
 UptimeSensor::UptimeSensor( int interval ) : Sensor( interval )
 {}
 UptimeSensor::~UptimeSensor()

@@ -18,8 +18,23 @@
 
 #include <QTextStream>
 
+
 #include "cpusensor.h"
 #include "cpusensor.moc"
+
+static KStaticDeleter<CPUSensor> cpuSensorDeleter;
+CPUSensor* CPUSensor::m_self = 0;
+
+CPUSensor* CPUSensor::self()
+{
+    if (!m_self)
+    {
+        cpuSensorDeleter.setObject(m_self, new CPUSensor());
+    }
+
+    return m_self;
+}
+
 
 CPUSensor::CPUSensor(int interval )
         :   Sensor(interval),

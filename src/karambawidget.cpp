@@ -927,7 +927,7 @@ void KarambaWidget::setSensor(const LineParser& lineParser, Meter* meter)
         {
             int interval = lineParser.getInt("INTERVAL");
             interval = (interval == 0)?1000:interval;
-            sensor = ( sensorMap["CPU"+cpuNbr] = new CPUSensor(interval ) );
+            sensor = ( sensorMap["CPU"+cpuNbr] = CPUSensor::self());
             sensorList.append( sensor );
         }
         /*SensorParams *sp = new SensorParams(meter);
@@ -947,7 +947,7 @@ void KarambaWidget::setSensor(const LineParser& lineParser, Meter* meter)
         {
             int interval = lineParser.getInt("INTERVAL");
             interval = (interval == 0)?3000:interval;
-            sensor = ( sensorMap["MEMORY"] = new MemSensor( interval ) );
+            sensor = ( sensorMap["MEMORY"] = MemSensor::self() );
             sensorList.append( sensor );
         }
         /*SensorParams *sp = new SensorParams(meter);
@@ -967,7 +967,7 @@ void KarambaWidget::setSensor(const LineParser& lineParser, Meter* meter)
         {
             int interval = lineParser.getInt("INTERVAL");
             interval = (interval == 0)?5000:interval;
-            sensor = ( sensorMap["DISK"] = new DiskSensor( interval ) );
+            sensor = ( sensorMap["DISK"] = DiskSensor::self() );
             connect( sensor, SIGNAL(initComplete()), this, SLOT(externalStep()) );
             sensorList.append( sensor );
         }
@@ -1001,7 +1001,7 @@ void KarambaWidget::setSensor(const LineParser& lineParser, Meter* meter)
         if (sensor == 0)
         {
             sensor = ( sensorMap["NETWORK"+device] =
-                           new NetworkSensor(device, interval));
+                    NetworkSensor::self());
             sensorList.append( sensor );
         }
         /*SensorParams *sp = new SensorParams(meter);
@@ -1019,7 +1019,7 @@ void KarambaWidget::setSensor(const LineParser& lineParser, Meter* meter)
         {
             int interval = lineParser.getInt("INTERVAL");
             interval = (interval == 0)?60000:interval;
-            sensor = ( sensorMap["UPTIME"] = new UptimeSensor( interval ));
+            sensor = ( sensorMap["UPTIME"] = UptimeSensor::self());
             sensorList.append( sensor );
 
         }
@@ -1037,7 +1037,7 @@ void KarambaWidget::setSensor(const LineParser& lineParser, Meter* meter)
         {
             int interval = lineParser.getInt("INTERVAL");
             interval = (interval == 0)?30000:interval;
-            sensor = (sensorMap["SENSOR"] = new SensorSensor(interval, tempUnit));
+            sensor = (sensorMap["SENSOR"] = SensorSensor::self());
             sensorList.append( sensor );
         }
         /*SensorParams *sp = new SensorParams(meter);
@@ -1077,7 +1077,7 @@ void KarambaWidget::setSensor(const LineParser& lineParser, Meter* meter)
         {
             int interval = lineParser.getInt("INTERVAL");
             interval = (interval == 0)?60000:interval;
-            sensor = ( sensorMap["DATE"] = new DateSensor( interval ) );
+            sensor = ( sensorMap["DATE"] = DateSensor::self());
             sensorList.append( sensor );
             timeList.append( sensor );
         }

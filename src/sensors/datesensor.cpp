@@ -14,6 +14,19 @@
 #include "datesensor.h"
 #include "datesensor.moc"
 
+static KStaticDeleter<DateSensor> dateSensorDeleter;
+DateSensor* DateSensor::m_self = 0;
+
+DateSensor* DateSensor::self()
+{
+    if (!m_self)
+    {
+        dateSensorDeleter.setObject(m_self, new DateSensor());
+    }
+
+    return m_self;
+}
+
 DateSensor::DateSensor(int interval)
         :   Sensor( interval ),
         hidden(true)

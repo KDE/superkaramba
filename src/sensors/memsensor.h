@@ -13,6 +13,7 @@
 #include <qstring.h>
 #include <qregexp.h>
 #include <kprocess.h>
+#include <kstaticdeleter.h>
 
 #ifdef __FreeBSD__
 #include <kprocio.h>
@@ -24,10 +25,6 @@ class MemSensor :  public Sensor
 {
     Q_OBJECT
 public:
-
-    MemSensor( int interval );
-    ~MemSensor();
-
     int getMemTotal();
     int getMemFree();
     int getBuffers();
@@ -40,13 +37,19 @@ public:
     void setMaxValue( SensorParams *sp );
     QString getMemLine();
     void addMeter(Meter*);
+    static MemSensor* self();
+    static bool isSingleton() { return true; }
 
 signals:
     void memValues(QVariant);
 
 private:
+    friend class KStaticDeleter<MemSensor>;
+    MemSensor( int interval=2000 );
+    ~MemSensor();
     QString meminfo;
     QVariantMap data;
+    static MemSensor* m_self;
     void readValues();
 #ifdef __FreeBSD__
 

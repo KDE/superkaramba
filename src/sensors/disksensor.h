@@ -16,20 +16,25 @@
 #include <qregexp.h>
 #include <qstringlist.h>
 #include <kprocess.h>
+#include <kstaticdeleter.h>
+
 class DiskSensor :  public Sensor
 {
     Q_OBJECT
 public:
-    DiskSensor(int msec );
-    ~DiskSensor();
     void update();
     void setMaxValue( SensorParams *sp );
     void addMeter(Meter *);
+    static DiskSensor* self();
+    static bool isSingleton() { return true; }
 
 signals:
     void diskValues(QVariant);
 
 private:
+    friend class KStaticDeleter<DiskSensor>;
+    DiskSensor(int msec=2000 );
+    virtual ~DiskSensor();
     int getFreeSpace(QString mntPt) const;
     int getUsedSpace(QString mntPt) const;
     int getTotalSpace(QString mntPt) const;
@@ -42,6 +47,7 @@ private:
     QMap<QString,QString> mntMap;
     QMap<QString,QVariant> data;
     QStringList stringList;
+    static DiskSensor* m_self;
 
     int init;
 

@@ -29,6 +29,7 @@ public:
 
     void addMeter(Meter*);
     void update();
+    static bool isSingleton() { return false; }
 
 signals:
     void rssValues(QVariant);

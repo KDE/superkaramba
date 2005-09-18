@@ -18,11 +18,22 @@
 
 #include "networksensor.h"
 
-NetworkSensor::NetworkSensor( QString dev, int interval ):Sensor( interval )
-{
-    device = dev.lower();
+static KStaticDeleter<NetworkSensor> networkSensorDeleter;
+NetworkSensor* NetworkSensor::m_self = 0;
 
-#ifdef __FreeBSD__
+NetworkSensor* NetworkSensor::self()
+{
+    if (!m_self)
+    {
+        networkSensorDeleter.setObject(m_self, new NetworkSensor());
+    }
+
+    return m_self;
+}
+
+NetworkSensor::NetworkSensor( int interval ):Sensor( interval )
+{
+    #ifdef __FreeBSD__
     /* Determine number of interfaces */
     u_int   n    = 0;
     size_t  nlen = 0;
@@ -66,10 +77,6 @@ NetworkSensor::NetworkSensor( QString dev, int interval ):Sensor( interval )
 
     if ((if_number == -1) && (if_gw != -1))
         if_number = if_gw;
-#else
-
-    if( device.isEmpty() )
-        device = "eth0";
 #endif
 
     getInOutBytes();

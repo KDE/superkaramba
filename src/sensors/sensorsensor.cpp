@@ -10,7 +10,20 @@
 #include "sensorsensor.h"
 #include <QByteArray>
 
-SensorSensor::SensorSensor(int interval, char tempUnit) : Sensor( interval )
+static KStaticDeleter<SensorSensor> sensorSensorDeleter;
+SensorSensor* SensorSensor::m_self = 0;
+
+SensorSensor* SensorSensor::self()
+{
+    if (!m_self)
+    {
+        sensorSensorDeleter.setObject(m_self, new SensorSensor());
+    }
+
+    return m_self;
+}
+
+SensorSensor::SensorSensor(int interval) : Sensor( interval )
 {
 #ifdef __FreeBSD__
     sensorMapBSD["VCore 1"] = "VC0";
@@ -28,8 +41,8 @@ SensorSensor::SensorSensor(int interval, char tempUnit) : Sensor( interval )
     sensorMapBSD["temp3"] = "TEMP2";
 #endif
 
-    if(tempUnit == 'F')
-        extraParams = " -f";
+//     if(tempUnit == 'F')
+//         extraParams = " -f";
     connect(&ksp, SIGNAL(receivedStdout(KProcess *, char *, int )),
             this,SLOT(receivedStdout(KProcess *, char *, int )));
     connect(&ksp, SIGNAL(processExited(KProcess *)),

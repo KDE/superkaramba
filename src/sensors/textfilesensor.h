@@ -44,6 +44,7 @@ public:
 
     void update();
     void addMeter(Meter*);
+    static bool isSingleton() { return false; }
 
 signals:
     void textfileValues(QVariant);

@@ -31,6 +31,7 @@ public:
     void update();
     void setMaxValue( SensorParams *);
     void addMeter(Meter*);
+    static bool isSingleton() { return false; }
 
 signals:
     void noatunValues(QVariant);

@@ -27,6 +27,19 @@
 #define pagetok(size) ((size) << pageshift)
 #endif
 
+static KStaticDeleter<MemSensor> memSensorDeleter;
+MemSensor* MemSensor::m_self = 0;
+
+MemSensor* MemSensor::self()
+{
+    if (!m_self)
+    {
+        memSensorDeleter.setObject(m_self, new MemSensor());
+    }
+
+    return m_self;
+}
+
 MemSensor::MemSensor(int msec) : Sensor(msec)
 {
 #ifdef __FreeBSD__
