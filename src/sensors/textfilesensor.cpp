@@ -60,7 +60,7 @@ void TextFileSensor::update()
                 QDomNodeList titles = docElem.elementsByTagName( "title" );
                 QDomNodeList links = docElem.elementsByTagName( "link" );
 
-                uint i;
+                int i;
                 for ( i = 0; i < titles.count(); ++i )
                 {
                     QDomElement element = titles.item( i ).toElement();

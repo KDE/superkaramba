@@ -121,6 +121,7 @@ QString NoatunSensor::getTitle()
        }
        return result;
     */
+	return "";
 }
 
 
