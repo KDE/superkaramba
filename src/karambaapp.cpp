@@ -41,19 +41,85 @@ KarambaApplication::KarambaApplication()
         dcopIfaceStub(0),
         sysTrayIcon(0)
 {
+    // god get rid of this shit
     iface = new KarambaIface();
     // register ourselves as a dcop client
     dcopClient()->registerAs(name());
     dcopClient()->setDefaultObject(dcopIface()->objId());
+
+// JESUS
+    QStringList lst;
+    QString mainAppId = getMainKaramba();
+    if(!mainAppId.isEmpty())
+    {
+        initDcopStub(mainAppId.toAscii());
+    }
+    else
+    {
+        //Set up systray icon
+        setUpSysTray(/*&about*/ 0);
+        initDcopStub();
+    }
+
+    // Try to restore a previous session if applicable.
+    if (isSessionRestored())
+    {
+        KConfig* config = sessionConfig();
+        config->setGroup("General Options");
+        QString restartThemes = config->readEntry("OpenThemes","");
+
+        //Get themes that were running
+        lst = QStringList::split(QString(";"), restartThemes);
+    }
+
+
+    if(lst.size() == 0)
+    {
+/*
+        //Not a saved session - check for themes given on command line
+        if(args->count() > 0)
+        {
+            for(int i = 0; i < (args->count()); i++)
+            {
+                if( args->arg(i) != "" )
+                {
+                    KURL url = args->url(i);
+                    lst.push_back(url.path());
+                }
+            }
+        }
+*/
+
+  //      app.checkCommandLine(args, lst);
+
+        if(lst.size() == 0)
+        {
+            //No themes given on command line and no saved session.
+            //Show welcome dialog.
+            showThemeDialog();
+        }
+    }
+
+//    args->clear();
+
+    //qDebug("startThemes");
+    if (!lst.isEmpty())
+    {
+        startThemes(lst);
+    }
+
+// End JESUS
+
     KarambaPython::initPython();
+    connect( this, SIGNAL(lastWindowClosed()), SLOT(quit()));
 }
 
 KarambaApplication::~KarambaApplication()
 {
     KarambaPython::shutdownPython();
 
-    qDeleteAll(karambaList);
-    karambaList.clear();
+    qDeleteAll(m_karambas);
+    m_karambas.clear();
 
     delete iface;
     delete themeListWindow;
@@ -148,14 +214,14 @@ void KarambaApplication::showKarambaMenuExtension(bool show)
 {
     if(show)
     {
-        foreach (QObject *k, karambaList)
+        foreach (QObject *k, m_karambas)
         {
             ((KarambaWidget*)k)->showMenuExtension();
         }
     }
     else
     {
-        foreach (QObject *k, karambaList)
+        foreach (QObject *k, m_karambas)
         {
             ((KarambaWidget*)k)->hideMenuExtension();
         }
@@ -212,23 +278,6 @@ void KarambaApplication::buildToolTip()
     setToolTip(toolTip);
 }
 
-void KarambaApplication::checkPreviousSession(KApplication &app,
-        QStringList &lst)
-{
-    /******
-    Try to restore a previous session if applicable.
-    */
-    if (app.isSessionRestored())
-    {
-        KConfig* config = app.sessionConfig();
-        config->setGroup("General Options");
-        QString restartThemes = config->readEntry("OpenThemes","");
-
-        //Get themes that were running
-        lst = QStringList::split(QString(";"), restartThemes);
-    }
-}
-
 bool KarambaApplication::startThemes(QStringList &lst)
 {
     bool result = false;
@@ -254,7 +303,7 @@ void KarambaApplication::addKaramba(KarambaWidget* k, bool reloading)
                            karambaApp->dcopClient()->appId(), k->theme().file());
         k->setInstance(instance);
     }
-    karambaList.append(k);
+    m_karambas.append(k);
 }
 
 void KarambaApplication::deleteKaramba(KarambaWidget* k, bool reloading)
@@ -262,45 +311,12 @@ void KarambaApplication::deleteKaramba(KarambaWidget* k, bool reloading)
     if(!reloading && karambaApp->dcopStub())
         karambaApp->dcopStub()->themeClosed(
             karambaApp->dcopClient()->appId(), k->theme().file(), k->instance());
-    karambaList.removeAll(k);
+    m_karambas.removeAll(k);
 }
 
 bool KarambaApplication::hasKaramba(KarambaWidget* k)
 {
-    return karambaList.count(k) > 0;
-}
-
-// XXX: I guess this should be made with mutex/semaphores
-// but this is good for now...
-
-bool KarambaApplication::lockKaramba()
-{
-    QString file = QDir::home().absPath() + "/.superkaramba/.lock";
-
-    fd = open(file.ascii(), O_CREAT | O_RDWR);
-    if (fd < 0)
-    {
-        qWarning("Open failed in lock.");
-        return false;
-    }
-    //qDebug("lock %d", getpid());
-    if(lockf(fd, F_LOCK, 0))
-    {
-        qWarning("Lock failed.");
-        return false;
-    }
-    return true;
-}
-
-void KarambaApplication::unlockKaramba()
-{
-    if(fd > 0)
-    {
-        lockf(fd, F_ULOCK, 0);
-        //qDebug("Unlock %d", getpid());
-        close(fd);
-        fd = -1;
-    }
+    return m_karambas.count(k) > 0;
 }
 
 void KarambaApplication::hideSysTray(bool hide)
@@ -336,9 +352,12 @@ void KarambaApplication::showThemeDialog()
 void KarambaApplication::quitSuperKaramba()
 {
     if(themeListWindow)
+    {
         themeListWindow->saveUserAddedThemes();
-    qApp->closeAllWindows();
-    qApp->quit();
+    }
+
+    closeAllWindows();
+    quit();
 }
 
 void KarambaApplication::globalQuitSuperKaramba()
@@ -350,18 +369,6 @@ void KarambaApplication::globalQuitSuperKaramba()
     {
         dcopIface_stub dcop((*it).ascii(), dcopIface()->objId());
         dcop.quit();
-    }
-}
-
-void KarambaApplication::globalShowThemeDialog()
-{
-    QStringList apps = getKarambas();
-    QStringList::Iterator it;
-
-    for (it = apps.begin(); it != apps.end(); ++it)
-    {
-        dcopIface_stub dcop((*it).ascii(), dcopIface()->objId());
-        dcop.showThemeDialog();
     }
 }
 

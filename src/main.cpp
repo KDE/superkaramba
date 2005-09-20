@@ -100,11 +100,6 @@ int main(int argc, char **argv)
     about.addAuthor("Petri Damstén", 0, "petri.damsten@iki.fi");
 
     KCmdLineArgs::init(argc, argv, &about);
-//    KCmdLineArgs::addCmdLineOptions(options);
-//    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    QStringList lst;
-    int ret = 0;
-
 
     // Create ~/.superkaramba if necessary
     QDir configDir(QDir::home().absPath() + "/.superkaramba");
@@ -121,59 +116,6 @@ int main(int argc, char **argv)
         }
     }
 
-//    KarambaApplication::lockKaramba();
-
     KarambaApplication app;
-    QString mainAppId = app.getMainKaramba();
-    if(!mainAppId.isEmpty())
-    {
-        app.initDcopStub(mainAppId.toAscii());
-    }
-    else
-    {
-        //Set up systray icon
-        app.setUpSysTray(&about);
-        app.initDcopStub();
-    }
-
-//    KarambaApplication::unlockKaramba();
-
-    app.connect(kapp,SIGNAL(lastWindowClosed()),kapp,SLOT(quit()));
-
-    // Try to restore a previous session if applicable.
-    app.checkPreviousSession(app, lst);
-    if(lst.size() == 0)
-    {
-/*
-        //Not a saved session - check for themes given on command line
-        if(args->count() > 0)
-        {
-            for(int i = 0; i < (args->count()); i++)
-            {
-                if( args->arg(i) != "" )
-                {
-                    KURL url = args->url(i);
-                    lst.push_back(url.path());
-                }
-            }
-        }
-*/
-
-  //      app.checkCommandLine(args, lst);
-
-        if(lst.size() == 0)
-        {
-            //No themes given on command line and no saved session.
-            //Show welcome dialog.
-            app.globalShowThemeDialog();
-        }
-    }
-
-//    args->clear();
-
-    //qDebug("startThemes");
-    if(app.startThemes(lst) || mainAppId.isEmpty())
-        ret = app.exec();
-
-    return ret;
+    return app.exec();
 }

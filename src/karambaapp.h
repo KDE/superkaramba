@@ -31,20 +31,6 @@ class KarambaApplication : public KUniqueApplication
 
     friend class KarambaIface;
 
-private:
-    static int fd;
-    KHelpMenu* m_helpMenu;
-
-    void showKarambaMenuExtension(bool show = true);
-    void setToolTip(const QString &tip = QString::null);
-
-protected:
-    KarambaIface* iface;
-    ThemesDlg* themeListWindow;
-    dcopIface_stub* dcopIfaceStub;
-    QList<QObject *> karambaList;
-    KSystemTray* sysTrayIcon;
-
 public:
     KarambaApplication();
     ~KarambaApplication();
@@ -75,19 +61,32 @@ public:
     void deleteKaramba(KarambaWidget* k, bool reloading = false);
     bool hasKaramba(KarambaWidget* k);
 
-    static bool lockKaramba();
-    static void unlockKaramba();
-
 public slots:
     void buildToolTip();
+    void showThemeDialog();
     void globalQuitSuperKaramba();
-    void globalShowThemeDialog();
     void globalHideSysTray(bool hide = true);
 
 protected slots:
     void quitSuperKaramba();
-    void showThemeDialog();
     void hideSysTray(bool hide = true);
+
+protected:
+    KarambaIface* iface;
+    ThemesDlg* themeListWindow;
+    dcopIface_stub* dcopIfaceStub;
+
+    KSystemTray* sysTrayIcon;
+
+private:
+    QList<KarambaWidget*> m_karambas;
+
+    static int fd;
+    KHelpMenu* m_helpMenu;
+
+    void showKarambaMenuExtension(bool show = true);
+    void setToolTip(const QString &tip = QString::null);
+
 };
 
 #endif // KARAMBAAPP_H

@@ -1937,7 +1937,7 @@ void KarambaWidget::slotQuit()
 
 void KarambaWidget::slotShowTheme()
 {
-    karambaApp->globalShowThemeDialog();
+    karambaApp->showThemeDialog();
 }
 
 #include "karambawidget.moc"
