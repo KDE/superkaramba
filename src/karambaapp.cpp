@@ -35,11 +35,11 @@ int KarambaApplication::fd = -1;
 
 KarambaApplication::KarambaApplication()
     :   KUniqueApplication(),
-        m_helpMenu(0),
-        iface(0),
+		iface(0),
         themeListWindow(0),
-        dcopIfaceStub(0),
-        sysTrayIcon(0)
+		dcopIfaceStub(0),
+        sysTrayIcon(0),
+		m_helpMenu(0)
 {
     // god get rid of this shit
     iface = new KarambaIface();
