@@ -52,8 +52,8 @@
 #define EDITSCRIPT 1
 #define THEMECONF  2
 
-KarambaWidget::KarambaWidget(QString fn, bool reloading, int instance) :
-        QWidget(0, Qt::FramelessWindowHint ),
+KarambaWidget::KarambaWidget(QString fn, bool reloading, int instance, QWidget *parent)
+    :   QWidget(parent, Qt::FramelessWindowHint ),
         kpop(0), widgetMask(0),
         config(0), kWinModule(0), tempUnit('C'), m_instance(instance),
         themeConfMenu(0), toDesktopMenu(0), kglobal(0), clickPos(0, 0), accColl(0),
