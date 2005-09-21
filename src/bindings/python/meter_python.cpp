@@ -160,8 +160,8 @@ PyObject* py_getSize(PyObject *, PyObject *args, QString type)
         return NULL;
     if (!checkKarambaAndMeter(widget, meter, type.ascii()))
         return NULL;
-    return Py_BuildValue((char*)"(i,i)", ((Meter*)meter)->getWidth(),
-                         ((Meter*)meter)->getHeight());
+    return Py_BuildValue((char*)"(i,i)", ((Meter*)meter)->width(),
+                         ((Meter*)meter)->height());
 }
 
 PyObject* py_resize(PyObject *, PyObject *args, QString type)
@@ -171,8 +171,7 @@ PyObject* py_resize(PyObject *, PyObject *args, QString type)
         return NULL;
     if (!checkKarambaAndMeter(widget, meter, type.ascii()))
         return NULL;
-    ((Meter*)meter)->setSize(((Meter*)meter)->getX(), ((Meter*)meter)->getY(),
-                             x, y);
+    ((Meter*)meter)->resize(x, y);
     return Py_BuildValue((char*)"l", 1);
 }
 
@@ -183,8 +182,8 @@ PyObject* py_getPos(PyObject *, PyObject *args, QString type)
         return NULL;
     if (!checkKarambaAndMeter(widget, meter, type.ascii()))
         return NULL;
-    return Py_BuildValue((char*)"(i,i)", ((Meter*)meter)->getX(),
-                         ((Meter*)meter)->getY());
+    return Py_BuildValue((char*)"(i,i)", ((Meter*)meter)->x(),
+                         ((Meter*)meter)->y());
 }
 
 PyObject* py_move(PyObject *, PyObject *args, QString type)
@@ -194,9 +193,7 @@ PyObject* py_move(PyObject *, PyObject *args, QString type)
         return NULL;
     if (!checkKarambaAndMeter(widget, meter, type.ascii()))
         return NULL;
-    ((Meter*)meter)->setSize(x, y,
-                             ((Meter*)meter)->getWidth(),
-                             ((Meter*)meter)->getHeight());
+    ((Meter*)meter)->move(x, y);
     return Py_BuildValue((char*)"l", 1);
 }
 

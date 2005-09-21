@@ -24,18 +24,16 @@
 Input::Input(KarambaWidget* k, int x, int y, int w, int h):
         Meter(k, x, y, w, h)
 {
-    edit = new SKLineEdit((QWidget*)k, this);
-    edit->setGeometry(x,y,w,h);
+    edit = new QLineEdit(this);
+    edit->resize(w,h);
 }
 
 Input::~Input()
-{
-    delete edit;
-}
+{}
 
-void Input::mUpdate(QPainter*)
+void Input::paintEvent(QPaintEvent*)
 {
-    edit->repaint();
+    edit->update();
 }
 
 void Input::setValue(QString text)
@@ -50,125 +48,76 @@ QString Input::getStringValue() const
 
 void Input::setBGColor(QColor c)
 {
-    edit->setBackgroundColor(c);
+    QPalette pal=edit->palette();
+    pal.setColor(QPalette::Base,c);
+    edit->setPalette(pal);
 }
 
-void Input::setColor(QColor c)
+void Input::setFGColor(QColor c)
 {
-    edit->setFrameColor(c);
+    QPalette pal=edit->palette();
+    pal.setColor(QPalette::Text,c);
+    edit->setPalette(pal);
 }
 
 QColor Input::getBGColor() const
 {
-    return edit->backgroundColor();
+    return edit->palette().color(QPalette::Base);
 }
 
-QColor Input::getColor() const
+QColor Input::getFGColor() const
 {
-    return edit->getFrameColor();
+    return edit->palette().color(QPalette::Text);
 }
 
-void Input::hide()
-{
-    Meter::hide();
-    edit->setHidden(true);
-}
 
-void Input::show()
+void Input::setMeterFont(QString fs)
 {
-    Meter::show();
-    edit->setHidden(false);
-}
-
-void Input::setSize(int ix, int iy, int iw, int ih)
-{
-    Meter::setSize(ix, iy, iw, ih);
-    edit->setGeometry(ix, iy, iw, ih);
-}
-
-void Input::setX(int ix)
-{
-    Meter::setX(ix);
-    edit->setGeometry(ix, getY(), getWidth(), getHeight());
-}
-
-void Input::setY(int iy)
-{
-    Meter::setY(iy);
-    edit->setGeometry(getX(), iy, getWidth(), getHeight());
-}
-
-void Input::setWidth(int iw)
-{
-    Meter::setWidth(iw);
-    edit->setGeometry(getX(), getY(), iw, getHeight());
-}
-
-void Input::setHeight(int ih)
-{
-    Meter::setHeight(ih);
-    edit->setGeometry(getX(), getY(), getWidth(), ih);
-}
-
-void Input::setFont(QString f)
-{
-    font.setFamily(f);
-    edit->setFont(font);
+    QFont f=edit->font();
+    f.setFamily(fs);
+    edit->setFont(f);
 }
 
 QString Input::getFont() const
 {
-    return font.family();
+    return edit->font().family();
 }
 
-void Input::setFontColor(QColor fontColor)
-{
-    QPalette palette = edit->palette();
-    palette.setColor(QColorGroup::Text, fontColor);
-    edit->setPalette(palette);
-}
-
-QColor Input::getFontColor() const
-{
-    const QColorGroup &color = edit->colorGroup();
-    return color.text();
-}
 
 void Input::setSelectionColor(QColor selectionColor)
 {
     QPalette palette = edit->palette();
-    palette.setColor(QColorGroup::Highlight, selectionColor);
+    palette.setColor(QPalette::Highlight, selectionColor);
     edit->setPalette(palette);
 }
 
 QColor Input::getSelectionColor() const
 {
-    const QColorGroup &color = edit->colorGroup();
-    return color.highlight();
+    return edit->palette().color(QPalette::Highlight);
 }
 
 void Input::setSelectedTextColor(QColor selectedTextColor)
 {
     QPalette palette = edit->palette();
-    palette.setColor(QColorGroup::HighlightedText, selectedTextColor);
+    palette.setColor(QPalette::HighlightedText, selectedTextColor);
     edit->setPalette(palette);
 }
 
 QColor Input::getSelectedTextColor() const
 {
-    const QColorGroup &color = edit->colorGroup();
-    return color.highlightedText();
+    return edit->palette().color(QPalette::HighlightedText);
 }
 
 void Input::setFontSize(int size)
 {
-    font.setPixelSize(size);
-    edit->setFont(font);
+    QFont f=edit->font();
+    f.setPixelSize(size);
+    edit->setFont(f);
 }
 
 int Input::getFontSize() const
 {
-    return font.pixelSize();
+    return edit->font().pixelSize();
 }
 
 void Input::setTextProps(TextField* t)
@@ -176,7 +125,7 @@ void Input::setTextProps(TextField* t)
     if(t)
     {
         setFontSize(t->getFontSize());
-        setFont(t->getFont());
+        setMeterFont(t->getFont());
         setColor(t->getColor());
         setBGColor(t->getBGColor());
     }

@@ -129,11 +129,11 @@ PyObject* py_execute_command_interactive(PyObject *, PyObject* args)
 
 long attachClickArea(long widget, long meter, QString LeftButton, QString MiddleButton, QString RightButton)
 {
-    KarambaWidget* currTheme = (KarambaWidget*) widget;
+    /*KarambaWidget* currTheme = (KarambaWidget*) widget;
     Meter* currMeter = (Meter*) meter;
 
     // Look if currMeter has an ClickArea attached.
-    bool meterAlreadyClickable = currTheme->clickList.count((ClickMap *)currMeter);
+//    bool meterAlreadyClickable = currTheme->clickList.count((ClickMap *)currMeter);
 
     // if currMeter is of type ImageLabel*
     if (ImageLabel* image = dynamic_cast<ImageLabel*>(currMeter))
@@ -142,7 +142,7 @@ long attachClickArea(long widget, long meter, QString LeftButton, QString Middle
         if (!meterAlreadyClickable)
         {
             //qWarning("attachClickArea : meter is image");
-            currTheme->clickList.append((ClickMap *)image);
+//             currTheme->clickList.append((ClickMap *)image);
         }
     }
     // else if currMeter is of type TextLabel*
@@ -152,7 +152,7 @@ long attachClickArea(long widget, long meter, QString LeftButton, QString Middle
         if (!meterAlreadyClickable)
         {
             //qWarning("attachClickArea : meter is text");
-            currTheme->clickList.append((ClickMap *)text);
+//             currTheme->clickList.append((ClickMap *)text);
         }
     }
     else
@@ -161,12 +161,12 @@ long attachClickArea(long widget, long meter, QString LeftButton, QString Middle
         qWarning("The given meter is not of type image or text");
         return 0;
     }
-    return 1;
+    return 1;*/
 }
 
 PyObject* py_attach_clickArea(PyObject*, PyObject* args, PyObject* dict)
 {
-    long widget;
+    /*long widget;
     long meter;
     char* LeftButton = NULL;
     char* MiddleButton = NULL;
@@ -205,7 +205,7 @@ PyObject* py_attach_clickArea(PyObject*, PyObject* args, PyObject* dict)
     {
         rB.setAscii("");
     }
-    return Py_BuildValue((char*)"l", attachClickArea(widget, meter, lB, mB, rB));
+    return Py_BuildValue((char*)"l", attachClickArea(widget, meter, lB, mB, rB));*/
 }
 
 /* now a method we need to expose to Python */
@@ -271,7 +271,7 @@ PyObject* py_read_theme_file(PyObject *, PyObject *args)
 /* now a method we need to expose to Python */
 long createClickArea(long widget, long x, long y, long w, long h, char* text)
 {
-
+/*
     KarambaWidget* currTheme = (KarambaWidget*)widget;
     ClickArea *tmp = new ClickArea(currTheme, x, y, w, h );
     QString onclick;
@@ -280,20 +280,20 @@ long createClickArea(long widget, long x, long y, long w, long h, char* text)
 
     tmp->setOnClick(onclick );
 
-    currTheme->clickList.append((ClickMap *)tmp);
-    return (long)tmp;
+//     currTheme->clickList.append((ClickMap *)tmp);
+    return (long)tmp;*/
 }
 
 PyObject* py_create_click_area(PyObject *, PyObject *args)
 {
-    long widget, x, y, w, h;
+/*    long widget, x, y, w, h;
     char *text;
     if (!PyArg_ParseTuple(args, (char*)"llllls:createClickArea", &widget, &x, &y,
                           &w, &h, &text))
         return NULL;
     if (!checkKaramba(widget))
         return NULL;
-    return Py_BuildValue((char*)"l", createClickArea(widget, x, y, w, h, text));
+    return Py_BuildValue((char*)"l", createClickArea(widget, x, y, w, h, text));*/
 }
 
 /* now a method we need to expose to Python */
@@ -360,10 +360,8 @@ int translateAll(long widget, int x, int y)
 
     foreach (QObject *it2, currTheme->meterList)
     {
-        ((Meter*) it2)->setSize(((Meter*) it2)->getX()+x,
-                                ((Meter*) it2)->getY()+y,
-                                ((Meter*) it2)->getWidth(),
-                                ((Meter*) it2)->getHeight());
+        ((Meter*) it2)->move(((Meter*) it2)->x()+x,
+                                ((Meter*) it2)->y()+y);
     }
 
     if (currTheme->systray != 0)

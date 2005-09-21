@@ -21,6 +21,7 @@
 #include <qsize.h>
 #include "karambawidget.h"
 
+class QTextDocument;
 class RichTextLabel : public Meter
 {
     Q_OBJECT
@@ -29,7 +30,7 @@ public:
     RichTextLabel(KarambaWidget* k, int x, int y, int w, int h);
     ~RichTextLabel();
 
-    void setText(QString text, bool linkUnderline = false);
+    void setText(QString text, QString f="");
     void setValue(QString text);
     void setValue(int v);
     QString getStringValue()
@@ -37,8 +38,11 @@ public:
         return source;
     };
 
-    void setFont(QString font);
-    QString getFont() const;
+    void setFontString(QString font);
+    QString getFont() const
+    {
+        return font().family();
+    }
     void setFontSize(int);
     int getFontSize() const;
     void setFixedPitch(bool);
@@ -48,23 +52,30 @@ public:
     const QColorGroup &getColorGroup() const;
     void setWidth(int width);
 
-    virtual bool insideActiveArea(int, int);
+    virtual bool insideActiveArea(qreal,qreal);
 
-    virtual bool click(QMouseEvent*);
-    virtual void mUpdate(QPainter*);
+ //   virtual bool click(QMouseEvent*);
+ //   virtual void mUpdate(QPainter*);
 
-    QString anchorAt(int, int);
+    QString anchorAt(qreal, qreal);
+    inline Qt::TextFormat textFormat() { return m_type;}
+    void setTextFormat(Qt::TextFormat f) 
+    {
+        m_type=f;
+    }  
 
 public slots:
-    void update(QVariant);
+    void update();
 
 private:
-    Q3SimpleRichText* text;
+    QTextDocument* textDoc;
     QString source;
-    QFont font;
     QColorGroup colorGrp;
     bool underlineLinks;
     QSize originalSize;
+    Qt::TextFormat m_type;
+protected:
+    virtual void paintEvent(QPaintEvent* pe);
 };
 
 #endif

@@ -27,7 +27,7 @@ public:
     void setValue( int );
     int getValue()
     {
-        return lastValue;
+        return values.last();
     };
     void setValue( QString );
 
@@ -60,18 +60,17 @@ public:
     void mUpdate( QPainter * );
 
 public slots:
-    void update(QVariant);
+    void update();
 
 private:
-    int lastValue;
-    int* values;
-    int nbrPoints;
-    int ptPtr;  // points to the array position
+    QList<int> values;
 
     int m_minValue;
     int m_maxValue;
 
     QColor m_color;
+protected:
+    virtual void paintEvent(QPaintEvent*);
 };
 
 #endif // GRAPH_H

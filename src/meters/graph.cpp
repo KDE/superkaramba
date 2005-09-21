@@ -14,15 +14,12 @@
 #include "graph.moc"
 
 Graph::Graph(KarambaWidget* k, int x, int y, int w, int h, int nbrPts)
-        :   Meter(k, x, y, w, h),
-        lastValue(0),
-        ptPtr(0)
+        :   Meter(k, x, y, w, h)
 {
-    nbrPoints = (nbrPts==0)? 50:nbrPts ;
-    values = new int[nbrPoints];
-    for(int i = 0; i < nbrPoints; i++)
+    nbrPts = (nbrPts==0)? 50:nbrPts ;
+    for(int i = 0; i < nbrPts; i++)
     {
-        values[i] = 0;
+        values.append(0);
     }
 
     m_minValue = 0;
@@ -30,26 +27,14 @@ Graph::Graph(KarambaWidget* k, int x, int y, int w, int h, int nbrPts)
 }
 
 Graph::~Graph()
-{
-    delete[] values;
-}
+{}
 
 void Graph::setValue(int v)
 {
-    if (v > m_maxValue)
-    {
-        // maxValue = v;
-        v = m_maxValue;
-    }
-    if (v < m_minValue)
-    {
-        //minValue = v;
-        v = m_minValue;
-    }
-
-    lastValue = v;
-    values[ptPtr] = (int) (v / (m_maxValue + 0.0001) * getHeight());
-    ptPtr = (ptPtr + 1) % nbrPoints;
+    v=qMin(v,m_maxValue);
+    v=qMax(v,m_minValue);
+    values.removeFirst();
+    values.append((int) (v / ((float)m_maxValue) * height()));
 }
 
 void Graph::setValue(QString v)
@@ -57,29 +42,26 @@ void Graph::setValue(QString v)
     setValue((int)(v.toDouble() + 0.5));
 }
 
-void Graph::update(QVariant values)
+void Graph::update()
 {
-    QVariantMap map = values.toMap();
-    setValue(map[m_format].toInt());
+    setValue(decodeDot(m_format.remove('%')).toInt());
+//     QVariantMap map = values.toMap();
+//     setValue(map[m_format].toInt());
 }
 
-void Graph::mUpdate(QPainter *p)
+void Graph::paintEvent( QPaintEvent *)
 {
-    if (hidden == 0)
+    QPainter p(this);
+    double step = (width() / (float)(values.size()-1));
+    double xPos = 0;
+    double nextXPos = 0;
+    p.setPen(m_color);
+    /*may be we can use here drawLines() instead of drawLine()? */
+    for (int i = 0; i < values.size()- 1 ; i ++)
     {
-        double step = (getWidth() / (nbrPoints-1.001));
-        double xPos = 0;
-        double nextXPos = 0;
-        p->setPen(m_color);
-
-        for (int i = 0; i < nbrPoints - 1 ; i ++)
-        {
-            nextXPos = xPos + step;
-            p->drawLine(getX() + (int)xPos, getY()+getHeight() -
-                        (int) values[(ptPtr+i) % nbrPoints] ,
-                        getX() + (int)nextXPos, getY()+getHeight() -
-                        (int) values[(ptPtr + i +1) % nbrPoints] );
-            xPos = nextXPos;
-        }
+        nextXPos=xPos+step;
+        p.drawLine( (int)xPos, height() -(int) values.at(i) ,
+                    (int)nextXPos, height() - (int) values.at(i+1));
+        xPos = nextXPos;
     }
 }

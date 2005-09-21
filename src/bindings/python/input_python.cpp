@@ -141,7 +141,7 @@ PyObject* py_setInputBoxFont(PyObject *, PyObject *args)
         return NULL;
     }
 
-    ((Input*)inputBox)->setFont(text);
+    ((Input*)inputBox)->setMeterFont(text);
 
     return Py_BuildValue((char*)"l", 1);
 }
@@ -176,7 +176,7 @@ PyObject* py_setInputBoxFontColor(PyObject *, PyObject *args)
         return NULL;
     }
 
-    ((Input*)inputBox)->setFontColor(QColor(r, g, b));
+    ((Input*)inputBox)->setFGColor(QColor(r, g, b));
 
     return Py_BuildValue((char*)"l", 1);
 }
@@ -194,7 +194,7 @@ PyObject* py_getInputBoxFontColor(PyObject *, PyObject *args)
         return NULL;
     }
 
-    QColor color = ((Input*)inputBox)->getFontColor();
+    QColor color = ((Input*)inputBox)->getFGColor();
 
     return Py_BuildValue((char*)"(i,i,i)", color.red(), color.green(), color.blue());
 }

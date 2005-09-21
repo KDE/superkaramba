@@ -42,40 +42,29 @@ public:
 
     ~Input();
 
-    void mUpdate(QPainter *p);
-
     void setValue(QString text);
     QString getStringValue() const;
 
     void setBGColor(QColor c);
     QColor getBGColor() const;
-    void setColor(QColor c);
-    QColor getColor() const;
-    void setFontColor(QColor fontColor);
-    QColor getFontColor() const;
     void setSelectionColor(QColor selectionColor);
     QColor getSelectionColor() const;
     void setSelectedTextColor(QColor selectedTextColor);
     QColor getSelectedTextColor() const;
     void setTextProps(TextField*);
 
-    void hide();
-    void show();
-
-    void setSize(int ix, int iy, int iw, int ih);
-    void setX(int ix);
-    void setY(int iy);
-    void setWidth(int iw);
-    void setHeight(int ih);
-
-    void setFont(QString f);
+    void setMeterFont(QString f);
     QString getFont() const;
     void setFontSize(int size);
     int getFontSize() const;
+    void setFGColor(QColor c);
+    QColor getFGColor() const;
+    
 
 private:
-    SKLineEdit *edit;
-    QFont font;
+    QLineEdit *edit;
+protected:
+    void paintEvent(QPaintEvent*);
 };
 
 #endif

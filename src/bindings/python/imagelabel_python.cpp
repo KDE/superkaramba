@@ -167,7 +167,7 @@ PyObject* py_deleteImage(PyObject *, PyObject *args)
     }
 
     ((KarambaWidget*)widget)->deleteMeterFromSensors((Meter*)meter);
-    ((KarambaWidget*)widget)->clickList.removeAll((ClickMap *)meter);
+//     ((KarambaWidget*)widget)->clickList.removeAll((ClickMap *)meter);
     ((KarambaWidget*)widget)->imageList.removeAll((ImageLabel *)meter);
 
     return Py_BuildValue((char*)"l",
@@ -353,7 +353,7 @@ PyObject* py_getImageHeight(PyObject *, PyObject *args)
         return NULL;
     }
 
-    return Py_BuildValue((char*)"l", ((ImageLabel*)meter)->getHeight());
+    return Py_BuildValue((char*)"l", ((ImageLabel*)meter)->height());
 }
 
 PyObject* py_getImageWidth(PyObject *, PyObject *args)
@@ -369,7 +369,7 @@ PyObject* py_getImageWidth(PyObject *, PyObject *args)
         return NULL;
     }
 
-    return Py_BuildValue((char*)"l", ((ImageLabel*)meter)->getWidth());
+    return Py_BuildValue((char*)"l", ((ImageLabel*)meter)->width());
 }
 
 PyObject* py_resizeImageSmooth(PyObject *, PyObject *args)

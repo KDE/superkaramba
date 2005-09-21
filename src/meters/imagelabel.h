@@ -123,8 +123,8 @@ public:
 
     void rolloverImage(QMouseEvent *e);
     void parseImages( QString fn, QString fn_roll, int, int, int, int );
-    virtual void show();
-    virtual void hide();
+//     virtual void show();
+//     virtual void hide();
 
     void setTooltip(QString txt);
     int cblend;
@@ -139,7 +139,7 @@ public:
     void attachClickArea(QString leftMouseButton, QString middleMouseButton,
                          QString rightMouseButton);
 
-    virtual bool click(QMouseEvent*);
+//    virtual bool click(QMouseEvent*);
 
 private slots:
 
@@ -189,6 +189,8 @@ private:
     int xoff,xon;
     int yoff,yon;
     QString imagePath;
+protected:
+    void paintEvent(QPaintEvent*); 
 };
 
 #endif // IMAGELABEL_H

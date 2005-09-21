@@ -35,11 +35,8 @@ public:
     SKLineEdit(QWidget *w, Input *i);
     ~SKLineEdit();
 
-    void drawFrame(QPainter *p);
-    void drawContents(QPainter *p);
-
-    void setFrameColor(QColor c);
-    QColor getFrameColor() const;
+//     void setFrameColor(QColor c);
+//     QColor getFrameColor() const;
 
     void setBackgroundColor(QColor c);
 

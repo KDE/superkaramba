@@ -65,12 +65,12 @@
 #include "karambarootpixmap.h"
 
 #include "bar.h"
-#include "textlabel.h"
+//#include "textlabel.h"
 #include "imagelabel.h"
 #include "graph.h"
 #include "input.h"
 
-#include "clickarea.h"
+// #include "clickarea.h"
 
 #include "sensorparams.h"
 #include "memsensor.h"
@@ -86,7 +86,7 @@
 #include "sensorsensor.h"
 #include "textfilesensor.h"
 
-#include "clickmap.h"
+// #include "clickmap.h"
 #include "rsssensor.h"
 //#include "clickable.h"
 #include "taskmanager.h"
@@ -111,10 +111,10 @@ class KarambaWidget :  public QWidget
 
 public:
     // TODO: Make sure to clear and delete these when your done later!
-    QList<QObject*> meterList;
-    QList<ImageLabel*> imageList;
-    QList<ClickMap*> clickList;
-    QList<KPopupMenu*> menuList;
+    QList<QObject *> meterList;
+    QList<ImageLabel *> imageList;
+//     QList<ClickMap *> clickList;
+    QList<KPopupMenu *> menuList;
 
     KarambaWidget(QString fn, bool reloading = false, int instance = -1, QWidget *parent = 0);
     virtual ~KarambaWidget();

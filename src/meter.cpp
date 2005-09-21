@@ -9,18 +9,24 @@
  ***************************************************************************/
 #include "meter.h"
 #include "sensor.h"
+#include "karambawidget.h"
 
-Meter::Meter(KarambaWidget* k, int ix, int iy, int iw, int ih):
+Meter::Meter(KarambaWidget* k, int ix, int iy, int iw, int ih): 
+        QWidget(k),
         boundingBox(ix, iy, iw, ih), leftButtonAction(""), middleButtonAction(""),
         rightButtonAction(""), clickable(true), hidden(0), m_sensor(0),
         m_karamba(k),autoUpdate(true)
-{}
+{
+    setGeometry(ix,iy,iw,ih);
+}
 
-Meter::Meter(KarambaWidget* k):
+Meter::Meter(KarambaWidget* k):QWidget(k),
         boundingBox(0, 0, 0, 0), leftButtonAction(""), middleButtonAction(""),
         rightButtonAction(""), clickable(true), hidden(0), m_sensor(0),
         m_karamba(k)
-{}
+{
+    
+}
 
 Meter::~Meter()
 {}
@@ -37,11 +43,11 @@ void Meter::detachFromSensor()
     m_sensor = 0;
 }
 
-bool Meter::click(QMouseEvent*)
+/*bool Meter::click(QMouseEvent*)
 {
     return false;
-}
-
+}*/
+/*
 void Meter::setSize(int ix, int iy, int iw, int ih)
 {
     boundingBox.setRect(ix, iy, iw, ih);
@@ -111,7 +117,7 @@ bool Meter::isEnabled()
 bool Meter::insideActiveArea(int x, int y)
 {
     return boundingBox.contains(x, y) && clickable;
-}
+}*/
 
 void Meter::storeData(QVariant value)
 {
@@ -123,6 +129,21 @@ void Meter::storeData(QVariant value)
 }
 void Meter::update()
 {
+}
+
+QVariant Meter::decodeDot( QString formatString )
+{
+    QStringList list=formatString.split('.');
+    QVariant value=data;
+    foreach(QString section,list)
+    {
+        if(value.toMap().find(section)==value.toMap().end()) return QVariant();
+        else
+        {
+            value=value.toMap().value(section);
+        }
+    }
+    return value ;
 }
 
 #include "meter.moc"

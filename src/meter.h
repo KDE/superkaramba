@@ -15,7 +15,7 @@
 #include <qpainter.h>
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qobject.h>
+#include <qwidget.h>
 #include <QMouseEvent>
 
 #include <qfileinfo.h>
@@ -23,35 +23,35 @@
 class KarambaWidget;
 class Sensor;
 
-class Meter : public QObject
+class Meter : public QWidget
 {
     Q_OBJECT
      /* So that for meter.x=50 we can use meter->setProperty(x,50) instead of
              several if,else,switch statements, After change to QWidget, many property
              will be vanished from here */
             
-    Q_PROPERTY(int x READ getX WRITE setX)
-    Q_PROPERTY(int y READ getY WRITE setY)
-    Q_PROPERTY(int width READ getWidth WRITE setWidth)
-    Q_PROPERTY(int height READ getHeight WRITE setHeight)
+//     Q_PROPERTY(int x READ getX WRITE setX)
+//     Q_PROPERTY(int y READ getY WRITE setY)
+//     Q_PROPERTY(int width READ getWidth WRITE setWidth)
+//     Q_PROPERTY(int height READ getHeight WRITE setHeight)
 
 public:
 
     Meter(KarambaWidget* k, int ix,int iy,int iw,int ih);
     Meter(KarambaWidget* k);
     virtual ~Meter();
-    virtual int getX() const;
-    virtual int getY() const;
-    virtual int getWidth() const;
-    virtual int getHeight() const;
-    virtual void setX(int);
-    virtual void setY(int);
-    virtual void setWidth(int);
-    virtual void setHeight(int);
+//     virtual int getX() const;
+//     virtual int getY() const;
+//     virtual int getWidth() const;
+//     virtual int getHeight() const;
+//     virtual void setX(int);
+//     virtual void setY(int);
+//     virtual void setWidth(int);
+//     virtual void setHeight(int);
 
-    virtual void setSize(int ix, int iy, int iw, int ih);
+//     virtual void setSize(int ix, int iy, int iw, int ih);
 
-    virtual void mUpdate(QPainter *)=0 ;
+//     virtual void mUpdate(QPainter *)=0 ;
 
     // TODO Review this methods and change python ifaces //
     virtual void setMax(int max)
@@ -92,23 +92,23 @@ public:
         return Qt::black;
     }
     ////////////////////////////////////////////////////////
-    virtual void show()
-    {
-        hidden = 0;
-    }
-    virtual void hide()
-    {
-        hidden = 1;
-    }
+//     virtual void show()
+//     {
+//         hidden = 0;
+//     }
+//     virtual void hide()
+//     {
+//         hidden = 1;
+//     }
 
     QRect getBoundingBox();
 
     // true when given coordinate point is inside the meters
     // active reagion and meter is enabled
-    virtual bool insideActiveArea(int, int);
+//    virtual bool insideActiveArea(int, int);
 
     // returns true when callback meterClicked should be called.
-    virtual bool click( QMouseEvent* );
+//    virtual bool click( QMouseEvent* );
 
     void setEnabled(bool);
     bool isEnabled();
@@ -127,6 +127,13 @@ public:
     {
         return m_sensor;
     }
+    virtual void setMeterFont(QString f)
+    {
+        QFont ft=font();
+        ft.setFamily(f);
+        setFont(ft);
+    }
+    
     /*
     void setOnClick( QString );
     void setOnMiddleClick( QString );
@@ -150,6 +157,7 @@ protected: // Protected attributes
     QString m_format;
     Sensor* m_sensor;
     KarambaWidget* m_karamba;
+    QVariant decodeDot(QString formatString);
 };
 
 #endif // METER_H

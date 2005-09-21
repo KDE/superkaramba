@@ -47,6 +47,7 @@
 #include <QtAlgorithms>
 #include <Q3TextDrag>
 #include <QX11Info>
+#include <krootpixmap.h>
 
 // Menu IDs
 #define EDITSCRIPT 1
@@ -292,6 +293,11 @@ KarambaWidget::KarambaWidget(QString fn, bool reloading, int instance, QWidget *
 
 
     setFocusPolicy(Qt::StrongFocus);
+    QList<QWidget*> allChilds=findChildren<QWidget*>();
+    foreach( QWidget* wd, allChilds)
+    {
+        new KRootPixmap(wd);
+    }
 }
 
 KarambaWidget::~KarambaWidget()
@@ -312,8 +318,8 @@ KarambaWidget::~KarambaWidget()
     sensorList.clear();
     //qDeleteAll(imageList);
     //imageList.clear();
-    qDeleteAll(clickList);
-    clickList.clear();
+//     qDeleteAll(clickList);
+//     clickList.clear();
     qDeleteAll(timeList);
     timeList.clear();
 
@@ -521,7 +527,7 @@ bool KarambaWidget::parseConfig()
             {
                 offsetStack.pop();
             }
-
+/*
             if(lineParser.meter() == "CLICKAREA")
             {
                 if( !hasMouseTracking() )
@@ -533,7 +539,7 @@ bool KarambaWidget::parseConfig()
                 clickList.append( (ClickMap *)tmp );
                 if( lineParser.getBoolean("PREVIEW"))
                     meterList.append( tmp );
-            }
+            }*/
 
             // program sensor without a meter
             if(lineParser.meter() == "SENSOR=PROGRAM")
@@ -587,8 +593,8 @@ bool KarambaWidget::parseConfig()
                 defaultTextField->setShadow(lineParser.getInt("SHADOW", 0));
             }
 
-            if(lineParser.meter() == "TEXT" ||
-                    lineParser.meter() == "CLICKMAP" ||
+            if(/*lineParser.meter() == "TEXT" ||
+                    lineParser.meter() == "CLICKMAP" ||*/
                     lineParser.meter() == "RICHTEXT" ||
                     lineParser.meter() == "INPUT")
             {
@@ -614,35 +620,35 @@ bool KarambaWidget::parseConfig()
 
                 // ////////////////////////////////////////////////////
                 // Now handle the specifics
-                if(lineParser.meter() == "TEXT")
-                {
+//                 if(lineParser.meter() == "TEXT")
+//                 {
+// 
+//                     TextLabel *tmp = new TextLabel(this, x, y, w, h );
+//                     tmp->setTextProps(tmpText);
+//                     tmp->setValue(
+//                         m_theme.locale()->translate(lineParser.getString("VALUE").ascii()));
+// 
+//                     QString name = lineParser.getString("NAME");
+//                     if (!name.isEmpty())
+//                         tmp->setName(name.ascii());
+// 
+//                     setSensor(lineParser, (Meter*)tmp);
+//                     meterList.append ( tmp );
+//                 }
 
-                    TextLabel *tmp = new TextLabel(this, x, y, w, h );
-                    tmp->setTextProps(tmpText);
-                    tmp->setValue(
-                        m_theme.locale()->translate(lineParser.getString("VALUE").ascii()));
-
-                    QString name = lineParser.getString("NAME");
-                    if (!name.isEmpty())
-                        tmp->setName(name.ascii());
-
-                    setSensor(lineParser, (Meter*)tmp);
-                    meterList.append ( tmp );
-                }
-
-                if(lineParser.meter() == "CLICKMAP")
-                {
-                    if( !hasMouseTracking() )
-                        setMouseTracking(true);
-                    ClickMap *tmp = new ClickMap(this, x, y, w, h);
-                    tmp->setTextProps( tmpText );
-
-                    setSensor(lineParser, (Meter*)tmp);
-                    // set all params
-                    clickList.append(tmp);
-                    meterList.append( tmp );
-
-                }
+//                 if(lineParser.meter() == "CLICKMAP")
+//                 {
+//                     if( !hasMouseTracking() )
+//                         setMouseTracking(true);
+//                     ClickMap *tmp = new ClickMap(this, x, y, w, h);
+//                     tmp->setTextProps( tmpText );
+// 
+//                     setSensor(lineParser, (Meter*)tmp);
+//                     // set all params
+//                     clickList.append(tmp);
+//                     meterList.append( tmp );
+// 
+//                 }
 
                 if(lineParser.meter() == "RICHTEXT")
                 {
@@ -651,17 +657,16 @@ bool KarambaWidget::parseConfig()
                     bool dUl = lineParser.getBoolean("UNDERLINE");
 
                     tmp->setText(
-                        m_theme.locale()->translate(lineParser.getString("VALUE").ascii()), dUl);
+                        m_theme.locale()->translate(lineParser.getString("VALUE").ascii()));
                     tmp->setTextProps( tmpText );
-                    tmp->setWidth(w);
-                    tmp->setHeight(h);
-
+                    tmp->resize(w,h);
+                    
                     QString name = lineParser.getString("NAME");
                     if (!name.isEmpty())
                         tmp->setName(name.ascii());
 
                     setSensor(lineParser, (Meter*)tmp);
-                    clickList.append((ClickMap *)tmp);
+//                     clickList.append((ClickMap *)tmp);
                     meterList.append ( tmp );
                 }
 
@@ -1196,32 +1201,32 @@ void KarambaWidget::passMenuOptionChanged(QString key, bool value)
 void KarambaWidget::meterClicked(QMouseEvent* e, Meter* meter)
 {
     //qWarning("KarambaWidget::meterClicked");
-    if (pythonIface && pythonIface->isExtensionLoaded() && haveUpdated)
-    {
-        int button = 0;
-
-        if( e->button() == Qt::LeftButton )
-            button = 1;
-        else if( e->button() == Qt::MidButton )
-            button = 2;
-        else if( e->button() == Qt::RightButton )
-            button = 3;
-
-        if (RichTextLabel* richText = dynamic_cast<RichTextLabel*>(meter))
-        {
-            pythonIface->meterClicked(this, richText->anchorAt(e->x(), e->y()),
-                                      button);
-        }
-        else
-        {
-            pythonIface->meterClicked(this, meter, button);
-        }
-    }
+//     if (pythonIface && pythonIface->isExtensionLoaded() && haveUpdated)
+//     {
+//         int button = 0;
+// 
+//         if( e->button() == Qt::LeftButton )
+//             button = 1;
+//         else if( e->button() == Qt::MidButton )
+//             button = 2;
+//         else if( e->button() == Qt::RightButton )
+//             button = 3;
+// 
+//         if (RichTextLabel* richText = dynamic_cast<RichTextLabel*>(meter))
+//         {
+//             pythonIface->meterClicked(this, richText->anchorAt(e->x(), e->y()),
+//                                       button);
+//         }
+//         else
+//         {
+//             pythonIface->meterClicked(this, meter, button);
+//         }
+//     }
 }
 
 void KarambaWidget::passClick(QMouseEvent *e)
 {
-    //qDebug("KarambaWidget::passClick");
+    /*//qDebug("KarambaWidget::passClick");
     QListIterator<Sensor *> it2( timeList ); // iterate over meters
     while ( it2.hasNext() )
     {
@@ -1257,12 +1262,12 @@ void KarambaWidget::passClick(QMouseEvent *e)
             button = 3;
 
         pythonIface->widgetClicked(this, e->x(), e->y(), button);
-    }
+    }*/
 }
 
 void KarambaWidget::passWheelClick( QWheelEvent *e )
 {
-    //qDebug("KarambaWidget::passWheelClick");
+ /*   //qDebug("KarambaWidget::passWheelClick");
     //Everything below is to call the python callback function
     if (pythonIface && pythonIface->isExtensionLoaded() && haveUpdated)
     {
@@ -1274,7 +1279,7 @@ void KarambaWidget::passWheelClick( QWheelEvent *e )
             button = 5;
 
         pythonIface->widgetClicked(this, e->x(), e->y(), button);
-    }
+    }*/
 }
 
 void KarambaWidget::mousePressEvent( QMouseEvent *e )
@@ -1335,37 +1340,37 @@ void KarambaWidget::mouseMoveEvent( QMouseEvent *e )
         move( e->globalPos() - clickPos );
     }
     else
-    {
-        // Change cursor over ClickArea
-        QListIterator<ClickMap *> it(clickList);
-        bool insideArea = false;
-
-        while (it.hasNext())
-        {
-            insideArea = ((Meter*) it.next()) -> insideActiveArea(e -> x(), e ->y());
-            if (insideArea)
-            {
-                break;
-            }
-        }
-
-        if(insideArea)
-        {
-            if( cursor().shape() != Qt::PointingHandCursor )
-                setCursor( Qt::PointingHandCursor );
-        }
-        else
-        {
-            if( cursor().shape() != Qt::ArrowCursor )
-                setCursor( Qt::ArrowCursor );
-        }
-
-        QListIterator<ImageLabel *> image_it( imageList);        // iterate over image sensors
-        while ( image_it.hasNext() )
-        {
-            ((ImageLabel*) image_it.next())->rolloverImage(e);
-        }
-    }
+//     {
+//         // Change cursor over ClickArea
+// //         QListIterator<ClickMap *> it(clickList);
+//         bool insideArea = false;
+// 
+//         while (it.hasNext())
+//         {
+//             insideArea = ((Meter*) it.next()) -> insideActiveArea(e -> x(), e ->y());
+//             if (insideArea)
+//             {
+//                 break;
+//             }
+//         }
+// 
+//         if(insideArea)
+//         {
+//             if( cursor().shape() != Qt::PointingHandCursor )
+//                 setCursor( Qt::PointingHandCursor );
+//         }
+//         else
+//         {
+//             if( cursor().shape() != Qt::ArrowCursor )
+//                 setCursor( Qt::ArrowCursor );
+//         }
+// 
+//         QListIterator<ImageLabel *> image_it( imageList);        // iterate over image sensors
+//         while ( image_it.hasNext() )
+//         {
+//             ((ImageLabel*) image_it.next())->rolloverImage(e);
+//         }
+//     }
 
     if (pythonIface && pythonIface->isExtensionLoaded())
     {
@@ -1432,59 +1437,59 @@ void KarambaWidget::updateBackground(KSharedPixmap* kpm)
     //kdDebug() << k_funcinfo << pm.size() << endl;
     // if pm width == 0 this is the first time we come here and we should start
     // the theme. This is because we need the background before starting.
-    if(pm.width() == 0)
-        start();
-    background = QPixmap(*kpm);
-
-    QPixmap buffer = QPixmap(size());
-
-    pm = QPixmap(size());
-    buffer.fill(Qt::black);
-
-    QListIterator<ImageLabel *> it( imageList ); // iterate over meters
-    p.begin(&buffer);
-    p.drawPixmap(0, 0, background);
-
-    while ( it.hasNext() )
-    {
-        ImageLabel *tmp = qobject_cast<ImageLabel *>(it.next());
-        if (tmp->background == 1)
-        {
-            tmp->mUpdate(&p, 1);
-        }
-    }
-    p.end();
-
-    p.begin(&pm);
-    p.drawPixmap(0, 0, buffer);
-    p.end();
-
-    background = pm;
-
-    QPixmap buffer2 = QPixmap(size());
-
-    pm = QPixmap(size());
-    buffer2.fill(Qt::black);
-
-    QListIterator<QObject *> it2( meterList ); // iterate over meters
-    p.begin(&buffer2);
-    p.drawPixmap(0, 0, background);
-
-    while ( it2.hasNext() )
-    {
-        ((Meter*) it2.next())->mUpdate(&p);
-    }
-    p.end();
-
-    p.begin(&pm);
-    p.drawPixmap(0, 0, buffer2);
-    p.end();
-
-    if (systray != 0)
-    {
-        systray->updateBackgroundPixmap(buffer2);
-    }
-    repaint();
+//     if(pm.width() == 0)
+//         start();
+//     background = QPixmap(*kpm);
+// 
+//     QPixmap buffer = QPixmap(size());
+// 
+//     pm = QPixmap(size());
+//     buffer.fill(Qt::black);
+// 
+//     QListIterator<ImageLabel *> it( imageList ); // iterate over meters
+//     p.begin(&buffer);
+//     p.drawPixmap(0, 0, background);
+// 
+//     while ( it.hasNext() )
+//     {
+//         ImageLabel *tmp = qobject_cast<ImageLabel *>(it.next());
+//         if (tmp->background == 1)
+//         {
+//   //          tmp->mUpdate(&p, 1);
+//         }
+//     }
+//     p.end();
+// 
+//     p.begin(&pm);
+//     p.drawPixmap(0, 0, buffer);
+//     p.end();
+// 
+//     background = pm;
+// 
+//     QPixmap buffer2 = QPixmap(size());
+// 
+//     pm = QPixmap(size());
+//     buffer2.fill(Qt::black);
+// 
+//     QListIterator<QObject *> it2( meterList ); // iterate over meters
+//     p.begin(&buffer2);
+//     p.drawPixmap(0, 0, background);
+// 
+//     while ( it2.hasNext() )
+//     {
+//  //       ((Meter*) it2.next())->mUpdate(&p);
+//     }
+//     p.end();
+// 
+//     p.begin(&pm);
+//     p.drawPixmap(0, 0, buffer2);
+//     p.end();
+// 
+//     if (systray != 0)
+//     {
+//         systray->updateBackgroundPixmap(buffer2);
+//     }
+//     repaint();
 }
 
 void KarambaWidget::currentDesktopChanged( int i )
@@ -1519,7 +1524,7 @@ void KarambaWidget::externalStep()
 
         while ( it.hasNext()  )
         {
-            ((Meter*) it.next())->mUpdate(&p);
+          //  ((Meter*) it.next())->mUpdate(&p);
         }
         p.end();
 
@@ -1546,7 +1551,7 @@ void KarambaWidget::step()
 
         while (it.hasNext())
         {
-            ((Meter*) it.next())->mUpdate(&p);
+    //        ((Meter*) it.next())->mUpdate(&p);
         }
         p.end();
 

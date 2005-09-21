@@ -12,69 +12,67 @@
 #include <kdebug.h>
 #include "karambawidget.h"
 #include "richtextlabel.h"
+#include <QAbstractTextDocumentLayout>
+#include <QPalette>
+#include <QStringList>
 
 RichTextLabel::RichTextLabel(KarambaWidget* k) :
         Meter(k, 0, 0, 100, 100),
-        text(0),
         source(""),
         colorGrp(k->colorGroup()),
-        underlineLinks(false)
+        m_type(Qt::AutoText)
 {
     originalSize = QSize(0, 0);
+    textDoc= new QTextDocument(this);
+    textDoc->setPageSize(QSizeF(width(),height()));
+    textDoc->setDefaultFont(font());
 }
 
 RichTextLabel::RichTextLabel(KarambaWidget* k, int x, int y, int w, int h) :
         Meter(k, x, y, w, h),
-        text(0),
         source(""),
         colorGrp(k->colorGroup()),
         underlineLinks(false)
 {
     kdDebug() << k_funcinfo << x << ", " << y << ", " << w << ", " << h << endl;
     originalSize = QSize(w, h);
+    textDoc= new QTextDocument(this);
+    textDoc->setPageSize(QSizeF(width(),height()));
+    textDoc->setDefaultFont(font());
 }
 
 RichTextLabel::~RichTextLabel()
 {
-    if (text != 0)
-    {
-        delete text;
-        text = 0;
-    }
+
 }
 
-void RichTextLabel::setText(QString t, bool linkUnderline)
+void RichTextLabel::setText(QString t,QString textformat)
 {
-    source = t;
-    if (text != 0)
+    if(textformat.toLower()=="plaintext")
+        setTextFormat(Qt::PlainText);
+    else if(textformat.toLower()=="richtext")
+        setTextFormat(Qt::RichText);
+    else if(textformat.toLower()=="autotext")
     {
-        delete text;
-        text = 0;
-    }
-    else
-    {
-        // set underlineLinks only when RichTextLabel is created, not
-        // when text is changed.
-        underlineLinks = linkUnderline;
+        setTextFormat(Qt::AutoText);
     }
     if(t.isEmpty())
-        t="";
-
-    text = new Q3SimpleRichText(t, font, m_karamba->theme().path(),
-                                0,        // default QStyleSheet*
-                                0,        // default QMimeSourceFactory
-                                -1,       // no pageBreak
-                                Qt::blue, // (has no effect) link Color
-                                underlineLinks);
-
-    // set the text to a reasonable size
-    text->adjustSize();
-    if(originalSize.width() < 1)
-        setWidth(text->width());
-    else
-        text->setWidth(getWidth());
-    if(originalSize.height() < 1)
-        setHeight(text->height());
+        source="";
+    if(textFormat()==Qt::PlainText)
+    {
+        textDoc->setPlainText(source);
+    }
+    else if(textFormat()==Qt::RichText)
+    {
+        textDoc->setHtml(source); 
+    }
+    else if(textFormat()==Qt::AutoText)
+    {
+        if(Qt::mightBeRichText(source))
+           textDoc->setHtml(source);
+        else textDoc->setPlainText(source);
+    }
+    textDoc->setPageSize(QSizeF(width(),height()));
 }
 
 void RichTextLabel::setValue(QString text)
@@ -87,40 +85,37 @@ void RichTextLabel::setValue(int v)
     setText(QString::number(v));
 }
 
-void RichTextLabel::setFont(QString f)
+void RichTextLabel::setFontString(QString f)
 {
-    font.setFamily(f);
-    if(text != 0)
-        text->setDefaultFont(font);
+    setFont(QFont(f));
+    textDoc->setDefaultFont(font());
 }
 
-QString RichTextLabel::getFont() const
-{
-    return font.family();
-}
 
 void RichTextLabel::setFontSize(int size)
 {
-    font.setPixelSize(size);
-    if(text != 0)
-        text->setDefaultFont(font);
+    QFont f=font();
+    f.setPixelSize(size);
+    setFont(f);
+    textDoc->setDefaultFont(font());
 }
 
 int RichTextLabel::getFontSize() const
 {
-    return font.pixelSize();
+    return font().pixelSize();
 }
 
 void RichTextLabel::setFixedPitch(bool fp)
 {
-    font.setFixedPitch(fp);
-    if(text != 0)
-        text->setDefaultFont(font);
+    QFont f=font();
+    f.setFixedPitch(fp);
+    setFont(f);
+    textDoc->setDefaultFont(font());
 }
 
 bool RichTextLabel::getFixedPitch() const
 {
-    return font.fixedPitch();
+    return font().fixedPitch();
 }
 
 void RichTextLabel::setTextProps(TextField* t)
@@ -133,30 +128,27 @@ void RichTextLabel::setTextProps(TextField* t)
     }
 }
 
-void RichTextLabel::setWidth(int width)
+void RichTextLabel::setWidth(int p_width)
 {
-    Meter::setWidth(width);
+    resize(p_width,height());
     // rearrange text
-    text->setWidth(getWidth());
-    if(originalSize.height() < 1)
-        setHeight(text->height());
+    textDoc->setPageSize(QSizeF(width(),height()));
+//     if(originalSize.height() < 1)
+//         setHeight(text->height());
 }
 
-void RichTextLabel::mUpdate(QPainter* p)
+
+
+void RichTextLabel::paintEvent(QPaintEvent* )
 {
-    if (hidden || text == 0)
-    {
-        return;
-    }
-
-    int x = getX();
-    int y = getY();
-    int w = getWidth();
-    int h = getHeight();
-    QRect clipRect(x, y, w, h);
-    text->draw(p, x, y, clipRect, colorGrp, 0 /* no background */);
+    QPainter p(this);
+    QAbstractTextDocumentLayout::PaintContext pc;
+    pc.palette.setCurrentColorGroup(QPalette::Active);
+    pc.palette.setActive(colorGrp);
+    textDoc->documentLayout()->draw(&p,pc);
 }
 
+/*
 bool RichTextLabel::click(QMouseEvent* e)
 {
     if (hidden)
@@ -178,12 +170,12 @@ bool RichTextLabel::click(QMouseEvent* e)
         //call callback meterClicked
         return true;
     }
-}
+}*/
 
-QString RichTextLabel::anchorAt(int x, int y)
+QString RichTextLabel::anchorAt(qreal x, qreal y)
 {
-    QPoint point(x - getX(), y - getY());
-    QString anchor = text->anchorAt(point);
+    QPointF point(x , y);
+    QString anchor = textDoc->documentLayout()->anchorAt(point);
     if (anchor[0] == '#')
     {
         return anchor.remove(0, 1);
@@ -195,10 +187,10 @@ QString RichTextLabel::anchorAt(int x, int y)
     }
 }
 
-bool RichTextLabel::insideActiveArea(int x, int y)
+bool RichTextLabel::insideActiveArea(qreal x, qreal y)
 {
-    QPoint point(x - getX(), y - getY());
-    return text->anchorAt(point) != ""; // && text -> inText(point);
+    QPointF point(x, y);
+    return textDoc->documentLayout()->anchorAt(point) != ""; // && text -> inText(point);
 }
 
 void RichTextLabel::setColorGroup(const QColorGroup &colorg)
@@ -211,16 +203,19 @@ const QColorGroup & RichTextLabel::getColorGroup() const
     return colorGrp;
 }
 
-void RichTextLabel::update(QVariant values)
+void RichTextLabel::update()
 {
-    QVariantMap map = values.toMap();
-    QList<QString> keys = map.keys();
-    QListIterator<QString> it(keys);
     QString format = QString(m_format);
-    while(it.hasNext())
+    QRegExp rx("([\\s]%[.\\d\\w]+[\\s])");
+    rx.indexIn(format);
+    QStringList capList=rx.capturedTexts();
+    foreach(QString cap, capList)
     {
-        QString k = it.next();
-        format.replace(k, map[k].toString());
+        QString temp=cap;
+        temp.remove('%');
+        temp=temp.trimmed();
+        QVariant replText=decodeDot(temp);
+        format.replace(cap,replText.toString());
     }
     setValue(format);
 }

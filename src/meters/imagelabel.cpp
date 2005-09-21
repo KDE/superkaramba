@@ -162,17 +162,17 @@ void ImageLabel::setValue(int v)
     setValue(QString::number(v));
 }
 
-void ImageLabel::show()
-{
-    Meter::show();
-    setEnabled(true);
-}
+// void ImageLabel::show()
+// {
+//     Meter::show();
+//     setEnabled(true);
+// }
 
-void ImageLabel::hide()
-{
-    Meter::hide();
-    setEnabled(false);
-}
+// void ImageLabel::hide()
+// {
+//     Meter::hide();
+//     setEnabled(false);
+// }
 
 void ImageLabel::rotate(int deg)
 {
@@ -227,25 +227,22 @@ void ImageLabel::applyTransformations(bool useSmoothScale)
     pixmap = realpixmap;
     if (doRotate)
     {
-        // KDE and QT seem to miss a high quality image rotation
+        //! @TODO
+        /* we need to put an argument for using smooth or fast transformation */
         QWMatrix rotMat;
         rotMat.rotate(rot_angle);
-        pixmap = pixmap.xForm(rotMat);
+        pixmap = pixmap.transformed(rotMat,Qt::SmoothTransformation);
+        
     }
     if (doScale)
     {
         if (m_karamba -> useSmoothTransforms() || useSmoothScale)
         {
-            pixmap.convertFromImage(
-                pixmap.convertToImage().smoothScale(scale_w, scale_h));
+            pixmap.scaled(scale_w, scale_h,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
         }
         else
         {
-            double widthFactor = ((double)scale_w) / ((double)pixmap.width());
-            double heightFactor = ((double)scale_h) / ((double)pixmap.height());
-            QWMatrix scaleMat;
-            scaleMat.scale(widthFactor, heightFactor);
-            pixmap = pixmap.xForm(scaleMat);
+            pixmap.scaled(scale_w, scale_h);
         }
     }
     if (imageEffect != 0)
@@ -253,8 +250,7 @@ void ImageLabel::applyTransformations(bool useSmoothScale)
         pixmap = imageEffect -> apply(pixmap);
     }
 
-    setWidth(pixmap.width());
-    setHeight(pixmap.height());
+    resize(pixmap.width(),pixmap.height());
 }
 
 void ImageLabel::slotCopyResult(KIO::Job* job)
@@ -278,8 +274,9 @@ void ImageLabel::slotCopyResult(KIO::Job* job)
 void ImageLabel::setValue(QString fn)
 {
     // use the first line
-    QStringList sList = QStringList::split( "\n", fn );
-    QString fileName = *sList.begin();
+    QStringList sList = fn.split( "\n");
+    if(sList.size()==0) return;
+    QString fileName = sList.at(0);
     KURL url(fileName);
     QRegExp rx("^[a-zA-Z]{1,5}:/",false);
     bool protocol = (rx.search(fileName)!=-1)?true:false;
@@ -320,14 +317,16 @@ void ImageLabel::setValue(QPixmap& pix)
 {
     realpixmap = KPixmap(pix);
     pixmap = realpixmap;
-    setWidth(pixmap.width());
-    setHeight(pixmap.height());
+    resize(pixmap.width(),pixmap.height());
+//     setWidth(pixmap.width());
+//     setHeight(pixmap.height());
 
     pixmapWidth = pixmap.width();
     pixmapHeight = pixmap.height();
-    rect_off = QRect(getX(),getY(),pixmapWidth,pixmapHeight);
+//     rect_off = QRect(getX(),getY(),pixmapWidth,pixmapHeight);
 }
 
+/*
 void ImageLabel::mUpdate(QPainter* p, int backgroundUpdate)
 {
     if (backgroundUpdate == 1)
@@ -391,6 +390,8 @@ void ImageLabel::mUpdate(QPainter* p)
     }
 }
 
+*/
+/*
 bool ImageLabel::click(QMouseEvent* e)
 {
     if (getBoundingBox().contains(e -> x(), e -> y()) && isEnabled())
@@ -421,6 +422,7 @@ bool ImageLabel::click(QMouseEvent* e)
     return false;
 }
 
+*/
 void ImageLabel::parseImages(QString fn, QString fn_roll, int _xoff,
                              int _yoff, int _xon, int _yon)
 {
@@ -540,8 +542,9 @@ void ImageLabel::rolloverImage(QMouseEvent *e)
         {
             // rollover the image to the zoomed image
             //setValue(fn_roll);
-            setX(xoff);
-            setY(yoff);
+            move(xoff,yoff);
+//             setX(xoff);
+//             setY(yoff);
             pixmap = pixmap_off;
             pixmapWidth = pixmapOffWidth;
             pixmapHeight = pixmapOffHeight;
@@ -555,8 +558,9 @@ void ImageLabel::rolloverImage(QMouseEvent *e)
         {
             // rollover the image to the zoomed image
             //setValue(fn_roll);
-            setX(xon);
-            setY(yon);
+            move(xon,yon);
+//             setX(xon);
+//             setY(yon);
             pixmap = pixmap_on;
             pixmapWidth = pixmapOnWidth;
             pixmapHeight = pixmapOnHeight;
@@ -568,7 +572,7 @@ void ImageLabel::rolloverImage(QMouseEvent *e)
 
 void ImageLabel::setTooltip(QString txt)
 {
-    QRect rect(getX(),getY(),pixmapWidth,pixmapHeight);
+    QRect rect(x(),y(),pixmapWidth,pixmapHeight);
     QToolTip::add
         (m_karamba, rect, txt);
     old_tip_rect = QRect(rect.topLeft(), rect.bottomRight());
@@ -641,4 +645,32 @@ void ImageLabel::attachClickArea(QString leftMouseButton,
     leftButtonAction = leftMouseButton;
     middleButtonAction = middleMouseButton;
     rightButtonAction = rightMouseButton;
+}
+
+void ImageLabel::paintEvent( QPaintEvent * pe)
+{
+    QPainter p(this);
+        if (cblend == 0)
+        {
+            //draw the pixmap
+            p.drawPixmap(x(),y(),pixmap);
+        }
+        else
+        {
+            //Blend this image with a color
+
+            QImage image = pixmap.toImage();
+
+            QImage result = KImageEffect::blend(QColor(255,0,0), image, 0.5f);
+            p.drawImage(0,0,result);
+
+            //p->drawRect(boundingBox);
+        }
+    
+
+    // start Timer
+    if (imageEffect != 0)
+    {
+        imageEffect -> startTimer();
+    }
 }

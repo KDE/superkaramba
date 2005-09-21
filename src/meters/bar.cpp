@@ -44,10 +44,9 @@ bool Bar::setImage(QString fileName)
     pixmapWidth = pixmap.width();
     pixmapHeight = pixmap.height();
 
-    if(getWidth()==0 || getHeight()==0)
+    if(width()==0 || height()==0)
     {
-        setWidth(pixmapWidth);
-        setHeight(pixmapHeight);
+        resize(pixmapWidth,pixmapHeight);
     }
 
     if(res)
@@ -60,18 +59,8 @@ bool Bar::setImage(QString fileName)
 
 void Bar::setValue(int v)
 {
-    if(v > m_maxValue)
-    {
-        // maxValue = v;
-        v = m_maxValue;
-    }
-
-    if(v < m_minValue)
-    {
-        //minValue = v;
-        v = m_minValue;
-    }
-
+    v= qMin(v , m_maxValue);
+    v=qMax(v,m_minValue);
     barValue = v;
 
     int diff = m_maxValue - m_minValue;
@@ -79,11 +68,11 @@ void Bar::setValue(int v)
     {
         if(vertical)
         {
-            value = int((v-m_minValue)*getHeight() / diff + 0.5);
+            value = int((v-m_minValue)*height() / diff + 0.5);
         }
         else // horizontal
         {
-            value = int((v-m_minValue)*getWidth() / diff + 0.5);
+            value = int((v-m_minValue)*width() / diff + 0.5);
         }
     }
     else
@@ -114,32 +103,24 @@ void Bar::setVertical(bool b)
     vertical = b;
 }
 
-void Bar::mUpdate(QPainter *p)
+void Bar::paintEvent(QPaintEvent*)
 {
-    int x, y, width, height;
-    x = getX();
-    y = getY();
-    width = getWidth();
-    height = getHeight();
+    QPainter p(this);
     //only draw image if not hidden
-    if(hidden == 0)
-    {
-        if(vertical)
+    if(vertical)
         {
             //  int v = int( (value-minValue)*height / (maxValue-minValue) + 0.5 );
-            p->drawTiledPixmap(x, y+height-value, width, value, pixmap, 0,
+            p.drawTiledPixmap(0, height()-value, width(), value, pixmap, 0,
                                pixmapHeight-value);
         }
-        else // horizontal
+    else // horizontal
         {
             //int v = int( (value-minValue)*width / (maxValue-minValue) + 0.5 );
-            p->drawTiledPixmap(x, y, value, height, pixmap);
+            p.drawTiledPixmap(0, 0, value, height(), pixmap);
         }
-    }
 }
 
-void Bar::update(QVariant value)
+void Bar::update()
 {
-    QVariantMap map = value.toMap();
-    setValue(map[m_format].toInt());
+    setValue(decodeDot(m_format.remove('%')).toInt());
 }

@@ -18,6 +18,11 @@
 class Bar : public Meter
 {
     Q_OBJECT
+    Q_PROPERTY(QString imagePath READ getImage WRITE setImage)
+    Q_PROPERTY(int barValue READ getValue WRITE setValue)
+    Q_PROPERTY(int max READ getMax WRITE setMax)
+    Q_PROPERTY(int min READ getMin WRITE setMin)
+    Q_PROPERTY(bool vertical READ getVertical WRITE setVertical)
 public:
     Bar(KarambaWidget* k,int ix,int iy,int iw,int ih );
     ~Bar();
@@ -59,7 +64,7 @@ public slots:
         return vertical;
     };
 
-    void update(QVariant);
+    void update();
 
 private:
     int barValue;
@@ -75,6 +80,9 @@ private:
 
     int m_minValue;
     int m_maxValue;
+protected:
+    void paintEvent(QPaintEvent* event);
+        
 }
 ;
 #endif // BAR_H
