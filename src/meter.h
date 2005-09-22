@@ -19,6 +19,7 @@
 #include <QMouseEvent>
 
 #include <qfileinfo.h>
+#include <kglobal.h>
 
 class KarambaWidget;
 class Sensor;
@@ -139,7 +140,7 @@ public:
     void setOnMiddleClick( QString );
     */
 public slots:
-    virtual void update();
+    virtual void updateData();
     void storeData(QVariant value);
 
 protected: // Protected attributes

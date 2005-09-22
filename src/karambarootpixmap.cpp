@@ -17,19 +17,14 @@ KarambaRootPixmap::KarambaRootPixmap(QWidget *w) :
     widget = w;
 }
 
-/*KarambaRootPixmap::KarambaRootPixmap()
- : KRootPixmap(0)
- {
- 
-//widget = w;
-}
-*/
 
 KarambaRootPixmap::~KarambaRootPixmap()
 {}
 
 void  KarambaRootPixmap::updateBackground (KSharedPixmap *kpm)
 {
-    ((KarambaWidget*)widget)->updateBackground(kpm);
+   QPalette pal=widget->palette();
+   pal.setBrush(widget->backgroundRole(), QBrush(*kpm));
+   widget->setPalette(pal);
 }
 

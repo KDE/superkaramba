@@ -42,7 +42,7 @@ void Graph::setValue(QString v)
     setValue((int)(v.toDouble() + 0.5));
 }
 
-void Graph::update()
+void Graph::updateData()
 {
     setValue(decodeDot(m_format.remove('%')).toInt());
 //     QVariantMap map = values.toMap();

@@ -15,6 +15,9 @@
 #include <QAbstractTextDocumentLayout>
 #include <QPalette>
 #include <QStringList>
+#include <QTextFrame>
+#include <QTextFrameFormat>
+#include <QTextLength>
 
 RichTextLabel::RichTextLabel(KarambaWidget* k) :
         Meter(k, 0, 0, 100, 100),
@@ -24,8 +27,9 @@ RichTextLabel::RichTextLabel(KarambaWidget* k) :
 {
     originalSize = QSize(0, 0);
     textDoc= new QTextDocument(this);
-    textDoc->setPageSize(QSizeF(width(),height()));
     textDoc->setDefaultFont(font());
+    textDoc->documentLayout()->setPaintDevice(this);
+    p.begin(this);
 }
 
 RichTextLabel::RichTextLabel(KarambaWidget* k, int x, int y, int w, int h) :
@@ -37,8 +41,9 @@ RichTextLabel::RichTextLabel(KarambaWidget* k, int x, int y, int w, int h) :
     kdDebug() << k_funcinfo << x << ", " << y << ", " << w << ", " << h << endl;
     originalSize = QSize(w, h);
     textDoc= new QTextDocument(this);
-    textDoc->setPageSize(QSizeF(width(),height()));
     textDoc->setDefaultFont(font());
+    textDoc->documentLayout()->setPaintDevice(this);
+    p.begin(this);
 }
 
 RichTextLabel::~RichTextLabel()
@@ -56,6 +61,7 @@ void RichTextLabel::setText(QString t,QString textformat)
     {
         setTextFormat(Qt::AutoText);
     }
+    source=t;
     if(t.isEmpty())
         source="";
     if(textFormat()==Qt::PlainText)
@@ -72,7 +78,9 @@ void RichTextLabel::setText(QString t,QString textformat)
            textDoc->setHtml(source);
         else textDoc->setPlainText(source);
     }
-    textDoc->setPageSize(QSizeF(width(),height()));
+    textDoc->setPageSize(QSizeF(width(),height()+100));
+//     kdDebug()<<"setText()"<< source <<"--" << textDoc->documentLayout()->documentSize().toSize() <<"--"<<textDoc->pageSize()<< endl;
+    
 }
 
 void RichTextLabel::setValue(QString text)
@@ -98,6 +106,7 @@ void RichTextLabel::setFontSize(int size)
     f.setPixelSize(size);
     setFont(f);
     textDoc->setDefaultFont(font());
+//     kdDebug() << "setFontSize" << size << textDoc->documentLayout()->documentSize().toSize()<<"--"<<textDoc->pageSize()<<endl;
 }
 
 int RichTextLabel::getFontSize() const
@@ -125,14 +134,14 @@ void RichTextLabel::setTextProps(TextField* t)
         setFontSize(t->getFontSize());
         setFont(t->getFont());
         colorGrp.setColor(QColorGroup::Text, t->getColor());
+        kdDebug()<< "setTextProps" << t->getFont() << t->getFontSize() << "--"<< textDoc->pageSize()<< textDoc->documentLayout()->documentSize().toSize()<<endl;
     }
 }
 
 void RichTextLabel::setWidth(int p_width)
 {
     resize(p_width,height());
-    // rearrange text
-    textDoc->setPageSize(QSizeF(width(),height()));
+    kdDebug() << "setWidth" << p_width << textDoc->documentLayout()->documentSize().toSize() << "--"<<textDoc->pageSize()<< endl;
 //     if(originalSize.height() < 1)
 //         setHeight(text->height());
 }
@@ -141,11 +150,17 @@ void RichTextLabel::setWidth(int p_width)
 
 void RichTextLabel::paintEvent(QPaintEvent* )
 {
+#warning need to optimize this
+
+/* the setpagesize should have been set earlier, not in paintEvent() */
     QPainter p(this);
+    textDoc->setPageSize(textDoc->documentLayout()->documentSize());
     QAbstractTextDocumentLayout::PaintContext pc;
+    pc.clip=QRectF(0,0,width(),height());
     pc.palette.setCurrentColorGroup(QPalette::Active);
     pc.palette.setActive(colorGrp);
     textDoc->documentLayout()->draw(&p,pc);
+//     kdDebug() << "paintEvent" << textDoc->documentLayout()->documentSize().toSize() <<"--" <<textDoc->pageSize().toSize() << endl;
 }
 
 /*
@@ -203,8 +218,9 @@ const QColorGroup & RichTextLabel::getColorGroup() const
     return colorGrp;
 }
 
-void RichTextLabel::update()
+void RichTextLabel::updateData()
 {
+    kdDebug() << "updateData" << m_format << endl;
     QString format = QString(m_format);
     QRegExp rx("([\\s]%[.\\d\\w]+[\\s])");
     rx.indexIn(format);
@@ -215,9 +231,12 @@ void RichTextLabel::update()
         temp.remove('%');
         temp=temp.trimmed();
         QVariant replText=decodeDot(temp);
+        kdDebug() << cap << capList << endl;
         format.replace(cap,replText.toString());
+        
     }
     setValue(format);
+    kdDebug() << "updateData" << format << endl;
 }
 
 #include "richtextlabel.moc"

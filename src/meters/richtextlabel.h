@@ -65,7 +65,7 @@ public:
     }  
 
 public slots:
-    void update();
+    void updateData();
 
 private:
     QTextDocument* textDoc;
@@ -74,6 +74,7 @@ private:
     bool underlineLinks;
     QSize originalSize;
     Qt::TextFormat m_type;
+    QPainter p;
 protected:
     virtual void paintEvent(QPaintEvent* pe);
 };

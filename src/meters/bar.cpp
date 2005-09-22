@@ -120,7 +120,8 @@ void Bar::paintEvent(QPaintEvent*)
         }
 }
 
-void Bar::update()
+void Bar::updateData()
 {
     setValue(decodeDot(m_format.remove('%')).toInt());
+    update();
 }

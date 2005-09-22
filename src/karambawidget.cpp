@@ -232,8 +232,7 @@ KarambaWidget::KarambaWidget(QString fn, bool reloading, int instance, QWidget *
         client->attach();
     appId = client->registerAs(qApp->name());
 
-
-    this->setBackgroundMode(Qt::NoBackground);
+//    this->setBackgroundMode(Qt::NoBackground);
     if( !(onTop || managed))
         this->lower();
 
@@ -245,10 +244,9 @@ KarambaWidget::KarambaWidget(QString fn, bool reloading, int instance, QWidget *
     }
     else
     {
-        kroot = new KarambaRootPixmap((QWidget*)this);
-        kroot->start();
+       KRootPixmap *root = new KRootPixmap((QWidget*)this);
+       root->start();
     }
-
     // Karamba specific Config Entries
     bool locked = toggleLocked->isChecked();
     locked = config->readBoolEntry("lockedPosition", locked);
@@ -293,11 +291,6 @@ KarambaWidget::KarambaWidget(QString fn, bool reloading, int instance, QWidget *
 
 
     setFocusPolicy(Qt::StrongFocus);
-    QList<QWidget*> allChilds=findChildren<QWidget*>();
-    foreach( QWidget* wd, allChilds)
-    {
-        new KRootPixmap(wd);
-    }
 }
 
 KarambaWidget::~KarambaWidget()

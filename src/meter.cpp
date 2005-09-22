@@ -10,6 +10,8 @@
 #include "meter.h"
 #include "sensor.h"
 #include "karambawidget.h"
+#include <krootpixmap.h>
+#include <kdebug.h>
 
 Meter::Meter(KarambaWidget* k, int ix, int iy, int iw, int ih): 
         QWidget(k),
@@ -18,6 +20,8 @@ Meter::Meter(KarambaWidget* k, int ix, int iy, int iw, int ih):
         m_karamba(k),autoUpdate(true)
 {
     setGeometry(ix,iy,iw,ih);
+    KRootPixmap* root= new KRootPixmap(this);
+    root->start();
 }
 
 Meter::Meter(KarambaWidget* k):QWidget(k),
@@ -25,7 +29,8 @@ Meter::Meter(KarambaWidget* k):QWidget(k),
         rightButtonAction(""), clickable(true), hidden(0), m_sensor(0),
         m_karamba(k)
 {
-    
+    KRootPixmap* root= new KRootPixmap(this);
+    root->start();
 }
 
 Meter::~Meter()
@@ -124,10 +129,10 @@ void Meter::storeData(QVariant value)
     data=value;
     if(autoUpdate)
     {
-        update();
+        updateData();
     }
 }
-void Meter::update()
+void Meter::updateData()
 {
 }
 
@@ -143,6 +148,7 @@ QVariant Meter::decodeDot( QString formatString )
             value=value.toMap().value(section);
         }
     }
+    kdDebug()<< 11<<formatString << value<< endl ;
     return value ;
 }
 

@@ -60,7 +60,7 @@ public:
     void mUpdate( QPainter * );
 
 public slots:
-    void update();
+    void updateData();
 
 private:
     QList<int> values;

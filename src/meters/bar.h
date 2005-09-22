@@ -64,7 +64,7 @@ public slots:
         return vertical;
     };
 
-    void update();
+    void updateData();
 
 private:
     int barValue;
