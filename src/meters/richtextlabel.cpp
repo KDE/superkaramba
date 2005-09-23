@@ -27,7 +27,6 @@ RichTextLabel::RichTextLabel(KarambaWidget* k) :
 {
     originalSize = QSize(0, 0);
     textDoc= new QTextDocument(this);
-    textDoc->setDefaultFont(font());
     textDoc->documentLayout()->setPaintDevice(this);
     p.begin(this);
 }
@@ -41,14 +40,12 @@ RichTextLabel::RichTextLabel(KarambaWidget* k, int x, int y, int w, int h) :
     kdDebug() << k_funcinfo << x << ", " << y << ", " << w << ", " << h << endl;
     originalSize = QSize(w, h);
     textDoc= new QTextDocument(this);
-    textDoc->setDefaultFont(font());
     textDoc->documentLayout()->setPaintDevice(this);
     p.begin(this);
 }
 
 RichTextLabel::~RichTextLabel()
 {
-
 }
 
 void RichTextLabel::setText(QString t,QString textformat)
@@ -70,17 +67,15 @@ void RichTextLabel::setText(QString t,QString textformat)
     }
     else if(textFormat()==Qt::RichText)
     {
-        textDoc->setHtml(source); 
+        textDoc->setHtml(source);
     }
     else if(textFormat()==Qt::AutoText)
     {
         if(Qt::mightBeRichText(source))
-           textDoc->setHtml(source);
-        else textDoc->setPlainText(source);
+            textDoc->setHtml(source);
+        else
+            textDoc->setPlainText(source);
     }
-    textDoc->setPageSize(QSizeF(width(),height()+100));
-//     kdDebug()<<"setText()"<< source <<"--" << textDoc->documentLayout()->documentSize().toSize() <<"--"<<textDoc->pageSize()<< endl;
-    
 }
 
 void RichTextLabel::setValue(QString text)
@@ -96,7 +91,6 @@ void RichTextLabel::setValue(int v)
 void RichTextLabel::setFontString(QString f)
 {
     setFont(QFont(f));
-    textDoc->setDefaultFont(font());
 }
 
 
@@ -105,8 +99,7 @@ void RichTextLabel::setFontSize(int size)
     QFont f=font();
     f.setPixelSize(size);
     setFont(f);
-    textDoc->setDefaultFont(font());
-//     kdDebug() << "setFontSize" << size << textDoc->documentLayout()->documentSize().toSize()<<"--"<<textDoc->pageSize()<<endl;
+    //     kdDebug() << "setFontSize" << size << textDoc->documentLayout()->documentSize().toSize()<<"--"<<textDoc->pageSize()<<endl;
 }
 
 int RichTextLabel::getFontSize() const
@@ -119,7 +112,6 @@ void RichTextLabel::setFixedPitch(bool fp)
     QFont f=font();
     f.setFixedPitch(fp);
     setFont(f);
-    textDoc->setDefaultFont(font());
 }
 
 bool RichTextLabel::getFixedPitch() const
@@ -134,16 +126,16 @@ void RichTextLabel::setTextProps(TextField* t)
         setFontSize(t->getFontSize());
         setFont(t->getFont());
         colorGrp.setColor(QColorGroup::Text, t->getColor());
-        kdDebug()<< "setTextProps" << t->getFont() << t->getFontSize() << "--"<< textDoc->pageSize()<< textDoc->documentLayout()->documentSize().toSize()<<endl;
+        //         kdDebug()<< "setTextProps" << t->getFont() << t->getFontSize() << "--"<< textDoc->pageSize()<< textDoc->documentLayout()->documentSize().toSize()<<endl;
     }
 }
 
 void RichTextLabel::setWidth(int p_width)
 {
     resize(p_width,height());
-    kdDebug() << "setWidth" << p_width << textDoc->documentLayout()->documentSize().toSize() << "--"<<textDoc->pageSize()<< endl;
-//     if(originalSize.height() < 1)
-//         setHeight(text->height());
+    //     kdDebug() << "setWidth" << p_width << textDoc->documentLayout()->documentSize().toSize() << "--"<<textDoc->pageSize()<< endl;
+    //     if(originalSize.height() < 1)
+    //         setHeight(text->height());
 }
 
 
@@ -151,16 +143,40 @@ void RichTextLabel::setWidth(int p_width)
 void RichTextLabel::paintEvent(QPaintEvent* )
 {
 #warning need to optimize this
-
-/* the setpagesize should have been set earlier, not in paintEvent() */
     QPainter p(this);
-    textDoc->setPageSize(textDoc->documentLayout()->documentSize());
-    QAbstractTextDocumentLayout::PaintContext pc;
-    pc.clip=QRectF(0,0,width(),height());
-    pc.palette.setCurrentColorGroup(QPalette::Active);
-    pc.palette.setActive(colorGrp);
-    textDoc->documentLayout()->draw(&p,pc);
-//     kdDebug() << "paintEvent" << textDoc->documentLayout()->documentSize().toSize() <<"--" <<textDoc->pageSize().toSize() << endl;
+    QTextBlock block = textDoc->begin();
+    qreal y = 0;
+    while(block.isValid())
+    {
+        QTextLayout *layout = block.layout();
+        layout->beginLayout();
+        while(1)
+        {
+            QTextLine line = layout->createLine();
+            if(!line.isValid())
+            {
+                break;
+            }
+            line.setLineWidth(width());
+            line.setPosition(QPointF(line.x(), y));
+            y += line.height();
+        }
+        layout->endLayout();
+        block = block.next();
+    }
+    block=textDoc->begin();
+    QPointF posText(0,0);
+    while(block.isValid())
+    {
+        QTextLayout *layout = block.layout();
+        // draw text
+        p.setBrush(colorGrp.text());
+        p.setPen(colorGrp.text());
+        layout->draw(&p, posText);
+        block = block.next();
+    }
+
+
 }
 
 /*
@@ -233,7 +249,7 @@ void RichTextLabel::updateData()
         QVariant replText=decodeDot(temp);
         kdDebug() << cap << capList << endl;
         format.replace(cap,replText.toString());
-        
+
     }
     setValue(format);
     kdDebug() << "updateData" << format << endl;
