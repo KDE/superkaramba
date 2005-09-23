@@ -653,7 +653,7 @@ void ImageLabel::paintEvent( QPaintEvent * pe)
         if (cblend == 0)
         {
             //draw the pixmap
-            p.drawPixmap(x(),y(),pixmap);
+            p.drawPixmap(0,0,pixmap);
         }
         else
         {
