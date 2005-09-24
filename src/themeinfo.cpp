@@ -30,28 +30,17 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 class ThemeInfo::Private
 {
 public:
-    Private()
-      : type(Undefined),
-        unique(true),
-        hidden(false)
-    {}
-
     QString name;
     QString comment;
     QString icon;
-    QString lib;
     QString desktopFile;
-    QString configFile;
+    QString themeFile;
     QString desktopFilePath;
-    ThemeType type;
-    bool unique;
-    bool hidden;
 };
 
-ThemeInfo::ThemeInfo( const QString& deskFile, const QString& configFile, const ThemeInfo::ThemeType type)
+ThemeInfo::ThemeInfo( const QString& deskFile, const QString& themeFile )
 {
     d = new Private;
-    d->type = type;
     QFileInfo fi(deskFile);
     d->desktopFilePath = fi.absFilePath();
     d->desktopFile = fi.fileName();
@@ -63,35 +52,7 @@ ThemeInfo::ThemeInfo( const QString& deskFile, const QString& configFile, const 
     setComment(df.readComment());
     setIcon(df.readIcon());
 
-    // library
-    setLibrary(df.readEntry("X-KDE-Library"));
-
-    // is it a unique theme?
-    setIsUnique(df.readBoolEntry("X-KDE-UniqueTheme", false));
-
-    // should it be shown in the gui?
-    d->hidden = df.readBoolEntry("Hidden", false);
-
-    if (configFile.isEmpty())
-    {
-        // generate a config file base name from the library name
-        d->configFile = d->lib.lower();
-
-        if (d->unique)
-        {
-            d->configFile.append("rc");
-        }
-        else
-        {
-            d->configFile.append("_")
-                        .append(kapp->randomString(20).lower())
-                        .append("_rc");
-        }
-    }
-    else
-    {
-        d->configFile = configFile;
-    }
+    d->themeFile = themeFile;
 }
 
 ThemeInfo::ThemeInfo(const ThemeInfo &copy)
@@ -127,16 +88,6 @@ QString ThemeInfo::icon() const
     return d->icon;
 }
 
-ThemeInfo::ThemeType ThemeInfo::type() const
-{
-    return d->type;
-}
-
-QString ThemeInfo::library() const
-{
-    return d->lib;
-}
-
 QString ThemeInfo::desktopFilePath() const
 {
     return d->desktopFilePath;
@@ -147,29 +98,14 @@ QString ThemeInfo::desktopFile() const
     return d->desktopFile;
 }
 
-QString ThemeInfo::configFile() const
+QString ThemeInfo::themeFile() const
 {
-    return d->configFile;
+    return d->themeFile;
 }
 
-bool ThemeInfo::isUniqueTheme() const
+void ThemeInfo::setThemeFile(const QString &tf)
 {
-    return d->unique;
-}
-
-bool ThemeInfo::isHidden() const
-{
-    return d->hidden;
-}
-
-void ThemeInfo::setConfigFile(const QString &cf)
-{
-    d->configFile = cf;
-}
-
-void ThemeInfo::setType(ThemeType type)
-{
-    d->type = type;
+    d->themeFile = tf;
 }
 
 void ThemeInfo::setName(const QString &name)
@@ -187,24 +123,14 @@ void ThemeInfo::setIcon(const QString &icon)
     d->icon = icon;
 }
 
-void ThemeInfo::setLibrary(const QString &lib)
-{
-   d->lib = lib; 
-}
-
-void ThemeInfo::setIsUnique(bool u)
-{
-    d->unique = u;
-}
-
 bool ThemeInfo::operator!=( const ThemeInfo& rhs) const
 {
-    return configFile() != rhs.configFile();
+    return themeFile() != rhs.themeFile();
 }
 
 bool ThemeInfo::operator==( const ThemeInfo& rhs) const
 {
-    return configFile() == rhs.configFile();
+    return themeFile() == rhs.themeFile();
 }
 
 bool ThemeInfo::operator<( const ThemeInfo& rhs ) const

@@ -36,9 +36,8 @@ class KDE_EXPORT ThemeInfo
         typedef QMap<QObject*, ThemeInfo*> Dict;
         enum ThemeType { Undefined, Theme, SpecialButton };
 
-        ThemeInfo(const QString& desktopFile = QString::null,
-                    const QString& configFile = QString::null,
-                    const ThemeType type = Undefined);
+        ThemeInfo( const QString& desktopFile = QString::null,
+                   const QString& configFile = QString::null );
 
         virtual ~ThemeInfo();
         ThemeInfo(const ThemeInfo& copy);
@@ -48,17 +47,11 @@ class KDE_EXPORT ThemeInfo
         QString comment() const;
         QString icon() const;
 
-        ThemeType type() const;
-
-        QString library() const;
         QString desktopFilePath() const;
         QString desktopFile() const;
-        QString configFile() const;
+        QString themeFile() const;
 
-        bool isUniqueTheme() const;
-        bool isHidden() const;
-
-        void setConfigFile(const QString &cf);
+        void setThemeFile(const QString &tf);
 
         bool operator<(const ThemeInfo& rhs) const;
         bool operator>(const ThemeInfo& rhs) const;
@@ -66,18 +59,15 @@ class KDE_EXPORT ThemeInfo
         bool operator!=(const ThemeInfo& rhs) const;
         bool operator==(const ThemeInfo& rhs) const;
 
-        void setType(ThemeType type);
-
     protected:
         void setName(const QString &name);
         void setComment(const QString &comment);
         void setIcon(const QString &icon);
-        void setLibrary(const QString &lib);
-        void setIsUnique(bool u);
 
     private:
         class Private;
         Private *d;
+
 };
 
 #endif
