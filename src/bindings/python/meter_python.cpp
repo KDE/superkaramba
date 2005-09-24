@@ -104,7 +104,7 @@ QString PyString2QString(PyObject* text)
         if(sizeof(Py_UNICODE) == 4)
             qtext = fromUcs4((Q_UINT32*)t);
         else
-            qtext = QString::fromUcs2((Q_UINT16*)t);
+            qtext = QString::fromUtf16((Q_UINT16*)t);
     }
     else
     {
