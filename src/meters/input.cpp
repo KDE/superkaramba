@@ -25,7 +25,8 @@ Input::Input(KarambaWidget* k, int x, int y, int w, int h):
         Meter(k, x, y, w, h)
 {
     edit = new QLineEdit(this);
-    edit->resize(w,h);
+    edit->setGeometry(0,0,w,h);
+    edit->show();
 }
 
 Input::~Input()
@@ -76,6 +77,7 @@ void Input::setMeterFont(QString fs)
     QFont f=edit->font();
     f.setFamily(fs);
     edit->setFont(f);
+    
 }
 
 QString Input::getFont() const
