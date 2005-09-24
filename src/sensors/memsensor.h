@@ -24,6 +24,8 @@
 class MemSensor :  public Sensor
 {
     Q_OBJECT
+public slots:
+    void update();
 public:
     int getMemTotal();
     int getMemFree();
@@ -33,7 +35,7 @@ public:
     int getSwapTotal();
     int getSwapFree();
 
-    void update();
+    
     void setMaxValue( SensorParams *sp );
     QString getMemLine();
     void addMeter(Meter*);

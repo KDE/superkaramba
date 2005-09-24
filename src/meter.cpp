@@ -140,6 +140,7 @@ QVariant Meter::decodeDot( QString formatString )
 {
     QStringList list=formatString.split('.');
     QVariant value=data;
+    kdDebug() <<value.toMap().keys() << endl;
     foreach(QString section,list)
     {
         if(value.toMap().find(section)==value.toMap().end()) return QVariant();
@@ -148,7 +149,6 @@ QVariant Meter::decodeDot( QString formatString )
             value=value.toMap().value(section);
         }
     }
-    kdDebug()<< 11<<formatString << value<< endl ;
     return value ;
 }
 

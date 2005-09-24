@@ -22,7 +22,7 @@ class UptimeSensor :  public Sensor
 {
     Q_OBJECT
 public:
-    void update();
+   
     void addMeter(Meter*);
     static UptimeSensor* self();
     static bool isSingleton() { return true; }
@@ -35,6 +35,8 @@ private:
     UptimeSensor(int interval=2000);
     virtual ~UptimeSensor();
     static UptimeSensor* m_self;
+public slots:
+    void update();
 };
 
 #endif // UPTIMESENSOR_H

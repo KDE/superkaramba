@@ -26,7 +26,7 @@ class XMMSSensor :  public Sensor
 public:
     XMMSSensor( int interval, const QString &encoding=QString::null );
     ~XMMSSensor();
-    void update();
+   
     void setMaxValue( SensorParams *);
     void addMeter(Meter*);
     static bool isSingleton() { return false; }
@@ -36,6 +36,8 @@ signals:
 
 private:
     QTextCodec *codec;
+public slots:
+    void update();
 
 };
 

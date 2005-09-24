@@ -34,8 +34,8 @@ TextFileSensor::~TextFileSensor()
 
 void TextFileSensor::addMeter(Meter* meter)
 {
-    disconnect(0, 0, meter, SLOT(update(QVariant)));
-    connect(this, SIGNAL(textfileValues(QVariant)), meter, SLOT(update(QVariant)));
+    disconnect(this, SIGNAL(textfileValues(QVariant) ), meter, SLOT(storeData(QVariant )));
+    connect(this, SIGNAL(textfileValues(QVariant)), meter, SLOT(storeData(QVariant )));
 }
 
 void TextFileSensor::update()

@@ -20,7 +20,6 @@ class CPUSensor :  public Sensor
 {
     Q_OBJECT
 public:
-    void update();
     void setMaxValue( SensorParams *sp );
 
     int getCPULoad();
@@ -49,6 +48,9 @@ private:
     void getTicks (long &u,long &s,long &n,long &i);
     QVariantMap data;
     static CPUSensor* m_self;
+public slots:
+     void update();
+
 
 };
 

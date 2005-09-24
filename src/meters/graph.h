@@ -24,7 +24,7 @@ public:
     Graph();
     ~Graph();
 
-    void setValue( int );
+    void setValue(double);
     int getValue()
     {
         return values.last();
@@ -57,16 +57,15 @@ public:
         return m_color;
     };
 
-    void mUpdate( QPainter * );
-
+    
 public slots:
     void updateData();
 
 private:
     QList<int> values;
 
-    int m_minValue;
-    int m_maxValue;
+    double m_minValue;
+    double m_maxValue;
 
     QColor m_color;
 protected:

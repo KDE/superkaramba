@@ -27,8 +27,6 @@ public:
     NoatunSensor( int interval, DCOPClient *client);
 
     ~NoatunSensor();
-
-    void update();
     void setMaxValue( SensorParams *);
     void addMeter(Meter*);
     static bool isSingleton() { return false; }
@@ -48,6 +46,9 @@ private:
 
     DCOPClient *client;
     QByteArray appId;
+public slots:
+    void update();
+    
 };
 
 #endif

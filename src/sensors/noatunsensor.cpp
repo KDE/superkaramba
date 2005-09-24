@@ -65,8 +65,8 @@ void NoatunSensor::update()
 
 void NoatunSensor::addMeter(Meter* meter)
 {
-    disconnect(0, 0, meter, SLOT(update(QVariant)));
-    connect(this, SIGNAL(noatunValues(QVariant)), meter, SLOT(update(QVariant)));
+    disconnect(this, SIGNAL(noatunValues(QVariant )), meter, SLOT(storeData(QVariant)));
+    connect(this, SIGNAL(noatunValues(QVariant)), meter, SLOT(storeData(QVariant)));
 }
 
 bool NoatunSensor::isRunning()

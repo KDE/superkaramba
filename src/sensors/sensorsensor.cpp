@@ -57,8 +57,8 @@ SensorSensor::~SensorSensor()
 
 void SensorSensor::addMeter(Meter* meter)
 {
-    disconnect(0, 0, meter, SLOT(update(QVariant)));
-    connect(this, SIGNAL(sensorValues(QVariant)), meter, SLOT(update(QVariant)));
+    disconnect(this, SIGNAL(sensorValues(QVariant) ), meter, SLOT(storeData(QVariant)));
+    connect(this, SIGNAL(sensorValues(QVariant)), meter, SLOT(storeData(QVariant)));
 }
 
 void SensorSensor::receivedStdout(KProcess *, char *buffer, int len )

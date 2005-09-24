@@ -48,6 +48,7 @@ RichTextLabel::~RichTextLabel()
 {
 }
 
+/* the default value textformat="" corresponds to use already defined/set m_type */
 void RichTextLabel::setText(QString t,QString textformat)
 {
     if(textformat.toLower()=="plaintext")

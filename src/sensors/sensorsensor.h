@@ -23,7 +23,6 @@ class SensorSensor : public Sensor
     Q_OBJECT
 public:
     static SensorSensor* self();
-    void update();
     void addMeter(Meter*);
     static bool isSingleton() { return true; }
 
@@ -50,7 +49,7 @@ private:
 private slots:
     void receivedStdout(KProcess *, char *buffer, int);
     void processExited(KProcess *);
-
+    void update();
 
 
 };

@@ -17,7 +17,7 @@
 #include <QTextStream>
 
 #include "networksensor.h"
-
+#include <kdebug.h>
 static KStaticDeleter<NetworkSensor> networkSensorDeleter;
 NetworkSensor* NetworkSensor::m_self = 0;
 
@@ -33,84 +33,28 @@ NetworkSensor* NetworkSensor::self()
 
 NetworkSensor::NetworkSensor( int interval ):Sensor( interval )
 {
-    #ifdef __FreeBSD__
-    /* Determine number of interfaces */
-    u_int   n    = 0;
-    size_t  nlen = 0;
-    nlen = sizeof(n);
-    sysctlbyname("net.link.generic.system.ifcount", &n, &nlen, NULL, 0);
 
-    size_t  if_miblen = 0;
-    if_miblen = sizeof(if_mib);
-    static  int name[] = { CTL_NET,
-                           PF_LINK,
-                           NETLINK_GENERIC,
-                           IFMIB_IFDATA,
-                           0,
-                           IFDATA_GENERAL };
-
-    /*
-       If the device was defined by the theme, find the right devicenumber.
-       If not, use the device that holds the default route.
-     */
-
-    if_number = -1;
-    int if_gw = -1;
-
-    for (int i = 1; i <= n; ++i)
-    {
-        name[4] = i;
-        /* Get data for iface-number i */
-        sysctl(name, 6, (void*)&if_mib, (size_t*)&if_miblen, (void*)NULL, (size_t)0);
-
-        /* We found the right interface? */
-        if (QString(if_mib.ifmd_name) == device)
-        {
-            if_number = i;
-            break;
-        }
-
-        /* Does the interface hold the default route? */
-        if ( if_mib.ifmd_flags & RTF_GATEWAY )
-            if_gw = i;
-    }
-
-    if ((if_number == -1) && (if_gw != -1))
-        if_number = if_gw;
-#endif
-
-    getInOutBytes();
     netTimer.start();
+    getInOutBytes();
+    start();
+    
 
 }
 NetworkSensor::~NetworkSensor()
 {}
-void NetworkSensor::getInOutBytes ()
+
+void NetworkSensor::start()
 {
-    unsigned long inB=0,outB=0;
-#ifdef __FreeBSD__
-    if (if_number != -1)
+    if (!m_timer.isActive())
     {
-        size_t  if_miblen = 0;
-        if_miblen = sizeof(if_mib);
-        int name[] = { CTL_NET,
-                       PF_LINK,
-                       NETLINK_GENERIC,
-                       IFMIB_IFDATA,
-                       if_number,
-                       IFDATA_GENERAL };
-
-        sysctl(name, 6, (void*)&if_mib, (size_t*)&if_miblen, (void*)NULL, (size_t)0);
-
-        in = if_mib.ifmd_data.ifi_ibytes;
-        out = if_mib.ifmd_data.ifi_obytes;
+        connect (&m_timer,SIGNAL(timeout()),this,SLOT(update()));
+        m_timer.start( (m_msec == 0)?1000:m_msec);
     }
-    else
-    {
-        in = 0;
-        out = 0;
-    }
-#else
+}
+
+void NetworkSensor::getInOutBytes()
+{
+    qulonglong inB=0,outB=0;
     QFile file("/proc/net/dev");
     QString line;
     if ( file.open(IO_ReadOnly | IO_Translate) )
@@ -121,43 +65,58 @@ void NetworkSensor::getInOutBytes ()
         {
             line = t.readLine();
         }
-        const double delay = (double) netTimer.elapsed(); // msec elapsed since last update
+        const double delay = (double) netTimer.restart()/1000.0; // msec elapsed since last update
         while(line !=0 && line.contains(':'))
         {
-            line = t.readLine();
-            line.simplified();
-            QString dev=line.left(line.indexOf(':'));
+            QString dev=line.left(line.indexOf(':')).simplified();
             QRegExp rx( "\\W+"+dev+":\\D*(\\d+)(?:\\D+\\d+){7}\\D+(\\d+)", false);
             rx.search(line);
             inB = rx.cap(1).toULong();
             outB = rx.cap(2).toULong();
-            QMap<QString, QVariant> map;
-            map["inkb"] = ((inB - receivedBytes)*8)/delay;
-            map["in"] = (inB - receivedBytes)/delay;
-            map["outkb"] = ((outB - transmittedBytes)*8)/delay;
-            map["out"] = (outB - transmittedBytes)/delay;
-            data[dev]=map;
+            kdDebug()<< "inB="<<inB <<"outB="<<outB <<endl;
+            if(data.find(dev)==data.end())
+            {
+                QVariantMap map;
+                map["inkb"] = 0;
+                map["in"] = 0;
+                map["outkb"] = 0;
+                map["out"] = 0;
+                map["intotal"]= inB;
+                map["outtotal"]= outB;
+                data[dev]=map;
+            }
+            else
+            {
+                QVariantMap map;
+                receivedBytes=data[dev].toMap().value("intotal").toULongLong();
+                transmittedBytes=data[dev].toMap().value("outtotal").toULongLong();
+                map["inkb"] = ((inB-receivedBytes)/1000)/delay;
+                map["in"] = (inB - receivedBytes)/delay;
+                map["outkb"] = ((outB - transmittedBytes)/1000)/delay;
+                map["out"] = (outB - transmittedBytes)/delay;
+                map["intotal"]=inB;
+                map["outtotal"]=outB;
+                data[dev]=map;
+            }
+            line = t.readLine();
         }
         file.close();
     }
-#endif
+    
 }
+
 
 void NetworkSensor::addMeter(Meter* meter)
 {
-    disconnect(0, 0, meter, SLOT(update(QVariant)));
-    connect(this, SIGNAL(networkValues(QVariant)), meter, SLOT(update(QVariant)));
+    disconnect(this, SIGNAL(networkValues(QVariant )), meter, SLOT(storeData(QVariant)));
+    connect(this, SIGNAL(networkValues(QVariant)), meter, SLOT(storeData(QVariant)));
 }
 
 void NetworkSensor::update()
 {
-    QMap<QString, QVariant> map;
-
     getInOutBytes();
-    netTimer.restart();
+    kdDebug()<< data.keys()<< data.values() <<endl;
     emit networkValues(QVariant(data));
-/*    receivedBytes = inB;
-    transmittedBytes = outB;*/
 }
 
 #include "networksensor.moc"

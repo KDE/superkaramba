@@ -41,8 +41,8 @@ RssSensor::~RssSensor()
 
 void RssSensor::addMeter(Meter* meter)
 {
-    disconnect(0, 0, meter, SLOT(update(QVariant)));
-    connect(this, SIGNAL(rssValues(QVariant)), meter, SLOT(update(QVariant)));
+    disconnect(this, SIGNAL(rssValues(QVariant) ), meter, SLOT(storeData(QVariant)));
+    connect(this, SIGNAL(rssValues(QVariant)), meter, SLOT(storeData(QVariant)));
 }
 
 void RssSensor::update()

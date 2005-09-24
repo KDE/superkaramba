@@ -40,8 +40,8 @@ ProgramSensor::~ProgramSensor()
 
 void ProgramSensor::addMeter(Meter* meter)
 {
-    disconnect(0, 0, meter, SLOT(update(QVariant)));
-    connect(this, SIGNAL(programValues(QVariant)), meter, SLOT(update(QVariant)));
+    disconnect(this, SIGNAL(programValues(QVariant )), meter, SLOT(storeData(QVariant)));
+    connect(this, SIGNAL(programValues(QVariant)), meter, SLOT(storeData(QVariant)));
 }
 
 void ProgramSensor::receivedStdout(KProcess *, char *buffer, int len)

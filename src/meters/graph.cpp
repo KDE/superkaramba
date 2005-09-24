@@ -12,6 +12,7 @@
 
 #include "graph.h"
 #include "graph.moc"
+#include <kdebug.h>
 
 Graph::Graph(KarambaWidget* k, int x, int y, int w, int h, int nbrPts)
         :   Meter(k, x, y, w, h)
@@ -29,17 +30,19 @@ Graph::Graph(KarambaWidget* k, int x, int y, int w, int h, int nbrPts)
 Graph::~Graph()
 {}
 
-void Graph::setValue(int v)
+void Graph::setValue(double v)
 {
+    kdDebug() << v << endl;
     v=qMin(v,m_maxValue);
     v=qMax(v,m_minValue);
     values.removeFirst();
-    values.append((int) (v / ((float)m_maxValue) * height()));
+    values.append( qRound(v / m_maxValue * (height()-1)));
+    update();
 }
 
 void Graph::setValue(QString v)
 {
-    setValue((int)(v.toDouble() + 0.5));
+    setValue(v.toDouble());
 }
 
 void Graph::updateData()
@@ -60,8 +63,8 @@ void Graph::paintEvent( QPaintEvent *)
     for (int i = 0; i < values.size()- 1 ; i ++)
     {
         nextXPos=xPos+step;
-        p.drawLine( (int)xPos, height() -(int) values.at(i) ,
-                    (int)nextXPos, height() - (int) values.at(i+1));
+        p.drawLine( (int)xPos, (height() -(int) values.at(i))-1 ,
+                     (int)nextXPos, (height() - (int) values.at(i+1))-1);
         xPos = nextXPos;
     }
 }

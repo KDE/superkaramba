@@ -27,10 +27,10 @@ class NetworkSensor :  public Sensor
 {
     Q_OBJECT
 public:
-    void update();
     void addMeter(Meter*);
     static NetworkSensor* self();
     static bool isSingleton() { return true; }
+    void start();
 
 signals:
     void networkValues(QVariant);
@@ -39,19 +39,16 @@ private:
     friend class KStaticDeleter<NetworkSensor>;
     NetworkSensor(int interval=2000 );
     virtual ~NetworkSensor();    
-    unsigned long receivedBytes;
-    unsigned long transmittedBytes;
+    qulonglong receivedBytes;
+    qulonglong transmittedBytes;
     QMap<QString,QVariant> data;
     QTime netTimer;
     QString device;
     static NetworkSensor* m_self;
-#ifdef __FreeBSD__
-
-    int if_number;
-    ifmibdata if_mib;
-#endif
-
-    void getInOutBytes () ;
+    void getInOutBytes();
+public slots:
+    void update();
+    
 
 };
 #endif // NETWORKSENSOR_H

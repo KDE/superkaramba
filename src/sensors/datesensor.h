@@ -28,8 +28,9 @@ private:
 class DateSensor :  public Sensor
 {
     Q_OBJECT
-public:
+public slots:
     void update();
+public:
     void addMeter(Meter*);
     static DateSensor* self();
     static bool isSingleton() { return true; }

@@ -22,6 +22,7 @@
 #include <kvm.h>
 #include <sys/file.h>
 #include <osreldate.h>
+#include <kdebug.h>
 
 /* define pagetok in terms of pageshift */
 #define pagetok(size) ((size) << pageshift)
@@ -251,8 +252,8 @@ void MemSensor::readValues()
 
 void MemSensor::addMeter(Meter* meter)
 {
-    disconnect(0, 0, meter, SLOT(update(QVariant)));
-    connect(this, SIGNAL(memValues(QVariant)), meter, SLOT(update(QVariant)));
+    disconnect(this, SIGNAL(memValues(QVariant) ), meter, SLOT(storeData(QVariant)));
+    connect(this, SIGNAL(memValues(QVariant)), meter, SLOT(storeData(QVariant)));
 }
 
 void MemSensor::update()

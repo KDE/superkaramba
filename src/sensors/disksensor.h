@@ -21,8 +21,9 @@
 class DiskSensor :  public Sensor
 {
     Q_OBJECT
-public:
+public slots:
     void update();
+public:
     void setMaxValue( SensorParams *sp );
     void addMeter(Meter *);
     static DiskSensor* self();

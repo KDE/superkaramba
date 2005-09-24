@@ -40,13 +40,13 @@ Sensor::~Sensor()
 
 void Sensor::addMeter(Meter* meter)
 {
-     disconnect(0, 0, meter, SLOT(storeData(QVariant)));
+    disconnect(this, SIGNAL(valueChanged(QVariant) ), meter, SLOT(storeData(QVariant)));
      connect(this, SIGNAL(valueChanged(QVariant)), meter, SLOT(storeData(QVariant)));
 }
 
 void Sensor::deleteMeter( Meter *meter )
 {
-    disconnect(this, 0, meter, SLOT(storeData(QVariant)));
+    disconnect(this, SIGNAL(valueChanged(QVariant )), meter, SLOT(storeData(QVariant)));
 }
 
 /*void Sensor::setMaxValue( SensorParams* )

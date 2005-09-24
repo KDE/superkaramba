@@ -42,7 +42,6 @@ public:
 
     ~TextFileSensor();
 
-    void update();
     void addMeter(Meter*);
     static bool isSingleton() { return false; }
 
@@ -53,6 +52,8 @@ private:
     QTextCodec *codec;
     QString fileName;
     bool rdf;
+public slots:
+    void update();
 };
 
 #endif // TEXTFILESENSOR_H

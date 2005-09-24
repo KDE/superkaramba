@@ -28,7 +28,7 @@ public:
     ~RssSensor();
 
     void addMeter(Meter*);
-    void update();
+    
     static bool isSingleton() { return false; }
 
 signals:
@@ -39,6 +39,9 @@ private:
     QString source;
     QString format;
     QString encoding;
+public slots:
+    void update();
+        
 
 };
 

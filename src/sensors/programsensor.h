@@ -22,7 +22,6 @@ class ProgramSensor :  public Sensor
 public:
     ProgramSensor(const QString &programName, int msec=1000, QString encoding="" );
     ~ProgramSensor();
-    void update();
     void addMeter(Meter*);
     static bool isSingleton() { return false; }
 
@@ -38,6 +37,7 @@ private:
 public slots:
     void receivedStdout(KProcess *proc, char *buffer, int buflen);
     void processExited(KProcess *proc);
+    void update();
 };
 
 #endif // PROGRAMSENSOR_H
