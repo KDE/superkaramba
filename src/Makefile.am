@@ -19,14 +19,14 @@ noinst_HEADERS = karambawidget.h karambaapp.h lineparser.h
                  themefile.h themesdlg.h themewidget.h 
 		 kwidgetlistbox.h themelocale.h themeinfo.h
 		 
-superkaramba_SOURCES = main.cpp karambawidget.cpp meter.cpp
-                       sensor.cpp sensorparams.cpp karambarootpixmap.cpp
-		       textfield.cpp showdesktop.cpp karambasessionmanaged.cpp
+superkaramba_SOURCES = main.cpp karambawidget.cpp meter.cpp \
+                       sensor.cpp sensorparams.cpp karambarootpixmap.cpp \
+		       textfield.cpp showdesktop.cpp karambasessionmanaged.cpp \
 		       taskmanager.cpp systemtray.cpp karambalistboxitem.cpp \
-                       dcopinterface.skel dcopinterface.stub karambainterface.cpp 
-                       karambaapp.cpp lineparser.cpp themefile.cpp 
-		       themesdlg.cpp themes_layout.ui themewidget_layout.ui
-		       themewidget.cpp kwidgetlistbox.cpp sknewstuff.cpp 
+                       dcopinterface.skel dcopinterface.stub karambainterface.cpp \ 
+                       karambaapp.cpp lineparser.cpp themefile.cpp \
+		       themesdlg.cpp themes_layout.ui themewidget_layout.ui \
+		       themewidget.cpp kwidgetlistbox.cpp sknewstuff.cpp \
 		       themelocale.cpp themeinfo.cpp superkarambasettings.kcfgc
 
 
