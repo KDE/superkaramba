@@ -765,8 +765,8 @@ void KarambaWidget::makeActive()
     KWin::setState(winId(), NET::Modal);
 }
 
-// void KarambaWidget::makePassive()
-// {
+ void KarambaWidget::makePassive()
+ {
 //     if(managed)
 //         return;
 // 
@@ -782,7 +782,7 @@ void KarambaWidget::makeActive()
 //     //KDE 3.2 addition for the always on top issues
 //     KWin::setState(winId(), NET::KeepBelow);
 // 
-// }
+ }
 
 void KarambaWidget::popupNotify(int)
 {
@@ -851,8 +851,8 @@ void KarambaWidget::editScript()
     KRun::runURL( KURL( path ), "text/plain" );
 }
 
-// QString KarambaWidget::findSensorFromMap(Sensor* sensor)
-// {
+ QString KarambaWidget::findSensorFromMap(Sensor* sensor)
+ {
 //     //qDebug("KarambaWidget::findSensorFromMap");
 //     QMap<QString,Sensor*>::ConstIterator it;
 //     QMap<QString,Sensor*>::ConstIterator end( sensorMap.end() );
@@ -868,17 +868,17 @@ void KarambaWidget::editScript()
 // {
 //     //qDebug("KarambaWidget::findSensorFromList");
 //     return meter->getSensor();
-// }
+ }
 // 
-// QString KarambaWidget::getSensor(Meter* meter)
-// {
+ QString KarambaWidget::getSensor(Meter* meter)
+ {
 //     //qDebug("KarambaWidget::getSensor");
 //     QString s;
 //     Sensor* sensor = meter->getSensor();
 //     if(sensor)
 //         s = findSensorFromMap(sensor);
 //     return s;
-// }
+ }
 
 void KarambaWidget::deleteMeterFromSensors(Meter* meter)
 {
