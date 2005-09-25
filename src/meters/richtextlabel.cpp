@@ -18,7 +18,7 @@
 #include <QTextFrame>
 #include <QTextFrameFormat>
 #include <QTextLength>
-
+#include "karamba_python.h"
 RichTextLabel::RichTextLabel(KarambaWidget* k) :
         Meter(k, 0, 0, 100, 100),
         source(""),
@@ -176,8 +176,8 @@ void RichTextLabel::paintEvent(QPaintEvent* )
         layout->draw(&p, posText);
         block = block.next();
     }
-
-
+    if ((*pythonIface) && (*pythonIface)->isExtensionLoaded())
+            (*pythonIface)->widgetUpdated(m_karamba);
 }
 
 /*

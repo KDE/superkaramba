@@ -12,6 +12,7 @@
 
 #include "bar.h"
 #include "bar.moc"
+#include "karamba_python.h"
 
 Bar::Bar(KarambaWidget* k, int x, int y, int w, int h)
         : Meter(k, x, y, w, h),
@@ -118,6 +119,8 @@ void Bar::paintEvent(QPaintEvent*)
             //int v = int( (value-minValue)*width / (maxValue-minValue) + 0.5 );
             p.drawTiledPixmap(0, 0, value, height(), pixmap);
         }
+        if ((*pythonIface) && (*pythonIface)->isExtensionLoaded())
+            (*pythonIface)->widgetUpdated(m_karamba);
 }
 
 void Bar::updateData()

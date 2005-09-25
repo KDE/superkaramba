@@ -22,11 +22,12 @@
 #include <kvm.h>
 #include <sys/file.h>
 #include <osreldate.h>
-#include <kdebug.h>
+
 
 /* define pagetok in terms of pageshift */
 #define pagetok(size) ((size) << pageshift)
 #endif
+#include <kdebug.h>
 
 static KStaticDeleter<MemSensor> memSensorDeleter;
 MemSensor* MemSensor::m_self = 0;
@@ -76,6 +77,7 @@ MemSensor::MemSensor(int msec) : Sensor(msec)
 
     readValues();
 #endif
+    start();
 }
 
 MemSensor::~MemSensor()
@@ -91,6 +93,17 @@ void MemSensor::receivedStdout(KProcess *, char *buffer, int len )
 void MemSensor::receivedStdout(KProcess *, char *, int)
 {}
 #endif
+
+void MemSensor::start()
+{
+    if (!m_timer.isActive())
+    {
+        connect (&m_timer,SIGNAL(timeout()),this,SLOT(update()));
+        m_timer.start( (m_msec == 0)?1000:m_msec);
+    }
+}
+
+
 
 void MemSensor::processExited(KProcess *)
 {
@@ -115,7 +128,7 @@ int MemSensor::getMemTotal()
 #else
 
     QRegExp rx( "MemTotal:\\s*(\\d+)" );
-    rx.search( meminfo );
+    rx.indexIn( meminfo );
     return ( rx.cap(1).toInt() );
 #endif
 }
@@ -131,7 +144,7 @@ int MemSensor::getMemFree()
 #else
 
     QRegExp rx( "MemFree:\\s*(\\d+)" );
-    rx.search( meminfo );
+    rx.indexIn( meminfo );
     return ( rx.cap(1).toInt() );
 #endif
 }
@@ -148,7 +161,7 @@ int MemSensor::getBuffers()
 #else
 
     QRegExp rx( "Buffers:\\s*(\\d+)" );
-    rx.search( meminfo );
+    rx.indexIn( meminfo );
     return ( rx.cap(1).toInt() );
 #endif
 }
@@ -196,7 +209,7 @@ int MemSensor::getSwapTotal()
 #else
 
     QRegExp rx( "SwapTotal:\\s*(\\d+)" );
-    rx.search( meminfo );
+    rx.indexIn( meminfo );
     return ( rx.cap(1).toInt() );
 #endif
 }
@@ -224,7 +237,7 @@ int MemSensor::getSwapFree()
 #else
 
     QRegExp rx( "SwapFree:\\s*(\\d+)" );
-    rx.search( meminfo );
+    rx.indexIn( meminfo );
     return ( rx.cap(1).toInt() );
 #endif
 }
@@ -241,10 +254,16 @@ void MemSensor::readValues()
 
     QFile file("/proc/meminfo");
     QString line;
+    meminfo="";
     if ( file.open(IO_ReadOnly | IO_Translate) )
     {
         QTextStream t( &file );        // use a text stream
-        meminfo = t.read();
+        QString line;
+        while((line= t.readLine())!=0)
+        {
+            meminfo += line;
+            meminfo +='\n';
+        }
         file.close();
     }
 #endif
@@ -281,17 +300,17 @@ void MemSensor::update()
     }
 #endif
 
-    data["%fmb"] = (int)(( totalMem - usedMemNoBuffers)/1024.0+0.5);
-    data["%fm"] = (int)( ( totalMem - usedMem  )/1024.0+0.5);
+    data["fmb"] = (int)(( totalMem - usedMemNoBuffers)/1024.0+0.5);
+    data["fm"] = (int)( ( totalMem - usedMem  )/1024.0+0.5);
 
-    data["%umb"] = (int)((usedMemNoBuffers)/1024.0+0.5);
-    data["%um"] = (int)((usedMem)/1024.0+0.5 );
+    data["umb"] = (int)((usedMemNoBuffers)/1024.0+0.5);
+    data["um"] = (int)((usedMem)/1024.0+0.5 );
 
-    data["%tm"] = (int)( (totalMem)/1024.0+0.5);
+    data["tm"] = (int)( (totalMem)/1024.0+0.5);
 
-    data["%fs"] = (int)((totalSwap - usedSwap)/1024.0+0.5);
-    data["%us"] = (int)(usedSwap/1024.0+0.5);
-    data["%ts"] = (int)(totalSwap/1024.0+0.5);
+    data["fs"] = (int)((totalSwap - usedSwap)/1024.0+0.5);
+    data["us"] = (int)(usedSwap/1024.0+0.5);
+    data["ts"] = (int)(totalSwap/1024.0+0.5);
 
     emit memValues(QVariant(data));
 

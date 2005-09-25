@@ -23,6 +23,7 @@
 
 class KarambaWidget;
 class Sensor;
+class KarambaPython;
 
 class Meter : public QWidget
 {
@@ -159,6 +160,18 @@ protected: // Protected attributes
     Sensor* m_sensor;
     KarambaWidget* m_karamba;
     QVariant decodeDot(QString formatString);
+    void mousePressEvent(QMouseEvent* me);
+    void mouseReleaseEvent(QMouseEvent* me);
+    void mouseMoveEvent(QMouseEvent* me);
+    void mouseDoubleClickEvent(QMouseEvent* me);
+    void keyPressEvent(QKeyEvent* ke);
+    void keyReleaseEvent(QKeyEvent* ke);
+    void wheelEvent(QWheelEvent* e);
+    KarambaWidget* karamba;
+    KarambaPython** pythonIface;
+   
+    
+    
 };
 
 #endif // METER_H

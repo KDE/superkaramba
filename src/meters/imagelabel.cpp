@@ -30,7 +30,7 @@
 #include <kimageeffect.h>
 #include <ktempfile.h>
 #include <kio/job.h>
-
+#include "karamba_python.h"
 #include "karambaapp.h"
 #include "imagelabel.h"
 #include "imagelabel.moc"
@@ -673,4 +673,6 @@ void ImageLabel::paintEvent( QPaintEvent * pe)
     {
         imageEffect -> startTimer();
     }
+    if ((*pythonIface) && (*pythonIface)->isExtensionLoaded())
+            (*pythonIface)->widgetUpdated(m_karamba);
 }

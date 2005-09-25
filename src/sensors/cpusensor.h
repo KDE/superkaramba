@@ -24,6 +24,7 @@ public:
 
     int getCPULoad();
     void addMeter(Meter *);
+    void start();
     static CPUSensor* self();
     static bool isSingleton() { return true; }
 
@@ -34,16 +35,12 @@ private:
     friend class KStaticDeleter<CPUSensor>;
     CPUSensor(int interval=2000);
     virtual ~CPUSensor();
-    long userTicks;
-    long sysTicks;
-    long niceTicks;
-    long idleTicks;
-
     int user;
     int system;
     int nice;
     int idle;
     QString cpuNbr;
+    QVariantMap oldData;
 
     void getTicks (long &u,long &s,long &n,long &i);
     QVariantMap data;

@@ -20,7 +20,7 @@
 
 #include "input.h"
 #include "kdebug.h"
-
+#include "karamba_python.h"
 Input::Input(KarambaWidget* k, int x, int y, int w, int h):
         Meter(k, x, y, w, h)
 {

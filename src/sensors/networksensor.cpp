@@ -73,7 +73,6 @@ void NetworkSensor::getInOutBytes()
             rx.search(line);
             inB = rx.cap(1).toULong();
             outB = rx.cap(2).toULong();
-            kdDebug()<< "inB="<<inB <<"outB="<<outB <<endl;
             if(data.find(dev)==data.end())
             {
                 QVariantMap map;
@@ -115,7 +114,6 @@ void NetworkSensor::addMeter(Meter* meter)
 void NetworkSensor::update()
 {
     getInOutBytes();
-    kdDebug()<< data.keys()<< data.values() <<endl;
     emit networkValues(QVariant(data));
 }
 

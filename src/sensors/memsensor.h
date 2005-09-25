@@ -39,6 +39,7 @@ public:
     void setMaxValue( SensorParams *sp );
     QString getMemLine();
     void addMeter(Meter*);
+    void start();
     static MemSensor* self();
     static bool isSingleton() { return true; }
 

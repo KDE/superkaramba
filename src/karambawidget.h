@@ -115,6 +115,7 @@ public:
     QList<ImageLabel *> imageList;
 //     QList<ClickMap *> clickList;
     QList<KPopupMenu *> menuList;
+    KarambaPython* pythonIface;
 
     KarambaWidget(QString fn, bool reloading = false, int instance = -1, QWidget *parent = 0);
     virtual ~KarambaWidget();
@@ -290,7 +291,7 @@ private:
     KToggleAction *toggleFastTransforms;
 
     // Python module references
-    KarambaPython* pythonIface;
+    
     TextField *defaultTextField;
 
     int  desktop;

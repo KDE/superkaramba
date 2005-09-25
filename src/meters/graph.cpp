@@ -13,7 +13,7 @@
 #include "graph.h"
 #include "graph.moc"
 #include <kdebug.h>
-
+#include "karamba_python.h"
 Graph::Graph(KarambaWidget* k, int x, int y, int w, int h, int nbrPts)
         :   Meter(k, x, y, w, h)
 {
@@ -67,4 +67,6 @@ void Graph::paintEvent( QPaintEvent *)
                      (int)nextXPos, (height() - (int) values.at(i+1))-1);
         xPos = nextXPos;
     }
+    if ((*pythonIface) && (*pythonIface)->isExtensionLoaded())
+            (*pythonIface)->widgetUpdated(m_karamba);
 }

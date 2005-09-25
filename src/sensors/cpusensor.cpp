@@ -17,6 +17,7 @@
 #endif
 
 #include <QTextStream>
+#include <kdebug.h>
 
 
 #include "cpusensor.h"
@@ -37,11 +38,7 @@ CPUSensor* CPUSensor::self()
 
 
 CPUSensor::CPUSensor(int interval )
-        :   Sensor(interval),
-        userTicks(0),
-        sysTicks(0),
-        niceTicks(0),
-        idleTicks(0)
+        :   Sensor(interval)
 {
 #warning Inefficient propgramming, no freebsd support
 /* actually, we are doing here the changing of cpu0 to cpu1 and so on and then getCPULoad(), but what we should have done actually is calling getCPULoad() once, which would fillup the data Map correctly.*/
@@ -51,7 +48,6 @@ CPUSensor::CPUSensor(int interval )
     if ( file.open(IO_ReadOnly | IO_Translate) )
     {
         QTextStream t( &file );        // use a text stream
-        line = t.readLine();
         while( (line = t.readLine()) !=0 )
         {
             QString cpu= line.left(line.indexOf(' '));
@@ -63,13 +59,29 @@ CPUSensor::CPUSensor(int interval )
             map["idle"] = QVariant();
             map["system"] = QVariant();
             data[cpu]=QVariant(map);
+            QVariantMap map2;
+            map2["userTicks"]=0;
+            map2["sysTicks"] = 0;
+            map2["niceTicks"] = 0;
+            map2["idleTicks"] = 0;
+            oldData[cpu]= map;
         }
     }
-    update();
+    start();
 }
 
 CPUSensor::~CPUSensor()
 {}
+
+void CPUSensor::start()
+{
+    if (!m_timer.isActive())
+    {
+        connect (&m_timer,SIGNAL(timeout()),this,SLOT(update()));
+        m_timer.start( (m_msec == 0)?1000:m_msec);
+    }
+}
+
 
 void CPUSensor::getTicks (long &u,long &s,long &n,long &i)
 {
@@ -93,11 +105,9 @@ void CPUSensor::getTicks (long &u,long &s,long &n,long &i)
     {
         QTextStream t( &file );        // use a text stream
         QRegExp rx( cpuNbr+"\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)");
-        line = t.readLine();
-        rx.search( line );
         while( (line = t.readLine()) !=0 && rx.cap(0) == "" )
         {
-            rx.search( line );
+            rx.indexIn( line );
         }
         //user
         u = rx.cap(1).toLong();
@@ -122,25 +132,27 @@ void CPUSensor::getTicks (long &u,long &s,long &n,long &i)
 int CPUSensor::getCPULoad()
 {
     long uTicks, sTicks, nTicks, iTicks;
-
+    int userTicks, sysTicks, niceTicks, idleTicks;
+    userTicks=oldData[cpuNbr].toMap()["userTicks"].toInt();
+    sysTicks=oldData[cpuNbr].toMap()["sysTicks"].toInt();
+    niceTicks=oldData[cpuNbr].toMap()["niceTicks"].toInt();
+    idleTicks=oldData[cpuNbr].toMap()["idleTicks"].toInt();
     getTicks(uTicks, sTicks, nTicks, iTicks);
 
-    const long totalTicks = ((uTicks - userTicks) +
-                             (sTicks - sysTicks) +
-                             (nTicks - niceTicks) +
-                             (iTicks - idleTicks));
+    const long totalTicks = ((uTicks - userTicks) + (sTicks - sysTicks) 
+            +(nTicks - niceTicks) +(iTicks - idleTicks));
 
     int load  = (totalTicks == 0) ? 0 : (int) ( 100.0 * ( (uTicks+sTicks+nTicks) - (userTicks+sysTicks+niceTicks))/( totalTicks+0.001) + 0.5 );
     user = (totalTicks == 0) ? 0 : (int) ( 100.0 * ( uTicks - userTicks)/( totalTicks+0.001) + 0.5 );
     idle = (totalTicks == 0) ? 0 : (int) ( 100.0 * ( iTicks - idleTicks)/( totalTicks+0.001) + 0.5 );
     system = (totalTicks == 0) ? 0 : (int) ( 100.0 * ( sTicks - sysTicks)/( totalTicks+0.001) + 0.5 );
     nice = (totalTicks == 0) ? 0 : (int) ( 100.0 * ( nTicks - niceTicks)/( totalTicks+0.001) + 0.5 );
-
-    userTicks = uTicks;
-    sysTicks = sTicks;
-    niceTicks = nTicks;
-    idleTicks = iTicks;
-
+    QVariantMap map;
+    map["userTicks"]=(int)uTicks;
+    map["sysTicks"] = (int)sTicks;
+    map["niceTicks"] = (int)nTicks;
+    map["idleTicks"] = (int)iTicks;
+    oldData[cpuNbr]= map;
     return load;
 }
 
@@ -157,11 +169,13 @@ void CPUSensor::update()
     {
         cpuNbr=cpu;
         int load=getCPULoad();
-        (data[cpu]).toMap()["load"]=QVariant(load);
-        (data[cpu]).toMap()["user"]=QVariant(user);
-        (data[cpu]).toMap()["nice"]=QVariant(nice);
-        (data[cpu]).toMap()["idle"]=QVariant(idle);
-        (data[cpu]).toMap()["system"]=QVariant(system);
+        QVariantMap map;
+        map["load"]=QVariant(load);
+        map["user"]=QVariant(user);
+        map["nice"]=QVariant(nice);
+        map["idle"]=QVariant(idle);
+        map["system"]=QVariant(system);
+        data[cpu]=map;
     }
     emit cpuValues(QVariant(data));
 }

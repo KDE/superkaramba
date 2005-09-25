@@ -1411,6 +1411,13 @@ void KarambaWidget::paintEvent ( QPaintEvent *e)
     QPainter p(this);
     p.drawPixmap(rect.topLeft(), pm, rect);
     p.end();
+    if (pythonIface && pythonIface->isExtensionLoaded())
+    {
+        if (haveUpdated == 0)
+            pythonIface->initWidget(this);
+        else
+            pythonIface->widgetUpdated(this);
+    }
 }
 
 void KarambaWidget::updateSensors()
