@@ -74,6 +74,7 @@ PyObject* py_deleteGraph(PyObject *, PyObject *args)
 PyObject* py_getThemeGraph(PyObject *self, PyObject *args)
 {
     return py_getThemeMeter(self, args, "Graph");
+    qWarning("I am here..............................");
 }
 
 PyObject* py_getGraphSize(PyObject *self, PyObject *args)

@@ -62,15 +62,17 @@ KarambaWidget::KarambaWidget(QString fn, bool reloading, int instance, QWidget *
         trayMenuSeperatorId(-1), trayMenuQuitId(-1), trayMenuToggleId(-1),
         trayMenuThemeId(-1)
 {
-    setObjectName("karamba");
     setAttribute(Qt::WA_GroupLeader);
     setAttribute(Qt::WA_DeleteOnClose);
     KURL url;
-
+    
+    /* Testing of passed filename as relative/absolute or pre filename */
     if(fn.find('/') == -1)
         url.setFileName(fn);
     else
         url = fn;
+    
+    /* if themefile is not set, close the theme */
     if(!m_theme.set(url))
     {
         setFixedSize(0, 0);
@@ -79,11 +81,13 @@ KarambaWidget::KarambaWidget(QString fn, bool reloading, int instance, QWidget *
     }
     kdDebug() << "Starting theme: " << m_theme.name() << endl;
     QString qName = "karamba - " + m_theme.name();
-    setName(qName.ascii());
+    setObjectName(qName.ascii());
 
-    //Add self to list of open themes
+    /*Add self to list of open themes to karambaApplication. reloading indicated whether this is
+    first start or we are reloading from RMB */
     karambaApp->addKaramba(this, reloading);
-
+    
+    //So that, if user changes the theme file/python script, the theme is reloaded
     KDirWatch *dirWatch = new KDirWatch( this );
     connect(dirWatch, SIGNAL( dirty( const QString & ) ),
             SLOT( slotFileChanged( const QString & ) ) );
@@ -117,6 +121,7 @@ KarambaWidget::KarambaWidget(QString fn, bool reloading, int instance, QWidget *
     config -> setGroup("internal");
 
     m_reloading = reloading;
+    /* Loading of python module the initialization of its interface */
     if(m_theme.pythonModuleExists())
     {
         kdDebug() << "Loading python module: " << m_theme.pythonModule() << endl;
@@ -129,7 +134,8 @@ KarambaWidget::KarambaWidget(QString fn, bool reloading, int instance, QWidget *
     // could be replaced with TaskManager
     kWinModule = new KWinModule();
     desktop = 0;
-
+    
+    /* To let python module know that desktop is changed, and repaint of faked transparency */
     connect( kWinModule,SIGNAL(currentDesktopChanged(int)), this,
              SLOT(currentDesktopChanged(int)) );
     connect( kapp, SIGNAL(backgroundChanged(int)), this,
@@ -151,6 +157,7 @@ KarambaWidget::KarambaWidget(QString fn, bool reloading, int instance, QWidget *
     themeConfMenu -> setCheckable(true);
 
     /* XXX - need to be able to delete all these DesktopChangeSlot objects */
+    /* these are the submenu "To Dekstop"*/
     DesktopChangeSlot *dslot;
 
     int mid;
@@ -231,11 +238,12 @@ KarambaWidget::KarambaWidget(QString fn, bool reloading, int instance, QWidget *
     if (!client->isAttached())
         client->attach();
     appId = client->registerAs(qApp->name());
+    //to send it to desktop
 
-//    this->setBackgroundMode(Qt::NoBackground);
     if( !(onTop || managed))
         this->lower();
 
+    /* if *.theme file could not be parsed correctly, close the theme */
     if( !parseConfig() )
     {
         setFixedSize(0,0);
@@ -244,6 +252,7 @@ KarambaWidget::KarambaWidget(QString fn, bool reloading, int instance, QWidget *
     }
     else
     {
+        /* the application background handling for faked transparency */
        KRootPixmap *root = new KRootPixmap((QWidget*)this);
        root->start();
     }
@@ -304,15 +313,13 @@ KarambaWidget::~KarambaWidget()
         writeConfigData();
 
     delete config;
-
+    /* TODO Remove these list. There is no need to keep a list, when childrens can be easiliy queried
+    directly by Qt functions */
     qDeleteAll(meterList);
     meterList.clear();
     qDeleteAll(sensorList);
     sensorList.clear();
-    //qDeleteAll(imageList);
-    //imageList.clear();
-//     qDeleteAll(clickList);
-//     clickList.clear();
+    
     qDeleteAll(timeList);
     timeList.clear();
 
@@ -543,26 +550,27 @@ bool KarambaWidget::parseConfig()
             if(lineParser.meter() == "IMAGE")
             {
                 QString file = lineParser.getString("PATH");
-                QString file_roll = lineParser.getString("PATHROLL");
-                int xon = lineParser.getInt("XROLL");
-                int yon = lineParser.getInt("YROLL");
+                /*specific functionality like rollover image should be programmed by theme writer themselves. if we really want to provide this function, at least this is not the place for that we should make separate convenience function for that    */
+//                 QString file_roll = lineParser.getString("PATHROLL");
+//                 int xon = lineParser.getInt("XROLL");
+//                 int yon = lineParser.getInt("YROLL");
                 QString tiptext = lineParser.getString("TOOLTIP");
                 QString name = lineParser.getString("NAME");
                 bool bg = lineParser.getBoolean("BACKGROUND");
-                xon = ( xon <= 0 ) ? x:xon;
-                yon = ( yon <= 0 ) ? y:yon;
+//                 xon = ( xon <= 0 ) ? x:xon;
+//                 yon = ( yon <= 0 ) ? y:yon;
 
                 ImageLabel *tmp = new ImageLabel(this, x, y, 0, 0);
                 tmp->setValue(file);
-                if(!file_roll.isEmpty())
-                    tmp->parseImages(file, file_roll, x,y, xon, yon);
+//                 if(!file_roll.isEmpty())
+//                     tmp->parseImages(file, file_roll, x,y, xon, yon);
                 tmp->setBackground(bg);
                 if (!name.isEmpty())
-                    tmp->setName(name.ascii());
+                    tmp->setObjectName(name.ascii());
                 if (!tiptext.isEmpty())
                     tmp->setTooltip(tiptext);
 
-                connect(tmp, SIGNAL(pixmapLoaded()), this, SLOT(externalStep()));
+               // connect(tmp, SIGNAL(pixmapLoaded()), this, SLOT(externalStep()));
                 setSensor(lineParser, (Meter*) tmp );
                 meterList.append (tmp );
                 imageList.append (tmp );
@@ -586,9 +594,7 @@ bool KarambaWidget::parseConfig()
                 defaultTextField->setShadow(lineParser.getInt("SHADOW", 0));
             }
 
-            if(/*lineParser.meter() == "TEXT" ||
-                    lineParser.meter() == "CLICKMAP" ||*/
-                    lineParser.meter() == "RICHTEXT" ||
+            if(lineParser.meter() == "RICHTEXT" ||
                     lineParser.meter() == "INPUT")
             {
                 TextField defTxt;
@@ -659,7 +665,6 @@ bool KarambaWidget::parseConfig()
                         tmp->setName(name.ascii());
 
                     setSensor(lineParser, (Meter*)tmp);
-//                     clickList.append((ClickMap *)tmp);
                     meterList.append ( tmp );
                 }
 
@@ -719,13 +724,8 @@ bool KarambaWidget::parseConfig()
             // (plays better with taskbar themes this way)
             KWin::setType(winId(), NET::Dock);
 
-#if defined(KDE_MAKE_VERSION)
-        #if KDE_VERSION >= KDE_MAKE_VERSION(3,1,9)
             //KDE 3.2 addition for the always on top issues
             KWin::setState(winId(), NET::KeepBelow);
-#endif
-      #endif
-
         }
 
         m_theme.close();
@@ -743,7 +743,7 @@ bool KarambaWidget::parseConfig()
         return true;
     }
 }
-
+/*
 void KarambaWidget::start()
 {
     QTimer *m_sysTimer = new QTimer(this);
@@ -757,42 +757,32 @@ void KarambaWidget::start()
 
     if( !(onTop || managed) )
         lowerTimer.start();
-}
+}*/
 
 void KarambaWidget::makeActive()
 {
     KWin::setType(winId(), NET::Normal);
-
-#if defined(KDE_MAKE_VERSION)
-    #if KDE_VERSION >= KDE_MAKE_VERSION(3,1,9)
-    //KDE 3.2 addition for the always on top issues
     KWin::setState(winId(), NET::Modal);
-#endif
-  #endif
 }
 
-void KarambaWidget::makePassive()
-{
-    if(managed)
-        return;
-
-    foreach (QObject *meter, meterList)
-    {
-        if((meter)->isA("Input"))
-            return;
-    }
-
-    // Matthew Kay: set window type to "dock" (plays better with taskbar themes
-    // this way)
-    KWin::setType(winId(), NET::Dock);
-
-#if defined(KDE_MAKE_VERSION)
-    #if KDE_VERSION >= KDE_MAKE_VERSION(3,1,9)
-    //KDE 3.2 addition for the always on top issues
-    KWin::setState(winId(), NET::KeepBelow);
-#endif
-  #endif
-}
+// void KarambaWidget::makePassive()
+// {
+//     if(managed)
+//         return;
+// 
+//     foreach (QObject *meter, meterList)
+//     {
+//         if((meter)->isA("Input"))
+//             return;
+//     }
+// 
+//     // Matthew Kay: set window type to "dock" (plays better with taskbar themes
+//     // this way)
+//     KWin::setType(winId(), NET::Dock);
+//     //KDE 3.2 addition for the always on top issues
+//     KWin::setState(winId(), NET::KeepBelow);
+// 
+// }
 
 void KarambaWidget::popupNotify(int)
 {
@@ -861,34 +851,34 @@ void KarambaWidget::editScript()
     KRun::runURL( KURL( path ), "text/plain" );
 }
 
-QString KarambaWidget::findSensorFromMap(Sensor* sensor)
-{
-    //qDebug("KarambaWidget::findSensorFromMap");
-    QMap<QString,Sensor*>::ConstIterator it;
-    QMap<QString,Sensor*>::ConstIterator end( sensorMap.end() );
-    for ( it = sensorMap.begin(); it != end; ++it )
-    {
-        if (it.data() == sensor)
-            return it.key();
-    }
-    return "";
-}
+// QString KarambaWidget::findSensorFromMap(Sensor* sensor)
+// {
+//     //qDebug("KarambaWidget::findSensorFromMap");
+//     QMap<QString,Sensor*>::ConstIterator it;
+//     QMap<QString,Sensor*>::ConstIterator end( sensorMap.end() );
+//     for ( it = sensorMap.begin(); it != end; ++it )
+//     {
+//         if (it.data() == sensor)
+//             return it.key();
+//     }
+//     return "";
+// }
 
-Sensor* KarambaWidget::findSensorFromList(Meter* meter)
-{
-    //qDebug("KarambaWidget::findSensorFromList");
-    return meter->getSensor();
-}
-
-QString KarambaWidget::getSensor(Meter* meter)
-{
-    //qDebug("KarambaWidget::getSensor");
-    QString s;
-    Sensor* sensor = meter->getSensor();
-    if(sensor)
-        s = findSensorFromMap(sensor);
-    return s;
-}
+// Sensor* KarambaWidget::findSensorFromList(Meter* meter)
+// {
+//     //qDebug("KarambaWidget::findSensorFromList");
+//     return meter->getSensor();
+// }
+// 
+// QString KarambaWidget::getSensor(Meter* meter)
+// {
+//     //qDebug("KarambaWidget::getSensor");
+//     QString s;
+//     Sensor* sensor = meter->getSensor();
+//     if(sensor)
+//         s = findSensorFromMap(sensor);
+//     return s;
+// }
 
 void KarambaWidget::deleteMeterFromSensors(Meter* meter)
 {
@@ -919,15 +909,15 @@ void KarambaWidget::setSensor(const LineParser& lineParser, Meter* meter)
 
     if( sens == "CPU" )
     {
-        QString cpuNbr = lineParser.getString("CPU");
-        sensor = sensorMap["CPU"+cpuNbr];
-        if (sensor == 0)
-        {
+//         QString cpuNbr = lineParser.getString("CPU");
+//         sensor = sensorMap["CPU"+cpuNbr];
+//         if (sensor == 0)
+//         {
             int interval = lineParser.getInt("INTERVAL");
             interval = (interval == 0)?1000:interval;
-            sensor = ( sensorMap["CPU"+cpuNbr] = CPUSensor::self());
+            sensor = ( /*sensorMap["CPU"+cpuNbr] =*/ CPUSensor::self());
             sensorList.append( sensor );
-        }
+//         }
         /*SensorParams *sp = new SensorParams(meter);
         sp->addParam("FORMAT",
                      m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
@@ -1285,8 +1275,8 @@ void KarambaWidget::mousePressEvent( QMouseEvent *e )
     else
     {
         clickPos = e->pos();
-        if( toggleLocked -> isChecked() )
-            passClick( e );
+//         if( toggleLocked -> isChecked() )
+//             passClick( e );
         if( !(onTop || managed))
             lower();
     }
@@ -1295,7 +1285,7 @@ void KarambaWidget::mousePressEvent( QMouseEvent *e )
 void KarambaWidget::wheelEvent( QWheelEvent *e )
 {
     //qDebug("KarambaWidget::wheelEvent");
-    passWheelClick( e );
+//     passWheelClick( e );
 }
 
 void KarambaWidget::mouseReleaseEvent( QMouseEvent *e )
@@ -1307,22 +1297,22 @@ void KarambaWidget::mouseReleaseEvent( QMouseEvent *e )
 void KarambaWidget::mouseDoubleClickEvent( QMouseEvent *e )
 {
     //qDebug("KarambaWidget::mouseDoubleClickEvent");
-    if( !toggleLocked -> isChecked() )
-    {
-        passClick( e );
-    }
+//     if( !toggleLocked -> isChecked() )
+//     {
+//         passClick( e );
+//     }
 }
 
 void KarambaWidget::keyPressEvent(QKeyEvent *e)
 {
     //qDebug("KarambaWidget::keyPressEvent");
-    keyPressed(e->text(), 0);
+//     keyPressed(e->text(), 0);
 }
 
 void KarambaWidget::keyPressed(const QString& s, const Meter* meter)
 {
-    if (pythonIface && pythonIface->isExtensionLoaded())
-        pythonIface->keyPressed(this, meter, s);
+//     if (pythonIface && pythonIface->isExtensionLoaded())
+//         pythonIface->keyPressed(this, meter, s);
 }
 
 void KarambaWidget::mouseMoveEvent( QMouseEvent *e )
@@ -1411,12 +1401,19 @@ void KarambaWidget::paintEvent ( QPaintEvent *e)
     QPainter p(this);
     p.drawPixmap(rect.topLeft(), pm, rect);
     p.end();
+    kdDebug() <<"karambawidget paintEvent"<<endl;
     if (pythonIface && pythonIface->isExtensionLoaded())
     {
         if (haveUpdated == 0)
+        {
             pythonIface->initWidget(this);
+            kdDebug() <<"karambawidget initWidget"<<endl;
+        }
         else
+        {
+            kdDebug() <<"karambawidget widgetupdated"<<endl;
             pythonIface->widgetUpdated(this);
+        }
     }
 }
 
