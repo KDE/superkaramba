@@ -1181,6 +1181,8 @@ void KarambaWidget::passMenuOptionChanged(QString key, bool value)
         pythonIface->menuOptionChanged(this, key, value);
 }
 
+//FIXME remove this function
+
 void KarambaWidget::meterClicked(QMouseEvent* e, Meter* meter)
 {
     //qWarning("KarambaWidget::meterClicked");
@@ -1206,7 +1208,7 @@ void KarambaWidget::meterClicked(QMouseEvent* e, Meter* meter)
 //         }
 //     }
 }
-
+//FIXME remove this function
 void KarambaWidget::passClick(QMouseEvent *e)
 {
     /*//qDebug("KarambaWidget::passClick");
@@ -1248,6 +1250,7 @@ void KarambaWidget::passClick(QMouseEvent *e)
     }*/
 }
 
+//FIXME remove this function
 void KarambaWidget::passWheelClick( QWheelEvent *e )
 {
  /*   //qDebug("KarambaWidget::passWheelClick");
@@ -1265,6 +1268,7 @@ void KarambaWidget::passWheelClick( QWheelEvent *e )
     }*/
 }
 
+//FIXME remove lower() and use only KeepBelow
 void KarambaWidget::mousePressEvent( QMouseEvent *e )
 {
     //qDebug("KarambaWidget::mousePressEvent");
@@ -1282,6 +1286,8 @@ void KarambaWidget::mousePressEvent( QMouseEvent *e )
     }
 }
 
+
+//FIXME remove this function
 void KarambaWidget::wheelEvent( QWheelEvent *e )
 {
     //qDebug("KarambaWidget::wheelEvent");
@@ -1294,6 +1300,7 @@ void KarambaWidget::mouseReleaseEvent( QMouseEvent *e )
     clickPos = e->pos();
 }
 
+//FIXME remove this function
 void KarambaWidget::mouseDoubleClickEvent( QMouseEvent *e )
 {
     //qDebug("KarambaWidget::mouseDoubleClickEvent");
@@ -1302,6 +1309,7 @@ void KarambaWidget::mouseDoubleClickEvent( QMouseEvent *e )
 //         passClick( e );
 //     }
 }
+//FIXME remove this function
 
 void KarambaWidget::keyPressEvent(QKeyEvent *e)
 {
@@ -1309,6 +1317,7 @@ void KarambaWidget::keyPressEvent(QKeyEvent *e)
 //     keyPressed(e->text(), 0);
 }
 
+//FIXME remove this function
 void KarambaWidget::keyPressed(const QString& s, const Meter* meter)
 {
 //     if (pythonIface && pythonIface->isExtensionLoaded())
@@ -1383,6 +1392,7 @@ void KarambaWidget::closeEvent ( QCloseEvent *  qc)
     //  this->close(true);
     //  delete this;
 }
+//FIXME remove the double buffering over here. Not needed now.
 
 void KarambaWidget::paintEvent ( QPaintEvent *e)
 {
@@ -1417,6 +1427,7 @@ void KarambaWidget::paintEvent ( QPaintEvent *e)
     }
 }
 
+//FIXME remove this function
 void KarambaWidget::updateSensors()
 {
     //qDebug("KarambaWidget::updateSensors");
@@ -1429,6 +1440,7 @@ void KarambaWidget::updateSensors()
     */
 }
 
+//FIXME remove this function
 void KarambaWidget::updateBackground(KSharedPixmap* kpm)
 {
     //kdDebug() << k_funcinfo << pm.size() << endl;
@@ -1492,7 +1504,7 @@ void KarambaWidget::updateBackground(KSharedPixmap* kpm)
 void KarambaWidget::currentDesktopChanged( int i )
 {
     //qDebug("KarambaWidget::currentDesktopChanged");
-    kroot->repaint( true );
+//    kroot->repaint( true );
     if (pythonIface && pythonIface->isExtensionLoaded())
         pythonIface->desktopChanged(this, i);
 }
@@ -1500,10 +1512,12 @@ void KarambaWidget::currentDesktopChanged( int i )
 void KarambaWidget::currentWallpaperChanged(int i )
 {
     //qDebug("KarambaWidget::currentWallpaperChanged");
-    kroot->repaint( true );
+//    kroot->repaint( true );
     if (pythonIface && pythonIface->isExtensionLoaded())
         pythonIface->wallpaperChanged(this, i);
 }
+
+//FIXME remove externalStep() function. Not needed now.
 
 void KarambaWidget::externalStep()
 {
@@ -1532,6 +1546,8 @@ void KarambaWidget::externalStep()
         repaint();
     }
 }
+
+//FIXME remove this function. no need to update at intervals.
 
 void KarambaWidget::step()
 {
@@ -1590,6 +1606,9 @@ void KarambaWidget::slotToggleLocked()
         toggleLocked->setIconSet(SmallIconSet("move"));
     }
 }
+/*FIXME should we really give transform as an option to user? IMHO this is theme developer's
+  job to recognise where smooth transform is enough efficient.so basically it should be a
+  property in meters  */
 
 void KarambaWidget::slotToggleFastTransforms()
 {
@@ -1608,7 +1627,7 @@ void KarambaWidget::slotToggleFastTransforms()
     //config.writeEntry("fastTransforms", toggleFastTransforms -> isChecked());
 }
 
-
+//FIXME see above
 bool KarambaWidget::useSmoothTransforms()
 {
     //qDebug("KarambaWidget::useSmoothTransforms");
@@ -1723,6 +1742,13 @@ void KarambaWidget::passMenuItemClicked(int id)
         pythonIface->menuItemClicked(this, menu, id);
     }
 }
+
+/*FIXME all these taskmanager stuff needs to be separated from karambawidget. 
+    on the first thought, I think, pointer to pythonIface/AbstractIface should
+    be available to classes other than karambawidget too. Then these signals 
+    should be emitted from there. as meters are now separate widgets, they also 
+    emit Iface signals. May be, we should make the Taskmanager class singleton, then it 
+    will have the iface QList, which can be populated by individual KarambaWidgets.*/
 
 void KarambaWidget::activeTaskChanged(Task* t)
 {
@@ -1845,6 +1871,8 @@ void KarambaWidget::systrayUpdated()
     if (pythonIface && pythonIface->isExtensionLoaded())
         pythonIface->systrayUpdated(this);
 }
+/*FIXME do we really need update functions should not the update be 
+     called by only meters, when they are updated? */
 
 void KarambaWidget::toggleWidgetUpdate( bool b)
 {
@@ -1852,6 +1880,9 @@ void KarambaWidget::toggleWidgetUpdate( bool b)
     if (pythonIface && pythonIface->isExtensionLoaded())
         widgetUpdate = b;
 }
+
+/* FIXME why do we need the meterlist to have with karambawidget? The meters are searched by name
+   here in meterlist, which we can always do with findChild() findChildren() directly with onle line ? */
 
 void KarambaWidget::addMeter(Meter* meter)
 {
