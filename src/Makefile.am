@@ -27,7 +27,8 @@ superkaramba_SOURCES = main.cpp karambawidget.cpp meter.cpp \
                        karambaapp.cpp lineparser.cpp themefile.cpp \
 		       themesdlg.cpp themes_layout.ui themewidget_layout.ui \
 		       themewidget.cpp kwidgetlistbox.cpp sknewstuff.cpp \
-		       themelocale.cpp themeinfo.cpp superkarambasettings.kcfgc
+		       themelocale.cpp themeinfo.cpp superkarambasettings.kcfgc \
+		       skthemehandler.cpp
 
 
 METASOURCES = AUTO

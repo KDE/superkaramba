@@ -187,6 +187,8 @@ public:
     void showMenuExtension();
     void hideMenuExtension();
 
+    void addMeter(Meter* meter);
+
 public slots:
     void step();
     void externalStep();

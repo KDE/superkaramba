@@ -1853,6 +1853,11 @@ void KarambaWidget::toggleWidgetUpdate( bool b)
         widgetUpdate = b;
 }
 
+void KarambaWidget::addMeter(Meter* meter)
+{
+    meterList.append(meter);
+}
+
 SignalBridge::SignalBridge(QObject* parent, QString name, KActionCollection* ac)
         : QObject(parent, name.ascii()), collection(ac)
 {
