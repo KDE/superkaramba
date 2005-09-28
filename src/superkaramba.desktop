@@ -8,6 +8,7 @@ Icon=superkaramba
 Type=Application
 MimeType=application/x-superkaramba
 Comment=An engine for cool desktop eyecandy.
+Comment[cs]=Nástroj pro úžasnou pracovní plochu, která je pastvou pro oči.
 Comment[da]=En grænseflade for lækre øjegodter på desktoppen.
 Comment[el]=Μία μηχανή για εντυπωσιακές διακοσμήσεις επιφάνειας εργασίας.
 Comment[es]=Un motor para añadir vistosidad al escritorio.
