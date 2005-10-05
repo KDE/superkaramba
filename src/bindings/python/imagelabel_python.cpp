@@ -65,7 +65,8 @@ ImageLabel* createImageLabel(KarambaWidget *theme, long x, long y,
 
     if(bg)
     {
-        theme->kroot->repaint(true);
+        //FIXME: This crashes themes
+        //theme->kroot->repaint(true);
     }
 
     return tmp;

@@ -300,6 +300,7 @@ KarambaWidget::KarambaWidget(QString fn, bool reloading, int instance, QWidget *
 
 
     setFocusPolicy(Qt::StrongFocus);
+    repaint(true);
 }
 
 KarambaWidget::~KarambaWidget()
@@ -359,7 +360,6 @@ bool KarambaWidget::parseConfig()
 
             if(lineParser.meter() == "KARAMBA" && !foundKaramba )
             {
-                //qDebug("karamba found");
                 toggleLocked->setChecked(lineParser.getBoolean("LOCKED"));
                 slotToggleLocked();
 
@@ -1398,7 +1398,9 @@ void KarambaWidget::paintEvent ( QPaintEvent *e)
 {
     //kdDebug() << k_funcinfo << pm.size() << endl;
     if(pm.width() == 0)
-        return;
+    {
+        //return;
+    }
     if( !(onTop || managed))
     {
         if( lowerTimer.elapsed() > 100 )
@@ -1411,17 +1413,14 @@ void KarambaWidget::paintEvent ( QPaintEvent *e)
     QPainter p(this);
     p.drawPixmap(rect.topLeft(), pm, rect);
     p.end();
-    kdDebug() <<"karambawidget paintEvent"<<endl;
     if (pythonIface && pythonIface->isExtensionLoaded())
     {
         if (haveUpdated == 0)
         {
             pythonIface->initWidget(this);
-            kdDebug() <<"karambawidget initWidget"<<endl;
         }
         else
         {
-            kdDebug() <<"karambawidget widgetupdated"<<endl;
             pythonIface->widgetUpdated(this);
         }
     }

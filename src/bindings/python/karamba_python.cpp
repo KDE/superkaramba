@@ -34,7 +34,7 @@
 #include "meter_python.h"
 #include "bar_python.h"
 #include "graph_python.h"
-// #include "textlabel_python.h"
+//#include "textlabel_python.h"
 #include "richtextlabel_python.h"
 #include "imagelabel_python.h"
 #include "widget_python.h"
@@ -44,6 +44,8 @@
 #include "systray_python.h"
 #include "misc_python.h"
 #include "input_python.h"
+
+#include <kdebug.h>
 
 /*******************************************
  * Python methods are defined here.
@@ -100,31 +102,33 @@ static PyMethodDef karamba_methods[] = {
                                            {(char*)"getGraphColor", py_getGraphColor, METH_VARARGS, (char*)"Get a Graph Sensor's Color"},
 
                                            // TextLabel - textlabel_python.cpp
-//                                            {(char*)"createText", py_createText, METH_VARARGS, (char*)"Create new Text."},
-//                                            {(char*)"deleteText", py_deleteText, METH_VARARGS, (char*)"Delete Text."},
-//                                            {(char*)"getThemeText", py_getThemeText, METH_VARARGS, (char*)"Get Text from .theme using it's name."},
-//                                            {(char*)"getTextSize", py_getTextSize, METH_VARARGS, (char*)"Get Text size."},
-//                                            {(char*)"resizeText", py_resizeText, METH_VARARGS, (char*)"Resize Text."},
-//                                            {(char*)"getTextPos", py_getTextPos, METH_VARARGS, (char*)"Get Text position."},
-//                                            {(char*)"moveText", py_moveText, METH_VARARGS, (char*)"Move Text."},
-//                                            {(char*)"hideText", py_hideText, METH_VARARGS, (char*)"Hide Text."},
-//                                            {(char*)"showText", py_showText, METH_VARARGS, (char*)"Show Text."},
-//                                            {(char*)"getTextSensor", py_getTextSensor, METH_VARARGS, (char*)"Get Text sensor."},
-//                                            {(char*)"setTextSensor", py_setTextSensor, METH_VARARGS, (char*)"Set Text sensor."},
-//                                            {(char*)"changeText", py_setTextValue, METH_VARARGS, (char*)"Change a Text Sensor's Text"},
-//                                            {(char*)"getTextValue", py_getTextValue, METH_VARARGS, (char*)"Get Text value"},
-//                                            {(char*)"changeTextShadow", py_setTextShadow, METH_VARARGS, (char*)"Change a Text Shadow size"},
-//                                            {(char*)"getTextShadow", py_getTextShadow, METH_VARARGS, (char*)"Get a Text Shadow size"},
-//                                            {(char*)"changeTextFont", py_setTextFont, METH_VARARGS, (char*)"Change a Text Sensor's Font"},
-//                                            {(char*)"getTextFont", py_getTextFont, METH_VARARGS, (char*)"Get a Text Sensor's Font"},
-//                                            {(char*)"changeTextColor", py_setTextColor, METH_VARARGS, (char*)"Change a Text Sensor's Color"},
-//                                            {(char*)"getTextColor", py_getTextColor, METH_VARARGS, (char*)"Get a Text Sensor's Color"},
-//                                            {(char*)"changeTextSize", py_setTextFontSize, METH_VARARGS, (char*)"Change a Text Sensor's Font Size"},
-//                                            {(char*)"getTextFontSize", py_getTextFontSize, METH_VARARGS, (char*)"Get a Text Sensor's Font Size"},
-//                                            {(char*)"getTextAlign", py_getTextAlign, METH_VARARGS, (char*)"Get Text alignment."},
-//                                            {(char*)"setTextAlign", py_setTextAlign, METH_VARARGS, (char*)"Set Text alignment."},
-//                                            {(char*)"setTextScroll", py_setTextScroll, METH_VARARGS, (char*)"Set Text scroll."},
-//  
+                                           /*
+                                            {(char*)"createText", py_createText, METH_VARARGS, (char*)"Create new Text."},
+                                            {(char*)"deleteText", py_deleteText, METH_VARARGS, (char*)"Delete Text."},
+                                            {(char*)"getThemeText", py_getThemeText, METH_VARARGS, (char*)"Get Text from .theme using it's name."},
+                                            {(char*)"getTextSize", py_getTextSize, METH_VARARGS, (char*)"Get Text size."},
+                                            {(char*)"resizeText", py_resizeText, METH_VARARGS, (char*)"Resize Text."},
+                                            {(char*)"getTextPos", py_getTextPos, METH_VARARGS, (char*)"Get Text position."},
+                                            {(char*)"moveText", py_moveText, METH_VARARGS, (char*)"Move Text."},
+                                            {(char*)"hideText", py_hideText, METH_VARARGS, (char*)"Hide Text."},
+                                            {(char*)"showText", py_showText, METH_VARARGS, (char*)"Show Text."},
+                                            {(char*)"getTextSensor", py_getTextSensor, METH_VARARGS, (char*)"Get Text sensor."},
+                                            {(char*)"setTextSensor", py_setTextSensor, METH_VARARGS, (char*)"Set Text sensor."},
+                                            {(char*)"changeText", py_setTextValue, METH_VARARGS, (char*)"Change a Text Sensor's Text"},
+                                            {(char*)"getTextValue", py_getTextValue, METH_VARARGS, (char*)"Get Text value"},
+                                            {(char*)"changeTextShadow", py_setTextShadow, METH_VARARGS, (char*)"Change a Text Shadow size"},
+                                            {(char*)"getTextShadow", py_getTextShadow, METH_VARARGS, (char*)"Get a Text Shadow size"},
+                                            {(char*)"changeTextFont", py_setTextFont, METH_VARARGS, (char*)"Change a Text Sensor's Font"},
+                                            {(char*)"getTextFont", py_getTextFont, METH_VARARGS, (char*)"Get a Text Sensor's Font"},
+                                            {(char*)"changeTextColor", py_setTextColor, METH_VARARGS, (char*)"Change a Text Sensor's Color"},
+                                            {(char*)"getTextColor", py_getTextColor, METH_VARARGS, (char*)"Get a Text Sensor's Color"},
+                                            {(char*)"changeTextSize", py_setTextFontSize, METH_VARARGS, (char*)"Change a Text Sensor's Font Size"},
+                                            {(char*)"getTextFontSize", py_getTextFontSize, METH_VARARGS, (char*)"Get a Text Sensor's Font Size"},
+                                            {(char*)"getTextAlign", py_getTextAlign, METH_VARARGS, (char*)"Get Text alignment."},
+                                            {(char*)"setTextAlign", py_setTextAlign, METH_VARARGS, (char*)"Set Text alignment."},
+                                            {(char*)"setTextScroll", py_setTextScroll, METH_VARARGS, (char*)"Set Text scroll."},
+                                            */
+  
                                            // RichTextLabel - richtextlabel_python.cpp
                                            {(char*)"createRichText", py_createRichText, METH_VARARGS, (char*)"Create a Rich Text Sensor"},
                                            {(char*)"deleteRichText", py_deleteRichText, METH_VARARGS, (char*)"Deletes a Rich Text Sensor"},

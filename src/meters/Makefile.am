@@ -4,7 +4,7 @@ INCLUDES = -I$(srcdir)/.. -I$(srcdir)/../sensors -I$(srcdir)/../bindings/python 
 noinst_LTLIBRARIES = libsk_meters.la
 
 libsk_meters_la_SOURCES = bar.cpp graph.cpp imagelabel.cpp input.cpp \
-	richtextlabel.cpp
+                          richtextlabel.cpp
 
 noinst_HEADERS = bar.h graph.h imagelabel.h input.h richtextlabel.h
 

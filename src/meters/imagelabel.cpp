@@ -650,23 +650,23 @@ void ImageLabel::attachClickArea(QString leftMouseButton,
 void ImageLabel::paintEvent( QPaintEvent * pe)
 {
     QPainter p(this);
-        if (cblend == 0)
-        {
-            //draw the pixmap
-            p.drawPixmap(0,0,pixmap);
-        }
-        else
-        {
-            //Blend this image with a color
+    if (cblend == 0)
+    {
+        //draw the pixmap
+        p.drawPixmap(0,0,pixmap);
+    }
+    else
+    {
+        //Blend this image with a color
 
-            QImage image = pixmap.toImage();
+        QImage image = pixmap.toImage();
 
-            QImage result = KImageEffect::blend(QColor(255,0,0), image, 0.5f);
-            p.drawImage(0,0,result);
+        QImage result = KImageEffect::blend(QColor(255,0,0), image, 0.5f);
+        p.drawImage(0,0,result);
 
-            //p->drawRect(boundingBox);
-        }
-    
+        //p->drawRect(boundingBox);
+    }
+
 
     // start Timer
     if (imageEffect != 0)
