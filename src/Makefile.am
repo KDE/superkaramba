@@ -15,20 +15,15 @@ superkaramba_LDADD = sensors/libsk_sensors.la meters/libsk_meters.la \
 superkaramba_LDFLAGS = -Wl,-export-dynamic \
                $(KDE_RPATH) $(all_libraries) $(PYTHONLIB) $(XMMS_LDFLAGS)
 
-noinst_HEADERS = karambawidget.h karambaapp.h lineparser.h \
-                 themefile.h themesdlg.h themewidget.h \
-                 kwidgetlistbox.h themelocale.h themeinfo.h
+noinst_HEADERS = karambawidget.h karambaapp.h lineparser.h themefile.h \
+	themesdlg.h themewidget.h kwidgetlistbox.h themelocale.h themeinfo.h
 
-superkaramba_SOURCES = main.cpp karambawidget.cpp meter.cpp \
-                       sensor.cpp sensorparams.cpp karambarootpixmap.cpp \
-                       textfield.cpp showdesktop.cpp karambasessionmanaged.cpp \
-                       taskmanager.cpp systemtray.cpp karambalistboxitem.cpp \
-                       dcopinterface.skel dcopinterface.stub karambainterface.cpp \
-                       karambaapp.cpp lineparser.cpp themefile.cpp \
-                       themesdlg.cpp themes_layout.ui themewidget_layout.ui \
-                       themewidget.cpp kwidgetlistbox.cpp sknewstuff.cpp \
-                       themelocale.cpp themeinfo.cpp superkarambasettings.kcfgc \
-                       skthemehandler.cpp
+superkaramba_SOURCES = main.cpp karambawidget.cpp meter.cpp sensor.cpp \
+	sensorparams.cpp textfield.cpp showdesktop.cpp karambasessionmanaged.cpp taskmanager.cpp \
+	systemtray.cpp karambalistboxitem.cpp dcopinterface.skel dcopinterface.stub \
+	karambainterface.cpp karambaapp.cpp lineparser.cpp themefile.cpp themesdlg.cpp \
+	themes_layout.ui themewidget_layout.ui themewidget.cpp kwidgetlistbox.cpp sknewstuff.cpp \
+	themelocale.cpp themeinfo.cpp superkarambasettings.kcfgc skthemehandler.cpp
 
 
 METASOURCES = AUTO

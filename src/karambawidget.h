@@ -62,7 +62,7 @@
 #include <kconfig.h>
 #include  <kprocess.h>
 
-#include "karambarootpixmap.h"
+// #include "karambarootpixmap.h"
 
 #include "bar.h"
 //#include "textlabel.h"
@@ -133,7 +133,7 @@ public:
     KPopupMenu* keditpop;
     KPopupMenu *kpop;
     QBitmap* widgetMask;
-    KarambaRootPixmap *kroot;
+//    KarambaRootPixmap *kroot;
     TaskManager taskManager;
     Systemtray* systray;
     KProcess* currProcess;
