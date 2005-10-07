@@ -26,7 +26,7 @@
 #define KARAMBA_PYTHON_H
 
 class QString;
-class KPopupMenu;
+class KMenu;
 class Task;
 class Startup;
 class KarambaWidget;
@@ -70,7 +70,7 @@ public:
     bool widgetClicked(KarambaWidget* k, int x, int y, int button);
     bool keyPressed(KarambaWidget* k, const Meter* meter, const QString& text);
     bool widgetMouseMoved(KarambaWidget* k, int x, int y, int button);
-    bool menuItemClicked(KarambaWidget* k, KPopupMenu* menu, long id);
+    bool menuItemClicked(KarambaWidget* k, KMenu* menu, long id);
     bool activeTaskChanged(KarambaWidget* k, Task* t);
     bool taskAdded(KarambaWidget* k, Task* t);
     bool taskRemoved(KarambaWidget* k, Task* t);

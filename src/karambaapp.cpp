@@ -180,7 +180,7 @@ void KarambaApplication::setUpSysTray(KAboutData* about)
     //Set up systray icon
     sysTrayIcon = new KSystemTray(themeListWindow);
 
-    KPopupMenu *menu = sysTrayIcon->contextMenu();
+    KMenu *menu = sysTrayIcon->contextMenu();
     menu->insertItem(SmallIconSet("superkaramba"),
                      i18n("Hide System Tray Icon"), this,
                      SLOT(globalHideSysTray()));

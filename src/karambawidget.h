@@ -49,7 +49,7 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <ksharedpixmap.h>
-#include <kpopupmenu.h>
+#include <kmenu.h>
 #include <qcursor.h>
 #include <netwm.h>
 #include <kiconloader.h>
@@ -114,7 +114,7 @@ public:
     QList<QObject *> meterList;
     QList<ImageLabel *> imageList;
 //     QList<ClickMap *> clickList;
-    QList<KPopupMenu *> menuList;
+    QList<KMenu *> menuList;
     KarambaPython* pythonIface;
 
     KarambaWidget(QString fn, bool reloading = false, int instance = -1, QWidget *parent = 0);
@@ -130,8 +130,8 @@ public:
     QString findSensorFromMap(Sensor* sensor);
     void deleteMeterFromSensors(Meter* meter);
     Sensor* findSensorFromList(Meter* meter);
-    KPopupMenu* keditpop;
-    KPopupMenu *kpop;
+    KMenu* keditpop;
+    KMenu *kpop;
     QBitmap* widgetMask;
 //    KarambaRootPixmap *kroot;
     TaskManager taskManager;
@@ -274,9 +274,9 @@ private:
     // use only the first occurance of KARAMBA in a config file
     bool foundKaramba;
 
-    KPopupMenu* themeConfMenu;
-    KPopupMenu* toDesktopMenu;
-    KPopupMenu* kglobal;
+    KMenu* themeConfMenu;
+    KMenu* toDesktopMenu;
+    KMenu* kglobal;
 
     DCOPClient *client;
     QByteArray appId;

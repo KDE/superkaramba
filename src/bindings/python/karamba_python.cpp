@@ -479,7 +479,7 @@ bool KarambaPython::menuOptionChanged(KarambaWidget* k, QString key, bool value)
     return callObject("menuOptionChanged", pArgs);
 }
 
-bool KarambaPython::menuItemClicked(KarambaWidget* k, KPopupMenu* menu, long id)
+bool KarambaPython::menuItemClicked(KarambaWidget* k, KMenu* menu, long id)
 {
     PyObject* pArgs = Py_BuildValue((char*)"(lll)", k, menu, id);
     return callObject("menuItemClicked", pArgs);

@@ -153,7 +153,7 @@ KarambaWidget::KarambaWidget(QString fn, bool reloading, int instance, QWidget *
     connect(&taskManager, SIGNAL(startupRemoved(Startup*)), this,
             SLOT(startupRemoved(Startup*)) );
 
-    themeConfMenu = new KPopupMenu( this);
+    themeConfMenu = new KMenu( this);
     themeConfMenu -> setCheckable(true);
 
     /* XXX - need to be able to delete all these DesktopChangeSlot objects */
@@ -162,7 +162,7 @@ KarambaWidget::KarambaWidget(QString fn, bool reloading, int instance, QWidget *
 
     int mid;
 
-    toDesktopMenu = new KPopupMenu (this);
+    toDesktopMenu = new KMenu (this);
     toDesktopMenu -> setCheckable(true);
     mid = toDesktopMenu -> insertItem (i18n("&All Desktops"),
                                        dslot = new DesktopChangeSlot(this,0),
@@ -181,7 +181,7 @@ KarambaWidget::KarambaWidget(QString fn, bool reloading, int instance, QWidget *
     }
 
 
-    kpop = new KPopupMenu( this );
+    kpop = new KMenu( this );
     kpop -> setCheckable(true);
 
     accColl = new KActionCollection( this );
@@ -1724,11 +1724,11 @@ void KarambaWidget::passMenuItemClicked(int id)
     //Everything below is to call the python callback function
     if (pythonIface && pythonIface->isExtensionLoaded())
     {
-        KPopupMenu* menu = 0;
+        KMenu* menu = 0;
         for(int i = 0; i < (int)menuList.count(); i++)
         {
-            KPopupMenu* tmp;
-            tmp = (KPopupMenu*) menuList.at(i);
+            KMenu* tmp;
+            tmp = (KMenu*) menuList.at(i);
 
             if(tmp != 0)
             {
@@ -1928,7 +1928,7 @@ int DesktopChangeSlot::menuId()
 
 void KarambaWidget::showMenuExtension()
 {
-    kglobal = new KPopupMenu(this);
+    kglobal = new KMenu(this);
 
     trayMenuToggleId = kglobal->insertItem(SmallIconSet("superkaramba"),
                                            i18n("Show System Tray Icon"), this,
