@@ -78,12 +78,12 @@ bool checkKarambaAndMeter(long widget, long meter, const char* type)
 
 // This just throws awya extra bytes.
 // I guess there is a better way to do this...
-QString fromUcs4(Q_UINT32* ucs4)
+QString fromUcs4(quint32* ucs4)
 {
     QString result = "";
     while(*ucs4 != 0)
     {
-        result += QChar((Q_UINT16)*ucs4);
+        result += QChar((quint16)*ucs4);
         ++ucs4;
     }
     return result;
@@ -102,9 +102,9 @@ QString PyString2QString(PyObject* text)
     {
         Py_UNICODE* t = PyUnicode_AsUnicode(text);
         if(sizeof(Py_UNICODE) == 4)
-            qtext = fromUcs4((Q_UINT32*)t);
+            qtext = fromUcs4((quint32*)t);
         else
-            qtext = QString::fromUtf16((Q_UINT16*)t);
+            qtext = QString::fromUtf16((quint16*)t);
     }
     else
     {

@@ -104,7 +104,7 @@ KarambaWidget::KarambaWidget(QString fn, bool reloading, int instance, QWidget *
     QString instanceString;
     if(m_instance > 1)
         instanceString = QString("-%1").arg(m_instance);
-    QString cfg = QDir::home().absPath() + "/.superkaramba/"
+    QString cfg = QDir::home().absolutePath() + "/.superkaramba/"
                   + m_theme.id() + instanceString + ".rc";
     kdDebug() << cfg << endl;
     QFile themeConfigFile(cfg);
@@ -501,7 +501,7 @@ bool KarambaWidget::parseConfig()
                 m_interval = lineParser.getInt("INTERVAL");
                 m_interval = (m_interval == 0) ? 1000 : m_interval;
 
-                QString temp = lineParser.getString("TEMPUNIT", "C").upper();
+                QString temp = lineParser.getString("TEMPUNIT", "C").toUpper();
                 tempUnit = temp.ascii()[0];
                 foundKaramba = true;
             }
@@ -846,7 +846,7 @@ void KarambaWidget::editScript()
     }
     else
     {
-        path = QFileInfo(m_theme.file()).dirPath() + "/" + m_theme.name() + ".py";
+        path = QFileInfo(m_theme.file()).path() + "/" + m_theme.name() + ".py";
     }
     KRun::runURL( KURL( path ), "text/plain" );
 }
@@ -905,7 +905,7 @@ void KarambaWidget::setSensor(const LineParser& lineParser, Meter* meter)
 
     deleteMeterFromSensors(meter);
 
-    QString sens = lineParser.getString("SENSOR").upper();
+    QString sens = lineParser.getString("SENSOR").toUpper();
 
     if( sens == "CPU" )
     {

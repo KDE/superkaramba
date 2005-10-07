@@ -266,7 +266,7 @@ bool ThemeFile::set
     }
     else
     {
-        m_path = fi.dirPath(true) + "/";
+        m_path = fi.absolutePath() + "/";
         m_zipTheme = false;
     }
     parseXml();
@@ -304,7 +304,7 @@ void ThemeFile::parseXml()
             else if(e.tagName() == "python_module")
             {
                 m_python = e.text();
-                if(m_python.right(3).lower() == ".py")
+                if(m_python.right(3).toLower() == ".py")
                     m_python.remove(m_python.length() - 3, 3);
             }
             else if(e.tagName() == "description")

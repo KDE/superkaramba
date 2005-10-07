@@ -39,7 +39,7 @@ void LineParser::set
     m_line = line;
 
     rx.search(m_line);
-    m_meter = rx.cap(1).upper();
+    m_meter = rx.cap(1).toUpper();
 }
 
 int LineParser::getInt(QString w, int def) const
@@ -84,7 +84,7 @@ QString LineParser::getString(QString w, QString def) const
 
 bool LineParser::getBoolean(QString w, bool def) const
 {
-    QString boolean = getString(w, "-").lower();
+    QString boolean = getString(w, "-").toLower();
     if(boolean == "-")
         return def;
     else if (boolean == "true") // true / false

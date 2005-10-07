@@ -96,7 +96,7 @@ int main(int argc, char **argv)
 //             if( args->arg(i) != "" )
 //             {
 //                 QFileInfo file( args->arg(i) );
-//                 //qDebug( file.dirPath(true) );
+//                 //qDebug( file.absolutePath() );
 //                 if( file.exists() && !file.isDir() )
 //                 {
 //                     //qDebug( "File exists" );

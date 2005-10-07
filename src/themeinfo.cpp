@@ -135,16 +135,16 @@ bool ThemeInfo::operator==( const ThemeInfo& rhs) const
 
 bool ThemeInfo::operator<( const ThemeInfo& rhs ) const
 {
-    return name().lower() < rhs.name().lower();
+    return name().toLower() < rhs.name().toLower();
 }
 
 bool ThemeInfo::operator> ( const ThemeInfo& rhs ) const
 {
-    return name().lower() > rhs.name().lower();
+    return name().toLower() > rhs.name().toLower();
 }
 
 bool ThemeInfo::operator<= ( const ThemeInfo& rhs ) const
 {
-    return name().lower() <= rhs.name().lower();
+    return name().toLower() <= rhs.name().toLower();
 }
 

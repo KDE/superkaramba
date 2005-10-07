@@ -102,11 +102,11 @@ int main(int argc, char **argv)
     KCmdLineArgs::init(argc, argv, &about);
 
     // Create ~/.superkaramba if necessary
-    QDir configDir(QDir::home().absPath() + "/.superkaramba");
+    QDir configDir(QDir::home().absolutePath() + "/.superkaramba");
     if (!configDir.exists())
     {
         qWarning("~/.superkaramba doesn't exist");
-        if(!configDir.mkdir(QDir::home().absPath() + "/.superkaramba"))
+        if(!configDir.mkdir(QDir::home().absolutePath() + "/.superkaramba"))
         {
             qWarning("Couldn't create Directory ~/.superkaramba");
         }
