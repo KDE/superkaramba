@@ -1418,6 +1418,7 @@ void KarambaWidget::paintEvent ( QPaintEvent *e)
         if (haveUpdated == 0)
         {
             pythonIface->initWidget(this);
+            haveUpdated = 1;
         }
         else
         {

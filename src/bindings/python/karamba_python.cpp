@@ -195,8 +195,8 @@ static PyMethodDef karamba_methods[] = {
                                            {(char*)"moveWidget", py_move_widget, METH_VARARGS, (char*)"Move Widget to x,y"},
                                            {(char*)"resizeWidget", py_resize_widget, METH_VARARGS, (char*)"Resize Widget to width,height"},
                                            {(char*)"createWidgetMask", py_create_widget_mask, METH_VARARGS, (char*)"Create a clipping mask for this widget"},
-                                           {(char*)"redrawWidget", py_redraw_widget, METH_VARARGS, (char*)"Update Widget to reflect your changes"},
-                                           {(char*)"redrawWidgetBackground", py_redraw_widget_background, METH_VARARGS, (char*)"Update Widget to reflect background image changes"},
+                                           //{(char*)"redrawWidget", py_redraw_widget, METH_VARARGS, (char*)"Update Widget to reflect your changes"},
+                                           //{(char*)"redrawWidgetBackground", py_redraw_widget_background, METH_VARARGS, (char*)"Update Widget to reflect background image changes"},
                                            {(char*)"getWidgetPosition", py_get_widget_position, METH_VARARGS, (char*)"Get Widget Position"},
                                            {(char*)"toggleWidgetRedraw", py_toggle_widget_redraw, METH_VARARGS, (char*)"Toggle Widget redrawing"},
 
