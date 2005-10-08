@@ -1,6 +1,6 @@
 /*****************************************************************
 
-Copyright (c) 1996-2000 the kicker authors. See file AUTHORS.
+Copyright (c) 2005 Pedro Suarez Casal, Vinay Khaitan
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

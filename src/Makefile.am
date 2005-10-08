@@ -16,7 +16,7 @@ superkaramba_LDFLAGS = -Wl,-export-dynamic \
                $(KDE_RPATH) $(all_libraries) $(PYTHONLIB) $(XMMS_LDFLAGS)
 
 noinst_HEADERS = karambawidget.h karambaapp.h lineparser.h themefile.h \
-	themesdlg.h themewidget.h kwidgetlistbox.h themelocale.h themeinfo.h
+		themesdlg.h themewidget.h kwidgetlistbox.h themelocale.h themeinfo.h sktheme.dtd
 
 superkaramba_SOURCES = main.cpp karambawidget.cpp meter.cpp sensor.cpp \
 	sensorparams.cpp textfield.cpp showdesktop.cpp karambasessionmanaged.cpp taskmanager.cpp \

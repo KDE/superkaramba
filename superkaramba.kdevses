@@ -1,10 +1,16 @@
 <?xml version = '1.0' encoding = 'UTF-8'?>
 <!DOCTYPE KDevPrjSession>
 <KDevPrjSession>
- <DocsAndViews NumberOfDocuments="1" >
+ <DocsAndViews NumberOfDocuments="3" >
   <Doc0 NumberOfViews="1" URL="file:///home/kde4/src/kdeutils/superkaramba/src/karambalistboxitem.cpp" >
-   <View0 line="22" Type="Source" />
+   <View0 Type="Source" />
   </Doc0>
+  <Doc1 NumberOfViews="1" URL="file:///home/kde4/src/kdeutils/superkaramba/src/skthemehandler.cpp" >
+   <View0 line="57" Type="Source" />
+  </Doc1>
+  <Doc2 NumberOfViews="1" URL="file:///home/kde4/src/kdeutils/superkaramba/src/skthemehandler.h" >
+   <View0 line="35" Type="Source" />
+  </Doc2>
  </DocsAndViews>
  <pluginList>
   <kdevdebugger>
