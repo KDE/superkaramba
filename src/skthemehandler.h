@@ -44,4 +44,6 @@ private:
     
     KarambaWidget* m_widget;
     Meter* m_meter;
+    QString error;
+    bool rootMet;
 };

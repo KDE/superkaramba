@@ -41,7 +41,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 SKThemeHandler::SKThemeHandler(KarambaWidget* w) :
     m_widget(w),
-    m_meter(0)
+    m_meter(0),
+    rootMet(false)
 {
 }
 
@@ -57,7 +58,17 @@ bool SKThemeHandler::unparsedEntityDecl(const QString& name, const QString& publ
 */
 bool SKThemeHandler::startElement(const QString& /*namespaceURI*/, const QString& /*localName*/, const QString& qName, const QXmlAttributes& attributes)
 {				        
-    if(qName=="METER")
+    qName=qName.toUpper();
+    if(qName!="SKTHEME" && !rootMet)
+    {
+        error= "Root Element is not SKTheme";
+        return false;
+    }
+    if(qName=="SKTHEME")
+    {
+        rootMet=true;
+    }
+    else if(qName=="METER")
     {    
         m_meter = parseMeterAttributes(attributes);
     } 
@@ -71,21 +82,6 @@ bool SKThemeHandler::startElement(const QString& /*namespaceURI*/, const QString
                 m_meter->attachToSensor(sensor);
             }
         }
-        else if(qName=="ALIGN")
-        {
-        
-        }
-	else if(qName=="FORMAT")
-	{
-            int pos = attributes.index("value");
-            if(pos>-1)
-            {
-                m_meter->setFormat(attributes.value(pos));
-            }
-	}
-	else if(qName=="FONT")
-	{
-	}
     }
 
     return true;
@@ -103,7 +99,7 @@ bool SKThemeHandler::endElement(const QString& /*namespaceURI*/, const QString& 
 
 QString SKThemeHandler::errorString() const
 {
-    return "Error!";
+    return error;
 }
 
 Meter* SKThemeHandler::parseMeterAttributes(const QXmlAttributes& attributes)
