@@ -58,34 +58,39 @@ bool SKThemeHandler::unparsedEntityDecl(const QString& name, const QString& publ
 */
 bool SKThemeHandler::startElement(const QString& /*namespaceURI*/, const QString& /*localName*/, const QString& qName, const QXmlAttributes& attributes)
 {				        
-    qName=qName.toUpper();
-    if(qName!="SKTHEME" && !rootMet)
+    QString name=qName.toUpper();
+    if(name!="SKTHEME" && !rootMet)
     {
-        error= "Root Element is not SKTheme";
+        error= "Root Element is not <SKTheme>";
         return false;
     }
-    if(qName=="SKTHEME")
+    if(name=="SKTHEME")
     {
         rootMet=true;
     }
-    else if(qName=="METER")
+    else if(name=="KARAMBA")
+    {
+        return parseKarambaAttributes(attributes); 
+    }
+    else if(name=="METER")
     {    
-        m_meter = parseMeterAttributes(attributes);
-    } 
+        return parseMeterAttributes(attributes);
+    }
+    else if(name=="DEFAULTFONT")
+    {
+        return parseDefaultFontAttributes(attributes);
+    }
     else if(m_meter)
     {
-        if(qName=="SENSOR")
+        if(name=="SENSOR")
         {
-            Sensor* sensor = parseSensorAttributes(attributes);
-            if(sensor)
-            {
-                m_meter->attachToSensor(sensor);
-            }
+            return  parseSensorAttributes(attributes);
         }
     }
 
     return true;
 }
+
 
 bool SKThemeHandler::endElement(const QString& /*namespaceURI*/, const QString& /*localName*/, const QString& qName)
 {
@@ -102,7 +107,7 @@ QString SKThemeHandler::errorString() const
     return error;
 }
 
-Meter* SKThemeHandler::parseMeterAttributes(const QXmlAttributes& attributes)
+bool SKThemeHandler::parseMeterAttributes(const QXmlAttributes& attributes)
 {
     Meter* meter = 0;
     int posValue = attributes.index("value");
@@ -141,10 +146,11 @@ Meter* SKThemeHandler::parseMeterAttributes(const QXmlAttributes& attributes)
        }
     }
 
-    return meter;
+    m_meter= meter;
+    return true;
 }
 
-Sensor* SKThemeHandler::parseSensorAttributes(const QXmlAttributes& attributes)
+bool SKThemeHandler::parseSensorAttributes(const QXmlAttributes& attributes)
 {
     Sensor* sensor = 0;
 
@@ -178,6 +184,285 @@ Sensor* SKThemeHandler::parseSensorAttributes(const QXmlAttributes& attributes)
             sensor = UptimeSensor::self();
         }
     }
+    if(sensor)
+    {
+        m_meter->attachToSensor(sensor);
+    }
+    return true;
+}
 
-    return sensor;
+bool SKThemeHandler::parseKarambaAttributes(const QXmlAttributes& attr)
+{
+    int x=0,y=0,w=0,h=0;
+    bool locked=true,bottom=false,top=false,left=false,right=false,
+                    ontop=false,managed=false,onalldesktops=true,
+                    topbar=false,bottombar=false,rightbar=false,leftbar=false;
+    QString mask;
+    
+    for(uint i=0 ;i< attr.count() ; ++i)
+    {
+        QString qName=attr.qName(i).toUpper();
+        QString value=attr.value(i);
+        if(qName=="X")
+        {
+            bool ok;
+            x=value.toInt(&ok,0);
+            if(!ok)
+            {
+                error= "could not convert X attribute to Int for karamba";
+                return false;
+            }
+        }
+        else if(qName=="Y")
+        {
+            bool ok;
+            y=value.toInt(&ok,0);
+            if(!ok)
+            {
+                error= "could not convert Y attribute to Int for karamba";
+                return false;
+            }
+        }
+        else if(qName=="W")
+        {
+            bool ok;
+            w=value.toInt(&ok,0);
+            if(!ok)
+            {
+                error= "could not convert W attribute to Int for karamba" ;
+            }
+        }
+        else if(qName=="H")
+        {
+            bool ok;
+            x=value.toInt(&ok,0);
+            if(!ok)
+            {
+                error= "could not convert H attribute to Int for karamba";
+            }
+        }
+        else if(qName=="LOCKED")
+        {
+            if(value.toUpper()=="TRUE")
+            {
+                locked=true;
+            }
+            else if(value.toUpper()=="FALSE")
+            {
+                locked=false;
+            }
+            else
+            {
+                error = "Locked attribute should be either false for true for karamba";
+                return false;
+            }
+        }
+        else if(qName=="BOTTOM")
+        {
+            if(value.toUpper()=="TRUE")
+            {
+                bottom=true;
+            }
+            else if(value.toUpper()=="FALSE")
+            {
+                bottom=false;
+            }
+            else
+            {
+                error = "Bottom attribute should be either false for true for karamba";
+                return false;
+            }
+        }
+        else if(qName=="TOP")
+        {
+            if(value.toUpper()=="TRUE")
+            {
+                top=true;
+            }
+            else if(value.toUpper()=="FALSE")
+            {
+                top=false;
+            }
+            else
+            {
+                error = "Top attribute should be either false for true for karamba";
+                return false;
+            }
+        }
+        else if(qName=="LEFT")
+        {
+            if(value.toUpper()=="TRUE")
+            {
+                left=true;
+            }
+            else if(value.toUpper()=="FALSE")
+            {
+                left=false;
+            }
+            else
+            {
+                error = "Left attribute should be either false for true for karamba";
+                return false;
+            }
+        }
+        else if(qName=="RIGHT")
+        {
+            if(value.toUpper()=="TRUE")
+            {
+                right=true;
+            }
+            else if(value.toUpper()=="FALSE")
+            {
+                right=false;
+            }
+            else
+            {
+                error = "Right attribute should be either false for true for karamba";
+                return false;
+            }
+        }
+        else if(qName=="ONTOP")
+        {
+            if(value.toUpper()=="TRUE")
+            {
+                ontop=true;
+            }
+            else if(value.toUpper()=="FALSE")
+            {
+                ontop=false;
+            }
+            else
+            {
+                error = "Ontop attribute should be either false for true for karamba";
+                return false;
+            }
+        }
+        else if(qName=="MANAGED")
+        {
+            if(value.toUpper()=="TRUE")
+            {
+                managed=true;
+            }
+            else if(value.toUpper()=="FALSE")
+            {
+                managed=false;
+            }
+            else
+            {
+                error = "Managed attribute should be either false for true for karamba";
+                return false;
+            }
+        }
+        else if(qName=="ONALLDESKTOPS")
+        {
+            if(value.toUpper()=="TRUE")
+            {
+                onalldesktops=true;
+            }
+            else if(value.toUpper()=="FALSE")
+            {
+                onalldesktops=false;
+            }
+            else
+            {
+                error = "Onalldesktops attribute should be either false for true for karamba";
+                return false;
+            }
+        }
+        else if(qName=="TOPBAR")
+        {
+            if(value.toUpper()=="TRUE")
+            {
+                topbar=true;
+            }
+            else if(value.toUpper()=="FALSE")
+            {
+                topbar=false;
+            }
+            else
+            {
+                error = "Topbar attribute should be either false for true for karamba";
+                return false;
+            }
+        }
+        else if(qName=="BOTTOMBAR")
+        {
+            if(value.toUpper()=="TRUE")
+            {
+                bottombar=true;
+            }
+            else if(value.toUpper()=="FALSE")
+            {
+                bottombar=false;
+            }
+            else
+            {
+                error = "Bottombar attribute should be either false for true for karamba";
+                return false;
+            }
+        }
+        else if(qName=="LEFTBAR")
+        {
+            if(value.toUpper()=="TRUE")
+            {
+                leftbar=true;
+            }
+            else if(value.toUpper()=="FALSE")
+            {
+                leftbar=false;
+            }
+            else
+            {
+                error = "Leftbar attribute should be either false for true for karamba";
+                return false;
+            }
+        }
+        else if(qName=="RIGHTBAR")
+        {
+            if(value.toUpper()=="TRUE")
+            {
+                rightbar=true;
+            }
+            else if(value.toUpper()=="FALSE")
+            {
+                rightbar=false;
+            }
+            else
+            {
+                error = "Rightbar attribute should be either false for true for karamba";
+                return false;
+            }
+        }
+        else if(qName=="MASK")
+        {
+            mask=value; 
+        }
+    }
+    return true;
+}
+
+bool SKThemeHandler::parseDefaultFontAttributes(const QXmlAttributes& attr)
+{
+    QString font,fontSize,color,bgcolor,fixedPitch,shadow,align;
+    for(uint i=0 ;i< attr.count() ; ++i)
+    {
+        QString qName=attr.qName(i).toUpper();
+        QString value=attr.value(i);
+        if(qName=="FONT") font=value;
+        else if(qName=="FONTSIZE") fontSize=value;
+        else if(qName=="COLOR") color=value;
+        else if(qName=="BGCOLOR") bgcolor=value;
+        else if(qName=="FIXEDPITCH") fixedPitch=value;
+        else if(qName=="SHADOW") shadow=value;
+        else if(qName=="ALIGN") 
+        {
+            align=value;
+            if(align.toLower()!="left" || align.toLower()!="center" ||align.toLower()!="right")
+            {
+                error="Align attribute should have value only left,center or right";
+                return false;
+            }
+        }
+    }
+    return true;
 }

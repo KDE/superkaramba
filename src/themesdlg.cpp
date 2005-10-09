@@ -346,8 +346,6 @@ void ThemesDlg::uninstall()
     KURL theme(tf->file());
 
     karambaApp->dcopIface()->closeTheme(tf->name());
-    if(!KProtocolInfo::isKnownProtocol(trash))
-        trash = KGlobalSettings::trashPath();
     KIO::move(theme, trash);
     tableThemes->removeItem(w);
 

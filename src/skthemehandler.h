@@ -39,9 +39,10 @@ public:
     QString errorString() const;
 
 private:
-    Meter* parseMeterAttributes(const QXmlAttributes& attributes);
-    Sensor* parseSensorAttributes(const QXmlAttributes& attributes);
-    
+    bool parseMeterAttributes(const QXmlAttributes& attributes);
+    bool parseSensorAttributes(const QXmlAttributes& attributes);
+    bool parseKarambaAttributes(const QXmlAttributes& attributes);
+    bool parseDefaultFontAttributes(const QXmlAttributes& attributes);
     KarambaWidget* m_widget;
     Meter* m_meter;
     QString error;

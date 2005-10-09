@@ -1599,11 +1599,11 @@ void KarambaWidget::slotToggleLocked()
     //qDebug("KarambaWidget::slotToggleLocked");
     if(toggleLocked->isChecked())
     {
-        toggleLocked->setIconSet(SmallIconSet("lock"));
+        toggleLocked->setIcon(SmallIconSet("lock"));
     }
     else
     {
-        toggleLocked->setIconSet(SmallIconSet("move"));
+        toggleLocked->setIcon(SmallIconSet("move"));
     }
 }
 /*FIXME should we really give transform as an option to user? IMHO this is theme developer's
