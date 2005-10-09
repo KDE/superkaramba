@@ -306,7 +306,8 @@ private:
 
     bool m_reloading;
     int m_interval;
-
+    
+    friend class SKThemeHandler;
 };
 
 /*

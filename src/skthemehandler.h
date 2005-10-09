@@ -26,6 +26,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 class KarambaWidget;
 class Meter;
 class Sensor;
+class TextField;
 
 class SKThemeHandler : public QXmlDefaultHandler
 {
@@ -47,4 +48,5 @@ private:
     Meter* m_meter;
     QString error;
     bool rootMet;
+    TextField* defaultTextField;
 };

@@ -38,11 +38,14 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "richtextlabel.h"
 #include "bar.h"
 #include "meter.h"
+#include "textfield.h"
+#include "themelocale.h"
 
 SKThemeHandler::SKThemeHandler(KarambaWidget* w) :
     m_widget(w),
     m_meter(0),
-    rootMet(false)
+    rootMet(false),
+    defaultTextField(0)
 {
 }
 
@@ -107,46 +110,309 @@ QString SKThemeHandler::errorString() const
     return error;
 }
 
-bool SKThemeHandler::parseMeterAttributes(const QXmlAttributes& attributes)
+bool SKThemeHandler::parseMeterAttributes(const QXmlAttributes& attr)
 {
-    Meter* meter = 0;
-    int posValue = attributes.index("value");
-    
-    if(posValue > -1)
+    Meter* returnMeter = 0;
+    QString type,path,color,bgcolor,font,align,onclick,format,name,tooltip,rdf,preview,parameter,string;
+    int x=0,y=0,w=0,h=0,fontSize=0,min=0,max=100,points=0,
+            interval=0,pvalue=0,shadow=0;
+    bool background=false,fixedPitch=false,vertical=false;
+    for(int i=0 ;i< attr.count() ; ++i)
     {
-       QString value = attributes.value(posValue);
-       if(value=="text")
-       {
-           meter = new RichTextLabel(m_widget);
-           m_widget->addMeter(meter);
-       } 
-       else if(value=="graph")
-       {
-           meter = new Graph(m_widget, 0, 0, 0, 0, 20);
-           m_widget->addMeter(meter);
-       }
-       else if(value=="bar")
-       {
-           meter = new Bar(m_widget, 0, 0, 0, 0);
-           m_widget->addMeter(meter);
-       }
-
-       int posX = attributes.index("x");
-       int posY = attributes.index("y");
-       int posW = attributes.index("w");
-       int posH = attributes.index("h");
-       if(posX  > -1 && posY > -1)
-       {
-           meter->move(QString(attributes.value(posX)).toInt(), QString(attributes.value(posY)).toInt());
-       }
-
-       if(posW > -1 && posH > -1)
-       {
-           meter->resize(QString(attributes.value(posW)).toInt(), QString(attributes.value(posH)).toInt());
-       }
+        QString qName=attr.qName(i).toUpper();
+        QString value=attr.value(i);
+        if(qName=="TYPE")
+        {
+            type=value.toLower();
+        }
+        else if(qName=="PATH")
+        {
+            path=value;
+        }
+        else if(qName=="COLOR")
+        {
+            color=value;
+        }
+        else if(qName=="BGCOLOR")
+        {
+            bgcolor=value;
+        }
+        else if(qName=="STRING")
+        {
+            string=value;
+        }
+        else if(qName=="FONT")
+        {
+            font=value.toLower();
+        }
+        else if(qName=="ALIGN")
+        {
+            align=value.toLower();
+        }
+        else if(qName=="ONCLICK")
+        {
+            onclick=value;
+        }
+        else if(qName=="FORMAT")
+        {
+            format=value;
+        }
+        else if(qName=="NAME")
+        {
+            name=value;
+        }
+        else if(qName=="TOOLTIP")
+        {
+            tooltip=value;
+        }
+        else if(qName=="RDF")
+        {
+            rdf=value;
+        }
+        else if(qName=="PREVIEW")
+        {
+            preview=value;
+        }
+        else if(qName=="PARAMETER")
+        {
+            parameter=value;
+        }
+        else if(qName=="VALUE")
+        {
+            bool ok;
+            pvalue=value.toInt(&ok,0);
+            if(!ok)
+            {
+                error= "could not convert VALUE attribute to Int for Meter";
+                return false;
+            }
+        }
+        else if(qName=="FIXEDPITCH")
+        {
+            if(value.toUpper()=="TRUE")
+            {
+                fixedPitch=true;
+            }
+            else if(value.toUpper()=="FALSE")
+            {
+                fixedPitch=false;
+            }
+            else
+            {
+                error = "FIXEDPITCH attribute should be either false for true for karamba";
+                return false;
+            }
+        }
+        else if(qName=="BACKGROUND")
+        {
+            if(value.toUpper()=="TRUE")
+            {
+                background=true;
+            }
+            else if(value.toUpper()=="FALSE")
+            {
+                background=false;
+            }
+            else
+            {
+                error = "BACKGROUND attribute should be either false for true for karamba";
+                return false;
+            }
+        }
+        else if(qName=="VERTICAL")
+        {
+            if(value.toUpper()=="TRUE")
+            {
+                vertical=true;
+            }
+            else if(value.toUpper()=="FALSE")
+            {
+                vertical=false;
+            }
+            else
+            {
+                error = "VERTICAL attribute should be either false for true for karamba";
+                return false;
+            }
+        }
+        else if(qName=="SHADOW")
+        {
+            bool ok;
+            shadow=value.toInt(&ok,0);
+            if(!ok)
+            {
+                error= "could not convert SHADOW attribute to Int for Meter";
+                return false;
+            }
+        }
+        else if(qName=="X")
+        {
+            bool ok;
+            x=value.toInt(&ok,0);
+            if(!ok)
+            {
+                error= "could not convert X attribute to Int for Meter";
+                return false;
+            }
+        }
+        else if(qName=="Y")
+        {
+            bool ok;
+            y=value.toInt(&ok,0);
+            if(!ok)
+            {
+                error= "could not convert Y attribute to Int for Meter";
+                return false;
+            }
+        }
+        else if(qName=="W")
+        {
+            bool ok;
+            w=value.toInt(&ok,0);
+            if(!ok)
+            {
+                error= "could not convert W attribute to Int for Meter";
+                return false;
+            }
+        }
+        else if(qName=="H")
+        {
+            bool ok;
+            h=value.toInt(&ok,0);
+            if(!ok)
+            {
+                error= "could not convert H attribute to Int for Meter";
+                return false;
+            }
+        }
+        else if(qName=="FONTSIZE")
+        {
+            bool ok;
+            fontSize=value.toInt(&ok,0);
+            if(!ok)
+            {
+                error= "could not convert FONTSIZE attribute to Int for Meter";
+                return false;
+            }
+        }
+        else if(qName=="POINTS")
+        {
+            bool ok;
+            points=value.toInt(&ok,0);
+            if(!ok)
+            {
+                error= "could not convert POINTS attribute to Int for Meter";
+                return false;
+            }
+        }
+        else if(qName=="MIN")
+        {
+            bool ok;
+            min=value.toInt(&ok,0);
+            if(!ok)
+            {
+                error= "could not convert MIN attribute to Int for Meter";
+                return false;
+            }
+        }else if(qName=="MAX")
+        {
+            bool ok;
+            max=value.toInt(&ok,0);
+            if(!ok)
+            {
+                error= "could not convert MAX attribute to Int for Meter";
+                return false;
+            }
+        }
+        else if(qName=="INTERVAL")
+        {
+            bool ok;
+            interval=value.toInt(&ok,0);
+            if(!ok)
+            {
+                error= "could not convert INTERVAL attribute to Int for Meter";
+                return false;
+            }
+        }
+        
     }
+    if(type=="bar")
+    {
+        Bar* meter = new Bar(m_widget, x, y, w, h );
+        meter->setImage(path.toAscii());
+        meter->setVertical(vertical);
+        meter->setMax(max);
+        meter->setMin(min);
+        meter->setValue(pvalue);
+        if (!name.isEmpty())
+            meter->setObjectName(name.toAscii());
+        returnMeter=meter;
+    }
+    else if(type=="graph")
+    {
+        Graph* meter = new Graph(m_widget, x, y, w, h, points);
+        meter->setMax(max);
+        meter->setMin(min);
+        if (!name.isEmpty())
+            meter->setObjectName(name.ascii());
+        meter->setColor(color);
+        returnMeter=meter;
+    }
+    else if(type=="text" || type =="input")
+    {
+        TextField defTxt;
 
-    m_meter= meter;
+        if(defaultTextField)
+            defTxt = *defaultTextField;
+
+        TextField* tmpText = new TextField();
+
+        tmpText->setColor(color.isEmpty()? defTxt.getColor():color);
+        tmpText->setBGColor(bgcolor.isEmpty()? defTxt.getBGColor():bgcolor);
+        tmpText->setFont(font.isEmpty()? defTxt.getFont() : font );
+        tmpText->setFontSize(fontSize? fontSize: defTxt.getFontSize());
+        tmpText->setAlignment(align.isEmpty()? defTxt.getAlignmentAsString():align);
+        tmpText->setFixedPitch(fixedPitch? fixedPitch:defTxt.getFixedPitch());
+        tmpText->setShadow(shadow?shadow:defTxt.getShadow());
+
+
+        if(type == "text")
+        {
+            RichTextLabel* meter = new RichTextLabel(m_widget, x, y, w, h);
+
+            meter->setText(m_widget-> m_theme.locale()->translate(string.toAscii()));
+            meter->setTextProps( tmpText );
+            meter->resize(w,h);
+            if (!name.isEmpty())
+                meter->setObjectName(name.toAscii());
+            returnMeter=meter;
+        }
+
+        else if(type == "INPUT")
+        {
+            Input* meter = new Input(m_widget, x, y, w, h);
+            if (!name.isEmpty())
+                meter->setObjectName(name.toAscii());
+
+            meter->setTextProps(tmpText);
+            meter->setValue(m_widget->m_theme.locale()->translate(string.toAscii()));
+//             m_widget->passive = false;
+            returnMeter=meter;
+        }
+    }
+    else if(type=="image")
+    {
+            ImageLabel *meter = new ImageLabel(m_widget, x, y, 0, 0);
+            meter->setValue(path);
+            meter->setBackground(background);
+            if (!name.isEmpty())
+                meter->setObjectName(name.toAscii());
+            if (!tooltip.isEmpty())
+                meter->setTooltip(tooltip);
+            returnMeter=meter;
+        
+    }
+    m_meter= returnMeter;
     return true;
 }
 
@@ -199,7 +465,7 @@ bool SKThemeHandler::parseKarambaAttributes(const QXmlAttributes& attr)
                     topbar=false,bottombar=false,rightbar=false,leftbar=false;
     QString mask;
     
-    for(uint i=0 ;i< attr.count() ; ++i)
+    for(int i=0 ;i< attr.count() ; ++i)
     {
         QString qName=attr.qName(i).toUpper();
         QString value=attr.value(i);
@@ -235,7 +501,7 @@ bool SKThemeHandler::parseKarambaAttributes(const QXmlAttributes& attr)
         else if(qName=="H")
         {
             bool ok;
-            x=value.toInt(&ok,0);
+            h=value.toInt(&ok,0);
             if(!ok)
             {
                 error= "could not convert H attribute to Int for karamba";
@@ -443,26 +709,71 @@ bool SKThemeHandler::parseKarambaAttributes(const QXmlAttributes& attr)
 
 bool SKThemeHandler::parseDefaultFontAttributes(const QXmlAttributes& attr)
 {
-    QString font,fontSize,color,bgcolor,fixedPitch,shadow,align;
-    for(uint i=0 ;i< attr.count() ; ++i)
+    QString font,color,bgcolor,align;
+    int fontSize=0,shadow=0;
+    bool fixedPitch=false;
+    for(int i=0 ;i< attr.count() ; ++i)
     {
         QString qName=attr.qName(i).toUpper();
         QString value=attr.value(i);
         if(qName=="FONT") font=value;
-        else if(qName=="FONTSIZE") fontSize=value;
+        else if(qName=="FONTSIZE")
+        {
+            bool ok;
+            fontSize=value.toInt(&ok,0);
+            if(!ok)
+            {
+                error= "could not convert FONTSIZE attribute to Int for Meter";
+                return false;
+            }
+        }
         else if(qName=="COLOR") color=value;
         else if(qName=="BGCOLOR") bgcolor=value;
-        else if(qName=="FIXEDPITCH") fixedPitch=value;
-        else if(qName=="SHADOW") shadow=value;
+        else if(qName=="FIXEDPITCH")
+        {
+            if(value.toUpper()=="TRUE")
+            {
+                fixedPitch=true;
+            }
+            else if(value.toUpper()=="FALSE")
+            {
+                fixedPitch=false;
+            }
+            else
+            {
+                error = "FIXEDPITCH attribute should be either false for true for karamba";
+                return false;
+            }
+        }
+        else if(qName=="SHADOW")
+        {
+            bool ok;
+            shadow=value.toInt(&ok,0);
+            if(!ok)
+            {
+                error= "could not convert SHADOW attribute to Int for Meter";
+                return false;
+            }
+        }
         else if(qName=="ALIGN") 
         {
-            align=value;
-            if(align.toLower()!="left" || align.toLower()!="center" ||align.toLower()!="right")
+            align=value.toLower();
+            if(align!="left" || align!="center" ||align!="right")
             {
                 error="Align attribute should have value only left,center or right";
                 return false;
             }
         }
     }
+    delete defaultTextField;
+    defaultTextField = new TextField( );
+
+    defaultTextField->setColor(color.isEmpty() ? "black" : color );
+    defaultTextField->setBGColor(bgcolor.isEmpty() ? "white" : bgcolor);
+    defaultTextField->setFont(font.isEmpty()? "Helvetica" :font);
+    defaultTextField->setFontSize(fontSize? fontSize :12 );
+    defaultTextField->setAlignment(align.isEmpty()? "left" : align);
+    defaultTextField->setFixedPitch(fixedPitch? fixedPitch: false);
+    defaultTextField->setShadow(shadow? shadow: 0);
     return true;
 }

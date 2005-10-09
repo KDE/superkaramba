@@ -33,19 +33,19 @@ public:
 
     virtual void setMax(int max)
     {
-        m_maxValue = max;
+        m_maxValue = (double)max;
     };
     virtual void setMin(int min)
     {
-        m_minValue = min;
+        m_minValue = (double) min;
     };
     virtual int getMax()
     {
-        return m_minValue;
+        return (int)m_minValue;
     };
     virtual int getMin()
     {
-        return m_maxValue;
+        return (int)m_maxValue;
     };
 
     virtual void setColor(QColor clr)
