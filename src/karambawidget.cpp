@@ -48,6 +48,9 @@
 #include <Q3TextDrag>
 #include <QX11Info>
 #include <krootpixmap.h>
+#include <QXmlSimpleReader>
+#include <QXmlInputSource>
+#include "skthemehandler.h"
 
 // Menu IDs
 #define EDITSCRIPT 1
@@ -81,7 +84,7 @@ KarambaWidget::KarambaWidget(QString fn, bool reloading, int instance, QWidget *
     }
     kdDebug() << "Starting theme: " << m_theme.name() << endl;
     QString qName = "karamba - " + m_theme.name();
-    setObjectName(qName.ascii());
+    setObjectName(qName.toAscii());
 
     /*Add self to list of open themes to karambaApplication. reloading indicated whether this is
     first start or we are reloading from RMB */
@@ -339,294 +342,333 @@ bool KarambaWidget::parseConfig()
 {
     //qDebug("KarambaWidget::parseConfig");
     bool passive = true;
-
-    if(m_theme.open())
-    {
-        QStack<QPoint> offsetStack;
-        LineParser lineParser;
-        int x=0;
-        int y=0;
-        int w=0;
-        int h=0;
-
-        offsetStack.push(QPoint(0,0));
-
-        while(m_theme.nextLine(lineParser))
-        {
-            x = lineParser.getInt("X") + offsetStack.top().x();
-            y = lineParser.getInt("Y") + offsetStack.top().y();
-            w = lineParser.getInt("W");
-            h = lineParser.getInt("H");
-
-            if(lineParser.meter() == "KARAMBA" && !foundKaramba )
-            {
-                toggleLocked->setChecked(lineParser.getBoolean("LOCKED"));
-                slotToggleLocked();
-
-                x = ( x < 0 ) ? 0:x;
-                y = ( y < 0 ) ? 0:y;
-
-                if( w == 0 ||  h == 0)
-                {
-                    w = 300;
-                    h = 300;
-                }
-                setFixedSize(w,h);
-
-                if(lineParser.getBoolean("RIGHT"))
-                {
-                    QDesktopWidget *d = QApplication::desktop();
-                    x = d->width() - w;
-                }
-                else if(lineParser.getBoolean("LEFT"))
-                {
-                    x = 0;
-                }
-
-                if(lineParser.getBoolean("BOTTOM"))
-                {
-                    QDesktopWidget *d = QApplication::desktop();
-                    y = d->height() - h;
-                }
-                else if(lineParser.getBoolean("TOP"))
-                {
-                    y = 0;
-                }
-
-                move(x,y);
-                //pm = QPixmap(size());
-
-                if(lineParser.getBoolean("ONTOP"))
-                {
-                    onTop = true;
-                    KWin::setState( winId(), NET::StaysOnTop );
-                }
-
-                if(lineParser.getBoolean("MANAGED"))
-                {
-                    managed = true;
-                    reparent(0, Qt::Dialog , pos());
-                    setAttribute(Qt::WA_DeleteOnClose);
-                }
-                else
-                {
-                    info->setState( NETWinInfo::SkipTaskbar
-                                    | NETWinInfo::SkipPager,NETWinInfo::SkipTaskbar
-                                    | NETWinInfo::SkipPager );
-                    if (onTop)
-                    {
-                        KWin::setState( winId(), NET::StaysOnTop );
-
-                    }
-                }
-
-                if (lineParser.getBoolean("ONALLDESKTOPS"))
-                {
-                    desktop = 200; // ugly
-                }
-
-
-                bool dfound=false;
-                //int desktop = lineParser.getInt("DESKTOP", line, dfound);
-                if (dfound)
-                {
-                    info->setDesktop( dfound );
-                }
-                if(lineParser.getBoolean("TOPBAR"))
-                {
-                    move(x,0);
-                    KWin::setStrut( winId(), 0, 0, h, 0 );
-                    toggleLocked->setChecked( true );
-                    slotToggleLocked();
-                    toggleLocked->setEnabled(false);
-
-                }
-
-                if(lineParser.getBoolean("BOTTOMBAR"))
-                {
-                    int dh = QApplication::desktop()->height();
-                    move( x, dh - h );
-                    KWin::setStrut( winId(), 0, 0, 0, h );
-                    toggleLocked->setChecked( true );
-                    slotToggleLocked();
-                    toggleLocked->setEnabled(false);
-                }
-
-                if(lineParser.getBoolean("RIGHTBAR"))
-                {
-                    int dw = QApplication::desktop()->width();
-                    move( dw - w, y );
-                    KWin::setStrut( winId(), 0, w, 0, 0 );
-                    toggleLocked->setChecked( true );
-                    slotToggleLocked();
-                    toggleLocked->setEnabled(false);
-                }
-
-                if(lineParser.getBoolean("LEFTBAR"))
-                {
-                    move( 0, y );
-                    KWin::setStrut( winId(), w, 0, 0, 0 );
-                    toggleLocked->setChecked( true );
-                    slotToggleLocked();
-                    toggleLocked->setEnabled(false);
-                }
-
-                QString path = lineParser.getString("MASK");
-
-                QFileInfo info(path);
-                QString absPath;
-                QBitmap bmMask;
-                QByteArray ba;
-                if( info.isRelative() )
-                {
-                    absPath.setAscii(m_theme.path().ascii());
-                    absPath.append(path.ascii());
-                    ba = m_theme.readThemeFile(path);
-                }
-                else
-                {
-                    absPath.setAscii(path.ascii());
-                    ba = m_theme.readThemeFile(info.fileName());
-                }
-                if(m_theme.isZipTheme())
-                {
-                    bmMask.loadFromData(ba);
-                }
-                else
-                {
-                    bmMask.load(absPath);
-                }
-                setMask(bmMask);
-
-                m_interval = lineParser.getInt("INTERVAL");
-                m_interval = (m_interval == 0) ? 1000 : m_interval;
-
-                QString temp = lineParser.getString("TEMPUNIT", "C").toUpper();
-                tempUnit = temp.ascii()[0];
-                foundKaramba = true;
-            }
-
-            if(lineParser.meter() == "THEME")
-            {
-                QString path = lineParser.getString("PATH");
-                QFileInfo info(path);
-                if( info.isRelative())
-                    path = m_theme.path() +"/" + path;
-                (new KarambaWidget( path, false ))->show();
-            }
-
-            if(lineParser.meter() == "<GROUP>")
-            {
-                int offsetX = offsetStack.top().x();
-                int offsetY = offsetStack.top().y();
-                offsetStack.push( QPoint( offsetX + lineParser.getInt("X"),
-                                          offsetY + lineParser.getInt("Y")));
-            }
-
-            if(lineParser.meter() == "</GROUP>")
-            {
-                offsetStack.pop();
-            }
-/*
-            if(lineParser.meter() == "CLICKAREA")
-            {
-                if( !hasMouseTracking() )
-                    setMouseTracking(true);
-                ClickArea *tmp = new ClickArea(this, x, y, w, h );
-                tmp->setOnClick(lineParser.getString("ONCLICK"));
-
-                setSensor(lineParser, (Meter*)tmp);
-                clickList.append( (ClickMap *)tmp );
-                if( lineParser.getBoolean("PREVIEW"))
-                    meterList.append( tmp );
-            }*/
-
-            // program sensor without a meter
-            if(lineParser.meter() == "SENSOR=PROGRAM")
-            {
-                setSensor(lineParser, 0 );
-            }
-
-            if(lineParser.meter() == "IMAGE")
-            {
-                QString file = lineParser.getString("PATH");
-                /*specific functionality like rollover image should be programmed by theme writer themselves. if we really want to provide this function, at least this is not the place for that we should make separate convenience function for that    */
-//                 QString file_roll = lineParser.getString("PATHROLL");
-//                 int xon = lineParser.getInt("XROLL");
-//                 int yon = lineParser.getInt("YROLL");
-                QString tiptext = lineParser.getString("TOOLTIP");
-                QString name = lineParser.getString("NAME");
-                bool bg = lineParser.getBoolean("BACKGROUND");
-//                 xon = ( xon <= 0 ) ? x:xon;
-//                 yon = ( yon <= 0 ) ? y:yon;
-
-                ImageLabel *tmp = new ImageLabel(this, x, y, 0, 0);
-                tmp->setValue(file);
-//                 if(!file_roll.isEmpty())
-//                     tmp->parseImages(file, file_roll, x,y, xon, yon);
-                tmp->setBackground(bg);
-                if (!name.isEmpty())
-                    tmp->setObjectName(name.ascii());
-                if (!tiptext.isEmpty())
-                    tmp->setTooltip(tiptext);
-
-               // connect(tmp, SIGNAL(pixmapLoaded()), this, SLOT(externalStep()));
-                setSensor(lineParser, (Meter*) tmp );
-                meterList.append (tmp );
-                imageList.append (tmp );
-            }
-
-            if(lineParser.meter() == "DEFAULTFONT" )
-            {
-                delete defaultTextField;
-                defaultTextField = new TextField( );
-
-                defaultTextField->setColor(lineParser.getColor("COLOR",
-                                           QColor("black")));
-                defaultTextField->setBGColor(lineParser.getColor("BGCOLOR",
-                                             QColor("white")));
-                defaultTextField->setFont(lineParser.getString("FONT", "Helvetica"));
-                defaultTextField->setFontSize(lineParser.getInt("FONTSIZE", 12));
-                defaultTextField->setAlignment(lineParser.getString("ALIGN",
-                                               "LEFT"));
-                defaultTextField->setFixedPitch(lineParser.getBoolean("FIXEDPITCH",
-                                                false));
-                defaultTextField->setShadow(lineParser.getInt("SHADOW", 0));
-            }
-
-            if(lineParser.meter() == "RICHTEXT" ||
-                    lineParser.meter() == "INPUT")
-            {
-                TextField defTxt;
-
-                if(defaultTextField)
-                    defTxt = *defaultTextField;
-
-                TextField* tmpText = new TextField();
-
-                tmpText->setColor(lineParser.getColor("COLOR", defTxt.getColor()));
-                tmpText->setBGColor(lineParser.getColor("BGCOLOR",
-                                                        defTxt.getBGColor()));
-                tmpText->setFont(lineParser.getString("FONT", defTxt.getFont()));
-                tmpText->setFontSize(lineParser.getInt("FONTSIZE",
-                                                       defTxt.getFontSize()));
-                tmpText->setAlignment(lineParser.getString("ALIGN",
-                                      defTxt.getAlignmentAsString()));
-                tmpText->setFixedPitch(lineParser.getInt("FIXEDPITCH",
-                                       defTxt.getFixedPitch()));
-
-                tmpText->setShadow(lineParser.getInt("SHADOW", defTxt.getShadow()));
-
-                // ////////////////////////////////////////////////////
-                // Now handle the specifics
-//                 if(lineParser.meter() == "TEXT")
+    QXmlSimpleReader parser;
+    QFile file(m_theme.file());
+    QXmlInputSource source(&file);
+    SKThemeHandler handler(this);
+    parser.setContentHandler(&handler);
+    parser.setErrorHandler(&handler);
+    return parser.parse(&source, false);
+//     if(m_theme.open())
+//     {
+//         QStack<QPoint> offsetStack;
+//         LineParser lineParser;
+//         int x=0;
+//         int y=0;
+//         int w=0;
+//         int h=0;
+// 
+//         offsetStack.push(QPoint(0,0));
+// 
+//         while(m_theme.nextLine(lineParser))
+//         {
+//             x = lineParser.getInt("X") + offsetStack.top().x();
+//             y = lineParser.getInt("Y") + offsetStack.top().y();
+//             w = lineParser.getInt("W");
+//             h = lineParser.getInt("H");
+// 
+//             if(lineParser.meter() == "KARAMBA" && !foundKaramba )
+//             {
+//                 toggleLocked->setChecked(lineParser.getBoolean("LOCKED"));
+//                 slotToggleLocked();
+// 
+//                 x = ( x < 0 ) ? 0:x;
+//                 y = ( y < 0 ) ? 0:y;
+// 
+//                 if( w == 0 ||  h == 0)
 //                 {
+//                     w = 300;
+//                     h = 300;
+//                 }
+//                 setFixedSize(w,h);
 // 
-//                     TextLabel *tmp = new TextLabel(this, x, y, w, h );
-//                     tmp->setTextProps(tmpText);
-//                     tmp->setValue(
+//                 if(lineParser.getBoolean("RIGHT"))
+//                 {
+//                     QDesktopWidget *d = QApplication::desktop();
+//                     x = d->width() - w;
+//                 }
+//                 else if(lineParser.getBoolean("LEFT"))
+//                 {
+//                     x = 0;
+//                 }
+// 
+//                 if(lineParser.getBoolean("BOTTOM"))
+//                 {
+//                     QDesktopWidget *d = QApplication::desktop();
+//                     y = d->height() - h;
+//                 }
+//                 else if(lineParser.getBoolean("TOP"))
+//                 {
+//                     y = 0;
+//                 }
+// 
+//                 move(x,y);
+//                 //pm = QPixmap(size());
+// 
+//                 if(lineParser.getBoolean("ONTOP"))
+//                 {
+//                     onTop = true;
+//                     KWin::setState( winId(), NET::StaysOnTop );
+//                 }
+// 
+//                 if(lineParser.getBoolean("MANAGED"))
+//                 {
+//                     managed = true;
+//                     reparent(0, Qt::Dialog , pos());
+//                     setAttribute(Qt::WA_DeleteOnClose);
+//                 }
+//                 else
+//                 {
+//                     info->setState( NETWinInfo::SkipTaskbar
+//                                     | NETWinInfo::SkipPager,NETWinInfo::SkipTaskbar
+//                                     | NETWinInfo::SkipPager );
+//                     if (onTop)
+//                     {
+//                         KWin::setState( winId(), NET::StaysOnTop );
+// 
+//                     }
+//                 }
+// 
+//                 if (lineParser.getBoolean("ONALLDESKTOPS"))
+//                 {
+//                     desktop = 200; // ugly
+//                 }
+// 
+// 
+//                 bool dfound=false;
+//                 //int desktop = lineParser.getInt("DESKTOP", line, dfound);
+//                 if (dfound)
+//                 {
+//                     info->setDesktop( dfound );
+//                 }
+//                 if(lineParser.getBoolean("TOPBAR"))
+//                 {
+//                     move(x,0);
+//                     KWin::setStrut( winId(), 0, 0, h, 0 );
+//                     toggleLocked->setChecked( true );
+//                     slotToggleLocked();
+//                     toggleLocked->setEnabled(false);
+// 
+//                 }
+// 
+//                 if(lineParser.getBoolean("BOTTOMBAR"))
+//                 {
+//                     int dh = QApplication::desktop()->height();
+//                     move( x, dh - h );
+//                     KWin::setStrut( winId(), 0, 0, 0, h );
+//                     toggleLocked->setChecked( true );
+//                     slotToggleLocked();
+//                     toggleLocked->setEnabled(false);
+//                 }
+// 
+//                 if(lineParser.getBoolean("RIGHTBAR"))
+//                 {
+//                     int dw = QApplication::desktop()->width();
+//                     move( dw - w, y );
+//                     KWin::setStrut( winId(), 0, w, 0, 0 );
+//                     toggleLocked->setChecked( true );
+//                     slotToggleLocked();
+//                     toggleLocked->setEnabled(false);
+//                 }
+// 
+//                 if(lineParser.getBoolean("LEFTBAR"))
+//                 {
+//                     move( 0, y );
+//                     KWin::setStrut( winId(), w, 0, 0, 0 );
+//                     toggleLocked->setChecked( true );
+//                     slotToggleLocked();
+//                     toggleLocked->setEnabled(false);
+//                 }
+// 
+//                 QString path = lineParser.getString("MASK");
+// 
+//                 QFileInfo info(path);
+//                 QString absPath;
+//                 QBitmap bmMask;
+//                 QByteArray ba;
+//                 if( info.isRelative() )
+//                 {
+//                     absPath.setAscii(m_theme.path().ascii());
+//                     absPath.append(path.ascii());
+//                     ba = m_theme.readThemeFile(path);
+//                 }
+//                 else
+//                 {
+//                     absPath.setAscii(path.ascii());
+//                     ba = m_theme.readThemeFile(info.fileName());
+//                 }
+//                 if(m_theme.isZipTheme())
+//                 {
+//                     bmMask.loadFromData(ba);
+//                 }
+//                 else
+//                 {
+//                     bmMask.load(absPath);
+//                 }
+//                 setMask(bmMask);
+// 
+//                 m_interval = lineParser.getInt("INTERVAL");
+//                 m_interval = (m_interval == 0) ? 1000 : m_interval;
+// 
+//                 QString temp = lineParser.getString("TEMPUNIT", "C").toUpper();
+//                 tempUnit = temp.ascii()[0];
+//                 foundKaramba = true;
+//             }
+// 
+//             if(lineParser.meter() == "THEME")
+//             {
+//                 QString path = lineParser.getString("PATH");
+//                 QFileInfo info(path);
+//                 if( info.isRelative())
+//                     path = m_theme.path() +"/" + path;
+//                 (new KarambaWidget( path, false ))->show();
+//             }
+// 
+//             if(lineParser.meter() == "<GROUP>")
+//             {
+//                 int offsetX = offsetStack.top().x();
+//                 int offsetY = offsetStack.top().y();
+//                 offsetStack.push( QPoint( offsetX + lineParser.getInt("X"),
+//                                           offsetY + lineParser.getInt("Y")));
+//             }
+// 
+//             if(lineParser.meter() == "</GROUP>")
+//             {
+//                 offsetStack.pop();
+//             }
+// /*
+//             if(lineParser.meter() == "CLICKAREA")
+//             {
+//                 if( !hasMouseTracking() )
+//                     setMouseTracking(true);
+//                 ClickArea *tmp = new ClickArea(this, x, y, w, h );
+//                 tmp->setOnClick(lineParser.getString("ONCLICK"));
+// 
+//                 setSensor(lineParser, (Meter*)tmp);
+//                 clickList.append( (ClickMap *)tmp );
+//                 if( lineParser.getBoolean("PREVIEW"))
+//                     meterList.append( tmp );
+//             }*/
+// 
+//             // program sensor without a meter
+//             if(lineParser.meter() == "SENSOR=PROGRAM")
+//             {
+//                 setSensor(lineParser, 0 );
+//             }
+// 
+//             if(lineParser.meter() == "IMAGE")
+//             {
+//                 QString file = lineParser.getString("PATH");
+//                 /*specific functionality like rollover image should be programmed by theme writer themselves. if we really want to provide this function, at least this is not the place for that we should make separate convenience function for that    */
+// //                 QString file_roll = lineParser.getString("PATHROLL");
+// //                 int xon = lineParser.getInt("XROLL");
+// //                 int yon = lineParser.getInt("YROLL");
+//                 QString tiptext = lineParser.getString("TOOLTIP");
+//                 QString name = lineParser.getString("NAME");
+//                 bool bg = lineParser.getBoolean("BACKGROUND");
+// //                 xon = ( xon <= 0 ) ? x:xon;
+// //                 yon = ( yon <= 0 ) ? y:yon;
+// 
+//                 ImageLabel *tmp = new ImageLabel(this, x, y, 0, 0);
+//                 tmp->setValue(file);
+// //                 if(!file_roll.isEmpty())
+// //                     tmp->parseImages(file, file_roll, x,y, xon, yon);
+//                 tmp->setBackground(bg);
+//                 if (!name.isEmpty())
+//                     tmp->setObjectName(name.ascii());
+//                 if (!tiptext.isEmpty())
+//                     tmp->setTooltip(tiptext);
+// 
+//                // connect(tmp, SIGNAL(pixmapLoaded()), this, SLOT(externalStep()));
+//                 setSensor(lineParser, (Meter*) tmp );
+//                 meterList.append (tmp );
+//                 imageList.append (tmp );
+//             }
+// 
+//             if(lineParser.meter() == "DEFAULTFONT" )
+//             {
+//                 delete defaultTextField;
+//                 defaultTextField = new TextField( );
+// 
+//                 defaultTextField->setColor(lineParser.getColor("COLOR",
+//                                            QColor("black")));
+//                 defaultTextField->setBGColor(lineParser.getColor("BGCOLOR",
+//                                              QColor("white")));
+//                 defaultTextField->setFont(lineParser.getString("FONT", "Helvetica"));
+//                 defaultTextField->setFontSize(lineParser.getInt("FONTSIZE", 12));
+//                 defaultTextField->setAlignment(lineParser.getString("ALIGN",
+//                                                "LEFT"));
+//                 defaultTextField->setFixedPitch(lineParser.getBoolean("FIXEDPITCH",
+//                                                 false));
+//                 defaultTextField->setShadow(lineParser.getInt("SHADOW", 0));
+//             }
+// 
+//             if(lineParser.meter() == "RICHTEXT" ||
+//                     lineParser.meter() == "INPUT")
+//             {
+//                 TextField defTxt;
+// 
+//                 if(defaultTextField)
+//                     defTxt = *defaultTextField;
+// 
+//                 TextField* tmpText = new TextField();
+// 
+//                 tmpText->setColor(lineParser.getColor("COLOR", defTxt.getColor()));
+//                 tmpText->setBGColor(lineParser.getColor("BGCOLOR",
+//                                                         defTxt.getBGColor()));
+//                 tmpText->setFont(lineParser.getString("FONT", defTxt.getFont()));
+//                 tmpText->setFontSize(lineParser.getInt("FONTSIZE",
+//                                                        defTxt.getFontSize()));
+//                 tmpText->setAlignment(lineParser.getString("ALIGN",
+//                                       defTxt.getAlignmentAsString()));
+//                 tmpText->setFixedPitch(lineParser.getInt("FIXEDPITCH",
+//                                        defTxt.getFixedPitch()));
+// 
+//                 tmpText->setShadow(lineParser.getInt("SHADOW", defTxt.getShadow()));
+// 
+//                 // ////////////////////////////////////////////////////
+//                 // Now handle the specifics
+// //                 if(lineParser.meter() == "TEXT")
+// //                 {
+// // 
+// //                     TextLabel *tmp = new TextLabel(this, x, y, w, h );
+// //                     tmp->setTextProps(tmpText);
+// //                     tmp->setValue(
+// //                         m_theme.locale()->translate(lineParser.getString("VALUE").ascii()));
+// // 
+// //                     QString name = lineParser.getString("NAME");
+// //                     if (!name.isEmpty())
+// //                         tmp->setName(name.ascii());
+// // 
+// //                     setSensor(lineParser, (Meter*)tmp);
+// //                     meterList.append ( tmp );
+// //                 }
+// 
+// //                 if(lineParser.meter() == "CLICKMAP")
+// //                 {
+// //                     if( !hasMouseTracking() )
+// //                         setMouseTracking(true);
+// //                     ClickMap *tmp = new ClickMap(this, x, y, w, h);
+// //                     tmp->setTextProps( tmpText );
+// // 
+// //                     setSensor(lineParser, (Meter*)tmp);
+// //                     // set all params
+// //                     clickList.append(tmp);
+// //                     meterList.append( tmp );
+// // 
+// //                 }
+// 
+//                 if(lineParser.meter() == "RICHTEXT")
+//                 {
+//                     RichTextLabel *tmp = new RichTextLabel(this, x, y, w, h);
+// 
+//                     bool dUl = lineParser.getBoolean("UNDERLINE");
+// 
+//                     tmp->setText(
 //                         m_theme.locale()->translate(lineParser.getString("VALUE").ascii()));
-// 
+//                     tmp->setTextProps( tmpText );
+//                     tmp->resize(w,h);
+//                     
 //                     QString name = lineParser.getString("NAME");
 //                     if (!name.isEmpty())
 //                         tmp->setName(name.ascii());
@@ -634,114 +676,81 @@ bool KarambaWidget::parseConfig()
 //                     setSensor(lineParser, (Meter*)tmp);
 //                     meterList.append ( tmp );
 //                 }
-
-//                 if(lineParser.meter() == "CLICKMAP")
+// 
+//                 if(lineParser.meter() == "INPUT")
 //                 {
-//                     if( !hasMouseTracking() )
-//                         setMouseTracking(true);
-//                     ClickMap *tmp = new ClickMap(this, x, y, w, h);
-//                     tmp->setTextProps( tmpText );
+//                     Input *tmp = new Input(this, x, y, w, h);
 // 
-//                     setSensor(lineParser, (Meter*)tmp);
-//                     // set all params
-//                     clickList.append(tmp);
-//                     meterList.append( tmp );
+//                     QString name = lineParser.getString("NAME");
+//                     if (!name.isEmpty())
+//                         tmp->setName(name.ascii());
 // 
+//                     tmp->setTextProps(tmpText);
+//                     tmp->setValue(
+//                         m_theme.locale()->translate(lineParser.getString("VALUE").ascii()));
+// 
+//                     meterList.append(tmp);
+//                     passive = false;
 //                 }
-
-                if(lineParser.meter() == "RICHTEXT")
-                {
-                    RichTextLabel *tmp = new RichTextLabel(this, x, y, w, h);
-
-                    bool dUl = lineParser.getBoolean("UNDERLINE");
-
-                    tmp->setText(
-                        m_theme.locale()->translate(lineParser.getString("VALUE").ascii()));
-                    tmp->setTextProps( tmpText );
-                    tmp->resize(w,h);
-                    
-                    QString name = lineParser.getString("NAME");
-                    if (!name.isEmpty())
-                        tmp->setName(name.ascii());
-
-                    setSensor(lineParser, (Meter*)tmp);
-                    meterList.append ( tmp );
-                }
-
-                if(lineParser.meter() == "INPUT")
-                {
-                    Input *tmp = new Input(this, x, y, w, h);
-
-                    QString name = lineParser.getString("NAME");
-                    if (!name.isEmpty())
-                        tmp->setName(name.ascii());
-
-                    tmp->setTextProps(tmpText);
-                    tmp->setValue(
-                        m_theme.locale()->translate(lineParser.getString("VALUE").ascii()));
-
-                    meterList.append(tmp);
-                    passive = false;
-                }
-            }
-
-            if(lineParser.meter() == "BAR")
-            {
-                Bar *tmp = new Bar(this, x, y, w, h );
-                tmp->setImage(lineParser.getString("PATH").ascii());
-                tmp->setVertical(lineParser.getBoolean("VERTICAL"));
-                tmp->setMax(lineParser.getInt("MAX", 100));
-                tmp->setMin(lineParser.getInt("MIN", 0));
-                tmp->setValue(lineParser.getInt("VALUE"));
-                QString name = lineParser.getString("NAME");
-                if (!name.isEmpty())
-                    tmp->setName(name.ascii());
-                setSensor(lineParser, (Meter*)tmp );
-                meterList.append ( tmp );
-            }
-
-            if(lineParser.meter() == "GRAPH")
-            {
-                int points = lineParser.getInt("POINTS");
-
-                Graph *tmp = new Graph(this, x, y, w, h, points);
-                tmp->setMax(lineParser.getInt("MAX", 100));
-                tmp->setMin(lineParser.getInt("MIN", 0));
-                QString name = lineParser.getString("NAME");
-                if (!name.isEmpty())
-                    tmp->setName(name.ascii());
-
-                tmp->setColor(lineParser.getColor("COLOR"));
-
-                setSensor(lineParser, (Graph*)tmp);
-                meterList.append ( tmp );
-            }
-        }
-
-        if(passive && !managed)
-        {
-            // Matthew Kay: set window type to "dock"
-            // (plays better with taskbar themes this way)
-            KWin::setType(winId(), NET::Dock);
-
-            //KDE 3.2 addition for the always on top issues
-            KWin::setState(winId(), NET::KeepBelow);
-        }
-
-        m_theme.close();
-    }
-    //qDebug("parseConfig ok: %d", foundKaramba);
-    if( !foundKaramba )
-    {
-        //  interval = initKaramba( "", 0, 0, 0, 0 );
-        //   this->close(true);
-        //delete this;
-        return false;
-    }
-    else
-    {
+//             }
+// 
+//             if(lineParser.meter() == "BAR")
+//             {
+//                 Bar *tmp = new Bar(this, x, y, w, h );
+//                 tmp->setImage(lineParser.getString("PATH").ascii());
+//                 tmp->setVertical(lineParser.getBoolean("VERTICAL"));
+//                 tmp->setMax(lineParser.getInt("MAX", 100));
+//                 tmp->setMin(lineParser.getInt("MIN", 0));
+//                 tmp->setValue(lineParser.getInt("VALUE"));
+//                 QString name = lineParser.getString("NAME");
+//                 if (!name.isEmpty())
+//                     tmp->setName(name.ascii());
+//                 setSensor(lineParser, (Meter*)tmp );
+//                 meterList.append ( tmp );
+//             }
+// 
+//             if(lineParser.meter() == "GRAPH")
+//             {
+//                 int points = lineParser.getInt("POINTS");
+// 
+//                 Graph *tmp = new Graph(this, x, y, w, h, points);
+//                 tmp->setMax(lineParser.getInt("MAX", 100));
+//                 tmp->setMin(lineParser.getInt("MIN", 0));
+//                 QString name = lineParser.getString("NAME");
+//                 if (!name.isEmpty())
+//                     tmp->setName(name.ascii());
+// 
+//                 tmp->setColor(lineParser.getColor("COLOR"));
+// 
+//                 setSensor(lineParser, (Graph*)tmp);
+//                 meterList.append ( tmp );
+//             }
+//         }
+// 
+//         if(passive && !managed)
+//         {
+//             // Matthew Kay: set window type to "dock"
+//             // (plays better with taskbar themes this way)
+//             KWin::setType(winId(), NET::Dock);
+// 
+//             //KDE 3.2 addition for the always on top issues
+//             KWin::setState(winId(), NET::KeepBelow);
+//         }
+// 
+//         m_theme.close();
+//     }
+//     //qDebug("parseConfig ok: %d", foundKaramba);
+//     if( !foundKaramba )
+//     {
+//         //  interval = initKaramba( "", 0, 0, 0, 0 );
+//         //   this->close(true);
+//         //delete this;
+//         return false;
+//     }
+//     else
+//     {
         return true;
-    }
+//     }
 }
 /*
 void KarambaWidget::start()
