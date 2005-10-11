@@ -1,0 +1,9 @@
+<?xml version = '1.0'?>
+<!DOCTYPE SKTheme SYSTEM "sktheme.dtd">
+<SKTHEME>
+  <Karamba w="500" x="300" y="300" h="300" />
+  <DefaultFont fontsize="16" color="#c8c8c8" font="Bitstream Vera Sans" />
+  <Meter W="400" POINTS="400" X="0" H="30" Y="20" FORMAT="%cpu.load" Type="GRAPH" NAME="graph0" MAX="50" COLOR="#c0c0c0" >
+    <Sensor type="cpu" />
+  </Meter>
+</SKTHEME>
