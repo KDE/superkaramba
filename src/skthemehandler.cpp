@@ -61,6 +61,7 @@ bool SKThemeHandler::unparsedEntityDecl(const QString& name, const QString& publ
 */
 bool SKThemeHandler::startElement(const QString& /*namespaceURI*/, const QString& /*localName*/, const QString& qName, const QXmlAttributes& attributes)
 {
+    kdDebug() << qName << " in startElement" << endl;
     QString name=qName.toUpper();
     if(name!="SKTHEME" && !rootMet)
     {
@@ -126,6 +127,7 @@ bool SKThemeHandler::parseMeterAttributes(const QXmlAttributes& attr)
     {
         QString qName=attr.qName(i).toUpper();
         QString value=attr.value(i);
+        kdDebug() << "qName =" << qName << " value= " << value << endl;
         if(qName=="TYPE")
         {
             type=value.toLower();
@@ -352,16 +354,19 @@ bool SKThemeHandler::parseMeterAttributes(const QXmlAttributes& attr)
         meter->setValue(pvalue);
         if (!name.isEmpty())
             meter->setObjectName(name.toAscii());
+        meter->setFormat(format.toAscii());
         returnMeter=meter;
     }
     else if(type=="graph")
     {
+        kdDebug() << "number of points " << points << endl;
         Graph* meter = new Graph(m_widget, x, y, w, h, points);
         meter->setMax(max);
         meter->setMin(min);
         if (!name.isEmpty())
-            meter->setObjectName(name.ascii());
+            meter->setObjectName(name.toAscii());
         meter->setColor(color);
+        meter->setFormat(format.toAscii());
         returnMeter=meter;
     }
     else if(type=="text" || type =="input")
@@ -391,6 +396,7 @@ bool SKThemeHandler::parseMeterAttributes(const QXmlAttributes& attr)
             meter->resize(w,h);
             if (!name.isEmpty())
                 meter->setObjectName(name.toAscii());
+            meter->setFormat(format.toAscii());
             returnMeter=meter;
         }
 
@@ -402,6 +408,7 @@ bool SKThemeHandler::parseMeterAttributes(const QXmlAttributes& attr)
 
             meter->setTextProps(tmpText);
             meter->setValue(m_widget->m_theme.locale()->translate(string.toAscii()));
+            meter->setFormat(format.toAscii());
             //             m_widget->passive = false;
             returnMeter=meter;
         }
@@ -413,6 +420,7 @@ bool SKThemeHandler::parseMeterAttributes(const QXmlAttributes& attr)
         meter->setBackground(background);
         if (!name.isEmpty())
             meter->setObjectName(name.toAscii());
+        meter->setFormat(format.toAscii());
         if (!tooltip.isEmpty())
             meter->setTooltip(tooltip);
         returnMeter=meter;
@@ -457,7 +465,6 @@ bool SKThemeHandler::parseSensorAttributes(const QXmlAttributes& attr)
             {
                 sensor = UptimeSensor::self();
             }
-            
         }
     }
     if(sensor)
@@ -471,8 +478,8 @@ bool SKThemeHandler::parseKarambaAttributes(const QXmlAttributes& attr)
 {
     int x=0,y=0,w=300,h=300;
     bool locked=true,bottom=false,top=false,left=false,right=false,
-                                      ontop=false,managed=false,onalldesktops=true,
-                                                                              topbar=false,bottombar=false,rightbar=false,leftbar=false;
+         ontop=false,managed=false,onalldesktops=true,
+         topbar=false,bottombar=false,rightbar=false,leftbar=false;
     QString mask;
 
     for(int i=0 ;i< attr.count() ; ++i)

@@ -348,7 +348,18 @@ bool KarambaWidget::parseConfig()
     SKThemeHandler handler(this);
     parser.setContentHandler(&handler);
     parser.setErrorHandler(&handler);
-    return parser.parse(&source, false);
+    kdDebug() << "1 parseconfig" << endl;
+    bool ret= parser.parse(&source, false);
+    if(ret)
+    {
+        kdDebug() << "success" <<endl;
+        return ret;
+    }
+    else
+    {
+        kdDebug() << "failure" << endl;
+        return ret;
+    }
 //     if(m_theme.open())
 //     {
 //         QStack<QPoint> offsetStack;
