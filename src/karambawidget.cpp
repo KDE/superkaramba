@@ -48,8 +48,7 @@
 #include <Q3TextDrag>
 #include <QX11Info>
 #include <krootpixmap.h>
-#include <QXmlSimpleReader>
-#include <QXmlInputSource>
+#include <qxml.h>
 #include "skthemehandler.h"
 
 // Menu IDs
