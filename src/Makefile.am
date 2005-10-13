@@ -29,8 +29,8 @@ superkaramba_SOURCES = main.cpp karambawidget.cpp meter.cpp sensor.cpp \
 METASOURCES = AUTO
 
 messages: rc.cpp
-        $(EXTRACTRC) *.ui >> rc.cpp
-        $(XGETTEXT) sensors/*.cpp libpython/*.cpp *.cpp -o $(podir)/superkaramba.pot
+	$(EXTRACTRC) *.ui >> rc.cpp
+	$(XGETTEXT) sensors/*.cpp libpython/*.cpp *.cpp -o $(podir)/superkaramba.pot
 
 # this is where the desktop file will go
 shelldesktopdir = $(kde_appsdir)/Utilities
