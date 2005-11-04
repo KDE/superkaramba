@@ -116,12 +116,23 @@ QString PyString2QString(PyObject* text)
 // Converts a QString to a Python String with Unicode support
 PyObject* QString2PyString(QString string)
 {
-  // XXX How to do this properly ?
-  const char* tmp = string.ascii();
+  PyObject *pyString;
+
+  const unsigned short* tmp = string.ucs2();
+  Py_UNICODE *buf = new Py_UNICODE[string.length()];
+  for(unsigned int i = 0; i < string.length(); i++)
+  {
+    buf[i] = tmp[i];
+  }
+  
   if(tmp)
-    return PyString_FromString(tmp);
+    pyString = PyUnicode_FromWideChar(buf, string.length());
   else
-    return PyString_FromString("");
+    pyString = PyString_FromString("");
+  
+  delete [] buf;
+
+  return pyString;
 }
 
 long getMeter(long widget, char* name)
