@@ -85,7 +85,7 @@ bool SKNewStuff::install( const QString &fileName )
         kdDebug() << "SKNewStuff::install() gzip/bzip2 mimetype encountered" <<
         endl;
         KTar archive( fileName );
-        if ( !archive.open( IO_ReadOnly ) )
+        if ( !archive.open( QIODevice::ReadOnly ) )
             return false;
         const KArchiveDirectory *archiveDir = archive.directory();
         archiveDir->copyTo(destDir);

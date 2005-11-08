@@ -43,7 +43,7 @@ void TextFileSensor::update()
     QStringList lines;
     QFile file(fileName);
     QString line;
-    if ( file.open(IO_ReadOnly | IO_Translate) )
+    if ( file.open(QIODevice::ReadOnly | IO_Translate) )
     {
         if (rdf)
         {

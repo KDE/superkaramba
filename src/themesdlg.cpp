@@ -40,6 +40,7 @@
 #include <qcombobox.h>
 #include <kio/job.h>
 #include <kprotocolinfo.h>
+#include <kglobal.h>
 
 ThemesDlg::ThemesDlg(QWidget *parent, const char *name)
         : QDialog(parent, name),
@@ -357,9 +358,9 @@ void ThemesDlg::uninstall()
     kdDebug() << theme.path() << name << endl;
     if(!name.isEmpty())
     {
-        kapp->config()->deleteEntry(theme.path());
+        KGlobal::config()->deleteEntry(theme.path());
         config->setGroup("KNewStuffStatus");
-        kapp->config()->deleteEntry(name);
+        KGlobal::config()->deleteEntry(name);
     }
 }
 

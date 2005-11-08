@@ -38,7 +38,7 @@ bool KSessionManaged::saveState(QSessionManager&)
         if (QString(w->name()).startsWith("karamba"))
         {
             KarambaWidget* k = (KarambaWidget*) w;
-            openThemes += QFileInfo(k->theme().file()).absFilePath();
+            openThemes += QFileInfo(k->theme().file()).absoluteFilePath();
             k->writeConfigData();
             openThemes += ";";
         }

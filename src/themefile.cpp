@@ -65,7 +65,7 @@ public:
 
         m_zip = new KZip(zipfile);
 
-        if(!m_zip->open(IO_ReadOnly))
+        if(!m_zip->open(QIODevice::ReadOnly))
         {
             qDebug("Unable to open '%s' for reading.", zipfile.ascii());
             return;
@@ -143,7 +143,7 @@ bool ThemeFile::open()
         m_ba = m_zip->data();
         if(m_ba.size() > 0)
         {
-            m_stream = new QTextStream(m_ba, IO_ReadOnly);
+            m_stream = new QTextStream(m_ba, QIODevice::ReadOnly);
             result = true;
         }
     }
@@ -151,7 +151,7 @@ bool ThemeFile::open()
     {
         m_fl.setName(m_file);
 
-        if(m_fl.open(IO_ReadOnly|IO_Translate))
+        if(m_fl.open(QIODevice::ReadOnly|IO_Translate))
         {
             m_stream = new QTextStream(&m_fl);        // use a text stream
             result = true;
@@ -376,7 +376,7 @@ QByteArray ThemeFile::readThemeFile(const QString& filename) const
     {
         QFile file(path() + "/" + filename);
 
-        if(file.open(IO_ReadOnly))
+        if(file.open(QIODevice::ReadOnly))
         {
             ba = file.readAll();
             file.close();
@@ -391,7 +391,7 @@ bool ThemeFile::isZipFile(const QString& filename)
 {
     QFile file(filename);
 
-    if(file.open(IO_ReadOnly))
+    if(file.open(QIODevice::ReadOnly))
     {
         unsigned char buf[5];
 

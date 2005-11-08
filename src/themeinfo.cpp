@@ -42,7 +42,7 @@ ThemeInfo::ThemeInfo( const QString& deskFile, const QString& themeFile )
 {
     d = new Private;
     QFileInfo fi(deskFile);
-    d->desktopFilePath = fi.absFilePath();
+    d->desktopFilePath = fi.absoluteFilePath();
     d->desktopFile = fi.fileName();
 
     KDesktopFile df(deskFile);

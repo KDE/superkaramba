@@ -255,7 +255,7 @@ void MemSensor::readValues()
     QFile file("/proc/meminfo");
     QString line;
     meminfo="";
-    if ( file.open(IO_ReadOnly | IO_Translate) )
+    if ( file.open(QIODevice::ReadOnly | IO_Translate) )
     {
         QTextStream t( &file );        // use a text stream
         QString line;

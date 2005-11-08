@@ -43,7 +43,7 @@ Effect::Effect(ImageLabel* img, int msec)
     {
         // remove the effect after the given time
         //QTimer::singleShot (millisec, myImage, SLOT(slotEffectExpired()));
-        //timer -> changeInterval(millisec);
+        //timer -> start(millisec);
         millisec = msec;
     }
     else

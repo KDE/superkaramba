@@ -105,7 +105,7 @@ QString NoatunSensor::getTitle()
        }
        else
        {
-           QDataStream reply(&replyData, IO_ReadOnly);
+           QDataStream reply(&replyData, QIODevice::ReadOnly);
            if (replyType == "QString")
            {
                reply >> result;

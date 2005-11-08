@@ -55,7 +55,7 @@ void RssSensor::update()
     if(KIO::NetAccess::download(KURL(source), tmpFile, karambaApp->parentWindow()))
     {
         file.setName(tmpFile);
-        if ( file.open(IO_ReadOnly | IO_Translate) )
+        if ( file.open(QIODevice::ReadOnly | IO_Translate) )
         {
             if ( doc.setContent( &file ) )
             {

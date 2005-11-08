@@ -22,7 +22,7 @@ ClickMap::ClickMap(KarambaWidget* k, int x, int y, int w, int h )
         if( h != 0 || w != 0)
             clip = 0;
         else
-            clip = Qt::DontClip;
+            clip = Qt::TextDontClip;
     */
 
     if( h == 0 || w == 0)
@@ -67,7 +67,7 @@ void ClickMap::mUpdate(QPainter *p)
     while( it != displays.end() && (row <= getHeight() || getHeight() == -1 )   )
     {
         p->setPen( text.getColor() );
-        // p->drawText(x,y+i,width,height,  Qt::AlignCenter | Qt::ExpandTabs, *it);
+        // p->drawText(x,y+i,width,height,  Qt::AlignCenter | Qt::TextExpandTabs, *it);
         p->drawText(getX(), getY() + i + text.getLineHeight(), *it);
         i += text.getLineHeight();
         it++;

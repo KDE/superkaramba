@@ -21,7 +21,7 @@ TextLabel::TextLabel(KarambaWidget *k, int x,int y,int w,int h):
     if( h != 0 || w != 0)
         clip = 0;
     else
-        clip = Qt::DontClip;
+        clip = Qt::TextDontClip;
 
     if( h == 0 || w == 0)
     {
@@ -226,10 +226,10 @@ int TextLabel::drawText(QPainter *p, int x, int y, int width, int height,
     {
         p->setPen(getBGColor());
         p->drawText(x + shadow, y + shadow, width, height,
-                    alignment | clip | Qt::ExpandTabs, text);
+                    alignment | clip | Qt::TextExpandTabs, text);
     }
     p->setPen(getColor());
-    p->drawText(x, y, width, height, alignment | clip | Qt::ExpandTabs, text);
+    p->drawText(x, y, width, height, alignment | clip | Qt::TextExpandTabs, text);
     return 0;
 }
 

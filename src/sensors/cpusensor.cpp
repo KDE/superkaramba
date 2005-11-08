@@ -45,7 +45,7 @@ CPUSensor::CPUSensor(int interval )
     QFile file("/proc/stat");
     QString line;
     //creating all the fields into data
-    if ( file.open(IO_ReadOnly | IO_Translate) )
+    if ( file.open(QIODevice::ReadOnly | IO_Translate) )
     {
         QTextStream t( &file );        // use a text stream
         while( (line = t.readLine()) !=0 )
@@ -101,7 +101,7 @@ void CPUSensor::getTicks (long &u,long &s,long &n,long &i)
 #else
     QFile file("/proc/stat");
     QString line;
-    if ( file.open(IO_ReadOnly | IO_Translate) )
+    if ( file.open(QIODevice::ReadOnly | IO_Translate) )
     {
         QTextStream t( &file );        // use a text stream
         QRegExp rx( cpuNbr+"\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)");
