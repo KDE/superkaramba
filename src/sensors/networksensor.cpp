@@ -57,7 +57,7 @@ void NetworkSensor::getInOutBytes()
     qulonglong inB=0,outB=0;
     QFile file("/proc/net/dev");
     QString line;
-    if ( file.open(QIODevice::ReadOnly | IO_Translate) )
+    if ( file.open(QIODevice::ReadOnly | QIODevice::Text) )
     {
         QTextStream t( &file );        // use a text stream
         line = t.readLine();

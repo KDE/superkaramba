@@ -95,7 +95,7 @@ QString NoatunSensor::getTitle()
     /*   DCOPCString data, replyData;
        QByteArray replyType;
        QString result;
-       QDataStream arg(&data, IO_WriteOnly);
+       QDataStream arg(&data, QIODevice::WriteOnly);
        arg << 5;
        if (!client->call( noatunID, DCOPCString("Noatun"), DCOPCString("title()"),
                           data, replyType, replyData))

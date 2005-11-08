@@ -151,7 +151,7 @@ bool ThemeFile::open()
     {
         m_fl.setName(m_file);
 
-        if(m_fl.open(QIODevice::ReadOnly|IO_Translate))
+        if(m_fl.open(QIODevice::ReadOnly|QIODevice::Text))
         {
             m_stream = new QTextStream(&m_fl);        // use a text stream
             result = true;

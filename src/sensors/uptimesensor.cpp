@@ -79,7 +79,7 @@ void UptimeSensor::update()
 #else
     QFile file("/proc/uptime");
     QString line;
-    if ( file.open(QIODevice::ReadOnly | IO_Translate) )
+    if ( file.open(QIODevice::ReadOnly | QIODevice::Text) )
     {
         // file opened successfully
         QTextStream t( &file );        // use a text stream

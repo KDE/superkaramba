@@ -114,7 +114,7 @@ KarambaWidget::KarambaWidget(QString fn, bool reloading, int instance, QWidget *
     if (!QFileInfo(themeConfigFile).exists())
     {
         // Create config file
-        themeConfigFile.open(IO_ReadWrite);
+        themeConfigFile.open(QIODevice::ReadWrite);
         themeConfigFile.close();
     }
 
