@@ -133,7 +133,7 @@ PyObject* QString2PyString(QString string)
   
       delete [] buf;
     #else
-      pyString = PyUnicode_FromWideChar((Py_UNICODE*)tmp, string.length());
+      pyString = PyUnicodeUCS2_FromUnicode((Py_UNICODE*)tmp, string.length());
     #endif
   }
     
