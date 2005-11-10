@@ -117,29 +117,39 @@ QString PyString2QString(PyObject* text)
 PyObject* QString2PyString(QString string)
 {
   PyObject *pyString;
-  
+
   const unsigned short* tmp = string.ucs2();
-  
+  bool dofree = false;
+
   if(tmp)
   {
     #if Py_UNICODE_SIZE == 4
-      Py_UNICODE *buf = new Py_UNICODE[string.length()];
+
+      Py_UNICODE* buf = new Py_UNICODE[string.length()];
       
       for(unsigned int i = 0; i < string.length(); i++)
       {
         buf[i] = tmp[i];
       }
-      pyString = PyUnicode_FromWideChar(buf, string.length());
-  
-      delete [] buf;
+      dofree = true;
+
     #else
-      pyString = PyUnicodeUCS2_FromUnicode((Py_UNICODE*)tmp, string.length());
+
+      Py_UNICODE* buf = (Py_UNICODE*) tmp;
+
     #endif
+
+    pyString = PyUnicode_FromUnicode(buf, string.length());
+
+    if(dofree)
+    {
+      delete [] buf;
+    }
   }
-    
+
   else
     pyString = PyString_FromString("");
-  
+
   return pyString;
 }
 
