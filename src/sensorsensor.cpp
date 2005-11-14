@@ -8,11 +8,11 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 #include "sensorsensor.h"
-
+#include <qglobal.h>
 
 SensorSensor::SensorSensor(int interval, char tempUnit) : Sensor( interval )
 {
-#ifdef __FreeBSD__
+#if defined __FreeBSD__ || defined(Q_OS_NETBSD)
     sensorMapBSD["VCore 1"] = "VC0";
     sensorMapBSD["VCore 2"] = "VC1";
     sensorMapBSD["+3.3V"] = "V33";
@@ -53,7 +53,7 @@ void SensorSensor::processExited(KProcess *)
     QStringList stringList = QStringList::split('\n',sensorResult);
     sensorResult = "";
     QStringList::Iterator it = stringList.begin();
-#ifdef __FreeBSD__
+#if defined __FreeBSD__ || defined(Q_OS_NETBSD)
     QRegExp rx( "^(\\S+)\\s+:\\s+[\\+\\-]?(\\d+\\.?\\d*)");
 #else
     QRegExp rx( "^(.+):\\s+[\\+\\-]?(\\d+\\.?\\d*)");
@@ -90,7 +90,7 @@ void SensorSensor::processExited(KProcess *)
             format = "%v";
         }
 
-#ifdef __FreeBSD__
+#if defined __FreeBSD__ || defined(Q_OS_NETBSD)
         format.replace( QRegExp("%v", false), sensorMap[sensorMapBSD[type]]);
 #else
         format.replace( QRegExp("%v", false), sensorMap[type]);
@@ -103,7 +103,7 @@ void SensorSensor::processExited(KProcess *)
 void SensorSensor::update()
 {
     ksp.clearArguments();
-#ifdef __FreeBSD__
+#if defined __FreeBSD__ || defined(Q_OS_NETBSD)
     ksp << "mbmon -r -c 1" << extraParams;
 #else
     ksp << "sensors" << extraParams;
