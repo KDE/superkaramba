@@ -10,6 +10,7 @@
 #ifndef MEMSENSOR_H
 #define MEMSENSOR_H
 #include "sensor.h"
+#include <qglobal.h>
 #include <qstring.h>
 #include <qregexp.h>
 #include <kprocess.h>
@@ -43,21 +44,19 @@ public:
 private:
   QString meminfo;
   void readValues();
-#ifdef __FreeBSD__
+#if defined __FreeBSD__ || defined(Q_OS_NETBSD)
   int pageshift;           /* log base 2 of the pagesize */
   QString sensorResult;
   int swapTotal;
   int swapUsed;
-
-# if __FreeBSD_version < 500018
+# if (defined(__FreeBSD__) && __FreeBSD_version < 500018)
   KShellProcess ksp;
   bool MaxSet;
 
-# else
+# elif defined __FreeBSD__
   kvm_t *kd;
   kvm_swap swapinfo;
 # endif
-
 #endif
 
 private slots:

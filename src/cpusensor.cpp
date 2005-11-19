@@ -8,12 +8,20 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-#ifdef __FreeBSD__
+#include <qglobal.h>
+
+#ifdef __FreeBSD__ 
 #include <sys/time.h>
 #include <sys/dkstat.h>
 #include <sys/param.h>
 #include <sys/sysctl.h>
 #include <sys/resource.h>
+#endif
+
+#if defined(Q_OS_NETBSD)
+#include <sys/param.h>
+#include <sys/sysctl.h>
+#include <sys/sched.h>
 #endif
 
 #include "cpusensor.h"
@@ -35,13 +43,26 @@ CPUSensor::~CPUSensor()
 
 void CPUSensor::getTicks (long &u,long &s,long &n,long &i)
 {
-#ifdef __FreeBSD__
+#ifdef __FreeBSD__ 
       static long cp_time[CPUSTATES];
 
         size_t size = sizeof(cp_time);
 
       /* get the cp_time array */
       if (sysctlbyname("kern.cp_time", &cp_time, &size, NULL, 0) != -1) {
+              u = cp_time[CP_USER];
+              s = cp_time[CP_SYS] + cp_time[CP_INTR];
+              n = cp_time[CP_NICE];
+              i = cp_time[CP_IDLE];
+      }
+#else 
+#if defined(Q_OS_NETBSD)
+     static uint64_t cp_time[CPUSTATES];
+
+     size_t size = sizeof(cp_time);
+
+     /* get the cp_time array */
+     if (sysctlbyname("kern.cp_time", &cp_time, &size, NULL, 0) != -1) {
               u = cp_time[CP_USER];
               s = cp_time[CP_SYS] + cp_time[CP_INTR];
               n = cp_time[CP_NICE];
@@ -70,6 +91,7 @@ void CPUSensor::getTicks (long &u,long &s,long &n,long &i)
         i = rx.cap(4).toLong();
         file.close();
     }
+#endif
 #endif
     else
     {

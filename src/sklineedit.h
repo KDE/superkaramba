@@ -50,7 +50,6 @@ class SKLineEdit : public QLineEdit
   private:
     QColor frameColor;
     Input* m_input;
-    QString m_key;
 };
 
 #endif

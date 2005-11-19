@@ -7,7 +7,15 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
-#ifdef __FreeBSD__
+#include <qglobal.h>
+
+#if defined __FreeBSD__
+#include <sys/time.h>
+#include <sys/sysctl.h>
+#endif
+
+#if defined(Q_OS_NETBSD)
+#include <sys/param.h>
 #include <sys/time.h>
 #include <sys/sysctl.h>
 #endif
@@ -21,7 +29,7 @@ UptimeSensor::~UptimeSensor()
 
 void UptimeSensor::update()
 {
-#ifdef __FreeBSD__
+#if defined __FreeBSD__ || defined(Q_OS_NETBSD)
       struct timeval  boottime;
       time_t          now;            /* the current time of day */
 
@@ -104,7 +112,8 @@ void UptimeSensor::update()
             meter->setValue(format);
             ++it;
         }
-#ifndef __FreeBSD__
-    }
+
+#if !defined __FreeBSD__ && !defined(Q_OS_NETBSD)
+  }
 #endif
 }

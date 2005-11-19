@@ -9,6 +9,7 @@
  ***************************************************************************/
 #include "memsensor.h"
 #include <qfile.h>
+#include <qglobal.h>
 #include <qtextstream.h>
 #include <qstring.h>
 #include <qregexp.h>
@@ -22,14 +23,23 @@
 #include <kvm.h>
 #include <sys/file.h>
 #include <osreldate.h>
+#endif
 
+#if defined(Q_OS_NETBSD)
+#include <sys/param.h>
+#include <sys/sysctl.h>
+#include <sys/sched.h>
+#include <sys/swap.h>
+#endif
+
+#if defined __FreeBSD__ || defined(Q_OS_NETBSD)
 /* define pagetok in terms of pageshift */
 #define pagetok(size) ((size) << pageshift)
 #endif
 
 MemSensor::MemSensor(int msec) : Sensor(msec)
 {
-#ifdef __FreeBSD__
+#if defined __FreeBSD__ || defined(Q_OS_NETBSD)
    /* get the page size with "getpagesize" and calculate pageshift from it */
     int pagesize = getpagesize();
     pageshift = 0;
@@ -41,8 +51,7 @@ MemSensor::MemSensor(int msec) : Sensor(msec)
 
     /* we only need the amount of log(2)1024 for our conversion */
     pageshift -= 10;
-
-# if __FreeBSD_version < 500018
+# if (defined(__FreeBSD__) && __FreeBSD_version < 500018)
     connect(&ksp, SIGNAL(receivedStdout(KProcess *, char *, int )),
             this,SLOT(receivedStdout(KProcess *, char *, int )));
     connect(&ksp, SIGNAL(processExited(KProcess *)),
@@ -53,7 +62,7 @@ MemSensor::MemSensor(int msec) : Sensor(msec)
     MaxSet = false;
 
     readValues();
-# else
+# elif defined __FreeBSD__
     kd = kvm_open("/dev/null", "/dev/null", "/dev/null", O_RDONLY, "kvm_open");
 # endif
 #else
@@ -90,7 +99,7 @@ void MemSensor::processExited(KProcess *)
 
 int MemSensor::getMemTotal()
 {
-#ifdef __FreeBSD__
+#if defined __FreeBSD || defined(Q_OS_NETBSD)
     static int mem = 0;
     size_t size = sizeof(mem);
 
@@ -111,13 +120,21 @@ int MemSensor::getMemFree()
 
     sysctlbyname("vm.stats.vm.v_free_count", &mem, &size, NULL, 0);
     return (pagetok(mem));
+#elif defined(Q_OS_NETBSD)
+    struct uvmexp_sysctl uvmexp;
+    int mib[2];
+    size_t ssize;
+    mib[0] = CTL_VM;
+    mib[1] = VM_UVMEXP2;
+    ssize = sizeof(uvmexp);
+    sysctl(mib,2,&uvmexp,&ssize,NULL,0);
+    return pagetok(uvmexp.free);
 #else
     QRegExp rx( "MemFree:\\s*(\\d+)" );
     rx.search( meminfo );
     return ( rx.cap(1).toInt() );
 #endif
 }
-
 
 int MemSensor::getBuffers()
 {
@@ -127,6 +144,12 @@ int MemSensor::getBuffers()
 
     sysctlbyname("vfs.bufspace", &mem, &size, NULL, 0);
     return (mem / 1024);
+#elif defined(Q_OS_NETBSD)
+    static int buf_mem = 0;
+    size_t size = sizeof(buf_mem);
+
+    sysctlbyname("vm.bufmem", &buf_mem, &size, NULL, 0);
+    return (buf_mem / 1024);
 #else
     QRegExp rx( "Buffers:\\s*(\\d+)" );
     rx.search( meminfo );
@@ -142,6 +165,8 @@ int MemSensor::getCached()
 
     sysctlbyname("vm.stats.vm.v_cache_count", &mem, &size, NULL, 0);
     return (pagetok(mem));
+#elif defined(Q_OS_NETBSD)
+    return 0;
 #else
     QRegExp rx1( "Cached:\\s*(\\d+)" );
     QRegExp rx2( "SwapCached:\\s*(\\d+)" );
@@ -172,6 +197,21 @@ int MemSensor::getSwapTotal()
 
     return(retavail);
 # endif
+#elif defined(Q_OS_NETBSD)
+    struct uvmexp_sysctl uvmexp;
+    int STotal = 0;
+    int pagesize = 1;
+    int mib[2];
+    size_t ssize;
+    mib[0] = CTL_VM;
+    mib[1] = VM_UVMEXP;
+    ssize = sizeof(uvmexp);
+
+    if (sysctl(mib,2,&uvmexp,&ssize,NULL,0) != -1) {
+	pagesize = uvmexp.pagesize;
+	STotal = (pagesize*uvmexp.swpages) >> 10;
+    }
+    return STotal;
 #else
     QRegExp rx( "SwapTotal:\\s*(\\d+)" );
     rx.search( meminfo );
@@ -198,6 +238,25 @@ int MemSensor::getSwapFree()
 
     return(retfree);
 # endif
+#elif defined(Q_OS_NETBSD)
+    struct uvmexp_sysctl uvmexp;
+    int STotal = 0;
+    int SFree = 0;
+    int SUsed = 0;
+    int pagesize = 1;
+    int mib[2];
+    size_t ssize;
+    mib[0] = CTL_VM;
+    mib[1] = VM_UVMEXP;
+    ssize = sizeof(uvmexp);
+
+    if (sysctl(mib,2,&uvmexp,&ssize,NULL,0) != -1) {
+	pagesize = uvmexp.pagesize;
+	STotal = (pagesize*uvmexp.swpages) >> 10;
+	SUsed = (pagesize*uvmexp.swpginuse) >> 10;
+	SFree = STotal - SUsed;
+    }
+    return SFree;
 #else
     QRegExp rx( "SwapFree:\\s*(\\d+)" );
     rx.search( meminfo );
@@ -207,8 +266,8 @@ int MemSensor::getSwapFree()
 
 void MemSensor::readValues()
 {
-#ifdef __FreeBSD__
-# if __FreeBSD_version < 500018
+#if defined __FreeBSD__ || defined(Q_OS_NETBSD)
+# if (defined(__FreeBSD__) && __FreeBSD_version < 500018)
     ksp.clearArguments();
     ksp << "swapinfo";
     ksp.start( KProcess::NotifyOnExit,KProcIO::Stdout);
@@ -235,7 +294,6 @@ void MemSensor::update()
 #if (defined(__FreeBSD__) && __FreeBSD_version < 500018)
     bool set = false;
 #endif
-
     int totalMem = getMemTotal();
     int usedMem = totalMem - getMemFree();
     int usedMemNoBuffers =  usedMem - getBuffers() - getCached();
@@ -277,7 +335,6 @@ void MemSensor::update()
     if (set)
         MaxSet = true;
 #endif
-
 }
 
 void MemSensor::setMaxValue( SensorParams *sp )

@@ -119,21 +119,40 @@ PyObject* QString2PyString(QString string)
   PyObject *pyString;
 
   const unsigned short* tmp = string.ucs2();
-  Py_UNICODE *buf = new Py_UNICODE[string.length()];
-  for(unsigned int i = 0; i < string.length(); i++)
-  {
-    buf[i] = tmp[i];
-  }
-  
+  bool dofree = false;
+
   if(tmp)
-    pyString = PyUnicode_FromWideChar(buf, string.length());
+  {
+    #if Py_UNICODE_SIZE == 4
+
+      Py_UNICODE* buf = new Py_UNICODE[string.length()];
+      
+      for(unsigned int i = 0; i < string.length(); i++)
+      {
+        buf[i] = tmp[i];
+      }
+      dofree = true;
+
+    #else
+
+      Py_UNICODE* buf = (Py_UNICODE*) tmp;
+
+    #endif
+
+    pyString = PyUnicode_FromUnicode(buf, string.length());
+
+    if(dofree)
+    {
+      delete [] buf;
+    }
+  }
+
   else
     pyString = PyString_FromString("");
-  
-  delete [] buf;
 
   return pyString;
 }
+
 
 long getMeter(long widget, char* name)
 {

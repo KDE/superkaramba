@@ -27,6 +27,7 @@
 #endif
 
 #include <Python.h>
+#include <qglobal.h>
 #include <qobject.h>
 #include "kdebug.h"
 #include "karamba.h"
@@ -427,7 +428,9 @@ PyObject* py_hide(PyObject *, PyObject *args)
 #ifdef __FreeBSD__
 #include <netinet/in.h>
 #endif
-
+#if defined(Q_OS_SOLARIS)
+#include <sys/sockio.h>
+#endif
 /* now a method we need to expose to Python */
 QString getIp(char *device_name)
 {
