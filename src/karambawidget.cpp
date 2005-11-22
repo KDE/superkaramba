@@ -887,6 +887,7 @@ void KarambaWidget::editScript()
 // {
 //     //qDebug("KarambaWidget::findSensorFromList");
 //     return meter->getSensor();
+ 	return "";
  }
 // 
  QString KarambaWidget::getSensor(Meter* meter)
@@ -897,6 +898,7 @@ void KarambaWidget::editScript()
 //     if(sensor)
 //         s = findSensorFromMap(sensor);
 //     return s;
+	return QString::null;
  }
 
 void KarambaWidget::deleteMeterFromSensors(Meter* meter)
