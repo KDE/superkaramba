@@ -373,6 +373,7 @@ void ThemesDlg::uninstall()
     kapp->config()->deleteEntry(name);
   }
 #endif
+  selectionChanged(tableThemes->selected());
 }
 
 QStringList ThemesDlg::runningThemes()
