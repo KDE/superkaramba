@@ -362,6 +362,7 @@ void ThemesDlg::uninstall()
         config->setGroup("KNewStuffStatus");
         KGlobal::config()->deleteEntry(name);
     }
+	selectionChanged(tableThemes->selected());
 }
 
 QStringList ThemesDlg::runningThemes()
