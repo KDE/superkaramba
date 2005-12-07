@@ -1,5 +1,5 @@
 #!/usr/bin/python
-# -*- coding: latin-1 -*-
+# -*- coding: utf-8 -*-
 #this import statement allows access to the karamba functions
 import karamba
 
@@ -27,7 +27,7 @@ def widgetUpdated(widget):
     global texts, b, a
 
     b = (b+1)%2
-    text = "Unicode text: ƒht‰riss‰ on ÷ljy‰"
+    text = "Unicode text: √Ñht√§riss√§ on √ñljy√§"
 
     # Create & delete
     if(texts[0]):
