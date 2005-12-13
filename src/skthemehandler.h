@@ -38,6 +38,7 @@ public:
     //bool notationDecl(const QString& name, const QString& publicId, const QString& systemId);
     //bool unparsedEntityDecl(const QString& name, const QString& publicId, const QString& systemId, const QString& notationName);
     QString errorString() const;
+    bool fatalError(const QXmlParseException& exception);
 
 private:
     bool parseMeterAttributes(const QXmlAttributes& attributes);

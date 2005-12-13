@@ -111,6 +111,15 @@ QString SKThemeHandler::errorString() const
     return error;
 }
 
+bool SKThemeHandler::fatalError (const QXmlParseException & exception)
+{
+  kdDebug() << "Fatal error on line: " << exception.lineNumber()
+            << ", column: " << exception.columnNumber() << " : "
+            << exception.message() << endl;
+
+  return false;
+}
+
 bool SKThemeHandler::parseMeterAttributes(const QXmlAttributes& attr)
 {
     if(m_meter)

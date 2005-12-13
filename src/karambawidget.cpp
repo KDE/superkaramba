@@ -347,16 +347,16 @@ bool KarambaWidget::parseConfig()
     SKThemeHandler handler(this);
     parser.setContentHandler(&handler);
     parser.setErrorHandler(&handler);
-    kdDebug() << "1 parseconfig" << endl;
+    kdDebug() << "1 parseconfig " << file.fileName() << endl;
     bool ret= parser.parse(&source, false);
     if(ret)
     {
-        kdDebug() << "success" <<endl;
+        kdDebug() << "xml parsing success" <<endl;
         return ret;
     }
     else
     {
-        kdDebug() << "failure" << endl;
+        kdDebug() << "xml parsing failure" << endl;
         return ret;
     }
 //     if(m_theme.open())
