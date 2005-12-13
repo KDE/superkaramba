@@ -42,14 +42,14 @@ public:
     Meter(KarambaWidget* k, int ix,int iy,int iw,int ih);
     Meter(KarambaWidget* k);
     virtual ~Meter();
-    virtual int getX() const;
-    virtual int getY() const;
+//     virtual int getX() const;
+//     virtual int getY() const;
 //     virtual int getWidth() const;
 //     virtual int getHeight() const;
 //     virtual void setX(int);
 //     virtual void setY(int);
-     virtual void setWidth(int);
-     virtual void setHeight(int);
+//     virtual void setWidth(int);
+//     virtual void setHeight(int);
 
 //     virtual void setSize(int ix, int iy, int iw, int ih);
 

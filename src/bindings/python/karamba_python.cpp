@@ -386,7 +386,6 @@ void KarambaPython::initPython()
 
 void KarambaPython::shutdownPython()
 {
-    kdDebug() << "shutting down python" << endl;
     // shut down the interpreter
     PyInterpreterState * mainInterpreterState = mainThreadState->interp;
     // create a thread state object for this thread
@@ -394,7 +393,6 @@ void KarambaPython::shutdownPython()
     PyThreadState_Swap(myThreadState);
     PyEval_AcquireLock();
     Py_Finalize();
-    kdDebug() << "python finalized" << endl;
 }
 
 void KarambaPython::getLock(PyThreadState** myThreadState)
