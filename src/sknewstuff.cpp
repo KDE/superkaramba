@@ -23,6 +23,7 @@
 #include <kfilemetainfo.h>
 #include <kio/netaccess.h>
 #include <kmimetype.h>
+#include <krun.h>
 #include <kstandarddirs.h>
 #include <ktar.h>
 #include <kurl.h>
@@ -132,8 +133,15 @@ bool SKNewStuff::createUploadFile( const QString &fileName )
 QString SKNewStuff::downloadDestination( KNS::Entry *entry )
 {
   KURL source = entry->payload();
-  kdDebug() << "SKNewStuff::downloadDestination() fileName: "
-    << source.fileName() << endl;
+  kdDebug() << "SKNewStuff::downloadDestination() url: "
+    << source.url() <<  " fileName: " << source.fileName() << endl;
+  QString file(source.fileName());
+  if ( file.isEmpty() )
+  {
+    kdDebug() << "the file was empty, this must be a direct URL" << endl;
+    KRun::runURL( source, "text/html");
+    return file;
+  }
   return KGlobal::dirs()->saveLocation( "tmp" ) + source.fileName();
 }
 #endif //KDE_3_3
