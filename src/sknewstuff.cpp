@@ -138,7 +138,8 @@ QString SKNewStuff::downloadDestination( KNS::Entry *entry )
   QString file(source.fileName());
   if ( file.isEmpty() )
   {
-    kdDebug() << "the file was empty, this must be a direct URL" << endl;
+    kdDebug() << "The file was empty. " << source.url() << 
+      " must be a direct URL" << endl;
     KRun::runURL( source, "text/html");
     return file;
   }
