@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=SuperKaramba
+Name[is]=SúperKaramba
 Name[sr]=СуперКарамба
 Exec=superkaramba %U
 Icon=superkaramba
@@ -18,6 +19,7 @@ Comment[et]=Töölaua lahedate vidinate mootor.
 Comment[eu]=Mahaigaineko efektu politentzako euskarri bat.
 Comment[fr]=Un moteur de bureau esthétique et sympathique
 Comment[hu]=Keretrendszer grafikus asztali elemek használatához.
+Comment[is]=Flottar skjáborðsviðbætur.
 Comment[it]=Un motore per rendere il desktop più gradevole.
 Comment[ja]=格好いいデスクトップ eyecandy エンジン。
 Comment[lt]=Šaunių darbastalio papuošimų priedas.
@@ -45,6 +47,7 @@ GenericName[et]=Töölauavidinad
 GenericName[eu]=Mahaigaineko trepetak
 GenericName[fr]=Éléments graphiques pour le bureau
 GenericName[hu]=Asztali programelemek
+GenericName[is]=Skjáborðshlutir
 GenericName[it]=Elementi desktop
 GenericName[ja]=デスクトップウィジェット
 GenericName[lt]=Darbastalio valdikliai
