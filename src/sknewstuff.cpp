@@ -111,9 +111,14 @@ bool SKNewStuff::install( const QString &fileName )
     KIO::NetAccess::removeTempFile( sourceFile.url() );
     mDlg->newSkzTheme(destFile.path());
   }
-  else if(result->name() == "plaint/text")
+  else if(result->name() == "plain/text")
   {
     kdDebug() << "SKNewStuff::install() plain text" << endl;
+  }
+  else if(result->name() == "text/html")
+  {
+    kdDebug() << "SKNewStuff::install() text/html" << endl;
+    KRun::runURL( m_sourceLink, "text/html");
   }
   else
   {
@@ -133,13 +138,15 @@ bool SKNewStuff::createUploadFile( const QString &fileName )
 QString SKNewStuff::downloadDestination( KNS::Entry *entry )
 {
   KURL source = entry->payload();
+  m_sourceLink = source;
+
   kdDebug() << "SKNewStuff::downloadDestination() url: "
     << source.url() <<  " fileName: " << source.fileName() << endl;
   QString file(source.fileName());
   if ( file.isEmpty() )
   {
     kdDebug() << "The file was empty. " << source.url() << 
-      " must be a direct URL" << endl;
+      " must be a URL link." << endl;
     KRun::runURL( source, "text/html");
     return file;
   }

@@ -21,6 +21,7 @@
 #ifndef SKNEWSTUFF_H
 #define SKNEWSTUFF_H
 
+#include <kurl.h>
 #include "karambaapp.h"
 #ifdef KDE_3_3
 #include "knewstuff/knewstuff.h"
@@ -44,6 +45,7 @@ class SKNewStuff : public KNewStuff
 
   private:
     ThemesDlg *mDlg;
+    KURL m_sourceLink;
 };
 
 #endif //SKNEWSTUFF_H
