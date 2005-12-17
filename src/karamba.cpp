@@ -457,7 +457,6 @@ bool karamba::parseConfig()
           toggleLocked->setChecked( true );
           slotToggleLocked();
           toggleLocked->setEnabled(false);
-
         }
 
         if(lineParser.getBoolean("BOTTOMBAR"))
@@ -743,7 +742,7 @@ bool karamba::parseConfig()
     {
       // Matthew Kay: set window type to "dock"
       // (plays better with taskbar themes this way)
-      KWin::setType(winId(), NET::Dock);
+      KWin::setType(winId(), NET::Normal);
 
       #if defined(KDE_MAKE_VERSION)
         #if KDE_VERSION >= KDE_MAKE_VERSION(3,1,9)
@@ -810,7 +809,7 @@ void karamba::makePassive()
 
   // Matthew Kay: set window type to "dock" (plays better with taskbar themes
   // this way)
-  KWin::setType(winId(), NET::Dock);
+  KWin::setType(winId(), NET::Normal);
 
   #if defined(KDE_MAKE_VERSION)
     #if KDE_VERSION >= KDE_MAKE_VERSION(3,1,9)
