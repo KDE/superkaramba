@@ -25,7 +25,11 @@
 #include "kwidgetlistbox.h"
 #include "karamba.h"
 
-#ifdef KDE_3_3
+#ifdef HAVE_CONFIG_H
+  #include <config.h>
+#endif
+
+#ifdef HAVE_KNEWSTUFF
   #include "sknewstuff.h"
 #endif
 
@@ -49,7 +53,7 @@ ThemesDlg::ThemesDlg(QWidget *parent, const char *name)
  : ThemesLayout(parent, name)
 {
   populateListbox();
-#ifdef KDE_3_3
+#ifdef HAVE_KNEWSTUFF
   mNewStuff = 0;
 #endif
 }
@@ -58,7 +62,7 @@ ThemesDlg::~ThemesDlg()
 {
   //kdDebug() << k_funcinfo << endl;
   saveUserAddedThemes();
-#ifdef KDE_3_3
+#ifdef HAVE_KNEWSTUFF
   if(mNewStuff)
   {
     delete mNewStuff;
@@ -126,7 +130,7 @@ void ThemesDlg::populateListbox()
   item->setDescriptionText(i18n("Download new themes."));
 
   item->buttonGo->setText(i18n("New Stuff..."));
-#ifdef KDE_3_3
+#ifdef HAVE_KNEWSTUFF
   item->buttonGo->setEnabled(true);
   connect(item->buttonGo, SIGNAL(clicked()),
           this, SLOT(getNewStuff()));
@@ -210,7 +214,7 @@ void ThemesDlg::openLocalTheme()
 
 void ThemesDlg::getNewStuff()
 {
-#ifdef KDE_3_3
+#ifdef HAVE_KNEWSTUFF
   KConfig* config = KGlobal::config();
   config->setGroup("KNewStuff");
   config->writeEntry("ProvidersUrl",
@@ -260,7 +264,7 @@ void ThemesDlg::newSkzTheme(const QString &file)
 {
   addThemeToList(file);
 
-#ifdef KDE_3_3
+#ifdef HAVE_KNEWSTUFF
   KConfig* config = KGlobal::config();
   QStringList keys = config->entryMap("KNewStuffStatus").keys();
 
@@ -359,7 +363,7 @@ void ThemesDlg::uninstall()
     trash = KGlobalSettings::trashPath();
   KIO::move(theme, trash);
   tableThemes->removeItem(w);
-#ifdef KDE_3_3
+#ifdef HAVE_KNEWSTUFF
   // Remove theme from KNewStuffStatus
   KConfig* config = KGlobal::config();
 

@@ -30,9 +30,13 @@
 #include <qdir.h>
 #include <qfileinfo.h>
 
+#ifdef HAVE_CONFIG_H
+  #include <config.h>
+#endif
+
 #include "karambaapp.h"
 #include "themesdlg.h"
-#ifdef KDE_3_3
+#ifdef HAVE_KNEWSTUFF
 #include "sknewstuff.h"
 
 SKNewStuff::SKNewStuff( ThemesDlg *dlg ) :
@@ -152,4 +156,4 @@ QString SKNewStuff::downloadDestination( KNS::Entry *entry )
   }
   return KGlobal::dirs()->saveLocation( "tmp" ) + source.fileName();
 }
-#endif //KDE_3_3
+#endif //HAVE_KNEWSTUFF

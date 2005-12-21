@@ -24,10 +24,14 @@
 #include <themes_layout.h>
 #include "karambaapp.h"
 
+#ifdef HAVE_CONFIG_H
+  #include <config.h>
+#endif
+
 /**
 @author See README for the list of authors
 */
-#ifdef KDE_3_3
+#ifdef HAVE_KNEWSTUFF
 class SKNewStuff;
 #endif
 
@@ -60,7 +64,7 @@ class ThemesDlg : public ThemesLayout
     int themeIndex(QString file);
     QStringList themes();
 
-#ifdef KDE_3_3
+#ifdef HAVE_KNEWSTUFF
   private:
     SKNewStuff *mNewStuff;
     QStringList m_newStuffStatus;

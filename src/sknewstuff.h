@@ -23,7 +23,12 @@
 
 #include <kurl.h>
 #include "karambaapp.h"
-#ifdef KDE_3_3
+
+#ifdef HAVE_CONFIG_H
+  #include <config.h>
+#endif
+
+#ifdef HAVE_KNEWSTUFF
 #include "knewstuff/knewstuff.h"
 #include "knewstuff/entry.h"
 
@@ -49,4 +54,4 @@ class SKNewStuff : public KNewStuff
 };
 
 #endif //SKNEWSTUFF_H
-#endif //KDE_3_3
+#endif //HAVE_KNEWSTUFF

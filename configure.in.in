@@ -63,8 +63,12 @@ AC_SUBST(XMMS_LIBS)
 AC_SUBST(XMMS_LDFLAGS)
 AC_SUBST(XMMS_INCLUDES)
 
-KDE_CHECK_LIB(knewstuff, main, [MY_LIBKNEWSTUFF="-lknewstuff"])
-AC_SUBST(MY_LIBKNEWSTUFF)
+kde_have_knewstuff=yes
+KDE_CHECK_LIB(knewstuff, main, [MY_LIBKNEWSTUFF="-lknewstuff"], kde_have_knewstuff=no)
+if test "$kde_have_knewstuff" = "yes"; then
+  AC_DEFINE(HAVE_KNEWSTUFF, 1, [Define if you have knewstuff])
+  AC_SUBST(MY_LIBKNEWSTUFF)
+fi
 
 AC_CHECK_LIB(kvm, main, [LIBKVM="-lkvm"])
 AC_SUBST(LIBKVM)
