@@ -358,25 +358,35 @@ void ThemesDlg::uninstall()
   KURL trash("trash:/");
   KURL theme(tf->file());
 
-  karambaApp->dcopIface()->closeTheme(tf->name());
-  if(!KProtocolInfo::isKnownProtocol(trash))
-    trash = KGlobalSettings::trashPath();
-  KIO::move(theme, trash);
-  tableThemes->removeItem(w);
-#ifdef HAVE_KNEWSTUFF
-  // Remove theme from KNewStuffStatus
-  KConfig* config = KGlobal::config();
-
-  config->setGroup("KNewStuffNames");
-  QString name = config->readEntry(theme.path());
-  kdDebug() << theme.path() << name << endl;
-  if(!name.isEmpty())
+  if(!tf->isZipTheme())
   {
-    kapp->config()->deleteEntry(theme.path());
-    config->setGroup("KNewStuffStatus");
-    kapp->config()->deleteEntry(name);
+    kdDebug() << "removing " << tf->name() << " from the theme dialog" << endl;
+    karambaApp->dcopIface()->closeTheme(tf->name());
+    tableThemes->removeItem(w);
   }
+  else
+  {
+    karambaApp->dcopIface()->closeTheme(tf->name());
+    if(!KProtocolInfo::isKnownProtocol(trash))
+      trash = KGlobalSettings::trashPath();
+    kdDebug() << "moving " << theme.fileName() << " to the trash" << endl;
+    KIO::move(theme, trash);
+    tableThemes->removeItem(w);
+#ifdef HAVE_KNEWSTUFF
+    // Remove theme from KNewStuffStatus
+    KConfig* config = KGlobal::config();
+
+    config->setGroup("KNewStuffNames");
+    QString name = config->readEntry(theme.path());
+    kdDebug() << theme.path() << name << endl;
+    if(!name.isEmpty())
+    {
+      kapp->config()->deleteEntry(theme.path());
+      config->setGroup("KNewStuffStatus");
+      kapp->config()->deleteEntry(name);
+    }
 #endif
+  }
   selectionChanged(tableThemes->selected());
 }
 
