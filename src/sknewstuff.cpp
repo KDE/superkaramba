@@ -48,6 +48,7 @@ SKNewStuff::SKNewStuff( ThemesDlg *dlg ) :
 void SKNewStuff::addThemes(const KArchiveDirectory *archiveDir,
                            const QString& destDir)
 {
+  kdDebug() << "SKNewStuff::addThemes(): destDir = " << destDir << endl;
   QStringList entries = archiveDir->entries();
 
   QStringList::Iterator end( entries.end() );
@@ -61,8 +62,10 @@ void SKNewStuff::addThemes(const KArchiveDirectory *archiveDir,
     else
     {
       QFileInfo fi(*it);
-      if(fi.extension() == "theme")
+      if(fi.extension( FALSE ) == "theme")
       {
+        kdDebug() << "SKNewStuff::addThemes(): theme " << *it 
+                  << "added to theme dialog" << endl;
         mDlg->addThemeToList(destDir + *it);
       }
     }
