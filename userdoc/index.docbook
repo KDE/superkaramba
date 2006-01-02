@@ -1,0 +1,261 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN"
+"dtd/kdex.dtd" [
+  <!ENTITY superkaramba "<application>SuperKaramba</application>">
+  <!ENTITY kappname "&superkaramba;">
+  <!ENTITY packagename "kdeutils">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % English "INCLUDE" > <!-- change language only here -->   
+]>
+<book lang="&language;">
+
+<bookinfo>
+<title>The &superkaramba; Handbook</title>
+<authorgroup>
+<author>
+<personname><firstname>Hans</firstname>
+<surname>Karlsson</surname></personname>
+<email>karlsson.h@home.se</email>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+
+<copyright>
+<year>2005</year>
+<holder>Hans Karlsson</holder>
+</copyright>
+
+<date>2005-08-04</date>
+<releaseinfo>0.3.5</releaseinfo>
+<legalnotice>&FDLNotice;</legalnotice>
+
+<abstract>
+<para>&superkaramba; is a tool that allows you to easily create interactive
+widgets on your &kde; desktop.</para>
+</abstract>
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>desktop</keyword>
+<keyword>karamba</keyword>
+</keywordset>
+</bookinfo>
+
+<!-- FIXME: Needs writing, but can't have empty elements in translateable -->
+<!-- documents.  Uncomment only when there is content -->
+<!--
+<chapter id="introduction">
+<title>Quickstart</title>
+
+<para> </para>
+
+</chapter>
+
+
+<chapter id="using-karamba">
+<title>Using &superkaramba;</title>
+<para>How to use &superkaramba;</para>
+</chapter>
+
+-->
+
+<chapter id="questionsanswersandtips">
+<title>Questions, Answers, and Tips</title>
+
+<qandaset id="faq">
+<title>Frequently asked questions</title>
+<qandadiv>
+<title>Installation</title>
+<qandaentry>
+<question>
+<para>Where can I find &superkaramba; <acronym>RPM</acronym>'s?</para>
+</question>
+<answer>
+<!-- FIXME: Now part of KDE, this should point users at their distribution -->
+<!-- for the next release -->
+<para>The SuperKaramba web site (http://netdragon.sourceforge.net) has a list of user-submitted RPMs for several distributions. Other user-subm
+itted RPMs have been posted to kde-look.org and to the SuperKaramba Help
+forum.</para>
+</answer>
+</qandaentry>
+<qandaentry>
+<question><para>When I try to compile, I get this error:</para>
+<screen><computeroutput>Python.h: No such file or directory</computeroutput></screen>
+</question>
+<answer><para>You will need to install the <literal>python-devel</literal>
+package.  Once that package is installed you should run
+<command>./configure</command> and <command>make</command> again.</para>
+</answer>
+</qandaentry>
+<qandaentry>
+<question><para>When I try to compile, I get this error:</para>
+<screen><computeroutput>cannot find -lselinux</computeroutput></screen>
+</question>
+<answer>
+<para>You will need to install the <literal>libselinux-devel</literal>
+package. Once that package is installed you should run
+<command>./configure</command> and <command>make</command> again.</para>
+</answer>
+</qandaentry>
+<qandaentry>
+<question>
+<para>After running <command>./configure</command>, <command>make</command>
+and <command>make install</command>, the &superkaramba; executable is not
+where I expected it to be. When I try to run <command>superkaramba</command>
+from the command line it says <computeroutput>command not
+found</computeroutput>.</para>
+</question>
+<answer>
+<para>In some distributions ./configure has a default prefix path that
+differs to what you might expect. For example, in Mandrake the default
+prefix is <filename class="directory">/usr/local/kde</filename> and the
+executable is installed in <filename
+class="directory">/usr/local/kde/bin</filename>.</para>
+<para>There are a few things you can do to fix this.</para>
+<para>You could run <command>./configure
+<parameter>--prefix=/usr</parameter></command> to specify the prefix that
+you prefer and then try <command>make</command> and <command>make
+install</command> again. Or you could create a symbolic link in your
+preferred directory that links to the executable. Or you could add the
+install directory to your $<envar>PATH</envar>.</para>
+</answer>
+</qandaentry>
+</qandadiv>
+
+<qandadiv>
+<title>General</title>
+<qandaentry>
+<question>
+<para>How do I get rid of the &kde; panel? Do I have to keep &kicker;
+running?</para>
+</question>
+<answer><para>Many themes depend on &kicker; and will not work well without
+it. If you don't want &kicker; to show on your desktop, you can set it to
+auto-hide. Another solution is to change the auto-hide setting in a
+<filename>~/.kde</filename> file. For more information see the wiki page about
+<ulink
+url="http://wiki.kdenews.org/tiki-print.php?page=Secret+Config+Settings">secret
+configuration settings</ulink>.</para>
+</answer>
+</qandaentry>
+<qandaentry>
+<question>
+<para>Can I run a system tray theme while the &kicker; system tray is
+running?</para>
+</question>
+<answer><para>It's better not to. If you run a theme with a SysTray on it
+while a regular kicker systray is running, the theme will
+<quote>steal</quote> all the icons from the first systray.  This is because
+in &kde; and Gnome, the systray icons are really little windows and there is
+only one copy of each running. If you want to run a system tray theme, you can
+remove the system tray from &kicker;.</para> 
+</answer>
+</qandaentry>
+<qandaentry>
+<question>
+<para>How do I set up my themes to run automatically on startup?</para>
+</question>
+<answer>
+<para>Turn on &kde; session support in the &kcontrolcenter;. When session
+support is enabled, any theme that is left running when you logout will
+automatically start on startup. For some themes you will also need to &RMB;
+click and reload the theme at least once after running it so that the config
+file will get written to your home directory.</para>
+<para>Another solution is to create a desktop config file in the &kde;
+autostart directory.</para> 
+<para>To create a desktop config file, open an editor and enter the
+following:</para>
+<screen><userinput>[Desktop Entry]
+Exec=superkaramba {location of theme file}.theme
+Name={theme name}
+Type=Application
+X-KDE-StartupNotify=false</userinput></screen>
+<para>Then save it as
+<filename><replaceable>themename</replaceable>.desktop</filename> into the
+autostart directory at <filename
+class="directory">$<envar>KDEHOME</envar>/Autostart/</filename>.</para>
+</answer>
+</qandaentry>
+<qandaentry>
+<question><para>Why is the <guimenuitem>Edit Script</guimenuitem> option
+disabled when I &RMB; click on a theme?</para></question>
+<answer><para>Some &superkaramba; themes don't include a
+<application>Python</application> script. This is normal and those themes
+will still work fine without one. However, if the theme does use a
+<application>Python</application> script, &superkaramba; may have not been
+able to load the script. This is usually due to
+<application>Python</application> errors. Run the theme from the command line
+to find out the specific error message.</para>
+</answer>
+</qandaentry>
+<qandaentry>
+<question>
+<para>Why is the <guimenuitem>Configure Theme</guimenuitem> menu disabled
+when I &RMB; click on a theme?</para>
+</question>
+<answer>
+<para>The <guimenuitem>Configure Theme</guimenuitem> menu is only enabled if
+the theme has added options to it. Some themes do not have any configuration
+options or use a different configuration method.</para>
+</answer>
+</qandaentry>
+</qandadiv>
+
+<qandadiv>
+<title>Troubleshooting</title>
+<qandaentry>
+<question>
+<para>My themes start up in different locations each time I start
+&kde;.</para>
+</question>
+<answer>
+<para>Close all &superkaramba; themes and then delete any session files in
+<filename
+class="directory">$<envar>KDEHOME</envar>/share/config/session/</filename>
+that begin with &superkaramba;. Restart &kde; and start your themes again. Now
+they will stay in the right place.</para> 
+</answer>
+</qandaentry>
+<qandaentry>
+<question>
+<para>The backgrounds of my themes are black instead of transparent.</para>
+</question>
+<answer><para>In &kde;, transparency only works when the desktop background
+is a wallpaper image that is centered or scaled. If the background is a
+plain color or a tiled image then &superkaramba; themes will not be
+transparent. In Gnome, there is a known issue that themes will have a black
+background even when a wallpaper is set.  Unfortunately there is no current
+solution. Your theme should work fine otherwise.</para>
+</answer>
+</qandaentry>
+</qandadiv>
+</qandaset>
+
+</chapter>
+
+<chapter>
+<title>Credits and Licenses</title>
+
+<para>&superkaramba; is written by
+<personname><firstname>Adam</firstname><surname>Geitgey</surname></personname>
+<email>adam@rootnode.org</email> and
+<personname><firstname>Hans</firstname><surname>Karlsson</surname></personname> <email>karlsson.h@home.se</email></para>
+
+<!-- FIXME: Add other contributors here, probably in an itemized list, look -->
+<!-- at say, konqueror-credits for an example -->
+
+<!-- TRANS:CREDIT_FOR_TRANSLATORS -->
+
+&underFDL;
+&underGPL;
+
+</chapter>
+
+</book>
+<!--
+Local Variables:
+mode: sgml
+sgml-omittag: nil
+sgml-shorttag: t
+sgml-general-insert-case: lower
+End:
+-->
