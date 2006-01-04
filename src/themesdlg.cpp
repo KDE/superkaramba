@@ -354,7 +354,7 @@ void ThemesDlg::uninstall()
     KConfig* config = KGlobal::config();
 
     config->setGroup("KNewStuffNames");
-    QString name = config->readEntry(theme.path());
+    QString name = config->readEntry(theme.path(),QString());
     kdDebug() << theme.path() << name << endl;
     if(!name.isEmpty())
     {

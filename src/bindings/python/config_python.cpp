@@ -159,7 +159,7 @@ QVariant readConfigEntry(long widget, QString key)
     KarambaWidget* currTheme = (KarambaWidget*)widget;
 
     currTheme->config->setGroup("theme");
-    return currTheme->config->readEntry(key);
+    return currTheme->config->readEntry(key,QString());
 }
 
 PyObject* py_read_config_entry(PyObject *, PyObject *args)
