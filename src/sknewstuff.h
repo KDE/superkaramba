@@ -53,5 +53,5 @@ class SKNewStuff : public KNewStuff
     KURL m_sourceLink;
 };
 
-#endif //SKNEWSTUFF_H
 #endif //HAVE_KNEWSTUFF
+#endif //SKNEWSTUFF_H
