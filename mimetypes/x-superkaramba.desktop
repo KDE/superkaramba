@@ -1,15 +1,6 @@
 [Desktop Entry]
 Comment=Superkaramba Theme File
-Comment[br]=Restr giz Superkaramba
-Comment[cs]=Soubor Superkaramba motivu
-Comment[el]=Αρχείο θέματος του Superkaramba
-Comment[es]=Archivo de tema de Superkaramba
-Comment[it]=File di tema Superkaramba
-Comment[pt_BR]=Arquivo de Tema do Superkaramba
-Comment[sr]=Фајл теме СуперКарамбе
-Comment[sr@Latn]=Фајл теме СуперКарамбе
-Comment[xx]=xxSuperkaramba Theme Filexx
-Comment[zh_CN]=Superkaramba 主题文件
+Comment[x-test]=xxSuperkaramba Theme Filexx
 DefaultApp=superkaramba
 Icon=superkaramba_theme
 MimeType=application/x-superkaramba
