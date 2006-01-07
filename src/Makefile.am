@@ -30,7 +30,7 @@ METASOURCES = AUTO
 
 messages: rc.cpp
 	$(EXTRACTRC) *.ui >> rc.cpp
-	$(XGETTEXT) sensors/*.cpp libpython/*.cpp *.cpp -o $(podir)/superkaramba.pot
+	$(XGETTEXT) sensors/*.cpp bindings/python/*.cpp *.cpp -o $(podir)/superkaramba.pot
 
 # this is where the desktop file will go
 shelldesktopdir = $(kde_appsdir)/Utilities
