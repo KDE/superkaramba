@@ -44,10 +44,6 @@ class SKNewStuff : public KNewStuff
     bool createUploadFile( const QString &fileName );
     QString downloadDestination( KNS::Entry *entry );
 
-  protected:
-    void addThemes(const KArchiveDirectory *archiveDir,
-                   const QString& destDir);
-
   private:
     ThemesDlg *mDlg;
     KURL m_sourceLink;

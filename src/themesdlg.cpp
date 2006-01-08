@@ -34,6 +34,7 @@
 #endif
 
 #include "superkarambasettings.h"
+#include <karchive.h>
 #include <kdebug.h>
 #include <kfiledialog.h>
 #include <kpushbutton.h>
@@ -46,6 +47,7 @@
 #include <qdir.h>
 #include <qlabel.h>
 #include <qcombobox.h>
+#include <qptrlist.h>
 #include <kio/job.h>
 #include <kprotocolinfo.h>
 
@@ -260,10 +262,41 @@ int ThemesDlg::themeIndex(QString file)
   return -1;
 }
 
-void ThemesDlg::newSkzTheme(const QString &file)
+void ThemesDlg::addSkzThemeToDialog(const QString &file)
 {
+  kdDebug() << "addSkzThemeToDialog(): file = " << file << endl;
   addThemeToList(file);
+  writeNewStuffConfig(file);
+}
 
+void ThemesDlg::addThemeToDialog(const KArchiveDirectory *archiveDir,
+                           const QString& destDir)
+{
+  kdDebug() << "addThemeToDialog(): destDir = " << destDir << endl;
+  QStringList entries = archiveDir->entries();
+
+  QStringList::Iterator end( entries.end() );
+  for(QStringList::Iterator it = entries.begin(); it != end; ++it)
+  {
+    if(archiveDir->entry(*it)->isDirectory())
+    {
+      addThemeToDialog(static_cast<const KArchiveDirectory*>(archiveDir->entry(*it)),
+                destDir + *it + "/");
+    }
+    else
+    {
+      QFileInfo fi(*it);
+      if(fi.extension( FALSE ) == "theme")
+      {
+        addThemeToList(destDir + *it);
+        writeNewStuffConfig(destDir);
+      }
+    }
+  }
+}
+
+void ThemesDlg::writeNewStuffConfig(const QString &file)
+{
 #ifdef HAVE_KNEWSTUFF
   KConfig* config = KGlobal::config();
   QStringList keys = config->entryMap("KNewStuffStatus").keys();
@@ -277,12 +310,14 @@ void ThemesDlg::newSkzTheme(const QString &file)
   {
     config->setGroup("KNewStuffNames");
     config->writeEntry(file, keys[0]);
+    config->sync();
   }
 #endif
 }
 
 int ThemesDlg::addThemeToList(const QString &file)
 {
+  kdDebug() << "addThemeToList() file: " << file << endl;
   int i = themeIndex(file);
   if(i < 0)
   {
@@ -351,39 +386,103 @@ bool ThemesDlg::filter(int index, QWidget* widget, void* data)
   return false;
 }
 
+bool ThemesDlg::isDownloaded( const QString& path )
+{
+  kdDebug() << "isDownloaded path: " << path << endl;
+  KConfig* config = KGlobal::config();
+  config->setGroup("KNewStuffNames");
+  if( !config->readEntry(path).isEmpty() )
+    return true;
+  else
+    return false;
+}
+
 void ThemesDlg::uninstall()
 {
   ThemeWidget* w = static_cast<ThemeWidget*>(tableThemes->selectedItem());
   ThemeFile* tf = w->themeFile();
   KURL trash("trash:/");
   KURL theme(tf->file());
+  QString tempPath(tf->path());
+
+  karambaApp->dcopIface()->closeTheme(tf->name());
+  if(!KProtocolInfo::isKnownProtocol(trash))
+    trash = KGlobalSettings::trashPath();
 
   if(!tf->isZipTheme())
   {
-    kdDebug() << "removing " << tf->name() << " from the theme dialog" << endl;
-    karambaApp->dcopIface()->closeTheme(tf->name());
+    kdDebug() << "encountered unpacked theme" << endl;
+    //Don't move it to the trash if it is a local theme
+    if(isDownloaded(tempPath))
+    {
+      QFileInfo remPath(tf->path());
+      QDir remDir(remPath.dir());
+      remDir.cdUp();
+      kdDebug() << "moving " << remDir.path() << " to the trash" << endl;
+      KIO::move(remDir.path(), trash);
+    }
     tableThemes->removeItem(w);
+    
+    //some themes have multiple .theme files
+    //find all .themes that could be listed in the dialog for the directory removed
+    QPtrList<ThemeWidget> list;
+    for(uint i = 2; i < tableThemes->count(); ++i)
+    {
+      ThemeWidget* tempW = static_cast<ThemeWidget*>(tableThemes->item(i));
+      ThemeFile* tempTf = tempW->themeFile();
+      if( tempTf->path().compare( tempPath ) == 0 )
+      {
+        list.append( tempW );
+      }
+    }
+    ThemeWidget *twPtr;
+    for ( twPtr = list.first(); twPtr; twPtr = list.next() )
+    {
+      tableThemes->removeItem( twPtr );
+    }
+#ifdef HAVE_KNEWSTUFF
+    // Remove theme from KNewStuffStatus
+    KConfig* config = KGlobal::config();
+    config->setGroup("KNewStuffNames");
+    QString name = config->readEntry(tempPath);
+    if(!name.isEmpty())
+    {
+      kdDebug() << "removing " << tempPath << " under KNewStuffNames from superkarambarc" 
+                << endl;
+      kapp->config()->deleteEntry(tempPath);
+      config->setGroup("KNewStuffStatus");
+      kdDebug() << "removing " << name << " under KNewStuffStatus from superkarambarc" 
+                << endl;
+      kapp->config()->deleteEntry(name);
+      kapp->config()->sync();
+    }
+#endif
+    
   }
   else
   {
-    karambaApp->dcopIface()->closeTheme(tf->name());
-    if(!KProtocolInfo::isKnownProtocol(trash))
-      trash = KGlobalSettings::trashPath();
-    kdDebug() << "moving " << theme.fileName() << " to the trash" << endl;
-    KIO::move(theme, trash);
+    kdDebug() << "encountered skz theme" << endl;
+    if(isDownloaded(theme.path()))
+    {
+      QFileInfo remPath(theme.path());
+      QDir remDir(remPath.dir());
+      kdDebug() << "moving " << remDir.path() << " to the trash" << endl;
+      KIO::move(remDir.path(), trash);
+    }
     tableThemes->removeItem(w);
 #ifdef HAVE_KNEWSTUFF
     // Remove theme from KNewStuffStatus
     KConfig* config = KGlobal::config();
-
     config->setGroup("KNewStuffNames");
     QString name = config->readEntry(theme.path());
-    kdDebug() << theme.path() << name << endl;
     if(!name.isEmpty())
     {
+      kdDebug() << "removing " << theme.path() << " from superkarambarc" << endl;
       kapp->config()->deleteEntry(theme.path());
       config->setGroup("KNewStuffStatus");
+      kdDebug() << "removing " << name << " from superkarambarc" << endl;
       kapp->config()->deleteEntry(name);
+      kapp->config()->sync();
     }
 #endif
   }

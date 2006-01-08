@@ -45,40 +45,16 @@ SKNewStuff::SKNewStuff( ThemesDlg *dlg ) :
 {
 }
 
-void SKNewStuff::addThemes(const KArchiveDirectory *archiveDir,
-                           const QString& destDir)
-{
-  kdDebug() << "SKNewStuff::addThemes(): destDir = " << destDir << endl;
-  QStringList entries = archiveDir->entries();
-
-  QStringList::Iterator end( entries.end() );
-  for(QStringList::Iterator it = entries.begin(); it != end; ++it)
-  {
-    if(archiveDir->entry(*it)->isDirectory())
-    {
-      addThemes(static_cast<const KArchiveDirectory*>(archiveDir->entry(*it)),
-                destDir + *it + "/");
-    }
-    else
-    {
-      QFileInfo fi(*it);
-      if(fi.extension( FALSE ) == "theme")
-      {
-        kdDebug() << "SKNewStuff::addThemes(): theme " << *it 
-                  << "added to theme dialog" << endl;
-        mDlg->addThemeToList(destDir + *it);
-      }
-    }
-  }
-}
-
 bool SKNewStuff::install( const QString &fileName )
 {
   kdDebug() << "SKNewStuff::install(): " << fileName << endl;
 
   KMimeType::Ptr result = KMimeType::findByURL(fileName);
   KStandardDirs myStdDir;
-  const QString destDir =myStdDir.saveLocation("data", kapp->instanceName() + "/themes/", true);
+  QFileInfo fi(fileName);
+  QString base = fi.baseName();
+  QString baseDestDir =myStdDir.saveLocation("data", kapp->instanceName() + "/themes/", true);
+  const QString destDir = baseDestDir + base + "/";
   KStandardDirs::makeDir( destDir );
 
   kdDebug() << "SKNewStuff::install() mimetype: " << result->name() << endl;
@@ -99,7 +75,8 @@ bool SKNewStuff::install( const QString &fileName )
       return false;
     const KArchiveDirectory *archiveDir = archive.directory();
     archiveDir->copyTo(destDir);
-    addThemes(archiveDir, destDir);
+    //Add the theme to the Theme Dialog
+    mDlg->addThemeToDialog(archiveDir, destDir);
     archive.close();
   }
   else if(result->name() == "application/x-zip" ||
@@ -116,7 +93,8 @@ bool SKNewStuff::install( const QString &fileName )
       return false;
     }
     KIO::NetAccess::removeTempFile( sourceFile.url() );
-    mDlg->newSkzTheme(destFile.path());
+    //Add the skz theme to the Theme Dialog
+    mDlg->addSkzThemeToDialog(destFile.path());
   }
   else if(result->name() == "plain/text")
   {

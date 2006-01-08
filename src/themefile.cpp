@@ -251,7 +251,7 @@ bool ThemeFile::set(const KURL &url)
 
   QFileInfo fi(m_file);
 
-  m_name = fi.baseName();
+  m_name = fi.baseName( TRUE );
   m_theme = m_name + ".theme";
   m_python = m_name;
   m_id = m_name;
@@ -275,7 +275,7 @@ bool ThemeFile::set(const KURL &url)
     fimo.setFile(m_theme);
   else
     fimo.setFile(m_python);
-  m_mo = fimo.baseName();
+  m_mo = fimo.baseName( TRUE );
 
   m_locale = new ThemeLocale(this);
   return isValid();

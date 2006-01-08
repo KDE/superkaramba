@@ -34,6 +34,8 @@
 #ifdef HAVE_KNEWSTUFF
 class SKNewStuff;
 #endif
+class ThemeFile;
+class KArchiveDirectory;
 
 class ThemesDlg : public ThemesLayout
 {
@@ -46,7 +48,10 @@ class ThemesDlg : public ThemesLayout
     int addTheme(const QString &appId, const QString &file);
     void removeTheme(const QString &appId, const QString &file, int instance);
     int addThemeToList(const QString &file);
-    void newSkzTheme(const QString &file);
+    void addSkzThemeToDialog(const QString &file);
+    void addThemeToDialog(const KArchiveDirectory *archiveDir, const QString& destDir);
+    void writeNewStuffConfig(const QString &file);
+    bool isDownloaded(const QString &path);
     void saveUserAddedThemes();
     QStringList runningThemes();
 
