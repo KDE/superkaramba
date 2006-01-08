@@ -130,7 +130,7 @@ int main(int argc, char **argv)
 
     // Try to restore a previous session if applicable.
     app.checkPreviousSession(app, lst);
-    if(lst.size() == 0)
+    if( (lst.size() == 0) && !app.isRestored() )
     {
       //Not a saved session - check for themes given on command line
       app.checkCommandLine(args, lst);
