@@ -51,6 +51,7 @@ class ThemesDlg : public ThemesLayout
     void addSkzThemeToDialog(const QString &file);
     void addThemeToDialog(const KArchiveDirectory *archiveDir, const QString& destDir);
     void writeNewStuffConfig(const QString &file);
+    void configSanityCheck();
     bool isDownloaded(const QString &path);
     void saveUserAddedThemes();
     QStringList runningThemes();

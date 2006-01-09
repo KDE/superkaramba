@@ -223,6 +223,9 @@ void ThemesDlg::getNewStuff()
       "http://download.kde.org/khotnewstuff/karamba-providers.xml");
   config->sync();
   m_newStuffStatus = config->entryMap("KNewStuffStatus").keys();
+  //This check is b/c KNewStuff will download, throw an error, 
+  //and still have the entry in the config that it was successful
+  configSanityCheck();
 
   if ( !mNewStuff )
   {
@@ -312,6 +315,41 @@ void ThemesDlg::writeNewStuffConfig(const QString &file)
     config->writeEntry(file, keys[0]);
     config->sync();
   }
+#endif
+}
+
+void ThemesDlg::configSanityCheck()
+{
+#ifdef HAVE_KNEWSTUFF
+  KConfig* config = KGlobal::config();
+  QStringList statusKeys = config->entryMap("KNewStuffStatus").keys();
+  QStringList nameKeys = config->entryMap("KNewStuffNames").keys();
+  QStringList removeList;
+
+  for(QStringList::Iterator it = statusKeys.begin();
+      it != statusKeys.end(); ++it)
+  {
+    QString keyName(*it);
+    bool removeKey = true;
+    config->setGroup("KNewStuffNames");
+    for(QStringList::Iterator it2 = nameKeys.begin();
+        it2 != nameKeys.end(); ++it2)
+    {
+      QString tempName(config->readEntry(*it2));
+      if( tempName.compare(keyName) == 0)
+      {
+        removeKey = false;
+      }
+      
+    }
+    if( removeKey )
+    {
+      kdDebug() << "sanityCheck() deleting entry " << keyName << endl;
+      config->setGroup("KNewStuffStatus");
+      config->deleteEntry( keyName );
+    }
+  }
+  config->sync();
 #endif
 }
 
