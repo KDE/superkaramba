@@ -83,10 +83,10 @@ void CPUSensor::getTicks (long &u,long &s,long &n,long &i)
         }
         //user
         u = rx.cap(1).toLong();
-        //system
-        s = rx.cap(2).toLong();
         //nice
-        n = rx.cap(3).toLong();
+        n = rx.cap(2).toLong();
+        //system
+        s = rx.cap(3).toLong();
         //idle
         i = rx.cap(4).toLong();
         file.close();
