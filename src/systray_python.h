@@ -112,5 +112,6 @@ PyObject* py_get_current_window_count(PyObject *self, PyObject *args);
 *   1 if successful
 */
 PyObject* py_update_systray_layout(PyObject *self, PyObject *args);
+PyObject* py_get_systray_size(PyObject *self, PyObject *args);
 
 #endif // SYSTRAY_PYTHON_H

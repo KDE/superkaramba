@@ -49,6 +49,10 @@ Systemtray::~Systemtray()
   m_Wins.clear();
 }
 
+int Systemtray::getTraySize() {
+
+	return (int) kwin_module->systemTrayWindows().size();
+}
 
 void Systemtray::updateBackgroundPixmap ( const QPixmap & pixmap) {
   QXEmbed *emb;

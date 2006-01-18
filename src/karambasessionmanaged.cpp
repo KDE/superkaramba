@@ -43,6 +43,8 @@ bool KSessionManaged::saveState(QSessionManager&)
     if (QString(w->name()).startsWith("karamba"))
     {
       karamba* k = (karamba*) w;
+      if (k->isSubTheme())
+        continue;
       openThemes += QFileInfo(k->theme().file()).absFilePath();
       k->writeConfigData();
       openThemes += ";";

@@ -3,7 +3,8 @@
 *
 *  Copyright (C) 2003 Hans Karlsson <karlsson.h@home.se>
 *  Copyright (C) 2003-2004 Adam Geitgey <adam@rootnode.org>
-*  Copyright (c) 2004 Petri Damstén <damu@iki.fi>
+*  Copyright (C) 2004 Petri Damstén <damu@iki.fi>
+*  Copyright (C) 2004, 2005 Luke Kenneth Casson Leighton <lkcl@lkcl.net>
 *
 *  This file is part of SuperKaramba.
 *
@@ -57,6 +58,36 @@ PyObject* py_accept_drops(PyObject *, PyObject *args)
   if (!checkKaramba(widget))
     return NULL;
   return Py_BuildValue((char*)"l", acceptDrops(widget));
+}
+
+// Runs a command, returns 0 if it could not start command
+PyObject* py_run_command(PyObject* self, PyObject* args)
+{
+  char* name;
+  char* command;
+  char* icon;
+  PyObject *lst;
+  if (!PyArg_ParseTuple(args, (char*)"sssO:run", &name, &command, &icon, &lst) ||
+      lst == NULL || !PyList_Check(lst))
+      return NULL;
+
+  QString n;
+  QString c;
+  QString i;
+
+  n.setAscii(name);
+  c.setAscii(command);
+  i.setAscii(icon);
+
+  KService svc(n, c, i);
+  KURL::List l;
+
+  for (int i = 0; i < PyList_Size(lst); i++)
+  {
+    l.append(PyString2QString(PyList_GetItem(lst, i)));
+  }
+  KRun::run(svc, l);
+  return Py_BuildValue("l", 1);
 }
 
 // Runs a command, returns 0 if it could not start command
@@ -224,8 +255,22 @@ PyObject* py_toggle_show_desktop(PyObject *, PyObject *args)
 }
 
 /* now a method we need to expose to Python */
-const char* getThemePath(long widget)
+const char* getPrettyName(long widget) {
+  karamba* currTheme = (karamba*)widget;
+
+  return currTheme->prettyName.ascii();
+}
+
+PyObject* py_get_pretty_name(PyObject *self, PyObject *args)
 {
+  long widget;
+  if (!PyArg_ParseTuple(args, (char*)"l:getPrettyThemeName", &widget))
+    return NULL;
+  return Py_BuildValue((char*)"s", getPrettyName(widget));
+}
+
+/* now a method we need to expose to Python */
+const char* getThemePath(long widget) {
   karamba* currTheme = (karamba*)widget;
 
   return currTheme->theme().path().ascii();
@@ -266,6 +311,36 @@ PyObject* py_read_theme_file(PyObject *, PyObject *args)
 }
 
 /* now a method we need to expose to Python */
+long removeClickArea(long widget, long click) {
+
+  karamba* currTheme = (karamba*)widget;
+  ClickArea *tmp = (ClickArea*)click;
+
+  currTheme -> clickList -> remove(tmp);
+
+  delete tmp;
+  return (int)tmp;
+}
+
+/* now a method we need to expose to Python */
+long createServiceClickArea(long widget, long x, long y, long w, long h, char *name, char* exec, char *icon) {
+
+  karamba* currTheme = (karamba*)widget;
+  ClickArea *tmp = new ClickArea( currTheme, x, y, w, h );
+  QString n;
+  QString e;
+  QString i;
+
+  n.setAscii(name);
+  e.setAscii(exec);
+  i.setAscii(icon);
+
+  tmp->setServiceOnClick(n, e, i);
+
+  currTheme -> clickList -> append(tmp);
+  return (int)tmp;
+}
+
 long createClickArea(long widget, long x, long y, long w, long h, char* text) {
 
   karamba* currTheme = (karamba*)widget;
@@ -280,7 +355,27 @@ long createClickArea(long widget, long x, long y, long w, long h, char* text) {
   return (long)tmp;
 }
 
-PyObject* py_create_click_area(PyObject *, PyObject *args)
+PyObject* py_remove_click_area(PyObject *self, PyObject *args)
+{
+  long widget, click;
+  if (!PyArg_ParseTuple(args, (char*)"ll:removeClickArea", &widget, &click))
+    return NULL;
+  return Py_BuildValue((char*)"l", removeClickArea(widget, click));
+}
+
+PyObject* py_create_service_click_area(PyObject *self, PyObject *args)
+{
+  long widget, x, y, w, h;
+  char *name;
+  char *exec;
+  char *icon;
+  if (!PyArg_ParseTuple(args, (char*)"lllllsss:createServiceClickArea", &widget, &x, &y, 
+                        &w, &h, &name, &exec, &icon))
+    return NULL;
+  return Py_BuildValue((char*)"l", createServiceClickArea(widget, x, y, w, h, name, exec, icon));
+}
+
+PyObject* py_create_click_area(PyObject *self, PyObject *args)
 {
   long widget, x, y, w, h;
   char *text;
@@ -290,6 +385,65 @@ PyObject* py_create_click_area(PyObject *, PyObject *args)
   if (!checkKaramba(widget))
     return NULL;
   return Py_BuildValue((char*)"l", createClickArea(widget, x, y, w, h, text));
+}
+
+static long callTheme(long widget, char* path, char *str)
+{
+  karamba* currTheme = (karamba*) widget;
+
+  if (currTheme)
+    currTheme->callTheme(QString(path), QString(str));
+
+  return (int)currTheme;
+}
+
+static long setIncomingData(long widget, char* path, char *obj)
+{
+  karamba* currTheme = (karamba*) widget;
+
+  if (currTheme)
+    currTheme->setIncomingData(QString(path), QString(obj));
+
+  return (int)currTheme;
+}
+
+static QString getIncomingData(long widget)
+{
+  karamba* currTheme = (karamba*) widget;
+
+  if (currTheme)
+    return currTheme->getIncomingData();
+
+  return QString("");
+}
+
+/*
+ * openNamedTheme.  this function checks to see whether the theme
+ * being opened is unique or not (against all running karamba widgets).
+ * this is important, as loading themes with the same name causes
+ * grief.
+ */
+long openNamedTheme(char* path, char *name, bool is_sub_theme) {
+
+  QString filename;
+  karamba* currTheme = 0; 
+
+  filename.setAscii(path);
+  
+  QFileInfo file( filename );
+  
+  if( file.exists() )
+  {
+      QCString prettyName(name);
+      KarambaApplication* app = (KarambaApplication*)qApp;
+      if (!app->themeExists(prettyName))
+      {
+        currTheme = new karamba( filename, prettyName, false ,
+                   -1, is_sub_theme);
+      currTheme->show();
+    }
+  }
+  return (int)currTheme;
 }
 
 /* now a method we need to expose to Python */
@@ -310,6 +464,44 @@ long openTheme(char* path)
     }
 
   return (long)currTheme;
+}
+
+PyObject* py_get_incoming_data(PyObject *self, PyObject *args)
+{
+  long widget;
+  if (!PyArg_ParseTuple(args, (char*)"l:getIncomingData", &widget))
+    return NULL;
+  return Py_BuildValue((char*)"O", QString2PyString(getIncomingData(widget)));
+}
+
+PyObject* py_set_incoming_data(PyObject *self, PyObject *args)
+{
+  char *themePath;
+  long widget;
+  char *obj;
+  if (!PyArg_ParseTuple(args, (char*)"lss:setIncomingData", &widget, &themePath, &obj))
+    return NULL;
+  return Py_BuildValue((char*)"l", setIncomingData(widget, themePath, obj));
+}
+
+PyObject* py_call_theme(PyObject *self, PyObject *args)
+{
+  char *themePath;
+  char *str;
+  long widget;
+  if (!PyArg_ParseTuple(args, (char*)"lss:callTheme", &widget, &themePath, &str))
+    return NULL;
+  return Py_BuildValue((char*)"l", callTheme(widget, themePath, str));
+}
+
+PyObject* py_open_named_theme(PyObject *self, PyObject *args)
+{
+  char *themePath;
+  char *themeName;
+  long is_sub_theme;
+  if (!PyArg_ParseTuple(args, (char*)"ssl:openNamedTheme", &themePath, &themeName, &is_sub_theme))
+    return NULL;
+  return Py_BuildValue((char*)"l", openNamedTheme(themePath, themeName, is_sub_theme ? true : false));
 }
 
 PyObject* py_open_theme(PyObject *, PyObject *args)
@@ -521,6 +713,27 @@ QString getIp(char *device_name)
   return retval;
 }
 
+PyObject* py_set_update_time(PyObject *self, PyObject *args)
+{
+  long widget;
+  double time;
+  if (!PyArg_ParseTuple(args, (char*)"ld:setUpdateTime", &widget, &time))
+    return NULL;
+  karamba* currTheme = (karamba*)widget;
+  currTheme->setUpdateTime(time);
+  return Py_BuildValue((char*)"l", 1);
+}
+
+PyObject* py_get_update_time(PyObject *self, PyObject *args)
+{
+  long widget;
+  double time;
+  if (!PyArg_ParseTuple(args, (char*)"l:getUpdateTime", &widget, &time))
+    return NULL;
+  karamba* currTheme = (karamba*)widget;
+  return Py_BuildValue((char*)"d", currTheme->getUpdateTime());
+}
+
 PyObject* py_get_ip(PyObject *, PyObject *args)
 {
   long widget;
@@ -531,3 +744,57 @@ PyObject* py_get_ip(PyObject *, PyObject *args)
     return NULL;
   return Py_BuildValue((char*)"O", QString2PyString(getIp(interface)));
 }
+
+static void management_popup(long widget)
+{
+  karamba* currTheme = (karamba*)widget;
+  currTheme->management_popup();
+}
+
+PyObject* py_management_popup(PyObject *, PyObject *args)
+{
+  long widget;
+  if (!PyArg_ParseTuple(args, (char*)"l:managementPopup", &widget))
+    return NULL;
+  if (!checkKaramba(widget))
+    return NULL;
+  management_popup(widget);
+  return Py_BuildValue((char*)"l", 1);
+}
+
+static void set_want_right_button(long widget, long yesno)
+{
+  karamba* currTheme = (karamba*)widget;
+  currTheme->setWantRightButton(yesno);
+}
+
+PyObject* py_want_right_button(PyObject *, PyObject *args)
+{
+  long widget, i;
+  if (!PyArg_ParseTuple(args, (char*)"ll:wantRightButton", &widget, &i))
+    return NULL;
+  if (!checkKaramba(widget))
+    return NULL;
+  set_want_right_button(widget, i);
+  return Py_BuildValue((char*)"l", 1);
+}
+
+
+static void changeInterval(long widget, long interval)
+{
+  karamba* currTheme = (karamba*)widget;
+  currTheme->changeInterval(interval);
+}
+
+PyObject* py_change_interval(PyObject *, PyObject *args)
+{
+  long widget, i;
+  if (!PyArg_ParseTuple(args, (char*)"ll:changeInterval", &widget, &i))
+    return NULL;
+  if (!checkKaramba(widget))
+    return NULL;
+  changeInterval(widget, i);
+  return Py_BuildValue((char*)"l", 1);
+}
+
+

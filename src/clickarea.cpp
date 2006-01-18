@@ -1,6 +1,8 @@
 /***************************************************************************
  *   Copyright (C) 2003 by Hans Karlsson                                   *
- *   karlsson.h@home.se                                                      *
+ *   karlsson.h@home.se                                                    *
+ *                                                                         *
+ *   Copyright (C) 2004,2005 Luke Kenneth Casson Leighton <lkcl@lkcl.net>  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -8,6 +10,8 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 #include "clickarea.h"
+
+#include <kservicegroup.h>
 
 
 ClickArea::ClickArea(karamba* k, int x, int y, int w, int h )
@@ -27,18 +31,27 @@ bool ClickArea::click( QMouseEvent *e )
     {
         //qDebug(QString::number(e->type()));
 	//KShellProcess ksp;
-        QString program;
-        if( e->button() == Qt::LeftButton )
-            program = onClick;
-        program.replace( QRegExp("%v", false), value );
+        if( e->button() != Qt::LeftButton )
+			return false;
+	if (!svc_name.isEmpty())
+	{
+		KService sv(svc_name, svc_onClick, svc_icon);
+		KURL::List l;
+		KRun::run(sv, l);
+		return false;
+	}
+	else
+	{
+		QString program;
+		program = onClick;
+		program.replace( QRegExp("%v", false), value );
 
-        if( !program.isEmpty())
-        {
-            //qDebug(program);
-          KRun::runCommand(program);
-	  //  ksp << program;
-          //  ksp.start(KProcIO::DontCare, KProcIO::NoCommunication);
-        }
+		if( !program.isEmpty() )
+		{
+			//qDebug(program);
+			KRun::runCommand(program);
+		}
+	}
     }
     return false;
 }
@@ -46,6 +59,13 @@ bool ClickArea::click( QMouseEvent *e )
 void ClickArea::setOnClick( QString oc )
 {
     onClick = oc;
+}
+
+void ClickArea::setServiceOnClick( QString name , QString exec, QString icon )
+{
+    svc_name = name;
+    svc_onClick = exec;
+    svc_icon = icon;
 }
 
 void ClickArea::setOnMiddleClick( QString oc )

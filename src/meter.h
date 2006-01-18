@@ -44,6 +44,8 @@ public:
   virtual int getMax() { return minValue; };
   virtual int getMin() { return maxValue; };
 
+  void setThemePath( QString );
+
   virtual void mUpdate(QPainter *)=0 ;
 
   virtual void setValue(int) {};
@@ -76,6 +78,8 @@ public:
   */
 
 protected: // Protected attributes
+  QString themePath;
+
   QRect boundingBox;
 
   // Actions to execute when clicked on meter

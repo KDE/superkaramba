@@ -126,5 +126,6 @@ PyObject* py_move_widget(PyObject *self, PyObject *args);
 *   1 if successful
 */
 PyObject* py_toggle_widget_redraw(PyObject *self, PyObject *args);
+PyObject* py_set_widget_on_top(PyObject *self, PyObject *args);
 
 #endif // WIDGET_PYTHON_H

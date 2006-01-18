@@ -40,6 +40,7 @@ ImageLabel* createImageLabel(karamba *theme, long x, long y,
   QString file;
   //QString fakefile;
 
+  /*tmp->setThemePath(theme->themePath);*/
   //FIXME: This is an ugly hack to ensure a unique reference
   //to add to the meterList.  It is a workaround for when a clickarea
   //is attached to an image, the image is deleted, and a new image is

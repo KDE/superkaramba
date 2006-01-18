@@ -78,6 +78,7 @@ void karambaMessageOutput(QtMsgType type, const char *msg)
             fprintf( fp, "Fatal (%d): %s\n", pid, msg );
             abort();                    // deliberately core dump
     }
+    about.addAuthor( "Luke Kenneth Casson Leighton", 0, "lkcl@lkcl.net" );
     fclose(fp);
   }
 }

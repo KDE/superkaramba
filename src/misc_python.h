@@ -3,7 +3,8 @@
 *
 *  Copyright (C) 2003 Hans Karlsson <karlsson.h@home.se>
 *  Copyright (C) 2003-2004 Adam Geitgey <adam@rootnode.org>
-*  Copyright (c) 2004 Petri Damstén <damu@iki.fi>
+*  Copyright (C) 2004 Petri Damstén <damu@iki.fi>
+*  Copyright (C) 2004,2005 Luke Kenneth Casson Leighton <lkcl@lkcl.net>
 *
 *  This file is part of SuperKaramba.
 *
@@ -95,6 +96,24 @@ PyObject* py_execute_command(PyObject* self, PyObject* args);
 *   1 if successful
 */
 PyObject* py_execute_command_interactive(PyObject* self, PyObject* args);
+
+/** Misc/run
+*
+*  SYNOPSIS
+*    long run(name, command, icon, list_of_args)
+*  DESCRIPTION
+*    This command simply executes a program or command on the system.
+*    The difference between run and execute is that run takes arguments,
+*    and the name of the icon to be displayed.
+*  ARGUMENTS
+*    * string name -- name to be displayed
+*    * string command -- command to execute
+*    * string icon -- name of icon to be displayed
+*    * string list_of_args -- arguments to be passed to the command
+*  RETURN VALUE
+*    1 if successful
+*/
+PyObject* py_run_command(PyObject* self, PyObject* args);
 
 /**
 *   It is possible to attach a clickarea to a meter (image or text field),
@@ -204,7 +223,7 @@ PyObject* py_read_theme_file(PyObject *self, PyObject *args);
 *   * long h -- height
 *   * string cmd_to_run -- command to be run
 * RETURN VALUE
-*   1 if successful
+*   a handle to the click area
 */
 PyObject* py_create_click_area(PyObject *self, PyObject *args);
 
@@ -230,7 +249,7 @@ PyObject* py_open_theme(PyObject *self, PyObject *args);
 * ARGUMENTS
 *   * long widget -- karamba
 * RETURN VALUE
-*   1 if successful
+*   a handle to the widget created
 */
 PyObject* py_reload_theme(PyObject *self, PyObject *args);
 
@@ -303,4 +322,220 @@ PyObject* py_hide(PyObject *self, PyObject *args);
 */
 PyObject* py_get_ip(PyObject *self, PyObject *args);
 
-#endif // MISC_PYTHON_H
+/** Misc/changeInterval
+* 
+*  SYNOPSIS
+*    long changeInterval(widget, interval)
+*  DESCRIPTION
+*    Calling this changes your widget's refresh rate (ms)
+*  ARGUMENTS
+*    * long widget -- karamba
+*    * int interval -- interval, in ms
+*  RETURN VALUE
+*    1 if successful
+*/
+PyObject* py_change_interval(PyObject *self, PyObject *args);
+
+/** Misc/createServiceClickArea
+*
+*  SYNOPSIS
+*    long createServiceClickArea(widget, x, y, w, h, name_of_command, cmd_to_run, icon_to_display)
+*  DESCRIPTION
+*     This creates a clickable area at x,y with width and height w,h. When
+*     this area is clicked, cmd_to_run will be executed. The mouse will change
+*     to the clickable icon when over this area.  For more information on
+*     the difference between createClickArea and createServiceClickArea,
+*     see the KDE documentation about KService, and the difference
+*     between KRun::run and KRun::runCommand.
+*  ARGUMENTS
+*    * long widget -- karamba
+*    * long x -- x coordinate
+*    * long y -- y coordinate
+*    * long w -- width
+*    * long h -- height
+*    * string name_of_command -- name to be displayed
+*    * string cmd_to_run -- command to be run
+*    * string icon_to_display -- name of icon to be displayed
+*  RETURN VALUE
+*    a handle to the click area
+*/
+PyObject* py_create_service_click_area(PyObject *self, PyObject *args);
+
+/** Misc/removeClickArea
+*
+*  SYNOPSIS
+*    long removeClickArea(widget, clickarea)
+*  DESCRIPTION
+*     This function deletes a clickable area.
+*  ARGUMENTS
+*    * long widget -- karamba
+*    * long clickarea -- handle to the click area
+*  RETURN VALUE
+*    1 if successful
+*/
+PyObject* py_remove_click_area(PyObject *self, PyObject *args);
+
+
+/** Misc/getPrettyName
+*
+*  SYNOPSIS
+*    string getPrettyName(theme)
+*  DESCRIPTION
+*    When a theme is created (with openNamedTheme), there is an
+*    option to give the theme an alternative name.
+*    This is useful if you open several widgets from the same theme:
+*    you need to give them unique names in order to contact them
+*    (for example, with callTheme or with setIncomingData)
+*  ARGUMENTS
+*    * string theme -- path to new theme
+*  RETURN VALUE
+*    the pretty name of the theme
+*/
+PyObject* py_get_pretty_name(PyObject *self, PyObject *args);
+
+/** Misc/openNamedTheme
+*
+*  SYNOPSIS
+*    long openNamedTheme(theme, pretty_name, is_sub_theme)
+*  DESCRIPTION
+*    Opens a new theme, giving it a pretty (alternative and by your
+*    own choice _unique_) name.
+*    If you do not want the theme to be loaded when superkaramba is
+*    first started up (but instead want it to only be opened by
+*    this function call) then set is_sub_theme to 1.
+*    Themes opened with openNamedTheme will be unique.  If a theme
+*    with the same pretty name already exists, openNamedTheme will
+*    have no effect.  If you want duplicate themes (and a bit of a
+*    mess), use openTheme, instead.
+*  ARGUMENTS
+*    * string theme -- path to new theme
+*    * string pretty_name -- the name to be associated with the new widget
+*    * long is_sub_theme -- sets persistence (save state) of the theme
+*  RETURN VALUE
+*    a handle to the widget created
+*/
+PyObject* py_open_named_theme(PyObject *self, PyObject *args);
+
+/** Misc/callTheme
+*
+*  SYNOPSIS
+*    long callTheme(widget, theme, info)
+*  DESCRIPTION
+*  Calls a theme - identified by the pretty name - and passes it a string.
+*  This will work, despite superkaramba being multithreaded, because it
+*  uses the DCOP interface to contact the other theme.  If you need to
+*  pass complex arguments (dictionaries, lists etc.) then use the python
+*  "repr" and "eval" functions to marshall and unmarshall the data structure.
+*  ARGUMENTS
+*    * long widget -- karamba
+*    * string theme -- path to theme to be called
+*    * string info -- a string containing the info to be passed to the theme
+*  RETURN VALUE
+*    1 if successful
+*/
+PyObject* py_call_theme(PyObject *self, PyObject *args);
+
+/** Misc/setIncomingData
+*
+*  SYNOPSIS
+*    long setIncomingData(widget, theme, info)
+*  DESCRIPTION
+*  Contacts a theme - identified by the pretty name - and stores a string
+*  to be associated with the remote theme.  The difference between
+*  setIncomingData and callTheme is that the theme is not notified
+*  by setIncomingData that the data has arrived.  Previous information,
+*  if any, is overwritten.  Use getIncomingData to retrieve the last
+*  stored information.
+*  setIncomingData is not very sophisticated, and could benefit from
+*  having info passed to it put into a queue, instead of being overwritten.
+*  ARGUMENTS
+*    * long widget -- karamba
+*    * string theme -- path to theme to have information passed to it.
+*    * string info -- a string containing the info to be passed to the theme
+*  RETURN VALUE
+*    1 if successful
+*/
+PyObject* py_set_incoming_data(PyObject *self, PyObject *args);
+
+/** Misc/getIncomingData
+*
+*  SYNOPSIS
+*    long getIncomingData(widget)
+*  DESCRIPTION
+*  Obtains the last data received by any other theme that set the
+*  "incoming data" of this theme.  This isn't particularly sophisticated
+*  and could benefit from the data being placed in an FIFO queue instead.
+*  ARGUMENTS
+*    * long widget -- karamba
+*  RETURN VALUE
+*    string containing last information received from setIncomingData
+*/
+PyObject* py_get_incoming_data(PyObject *self, PyObject *args);
+
+/** Misc/getUpdateTime
+*
+*  SYNOPSIS
+*    long getUpdateTime(widget)
+*  DESCRIPTION
+*    returns the last stored update time.  intended for use 
+*    so that the next refresh interval can work out how long ago
+*    the mouse was last moved over the widget.
+*  ARGUMENTS
+*    * long widget -- karamba
+*  RETURN VALUE
+*    last stored update time (from setUpdateTime)
+*/
+PyObject* py_get_update_time(PyObject *self, PyObject *args);
+
+/** Misc/wantRightButton
+*
+*  SYNOPSIS
+*    long wantRightButton(widget, want_receive_right_button)
+*  DESCRIPTION
+*    There's a management menu for SuperKaramba themes which
+*    allows themes to be loaded, closed, moved to other
+*    screens.  Not all themes will want this management
+*    interface.  call karamba.wantRightButton(widget, 1)
+*    if you want to receive MouseUpdate button notifications.
+*  ARGUMENTS
+*    * long widget -- karamba
+*    * long want_receive_right_button -- whether the widget will receive right clicks
+*  RETURN VALUE
+*    1 if successful
+*/
+PyObject* py_want_right_button(PyObject *self, PyObject *args);
+
+/** Misc/managementPopup
+*
+*  SYNOPSIS
+*    long managementPopup(widget)
+*  DESCRIPTION
+*    There's a management menu for SuperKaramba themes which
+*    allows themes to be loaded, closed, moved to other
+*    screens.  If you want this popup menu to appear, call
+*    this function.
+*  ARGUMENTS
+*    * long widget -- karamba
+*  RETURN VALUE
+*    1 if successful
+*/
+PyObject* py_management_popup(PyObject *self, PyObject *args);
+
+/** Misc/setUpdateTime
+*
+*  SYNOPSIS
+*    long getUpdateTime(widget, updated_time)
+*  DESCRIPTION
+*    returns the last stored update time.  intended for use 
+*    so that the next refresh interval can work out how long ago
+*    the mouse was last moved over the widget.
+*  ARGUMENTS
+*    * long widget -- karamba
+*    * long updated_time -- the update time to be associated with the widget
+*  RETURN VALUE
+*    1 if successful
+*/
+PyObject* py_set_update_time(PyObject *self, PyObject *args);
+
+#endif /*  MISC_PYTHON_H */
+

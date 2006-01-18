@@ -46,6 +46,7 @@ public:
 
 public slots:
     void updateTrayWindows();
+    int getTraySize();
     void systemTrayWindowAdded( WId w );
     void systemTrayWindowRemoved( WId w );
     void layoutSystray();

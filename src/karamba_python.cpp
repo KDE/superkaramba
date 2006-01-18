@@ -4,6 +4,7 @@
 *  Copyright (C) 2003 Hans Karlsson <karlsson.h@home.se>
 *  Copyright (C) 2003-2004 Adam Geitgey <adam@rootnode.org>
 *  Copyright (c) 2004 Petri Damstén <damu@iki.fi>
+*  Copyright (c) 2004 Luke Kenneth Casson Leighton <lkcl@lkcl.net>
 *
 *  This file is part of SuperKaramba.
 *
@@ -42,6 +43,7 @@
 #include "config_python.h"
 #include "task_python.h"
 #include "systray_python.h"
+#include "svcgrp_python.h"
 #include "misc_python.h"
 #include "input_python.h"
 
@@ -79,6 +81,8 @@ static PyMethodDef karamba_methods[] = {
     {(char*)"getBarValue", py_getBarValue, METH_VARARGS, (char*)"Get bar value"},
     {(char*)"setBarMinMax", py_setBarMinMax, METH_VARARGS, (char*)"Set bar min & max"},
     {(char*)"getBarMinMax", py_getBarMinMax, METH_VARARGS, (char*)"Get bar min & max"},
+    {(char*)"getIncomingData", py_get_incoming_data, METH_VARARGS, (char*)"Get incoming data passed from another theme"},
+    {(char*)"setIncomingData", py_set_incoming_data, METH_VARARGS, (char*)"Set incoming data passed in another theme"},
 
     // Graph - graph_python.cpp
     {(char*)"createGraph", py_createGraph, METH_VARARGS, (char*)"Create new Graph."},
@@ -288,6 +292,37 @@ static PyMethodDef karamba_methods[] = {
     {(char*)"getInputBoxFontSize", py_getInputBoxFontSize, METH_VARARGS,
         (char*)"Get a Input Box Font Size"},
 
+    {(char*)"setWidgetOnTop", py_set_widget_on_top, METH_VARARGS,
+      (char*)"changes 'on top' status"},
+    {(char*)"getSystraySize", py_get_systray_size, METH_VARARGS, 
+      (char*)"Get the size of the Systray"},
+    {(char*)"getPrettyThemeName", py_get_pretty_name, METH_VARARGS,  
+      (char*)"Get the pretty name of the theme"},
+    {(char*)"openNamedTheme", py_open_named_theme, METH_VARARGS, 
+      (char*)"Open a new theme giving it a new name"},
+    {(char*)"callTheme", py_call_theme, METH_VARARGS, 
+      (char*)"Pass a string to another theme"},
+    {(char*)"changeInterval", py_change_interval, METH_VARARGS, 
+      (char*)"Change the refresh interval"},
+    {(char*)"run", py_run_command, METH_VARARGS, 
+      (char*)"Execute a command with KRun"},
+    {(char*)"createServiceClickArea", py_create_service_click_area, METH_VARARGS, 
+      (char*)"Create a Service-named Click Area Sensor"},
+    {(char*)"removeClickArea", py_remove_click_area, METH_VARARGS, 
+      (char*)"Remove a Click Area Sensor"},
+    {(char*)"setUpdateTime", py_set_update_time, METH_VARARGS, 
+      (char*)"Set last updated time"},
+    {(char*)"getUpdateTime", py_get_update_time, METH_VARARGS, 
+      (char*)"Get last updated time"},
+    {(char*)"setWantRightButton", py_want_right_button, METH_VARARGS, 
+      (char*)"Set to 1 to deactivate management popups"},
+    {(char*)"managementPopup", py_management_popup, METH_VARARGS, 
+      (char*)"Activates the Management Popup menu"},
+
+  // service groups
+    {(char*)"getServiceGroups", py_get_service_groups, METH_VARARGS, 
+      (char*)"Get KDE Service Groups"},
+
     {NULL, NULL, 0 ,NULL}
 };
 
@@ -417,14 +452,15 @@ PyObject* KarambaPython::getFunc(const char* function)
   return NULL;
 }
 
-bool KarambaPython::callObject(const char* func, PyObject* pArgs)
+bool KarambaPython::callObject(const char* func, PyObject* pArgs, bool lock)
 {
   bool result = false;
   PyThreadState* myThreadState;
 
   //qDebug("Calling %s", func);
 
-  getLock(&myThreadState);
+  if (lock)
+    getLock(&myThreadState);
   PyObject* pFunc = getFunc(func);
 
   if (pFunc != NULL)
@@ -443,7 +479,8 @@ bool KarambaPython::callObject(const char* func, PyObject* pArgs)
     }
   }
   Py_DECREF(pArgs);
-  releaseLock(myThreadState);
+  if (lock)
+    releaseLock(myThreadState);
   return result;
 }
 
@@ -550,10 +587,21 @@ bool KarambaPython::commandFinished(karamba* k, int pid)
   return callObject("commandFinished", pArgs);
 }
 
-bool KarambaPython::itemDropped(karamba* k, QString text)
+bool KarambaPython::itemDropped(karamba* k, QString text, int x, int y)
 {
-  PyObject* pArgs = Py_BuildValue((char*)"(ls)", k, text.ascii());
+  PyObject* pArgs = Py_BuildValue((char*)"(lsii)", k, text.ascii(), x, y);
   return callObject("itemDropped", pArgs);
+}
+
+bool KarambaPython::themeNotify(karamba* k, const char *from, const char *str)
+{
+  // WARNING WARNING WARNING i had to switch off thread locking to get
+  // this to work.  callNotify is called from INSIDE another locked thread,
+  // so can never complete because themeNotify will expect locking to be
+  // released...
+  //
+  PyObject* pArgs = Py_BuildValue((char*)"(lss)", k, from, str);
+  return callObject("themeNotify", pArgs, false);
 }
 
 bool KarambaPython::systrayUpdated(karamba* k)

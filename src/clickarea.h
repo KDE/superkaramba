@@ -47,6 +47,7 @@ public:
 
     virtual bool click( QMouseEvent* );
     void setOnClick( QString );
+    void setServiceOnClick( QString , QString, QString);
     void setOnMiddleClick( QString );
 
 
@@ -58,6 +59,9 @@ public:
 
     QRect rect;
     QString onClick;
+    QString svc_onClick;
+    QString svc_name;
+    QString svc_icon;
     QString onMiddleClick;
     QString value;
 };

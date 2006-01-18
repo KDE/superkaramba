@@ -175,3 +175,25 @@ PyObject* py_update_systray_layout(PyObject *, PyObject *args)
     return NULL;
   return Py_BuildValue((char*)"l", updateSystrayLayout(widget));
 }
+
+/* get the systray size from python */
+int getSystraySize(long widget) {
+	karamba* currTheme = (karamba*)widget;
+	if(currTheme->systray == 0) {
+		return 0;
+	} else {
+		return currTheme->systray->getTraySize();
+	}
+}
+
+// Returns the size of the systray 
+PyObject* py_get_systray_size(PyObject* self, PyObject* args)
+{
+    long widget; 
+
+    if (!PyArg_ParseTuple(args, "l:getSystraySize", &widget))
+        return NULL;
+
+    return Py_BuildValue("l", getSystraySize(widget));
+}
+

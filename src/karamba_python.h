@@ -48,7 +48,7 @@ protected:
   void getLock(PyThreadState** myThreadState);
   PyObject* getFunc(const char* function);
   void releaseLock(PyThreadState* myThreadState);
-  bool callObject(const char* func, PyObject* pArgs);
+  bool callObject(const char* func, PyObject* pArgs, bool lock=true);
 
 public:
   KarambaPython(const ThemeFile& theme, bool reloading);
@@ -75,7 +75,8 @@ public:
   bool startupRemoved(karamba* k, Startup* t);
   bool commandOutput(karamba* k, int pid, char *buffer);
   bool commandFinished(karamba* k, int pid);
-  bool itemDropped(karamba* k, QString text);
+  bool itemDropped(karamba* k, QString text, int x, int y);
+  bool themeNotify(karamba* k, const char *from, const char *txt);
   bool systrayUpdated(karamba* k);
   bool desktopChanged(karamba* k, int desktop);
   bool wallpaperChanged(karamba* k, int desktop);

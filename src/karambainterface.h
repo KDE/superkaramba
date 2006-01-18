@@ -26,6 +26,7 @@ public:
 
 public slots:
   virtual void openTheme(QString filename);
+  virtual void openNamedTheme(QString filename, QString name, bool is_sub_theme);
   virtual void closeTheme(QString name);
   virtual void quit();
   virtual void hideSystemTray(bool show);
@@ -33,6 +34,8 @@ public slots:
 
   virtual int themeAdded(QString appId, QString file);
   virtual void themeClosed(QString appId, QString file, int instance);
+  virtual void themeNotify(QString name, QString text);
+  virtual void setIncomingData(QString name, QString text);
   virtual bool isMainKaramba();
 };
 

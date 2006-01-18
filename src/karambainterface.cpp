@@ -34,7 +34,7 @@ karamba* KarambaIface::getKaramba(QString name)
     if (QString(w->name()).startsWith("karamba"))
     {
       karamba* k = (karamba*) w;
-      if(k->theme().name() == name)
+      if(k->prettyName == name)
       {
         result = k;
         break;
@@ -74,11 +74,20 @@ void KarambaIface::openTheme(QString filename)
   }
 }
 
+void KarambaIface::openNamedTheme(QString filename, QString name, bool is_sub_theme)
+{
+	QFileInfo file(filename);
+	if(file.exists())
+	{
+		(new karamba(filename, name, false, -1, is_sub_theme))->show();
+	}
+}
+
 void KarambaIface::closeTheme(QString name)
 {
   karamba* k;
 
-  while(k = getKaramba(name))
+  while((k = getKaramba(name)))
   {
     k->writeConfigData();
     k->close(true);
@@ -91,6 +100,24 @@ int KarambaIface::themeAdded(QString appId, QString file)
   if(tw)
     return tw->addTheme(appId, file);
   return -1;
+}
+
+void KarambaIface::themeNotify(QString name, QString text)
+{
+  karamba* k = getKaramba(name);
+  if(k)
+  {
+    k->themeNotify(name, text);
+  }
+}
+
+void KarambaIface::setIncomingData(QString name, QString text)
+{
+  karamba* k = getKaramba(name);
+  if(k)
+  {
+    k->_setIncomingData(text);
+  }
 }
 
 void KarambaIface::themeClosed(QString appId, QString file, int instance)

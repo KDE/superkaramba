@@ -62,6 +62,7 @@ class KarambaApplication : public KApplication
 
     QString getMainKaramba();
     QStringList getKarambas();
+    bool themeExists(QString pretty_name);
     void initDcopStub(QCString app = "");
     void setUpSysTray(KAboutData* about);
     void checkPreviousSession(KApplication &app, QStringList &lst);

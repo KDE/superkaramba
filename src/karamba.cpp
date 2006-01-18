@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2003-2004 Adam Geitgey <adam@rootnode.org>
  * Copyright (C) 2003 Hans Karlsson <karlsson.h@home.se>
+ * Copyright (C) 2004,2005 Luke Kenneth Casson Leighton <lkcl@lkcl.net>
  * Copyright (c) 2005 Ryan Nickell <p0z3r@earthlink.net>
  *
  * This file is part of SuperKaramba.
@@ -48,7 +49,8 @@
 #define EDITSCRIPT 1
 #define THEMECONF  2
 
-karamba::karamba(QString fn, bool reloading, int instance) :
+karamba::karamba(QString fn, QString name, bool reloading, int instance,
+    bool sub_theme):
     QWidget(0,"karamba", Qt::WGroupLeader | WStyle_Customize |
             WRepaintNoErase| WStyle_NoBorder | WDestructiveClose  ),
     meterList(0), imageList(0), clickList(0), kpop(0), widgetMask(0),
@@ -57,8 +59,13 @@ karamba::karamba(QString fn, bool reloading, int instance) :
     themeConfMenu(0), toDesktopMenu(0), kglobal(0), clickPos(0, 0), accColl(0),
     menuAccColl(0), toggleLocked(0), pythonIface(0), defaultTextField(0),
     trayMenuSeperatorId(-1), trayMenuQuitId(-1), trayMenuToggleId(-1),
-    trayMenuThemeId(-1)
+    trayMenuThemeId(-1),
+    m_sysTimer(NULL)
 {
+  want_right_button = false;
+  prettyName = name;
+  m_sub_theme = sub_theme;
+
   KURL url;
 
   if(fn.find('/') == -1)
@@ -72,7 +79,7 @@ karamba::karamba(QString fn, bool reloading, int instance) :
     return;
   }
   kdDebug() << "Starting theme: " << m_theme.name() << endl;
-  QString qName = "karamba - " + m_theme.name();
+  QString qName = "karamba - " + prettyName;
   setName(qName.ascii());
 
   //Add self to list of open themes
@@ -238,9 +245,9 @@ karamba::karamba(QString fn, bool reloading, int instance) :
   appId = client->registerAs(qApp->name());
 
 
-  this->setBackgroundMode( NoBackground);
+  setBackgroundMode( NoBackground);
   if( !(onTop || managed))
-    this->lower();
+    lower();
 
   if( !parseConfig() )
   {
@@ -350,7 +357,8 @@ karamba::~karamba()
   delete widgetMask;
   delete kWinModule;
   delete defaultTextField;
-  delete pythonIface;
+  if (pythonIface != NULL)
+    delete pythonIface;
 }
 
 bool karamba::parseConfig()
@@ -782,7 +790,7 @@ bool karamba::parseConfig()
 
 void karamba::start()
 {
-  QTimer *m_sysTimer = new QTimer(this);
+  m_sysTimer = new QTimer(this);
 
   connect(m_sysTimer, SIGNAL(timeout()), SLOT(step()));
 
@@ -849,7 +857,8 @@ void karamba::reloadConfig()
   writeConfigData();
   if(m_theme.exists())
   {
-    (new karamba(m_theme.file(), true, m_instance))->show();
+    QFileInfo fileInfo( m_theme.file() );
+    (new karamba(m_theme.file(), fileInfo.baseName(), true, m_instance))->show();
   }
   closeTheme(true);
 }
@@ -1234,6 +1243,54 @@ void karamba::passMenuOptionChanged(QString key, bool value)
     pythonIface->menuOptionChanged(this, key, value);
 }
 
+void karamba::setIncomingData(QString theme, QString obj)
+{
+  KarambaApplication* app = (KarambaApplication*)qApp;
+
+  qWarning("karamba::callTheme");
+   //QByteArray data;
+   //QDataStream dataStream( data, IO_WriteOnly );
+   //dataStream << theme;
+   //dataStream << txt;
+
+   //kapp->dcopClient()->send( app->dcopClient()->appId(), "KarambaIface", "themeNotify(QString,QString)", data );
+ 
+  DCOPClient *c = kapp->dcopClient();
+  if (!c->isAttached())
+    c->attach();
+
+  if(app->dcopStub())
+    app->dcopStub()->setIncomingData(theme, obj);
+}
+
+void karamba::callTheme(QString theme, QString txt)
+{
+  KarambaApplication* app = (KarambaApplication*)qApp;
+
+  //qWarning("karamba::callTheme");
+   //QByteArray data;
+   //QDataStream dataStream( data, IO_WriteOnly );
+   //dataStream << theme;
+   //dataStream << txt;
+
+   //kapp->dcopClient()->send( app->dcopClient()->appId(), "KarambaIface", "themeNotify(QString,QString)", data );
+ 
+  DCOPClient *c = kapp->dcopClient();
+  if (!c->isAttached())
+    c->attach();
+
+  if(app->dcopStub())
+    app->dcopStub()->themeNotify(theme, txt);
+}
+
+void karamba::themeNotify(QString theme, QString txt)
+{
+  if (pythonIface->isExtensionLoaded())
+  {
+      pythonIface->themeNotify(this, theme.ascii(), txt.ascii());
+  }
+}
+
 void karamba::meterClicked(QMouseEvent* e, Meter* meter)
 {
   //qWarning("karamba::meterClicked");
@@ -1258,6 +1315,12 @@ void karamba::meterClicked(QMouseEvent* e, Meter* meter)
       pythonIface->meterClicked(this, meter, button);
     }
   }
+}
+
+void karamba::changeInterval(int interval)
+{
+  if (m_sysTimer != NULL)
+    m_sysTimer->changeInterval(interval);
 }
 
 void karamba::passClick(QMouseEvent *e)
@@ -1320,12 +1383,17 @@ void karamba::passWheelClick( QWheelEvent *e )
   }
 }
 
+void karamba::management_popup( void )
+{
+  kpop->popup(QCursor::pos());
+}
+
 void karamba::mousePressEvent( QMouseEvent *e )
 {
   //qDebug("karamba::mousePressEvent");
-  if( e->button() == RightButton )
+  if( e->button() == RightButton && !want_right_button )
   {
-    kpop->exec(QCursor::pos());
+    management_popup();
   }
   else
   {
@@ -1437,7 +1505,7 @@ void karamba::closeEvent ( QCloseEvent *  qc)
 {
   //qDebug("karamba::closeEvent");
   qc->accept();
-  //  this->close(true);
+  //  close(true);
   //  delete this;
 }
 
@@ -1852,7 +1920,10 @@ void karamba::dropEvent(QDropEvent* event)
   {
     //Everything below is to call the python callback function
     if (pythonIface && pythonIface->isExtensionLoaded())
-      pythonIface->itemDropped(this, text.ascii());
+    {
+      const QPoint &p = event->pos();
+      pythonIface->itemDropped(this, text.ascii(), p.x(), p.y());
+    }
   }
 }
 
@@ -1979,6 +2050,20 @@ void karamba::slotQuit()
 void karamba::slotShowTheme()
 {
   karambaApp->globalShowThemeDialog();
+}
+
+void karamba::setAlwaysOnTop(bool stay)
+{
+    if(stay)
+    {
+        onTop = true;
+        KWin::setState( winId(), NET::StaysOnTop );
+    }
+    else
+    {
+        onTop = false;
+        KWin::clearState( winId(), NET::StaysOnTop );
+    }
 }
 
 #include "karamba.moc"

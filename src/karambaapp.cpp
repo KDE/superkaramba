@@ -27,6 +27,7 @@
 #include "dcopinterface_stub.h"
 #include "karamba.h"
 #include "superkarambasettings.h"
+#include "qwidgetlist.h"
 
 int KarambaApplication::fd = -1;
 
@@ -71,6 +72,25 @@ QString KarambaApplication::getMainKaramba()
       return *it;
   }
   return QString::null;
+}
+
+bool KarambaApplication::themeExists(QString pretty_name)
+{
+  QWidgetList  *list = QApplication::allWidgets();
+  QWidgetListIt it( *list );         // iterate over the widgets
+  QWidget * w;
+  while ( (w=it.current()) != 0 ) // for each widget...
+  {
+    ++it;
+    if (QString(w->name()).startsWith("karamba"))
+    {
+      karamba* k = (karamba*) w;
+      if (k->getPrettyName() == pretty_name)
+        return true;
+    }
+  }
+  delete list; // delete the list, not the widgets
+  return false;
 }
 
 QStringList KarambaApplication::getKarambas()

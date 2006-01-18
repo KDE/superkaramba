@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2003 Hans Karlsson <karlsson.h@home.se>
+ * Copyright (C) 2004,2005 Luke Kenneth Casson Leighton <lkcl@lkcl.net>
  * Copyright (C) 2003-2004 Adam Geitgey <adam@rootnode.org>
  * Copyright (c) 2005 Ryan Nickell <p0z3r@earthlink.net>
  *
@@ -101,6 +102,7 @@
  * @short Application Main Window
  * @author Adam Geitgey <adam@rootnode.org>
  * @author Hans Karlsson <karlsson.h@home.se>
+ * @author Luke Kenneth Casson Leighton <lkcl@lkcl.net>
  * @version 0.26
  */
 
@@ -112,7 +114,8 @@ class karamba :  public QWidget
     Q_OBJECT
 
 public:
-    karamba(QString fn, bool reloading = false, int instance = -1);
+    karamba(QString fn, QString name, bool reloading = false,
+            int instance = -1, bool sub_theme = false);
     QObjectList *menuList;
 
     virtual ~karamba();
@@ -135,6 +138,7 @@ public:
     KProcess* currProcess;
     bool useSmoothTransforms();
 
+    void changeInterval(int interval);
     void setWidgetUpdate(bool wu) { widgetUpdate = wu; };
     bool getWidgetUpdate() { return widgetUpdate; };
     bool hasMeter(Meter* meter) { return meterList->containsRef(meter) > 0; };
@@ -151,16 +155,30 @@ public:
 
     int numberOfConfMenuItems;
     KConfig* config;
+    QString prettyName;
+    bool m_sub_theme;
+    bool isSubTheme() { return m_sub_theme; }
 
     void toggleWidgetUpdate( bool );
 
     KWinModule*    kWinModule;
 
-    void makeActive();
-  void makePassive();
+    QString incomingData;
+    QString getIncomingData() { return incomingData; }
+    void _setIncomingData(QString data) { incomingData = data; }
+    void setIncomingData(QString theme, QString data);
 
-  void showMenuExtension();
-  void hideMenuExtension();
+    void themeNotify(QString theme, QString txt);
+    void callTheme(QString theme, QString txt);
+
+    double getUpdateTime() { return update_time; }
+    void setUpdateTime(double time) { update_time = time; }
+
+    void makeActive();
+    void makePassive();
+
+    void showMenuExtension();
+    void hideMenuExtension();
 
 protected:
     void mousePressEvent( QMouseEvent *);
@@ -179,6 +197,8 @@ protected:
 private:
     bool widgetUpdate;
     bool repaintInProgress;
+    //bool reloading;
+    bool want_right_button;
 
     NETWinInfo* info;
     bool onTop;
@@ -186,6 +206,7 @@ private:
     bool fixedPosition;
     bool haveUpdated;
     char tempUnit;
+    double update_time;
     int m_instance;
 
     bool parseConfig();
@@ -248,6 +269,7 @@ public slots:
     void processExited (KProcess *proc);
     void receivedStdout (KProcess *proc, char *buffer, int buflen);
     void toDesktop(int desktopid, int menuid);
+    const char *getPrettyName() { return prettyName.ascii(); }
 
     // Systray
     void systrayUpdated();
@@ -261,8 +283,22 @@ public slots:
     void activeTaskChanged(Task*);
     void reloadConfig();
 
+    void setAlwaysOnTop(bool stay);
+
+    /**
+     * If true, then when a right button is pressed on the theme,
+     * the theme's python widgetMouseMoved function is called.
+     */
+    void setWantRightButton(bool yesno) { want_right_button = yesno; }
+
+    /**
+     * can be used to fire up the karamba management popup menu
+     */
+    void management_popup( void );
+
 private:
     bool m_reloading;
+    QTimer *m_sysTimer;
     int m_interval;
 
 private slots:

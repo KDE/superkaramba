@@ -38,6 +38,11 @@ void Meter::setSize(int ix, int iy, int iw, int ih)
   recalculateValue();
 }
 
+void Meter::setThemePath( QString path )
+{
+	  themePath = path;
+}
+
 int Meter::getX()
 {
   return boundingBox.x();

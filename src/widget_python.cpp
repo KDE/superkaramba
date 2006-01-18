@@ -172,6 +172,26 @@ PyObject* py_move_widget(PyObject *, PyObject *args)
 }
 
 /* now a method we need to expose to Python */
+long widgetSetOnTop(long widget, bool b) {
+  karamba* currTheme = (karamba*)widget;
+
+  if (currTheme != 0)
+  {
+    currTheme->setAlwaysOnTop(b);
+  }
+  return 1;
+}
+
+PyObject* py_set_widget_on_top(PyObject *self, PyObject *args)
+{
+  long widget;
+  long b;
+  if (!PyArg_ParseTuple(args, (char*)"ll:setWidgetOnTop", &widget, &b ))
+    return NULL;
+  return Py_BuildValue((char*)"l", widgetSetOnTop(widget, b));
+}
+
+/* now a method we need to expose to Python */
 long toggleWidgetRedraw(long widget, bool b)
 {
   karamba* currTheme = (karamba*)widget;
