@@ -3,7 +3,7 @@
 *
 *  Copyright (C) 2003 Hans Karlsson <karlsson.h@home.se>
 *  Copyright (C) 2003-2004 Adam Geitgey <adam@rootnode.org>
-*  Copyright (C) 2004 Petri Damstén <damu@iki.fi> 
+*  Copyright (C) 2004 Petri Damstï¿½ <damu@iki.fi> 
 *  Copyright (C) 2004, 2005 Luke Kenneth Casson Leighton <lkcl@lkcl.net>
 *
 *  This file is part of SuperKaramba.
