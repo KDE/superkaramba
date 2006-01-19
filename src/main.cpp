@@ -97,6 +97,7 @@ int main(int argc, char **argv)
     about.addAuthor("Hans Karlsson", 0, "karlsson.h@home.se");
     about.addAuthor("Ryan Nickell", 0, "p0z3r@earthlink.net");
     about.addAuthor("Petri Damstén", 0, "petri.damsten@iki.fi");
+    about.addAuthor("Alexander Wiedenbruch", 0, "mail@wiedenbruch.de");
     about.addAuthor("Luke Kenneth Casson Leighton", 0, "lkcl@lkcl.net");
     KCmdLineArgs::init(argc, argv, &about);
     KCmdLineArgs::addCmdLineOptions(options);
