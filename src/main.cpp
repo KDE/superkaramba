@@ -42,7 +42,7 @@
 static const char *description =
     I18N_NOOP("A KDE Eye-candy Application");
 
-static const char *version = "0.37";
+static const char *version = "0.38";
 
 static KCmdLineOptions options[] =
 {
@@ -78,7 +78,6 @@ void karambaMessageOutput(QtMsgType type, const char *msg)
             fprintf( fp, "Fatal (%d): %s\n", pid, msg );
             abort();                    // deliberately core dump
     }
-    about.addAuthor( "Luke Kenneth Casson Leighton", 0, "lkcl@lkcl.net" );
     fclose(fp);
   }
 }
@@ -93,11 +92,12 @@ int main(int argc, char **argv)
     KAboutData about("superkaramba", I18N_NOOP("SuperKaramba"),
                      version, description,
                      KAboutData::License_GPL,
-                     "(c) 2003-2005 The SuperKaramba developers");
+                     "(c) 2003-2006 The SuperKaramba developers");
     about.addAuthor("Adam Geitgey", 0, "adam@rootnode.org");
     about.addAuthor("Hans Karlsson", 0, "karlsson.h@home.se");
     about.addAuthor("Ryan Nickell", 0, "p0z3r@earthlink.net");
     about.addAuthor("Petri Damstén", 0, "petri.damsten@iki.fi");
+    about.addAuthor("Luke Kenneth Casson Leighton", 0, "lkcl@lkcl.net");
     KCmdLineArgs::init(argc, argv, &about);
     KCmdLineArgs::addCmdLineOptions(options);
     KSessionManaged ksm;
