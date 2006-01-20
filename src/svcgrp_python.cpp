@@ -146,7 +146,7 @@ static PyObject *getServiceGroups(const char *rel_path)
 		return list;
 }
 
-PyObject* py_get_service_groups(PyObject *self, PyObject *args)
+PyObject* py_get_service_groups(PyObject *, PyObject *args)
 {
   char *rel_path;
   if (!PyArg_ParseTuple(args, (char*)"s:getServiceGroup", &rel_path))
