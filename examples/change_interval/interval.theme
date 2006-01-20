@@ -1,0 +1,2 @@
+KARAMBA x=200 y=100 w=300 h=40 INTERVAL=200 LOCKED=true
+TEXT x=0 y=0 w=300 h=20 value="wiggle the mouse over me" color=200,252,200

@@ -1,0 +1,5 @@
+# simple test of drop receipt, including location.
+
+karamba  x=0 y=0 w=600 h=140 locked=true color=0,50,0
+text x=10 y=10 value="Drag a desktop icon on me and i will tell you where" color=252,252,252 fontsize=12 font="sans"
+
