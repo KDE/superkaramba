@@ -10,6 +10,7 @@
 
 #include "karamba.h"
 #include "karambainterface.h"
+#include <kdebug.h>
 #include "qwidgetlist.h"
 #include "themesdlg.h"
 
@@ -34,7 +35,8 @@ karamba* KarambaIface::getKaramba(QString name)
     if (QString(w->name()).startsWith("karamba"))
     {
       karamba* k = (karamba*) w;
-      if(k->prettyName == name)
+      //if(k->prettyName == name)
+      if(k->theme().name() == name)
       {
         result = k;
         break;
@@ -85,6 +87,7 @@ void KarambaIface::openNamedTheme(QString filename, QString name, bool is_sub_th
 
 void KarambaIface::closeTheme(QString name)
 {
+  kdDebug() << "KarambaIface::closeTheme: " << name << endl;
   karamba* k;
 
   while((k = getKaramba(name)))

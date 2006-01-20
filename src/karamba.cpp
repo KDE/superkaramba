@@ -78,8 +78,10 @@ karamba::karamba(QString fn, QString name, bool reloading, int instance,
     QTimer::singleShot(100, this, SLOT(killWidget()));
     return;
   }
-  kdDebug() << "Starting theme: " << m_theme.name() << endl;
+  kdDebug() << "Starting theme: " << m_theme.name()
+            << " pretty name: " << prettyName << endl;
   QString qName = "karamba - " + prettyName;
+  //QString qName = "karamba - " + m_theme.name();
   setName(qName.ascii());
 
   //Add self to list of open themes
@@ -1247,7 +1249,7 @@ void karamba::setIncomingData(QString theme, QString obj)
 {
   KarambaApplication* app = (KarambaApplication*)qApp;
 
-  qWarning("karamba::callTheme");
+  kdDebug() << "karamba::setIncomingData " << theme << obj << endl;
    //QByteArray data;
    //QDataStream dataStream( data, IO_WriteOnly );
    //dataStream << theme;
@@ -1266,7 +1268,7 @@ void karamba::setIncomingData(QString theme, QString obj)
 void karamba::callTheme(QString theme, QString txt)
 {
   KarambaApplication* app = (KarambaApplication*)qApp;
-
+  kdDebug() << "karamba::callTheme " << theme << txt << endl;
   //qWarning("karamba::callTheme");
    //QByteArray data;
    //QDataStream dataStream( data, IO_WriteOnly );
@@ -1285,6 +1287,7 @@ void karamba::callTheme(QString theme, QString txt)
 
 void karamba::themeNotify(QString theme, QString txt)
 {
+  kdDebug() << "karamba::themeNotify" << theme << txt << endl;
   if (pythonIface->isExtensionLoaded())
   {
       pythonIface->themeNotify(this, theme.ascii(), txt.ascii());

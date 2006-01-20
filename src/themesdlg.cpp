@@ -476,6 +476,7 @@ void ThemesDlg::uninstall()
     ThemeWidget *twPtr;
     for ( twPtr = list.first(); twPtr; twPtr = list.next() )
     {
+      karambaApp->dcopIface()->closeTheme(twPtr->themeFile()->name());
       tableThemes->removeItem( twPtr );
     }
 #ifdef HAVE_KNEWSTUFF
