@@ -186,10 +186,10 @@ int getSystraySize(long widget) {
 	}
 }
 
-// Returns the size of the systray 
-PyObject* py_get_systray_size(PyObject* self, PyObject* args)
+// Returns the size of the systray
+PyObject* py_get_systray_size(PyObject*, PyObject* args)
 {
-    long widget; 
+    long widget;
 
     if (!PyArg_ParseTuple(args, "l:getSystraySize", &widget))
         return NULL;

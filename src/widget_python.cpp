@@ -68,7 +68,7 @@ long createWidgetMask(long widget, char* path)
   rootPath.setAscii(currTheme->theme().path().ascii());
 
   currTheme->clearMask();
-  
+
   maskpath.setAscii(path);
   rootPath.append(maskpath.ascii());
 
@@ -182,7 +182,7 @@ long widgetSetOnTop(long widget, bool b) {
   return 1;
 }
 
-PyObject* py_set_widget_on_top(PyObject *self, PyObject *args)
+PyObject* py_set_widget_on_top(PyObject *, PyObject *args)
 {
   long widget;
   long b;

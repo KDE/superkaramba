@@ -3,7 +3,7 @@
 *
 *  Copyright (C) 2003 Hans Karlsson <karlsson.h@home.se>
 *  Copyright (C) 2003-2004 Adam Geitgey <adam@rootnode.org>
-*  Copyright (C) 2004 Petri Damst� <damu@iki.fi> 
+*  Copyright (C) 2004 Petri Damst� <damu@iki.fi>
 *  Copyright (C) 2004, 2005 Luke Kenneth Casson Leighton <lkcl@lkcl.net>
 *
 *  This file is part of SuperKaramba.
@@ -61,7 +61,7 @@ PyObject* py_accept_drops(PyObject *, PyObject *args)
 }
 
 // Runs a command, returns 0 if it could not start command
-PyObject* py_run_command(PyObject* self, PyObject* args)
+PyObject* py_run_command(PyObject*, PyObject* args)
 {
   char* name;
   char* command;
@@ -261,7 +261,7 @@ const char* getPrettyName(long widget) {
   return currTheme->prettyName.ascii();
 }
 
-PyObject* py_get_pretty_name(PyObject *self, PyObject *args)
+PyObject* py_get_pretty_name(PyObject *, PyObject *args)
 {
   long widget;
   if (!PyArg_ParseTuple(args, (char*)"l:getPrettyThemeName", &widget))
@@ -319,7 +319,7 @@ long removeClickArea(long widget, long click) {
   currTheme -> clickList -> remove(tmp);
 
   delete tmp;
-  return (int)tmp;
+  return (long)tmp;
 }
 
 /* now a method we need to expose to Python */
@@ -338,7 +338,7 @@ long createServiceClickArea(long widget, long x, long y, long w, long h, char *n
   tmp->setServiceOnClick(n, e, i);
 
   currTheme -> clickList -> append(tmp);
-  return (int)tmp;
+  return (long)tmp;
 }
 
 long createClickArea(long widget, long x, long y, long w, long h, char* text) {
@@ -355,7 +355,7 @@ long createClickArea(long widget, long x, long y, long w, long h, char* text) {
   return (long)tmp;
 }
 
-PyObject* py_remove_click_area(PyObject *self, PyObject *args)
+PyObject* py_remove_click_area(PyObject *, PyObject *args)
 {
   long widget, click;
   if (!PyArg_ParseTuple(args, (char*)"ll:removeClickArea", &widget, &click))
@@ -363,19 +363,19 @@ PyObject* py_remove_click_area(PyObject *self, PyObject *args)
   return Py_BuildValue((char*)"l", removeClickArea(widget, click));
 }
 
-PyObject* py_create_service_click_area(PyObject *self, PyObject *args)
+PyObject* py_create_service_click_area(PyObject *, PyObject *args)
 {
   long widget, x, y, w, h;
   char *name;
   char *exec;
   char *icon;
-  if (!PyArg_ParseTuple(args, (char*)"lllllsss:createServiceClickArea", &widget, &x, &y, 
+  if (!PyArg_ParseTuple(args, (char*)"lllllsss:createServiceClickArea", &widget, &x, &y,
                         &w, &h, &name, &exec, &icon))
     return NULL;
   return Py_BuildValue((char*)"l", createServiceClickArea(widget, x, y, w, h, name, exec, icon));
 }
 
-PyObject* py_create_click_area(PyObject *self, PyObject *args)
+PyObject* py_create_click_area(PyObject *, PyObject *args)
 {
   long widget, x, y, w, h;
   char *text;
@@ -394,7 +394,7 @@ static long callTheme(long widget, char* path, char *str)
   if (currTheme)
     currTheme->callTheme(QString(path), QString(str));
 
-  return (int)currTheme;
+  return (long)currTheme;
 }
 
 static long setIncomingData(long widget, char* path, char *obj)
@@ -404,7 +404,7 @@ static long setIncomingData(long widget, char* path, char *obj)
   if (currTheme)
     currTheme->setIncomingData(QString(path), QString(obj));
 
-  return (int)currTheme;
+  return (long)currTheme;
 }
 
 static QString getIncomingData(long widget)
@@ -426,12 +426,12 @@ static QString getIncomingData(long widget)
 long openNamedTheme(char* path, char *name, bool is_sub_theme) {
 
   QString filename;
-  karamba* currTheme = 0; 
+  karamba* currTheme = 0;
 
   filename.setAscii(path);
-  
+
   QFileInfo file( filename );
-  
+
   if( file.exists() )
   {
       QCString prettyName(name);
@@ -443,7 +443,7 @@ long openNamedTheme(char* path, char *name, bool is_sub_theme) {
       currTheme->show();
     }
   }
-  return (int)currTheme;
+  return (long)currTheme;
 }
 
 /* now a method we need to expose to Python */
@@ -466,7 +466,7 @@ long openTheme(char* path)
   return (long)currTheme;
 }
 
-PyObject* py_get_incoming_data(PyObject *self, PyObject *args)
+PyObject* py_get_incoming_data(PyObject *, PyObject *args)
 {
   long widget;
   if (!PyArg_ParseTuple(args, (char*)"l:getIncomingData", &widget))
@@ -474,7 +474,7 @@ PyObject* py_get_incoming_data(PyObject *self, PyObject *args)
   return Py_BuildValue((char*)"O", QString2PyString(getIncomingData(widget)));
 }
 
-PyObject* py_set_incoming_data(PyObject *self, PyObject *args)
+PyObject* py_set_incoming_data(PyObject *, PyObject *args)
 {
   char *themePath;
   long widget;
@@ -484,7 +484,7 @@ PyObject* py_set_incoming_data(PyObject *self, PyObject *args)
   return Py_BuildValue((char*)"l", setIncomingData(widget, themePath, obj));
 }
 
-PyObject* py_call_theme(PyObject *self, PyObject *args)
+PyObject* py_call_theme(PyObject *, PyObject *args)
 {
   char *themePath;
   char *str;
@@ -494,7 +494,7 @@ PyObject* py_call_theme(PyObject *self, PyObject *args)
   return Py_BuildValue((char*)"l", callTheme(widget, themePath, str));
 }
 
-PyObject* py_open_named_theme(PyObject *self, PyObject *args)
+PyObject* py_open_named_theme(PyObject *, PyObject *args)
 {
   char *themePath;
   char *themeName;
@@ -713,7 +713,7 @@ QString getIp(char *device_name)
   return retval;
 }
 
-PyObject* py_set_update_time(PyObject *self, PyObject *args)
+PyObject* py_set_update_time(PyObject *, PyObject *args)
 {
   long widget;
   double time;
@@ -724,7 +724,7 @@ PyObject* py_set_update_time(PyObject *self, PyObject *args)
   return Py_BuildValue((char*)"l", 1);
 }
 
-PyObject* py_get_update_time(PyObject *self, PyObject *args)
+PyObject* py_get_update_time(PyObject *, PyObject *args)
 {
   long widget;
   double time;
