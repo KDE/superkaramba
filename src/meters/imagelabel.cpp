@@ -277,7 +277,7 @@ void ImageLabel::setValue(QString fn)
     QStringList sList = fn.split( "\n");
     if(sList.size()==0) return;
     QString fileName = sList.at(0);
-    KURL url(fileName);
+    KUrl url(fileName);
     QRegExp rx("^[a-zA-Z]{1,5}:/",false);
     bool protocol = (rx.search(fileName)!=-1)?true:false;
     QPixmap pm;

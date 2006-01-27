@@ -66,7 +66,7 @@ KarambaWidget::KarambaWidget(QString fn, bool reloading, int instance, QWidget *
 {
     setAttribute(Qt::WA_GroupLeader);
     setAttribute(Qt::WA_DeleteOnClose);
-    KURL url;
+    KUrl url;
     
     /* Testing of passed filename as relative/absolute or pre filename */
     if(fn.find('/') == -1)

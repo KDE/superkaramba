@@ -116,7 +116,7 @@ private:
     const KArchiveDirectory* m_dir;
 };
 
-ThemeFile::ThemeFile(const KURL& url)
+ThemeFile::ThemeFile(const KUrl& url)
         : m_stream(0), m_locale(0), m_zip(0)
 {
     if(url.isValid())
@@ -206,7 +206,7 @@ QPixmap ThemeFile::icon() const
 }
 
 bool ThemeFile::set
-    (const KURL &url)
+    (const KUrl &url)
 {
     if(!url.isLocalFile() && !url.protocol().isEmpty())
     {

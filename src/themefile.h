@@ -44,7 +44,7 @@ class ThemeFile
 public:
     typedef QVector<ThemeFile> List;
 
-    ThemeFile(const KURL& url = KURL());
+    ThemeFile(const KUrl& url = KURL());
     ~ThemeFile();
 
     bool isZipTheme() const
@@ -113,7 +113,7 @@ public:
     bool canUninstall() const;
 
     bool set
-        (const KURL& url);
+        (const KUrl& url);
     bool open();
     bool nextLine(LineParser& parser);
     bool close();

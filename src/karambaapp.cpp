@@ -83,7 +83,7 @@ KarambaApplication::KarambaApplication()
             {
                 if( args->arg(i) != "" )
                 {
-                    KURL url = args->url(i);
+                    KUrl url = args->url(i);
                     lst.push_back(url.path());
                 }
             }

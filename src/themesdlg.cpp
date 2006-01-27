@@ -343,8 +343,8 @@ void ThemesDlg::uninstall()
 {
     ThemeWidget* w = static_cast<ThemeWidget*>(tableThemes->selectedItem());
     ThemeFile* tf = w->themeFile();
-    KURL trash("trash:/");
-    KURL theme(tf->file());
+    KUrl trash("trash:/");
+    KUrl theme(tf->file());
 
     karambaApp->dcopIface()->closeTheme(tf->name());
     KIO::move(theme, trash);

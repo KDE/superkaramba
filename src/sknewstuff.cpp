@@ -99,8 +99,8 @@ bool SKNewStuff::install( const QString &fileName )
         //TODO: write a routine to check if this is a valid .skz file
         //otherwise we need to unpack it like it is an old theme that was packaged
         //as a .zip instead of .bz2 or .tar.gz
-        KURL sourceFile(fileName);
-        KURL destFile( destDir + sourceFile.fileName() );
+        KUrl sourceFile(fileName);
+        KUrl destFile( destDir + sourceFile.fileName() );
         if(!KIO::NetAccess::file_copy( sourceFile, destFile ))
         {
             return false;
@@ -129,7 +129,7 @@ bool SKNewStuff::createUploadFile( const QString &fileName )
 
 QString SKNewStuff::downloadDestination( KNS::Entry *entry )
 {
-    KURL source = entry->payload();
+    KUrl source = entry->payload();
     kdDebug() << "SKNewStuff::downloadDestination() fileName: "
     << source.fileName() << endl;
     return KGlobal::dirs()->saveLocation( "tmp" ) + source.fileName();
