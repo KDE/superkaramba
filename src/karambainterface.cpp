@@ -72,7 +72,7 @@ void KarambaIface::openTheme(QString filename)
   QFileInfo file(filename);
   if(file.exists())
   {
-    (new karamba(filename, false))->show();
+    (new karamba(filename, QString()))->show();
   }
 }
 

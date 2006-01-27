@@ -544,7 +544,7 @@ bool karamba::parseConfig()
         QFileInfo info(path);
         if( info.isRelative())
           path = m_theme.path() +"/" + path;
-        (new karamba( path, false ))->show();
+        (new karamba( path, QString() ))->show();
       }
 
       if(lineParser.meter() == "<GROUP>")

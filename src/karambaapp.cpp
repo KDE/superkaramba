@@ -279,7 +279,7 @@ bool KarambaApplication::startThemes(QStringList &lst)
   {
     karamba *mainWin = 0;
 
-    mainWin = new karamba(*it , false);
+    mainWin = new karamba(*it , QString());
     mainWin->show();
     result = true;
   }

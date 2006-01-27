@@ -195,7 +195,7 @@ void ThemesDlg::addToDesktop()
     ThemeFile* tf = w->themeFile();
     if(tf)
     {
-      (new karamba(tf->file(), false))->show();
+      (new karamba(tf->file(), QString()))->show();
     }
   }
 }
@@ -210,7 +210,7 @@ void ThemesDlg::openLocalTheme()
   {
     ThemeFile file(*it);
     if(file.isValid())
-      (new karamba(*it, false))->show();
+      (new karamba(*it, QString()))->show();
   }
 }
 

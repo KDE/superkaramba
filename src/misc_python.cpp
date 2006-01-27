@@ -459,7 +459,7 @@ long openTheme(char* path)
 
   if( file.exists() )
     {
-      currTheme = new karamba( filename, false );
+      currTheme = new karamba( filename, QString() );
       currTheme->show();
     }
 
