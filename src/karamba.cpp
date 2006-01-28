@@ -1903,7 +1903,7 @@ void karamba::readProperties(KConfig* config)
 {
   //qDebug("karamba::readProperties");
   config->setGroup("session");
-  QString atheme = config->readEntry("theme","");
+  QString atheme = config->readEntry("theme");
 }
 
 //Register types of events that can be dragged on our widget

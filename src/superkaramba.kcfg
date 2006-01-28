@@ -9,7 +9,7 @@
     </entry>
   </group>
   <group name="themes">
-    <entry name="UserAddedThemes" type="StringList">
+    <entry name="UserAddedThemes" type="PathList">
       <label>Themes that user added to theme list.</label>
     </entry>
   </group>

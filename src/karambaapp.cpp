@@ -245,7 +245,7 @@ void KarambaApplication::checkPreviousSession(KApplication &app,
   {
     KConfig* config = app.sessionConfig();
     config->setGroup("General Options");
-    QString restartThemes = config->readEntry("OpenThemes","");
+    QString restartThemes = config->readEntry("OpenThemes");
 
     //Get themes that were running
     lst = QStringList::split(QString(";"), restartThemes);

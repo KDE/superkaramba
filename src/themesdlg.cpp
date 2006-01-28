@@ -219,8 +219,8 @@ void ThemesDlg::getNewStuff()
 #ifdef HAVE_KNEWSTUFF
   KConfig* config = KGlobal::config();
   config->setGroup("KNewStuff");
-  config->writeEntry("ProvidersUrl",
-      "http://download.kde.org/khotnewstuff/karamba-providers.xml");
+  config->writePathEntry("ProvidersUrl",
+      QString::fromLatin1("http://download.kde.org/khotnewstuff/karamba-providers.xml"));
   config->sync();
   m_newStuffStatus = config->entryMap("KNewStuffStatus").keys();
   //This check is b/c KNewStuff will download, throw an error, 
@@ -429,10 +429,7 @@ bool ThemesDlg::isDownloaded( const QString& path )
   kdDebug() << "isDownloaded path: " << path << endl;
   KConfig* config = KGlobal::config();
   config->setGroup("KNewStuffNames");
-  if( !config->readEntry(path).isEmpty() )
-    return true;
-  else
-    return false;
+  return !config->readEntry(path).isEmpty();
 }
 
 void ThemesDlg::uninstall()
