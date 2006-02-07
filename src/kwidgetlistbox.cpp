@@ -189,14 +189,14 @@ void KWidgetListbox::showItems(show_callback func, void* data)
 
 void KWidgetListbox::showEvent(QShowEvent*)
 {
-    //kdDebug() << k_funcinfo << endl;
+    //kDebug() << k_funcinfo << endl;
     repaintContents(false);
 }
 
 void KWidgetListbox::paintCell(QPainter*, int, int, const QRect&,
                                bool, const QColorGroup&)
 {
-    //kdDebug() << k_funcinfo << endl;
+    //kDebug() << k_funcinfo << endl;
 }
 
 #include "kwidgetlistbox.moc"

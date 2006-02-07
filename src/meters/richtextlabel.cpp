@@ -37,7 +37,7 @@ RichTextLabel::RichTextLabel(KarambaWidget* k, int x, int y, int w, int h) :
         colorGrp(k->colorGroup()),
         underlineLinks(false)
 {
-    kdDebug() << k_funcinfo << x << ", " << y << ", " << w << ", " << h << endl;
+    kDebug() << k_funcinfo << x << ", " << y << ", " << w << ", " << h << endl;
     originalSize = QSize(w, h);
     textDoc= new QTextDocument(this);
     textDoc->documentLayout()->setPaintDevice(this);
@@ -100,7 +100,7 @@ void RichTextLabel::setFontSize(int size)
     QFont f=font();
     f.setPixelSize(size);
     setFont(f);
-    //     kdDebug() << "setFontSize" << size << textDoc->documentLayout()->documentSize().toSize()<<"--"<<textDoc->pageSize()<<endl;
+    //     kDebug() << "setFontSize" << size << textDoc->documentLayout()->documentSize().toSize()<<"--"<<textDoc->pageSize()<<endl;
 }
 
 int RichTextLabel::getFontSize() const
@@ -127,14 +127,14 @@ void RichTextLabel::setTextProps(TextField* t)
         setFontSize(t->getFontSize());
         setFont(t->getFont());
         colorGrp.setColor(QColorGroup::Text, t->getColor());
-        //         kdDebug()<< "setTextProps" << t->getFont() << t->getFontSize() << "--"<< textDoc->pageSize()<< textDoc->documentLayout()->documentSize().toSize()<<endl;
+        //         kDebug()<< "setTextProps" << t->getFont() << t->getFontSize() << "--"<< textDoc->pageSize()<< textDoc->documentLayout()->documentSize().toSize()<<endl;
     }
 }
 
 void RichTextLabel::setWidth(int p_width)
 {
     resize(p_width,height());
-    //     kdDebug() << "setWidth" << p_width << textDoc->documentLayout()->documentSize().toSize() << "--"<<textDoc->pageSize()<< endl;
+    //     kDebug() << "setWidth" << p_width << textDoc->documentLayout()->documentSize().toSize() << "--"<<textDoc->pageSize()<< endl;
     //     if(originalSize.height() < 1)
     //         setHeight(text->height());
 }
@@ -237,7 +237,7 @@ const QColorGroup & RichTextLabel::getColorGroup() const
 
 void RichTextLabel::updateData()
 {
-    kdDebug() << "updateData" << m_format << endl;
+    kDebug() << "updateData" << m_format << endl;
     QString format = QString(m_format);
     QRegExp rx("([\\s]%[.\\d\\w]+[\\s])");
     rx.indexIn(format);
@@ -248,12 +248,12 @@ void RichTextLabel::updateData()
         temp.remove('%');
         temp=temp.trimmed();
         QVariant replText=decodeDot(temp);
-        kdDebug() << cap << capList << endl;
+        kDebug() << cap << capList << endl;
         format.replace(cap,replText.toString());
 
     }
     setValue(format);
-    kdDebug() << "updateData" << format << endl;
+    kDebug() << "updateData" << format << endl;
 }
 
 #include "richtextlabel.moc"

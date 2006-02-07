@@ -53,7 +53,7 @@ ThemesDlg::ThemesDlg(QWidget *parent, const char *name)
 
 ThemesDlg::~ThemesDlg()
 {
-    //kdDebug() << k_funcinfo << endl;
+    //kDebug() << k_funcinfo << endl;
     saveUserAddedThemes();
 
     if(mNewStuff)
@@ -355,7 +355,7 @@ void ThemesDlg::uninstall()
 
     config->setGroup("KNewStuffNames");
     QString name = config->readEntry(theme.path(),QString());
-    kdDebug() << theme.path() << name << endl;
+    kDebug() << theme.path() << name << endl;
     if(!name.isEmpty())
     {
         KGlobal::config()->deleteEntry(theme.path());

@@ -32,7 +32,7 @@ Graph::~Graph()
 
 void Graph::setValue(double v)
 {
-    kdDebug() << v << endl;
+    kDebug() << v << endl;
     v=qMin(v,m_maxValue);
     v=qMax(v,m_minValue);
     values.removeFirst();

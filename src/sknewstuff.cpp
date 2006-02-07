@@ -64,14 +64,14 @@ void SKNewStuff::addThemes(const KArchiveDirectory *archiveDir,
 
 bool SKNewStuff::install( const QString &fileName )
 {
-    kdDebug() << "SKNewStuff::install(): " << fileName << endl;
+    kDebug() << "SKNewStuff::install(): " << fileName << endl;
 
     KMimeType::Ptr result = KMimeType::findByURL(fileName);
     KStandardDirs myStdDir;
     const QString destDir =myStdDir.saveLocation("data", kapp->instanceName() + "/themes/", true);
     KStandardDirs::makeDir( destDir );
 
-    kdDebug() << "SKNewStuff::install() mimetype: " << result->name() << endl;
+    kDebug() << "SKNewStuff::install() mimetype: " << result->name() << endl;
 
     if( result->name() == "application/x-gzip" ||
             result->name() == "application/x-tgz" ||
@@ -82,7 +82,7 @@ bool SKNewStuff::install( const QString &fileName )
             result->name() == "application/x-tar" ||
             result->name() == "application/x-tarz")
     {
-        kdDebug() << "SKNewStuff::install() gzip/bzip2 mimetype encountered" <<
+        kDebug() << "SKNewStuff::install() gzip/bzip2 mimetype encountered" <<
         endl;
         KTar archive( fileName );
         if ( !archive.open( QIODevice::ReadOnly ) )
@@ -95,7 +95,7 @@ bool SKNewStuff::install( const QString &fileName )
     else if(result->name() == "application/x-zip" ||
             result->name() == "application/x-superkaramba")
     {
-        kdDebug() << "SKNewStuff::install() zip mimetype encountered" << endl;
+        kDebug() << "SKNewStuff::install() zip mimetype encountered" << endl;
         //TODO: write a routine to check if this is a valid .skz file
         //otherwise we need to unpack it like it is an old theme that was packaged
         //as a .zip instead of .bz2 or .tar.gz
@@ -110,11 +110,11 @@ bool SKNewStuff::install( const QString &fileName )
     }
     else if(result->name() == "plaint/text")
     {
-        kdDebug() << "SKNewStuff::install() plain text" << endl;
+        kDebug() << "SKNewStuff::install() plain text" << endl;
     }
     else
     {
-        kdDebug() << "SKNewStuff::install() Error no compatible mimetype encountered to install"
+        kDebug() << "SKNewStuff::install() Error no compatible mimetype encountered to install"
         << endl;
         return false;
     }
@@ -123,14 +123,14 @@ bool SKNewStuff::install( const QString &fileName )
 
 bool SKNewStuff::createUploadFile( const QString &fileName )
 {
-    kdDebug() << "SKNewStuff::createUploadFile(): " << fileName << endl;
+    kDebug() << "SKNewStuff::createUploadFile(): " << fileName << endl;
     return true;
 }
 
 QString SKNewStuff::downloadDestination( KNS::Entry *entry )
 {
     KUrl source = entry->payload();
-    kdDebug() << "SKNewStuff::downloadDestination() fileName: "
+    kDebug() << "SKNewStuff::downloadDestination() fileName: "
     << source.fileName() << endl;
     return KGlobal::dirs()->saveLocation( "tmp" ) + source.fileName();
 }

@@ -81,7 +81,7 @@ KarambaWidget::KarambaWidget(QString fn, bool reloading, int instance, QWidget *
         QTimer::singleShot(100, this, SLOT(killWidget()));
         return;
     }
-    kdDebug() << "Starting theme: " << m_theme.name() << endl;
+    kDebug() << "Starting theme: " << m_theme.name() << endl;
     QString qName = "karamba - " + m_theme.name();
     setObjectName(qName.toAscii());
 
@@ -108,7 +108,7 @@ KarambaWidget::KarambaWidget(QString fn, bool reloading, int instance, QWidget *
         instanceString = QString("-%1").arg(m_instance);
     QString cfg = QDir::home().absolutePath() + "/.superkaramba/"
                   + m_theme.id() + instanceString + ".rc";
-    kdDebug() << cfg << endl;
+    kDebug() << cfg << endl;
     QFile themeConfigFile(cfg);
     // Tests if config file Exists
     if (!QFileInfo(themeConfigFile).exists())
@@ -126,7 +126,7 @@ KarambaWidget::KarambaWidget(QString fn, bool reloading, int instance, QWidget *
     /* Loading of python module the initialization of its interface */
     if(m_theme.pythonModuleExists())
     {
-        kdDebug() << "Loading python module: " << m_theme.pythonModule() << endl;
+        kDebug() << "Loading python module: " << m_theme.pythonModule() << endl;
         QTimer::singleShot(0, this, SLOT(initPythonInterface()));
     }
 
@@ -347,16 +347,16 @@ bool KarambaWidget::parseConfig()
     SKThemeHandler handler(this);
     parser.setContentHandler(&handler);
     parser.setErrorHandler(&handler);
-    kdDebug() << "1 parseconfig " << file.fileName() << endl;
+    kDebug() << "1 parseconfig " << file.fileName() << endl;
     bool ret= parser.parse(&source, false);
     if(ret)
     {
-        kdDebug() << "xml parsing success" <<endl;
+        kDebug() << "xml parsing success" <<endl;
         return ret;
     }
     else
     {
-        kdDebug() << "xml parsing failure" << endl;
+        kDebug() << "xml parsing failure" << endl;
         return ret;
     }
 //     if(m_theme.open())
@@ -1417,7 +1417,7 @@ void KarambaWidget::closeEvent ( QCloseEvent *  qc)
 
 void KarambaWidget::paintEvent ( QPaintEvent *e)
 {
-    //kdDebug() << k_funcinfo << pm.size() << endl;
+    //kDebug() << k_funcinfo << pm.size() << endl;
     if(pm.width() == 0)
     {
         //return;
@@ -1464,7 +1464,7 @@ void KarambaWidget::updateSensors()
 //FIXME remove this function
 void KarambaWidget::updateBackground(KSharedPixmap* kpm)
 {
-    //kdDebug() << k_funcinfo << pm.size() << endl;
+    //kDebug() << k_funcinfo << pm.size() << endl;
     // if pm width == 0 this is the first time we come here and we should start
     // the theme. This is because we need the background before starting.
 //     if(pm.width() == 0)
@@ -1542,7 +1542,7 @@ void KarambaWidget::currentWallpaperChanged(int i )
 
 void KarambaWidget::externalStep()
 {
-    //kdDebug() << k_funcinfo << pm.size() << endl;
+    //kDebug() << k_funcinfo << pm.size() << endl;
     if (widgetUpdate)
     {
         QPixmap buffer = QPixmap(size());
@@ -1572,7 +1572,7 @@ void KarambaWidget::externalStep()
 
 void KarambaWidget::step()
 {
-    //kdDebug() << k_funcinfo << pm.size() << endl;
+    //kDebug() << k_funcinfo << pm.size() << endl;
     if (widgetUpdate && haveUpdated)
     {
         pm = QPixmap(size());

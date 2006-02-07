@@ -61,7 +61,7 @@ bool SKThemeHandler::unparsedEntityDecl(const QString& name, const QString& publ
 */
 bool SKThemeHandler::startElement(const QString& /*namespaceURI*/, const QString& /*localName*/, const QString& qName, const QXmlAttributes& attributes)
 {
-    kdDebug() << qName << " in startElement" << endl;
+    kDebug() << qName << " in startElement" << endl;
     QString name=qName.toUpper();
     if(name!="SKTHEME" && !rootMet)
     {
@@ -113,7 +113,7 @@ QString SKThemeHandler::errorString() const
 
 bool SKThemeHandler::fatalError (const QXmlParseException & exception)
 {
-  kdDebug() << "Fatal error on line: " << exception.lineNumber()
+  kDebug() << "Fatal error on line: " << exception.lineNumber()
             << ", column: " << exception.columnNumber() << " : "
             << exception.message() << endl;
 
@@ -136,7 +136,7 @@ bool SKThemeHandler::parseMeterAttributes(const QXmlAttributes& attr)
     {
         QString qName=attr.qName(i).toUpper();
         QString value=attr.value(i);
-        kdDebug() << "qName =" << qName << " value= " << value << endl;
+        kDebug() << "qName =" << qName << " value= " << value << endl;
         if(qName=="TYPE")
         {
             type=value.toLower();
@@ -368,7 +368,7 @@ bool SKThemeHandler::parseMeterAttributes(const QXmlAttributes& attr)
     }
     else if(type=="graph")
     {
-        kdDebug() << "number of points " << points << endl;
+        kDebug() << "number of points " << points << endl;
         Graph* meter = new Graph(m_widget, x, y, w, h, points);
         meter->setMax(max);
         meter->setMin(min);

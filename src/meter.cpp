@@ -145,7 +145,7 @@ QVariant Meter::decodeDot( QString formatString )
 {
     QStringList list=formatString.split('.');
     QVariant value=data;
-    kdDebug() <<value.toMap().keys() << endl;
+    kDebug() <<value.toMap().keys() << endl;
     foreach(QString section,list)
     {
         if(value.toMap().find(section)==value.toMap().end()) return QVariant();
@@ -172,7 +172,7 @@ void Meter::mousePressEvent( QMouseEvent * e )
         (*pythonIface)->widgetClicked(m_karamba,e->x(),e->y(),button);
         (*pythonIface)->meterClicked(m_karamba, this, button);
     }
-    kdDebug() << "mousePressEvent"<< button<< endl;
+    kDebug() << "mousePressEvent"<< button<< endl;
 }
 
 void Meter::mouseReleaseEvent( QMouseEvent * me )

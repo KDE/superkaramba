@@ -154,7 +154,7 @@ void TaskManager::windowAdded(WId w )
                 if (t->window() != w)
                 {
                     t->addTransient(w);
-                    // kdDebug() << "TM: Transient " << w << " added for Task: " << t->window() << endl;
+                    // kDebug() << "TM: Transient " << w << " added for Task: " << t->window() << endl;
                 }
                 return;
             }
@@ -163,7 +163,7 @@ void TaskManager::windowAdded(WId w )
     Task* t = new Task(w, this);
     _tasks.append(t);
 
-    // kdDebug() << "TM: Task added for WId: " << w << endl;
+    // kDebug() << "TM: Task added for WId: " << w << endl;
     emit taskAdded(t);
 }
 
@@ -184,13 +184,13 @@ void TaskManager::windowRemoved(WId w )
             _active = 0;
         {
             delete t;
-            //kdDebug() << "TM: Task for WId " << w << " removed." << endl;
+            //kDebug() << "TM: Task for WId " << w << " removed." << endl;
         }
     }
     else
     {
         t->removeTransient( w );
-        //kdDebug() << "TM: Transient " << w << " for Task " << t->window() << " removed." << endl;
+        //kDebug() << "TM: Transient " << w << " for Task " << t->window() << " removed." << endl;
     }
 }
 
@@ -222,7 +222,7 @@ void TaskManager::windowChanged(WId w, unsigned int dirty)
     if (!t)
         return;
 
-    //kdDebug() << "TaskManager::windowChanged " << w << " " << dirty << endl;
+    //kDebug() << "TaskManager::windowChanged " << w << " " << dirty << endl;
 
 
     // refresh icon pixmap if necessary
@@ -237,7 +237,7 @@ void TaskManager::windowChanged(WId w, unsigned int dirty)
 
 void TaskManager::activeWindowChanged(WId w )
 {
-    //kdDebug() << "TaskManager::activeWindowChanged" << endl;
+    //kDebug() << "TaskManager::activeWindowChanged" << endl;
 
     Task* t = findTask( w );
     if (!t)
@@ -656,19 +656,19 @@ void Task::close()
 
 void Task::raise()
 {
-    //    kdDebug(1210) << "Task::raise(): " << name() << endl;
+    //    kDebug(1210) << "Task::raise(): " << name() << endl;
     XRaiseWindow( QX11Info::display(), _win );
 }
 
 void Task::lower()
 {
-    //    kdDebug(1210) << "Task::lower(): " << name() << endl;
+    //    kDebug(1210) << "Task::lower(): " << name() << endl;
     XLowerWindow( QX11Info::display(), _win );
 }
 
 void Task::activate()
 {
-    //    kdDebug(1210) << "Task::activate():" << name() << endl;
+    //    kDebug(1210) << "Task::activate():" << name() << endl;
     NETRootInfo ri( QX11Info::display(), 0 );
     ri.setActiveWindow( _win );
 }
