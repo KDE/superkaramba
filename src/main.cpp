@@ -22,6 +22,7 @@
 
 #include <karambaapp.h>
 #include <qobject.h>
+#include <qmutex.h>
 
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
@@ -86,6 +87,7 @@ void karambaMessageOutput(QtMsgType type, const char *msg)
 
 int main(int argc, char **argv)
 {
+    QMutex mutex;
 #ifdef KARAMBA_LOG
     qInstallMsgHandler(karambaMessageOutput);
 #endif
@@ -110,7 +112,9 @@ int main(int argc, char **argv)
     // Create ~/.superkaramba if necessary
     KarambaApplication::checkSuperKarambaDir();
 
-    KarambaApplication::lockKaramba();
+    // Exit (instead of waiting) if another superkaramba has the lock.
+    if (!mutex.tryLock())
+      return ret;
 
     KarambaApplication app;
 
@@ -126,7 +130,7 @@ int main(int argc, char **argv)
       app.initDcopStub();
     }
 
-    KarambaApplication::unlockKaramba();
+    mutex.unlock();
 
     app.connect(qApp,SIGNAL(lastWindowClosed()),qApp,SLOT(quit()));
 

@@ -76,8 +76,6 @@ class KarambaApplication : public KApplication
     void deleteKaramba(karamba* k, bool reloading = false);
     bool hasKaramba(karamba* k);
 
-    static bool lockKaramba();
-    static void unlockKaramba();
     static void checkSuperKarambaDir();
 
   public slots:

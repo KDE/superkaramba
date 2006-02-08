@@ -312,39 +312,6 @@ bool KarambaApplication::hasKaramba(karamba* k)
   return karambaList->containsRef(k) > 0;
 }
 
-// XXX: I guess this should be made with mutex/semaphores
-// but this is good for now...
-
-bool KarambaApplication::lockKaramba()
-{
-  QString file = QDir::home().absPath() + "/.superkaramba/.lock";
-
-  fd = open(file.ascii(), O_CREAT | O_RDWR);
-  if (fd < 0)
-  {
-    qWarning("Open failed in lock.");
-    return false;
-  }
-  //qDebug("lock %d", getpid());
-  if(lockf(fd, F_LOCK, 0))
-  {
-    qWarning("Lock failed.");
-    return false;
-  }
-  return true;
-}
-
-void KarambaApplication::unlockKaramba()
-{
-  if(fd > 0)
-  {
-    lockf(fd, F_ULOCK, 0);
-    //qDebug("Unlock %d", getpid());
-    close(fd);
-    fd = -1;
-  }
-}
-
 void KarambaApplication::hideSysTray(bool hide)
 {
   //kdDebug() << k_funcinfo << endl;
