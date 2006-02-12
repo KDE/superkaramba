@@ -260,17 +260,17 @@ KarambaWidget::KarambaWidget(QString fn, bool reloading, int instance, QWidget *
     }
     // Karamba specific Config Entries
     bool locked = toggleLocked->isChecked();
-    locked = config->readBoolEntry("lockedPosition", locked);
+    locked = config->readEntry("lockedPosition", locked);
     toggleLocked->setChecked(locked);
     slotToggleLocked();
 
-    if (!config -> readBoolEntry("fastTransforms", true))
+    if (!config -> readEntry("fastTransforms", true))
     {
         toggleFastTransforms -> setChecked(false);
         slotToggleFastTransforms();
     }
 
-    desktop = config -> readNumEntry("desktop", desktop);
+    desktop = config -> readEntry("desktop", desktop);
     if (desktop > kWinModule->numberOfDesktops())
     {
         desktop = 0;
@@ -287,8 +287,8 @@ KarambaWidget::KarambaWidget(QString fn, bool reloading, int instance, QWidget *
     config -> setGroup("theme");
     if (config -> hasKey("widgetPosX") && config -> hasKey("widgetPosY"))
     {
-        int xpos = config -> readNumEntry("widgetPosX");
-        int ypos = config -> readNumEntry("widgetPosY");
+        int xpos = config -> readEntry("widgetPosX",0);
+        int ypos = config -> readEntry("widgetPosY",0);
 
         if (xpos < 0)
             xpos = 0;
@@ -1701,7 +1701,7 @@ void KarambaWidget::addMenuConfigOption(QString key, QString name)
             this, SLOT( slotToggleConfigOption(QString, bool) ));
 
     config -> setGroup("config menu");
-    confItem -> setChecked(config -> readBoolEntry(key));
+    confItem -> setChecked(config -> readEntry(key,false));
 
     confItem -> plug(themeConfMenu);
 

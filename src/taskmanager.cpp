@@ -89,7 +89,7 @@ void TaskManager::configure_startup()
 {
     KConfig c("klaunchrc", true);
     c.setGroup("FeedbackStyle");
-    if (!c.readBoolEntry("TaskbarButton", true))
+    if (!c.readEntry("TaskbarButton", true))
         return;
     _startup_info = new KStartupInfo( true, this );
     connect( _startup_info,
@@ -102,7 +102,7 @@ void TaskManager::configure_startup()
              SIGNAL( gotRemoveStartup( const KStartupInfoId&, const KStartupInfoData& )),
              SLOT( gotRemoveStartup( const KStartupInfoId& )));
     c.setGroup( "TaskbarButtonSettings" );
-    _startup_info->setTimeout( c.readUnsignedNumEntry( "Timeout", 30 ));
+    _startup_info->setTimeout( c.readEntry( "Timeout", 30 ));
 }
 
 Task* TaskManager::findTask(WId w)
