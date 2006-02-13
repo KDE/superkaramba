@@ -78,14 +78,17 @@ karamba::karamba(QString fn, QString name, bool reloading, int instance,
     QTimer::singleShot(100, this, SLOT(killWidget()));
     return;
   }
+  // Add self to list of open themes
+  // This also updates instance number
+  karambaApp->addKaramba(this, reloading);
+
+  if(prettyName.isEmpty())
+    prettyName = QString("%1 - %2").arg(m_theme.name()).arg(m_instance);
+
   kdDebug() << "Starting theme: " << m_theme.name()
             << " pretty name: " << prettyName << endl;
   QString qName = "karamba - " + prettyName;
-  //QString qName = "karamba - " + m_theme.name();
   setName(qName.ascii());
-
-  //Add self to list of open themes
-  karambaApp->addKaramba(this, reloading);
 
   KDirWatch *dirWatch = new KDirWatch( this );
   connect(dirWatch, SIGNAL( dirty( const QString & ) ),
@@ -1256,7 +1259,7 @@ void karamba::setIncomingData(QString theme, QString obj)
    //dataStream << txt;
 
    //kapp->dcopClient()->send( app->dcopClient()->appId(), "KarambaIface", "themeNotify(QString,QString)", data );
- 
+
   DCOPClient *c = kapp->dcopClient();
   if (!c->isAttached())
     c->attach();
@@ -1276,7 +1279,7 @@ void karamba::callTheme(QString theme, QString txt)
    //dataStream << txt;
 
    //kapp->dcopClient()->send( app->dcopClient()->appId(), "KarambaIface", "themeNotify(QString,QString)", data );
- 
+
   DCOPClient *c = kapp->dcopClient();
   if (!c->isAttached())
     c->attach();
