@@ -52,7 +52,7 @@ void RssSensor::update()
     QString tmpFile;
     bool OK = false;
 
-    if(KIO::NetAccess::download(KURL(source), tmpFile, karambaApp->parentWindow()))
+    if(KIO::NetAccess::download(KUrl(source), tmpFile, karambaApp->parentWindow()))
     {
         file.setName(tmpFile);
         if ( file.open(QIODevice::ReadOnly | QIODevice::Text) )

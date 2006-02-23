@@ -178,7 +178,7 @@ QStringList ThemeLocale::languageList()
     languageList +=
         QStringList::split(':', QFile::decodeName(::getenv("KDE_LANG")));
 
-    languageList += config->readListEntry("Language", ':');
+    languageList += config->readEntry("Language",QStringList(), ':');
 
     // same order as setlocale use
     // HPB: Only run splitLocale on the environment variables..

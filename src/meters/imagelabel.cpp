@@ -456,7 +456,7 @@ void ImageLabel::parseImages(QString fn, QString fn_roll, int _xoff,
     {
         QString tmpFile;
 
-        if(KIO::NetAccess::download(KURL(path), tmpFile, karambaApp->parentWindow()))
+        if(KIO::NetAccess::download(KUrl(path), tmpFile, karambaApp->parentWindow()))
         {
             pixmap_off = KPixmap(tmpFile);
             KIO::NetAccess::removeTempFile(tmpFile);
@@ -502,7 +502,7 @@ void ImageLabel::parseImages(QString fn, QString fn_roll, int _xoff,
     {
         QString tmpFile;
 
-        if(KIO::NetAccess::download(KURL(path), tmpFile, karambaApp->parentWindow()))
+        if(KIO::NetAccess::download(KUrl(path), tmpFile, karambaApp->parentWindow()))
         {
             pixmap_on = KPixmap(tmpFile);
             KIO::NetAccess::removeTempFile(tmpFile);
