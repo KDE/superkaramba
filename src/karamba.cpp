@@ -228,7 +228,6 @@ karamba::karamba(QString fn, QString name, bool reloading, int instance,
 
   systray = 0;
   foundKaramba = false;
-  dockBar = false;
   onTop = false;
   managed = false;
   fixedPosition = false;
@@ -471,7 +470,6 @@ bool karamba::parseConfig()
           toggleLocked->setChecked( true );
           slotToggleLocked();
           toggleLocked->setEnabled(false);
-          dockBar = true;
         }
 
         if(lineParser.getBoolean("BOTTOMBAR"))
@@ -482,7 +480,6 @@ bool karamba::parseConfig()
           toggleLocked->setChecked( true );
           slotToggleLocked();
           toggleLocked->setEnabled(false);
-          dockBar = true;
         }
 
         if(lineParser.getBoolean("RIGHTBAR"))
@@ -493,7 +490,6 @@ bool karamba::parseConfig()
           toggleLocked->setChecked( true );
           slotToggleLocked();
           toggleLocked->setEnabled(false);
-          dockBar = true;
         }
 
         if(lineParser.getBoolean("LEFTBAR"))
@@ -503,7 +499,6 @@ bool karamba::parseConfig()
           toggleLocked->setChecked( true );
           slotToggleLocked();
           toggleLocked->setEnabled(false);
-          dockBar = true;
         }
 
         QString path = lineParser.getString("MASK");
@@ -760,15 +755,7 @@ bool karamba::parseConfig()
     {
       // Matthew Kay: set window type to "dock"
       // (plays better with taskbar themes this way)
-      if(dockBar)
-      {
-        KWin::setType(winId(), NET::Dock);
-      }
-      else
-      {
-        KWin::setType(winId(), NET::Normal);
-      }
-
+      KWin::setType(winId(), NET::Dock);
       #if defined(KDE_MAKE_VERSION)
         #if KDE_VERSION >= KDE_MAKE_VERSION(3,1,9)
           //KDE 3.2 addition for the always on top issues
@@ -834,15 +821,7 @@ void karamba::makePassive()
 
   // Matthew Kay: set window type to "dock" (plays better with taskbar themes
   // this way)
-  if(dockBar)
-  {
-    KWin::setType(winId(), NET::Dock);
-  }
-  else
-  {
-    KWin::setType(winId(), NET::Normal);
-  }
-
+  KWin::setType(winId(), NET::Dock);
   #if defined(KDE_MAKE_VERSION)
     #if KDE_VERSION >= KDE_MAKE_VERSION(3,1,9)
       //KDE 3.2 addition for the always on top issues

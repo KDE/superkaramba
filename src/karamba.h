@@ -222,7 +222,6 @@ private:
     QTime lowerTimer;
     // use only the first occurance of KARAMBA in a config file
     bool foundKaramba;
-    bool dockBar;
 
     KPopupMenu* themeConfMenu;
     KPopupMenu* toDesktopMenu;
