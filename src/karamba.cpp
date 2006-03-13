@@ -251,7 +251,7 @@ karamba::karamba(QString fn, QString name, bool reloading, int instance,
 
   setBackgroundMode( NoBackground);
   if( !(onTop || managed))
-    lower();
+    KWin::lowerWindow( winId() );
 
   if( !parseConfig() )
   {
@@ -1386,7 +1386,7 @@ void karamba::mousePressEvent( QMouseEvent *e )
     if( toggleLocked -> isChecked() )
       passClick( e );
     if( !(onTop || managed))
-      lower();
+      KWin::lowerWindow( winId() );
   }
 }
 
@@ -1503,7 +1503,7 @@ void karamba::paintEvent ( QPaintEvent *e)
   {
     if( lowerTimer.elapsed() > 100 )
     {
-      this->lower();
+      KWin::lowerWindow( winId() );
       lowerTimer.restart();
     }
   }
