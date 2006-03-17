@@ -1,4 +1,5 @@
 kde4_header()
+project(superkaramba)
 
 add_subdirectory( src ) 
 add_subdirectory( icons ) 

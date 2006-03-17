@@ -6,10 +6,49 @@ add_subdirectory( meters )
 
 include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}  )
 
+set(libsk_sensors_SRCS 
+	${CMAKE_SOURCE_DIR}/superkaramba/src/sensors/cpusensor.cpp 
+	${CMAKE_SOURCE_DIR}/superkaramba/src/sensors/datesensor.cpp 
+	${CMAKE_SOURCE_DIR}/superkaramba/src/sensors/disksensor.cpp 
+	${CMAKE_SOURCE_DIR}/superkaramba/src/sensors/memsensor.cpp 
+	${CMAKE_SOURCE_DIR}/superkaramba/src/sensors/networksensor.cpp 
+	${CMAKE_SOURCE_DIR}/superkaramba/src/sensors/noatunsensor.cpp 
+	${CMAKE_SOURCE_DIR}/superkaramba/src/sensors/programsensor.cpp 
+	${CMAKE_SOURCE_DIR}/superkaramba/src/sensors/rsssensor.cpp 
+	${CMAKE_SOURCE_DIR}/superkaramba/src/sensors/sensorsensor.cpp 
+	${CMAKE_SOURCE_DIR}/superkaramba/src/sensors/textfilesensor.cpp 
+	${CMAKE_SOURCE_DIR}/superkaramba/src/sensors/uptimesensor.cpp 
+	${CMAKE_SOURCE_DIR}/superkaramba/src/sensors/xmmssensor.cpp
+)
+
+set(libsk_meters_SRCS 
+	${CMAKE_SOURCE_DIR}/superkaramba/src/meters/bar.cpp 
+	${CMAKE_SOURCE_DIR}/superkaramba/src/meters/graph.cpp 
+	${CMAKE_SOURCE_DIR}/superkaramba/src/meters/imagelabel.cpp 
+	${CMAKE_SOURCE_DIR}/superkaramba/src/meters/input.cpp 
+	${CMAKE_SOURCE_DIR}/superkaramba/src/meters/richtextlabel.cpp
+	)
+
+set(libsk_python_SRCS 
+	${CMAKE_SOURCE_DIR}/superkaramba/src/bindings/python/bar_python.cpp 
+	${CMAKE_SOURCE_DIR}/superkaramba/src/bindings/python/imagelabel_python.cpp 
+	${CMAKE_SOURCE_DIR}/superkaramba/src/bindings/python/menu_python.cpp 
+	${CMAKE_SOURCE_DIR}/superkaramba/src/bindings/python/richtextlabel_python.cpp 
+	${CMAKE_SOURCE_DIR}/superkaramba/src/bindings/python/widget_python.cpp 
+	${CMAKE_SOURCE_DIR}/superkaramba/src/bindings/python/config_python.cpp 
+	${CMAKE_SOURCE_DIR}/superkaramba/src/bindings/python/input_python.cpp 
+	${CMAKE_SOURCE_DIR}/superkaramba/src/bindings/python/meter_python.cpp
+	${CMAKE_SOURCE_DIR}/superkaramba/src/bindings/python/task_python.cpp 
+	${CMAKE_SOURCE_DIR}/superkaramba/src/bindings/python/systray_python.cpp 
+	${CMAKE_SOURCE_DIR}/superkaramba/src/bindings/python/graph_python.cpp 
+	${CMAKE_SOURCE_DIR}/superkaramba/src/bindings/python/karamba_python.cpp 
+	${CMAKE_SOURCE_DIR}/superkaramba/src/bindings/python/misc_python.cpp
+)
+
 
 ########### next target ###############
 
-set(superkaramba_SRCS 
+set(superkaramba_SRCS ${libsk_sensors_SRCS} ${libsk_meters_SRCS} ${libsk_python_SRCS}
    main.cpp 
    karambawidget.cpp 
    meter.cpp 
@@ -45,7 +84,7 @@ kde4_add_kcfg_files(superkaramba_SRCS superkarambasettings.kcfgc )
 
 kde4_add_executable(superkaramba ${superkaramba_SRCS})
 
-target_link_libraries(superkaramba  ${QT_AND_KDECORE_LIBS} sk_sensors sk_meters sk_python kdeui )
+target_link_libraries(superkaramba  ${LIB_KDEUI})
 
 install_targets(/bin superkaramba )
 
