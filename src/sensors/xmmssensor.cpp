@@ -8,7 +8,6 @@
 *   (at your option) any later version.                                   *
 ***************************************************************************/
 #include "xmmssensor.h"
-
 #ifdef HAVE_XMMS
 #include <xmmsctrl.h>
 #endif // HAVE_XMMS
