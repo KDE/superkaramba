@@ -121,7 +121,7 @@ void ThemesDlg::populateListbox()
 
     item = new ThemeWidget;
     item->micon->setPixmap(KGlobal::iconLoader()->loadIcon("knewstuff",
-                           KIcon::NoGroup, KIcon::SizeHuge));
+                           K3Icon::NoGroup, K3Icon::SizeHuge));
     item->setHeaderText(i18n("Get New Stuff"));
     item->setDescriptionText(i18n("Download new themes."));
 
@@ -133,7 +133,7 @@ void ThemesDlg::populateListbox()
 
     item = new ThemeWidget;
     item->micon->setPixmap(KGlobal::iconLoader()->loadIcon("ksysguard",
-                           KIcon::NoGroup, KIcon::SizeHuge));
+                           K3Icon::NoGroup, K3Icon::SizeHuge));
     item->setHeaderText(i18n("Open Local Theme"));
     item->setDescriptionText(i18n("Add local theme to the list."));
     item->buttonGo->setProperty("stdItem", 18);

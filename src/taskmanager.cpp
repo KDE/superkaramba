@@ -375,8 +375,8 @@ Task::Task(WId win, TaskManager * parent, const char *name) :
     // try to guess the icon from the classhint
     if(_pixmap.isNull())
         KGlobal::instance()->iconLoader()->loadIcon(className().toLower(),
-                KIcon::Small,KIcon::Small,
-                KIcon::DefaultState, 0, true);
+                K3Icon::Small,K3Icon::Small,
+                K3Icon::DefaultState, 0, true);
 
     // load xapp icon
     if (_pixmap.isNull())
@@ -398,7 +398,7 @@ void Task::refresh(bool icon)
         if(_pixmap.isNull())
         {
             KGlobal::instance()->iconLoader()->loadIcon(className().toLower(),
-                    KIcon::Small, KIcon::Small, KIcon::DefaultState, 0, true);
+                    K3Icon::Small, K3Icon::Small, K3Icon::DefaultState, 0, true);
         }
 
         // load xapp icon
@@ -533,7 +533,7 @@ QPixmap Task::bestIcon( int size, bool &isStaticIcon )
 
     switch( size )
     {
-    case KIcon::SizeSmall:
+    case K3Icon::SizeSmall:
         {
             pixmap = icon( 16, 16, true  );
 
@@ -541,13 +541,13 @@ QPixmap Task::bestIcon( int size, bool &isStaticIcon )
             if( pixmap.isNull() )
             {
                 pixmap = KGlobal::iconLoader()->loadIcon( "go",
-                         KIcon::NoGroup,
-                         KIcon::SizeSmall );
+                         K3Icon::NoGroup,
+                         K3Icon::SizeSmall );
                 isStaticIcon = true;
             }
         }
         break;
-    case KIcon::SizeMedium:
+    case K3Icon::SizeMedium:
         {
             //
             // Try 34x34 first for KDE 2.1 icons with shadows, if we don't
@@ -567,13 +567,13 @@ QPixmap Task::bestIcon( int size, bool &isStaticIcon )
             if( pixmap.isNull() )
             {
                 pixmap = KGlobal::iconLoader()->loadIcon( "go",
-                         KIcon::NoGroup,
-                         KIcon::SizeMedium );
+                         K3Icon::NoGroup,
+                         K3Icon::SizeMedium );
                 isStaticIcon = true;
             }
         }
         break;
-    case KIcon::SizeLarge:
+    case K3Icon::SizeLarge:
         {
             // If there's a 48x48 icon in the hints then use it
             pixmap = icon( size, size, false  );
@@ -582,9 +582,9 @@ QPixmap Task::bestIcon( int size, bool &isStaticIcon )
             if ( pixmap.isNull() || pixmap.width() != size || pixmap.height() != size )
             {
                 pixmap = KGlobal::iconLoader()->loadIcon( className(),
-                         KIcon::NoGroup,
+                         K3Icon::NoGroup,
                          size,
-                         KIcon::DefaultState,
+                         K3Icon::DefaultState,
                          0L,
                          true );
                 isStaticIcon = true;
@@ -601,7 +601,7 @@ QPixmap Task::bestIcon( int size, bool &isStaticIcon )
             if( pixmap.isNull() )
             {
                 pixmap = KGlobal::iconLoader()->loadIcon( "go",
-                         KIcon::NoGroup,
+                         K3Icon::NoGroup,
                          size );
                 isStaticIcon = true;
             }
