@@ -92,7 +92,7 @@ kde4_add_kcfg_files(superkaramba_SRCS superkarambasettings.kcfgc )
 
 kde4_add_executable(superkaramba ${superkaramba_SRCS})
 
-target_link_libraries(superkaramba  ${KDE4_KDEUI_LIBRARIES} ${XMMS_LIBRARIES})
+target_link_libraries(superkaramba  ${KDE4_KDEUI_LIBS} ${XMMS_LIBRARIES})
 
 install_targets(/bin superkaramba )
 
