@@ -10,6 +10,10 @@ include_directories(
 	${CMAKE_SOURCE_DIR}/superkaramba/src/bindings/python/
 	${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}  )
 
+if(XMMS_FOUND)
+	ADD_DEFINITIONS(${XMMS_INCLUDE_DIR})
+endif(XMMS_FOUND)
+
 set(libsk_sensors_SRCS 
 	${CMAKE_SOURCE_DIR}/superkaramba/src/sensors/cpusensor.cpp 
 	${CMAKE_SOURCE_DIR}/superkaramba/src/sensors/datesensor.cpp 
@@ -88,7 +92,7 @@ kde4_add_kcfg_files(superkaramba_SRCS superkarambasettings.kcfgc )
 
 kde4_add_executable(superkaramba ${superkaramba_SRCS})
 
-target_link_libraries(superkaramba  ${LIB_KDEUI})
+target_link_libraries(superkaramba  ${LIB_KDEUI} ${XMMS_LIBRARIES})
 
 install_targets(/bin superkaramba )
 
