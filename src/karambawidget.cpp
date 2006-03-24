@@ -1620,11 +1620,12 @@ void KarambaWidget::slotToggleLocked()
     //qDebug("KarambaWidget::slotToggleLocked");
     if(toggleLocked->isChecked())
     {
-        toggleLocked->setIcon(SmallIconSet("lock"));
+        //toggleLocked->setIcon(SmallIconSet("lock"));
+		toggleLocked->setIcon(KIcon("lock"));
     }
     else
     {
-        toggleLocked->setIcon(SmallIconSet("move"));
+        toggleLocked->setIcon(KIcon("move"));
     }
 }
 /*FIXME should we really give transform as an option to user? IMHO this is theme developer's
@@ -1693,7 +1694,8 @@ void KarambaWidget::addMenuConfigOption(QString key, QString name)
     KToggleAction* confItem = new KToggleAction (name.ascii(), KShortcut::null(),
                               action, SLOT(receive()),
                               menuAccColl, key.ascii());
-    confItem -> setName(key.ascii());
+#warning "kde4: port it :confItem -> setName(key.ascii());"	
+    //confItem -> setName(key.ascii());
 
     menuAccColl -> insert(confItem);
 
