@@ -213,8 +213,8 @@ bool ThemeFile::set
         if(KMessageBox::warningContinueCancel(kapp->activeWindow(),
                                               i18n("You are about to install and run %1 SuperKaramba theme. Since "
                                                    "themes can contain executable code you should only install themes "
-                                                   "from sources that you trust. Continue?"), i18n("Executable Code Warning"), i18n("Install")
-                                              .arg(url.prettyURL()))
+                                                   "from sources that you trust. Continue?", url.prettyURL()),
+                                              i18n("Executable Code Warning"), i18n("Install"))
                 == KMessageBox::Cancel)
         {
             return false;
@@ -226,8 +226,8 @@ bool ThemeFile::set
         if(localFile.exists())
         {
             if(KMessageBox::warningContinueCancel(kapp->activeWindow(),
-                                                  i18n("%1 already exists. Do you want to overwrite it?")
-                                                  .arg(localFile.filePath()),i18n("File Exists"),i18n("Overwrite"))
+                                                  i18n("%1 already exists. Do you want to overwrite it?",
+                                                   localFile.filePath()),i18n("File Exists"),i18n("Overwrite"))
                     == KMessageBox::Cancel)
             {
                 return false;
