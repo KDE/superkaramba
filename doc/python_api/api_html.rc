@@ -8,7 +8,7 @@ items:
 ignore items:
 options:
     --singledoc
-    --src ../../src/
+    --src .apiHeaders
     --doc python_api
     --html
     #--tell
