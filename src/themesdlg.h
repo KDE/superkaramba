@@ -21,7 +21,7 @@
 #ifndef THEMESDLG_H
 #define THEMESDLG_H
 
-#include "themes_layout.h"
+#include "ui_themes_layout.h"
 #include "karambaapp.h"
 
 /**

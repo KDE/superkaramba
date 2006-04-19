@@ -23,7 +23,7 @@
 #include <QList>
 
 #include "themefile.h"
-#include "themewidget_layout.h"
+#include "ui_themewidget_layout.h"
 
 /**
 @author See README for the list of authors

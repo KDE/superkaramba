@@ -1,14 +1,16 @@
 kde4_header()
-
+find_package(PythonLibs REQUIRED)
 add_subdirectory( sensors ) 
 add_subdirectory( bindings ) 
 add_subdirectory( meters ) 
 
 include_directories( 
+	${PYTHON_INCLUDE_PATH}
 	${CMAKE_SOURCE_DIR}/superkaramba/src/sensors/ 
 	${CMAKE_SOURCE_DIR}/superkaramba/src/meters/
 	${CMAKE_SOURCE_DIR}/superkaramba/src/bindings/python/
-	${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}  )
+	${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}  
+	)
 
 if(XMMS_FOUND)
 	ADD_DEFINITIONS(${XMMS_INCLUDE_DIR})
@@ -92,7 +94,7 @@ kde4_add_kcfg_files(superkaramba_SRCS superkarambasettings.kcfgc )
 
 kde4_add_executable(superkaramba ${superkaramba_SRCS})
 
-target_link_libraries(superkaramba  ${KDE4_KDEUI_LIBS} ${XMMS_LIBRARIES})
+target_link_libraries(superkaramba  ${KDE4_KIO_LIBS} ${XMMS_LIBRARIES} kutils  ${PYTHON_LIBRARIES} knewstuff)
 
 install_targets(/bin superkaramba )
 
