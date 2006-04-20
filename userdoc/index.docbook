@@ -40,13 +40,13 @@ widgets on your &kde; desktop.</para>
 </keywordset>
 </bookinfo>
 
-<!-- FIXME: Needs writing, but can't have empty elements in translateable -->
+<!-- FIXME: Needs writing, but cannot have empty elements in translateable -->
 <!-- documents.  Uncomment only when there is content -->
 <!--
 <chapter id="introduction">
 <title>Quickstart</title>
 
-<para> </para>
+<para>Not Yet Available</para>
 
 </chapter>
 
@@ -72,8 +72,8 @@ widgets on your &kde; desktop.</para>
 <answer>
 <!-- FIXME: Now part of KDE, this should point users at their distribution -->
 <!-- for the next release -->
-<para>The SuperKaramba web site (http://netdragon.sourceforge.net) has a list of user-submitted RPMs for several distributions. Other user-subm
-itted RPMs have been posted to kde-look.org and to the SuperKaramba Help
+<para>The &superkaramba; web site (http://netdragon.sourceforge.net) has a list of user-submitted RPMs for several distributions. Other user-subm
+itted RPMs have been posted to kde-look.org and to the &superkaramba; Help
 forum.</para>
 </answer>
 </qandaentry>
@@ -106,7 +106,7 @@ found</computeroutput>.</para>
 </question>
 <answer>
 <para>In some distributions ./configure has a default prefix path that
-differs to what you might expect. For example, in Mandrake the default
+differs to what you might expect. For example, in &Mandrake; the default
 prefix is <filename class="directory">/usr/local/kde</filename> and the
 executable is installed in <filename
 class="directory">/usr/local/kde/bin</filename>.</para>
