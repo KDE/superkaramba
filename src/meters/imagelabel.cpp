@@ -253,7 +253,7 @@ void ImageLabel::applyTransformations(bool useSmoothScale)
     resize(pixmap.width(),pixmap.height());
 }
 
-void ImageLabel::slotCopyResult(KIO::Job* job)
+void ImageLabel::slotCopyResult(KJob* job)
 {
     QString tempFile = ((KIO::FileCopyJob*)job)->destURL().path();
     if(job->error() == 0)
@@ -287,8 +287,8 @@ void ImageLabel::setValue(QString fn)
         KTempFile tmpFile;
         KIO::FileCopyJob* copy = KIO::file_copy(fileName, tmpFile.name(), 0600,
                                                 true, false, false);
-        connect(copy, SIGNAL(result(KIO::Job*)),
-                this, SLOT(slotCopyResult(KIO::Job*)));
+        connect(copy, SIGNAL(result(KJob*)),
+                this, SLOT(slotCopyResult(KJob*)));
         return;
     }
     else
