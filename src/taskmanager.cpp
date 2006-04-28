@@ -405,7 +405,7 @@ void Task::refresh(bool icon)
         if (_pixmap.isNull())
             _pixmap = SmallIcon("kcmx");
 
-        _lastIcon.resize(0,0);
+        _lastIcon = QPixmap(0,0);
         emit iconChanged();
     }
     emit changed();
@@ -781,7 +781,7 @@ void Task::generateThumbnail()
     if ( _grab.isNull() )
         return;
 
-    QImage img = _grab.convertToImage();
+    QImage img = _grab.toImage();
 
     double width = img.width();
     double height = img.height();
@@ -789,8 +789,8 @@ void Task::generateThumbnail()
     height = height * _thumbSize;
 
     img = img.smoothScale( (int) width, (int) height );
-    _thumb = img;
-    _grab.resize( 0, 0 ); // Makes grab a null image.
+    _thumb = QPixmap::fromImage(img);
+    _grab = QPixmap(); // Makes grab a null image.
 
     emit thumbnailChanged();
 }
