@@ -291,6 +291,12 @@ static PyMethodDef karamba_methods[] = {
         (char*)"Change a Input Box Font Size"},
     {(char*)"getInputBoxFontSize", py_getInputBoxFontSize, METH_VARARGS,
         (char*)"Get a Input Box Font Size"},
+    {(char*)"setInputFocus", py_setInputFocus, METH_VARARGS,
+        (char*)"Set the Input Focus to the Input Box"},
+    {(char*)"clearInputFocus", py_clearInputFocus, METH_VARARGS,
+        (char*)"Clear the Input Focus of the Input Box"},
+    {(char*)"getInputFocus", py_getInputFocus, METH_VARARGS,
+        (char*)"Get the Input Box currently focused"},
 
     {(char*)"setWidgetOnTop", py_set_widget_on_top, METH_VARARGS,
       (char*)"changes 'on top' status"},

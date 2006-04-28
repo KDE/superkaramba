@@ -72,6 +72,9 @@ public:
   QString getFont() const;
   void setFontSize(int size);
   int getFontSize() const;
+  
+  void setInputFocus();
+  void clearInputFocus();
 
 private:
   SKLineEdit *edit;

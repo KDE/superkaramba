@@ -304,3 +304,52 @@ PyObject* py_getInputBoxFontSize(PyObject *, PyObject *args)
 
   return Py_BuildValue((char*)"l", ((Input*)inputBox)->getFontSize());
 }
+
+PyObject* py_setInputFocus(PyObject *, PyObject *args)
+{
+  long widget, inputBox;
+  if (!PyArg_ParseTuple(args, (char*)"ll:setInputFocus", &widget, &inputBox))
+    return NULL;
+
+  if (!checkKarambaAndMeter(widget, inputBox, "Input"))
+    return NULL;
+
+  //((karamba*)widget)->setActiveWindow();
+
+  ((Input*)inputBox)->setInputFocus();
+  return Py_BuildValue((char*)"l", 1);
+}
+
+PyObject* py_clearInputFocus(PyObject *, PyObject *args)
+{
+  long widget, inputBox;
+  if (!PyArg_ParseTuple(args, (char*)"ll:clearInputFocus", &widget, &inputBox))
+    return NULL;
+
+  if (!checkKarambaAndMeter(widget, inputBox, "Input"))
+    return NULL;
+
+  ((Input*)inputBox)->clearInputFocus();
+  return Py_BuildValue((char*)"l", 1);
+}
+
+PyObject* py_getInputFocus(PyObject *, PyObject *args)
+{
+  long widget;
+  if (!PyArg_ParseTuple(args, (char*)"l:getInputFocus", &widget))
+    return NULL;
+
+  if (!checkKaramba(widget))
+    return NULL;
+  
+  //
+  // FocusWidget() returns the currently focused line edit,
+  // but unfortunately we need an 'Input' object here.
+  //
+  QWidget *obj = ((karamba*)widget)->focusWidget();
+  
+  if(obj->isA("QLineEdit")) // SKLineEdit is no Q_Object, but QLineEdit can only be here as a SKLineEdit
+    return Py_BuildValue((char*)"l", ((SKLineEdit*)obj)->getInput());
+  
+  return Py_BuildValue((char*)"l", 0);
+}

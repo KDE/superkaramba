@@ -42,6 +42,8 @@ class SKLineEdit : public QLineEdit
     QColor getFrameColor() const;
 
     void setBackgroundColor(QColor c);
+    
+    Input* getInput();
 
   protected:
     virtual void keyReleaseEvent(QKeyEvent* e);

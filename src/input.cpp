@@ -183,4 +183,14 @@ void Input::setTextProps(TextField* t)
   }
 }
 
+void Input::setInputFocus()
+{
+  edit->setFocus();
+}
+
+void Input::clearInputFocus()
+{
+  edit->clearFocus();
+}
+
 #include "input.moc"

@@ -75,3 +75,8 @@ void SKLineEdit::keyReleaseEvent(QKeyEvent* e)
 {
   QLineEdit::keyReleaseEvent(e);
 }
+
+Input* SKLineEdit::getInput()
+{
+  return m_input;
+}
