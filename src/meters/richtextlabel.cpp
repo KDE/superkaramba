@@ -22,7 +22,7 @@
 RichTextLabel::RichTextLabel(KarambaWidget* k) :
         Meter(k, 0, 0, 100, 100),
         source(""),
-        colorGrp(k->colorGroup()),
+        colorGrp(k->palette()),
         m_type(Qt::AutoText)
 {
     originalSize = QSize(0, 0);
@@ -34,7 +34,7 @@ RichTextLabel::RichTextLabel(KarambaWidget* k) :
 RichTextLabel::RichTextLabel(KarambaWidget* k, int x, int y, int w, int h) :
         Meter(k, x, y, w, h),
         source(""),
-        colorGrp(k->colorGroup()),
+        colorGrp(k->palette()),
         underlineLinks(false)
 {
     kDebug() << k_funcinfo << x << ", " << y << ", " << w << ", " << h << endl;

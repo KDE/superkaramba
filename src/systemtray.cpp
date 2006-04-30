@@ -38,7 +38,8 @@ Systemtray::Systemtray(QWidget* parent)
         : QWidget(parent,0,0)
 {
     setBackgroundOrigin(ParentOrigin);
-    setBackgroundMode(Qt::FixedPixmap);
+#warning please test how FixedPixmap is replaced best
+    //setBackgroundMode(Qt::FixedPixmap);
 }
 
 
@@ -59,15 +60,15 @@ void Systemtray::updateBackgroundPixmap ( const QPixmap & pixmap)
      * QXEmbed *emb;
       setPaletteBackgroundPixmap (pixmap);
         for (emb = m_Wins.first(); emb != 0L; emb = m_Wins.next()) {
-     
+
         //Stupid stupid stupid work around for annoying bug
         //QXEmbed ignores setBackgroundOrigin(AncestorOrigin)....
         QPixmap bug = QPixmap(emb->size());
         bitBlt(&bug, 0, 0, &pixmap, emb->parentWidget()->x()+emb->x(),  emb->parentWidget()->y()+emb->y(), emb->width(), emb->height(),Qt::CopyROP, false);
         emb->setPaletteBackgroundPixmap (bug);
-     
+
       }
-     
+
         QPoint topPoint = mapToGlobal(QPoint(0,0));
         Window hack = XCreateSimpleWindow(qt_xdisplay(), winId(), 0,0, width(), height(), 0, 0, 0);
         XRaiseWindow(qt_xdisplay(), hack);
@@ -139,8 +140,8 @@ void Systemtray::initSystray( void )
       xev.data.l[0] = CurrentTime;
       xev.data.l[1] = net_system_tray_selection;
       xev.data.l[2] = winId();
-      xev.data.l[3] = 0;       // Manager specific data 
-      xev.data.l[4] = 0;       // Manager specific data 
+      xev.data.l[3] = 0;       // Manager specific data
+      xev.data.l[4] = 0;       // Manager specific data
 
       XSendEvent( display, root, false, StructureNotifyMask, (XEvent *)&xev );
     }
@@ -151,7 +152,7 @@ void Systemtray::updateTrayWindows( void )
 {
     /*
      * QXEmbed *emb;
-     
+
       emb = m_Wins.first();
       while ((emb = m_Wins.current()) != 0L)
       {
@@ -168,32 +169,32 @@ void Systemtray::layoutSystray()
 {
     /*
      * int i = 0, a = 0;
-     
+
       QXEmbed* emb;
       int x = 0;
       int count = 0;
-     
+
       //How many systray icons can fit on a line?
       int aa = width() / 24;
-     
+
       if(aa < 1)
       {
         // The place is to small to display a icon we make than one line with
         //   icons that we display at the top
         aa = 1;
       }
-     
+
       for (emb = m_Wins.first(); emb != 0L; emb = m_Wins.next()) {
         x = 2+i*24;
-     
+
         emb->move(a*24, x);
         a++;
-     
+
         if(a+1 > aa) {
           a = 0;
           i++;
         }
-     
+
         count++;
         emb->repaint();
       }

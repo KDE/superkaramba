@@ -67,13 +67,13 @@ KarambaWidget::KarambaWidget(QString fn, bool reloading, int instance, QWidget *
     setAttribute(Qt::WA_GroupLeader);
     setAttribute(Qt::WA_DeleteOnClose);
     KUrl url;
-    
+
     /* Testing of passed filename as relative/absolute or pre filename */
     if(fn.find('/') == -1)
         url.setFileName(fn);
     else
         url = fn;
-    
+
     /* if themefile is not set, close the theme */
     if(!m_theme.set(url))
     {
@@ -88,7 +88,7 @@ KarambaWidget::KarambaWidget(QString fn, bool reloading, int instance, QWidget *
     /*Add self to list of open themes to karambaApplication. reloading indicated whether this is
     first start or we are reloading from RMB */
     karambaApp->addKaramba(this, reloading);
-    
+
     //So that, if user changes the theme file/python script, the theme is reloaded
     KDirWatch *dirWatch = new KDirWatch( this );
     connect(dirWatch, SIGNAL( dirty( const QString & ) ),
@@ -136,7 +136,7 @@ KarambaWidget::KarambaWidget(QString fn, bool reloading, int instance, QWidget *
     // could be replaced with TaskManager
     kWinModule = new KWinModule();
     desktop = 0;
-    
+
     /* To let python module know that desktop is changed, and repaint of faked transparency */
     connect( kWinModule,SIGNAL(currentDesktopChanged(int)), this,
              SLOT(currentDesktopChanged(int)) );
@@ -225,7 +225,7 @@ KarambaWidget::KarambaWidget(QString fn, bool reloading, int instance, QWidget *
     if(!SuperKarambaSettings::showSysTray())
         showMenuExtension();
 
-    kpop->polish();
+    kpop->ensurePolished();
 
     numberOfConfMenuItems = 0;
 
@@ -302,7 +302,7 @@ KarambaWidget::KarambaWidget(QString fn, bool reloading, int instance, QWidget *
 
 
     setFocusPolicy(Qt::StrongFocus);
-    repaint(true);
+    repaint();
 }
 
 KarambaWidget::~KarambaWidget()
@@ -322,7 +322,7 @@ KarambaWidget::~KarambaWidget()
     meterList.clear();
     qDeleteAll(sensorList);
     sensorList.clear();
-    
+
     qDeleteAll(timeList);
     timeList.clear();
 
@@ -367,31 +367,31 @@ bool KarambaWidget::parseConfig()
 //         int y=0;
 //         int w=0;
 //         int h=0;
-// 
+//
 //         offsetStack.push(QPoint(0,0));
-// 
+//
 //         while(m_theme.nextLine(lineParser))
 //         {
 //             x = lineParser.getInt("X") + offsetStack.top().x();
 //             y = lineParser.getInt("Y") + offsetStack.top().y();
 //             w = lineParser.getInt("W");
 //             h = lineParser.getInt("H");
-// 
+//
 //             if(lineParser.meter() == "KARAMBA" && !foundKaramba )
 //             {
 //                 toggleLocked->setChecked(lineParser.getBoolean("LOCKED"));
 //                 slotToggleLocked();
-// 
+//
 //                 x = ( x < 0 ) ? 0:x;
 //                 y = ( y < 0 ) ? 0:y;
-// 
+//
 //                 if( w == 0 ||  h == 0)
 //                 {
 //                     w = 300;
 //                     h = 300;
 //                 }
 //                 setFixedSize(w,h);
-// 
+//
 //                 if(lineParser.getBoolean("RIGHT"))
 //                 {
 //                     QDesktopWidget *d = QApplication::desktop();
@@ -401,7 +401,7 @@ bool KarambaWidget::parseConfig()
 //                 {
 //                     x = 0;
 //                 }
-// 
+//
 //                 if(lineParser.getBoolean("BOTTOM"))
 //                 {
 //                     QDesktopWidget *d = QApplication::desktop();
@@ -411,16 +411,16 @@ bool KarambaWidget::parseConfig()
 //                 {
 //                     y = 0;
 //                 }
-// 
+//
 //                 move(x,y);
 //                 //pm = QPixmap(size());
-// 
+//
 //                 if(lineParser.getBoolean("ONTOP"))
 //                 {
 //                     onTop = true;
 //                     KWin::setState( winId(), NET::StaysOnTop );
 //                 }
-// 
+//
 //                 if(lineParser.getBoolean("MANAGED"))
 //                 {
 //                     managed = true;
@@ -435,16 +435,16 @@ bool KarambaWidget::parseConfig()
 //                     if (onTop)
 //                     {
 //                         KWin::setState( winId(), NET::StaysOnTop );
-// 
+//
 //                     }
 //                 }
-// 
+//
 //                 if (lineParser.getBoolean("ONALLDESKTOPS"))
 //                 {
 //                     desktop = 200; // ugly
 //                 }
-// 
-// 
+//
+//
 //                 bool dfound=false;
 //                 //int desktop = lineParser.getInt("DESKTOP", line, dfound);
 //                 if (dfound)
@@ -458,9 +458,9 @@ bool KarambaWidget::parseConfig()
 //                     toggleLocked->setChecked( true );
 //                     slotToggleLocked();
 //                     toggleLocked->setEnabled(false);
-// 
+//
 //                 }
-// 
+//
 //                 if(lineParser.getBoolean("BOTTOMBAR"))
 //                 {
 //                     int dh = QApplication::desktop()->height();
@@ -470,7 +470,7 @@ bool KarambaWidget::parseConfig()
 //                     slotToggleLocked();
 //                     toggleLocked->setEnabled(false);
 //                 }
-// 
+//
 //                 if(lineParser.getBoolean("RIGHTBAR"))
 //                 {
 //                     int dw = QApplication::desktop()->width();
@@ -480,7 +480,7 @@ bool KarambaWidget::parseConfig()
 //                     slotToggleLocked();
 //                     toggleLocked->setEnabled(false);
 //                 }
-// 
+//
 //                 if(lineParser.getBoolean("LEFTBAR"))
 //                 {
 //                     move( 0, y );
@@ -489,9 +489,9 @@ bool KarambaWidget::parseConfig()
 //                     slotToggleLocked();
 //                     toggleLocked->setEnabled(false);
 //                 }
-// 
+//
 //                 QString path = lineParser.getString("MASK");
-// 
+//
 //                 QFileInfo info(path);
 //                 QString absPath;
 //                 QBitmap bmMask;
@@ -516,15 +516,15 @@ bool KarambaWidget::parseConfig()
 //                     bmMask.load(absPath);
 //                 }
 //                 setMask(bmMask);
-// 
+//
 //                 m_interval = lineParser.getInt("INTERVAL");
 //                 m_interval = (m_interval == 0) ? 1000 : m_interval;
-// 
+//
 //                 QString temp = lineParser.getString("TEMPUNIT", "C").toUpper();
 //                 tempUnit = temp.ascii()[0];
 //                 foundKaramba = true;
 //             }
-// 
+//
 //             if(lineParser.meter() == "THEME")
 //             {
 //                 QString path = lineParser.getString("PATH");
@@ -533,7 +533,7 @@ bool KarambaWidget::parseConfig()
 //                     path = m_theme.path() +"/" + path;
 //                 (new KarambaWidget( path, false ))->show();
 //             }
-// 
+//
 //             if(lineParser.meter() == "<GROUP>")
 //             {
 //                 int offsetX = offsetStack.top().x();
@@ -541,7 +541,7 @@ bool KarambaWidget::parseConfig()
 //                 offsetStack.push( QPoint( offsetX + lineParser.getInt("X"),
 //                                           offsetY + lineParser.getInt("Y")));
 //             }
-// 
+//
 //             if(lineParser.meter() == "</GROUP>")
 //             {
 //                 offsetStack.pop();
@@ -553,19 +553,19 @@ bool KarambaWidget::parseConfig()
 //                     setMouseTracking(true);
 //                 ClickArea *tmp = new ClickArea(this, x, y, w, h );
 //                 tmp->setOnClick(lineParser.getString("ONCLICK"));
-// 
+//
 //                 setSensor(lineParser, (Meter*)tmp);
 //                 clickList.append( (ClickMap *)tmp );
 //                 if( lineParser.getBoolean("PREVIEW"))
 //                     meterList.append( tmp );
 //             }*/
-// 
+//
 //             // program sensor without a meter
 //             if(lineParser.meter() == "SENSOR=PROGRAM")
 //             {
 //                 setSensor(lineParser, 0 );
 //             }
-// 
+//
 //             if(lineParser.meter() == "IMAGE")
 //             {
 //                 QString file = lineParser.getString("PATH");
@@ -578,7 +578,7 @@ bool KarambaWidget::parseConfig()
 //                 bool bg = lineParser.getBoolean("BACKGROUND");
 // //                 xon = ( xon <= 0 ) ? x:xon;
 // //                 yon = ( yon <= 0 ) ? y:yon;
-// 
+//
 //                 ImageLabel *tmp = new ImageLabel(this, x, y, 0, 0);
 //                 tmp->setValue(file);
 // //                 if(!file_roll.isEmpty())
@@ -588,18 +588,18 @@ bool KarambaWidget::parseConfig()
 //                     tmp->setObjectName(name.ascii());
 //                 if (!tiptext.isEmpty())
 //                     tmp->setTooltip(tiptext);
-// 
+//
 //                // connect(tmp, SIGNAL(pixmapLoaded()), this, SLOT(externalStep()));
 //                 setSensor(lineParser, (Meter*) tmp );
 //                 meterList.append (tmp );
 //                 imageList.append (tmp );
 //             }
-// 
+//
 //             if(lineParser.meter() == "DEFAULTFONT" )
 //             {
 //                 delete defaultTextField;
 //                 defaultTextField = new TextField( );
-// 
+//
 //                 defaultTextField->setColor(lineParser.getColor("COLOR",
 //                                            QColor("black")));
 //                 defaultTextField->setBGColor(lineParser.getColor("BGCOLOR",
@@ -612,17 +612,17 @@ bool KarambaWidget::parseConfig()
 //                                                 false));
 //                 defaultTextField->setShadow(lineParser.getInt("SHADOW", 0));
 //             }
-// 
+//
 //             if(lineParser.meter() == "RICHTEXT" ||
 //                     lineParser.meter() == "INPUT")
 //             {
 //                 TextField defTxt;
-// 
+//
 //                 if(defaultTextField)
 //                     defTxt = *defaultTextField;
-// 
+//
 //                 TextField* tmpText = new TextField();
-// 
+//
 //                 tmpText->setColor(lineParser.getColor("COLOR", defTxt.getColor()));
 //                 tmpText->setBGColor(lineParser.getColor("BGCOLOR",
 //                                                         defTxt.getBGColor()));
@@ -633,77 +633,77 @@ bool KarambaWidget::parseConfig()
 //                                       defTxt.getAlignmentAsString()));
 //                 tmpText->setFixedPitch(lineParser.getInt("FIXEDPITCH",
 //                                        defTxt.getFixedPitch()));
-// 
+//
 //                 tmpText->setShadow(lineParser.getInt("SHADOW", defTxt.getShadow()));
-// 
+//
 //                 // ////////////////////////////////////////////////////
 //                 // Now handle the specifics
 // //                 if(lineParser.meter() == "TEXT")
 // //                 {
-// // 
+// //
 // //                     TextLabel *tmp = new TextLabel(this, x, y, w, h );
 // //                     tmp->setTextProps(tmpText);
 // //                     tmp->setValue(
 // //                         m_theme.locale()->translate(lineParser.getString("VALUE").ascii()));
-// // 
+// //
 // //                     QString name = lineParser.getString("NAME");
 // //                     if (!name.isEmpty())
 // //                         tmp->setName(name.ascii());
-// // 
+// //
 // //                     setSensor(lineParser, (Meter*)tmp);
 // //                     meterList.append ( tmp );
 // //                 }
-// 
+//
 // //                 if(lineParser.meter() == "CLICKMAP")
 // //                 {
 // //                     if( !hasMouseTracking() )
 // //                         setMouseTracking(true);
 // //                     ClickMap *tmp = new ClickMap(this, x, y, w, h);
 // //                     tmp->setTextProps( tmpText );
-// // 
+// //
 // //                     setSensor(lineParser, (Meter*)tmp);
 // //                     // set all params
 // //                     clickList.append(tmp);
 // //                     meterList.append( tmp );
-// // 
+// //
 // //                 }
-// 
+//
 //                 if(lineParser.meter() == "RICHTEXT")
 //                 {
 //                     RichTextLabel *tmp = new RichTextLabel(this, x, y, w, h);
-// 
+//
 //                     bool dUl = lineParser.getBoolean("UNDERLINE");
-// 
+//
 //                     tmp->setText(
 //                         m_theme.locale()->translate(lineParser.getString("VALUE").ascii()));
 //                     tmp->setTextProps( tmpText );
 //                     tmp->resize(w,h);
-//                     
+//
 //                     QString name = lineParser.getString("NAME");
 //                     if (!name.isEmpty())
 //                         tmp->setName(name.ascii());
-// 
+//
 //                     setSensor(lineParser, (Meter*)tmp);
 //                     meterList.append ( tmp );
 //                 }
-// 
+//
 //                 if(lineParser.meter() == "INPUT")
 //                 {
 //                     Input *tmp = new Input(this, x, y, w, h);
-// 
+//
 //                     QString name = lineParser.getString("NAME");
 //                     if (!name.isEmpty())
 //                         tmp->setName(name.ascii());
-// 
+//
 //                     tmp->setTextProps(tmpText);
 //                     tmp->setValue(
 //                         m_theme.locale()->translate(lineParser.getString("VALUE").ascii()));
-// 
+//
 //                     meterList.append(tmp);
 //                     passive = false;
 //                 }
 //             }
-// 
+//
 //             if(lineParser.meter() == "BAR")
 //             {
 //                 Bar *tmp = new Bar(this, x, y, w, h );
@@ -718,35 +718,35 @@ bool KarambaWidget::parseConfig()
 //                 setSensor(lineParser, (Meter*)tmp );
 //                 meterList.append ( tmp );
 //             }
-// 
+//
 //             if(lineParser.meter() == "GRAPH")
 //             {
 //                 int points = lineParser.getInt("POINTS");
-// 
+//
 //                 Graph *tmp = new Graph(this, x, y, w, h, points);
 //                 tmp->setMax(lineParser.getInt("MAX", 100));
 //                 tmp->setMin(lineParser.getInt("MIN", 0));
 //                 QString name = lineParser.getString("NAME");
 //                 if (!name.isEmpty())
 //                     tmp->setName(name.ascii());
-// 
+//
 //                 tmp->setColor(lineParser.getColor("COLOR"));
-// 
+//
 //                 setSensor(lineParser, (Graph*)tmp);
 //                 meterList.append ( tmp );
 //             }
 //         }
-// 
+//
 //         if(passive && !managed)
 //         {
 //             // Matthew Kay: set window type to "dock"
 //             // (plays better with taskbar themes this way)
 //             KWin::setType(winId(), NET::Dock);
-// 
+//
 //             //KDE 3.2 addition for the always on top issues
 //             KWin::setState(winId(), NET::KeepBelow);
 //         }
-// 
+//
 //         m_theme.close();
 //     }
 //     //qDebug("parseConfig ok: %d", foundKaramba);
@@ -788,19 +788,19 @@ void KarambaWidget::makeActive()
  {
 //     if(managed)
 //         return;
-// 
+//
 //     foreach (QObject *meter, meterList)
 //     {
 //         if((meter)->isA("Input"))
 //             return;
 //     }
-// 
+//
 //     // Matthew Kay: set window type to "dock" (plays better with taskbar themes
 //     // this way)
 //     KWin::setType(winId(), NET::Dock);
 //     //KDE 3.2 addition for the always on top issues
 //     KWin::setState(winId(), NET::KeepBelow);
-// 
+//
  }
 
 void KarambaWidget::popupNotify(int)
@@ -889,7 +889,7 @@ void KarambaWidget::editScript()
 //     return meter->getSensor();
  	return "";
  }
-// 
+//
  QString KarambaWidget::getSensor(Meter* meter)
  {
 //     //qDebug("KarambaWidget::getSensor");
@@ -1210,14 +1210,14 @@ void KarambaWidget::meterClicked(QMouseEvent* e, Meter* meter)
 //     if (pythonIface && pythonIface->isExtensionLoaded() && haveUpdated)
 //     {
 //         int button = 0;
-// 
+//
 //         if( e->button() == Qt::LeftButton )
 //             button = 1;
 //         else if( e->button() == Qt::MidButton )
 //             button = 2;
 //         else if( e->button() == Qt::RightButton )
 //             button = 3;
-// 
+//
 //         if (RichTextLabel* richText = dynamic_cast<RichTextLabel*>(meter))
 //         {
 //             pythonIface->meterClicked(this, richText->anchorAt(e->x(), e->y()),
@@ -1357,7 +1357,7 @@ void KarambaWidget::mouseMoveEvent( QMouseEvent *e )
 //         // Change cursor over ClickArea
 // //         QListIterator<ClickMap *> it(clickList);
 //         bool insideArea = false;
-// 
+//
 //         while (it.hasNext())
 //         {
 //             insideArea = ((Meter*) it.next()) -> insideActiveArea(e -> x(), e ->y());
@@ -1366,7 +1366,7 @@ void KarambaWidget::mouseMoveEvent( QMouseEvent *e )
 //                 break;
 //             }
 //         }
-// 
+//
 //         if(insideArea)
 //         {
 //             if( cursor().shape() != Qt::PointingHandCursor )
@@ -1377,7 +1377,7 @@ void KarambaWidget::mouseMoveEvent( QMouseEvent *e )
 //             if( cursor().shape() != Qt::ArrowCursor )
 //                 setCursor( Qt::ArrowCursor );
 //         }
-// 
+//
 //         QListIterator<ImageLabel *> image_it( imageList);        // iterate over image sensors
 //         while ( image_it.hasNext() )
 //         {
@@ -1470,16 +1470,16 @@ void KarambaWidget::updateBackground(KSharedPixmap* kpm)
 //     if(pm.width() == 0)
 //         start();
 //     background = QPixmap(*kpm);
-// 
+//
 //     QPixmap buffer = QPixmap(size());
-// 
+//
 //     pm = QPixmap(size());
 //     buffer.fill(Qt::black);
-// 
+//
 //     QListIterator<ImageLabel *> it( imageList ); // iterate over meters
 //     p.begin(&buffer);
 //     p.drawPixmap(0, 0, background);
-// 
+//
 //     while ( it.hasNext() )
 //     {
 //         ImageLabel *tmp = qobject_cast<ImageLabel *>(it.next());
@@ -1489,32 +1489,32 @@ void KarambaWidget::updateBackground(KSharedPixmap* kpm)
 //         }
 //     }
 //     p.end();
-// 
+//
 //     p.begin(&pm);
 //     p.drawPixmap(0, 0, buffer);
 //     p.end();
-// 
+//
 //     background = pm;
-// 
+//
 //     QPixmap buffer2 = QPixmap(size());
-// 
+//
 //     pm = QPixmap(size());
 //     buffer2.fill(Qt::black);
-// 
+//
 //     QListIterator<QObject *> it2( meterList ); // iterate over meters
 //     p.begin(&buffer2);
 //     p.drawPixmap(0, 0, background);
-// 
+//
 //     while ( it2.hasNext() )
 //     {
 //  //       ((Meter*) it2.next())->mUpdate(&p);
 //     }
 //     p.end();
-// 
+//
 //     p.begin(&pm);
 //     p.drawPixmap(0, 0, buffer2);
 //     p.end();
-// 
+//
 //     if (systray != 0)
 //     {
 //         systray->updateBackgroundPixmap(buffer2);
@@ -1694,7 +1694,7 @@ void KarambaWidget::addMenuConfigOption(QString key, QString name)
     KToggleAction* confItem = new KToggleAction (name.ascii(), KShortcut::null(),
                               action, SLOT(receive()),
                               menuAccColl, key.ascii());
-#warning "kde4: port it :confItem -> setName(key.ascii());"	
+#warning "kde4: port it :confItem -> setName(key.ascii());"
     //confItem -> setName(key.ascii());
 
     menuAccColl -> insert(confItem);
@@ -1766,11 +1766,11 @@ void KarambaWidget::passMenuItemClicked(int id)
     }
 }
 
-/*FIXME all these taskmanager stuff needs to be separated from karambawidget. 
+/*FIXME all these taskmanager stuff needs to be separated from karambawidget.
     on the first thought, I think, pointer to pythonIface/AbstractIface should
-    be available to classes other than karambawidget too. Then these signals 
-    should be emitted from there. as meters are now separate widgets, they also 
-    emit Iface signals. May be, we should make the Taskmanager class singleton, then it 
+    be available to classes other than karambawidget too. Then these signals
+    should be emitted from there. as meters are now separate widgets, they also
+    emit Iface signals. May be, we should make the Taskmanager class singleton, then it
     will have the iface QList, which can be populated by individual KarambaWidgets.*/
 
 void KarambaWidget::activeTaskChanged(Task* t)
@@ -1894,7 +1894,7 @@ void KarambaWidget::systrayUpdated()
     if (pythonIface && pythonIface->isExtensionLoaded())
         pythonIface->systrayUpdated(this);
 }
-/*FIXME do we really need update functions should not the update be 
+/*FIXME do we really need update functions should not the update be
      called by only meters, when they are updated? */
 
 void KarambaWidget::toggleWidgetUpdate( bool b)
@@ -1966,7 +1966,7 @@ void KarambaWidget::showMenuExtension()
                                          i18n("&Quit SuperKaramba"), this,
                                          SLOT(slotQuit()), Qt::CTRL + Qt::Key_Q);
 
-    kglobal->polish();
+    kglobal->ensurePolished();
 
     trayMenuSeperatorId = kpop->insertSeparator();
     kpop->insertItem("SuperKaramba", kglobal);
