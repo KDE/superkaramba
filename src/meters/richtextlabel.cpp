@@ -126,7 +126,7 @@ void RichTextLabel::setTextProps(TextField* t)
     {
         setFontSize(t->getFontSize());
         setFont(t->getFont());
-        colorGrp.setColor(QColorGroup::Text, t->getColor());
+        colorGrp.setColor(QPalette::Text, t->getColor());
         //         kDebug()<< "setTextProps" << t->getFont() << t->getFontSize() << "--"<< textDoc->pageSize()<< textDoc->documentLayout()->documentSize().toSize()<<endl;
     }
 }
