@@ -84,7 +84,7 @@ void RssSensor::update()
         {
             QDomNodeList links = docElem.elementsByTagName( "link" );
             QDomNodeList displays;
-            if ( format.contains( "%d", false ) > 0 )
+            if ( format.contains( "%d", Qt::CaseInsensitive ) )
             {
                 displays = docElem.elementsByTagName( "description" );
             }
@@ -95,7 +95,7 @@ void RssSensor::update()
 
             QRegExp rx("^http://", false );
             QList<QVariant> list;
-            for (uint i=1; i < displays.count(); ++i )
+            for (int i=1; i < displays.count(); ++i )
             {
                 QString dispTxt = displays.item( i ).toElement().text();
                 QString linkTxt = links.item( i ).toElement().text();
