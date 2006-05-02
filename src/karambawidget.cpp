@@ -69,7 +69,7 @@ KarambaWidget::KarambaWidget(QString fn, bool reloading, int instance, QWidget *
     KUrl url;
 
     /* Testing of passed filename as relative/absolute or pre filename */
-    if(fn.find('/') == -1)
+    if(!fn.contains('/'))
         url.setFileName(fn);
     else
         url = fn;
