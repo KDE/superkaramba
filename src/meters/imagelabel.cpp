@@ -88,15 +88,15 @@ ChannelIntensity::ChannelIntensity(ImageLabel* img, float r, QString c,
     ratio = (ratio < -1) ? -1 : ratio;
 
     channel = 0;
-    if (c.find("red", 0 , false))
+    if (c.contains("red", Qt::CaseInsensitive))
     {
         channel = 0;
     }
-    else if (c.find("green", 0, false))
+    else if (c.contains("green", Qt::CaseInsensitive))
     {
         channel = 1;
     }
-    else if (c.find("blue", 0, false))
+    else if (c.contains("blue", Qt::CaseInsensitive))
     {
         channel = 2;
     }
@@ -232,7 +232,7 @@ void ImageLabel::applyTransformations(bool useSmoothScale)
         QWMatrix rotMat;
         rotMat.rotate(rot_angle);
         pixmap = pixmap.transformed(rotMat,Qt::SmoothTransformation);
-        
+
     }
     if (doScale)
     {
