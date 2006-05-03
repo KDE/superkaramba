@@ -14,6 +14,7 @@
 #include <config.h>
 #endif
 
+#include <config-superkaramba.h>
 #include <qdatetime.h>
 #include <qregexp.h>
 #include <qtextcodec.h>
