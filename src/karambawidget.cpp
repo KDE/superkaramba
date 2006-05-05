@@ -199,7 +199,7 @@ KarambaWidget::KarambaWidget(QString fn, bool reloading, int instance, QWidget *
     accColl->insert(toggleLocked);
     toggleLocked -> setChecked(true);
 
-    toggleLocked->plug(kpop);
+    kpop->addAction( toggleLocked );
 
     toggleFastTransforms = new KToggleAction(i18n("Use &Fast Image Scaling"),
                            Qt::CTRL + Qt::Key_F, this,

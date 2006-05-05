@@ -189,13 +189,13 @@ void KarambaApplication::setUpSysTray(KAboutData* about)
     m_helpMenu = new KHelpMenu(themeListWindow, about);
     action = KStdAction::help(m_helpMenu, SLOT(appHelpActivated()),
                               sysTrayIcon->actionCollection());
-    action->plug(menu);
+    menu->addAction( action );
     action = KStdAction::aboutApp(m_helpMenu, SLOT(aboutApplication()),
                                   sysTrayIcon->actionCollection());
-    action->plug(menu);
+    menu->addAction( action );
     action = KStdAction::aboutKDE(m_helpMenu, SLOT(aboutKDE()),
                                   sysTrayIcon->actionCollection());
-    action->plug(menu);
+    menu->addAction( action );
 
     sysTrayIcon->setPixmap(sysTrayIcon->loadIcon("superkaramba"));
     setToolTip();
