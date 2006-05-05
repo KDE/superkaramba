@@ -209,7 +209,7 @@ KarambaWidget::KarambaWidget(QString fn, bool reloading, int instance, QWidget *
     accColl->insert(toggleFastTransforms);
     toggleFastTransforms -> setChecked(true);
 
-    toggleFastTransforms -> plug(kpop);
+    kpop->addAction(toggleFastTransforms);
 
     kpop->insertSeparator();
 
@@ -1705,7 +1705,7 @@ void KarambaWidget::addMenuConfigOption(QString key, QString name)
     config -> setGroup("config menu");
     confItem -> setChecked(config -> readEntry(key,false));
 
-    confItem -> plug(themeConfMenu);
+    themeConfMenu->addAction( confItem );
 
     numberOfConfMenuItems++;
 }
