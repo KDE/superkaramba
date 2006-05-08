@@ -18,7 +18,7 @@
 #include <kmessagebox.h>
 #include <kdebug.h>
 #include <khelpmenu.h>
-
+#include <kstdaction.h>
 #include <qtooltip.h>
 #include <QByteArray>
 #include <QtAlgorithms>

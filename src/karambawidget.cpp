@@ -51,6 +51,9 @@
 #include <qxml.h>
 #include "skthemehandler.h"
 
+#include <ktoggleaction.h>
+#include <kactioncollection.h>
+
 // Menu IDs
 #define EDITSCRIPT 1
 #define THEMECONF  2

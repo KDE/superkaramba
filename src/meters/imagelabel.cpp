@@ -73,7 +73,7 @@ Intensity::Intensity(ImageLabel* img, float r, int millisec)
     ratio = (ratio < -1) ? -1 : ratio;
 }
 
-KPixmap Intensity::apply(KPixmap pixmap)
+QPixmap Intensity::apply(QPixmap pixmap)
 {
     return KPixmapEffect::intensity(pixmap, ratio);
 }
@@ -102,7 +102,7 @@ ChannelIntensity::ChannelIntensity(ImageLabel* img, float r, QString c,
     }
 }
 
-KPixmap ChannelIntensity::apply(KPixmap pixmap)
+QPixmap ChannelIntensity::apply(QPixmap pixmap)
 {
     return KPixmapEffect::channelIntensity(pixmap, ratio,
                                            (KPixmapEffect::RGBComponent)channel);
@@ -113,7 +113,7 @@ ToGray::ToGray(ImageLabel* img, int millisec)
         :   Effect(img, millisec)
 {}
 
-KPixmap ToGray::apply(KPixmap pixmap)
+QPixmap ToGray::apply(QPixmap pixmap)
 {
     return KPixmapEffect::toGray(pixmap);
 }
@@ -315,7 +315,7 @@ void ImageLabel::setValue(QString fn)
  */
 void ImageLabel::setValue(QPixmap& pix)
 {
-    realpixmap = KPixmap(pix);
+    realpixmap = QPixmap(pix);
     pixmap = realpixmap;
     resize(pixmap.width(),pixmap.height());
 //     setWidth(pixmap.width());
@@ -458,7 +458,7 @@ void ImageLabel::parseImages(QString fn, QString fn_roll, int _xoff,
 
         if(KIO::NetAccess::download(KUrl(path), tmpFile, karambaApp->parentWindow()))
         {
-            pixmap_off = KPixmap(tmpFile);
+            pixmap_off = QPixmap(tmpFile);
             KIO::NetAccess::removeTempFile(tmpFile);
             qDebug("Downloaded: %s to %s", path.ascii(), tmpFile.ascii());
         }
@@ -469,7 +469,7 @@ void ImageLabel::parseImages(QString fn, QString fn_roll, int _xoff,
     }
     else
     {
-        pixmap_off = KPixmap(path);
+        pixmap_off = QPixmap(path);
     }
 
     pixmapOffWidth = pixmap.width();
@@ -504,7 +504,7 @@ void ImageLabel::parseImages(QString fn, QString fn_roll, int _xoff,
 
         if(KIO::NetAccess::download(KUrl(path), tmpFile, karambaApp->parentWindow()))
         {
-            pixmap_on = KPixmap(tmpFile);
+            pixmap_on = QPixmap(tmpFile);
             KIO::NetAccess::removeTempFile(tmpFile);
             qDebug("Downloaded: %s to %s", path.ascii(), tmpFile.ascii());
         }
@@ -515,7 +515,7 @@ void ImageLabel::parseImages(QString fn, QString fn_roll, int _xoff,
     }
     else
     {
-        pixmap_on = KPixmap(path);
+        pixmap_on = QPixmap(path);
     }
 
     pixmapOnWidth = pixmap_on.width();

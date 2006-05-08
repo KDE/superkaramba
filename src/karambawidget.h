@@ -100,10 +100,11 @@
  * @author Hans Karlsson <karlsson.h@home.se>
  * @version 0.26
  */
-
+#include <ktoggleaction.h>
 class KarambaPython;
 class LineParser;
 class ImageLabel;
+class KToggleAction;
 
 class KarambaWidget :  public QWidget
 {
