@@ -378,6 +378,7 @@ void tl_nl_load_domain (QIODevice* device, int size,
             if (nb == -1)
             {
                 device->close();
+		free(data);
                 return;
             }
 
@@ -400,8 +401,10 @@ void tl_nl_load_domain (QIODevice* device, int size,
 
     domain_file->data
     = (struct loaded_domain *) malloc (sizeof (struct loaded_domain));
-    if (domain_file->data == NULL)
+    if (domain_file->data == NULL) {
+	free(data);
         return;
+    }
 
     domain = (struct loaded_domain *) domain_file->data;
     domain->data = (char *) data;
