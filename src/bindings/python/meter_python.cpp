@@ -132,7 +132,7 @@ long getMeter(long widget, char* name)
     {
         if (strcmp(((Meter*) it)->name(), name) == 0)
             return (long)it;
-        qWarning("it= %d",(int)it);
+        qWarning("it=%p",(void*)it);
     }
     return 0;
 }
