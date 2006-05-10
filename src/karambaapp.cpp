@@ -8,9 +8,9 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-#include <qstring.h>
+#include <QString>
 #include <qstringlist.h>
-#include <qdir.h>
+#include <QDir>
 #include <kfiledialog.h>
 #include <kcmdlineargs.h>
 #include <fcntl.h>
@@ -19,7 +19,7 @@
 #include <kdebug.h>
 #include <khelpmenu.h>
 #include <kstdaction.h>
-#include <qtooltip.h>
+#include <QToolTip>
 #include <QByteArray>
 #include <QtAlgorithms>
 

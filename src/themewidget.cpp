@@ -22,8 +22,8 @@
 #include <kpushbutton.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QLabel>
+#include <QLayout>
 
 ThemeWidget::ThemeWidget(QWidget *parent, const char *name)
         : QWidget(parent, name),

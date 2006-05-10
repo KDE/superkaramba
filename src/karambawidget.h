@@ -27,26 +27,26 @@
 #include <config.h>
 #endif
 
-#include <qwidget.h>
+#include <QWidget>
 #include <kapplication.h>
 
 #include <kwinmodule.h>
 #include <kwin.h>
 
-#include <qfile.h>
+#include <QFile>
 #include <kfile.h>
 #include <qfileinfo.h>
 #include <kaction.h>
-#include <qtimer.h>
+#include <QTimer>
 #include <qpixmap.h>
 #include <qpainter.h>
 #include <QByteArray>
 
 //#include <krootpixmap.h>
 
-#include <qregexp.h>
-#include <qlabel.h>
-#include <qstring.h>
+#include <QRegExp>
+#include <QLabel>
+#include <QString>
 #include <qstringlist.h>
 #include <ksharedpixmap.h>
 #include <kmenu.h>
@@ -54,10 +54,10 @@
 #include <netwm.h>
 #include <kiconloader.h>
 #include <kfiledialog.h>
-#include <qmap.h>
+#include <QMap>
 #include <kurl.h>
 #include <krun.h>
-#include <qdatetime.h>
+#include <QDateTime>
 #include <qbitmap.h>
 #include <kconfig.h>
 #include  <kprocess.h>

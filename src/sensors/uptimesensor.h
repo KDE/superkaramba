@@ -11,11 +11,11 @@
 #define UPTIMESENSOR_H
 #include "sensor.h"
 
-#include <qfile.h>
+#include <QFile>
 #include <qtextstream.h>
-#include <qstring.h>
-#include <qregexp.h>
-#include <qdatetime.h>
+#include <QString>
+#include <QRegExp>
+#include <QDateTime>
 #include <kstaticdeleter.h>
 
 class UptimeSensor :  public Sensor

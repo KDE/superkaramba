@@ -2,11 +2,11 @@
 #ifndef SENSORSENSOR_H
 #define SENSORSENSOR_H
 
-#include <qstring.h>
+#include <QString>
 #include <qtextcodec.h>
-#include <qmap.h>
+#include <QMap>
 #include <qstringlist.h>
-#include <qregexp.h>
+#include <QRegExp>
 #include <kprocess.h>
 #include <kprocio.h>
 #include <kstaticdeleter.h>

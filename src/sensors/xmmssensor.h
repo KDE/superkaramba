@@ -15,8 +15,8 @@
 #endif
 
 #include <config-superkaramba.h>
-#include <qdatetime.h>
-#include <qregexp.h>
+#include <QDateTime>
+#include <QRegExp>
 #include <qtextcodec.h>
 
 #include "sensor.h"

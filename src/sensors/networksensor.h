@@ -13,9 +13,9 @@
 #include "sensor.h"
 #include <kstaticdeleter.h>
 
-#include <qdatetime.h>
-#include <qfile.h>
-#include <qregexp.h>
+#include <QDateTime>
+#include <QFile>
+#include <QRegExp>
 #ifdef __FreeBSD__
 #include <sys/types.h>
 #include <sys/socket.h>

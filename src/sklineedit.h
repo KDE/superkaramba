@@ -21,11 +21,11 @@
 #ifndef SKLINEEDIT_H
 #define SKLINEEDIT_H
 
-#include <qlineedit.h>
-#include <qwidget.h>
+#include <QLineEdit>
+#include <QWidget>
 #include <qevent.h>
 #include <qpainter.h>
-#include <qcolor.h>
+#include <QColor>
 
 class Input;
 

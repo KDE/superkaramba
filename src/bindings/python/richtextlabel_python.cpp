@@ -27,7 +27,7 @@
 #endif
 
 #include <Python.h>
-#include <qobject.h>
+#include <QObject>
 #include "karambawidget.h"
 #include "richtextlabel.h"
 #include "meter_python.h"

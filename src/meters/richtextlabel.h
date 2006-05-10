@@ -12,10 +12,10 @@
 #define RICHTEXTLABEL_H
 
 #include "meter.h"
-#include <qstring.h>
+#include <QString>
 #include <q3simplerichtext.h>
 #include <qpainter.h>
-#include <qfont.h>
+#include <QFont>
 #include <qfontmetrics.h>
 #include <qrect.h>
 #include <qsize.h>

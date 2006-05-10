@@ -12,7 +12,7 @@
 #define RSSSENSOR_H
 
 #include <sensor.h>
-#include <qstring.h>
+#include <QString>
 #include <qtextcodec.h>
 
 /**

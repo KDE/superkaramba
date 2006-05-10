@@ -10,8 +10,8 @@
 #ifndef MEMSENSOR_H
 #define MEMSENSOR_H
 #include "sensor.h"
-#include <qstring.h>
-#include <qregexp.h>
+#include <QString>
+#include <QRegExp>
 #include <kprocess.h>
 #include <kstaticdeleter.h>
 

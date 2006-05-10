@@ -19,7 +19,7 @@
 #include "systemtray.h"
 
 #include <QtAlgorithms>
-#include <qobject.h>
+#include <QObject>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kwinmodule.h>
@@ -27,7 +27,7 @@
 #include <kdebug.h>
 #include <kwin.h>
 
-#include <qlayout.h>
+#include <QLayout>
 #include <qstringlist.h>
 #include <qpixmap.h>
 #include <QX11Info>

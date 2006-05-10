@@ -22,10 +22,10 @@
 #ifndef CLICKAREA_H
 #define CLICKAREA_H
 
-#include <qstring.h>
+#include <QString>
 #include <qrect.h>
 #include <qevent.h>
-#include <qregexp.h>
+#include <QRegExp>
 
 #include <kprocess.h>
 #include <kprocio.h>

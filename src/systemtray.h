@@ -21,7 +21,7 @@
 #ifndef TESTCARDAPPLET_H
 #define TESTCARDAPPLET_H
 
-#include <qobject.h>
+#include <QObject>
 #include <qpixmap.h>
 #include <QX11EmbedWidget>
 #include <QList>

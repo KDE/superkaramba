@@ -11,7 +11,7 @@
 #define DATESENSOR_H
 #include "sensor.h"
 #include "sensorparams.h"
-#include <qdatetime.h>
+#include <QDateTime>
 #include <kdatepicker.h>
 #include <q3vbox.h>
 #include <kstaticdeleter.h>

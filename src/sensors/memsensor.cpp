@@ -8,10 +8,10 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 #include "memsensor.h"
-#include <qfile.h>
+#include <QFile>
 #include <qtextstream.h>
-#include <qstring.h>
-#include <qregexp.h>
+#include <QString>
+#include <QRegExp>
 
 #ifdef __FreeBSD__
 #include <sys/time.h>

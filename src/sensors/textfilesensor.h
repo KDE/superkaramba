@@ -24,9 +24,9 @@
 
 
 #include <sensor.h>
-#include <qfile.h>
+#include <QFile>
 #include <qtextstream.h>
-#include <qstring.h>
+#include <QString>
 #include <qtextcodec.h>
 
 /**

@@ -13,7 +13,7 @@
 
 #include "meter.h"
 #include <qpainter.h>
-#include <qcolor.h>
+#include <QColor>
 
 class Graph : public Meter
 {

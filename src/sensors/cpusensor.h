@@ -11,9 +11,9 @@
 #define CPUSENSOR_H
 #include "sensor.h"
 
-#include <qfile.h>
-#include <qregexp.h>
-#include <qmap.h>
+#include <QFile>
+#include <QRegExp>
+#include <QMap>
 #include <kstaticdeleter.h>
 
 class CPUSensor :  public Sensor

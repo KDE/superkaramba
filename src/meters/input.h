@@ -25,11 +25,11 @@
 #include <sklineedit.h>
 
 #include <qpainter.h>
-#include <qcolor.h>
-#include <qlineedit.h>
-#include <qwidget.h>
-#include <qstring.h>
-#include <qfont.h>
+#include <QColor>
+#include <QLineEdit>
+#include <QWidget>
+#include <QString>
+#include <QFont>
 
 #include "textfield.h"
 

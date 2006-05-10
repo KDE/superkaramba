@@ -13,7 +13,7 @@
 #endif
 
 #include <Python.h>
-#include <qobject.h>
+#include <QObject>
 #include "karambawidget.h"
 #include "karambaapp.h"
 #include "meter.h"

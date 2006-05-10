@@ -11,7 +11,7 @@
 #include "karambaapp.h"
 #include "rsssensor.h"
 #include <qdom.h>
-#include <qregexp.h>
+#include <QRegExp>
 #include <kurl.h>
 #include <kio/netaccess.h>
 

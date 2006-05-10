@@ -10,10 +10,10 @@
 #ifndef DISKSENSOR_H
 #define DISKSENSOR_H
 #include "sensor.h"
-#include <qmap.h>
-#include <qstring.h>
+#include <QMap>
+#include <QString>
 #include <qtextcodec.h>
-#include <qregexp.h>
+#include <QRegExp>
 #include <qstringlist.h>
 #include <kprocess.h>
 #include <kstaticdeleter.h>

@@ -12,8 +12,8 @@
 
 #include "sensor.h"
 #include <dcopclient.h>
-#include <qregexp.h>
-#include <qdatastream.h>
+#include <QRegExp>
+#include <QDataStream>
 #include <qstringlist.h>
 #include <QByteArray>
 

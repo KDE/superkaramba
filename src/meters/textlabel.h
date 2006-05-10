@@ -10,10 +10,10 @@
 #ifndef TEXTLABEL_H
 #define TEXTLABEL_H
 #include "meter.h"
-#include <qstring.h>
+#include <QString>
 #include <qpainter.h>
-#include <qcolor.h>
-#include <qfont.h>
+#include <QColor>
+#include <QFont>
 #include <qfontmetrics.h>
 #include <qstringlist.h>
 #include <qrect.h>

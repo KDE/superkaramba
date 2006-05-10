@@ -22,8 +22,8 @@
 #define SENSORPARAMS_H
 
 #include "meter.h"
-#include <qstring.h>
-#include <qmap.h>
+#include <QString>
+#include <QMap>
 /**
  *
  * Hans Karlsson

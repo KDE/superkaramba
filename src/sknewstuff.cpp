@@ -26,7 +26,7 @@
 #include <kstandarddirs.h>
 #include <ktar.h>
 #include <kurl.h>
-#include <qdir.h>
+#include <QDir>
 #include <qfileinfo.h>
 
 #include "karambaapp.h"

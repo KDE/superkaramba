@@ -27,8 +27,8 @@
 @author See README for the list of authors
 */
 
-#include <qstring.h>
-#include <qcolor.h>
+#include <QString>
+#include <QColor>
 
 class LineParser
 {

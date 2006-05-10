@@ -21,7 +21,7 @@
  ****************************************************************************/
 
 #include <karambaapp.h>
-#include <qobject.h>
+#include <QObject>
 
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>

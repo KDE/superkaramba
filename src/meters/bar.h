@@ -12,7 +12,7 @@
 
 #include "meter.h"
 #include <qpixmap.h>
-#include <qstring.h>
+#include <QString>
 #include <qpainter.h>
 
 class Bar : public Meter

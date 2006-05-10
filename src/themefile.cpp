@@ -35,7 +35,7 @@
 #include <qtextstream.h>
 #include <qfileinfo.h>
 #include <qdom.h>
-#include <qdir.h>
+#include <QDir>
 
 class ZipFile
 {

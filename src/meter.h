@@ -10,12 +10,12 @@
 #ifndef METER_H
 #define METER_H
 
-#include <qvariant.h>
+#include <QVariant>
 #include <qpixmap.h>
 #include <qpainter.h>
-#include <qstring.h>
+#include <QString>
 #include <qstringlist.h>
-#include <qwidget.h>
+#include <QWidget>
 #include <QMouseEvent>
 
 #include <qfileinfo.h>

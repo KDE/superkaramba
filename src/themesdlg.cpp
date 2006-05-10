@@ -34,10 +34,10 @@
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <qlineedit.h>
-#include <qdir.h>
-#include <qlabel.h>
-#include <qcombobox.h>
+#include <QLineEdit>
+#include <QDir>
+#include <QLabel>
+#include <QComboBox>
 #include <kio/job.h>
 #include <kprotocolinfo.h>
 #include <kglobal.h>

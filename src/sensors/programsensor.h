@@ -12,7 +12,7 @@
 #include "sensor.h"
 #include <kprocess.h>
 #include <kprocio.h>
-#include <qstring.h>
+#include <QString>
 #include <qstringlist.h>
 #include <qtextcodec.h>
 

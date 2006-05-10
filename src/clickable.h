@@ -11,7 +11,7 @@
 #ifndef CLICKABLE_H
 #define CLICKABLE_H
 
-#include <qstring.h>
+#include <QString>
 #include <qrect.h>
 #include <qevent.h>
 

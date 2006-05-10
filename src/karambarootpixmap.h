@@ -10,7 +10,7 @@
 #ifndef KARAMBAROOTPIXMAP_H
 #define KARAMBAROOTPIXMAP_H
 
-#include <qwidget.h>
+#include <QWidget>
 #include <krootpixmap.h>
 #include <ksharedpixmap.h>
 

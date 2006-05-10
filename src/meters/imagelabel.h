@@ -28,12 +28,12 @@
 #include <qimage.h>
 #include <qpixmap.h>
 #include <qpainter.h>
-#include <qstring.h>
+#include <QString>
 #include <qstringlist.h>
 #include <kurl.h>
 #include <kio/netaccess.h>
-#include <qregexp.h>
-#include <qtimer.h>
+#include <QRegExp>
+#include <QTimer>
 #include "karambawidget.h"
 
 class ImageLabel;
