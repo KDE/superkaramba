@@ -204,10 +204,9 @@ KarambaWidget::KarambaWidget(QString fn, bool reloading, int instance, QWidget *
 
     kpop->addAction( toggleLocked );
 
-    toggleFastTransforms = new KToggleAction(i18n("Use &Fast Image Scaling"),
-                           Qt::CTRL + Qt::Key_F, this,
-                           SLOT( slotToggleFastTransforms() ),
-                           accColl, "Fast transformations");
+    toggleFastTransforms = new KToggleAction(i18n("Use &Fast Image Scaling"), accColl, "Fast transformations");
+    connect(toggleFastTransforms, SIGNAL(triggered(bool) ), SLOT( slotToggleFastTransforms() ));
+    toggleFastTransforms->setShortcut(Qt::CTRL + Qt::Key_F);
 
     accColl->insert(toggleFastTransforms);
     toggleFastTransforms -> setChecked(true);
@@ -1694,9 +1693,8 @@ void KarambaWidget::addMenuConfigOption(QString key, QString name)
     kpop -> setItemEnabled(THEMECONF, true);
 
     SignalBridge* action = new SignalBridge(this, key, menuAccColl);
-    KToggleAction* confItem = new KToggleAction (name.ascii(), KShortcut::null(),
-                              action, SLOT(receive()),
-                              menuAccColl, key.ascii());
+    KToggleAction *confItem = new KToggleAction(name, menuAccColl, key.ascii());
+    connect(confItem, SIGNAL(triggered(bool) ), action, SLOT(receive()));
 #warning "kde4: port it :confItem -> setName(key.ascii());"
     //confItem -> setName(key.ascii());
 
@@ -1916,9 +1914,9 @@ void KarambaWidget::addMeter(Meter* meter)
 }
 
 SignalBridge::SignalBridge(QObject* parent, QString name, KActionCollection* ac)
-        : QObject(parent, name.ascii()), collection(ac)
+        : QObject(parent, collection(ac)
 {
-    setName(name.ascii());
+    setObjectName(name);
 }
 
 void SignalBridge::receive()
