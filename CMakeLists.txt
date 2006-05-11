@@ -1,14 +1,14 @@
 kde4_header()
 project(superkaramba)
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-superkaramba.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-superkaramba.h )
+configure_file(config-superkaramba.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-superkaramba.h )
 
 
 add_subdirectory( src ) 
 add_subdirectory( icons ) 
 add_subdirectory( mimetypes ) 
 
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}  )
+
 
 
 ########### install files ###############

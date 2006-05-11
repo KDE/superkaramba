@@ -7,7 +7,6 @@ include_directories(
 	${CMAKE_SOURCE_DIR}/superkaramba/src/sensors/ 
 	${CMAKE_SOURCE_DIR}/superkaramba/src/meters/
 	${CMAKE_SOURCE_DIR}/superkaramba/src/bindings/python/
-	${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}  
 	)
 
 add_subdirectory( sensors )
@@ -15,9 +14,9 @@ add_subdirectory( bindings )
 add_subdirectory( meters )
 
 
-if(XMMS_FOUND)
-	ADD_DEFINITIONS(${XMMS_INCLUDE_DIR})
-endif(XMMS_FOUND)
+if (XMMS_FOUND)
+   add_definitions(${XMMS_INCLUDE_DIR})
+endif (XMMS_FOUND)
 
 set(libsk_sensors_SRCS 
 	${CMAKE_SOURCE_DIR}/superkaramba/src/sensors/cpusensor.cpp 
