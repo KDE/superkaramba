@@ -1,4 +1,3 @@
-kde4_header()
 project(superkaramba)
 
 configure_file(config-superkaramba.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-superkaramba.h )
@@ -14,7 +13,6 @@ add_subdirectory( mimetypes )
 ########### install files ###############
 
 
-kde4_footer()
 
 
 

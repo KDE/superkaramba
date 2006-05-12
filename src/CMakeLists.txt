@@ -1,4 +1,3 @@
-kde4_header()
 find_package(PythonLibs REQUIRED)
 
 include_directories( 
@@ -106,7 +105,6 @@ install_targets(/bin superkaramba )
 install_files( ${DATA_INSTALL_DIR}/superkaramba FILES superkarambaui.rc )
 install_files( ${APPLNK_INSTALL_DIR}/Utilities FILES superkaramba.desktop )
 
-kde4_footer()
 
 
 
