@@ -73,9 +73,10 @@ Intensity::Intensity(ImageLabel* img, float r, int millisec)
     ratio = (ratio < -1) ? -1 : ratio;
 }
 
-QPixmap Intensity::apply(QPixmap pixmap)
+QPixmap Intensity::apply(const QPixmap& pixmap)
 {
-    return KPixmapEffect::intensity(pixmap, ratio);
+    QPixmap p (pixmap);
+    return KPixmapEffect::intensity(p, ratio);
 }
 
 // ChannelIntensity
@@ -102,9 +103,10 @@ ChannelIntensity::ChannelIntensity(ImageLabel* img, float r, QString c,
     }
 }
 
-QPixmap ChannelIntensity::apply(QPixmap pixmap)
+QPixmap ChannelIntensity::apply(const QPixmap& pixmap)
 {
-    return KPixmapEffect::channelIntensity(pixmap, ratio,
+    QPixmap p(pixmap);
+    return KPixmapEffect::channelIntensity(p, ratio,
                                            (KPixmapEffect::RGBComponent)channel);
 }
 
@@ -113,9 +115,10 @@ ToGray::ToGray(ImageLabel* img, int millisec)
         :   Effect(img, millisec)
 {}
 
-QPixmap ToGray::apply(QPixmap pixmap)
+QPixmap ToGray::apply(const QPixmap& pixmap)
 {
-    return KPixmapEffect::toGray(pixmap);
+    QPixmap p(pixmap);
+    return KPixmapEffect::toGray(p);
 }
 
 /***********************************************************************/

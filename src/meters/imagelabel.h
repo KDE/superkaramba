@@ -50,7 +50,7 @@ public:
 
     virtual ~Effect();
 
-    virtual QPixmap apply(QPixmap pixmap) = 0;
+    virtual QPixmap apply(const QPixmap& pixmap) = 0;
 
     void startTimer();
 
@@ -66,7 +66,7 @@ class Intensity : public Effect
 public:
     Intensity(ImageLabel*, float r, int millisec);
 
-    QPixmap apply(QPixmap pixmap);
+    QPixmap apply(const QPixmap& pixmap);
 
 private:
     float ratio;
@@ -79,7 +79,7 @@ class ChannelIntensity : public Effect
 public:
     ChannelIntensity(ImageLabel*, float r, QString c, int millisec);
 
-    QPixmap apply(QPixmap pixmap);
+    QPixmap apply(const QPixmap& pixmap);
 
 private:
     float ratio;
@@ -92,7 +92,7 @@ class ToGray : public Effect
 public:
     ToGray(ImageLabel*, int millisec);
 
-    QPixmap apply(QPixmap pixmap);
+    QPixmap apply(const QPixmap& pixmap);
 };
 
 class ImageLabel : public Meter
@@ -108,7 +108,7 @@ public:
 
     void setValue( int );
     void setValue( QPixmap& );
-    QString getStringValue()
+    virtual QString getStringValue() const
     {
         return imagePath;
     };

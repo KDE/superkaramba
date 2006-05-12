@@ -33,7 +33,7 @@ public:
     void setText(QString text, QString f="");
     void setValue(QString text);
     void setValue(int v);
-    QString getStringValue()
+    virtual QString getStringValue() const
     {
         return source;
     };

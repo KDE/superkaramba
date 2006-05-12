@@ -150,7 +150,7 @@ PyObject* py_getBarImage(PyObject *, PyObject *args)
         return NULL;
     }
 
-    return Py_BuildValue((char*)"s", ((Bar*)meter)->getImage().ascii());
+    return Py_BuildValue((char*)"s", ((Bar*)meter)->getImage().utf8());
 }
 
 PyObject* py_setBarImage(PyObject *, PyObject *args)
