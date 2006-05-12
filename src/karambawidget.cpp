@@ -1914,7 +1914,7 @@ void KarambaWidget::addMeter(Meter* meter)
 }
 
 SignalBridge::SignalBridge(QObject* parent, QString name, KActionCollection* ac)
-        : QObject(parent, collection(ac)
+        : QObject(parent), collection(ac)
 {
     setObjectName(name);
 }
