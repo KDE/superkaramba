@@ -852,7 +852,7 @@ void KarambaWidget::editConfig()
         path = m_theme.file();
     }
 
-    KRun::runURL( KUrl( path ), "text/plain" );
+    KRun::runUrl( KUrl( path ), "text/plain",this );
 }
 
 void KarambaWidget::editScript()
@@ -869,7 +869,7 @@ void KarambaWidget::editScript()
     {
         path = QFileInfo(m_theme.file()).path() + "/" + m_theme.name() + ".py";
     }
-    KRun::runURL( KUrl( path ), "text/plain" );
+    KRun::runUrl( KUrl( path ), "text/plain" ,this);
 }
 
  QString KarambaWidget::findSensorFromMap(Sensor* sensor)
