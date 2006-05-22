@@ -213,7 +213,7 @@ bool ThemeFile::set
         if(KMessageBox::warningContinueCancel(kapp->activeWindow(),
                                               i18n("You are about to install and run %1 SuperKaramba theme. Since "
                                                    "themes can contain executable code you should only install themes "
-                                                   "from sources that you trust. Continue?", url.prettyURL()),
+                                                   "from sources that you trust. Continue?", url.prettyUrl()),
                                               i18n("Executable Code Warning"), i18n("Install"))
                 == KMessageBox::Cancel)
         {
