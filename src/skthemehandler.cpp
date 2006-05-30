@@ -421,8 +421,7 @@ bool SKThemeHandler::parseMeterAttributes(const QXmlAttributes& attr)
             //             m_widget->passive = false;
             returnMeter=meter;
         }
-	else
-	    delete tmpText;
+	delete tmpText;
     }
     else if(type=="image")
     {
