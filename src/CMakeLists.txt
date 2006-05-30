@@ -103,7 +103,7 @@ install_targets(/bin superkaramba )
 ########### install files ###############
 
 install_files( ${DATA_INSTALL_DIR}/superkaramba FILES superkarambaui.rc )
-install_files( ${APPLNK_INSTALL_DIR}/Utilities FILES superkaramba.desktop )
+install_files( ${XDG_APPS_DIR} FILES superkaramba.desktop )
 
 
 
