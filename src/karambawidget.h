@@ -272,7 +272,7 @@ private:
     QList<Sensor *> timeList;
 
     QTime lowerTimer;
-    // use only the first occurance of KARAMBA in a config file
+    // use only the first occurrence of KARAMBA in a config file
     bool foundKaramba;
 
     KMenu* themeConfMenu;

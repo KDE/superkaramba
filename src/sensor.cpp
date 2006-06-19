@@ -12,7 +12,7 @@
 
 Sensor::Sensor(int p_msec)
 {
-    m_msec = p_msec; //intialization
+    m_msec = p_msec; //initialization
 }
 // void Sensor::start()
 // {

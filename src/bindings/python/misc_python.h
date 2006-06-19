@@ -76,7 +76,7 @@ PyObject* py_execute_command(PyObject* self, PyObject* args);
 *
 *   To use it, call executeInteractive with the reference to your widget and
 *   a list of command options. The array is simply a list that contains the
-*   command as the first entry, and each option as a seperate list entry.
+*   command as the first entry, and each option as a separate list entry.
 *   Output from the command is returned via the commandOutput callback.
 *
 *   The command returns the process number of the command. This is useful if

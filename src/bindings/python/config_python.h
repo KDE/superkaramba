@@ -32,7 +32,7 @@
 * DESCRIPTION
 *   SuperKaramba supports a simplistic configuration pop-up menu. This menu
 *   appears when you right-click on a widget and choose Configure Theme.
-*   Basically, it allows you to have check-able entrys in the menu to allow
+*   Basically, it allows you to have check-able entries in the menu to allow
 *   the user to enable or disable features in your theme.
 *
 *   Before you use any configuration menu stuff, you NEED to add a new

@@ -180,7 +180,7 @@ static PyMethodDef karamba_methods[] = {
                                            {(char*)"createMenu", py_create_menu, METH_VARARGS, (char*)"Create a popup menu"},
                                            {(char*)"deleteMenu", py_delete_menu, METH_VARARGS, (char*)"Delete a popup menu"},
                                            {(char*)"addMenuItem", py_add_menu_item, METH_VARARGS, (char*)"Add a popup menu entry"},
-                                           {(char*)"addMenuSeparator", py_add_menu_separator, METH_VARARGS, (char*)"Add a popup menu seperator item"},
+                                           {(char*)"addMenuSeparator", py_add_menu_separator, METH_VARARGS, (char*)"Add a popup menu separator item"},
                                            {(char*)"removeMenuItem", py_remove_menu_item, METH_VARARGS, (char*)"Remove a popup menu entry"},
                                            {(char*)"popupMenu", py_popup_menu, METH_VARARGS, (char*)"Popup a menu at a specified location"},
 
