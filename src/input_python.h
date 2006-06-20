@@ -432,44 +432,44 @@ PyObject* py_setInputBoxFontSize(PyObject *, PyObject *args);
 PyObject* py_getInputBoxFontSize(PyObject *, PyObject *args);
 
 /** InputBox/setInputFocus
- *
- * SYNOPSIS
- *   long setInputFocus(widget, inputBox)
- * DESCRIPTION
- *   Sets the Input Focus to the Input Box
- * ARGUMENTS
- *   * long widget -- karamba
- *   * long inputBox -- pointer to Input Box
- * RETURN VALUE
- *   1 if successful
- */
+*
+* SYNOPSIS
+*   long setInputFocus(widget, inputBox)
+* DESCRIPTION
+*   Sets the Input Focus to the Input Box
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long inputBox -- pointer to Input Box
+* RETURN VALUE
+*   1 if successful
+*/
 PyObject* py_setInputFocus(PyObject *, PyObject *args);
 
 /** InputBox/clearInputFocus
- *
- * SYNOPSIS
- *   long clearInputFocus(widget, inputBox)
- * DESCRIPTION
- *   releases the Input Focus from the Input Box
- * ARGUMENTS
- *   * long widget -- karamba
- *   * long inputBox -- pointer to Input Box
- * RETURN VALUE
- *   1 if successful
- */
+*
+* SYNOPSIS
+*   long clearInputFocus(widget, inputBox)
+* DESCRIPTION
+*   releases the Input Focus from the Input Box
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long inputBox -- pointer to Input Box
+* RETURN VALUE
+*   1 if successful
+*/
 PyObject* py_clearInputFocus(PyObject *, PyObject *args);
 
 /** InputBox/getInputFocus
- *
- * SYNOPSIS
- *   long getInputFocus(widget)
- * DESCRIPTION
- *   Get the Input Box currently focused
- * ARGUMENTS
- *   * long widget -- karamba
- * RETURN VALUE
- *   the input box or 0
- */
+*
+* SYNOPSIS
+*   long getInputFocus(widget)
+* DESCRIPTION
+*   Get the Input Box currently focused
+* ARGUMENTS
+*   * long widget -- karamba
+* RETURN VALUE
+*   the input box or 0
+*/
 PyObject* py_getInputFocus(PyObject *, PyObject *args);
 
 #endif
