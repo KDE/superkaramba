@@ -128,13 +128,14 @@ QString NoatunSensor::getTitle()
 int NoatunSensor::getTime()
 {
     int result;
-    DCOPReply dcopResult = DCOPRef( noatunID, "Noatun").call("position()");
-    if (!dcopResult.get(result))
+    QDBusInterfacePtr noatun("org.kde.noatun", "/Noatun", "org.kde.noatun.Noatun");
+    QDBusReply<int> reply = noatun->call("position");
+    if (!reply.isSuccess())
     {
         qDebug("Something went wrong with the call!");
         result = 0;
     }
-
+    result = reply;
     return result;
 }
 
@@ -142,13 +143,14 @@ int NoatunSensor::getTime()
 int NoatunSensor::getLength()
 {
     int result;
-    DCOPReply dcopResult = DCOPRef( noatunID, "Noatun").call("length()");
-    if (!dcopResult.get(result))
+    QDBusInterfacePtr noatun("org.kde.noatun", "/Noatun", "org.kde.noatun.Noatun");
+    QDBusReply<int> reply = noatun->call("length");
+    if (!reply.isSuccess())
     {
         qDebug("Something went wrong with the call!");
         result = 0;
     }
-
+    result = reply;
     return result;
 }
 
@@ -159,10 +161,10 @@ void NoatunSensor::setMaxValue( SensorParams *sp)
     meter = sp->getMeter();
     QString f;
     f = sp->getParam("FORMAT");
- 
+
     if ( f == "%full" )
         meter->setMax( 1 );
- 
+
 }
 */
 #include "noatunsensor.moc"

@@ -11,7 +11,6 @@
 #define NOATUNSENSOR_H
 
 #include "sensor.h"
-#include <dcopclient.h>
 #include <QRegExp>
 #include <QDataStream>
 #include <qstringlist.h>

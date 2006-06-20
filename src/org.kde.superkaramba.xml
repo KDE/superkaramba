@@ -1,0 +1,37 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+  <interface name="org.kde.superkaramba">
+    <method name="openTheme">
+    <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+    <arg name="file" type="s" direction="in"/>
+    </method>
+    <method name="closeTheme">
+    <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+    <arg name="file" type="s" direction="in"/>
+    </method>
+    <method name="quit">
+    <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+    </method>
+    <method name="hideSystemTray">
+    <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+    <arg name="hide" type="b" direction="in"/>
+    </method>
+    <method name="showThemeDialog">
+    <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+    </method>
+    <method name="themeAdded">
+    <arg name="appId" type="b" direction="in"/>
+    <arg name="file" type="b" direction="in"/>
+    </method>
+    <method name="themeAdded">
+    <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+    <arg name="appId" type="b" direction="in"/>
+    <arg name="file" type="b" direction="in"/>
+    <arg name="instance" type="i" direction="in"/>
+    </method>
+    <method name="isMainKaramba">
+    <arg type="b" direction="out"/>
+    </method>
+  </interface>
+</node>

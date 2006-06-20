@@ -60,7 +60,7 @@ set(libsk_python_SRCS
 ########### next target ###############
 
 set(superkaramba_SRCS ${libsk_sensors_SRCS} ${libsk_meters_SRCS} ${libsk_python_SRCS}
-   main.cpp 
+   main.cpp  superkarambaadaptor.cpp
    karambawidget.cpp 
    meter.cpp 
    sensor.cpp 
@@ -87,9 +87,6 @@ kde4_automoc(${superkaramba_SRCS})
 
 kde4_add_ui_files(superkaramba_SRCS themes_layout.ui themewidget_layout.ui )
 
-kde4_add_dcop_skels(superkaramba_SRCS dcopinterface.h )
-
-kde4_add_dcop_stubs(superkaramba_SRCS dcopinterface.h )
 
 kde4_add_kcfg_files(superkaramba_SRCS superkarambasettings.kcfgc )
 
