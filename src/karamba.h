@@ -297,6 +297,7 @@ public slots:
 
 private:
     bool m_reloading;
+    bool themeStarted;
     QTimer *m_sysTimer;
     int m_interval;
 

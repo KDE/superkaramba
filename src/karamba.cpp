@@ -62,6 +62,7 @@ karamba::karamba(QString fn, QString name, bool reloading, int instance,
     trayMenuThemeId(-1),
     m_sysTimer(NULL)
 {
+  themeStarted = false;
   want_right_button = false;
   prettyName = name;
   m_sub_theme = sub_theme;
@@ -1528,8 +1529,12 @@ void karamba::updateBackground(KSharedPixmap* kpm)
   //kdDebug() << k_funcinfo << pm.size() << endl;
   // if pm width == 0 this is the first time we come here and we should start
   // the theme. This is because we need the background before starting.
-  if(pm.width() == 0)
+  //if(pm.width() == 0)
+  if( !themeStarted )
+  {
+    themeStarted = true;
     start();
+  }
   background = QPixmap(*kpm);
 
   QPixmap buffer = QPixmap(size());
