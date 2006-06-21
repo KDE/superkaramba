@@ -2047,12 +2047,12 @@ void karamba::setAlwaysOnTop(bool stay)
     if(stay)
     {
         onTop = true;
-        KWin::setState( winId(), NET::StaysOnTop );
+        KWin::setState( winId(), NET::KeepAbove );
     }
     else
     {
         onTop = false;
-        KWin::clearState( winId(), NET::StaysOnTop );
+        KWin::setState( winId(), NET::KeepBelow );
     }
 }
 
