@@ -5,7 +5,6 @@ configure_file(config-superkaramba.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-su
 
 add_subdirectory( src ) 
 add_subdirectory( icons ) 
-add_subdirectory( mimetypes ) 
 
 
 
