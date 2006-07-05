@@ -94,13 +94,13 @@ kde4_add_executable(superkaramba ${superkaramba_SRCS})
 
 target_link_libraries(superkaramba  ${KDE4_KIO_LIBS} ${XMMS_LIBRARIES} kutils  ${PYTHON_LIBRARIES} knewstuff)
 
-install_targets(/bin superkaramba )
+install(TARGETS superkaramba  DESTINATION ${BIN_INSTALL_DIR} )
 
 
 ########### install files ###############
 
-install_files( ${DATA_INSTALL_DIR}/superkaramba FILES superkarambaui.rc )
-install_files( ${XDG_APPS_DIR} FILES superkaramba.desktop )
+install( FILES superkarambaui.rc  DESTINATION ${DATA_INSTALL_DIR}/superkaramba)
+install( FILES superkaramba.desktop  DESTINATION ${XDG_APPS_DIR})
 
 
 
