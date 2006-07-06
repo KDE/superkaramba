@@ -10,6 +10,7 @@
 #include <QByteArray>
 #include <QTime>
 #include "noatunsensor.h"
+#include <QtDBus>
 
 NoatunSensor::NoatunSensor( int interval,  DCOPClient *c)
         : Sensor( interval )
@@ -128,9 +129,9 @@ QString NoatunSensor::getTitle()
 int NoatunSensor::getTime()
 {
     int result;
-    QDBusInterfacePtr noatun("org.kde.noatun", "/Noatun", "org.kde.noatun.Noatun");
-    QDBusReply<int> reply = noatun->call("position");
-    if (!reply.isSuccess())
+    QDBusInterface noatun("org.kde.noatun", "/Noatun", "org.kde.noatun.Noatun");
+    QDBusReply<int> reply = noatun.call("position");
+    if (!reply.isValid())
     {
         qDebug("Something went wrong with the call!");
         result = 0;
@@ -143,9 +144,9 @@ int NoatunSensor::getTime()
 int NoatunSensor::getLength()
 {
     int result;
-    QDBusInterfacePtr noatun("org.kde.noatun", "/Noatun", "org.kde.noatun.Noatun");
-    QDBusReply<int> reply = noatun->call("length");
-    if (!reply.isSuccess())
+    QDBusInterface noatun("org.kde.noatun", "/Noatun", "org.kde.noatun.Noatun");
+    QDBusReply<int> reply = noatun.call("length");
+    if (!reply.isValid())
     {
         qDebug("Something went wrong with the call!");
         result = 0;
