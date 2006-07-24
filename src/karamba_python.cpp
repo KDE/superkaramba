@@ -595,7 +595,7 @@ bool KarambaPython::commandFinished(karamba* k, int pid)
 
 bool KarambaPython::itemDropped(karamba* k, QString text, int x, int y)
 {
-  PyObject* pArgs = Py_BuildValue((char*)"(lsii)", k, text.ascii(), x, y);
+  PyObject* pArgs = Py_BuildValue((char*)"(lOii)", k, QString2PyString(text), x, y);
   return callObject("itemDropped", pArgs);
 }
 

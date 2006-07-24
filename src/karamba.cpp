@@ -1912,7 +1912,7 @@ void karamba::dropEvent(QDropEvent* event)
     if (pythonIface && pythonIface->isExtensionLoaded())
     {
       const QPoint &p = event->pos();
-      pythonIface->itemDropped(this, text.ascii(), p.x(), p.y());
+      pythonIface->itemDropped(this, text, p.x(), p.y());
     }
   }
 }
