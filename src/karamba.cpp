@@ -1741,7 +1741,7 @@ void karamba::addMenuConfigOption(QString key, QString name)
   kpop -> setItemEnabled(THEMECONF, true);
 
   SignalBridge* action = new SignalBridge(this, key, menuAccColl);
-  KToggleAction* confItem = new KToggleAction (name.ascii(), KShortcut::null(),
+  KToggleAction* confItem = new KToggleAction (name, KShortcut::null(),
                                                action, SLOT(receive()),
                                                menuAccColl, key.ascii());
   confItem -> setName(key.ascii());
