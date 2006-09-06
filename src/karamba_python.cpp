@@ -3,7 +3,7 @@
 *
 *  Copyright (C) 2003 Hans Karlsson <karlsson.h@home.se>
 *  Copyright (C) 2003-2004 Adam Geitgey <adam@rootnode.org>
-*  Copyright (c) 2004 Petri Damstén <damu@iki.fi>
+*  Copyright (c) 2004 Petri Damstï¿½ <damu@iki.fi>
 *  Copyright (c) 2004 Luke Kenneth Casson Leighton <lkcl@lkcl.net>
 *
 *  This file is part of SuperKaramba.
@@ -221,7 +221,9 @@ static PyMethodDef karamba_methods[] = {
     {(char*)"readThemeFile", py_read_theme_file, METH_VARARGS,
         (char*)"Read file from theme."},
     {(char*)"language", py_language, METH_VARARGS,
-        (char*)"Return default language."},
+        (char*)"Return default language of a translation file."},
+    {(char*)"userLanguage", py_userLanguage, METH_VARARGS,
+        (char*)"Return user language."},
     {(char*)"openTheme", py_open_theme, METH_VARARGS,
         (char*)"Open a new theme"},
     {(char*)"reloadTheme", py_reload_theme, METH_VARARGS,

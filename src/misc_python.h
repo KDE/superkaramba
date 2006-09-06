@@ -185,13 +185,27 @@ PyObject* py_get_theme_path(PyObject *self, PyObject *args);
 * SYNOPSIS
 *   string language(widget)
 * DESCRIPTION
-*   Returns a string containing default language.
+*   Returns a string containing default language of a translation file.
 * ARGUMENTS
 *   * long widget -- karamba
 * RETURN VALUE
 *   default language or empty string if no translation files found.
 */
 PyObject* py_language(PyObject *self, PyObject *args);
+
+/** Misc/language
+ *
+ * SYNOPSIS
+ *   string userLanguage(widget)
+ * DESCRIPTION
+ *   Returns a string containing the global KDE user language.
+ * ARGUMENTS
+ *   * long widget -- karamba
+ * RETURN VALUE
+ *   user language or empty string.
+ */
+PyObject* py_userLanguage(PyObject *self, PyObject *args);
+
 
 /** Misc/readThemeFile
 *

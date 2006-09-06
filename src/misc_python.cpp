@@ -30,6 +30,10 @@
 #include <Python.h>
 #include <qglobal.h>
 #include <qobject.h>
+
+#include <kglobal.h>
+#include <klocale.h>
+
 #include "kdebug.h"
 #include "karamba.h"
 #include "karambaapp.h"
@@ -295,6 +299,16 @@ PyObject* py_language(PyObject *, PyObject *args)
     return NULL;
   return Py_BuildValue((char*)"s",
       ((karamba*)widget)->theme().locale()->language().ascii());
+}
+
+PyObject* py_userLanguage(PyObject *, PyObject *args)
+{
+  long widget;
+  if (!PyArg_ParseTuple(args, (char*)"l:language", &widget))
+    return NULL;
+  if (!checkKaramba(widget))
+    return NULL;
+  return Py_BuildValue((char*)"s", KGlobal::locale()->language().ascii());
 }
 
 PyObject* py_read_theme_file(PyObject *, PyObject *args)
