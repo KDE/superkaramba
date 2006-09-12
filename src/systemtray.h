@@ -23,8 +23,11 @@
 
 #include <qobject.h>
 #include <qpixmap.h>
-#include <qptrlist.h>
-#include <qxembed.h>
+#include <q3ptrlist.h>
+//#include <qxembed.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <QWidget>
 
 class KWinModule;
 
@@ -56,9 +59,9 @@ signals:
 
 private:
     KWinModule *kwin_module;
-    QValueList<WId> systemTrayWindows;
+    Q3ValueList<WId> systemTrayWindows;
 
-    QPtrList<QXEmbed> m_Wins;
+    //Q3PtrList<QXEmbed> m_Wins;	// KDE4
 
     Atom net_system_tray_selection;
     Atom net_system_tray_opcode;

@@ -29,11 +29,10 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <qpoint.h>
 #include <qobject.h>
-#include <qvaluelist.h>
-#include <qptrlist.h>
+#include <q3valuelist.h>
+#include <q3ptrlist.h>
 #include <qpixmap.h>
 
-#include <dcopobject.h>
 #include <kwin.h>
 #include <kstartupinfo.h>
 #include "karambaapp.h"
@@ -100,7 +99,7 @@ public:
      * A list of the window ids of all transient windows (dialogs) associated
      * with this task.
      */
-    QValueList<WId> transients() const { return _transients; }
+    Q3ValueList<WId> transients() const { return _transients; }
 
     /**
      * Returns a 16x16 (KIcon::Small) icon for the task. This method will
@@ -353,7 +352,7 @@ private:
 #else
     KWin::Info          _info;
 #endif
-    QValueList<WId>     _transients;
+    Q3ValueList<WId>     _transients;
 
     int                 _lastWidth;
     int                 _lastHeight;
@@ -413,8 +412,8 @@ private:
     class StartupPrivate *d;
 };
 
-typedef QPtrList<Task> TaskList;
-typedef QPtrList<Startup> StartupList;
+typedef Q3PtrList<Task> TaskList;
+typedef Q3PtrList<Startup> StartupList;
 
 
 /**
@@ -540,7 +539,7 @@ protected:
 private:
     Task*               _active;
     TaskList           _tasks;
-    QValueList< WId >   _skiptaskbar_windows;
+    Q3ValueList< WId >   _skiptaskbar_windows;
     StartupList         _startups;
     KStartupInfo*       _startup_info;
 

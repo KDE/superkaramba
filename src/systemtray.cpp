@@ -20,6 +20,9 @@
 
 
 #include <qobject.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <Q3ValueList>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kwinmodule.h>
@@ -27,8 +30,8 @@
 #include <kdebug.h>
 #include <kwin.h>
 
-#include <qpopupmenu.h>
-#include <qdragobject.h>
+#include <q3popupmenu.h>
+#include <q3dragobject.h>
 #include <qlayout.h>
 #include <qstringlist.h>
 #include <qpixmap.h>
@@ -40,13 +43,13 @@ Systemtray::Systemtray(QWidget* parent)
 {
   setBackgroundOrigin(ParentOrigin);
   setBackgroundMode(FixedPixmap);
-  m_Wins.setAutoDelete(true);
+  //m_Wins.setAutoDelete(true);	//KDE4
 }
 
 
 Systemtray::~Systemtray()
 {
-  m_Wins.clear();
+  //m_Wins.clear();		// KDE4
 }
 
 int Systemtray::getTraySize() {
@@ -54,6 +57,8 @@ int Systemtray::getTraySize() {
 	return (int) kwin_module->systemTrayWindows().size();
 }
 
+/*
+QXEmbed in Qt4?? KDE4??
 void Systemtray::updateBackgroundPixmap ( const QPixmap & pixmap) {
   QXEmbed *emb;
   setPaletteBackgroundPixmap (pixmap);
@@ -74,6 +79,7 @@ void Systemtray::updateBackgroundPixmap ( const QPixmap & pixmap) {
     XUnmapWindow(qt_xdisplay(), hack);
     XDestroyWindow(qt_xdisplay(), hack);
 }
+*/
 
 void Systemtray::initSystray( void )
 {
@@ -84,8 +90,8 @@ void Systemtray::initSystray( void )
 
   kwin_module = new KWinModule();
   systemTrayWindows = kwin_module->systemTrayWindows();
-  QValueList<WId>::ConstIterator end(systemTrayWindows.end());
-  for (QValueList<WId>::ConstIterator it = systemTrayWindows.begin(); it!=end; ++it)
+  Q3ValueList<WId>::ConstIterator end(systemTrayWindows.end());
+  for (Q3ValueList<WId>::ConstIterator it = systemTrayWindows.begin(); it!=end; ++it)
   {
     no_of_systray_windows++;
     QXEmbed *emb;
@@ -110,9 +116,9 @@ void Systemtray::initSystray( void )
   connect(kwin_module, SIGNAL(systemTrayWindowAdded(WId)), SLOT(systemTrayWindowAdded(WId)));
   connect(kwin_module, SIGNAL(systemTrayWindowRemoved(WId)), SLOT(systemTrayWindowRemoved(WId)));
 
-  QCString screenstr;
+  Q3CString screenstr;
   screenstr.setNum(qt_xscreen());
-  QCString trayatom = "_NET_SYSTEM_TRAY_S" + screenstr;
+  Q3CString trayatom = "_NET_SYSTEM_TRAY_S" + screenstr;
 
   net_system_tray_selection = XInternAtom( display, trayatom, false );
   net_system_tray_opcode = XInternAtom( display, "_NET_SYSTEM_TRAY_OPCODE", false );

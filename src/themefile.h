@@ -3,7 +3,7 @@
 *
 *  Copyright (C) 2003 Hans Karlsson <karlsson.h@home.se>
 *  Copyright (C) 2003-2004 Adam Geitgey <adam@rootnode.org>
-*  Copyright (c) 2004 Petri Damstén <damu@iki.fi>
+*  Copyright (c) 2004 Petri Damstï¿½ <damu@iki.fi>
 *
 *  This file is part of SuperKaramba.
 *
@@ -26,13 +26,13 @@
 
 #include <kurl.h>
 #include <qstring.h>
-#include <qcstring.h>
+#include <q3cstring.h>
 #include <qpixmap.h>
 #include <qfile.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 
 class LineParser;
-class QTextStream;
+class Q3TextStream;
 class ThemeLocale;
 class ZipFile;
 
@@ -42,9 +42,9 @@ class ZipFile;
 class ThemeFile
 {
   public:
-    typedef QValueVector<ThemeFile> List;
+    typedef Q3ValueVector<ThemeFile> List;
 
-    ThemeFile(const KURL& url = KURL());
+    ThemeFile(const KUrl& url = KUrl());
     ~ThemeFile();
 
     bool isZipTheme() const { return m_zipTheme; };
@@ -70,7 +70,7 @@ class ThemeFile
     const ThemeLocale* locale() const { return m_locale; };
     bool canUninstall() const;
 
-    bool set(const KURL& url);
+    bool set(const KUrl& url);
     bool open();
     bool nextLine(LineParser& parser);
     bool close();
@@ -93,7 +93,7 @@ class ThemeFile
     QString m_icon;
     QString m_version;
     QString m_license;
-    QTextStream* m_stream;
+    Q3TextStream* m_stream;
     QByteArray m_ba;
     QFile m_fl;
     QString m_description;

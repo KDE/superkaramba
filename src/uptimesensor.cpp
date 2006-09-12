@@ -67,10 +67,10 @@ void UptimeSensor::update()
 #else
     QFile file("/proc/uptime");
     QString line;
-    if ( file.open(IO_ReadOnly | IO_Translate) )
+    if ( file.open(QIODevice::ReadOnly | QIODevice::Text) )
     {
         // file opened successfully
-        QTextStream t( &file );        // use a text stream
+        Q3TextStream t( &file );        // use a text stream
         line = t.readLine();         // line of text excluding '\n'
         file.close();
 
@@ -90,6 +90,9 @@ void UptimeSensor::update()
         SensorParams *sp;
         Meter *meter;
 
+        /*
+        KDE4
+        
         QObjectListIt it( *objList );
         while (it != 0)
         {
@@ -112,6 +115,7 @@ void UptimeSensor::update()
             meter->setValue(format);
             ++it;
         }
+        */
 
 #if !defined __FreeBSD__ && !defined(Q_OS_NETBSD)
   }

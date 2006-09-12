@@ -11,7 +11,7 @@
 #include "karamba.h"
 #include "karambainterface.h"
 #include <kdebug.h>
-#include "qwidgetlist.h"
+#include "qwidget.h"
 #include "themesdlg.h"
 
 KarambaIface::KarambaIface(): DCOPObject("KarambaIface")

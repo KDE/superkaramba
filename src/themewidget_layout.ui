@@ -14,9 +14,9 @@
     </property>
     <property name="paletteBackgroundColor">
         <color>
-            <red>250</red>
-            <green>248</green>
-            <blue>241</blue>
+            <Qt::red>250</Qt::red>
+            <Qt::green>248</Qt::green>
+            <Qt::blue>241</Qt::blue>
         </color>
     </property>
     <hbox>
@@ -48,7 +48,7 @@
                         <pixmap>image0</pixmap>
                     </property>
                     <property name="alignment">
-                        <set>AlignCenter</set>
+                        <set>Qt::AlignCenter</set>
                     </property>
                 </widget>
                 <widget class="QLabel">
@@ -72,7 +72,7 @@
                         <string>&lt;p align="center"&gt;1 running&lt;/p&gt;</string>
                     </property>
                     <property name="textFormat">
-                        <enum>RichText</enum>
+                        <enum>Qt::RichText</enum>
                     </property>
                 </widget>
             </vbox>
@@ -122,7 +122,7 @@
                         <string>Description</string>
                     </property>
                     <property name="alignment">
-                        <set>WordBreak|AlignTop</set>
+                        <set>Qt::TextWordWrap|Qt::AlignTop</set>
                     </property>
                 </widget>
                 <widget class="QLayoutWidget">
@@ -138,7 +138,7 @@
                                 <cstring>spacer</cstring>
                             </property>
                             <property name="orientation">
-                                <enum>Horizontal</enum>
+                                <enum>Qt::Horizontal</enum>
                             </property>
                             <property name="sizeType">
                                 <enum>Expanding</enum>

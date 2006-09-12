@@ -13,7 +13,9 @@
 
 #include "kapplication.h"
 #include <kdeversion.h>
-#include <ksystemtray.h>
+#include <ksystemtrayicon.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #undef KDE_3_2
 #undef KDE_3_3
@@ -54,7 +56,7 @@ class KarambaApplication : public KApplication
     ThemesDlg* themeListWindow;
     dcopIface_stub* dcopIfaceStub;
     QObjectList *karambaList;
-    KSystemTray* sysTrayIcon;
+    KSystemTrayIcon* sysTrayIcon;
 
   public:
     KarambaApplication();
@@ -63,7 +65,7 @@ class KarambaApplication : public KApplication
     QString getMainKaramba();
     QStringList getKarambas();
     bool themeExists(QString pretty_name);
-    void initDcopStub(QCString app = "");
+    void initDcopStub(Q3CString app = "");
     void setUpSysTray(KAboutData* about);
     void checkPreviousSession(KApplication &app, QStringList &lst);
     void checkCommandLine(KCmdLineArgs *args, QStringList &lst);

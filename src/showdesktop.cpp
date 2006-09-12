@@ -25,6 +25,8 @@
 #include "karambaapp.h"
 #include "showdesktop.h"
 #include "showdesktop.moc"
+//Added by qt3to4:
+#include <Q3ValueList>
 
 ShowDesktop* ShowDesktop::the()
 {
@@ -65,7 +67,7 @@ void ShowDesktop::slotWindowChanged(WId w, unsigned int dirty)
   // SELI this needs checking for kwin_iii (_NET_SHOWING_DESKTOP)
   if ( dirty & NET::XAWMState )
   {
-    NETWinInfo inf(qt_xdisplay(), w, qt_xrootwin(),
+    NETWinInfo inf(QX11Info::display(), w, QX11Info::appRootWindow(),
                    NET::XAWMState | NET::WMWindowType);
 #ifdef KDE_3_2
     NET::WindowType windowType = inf.windowType(NET_ALL_TYPES_MASK);
@@ -91,12 +93,12 @@ void ShowDesktop::showDesktop( bool b )
     if ( b ) {
         // this code should move to KWin after supporting NETWM1.2
         iconifiedList.clear();
-        const QValueList<WId> windows = kWinModule->windows();
-        QValueList<WId>::ConstIterator it;
-        QValueList<WId>::ConstIterator end( windows.end() );
+        const Q3ValueList<WId> windows = kWinModule->windows();
+        Q3ValueList<WId>::ConstIterator it;
+        Q3ValueList<WId>::ConstIterator end( windows.end() );
         for ( it=windows.begin(); it!=end; ++it ) {
             WId w = *it;
-            NETWinInfo info( qt_xdisplay(), w, qt_xrootwin(),
+            NETWinInfo info( QX11Info::display(), w, QX11Info::appRootWindow(),
                              NET::XAWMState | NET::WMDesktop );
             if ( info.mappingState() == NET::Visible &&
                  ( info.desktop() == NETWinInfo::OnAllDesktops
@@ -107,13 +109,13 @@ void ShowDesktop::showDesktop( bool b )
         }
         // find first, hide later, otherwise transients may get minimized
         // with the window they're transient for
-        QValueList<WId>::ConstIterator endInconifiedList( iconifiedList.end() );
+        Q3ValueList<WId>::ConstIterator endInconifiedList( iconifiedList.end() );
         for ( it=iconifiedList.begin(); it!=endInconifiedList; ++it ) {
             KWin::iconifyWindow( *it, false );
         }
     } else {
-        QValueList<WId>::ConstIterator it;
-        QValueList<WId>::ConstIterator end( iconifiedList.end() );
+        Q3ValueList<WId>::ConstIterator it;
+        Q3ValueList<WId>::ConstIterator end( iconifiedList.end() );
         for ( it=iconifiedList.begin(); it!=end; ++it ) {
             KWin::deIconifyWindow( *it, false  );
         }

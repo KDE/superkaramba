@@ -48,13 +48,13 @@ void RssSensor::update()
     bool OK = false;
 
 #if defined(KDE_3_3)
-    if(KIO::NetAccess::download(KURL(source), tmpFile, karambaApp->parentWindow()))
+    if(KIO::NetAccess::download(KUrl(source), tmpFile, karambaApp->parentWindow()))
 #else
-    if(KIO::NetAccess::download(KURL(source), tmpFile))
+    if(KIO::NetAccess::download(KUrl(source), tmpFile))
 #endif
     {
         file.setName(tmpFile);
-        if ( file.open(IO_ReadOnly | IO_Translate) )
+        if ( file.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
             if ( doc.setContent( &file ) )
             {
@@ -79,6 +79,9 @@ void RssSensor::update()
         SensorParams *sp;
         Meter *meter;
 
+        /*
+        KDE4
+        
         QObjectListIt it( *objList );
         while (it != 0)
         {
@@ -127,6 +130,7 @@ void RssSensor::update()
 
             ++it;
         }
+        */
     }
     // Cleanup
     file.close();

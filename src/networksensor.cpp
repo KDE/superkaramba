@@ -14,6 +14,8 @@
 #include <net/route.h>
 #endif
 
+#include <Q3TextStream>
+
 #include "networksensor.h"
 
 NetworkSensor::NetworkSensor( QString dev, int interval ):Sensor( interval )
@@ -98,14 +100,20 @@ void NetworkSensor::getInOutBytes ( unsigned long &in,unsigned long &out) const
 #else
     QFile file("/proc/net/dev");
     QString line;
-    if ( file.open(IO_ReadOnly | IO_Translate) )
+    if ( file.open(QIODevice::ReadOnly | QIODevice::Text) )
     {
-        QTextStream t( &file );        // use a text stream
+        Q3TextStream t( &file );        // use a text stream
         line = t.readLine();
+        
+        /*
+        KDE4
+        
         while(line !=0 && !line.contains(device))
         {
             line = t.readLine();
         }
+        */
+        
         if ( line.contains( device ) )
         {
             QRegExp rx( "\\W+"+device+":\\D*(\\d+)(?:\\D+\\d+){7}\\D+(\\d+)", false);
@@ -126,6 +134,9 @@ void NetworkSensor::getInOutBytes ( unsigned long &in,unsigned long &out) const
 
 void NetworkSensor::update()
 {
+  /*
+  KDE4
+  
     SensorParams *sp;
     Meter *meter;
     QObjectListIt it( *objList );
@@ -159,6 +170,7 @@ void NetworkSensor::update()
     }
     receivedBytes = inB;
     transmittedBytes = outB;
+  */
 }
 
 #include "networksensor.moc"

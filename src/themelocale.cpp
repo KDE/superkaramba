@@ -347,7 +347,7 @@ void tl_nl_load_domain (QIODevice* device, int size,
     return;
 
   /* Try to open the addressed file.  */
-  if (device->open(IO_ReadOnly) == false)
+  if (device->open(QIODevice::ReadOnly) == false)
     return;
 
   /* We must know about the size of the file.  */

@@ -20,9 +20,11 @@
 #include "kwidgetlistbox.h"
 #include <kdebug.h>
 #include <kglobalsettings.h>
+//Added by qt3to4:
+#include <QShowEvent>
 
 KWidgetListbox::KWidgetListbox(QWidget *parent, const char *name)
- : QTable(parent, name)
+ : Q3Table(parent, name)
 {
   setNumRows(0);
   setNumCols(1);
@@ -31,12 +33,12 @@ KWidgetListbox::KWidgetListbox(QWidget *parent, const char *name)
   setTopMargin(0);
   horizontalHeader()->hide();
   verticalHeader()->hide();
-  setSelectionMode(QTable::NoSelection);
-  setFocusStyle(QTable::FollowStyle);
+  setSelectionMode(Q3Table::NoSelection);
+  setFocusStyle(Q3Table::FollowStyle);
   connect(this, SIGNAL(currentChanged(int, int)),
           this, SLOT(selectionChanged(int, int)));
-  setHScrollBarMode(QScrollView::AlwaysOff);
-  setVScrollBarMode(QScrollView::Auto);
+  setHScrollBarMode(Q3ScrollView::AlwaysOff);
+  setVScrollBarMode(Q3ScrollView::Auto);
 }
 
 KWidgetListbox::~KWidgetListbox()

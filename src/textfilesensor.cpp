@@ -31,10 +31,10 @@ TextFileSensor::~TextFileSensor()
 
 void TextFileSensor::update()
 {
-    QValueVector<QString> lines;
+    Q3ValueVector<QString> lines;
     QFile file(fileName);
     QString line;
-    if ( file.open(IO_ReadOnly | IO_Translate) )
+    if ( file.open(QIODevice::ReadOnly | QIODevice::Text) )
     {
         if (rdf)
         {
@@ -64,11 +64,14 @@ void TextFileSensor::update()
         }
         else
         {
-            QTextStream t( &file );        // use a text stream
+          /*
+          KDE4
+            Q3TextStream t( &file );        // use a text stream
             while( (line = t.readLine()) !=0 )
             {
                 lines.push_back(line);
             }
+          */
         }
         file.close();
     }
@@ -77,6 +80,9 @@ void TextFileSensor::update()
     SensorParams *sp;
     Meter *meter;
 
+    /*
+    KDE4
+    
     int count = (int) lines.size();
     QObjectListIt it( *objList );
     while (it != 0)
@@ -104,6 +110,7 @@ void TextFileSensor::update()
         }
         ++it;
     }
+    */
 }
 
 #include "textfilesensor.moc"

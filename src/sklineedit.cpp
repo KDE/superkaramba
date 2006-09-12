@@ -21,6 +21,8 @@
 #include "sklineedit.h"
 #include "karamba.h"
 #include "kdebug.h"
+//Added by qt3to4:
+#include <QKeyEvent>
 
 SKLineEdit::SKLineEdit(QWidget *w, Input *i) : QLineEdit(w), m_input(i)
 {

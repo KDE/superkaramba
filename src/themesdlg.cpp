@@ -43,11 +43,11 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <qlineedit.h>
-#include <qtable.h>
+#include <q3table.h>
 #include <qdir.h>
 #include <qlabel.h>
 #include <qcombobox.h>
-#include <qptrlist.h>
+#include <q3ptrlist.h>
 #include <kio/job.h>
 #include <kprotocolinfo.h>
 
@@ -460,7 +460,7 @@ void ThemesDlg::uninstall()
     
     //some themes have multiple .theme files
     //find all .themes that could be listed in the dialog for the directory removed
-    QPtrList<ThemeWidget> list;
+    Q3PtrList<ThemeWidget> list;
     for(uint i = 2; i < tableThemes->count(); ++i)
     {
       ThemeWidget* tempW = static_cast<ThemeWidget*>(tableThemes->item(i));

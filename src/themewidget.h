@@ -22,12 +22,14 @@
 
 #include "themefile.h"
 #include <themewidget_layout.h>
+//Added by qt3to4:
+#include <Q3ValueList>
 
 /**
 @author See README for the list of authors
 */
 
-class ThemeWidget : public ThemeWidgetLayout
+class ThemeWidget : public Ui_ThemeWidgetLayout
 {
     Q_OBJECT
   public:
@@ -51,7 +53,7 @@ class ThemeWidget : public ThemeWidgetLayout
 
   private:
     ThemeFile* m_themeFile;
-    QValueList<int> m_instancePool;
+    Q3ValueList<int> m_instancePool;
 };
 
 #endif

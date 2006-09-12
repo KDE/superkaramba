@@ -11,7 +11,7 @@
 #define SENSOR_H
 #include <qstring.h>
 #include <qobject.h>
-#include <qobjectlist.h>
+#include <qobject.h>
 #include <qstringlist.h>
 #include <qmap.h>
 #include <qtimer.h>

@@ -2,7 +2,7 @@
 *  imagelabel.h  -  ImageLabel meter
 *
 *  Copyright (C) 2003 Hans Karlsson <karlsson.h@home.se>
-*  Copyright (c) 2004 Petri Damstén <damu@iki.fi>
+*  Copyright (c) 2004 Petri Damstï¿½ <damu@iki.fi>
 *
 *  This file is part of SuperKaramba.
 *
@@ -25,12 +25,14 @@
 #define IMAGELABEL_H
 
 #include "meter.h"
-#include <kpixmap.h>
+#include <QPixmap>
 #include <qimage.h>
 #include <qpixmap.h>
 #include <qpainter.h>
 #include <qstring.h>
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <QMouseEvent>
 #include <kurl.h>
 #include <kio/netaccess.h>
 #include <qregexp.h>
@@ -51,7 +53,7 @@ public:
 
   virtual ~Effect();
 
-  virtual KPixmap apply(KPixmap pixmap) = 0;
+  virtual QPixmap apply(QPixmap pixmap) = 0;
 
   void startTimer();
 
@@ -67,7 +69,7 @@ class Intensity : public Effect
 public:
   Intensity(ImageLabel*, float r, int millisec);
 
-  KPixmap apply(KPixmap pixmap);
+  QPixmap apply(QPixmap pixmap);
 
 private:
   float ratio;
@@ -80,7 +82,7 @@ class ChannelIntensity : public Effect
 public:
   ChannelIntensity(ImageLabel*, float r, QString c, int millisec);
 
-  KPixmap apply(KPixmap pixmap);
+  QPixmap apply(QPixmap pixmap);
 
 private:
   float ratio;
@@ -93,7 +95,7 @@ class ToGray : public Effect
 public:
   ToGray(ImageLabel*, int millisec);
 
-  KPixmap apply(KPixmap pixmap);
+  QPixmap apply(QPixmap pixmap);
 };
 
 class ImageLabel : public Meter
@@ -172,8 +174,8 @@ private:
   //QWMatrix rotMat;
   int rot_angle;
 
-  KPixmap pixmap;
-  KPixmap realpixmap;
+  QPixmap pixmap;
+  QPixmap realpixmap;
 
   QRect rect_off, rect_on;
   QRect old_tip_rect;
@@ -181,8 +183,8 @@ private:
   bool zoomed;
   //QString fn, fn_roll;
   bool rollover;
-  KPixmap pixmap_off;
-  KPixmap pixmap_on;
+  QPixmap pixmap_off;
+  QPixmap pixmap_on;
   int xoff,xon;
   int yoff,yon;
   QString imagePath;

@@ -10,6 +10,10 @@
 #include "datesensor.h"
 
 #include <qapplication.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <Q3Frame>
+#include <QKeyEvent>
 DateSensor::DateSensor( int interval ) : Sensor( interval )
 {
 	hidden = true;
@@ -25,6 +29,9 @@ void DateSensor::update()
     SensorParams *sp;
     Meter *meter;
 
+    /*
+    KDE4
+  
     QObjectListIt it( *objList );
     while (it != 0)
     {
@@ -39,6 +46,7 @@ void DateSensor::update()
         meter->setValue(qdt.toString(format));
         ++it;
     }
+    */
 }
 
 void DateSensor::slotCalendarDeleted()
@@ -49,10 +57,10 @@ void DateSensor::slotCalendarDeleted()
 
 
 DatePicker::DatePicker(QWidget *parent)
-    : QVBox( parent, 0, WType_TopLevel | WDestructiveClose |
-             WStyle_Customize | WStyle_StaysOnTop | WStyle_NoBorder )
+    : Q3VBox( parent, 0, Qt::WType_TopLevel | Qt::WDestructiveClose |
+             Qt::WStyle_Customize | Qt::WStyle_StaysOnTop | Qt::WStyle_NoBorder )
 {
-    setFrameStyle( QFrame::PopupPanel | QFrame::Raised );
+    setFrameStyle( Q3Frame::PopupPanel | Q3Frame::Raised );
     //KWin::setOnAllDesktops( handle(), true );
     picker = new KDatePicker(this);
     picker->setCloseButton(true);
@@ -64,13 +72,16 @@ DatePicker::DatePicker(QWidget *parent)
 
 void DatePicker::keyReleaseEvent(QKeyEvent *e)
 {
-        QVBox::keyReleaseEvent(e);
+        Q3VBox::keyReleaseEvent(e);
         if (e->key() == Qt::Key_Escape)
                 close();
 }
 
 void DateSensor::toggleCalendar(QMouseEvent *ev)
 {
+  /*
+  KDE4
+  
 	QObjectListIt it(*objList);
 	while (it != 0)
 	{
@@ -111,13 +122,14 @@ void DateSensor::toggleCalendar(QMouseEvent *ev)
 
 		++it;
 	}
+  */
 }
 
 void DateSensor::mousePressEvent(QMouseEvent *ev)
 {
 	switch (ev->button()) 
 	{
-		case QMouseEvent::LeftButton:
+		case Qt::LeftButton:
 			toggleCalendar(ev);
 			break;
 		default:

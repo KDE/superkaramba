@@ -11,14 +11,15 @@
 #define KARAMBAROOTPIXMAP_H
 
 #include <qwidget.h>
-#include <krootpixmap.h>
-#include <ksharedpixmap.h>
 
 //#include "karamba.h"
+
 
 /**
 @author Hans Karlsson
 */
+/*
+KDE4
 class KarambaRootPixmap : public KRootPixmap
 {
 public:
@@ -35,5 +36,6 @@ QWidget *widget;
 
 
 };
+*/
 
 #endif

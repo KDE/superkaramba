@@ -9,6 +9,8 @@
  ***************************************************************************/
 #include "sensorsensor.h"
 #include <qglobal.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 SensorSensor::SensorSensor(int interval, char tempUnit) : Sensor( interval )
 {
@@ -45,7 +47,7 @@ SensorSensor::~SensorSensor()
 void SensorSensor::receivedStdout(KProcess *, char *buffer, int len )
 {
     buffer[len] = 0;
-    sensorResult += QString( QCString(buffer) );
+    sensorResult += QString( Q3CString(buffer) );
 }
 
 void SensorSensor::processExited(KProcess *)
@@ -74,6 +76,9 @@ void SensorSensor::processExited(KProcess *)
     SensorParams *sp;
     Meter *meter;
 
+    /*
+    KDE4
+    
     QObjectListIt lit( *objList );
     while (lit != 0)
     {
@@ -98,6 +103,7 @@ void SensorSensor::processExited(KProcess *)
         meter->setValue(format);
         ++lit;
     }
+    */
 }
 
 void SensorSensor::update()

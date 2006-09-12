@@ -30,6 +30,8 @@
 #include <Python.h>
 #include <qglobal.h>
 #include <qobject.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -448,7 +450,7 @@ long openNamedTheme(char* path, char *name, bool is_sub_theme) {
 
   if( file.exists() )
   {
-      QCString prettyName(name);
+      Q3CString prettyName(name);
       KarambaApplication* app = (KarambaApplication*)qApp;
       if (!app->themeExists(prettyName))
       {

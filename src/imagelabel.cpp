@@ -2,7 +2,7 @@
 *  imagelabel.cpp  -  ImageLabel meter
 *
 *  Copyright (C) 2003 Hans Karlsson <karlsson.h@home.se>
-*  Copyright (c) 2004 Petri Damstén <damu@iki.fi>
+*  Copyright (c) 2004 Petri Damstï¿½ <damu@iki.fi>
 *
 *  This file is part of SuperKaramba.
 *
@@ -24,7 +24,9 @@
 #include <qpixmap.h>
 #include <qtimer.h>
 #include <qtooltip.h>
-#include <kpixmapeffect.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+//#include <QPixmapeffect.h>
 #include <kdebug.h>
 #include <kimageeffect.h>
 #include <ktempfile.h>
@@ -71,9 +73,13 @@ Intensity::Intensity(ImageLabel* img, float r, int millisec) :
   ratio = (ratio < -1) ? -1 : ratio;
 }
 
-KPixmap Intensity::apply(KPixmap pixmap)
+QPixmap Intensity::apply(QPixmap pixmap)
 {
-  return KPixmapEffect::intensity(pixmap, ratio);
+  /*
+  KDE4
+  
+  return QPixmapEffect::intensity(pixmap, ratio);
+  */
 }
 
 // ChannelIntensity
@@ -100,10 +106,14 @@ ChannelIntensity::ChannelIntensity(ImageLabel* img, float r, QString c,
   }
 }
 
-KPixmap ChannelIntensity::apply(KPixmap pixmap)
+QPixmap ChannelIntensity::apply(QPixmap pixmap)
 {
-  return KPixmapEffect::channelIntensity(pixmap, ratio,
-    (KPixmapEffect::RGBComponent)channel);
+  /*
+  KDE4
+  
+  return QPixmapEffect::channelIntensity(pixmap, ratio,
+    (QPixmapEffect::RGBComponent)channel);
+  */
 }
 
 // ToGray
@@ -111,9 +121,13 @@ ToGray::ToGray(ImageLabel* img, int millisec) : Effect(img, millisec)
 {
 }
 
-KPixmap ToGray::apply(KPixmap pixmap)
+QPixmap ToGray::apply(QPixmap pixmap)
 {
-  return KPixmapEffect::toGray(pixmap);
+  /*
+  KDE4
+  
+  return QPixmapEffect::toGray(pixmap);
+  */
 }
 
 /***********************************************************************/
@@ -151,7 +165,8 @@ ImageLabel::~ImageLabel()
   }
   if(!old_tip_rect.isNull())
   {
-    QToolTip::remove(m_karamba, old_tip_rect);
+    //QToolTip::remove(m_karamba, old_tip_rect);  KDE4
+    QToolTip::remove(m_karamba);
   }
 }
 
@@ -227,7 +242,7 @@ void ImageLabel::applyTransformations(bool useSmoothScale)
     if (doRotate)
     {
         // KDE and QT seem to miss a high quality image rotation
-        QWMatrix rotMat;
+        QMatrix rotMat;
         rotMat.rotate(rot_angle);
         pixmap = pixmap.xForm(rotMat);
     }
@@ -242,7 +257,7 @@ void ImageLabel::applyTransformations(bool useSmoothScale)
         {
             double widthFactor = ((double)scale_w) / ((double)pixmap.width());
             double heightFactor = ((double)scale_h) / ((double)pixmap.height());
-            QWMatrix scaleMat;
+            QMatrix scaleMat;
             scaleMat.scale(widthFactor, heightFactor);
             pixmap = pixmap.xForm(scaleMat);
         }
@@ -277,7 +292,7 @@ void ImageLabel::setValue(QString fn)
   // use the first line
   QStringList sList = QStringList::split( "\n", fn );
   QString fileName = *sList.begin();
-  KURL url(fileName);
+  KUrl url(fileName);
   QRegExp rx("^[a-zA-Z]{1,5}:/",false);
   bool protocol = (rx.search(fileName)!=-1)?true:false;
   QPixmap pm;
@@ -313,7 +328,7 @@ void ImageLabel::setValue(QString fn)
  */
 void ImageLabel::setValue(QPixmap& pix)
 {
-  realpixmap = KPixmap(pix);
+  realpixmap = QPixmap(pix);
   pixmap = realpixmap;
   setWidth(pixmap.width());
   setHeight(pixmap.height());
@@ -446,12 +461,12 @@ void ImageLabel::parseImages(QString fn, QString fn_roll, int _xoff,
   {
     QString tmpFile;
 #if defined(KDE_3_2)
-    if(KIO::NetAccess::download(KURL(path), tmpFile, karambaApp->parentWindow()))
+    if(KIO::NetAccess::download(KUrl(path), tmpFile, karambaApp->parentWindow()))
 #else
-    if(KIO::NetAccess::download(KURL(path), tmpFile))
+    if(KIO::NetAccess::download(KUrl(path), tmpFile))
 #endif
     {
-      pixmap_off = KPixmap(tmpFile);
+      pixmap_off = QPixmap(tmpFile);
       KIO::NetAccess::removeTempFile(tmpFile);
       qDebug( "Downloaded: %s to %s", path.ascii(), tmpFile.ascii() );
     }
@@ -462,7 +477,7 @@ void ImageLabel::parseImages(QString fn, QString fn_roll, int _xoff,
   }
   else
   {
-    pixmap_off = KPixmap( path );
+    pixmap_off = QPixmap( path );
   }
 
   pixmapOffWidth = pixmap.width();
@@ -494,12 +509,12 @@ void ImageLabel::parseImages(QString fn, QString fn_roll, int _xoff,
   {
     QString tmpFile;
 #if defined(KDE_3_2)
-    if(KIO::NetAccess::download(KURL(path), tmpFile, karambaApp->parentWindow()))
+    if(KIO::NetAccess::download(KUrl(path), tmpFile, karambaApp->parentWindow()))
 #else
-    if(KIO::NetAccess::download(KURL(path), tmpFile))
+    if(KIO::NetAccess::download(KUrl(path), tmpFile))
 #endif
     {
-      pixmap_on = KPixmap(tmpFile);
+      pixmap_on = QPixmap(tmpFile);
       KIO::NetAccess::removeTempFile(tmpFile);
       qDebug( "Downloaded: %s to %s", path.ascii(), tmpFile.ascii());
     }
@@ -510,7 +525,7 @@ void ImageLabel::parseImages(QString fn, QString fn_roll, int _xoff,
   }
   else
   {
-    pixmap_on = KPixmap( path );
+    pixmap_on = QPixmap( path );
   }
   pixmapOnWidth = pixmap_on.width();
   pixmapOnHeight = pixmap_on.height();
@@ -585,7 +600,7 @@ void ImageLabel::intensity(float ratio, int millisec)
     delete imageEffect;
     imageEffect = 0;
   }
-  //KPixmapEffect::intensity(pixmap, ratio);
+  //QPixmapEffect::intensity(pixmap, ratio);
   imageEffect = new Intensity(this, ratio, millisec);
   applyTransformations();
 }
@@ -597,7 +612,7 @@ void ImageLabel::channelIntensity(float ratio, QString channel, int millisec)
     delete imageEffect;
     imageEffect = 0;
   }
-  //KPixmapEffect::channelIntensity(pixmap, ratio, rgbChannel);
+  //QPixmapEffect::channelIntensity(pixmap, ratio, rgbChannel);
   imageEffect = new ChannelIntensity(this, ratio, channel, millisec);
   applyTransformations();
 }
@@ -609,7 +624,7 @@ void ImageLabel::toGray(int millisec)
     delete imageEffect;
     imageEffect = 0;
   }
-  //KPixmapEffect::toGray(pixmap);
+  //QPixmapEffect::toGray(pixmap);
   imageEffect = new ToGray(this, millisec);
   applyTransformations();
 }

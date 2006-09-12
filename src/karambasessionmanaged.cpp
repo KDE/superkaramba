@@ -24,7 +24,7 @@
 #include <kconfig.h>
 #include "karambasessionmanaged.h"
 #include "karamba.h"
-#include "qwidgetlist.h"
+#include "qwidget.h"
 
 bool KSessionManaged::saveState(QSessionManager&)
 {
@@ -34,6 +34,9 @@ bool KSessionManaged::saveState(QSessionManager&)
 
   QString openThemes="";
 
+  /*
+  KDE4
+  
   QWidgetList  *list = QApplication::allWidgets();
   QWidgetListIt it( *list );         // iterate over the widgets
   QWidget * w;
@@ -51,6 +54,7 @@ bool KSessionManaged::saveState(QSessionManager&)
     }
   }
   delete list;                      // delete the list, not the widgets
+  */
 
   qDebug("Open themes %s", openThemes.ascii());
   config->writeEntry("OpenThemes", openThemes);

@@ -13,12 +13,15 @@
 
 #include "meter.h"
 #include <qstring.h>
-#include <qsimplerichtext.h>
+#include <q3simplerichtext.h>
 #include <qpainter.h>
 #include <qfont.h>
 #include <qfontmetrics.h>
 #include <qrect.h>
 #include <qsize.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QColorGroup>  //KDE4 QT Support
 #include "karamba.h"
 
 class RichTextLabel : public Meter
@@ -53,7 +56,7 @@ class RichTextLabel : public Meter
     QString anchorAt(int, int);
 
   private:
-    QSimpleRichText* text;
+    Q3SimpleRichText* text;
     QString source;
     QFont font;
     QColorGroup colorGrp;

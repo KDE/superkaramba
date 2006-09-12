@@ -29,6 +29,15 @@
 #endif
 
 #include <qwidget.h>
+//Added by qt3to4:
+#include <Q3CString>
+#include <QCloseEvent>
+#include <QDropEvent>
+#include <QWheelEvent>
+#include <QPaintEvent>
+#include <QMouseEvent>
+#include <QKeyEvent>
+#include <QDragEnterEvent>
 #include <kapplication.h>
 
 #include <kwinmodule.h>
@@ -46,13 +55,12 @@
 
 #include <qregexp.h>
 #include <qlabel.h>
-#include <qobjectlist.h>
+#include <qobject.h>
 #include <qstring.h>
 #include <qstringlist.h>
-#include <ksharedpixmap.h>
-#include <qvaluestack.h>
-#include <dcopclient.h>
-#include <kpopupmenu.h>
+#include <q3valuestack.h>
+//#include <dcopclient.h>
+#include <kmenu.h>
 #include <qcursor.h>
 #include <netwm.h>
 #include <kiconloader.h>
@@ -63,10 +71,13 @@
 #include <qdatetime.h>
 #include <qbitmap.h>
 #include <kconfig.h>
-#include  <kprocess.h>
-#include <qdragobject.h>
+#include <kprocess.h>
+#include <q3dragobject.h>
+#include <ktoggleaction.h>
 
-#include "karambarootpixmap.h"
+#include <kactioncollection.h>
+
+//#include "karambarootpixmap.h"
 
 #include "bar.h"
 #include "textlabel.h"
@@ -84,7 +95,6 @@
 #include "cpusensor.h"
 #include "networksensor.h"
 #include "xmmssensor.h"
-#include "noatunsensor.h"
 #include "programsensor.h"
 #include "disksensor.h"
 #include "sensorsensor.h"
@@ -129,10 +139,10 @@ public:
     QString findSensorFromMap(Sensor* sensor);
     void deleteMeterFromSensors(Meter* meter);
     Sensor* findSensorFromList(Meter* meter);
-    KPopupMenu* keditpop;
-    KPopupMenu *kpop;
+    KMenu* keditpop;
+    KMenu *kpop;
     QBitmap* widgetMask;
-    KarambaRootPixmap *kroot;
+    //KarambaRootPixmap *kroot;				// Not used in KDE4
     TaskManager taskManager;
     Systemtray* systray;
     KProcess* currProcess;
@@ -141,7 +151,10 @@ public:
     void changeInterval(int interval);
     void setWidgetUpdate(bool wu) { widgetUpdate = wu; };
     bool getWidgetUpdate() { return widgetUpdate; };
-    bool hasMeter(Meter* meter) { return meterList->containsRef(meter) > 0; };
+
+    //bool hasMeter(Meter* meter) { return meterList->containsRef(meter) > 0; };	//KDE4
+    bool hasMeter(Meter* meter) { return meterList->indexOf(meter) >= 0; };	//KDE4
+
     char getTempUnit() { return tempUnit; };
     void addMenuConfigOption(QString key, QString name);
     bool setMenuConfigOption(QString key, bool value);
@@ -223,12 +236,12 @@ private:
     // use only the first occurance of KARAMBA in a config file
     bool foundKaramba;
 
-    KPopupMenu* themeConfMenu;
-    KPopupMenu* toDesktopMenu;
-    KPopupMenu* kglobal;
+    KMenu* themeConfMenu;
+    KMenu* toDesktopMenu;
+    KMenu* kglobal;
 
-    DCOPClient *client;
-    QCString appId;
+    //DCOPClient *client;		// KDE4
+    Q3CString appId;
 
     QPixmap pm;
     QPixmap background;
@@ -262,13 +275,13 @@ public slots:
     void currentDesktopChanged(int);
     void currentWallpaperChanged(int);
     void slotToggleConfigOption(QString key, bool);
-    void updateBackground(KSharedPixmap*);
+    //void updateBackground(KSharedPixmap*);			// KDE4
     void passMenuOptionChanged(QString key, bool);
     void passMenuItemClicked(int);
     void processExited (KProcess *proc);
     void receivedStdout (KProcess *proc, char *buffer, int buflen);
     void toDesktop(int desktopid, int menuid);
-    const char *getPrettyName() { return prettyName.ascii(); }
+    QString getPrettyName() { return prettyName; }
 
     // Systray
     void systrayUpdated();

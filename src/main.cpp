@@ -117,7 +117,7 @@ int main(int argc, char **argv)
     QString mainAppId = app.getMainKaramba();
     if(!mainAppId.isEmpty())
     {
-      app.initDcopStub(mainAppId.ascii());
+      //app.initDcopStub(mainAppId);  //KDE4
     }
     else
     {
@@ -132,7 +132,7 @@ int main(int argc, char **argv)
 
     // Try to restore a previous session if applicable.
     app.checkPreviousSession(app, lst);
-    if( (lst.size() == 0) && !app.isRestored() )
+    if( (lst.size() == 0) && !app.isSessionRestored() )
     {
       //Not a saved session - check for themes given on command line
       app.checkCommandLine(args, lst);

@@ -11,7 +11,11 @@
 #ifndef KARAMBAINTERFACE_H
 #define KARAMBAINTERFACE_H
 
-#include "dcopinterface.h"
+//#include "dcopinterface.h"
+
+/*
+
+KDE4 DBUS
 
 class karamba;
 class ThemeListWindow;
@@ -38,5 +42,7 @@ public slots:
   virtual void setIncomingData(QString name, QString text);
   virtual bool isMainKaramba();
 };
+
+*/
 
 #endif // KARAMBAINTERFACE_H

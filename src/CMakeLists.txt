@@ -65,7 +65,7 @@ input_python.cpp
 #dcopinterface.h
 )
 
-KDE4_ADD_UI_FILES(superkaramba_SRCS
+KDE4_ADD_UI3_FILES(superkaramba_SRCS
 themes_layout.ui
 themewidget_layout.ui
 )

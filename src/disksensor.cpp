@@ -10,9 +10,11 @@
 #include "disksensor.h"
 
 #include <qfile.h>
-#include <qtextstream.h>
+#include <q3textstream.h>
 #include <qstring.h>
 #include <qregexp.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include <kprocess.h>
 #include <kprocio.h>
 
@@ -72,7 +74,7 @@ void DiskSensor::receivedStdout(KProcess *, char *buffer, int len )
 {
 
     buffer[len] = 0;
-    sensorResult += QString( QCString(buffer) );
+    sensorResult += QString( Q3CString(buffer) );
 
 }
 
@@ -100,6 +102,9 @@ void DiskSensor::processExited(KProcess *)
     SensorParams *sp;
     Meter *meter;
 
+    /*
+    KDE4
+    
     QObjectListIt lit( *objList );
     while (lit != 0)
     {
@@ -147,6 +152,7 @@ void DiskSensor::processExited(KProcess *)
         emit initComplete();
         init = 0;
     }
+    */
 }
 
 void DiskSensor::update()

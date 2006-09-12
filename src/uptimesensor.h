@@ -12,7 +12,7 @@
 #include "sensor.h"
 
 #include <qfile.h>
-#include <qtextstream.h>
+#include <q3textstream.h>
 #include <qstring.h>
 #include <qregexp.h>
 #include <qdatetime.h>

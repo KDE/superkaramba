@@ -10,6 +10,8 @@
 
 #include "clickmap.h"
 #include <qregexp.h>
+//Added by qt3to4:
+#include <QMouseEvent>
 #include <krun.h>
 
 ClickMap::ClickMap(karamba* k, int x, int y, int w, int h )

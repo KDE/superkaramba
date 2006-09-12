@@ -11,6 +11,8 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qdir.h>
+//Added by qt3to4:
+#include <Q3CString>
 #include <kfiledialog.h>
 #include <kcmdlineargs.h>
 #include <fcntl.h>
@@ -27,7 +29,7 @@
 #include "dcopinterface_stub.h"
 #include "karamba.h"
 #include "superkarambasettings.h"
-#include "qwidgetlist.h"
+#include "qwidget.h"
 
 int KarambaApplication::fd = -1;
 
@@ -38,8 +40,12 @@ KarambaApplication::KarambaApplication() :
   iface = new KarambaIface();
   karambaList = new QObjectList();
   // register ourselves as a dcop client
+  
+  /*
+  KDE4
   dcopClient()->registerAs(name());
   dcopClient()->setDefaultObject(dcopIface()->objId());
+  */
 }
 
 KarambaApplication::~KarambaApplication()
@@ -47,16 +53,19 @@ KarambaApplication::~KarambaApplication()
   delete iface;
   delete karambaList;
   delete themeListWindow;
-  delete dcopIfaceStub;
+  //delete dcopIfaceStub; KDE4
   //delete m_helpMenu;
 }
 
-void KarambaApplication::initDcopStub(QCString app)
+/*
+KDE4
+void KarambaApplication::initDcopStub(Q3CString app)
 {
   if(app.isEmpty())
     app = dcopClient()->appId();
   dcopIfaceStub = new dcopIface_stub(app, iface->objId());
 }
+*/
 
 QString KarambaApplication::getMainKaramba()
 {
@@ -97,7 +106,7 @@ QStringList KarambaApplication::getKarambas()
 {
   QCStringList applst = dcopClient()->registeredApplications();
   QCStringList::Iterator it;
-  QCString s;
+  Q3CString s;
   QStringList result;
 
   for (it = applst.begin(); (s = *it) != 0; ++it)

@@ -10,6 +10,8 @@
 
 #include <qglobal.h>
 
+#include <Q3TextStream>
+
 #ifdef __FreeBSD__ 
 #include <sys/time.h>
 #include <sys/dkstat.h>
@@ -71,12 +73,16 @@ void CPUSensor::getTicks (long &u,long &s,long &n,long &i)
 #else
     QFile file("/proc/stat");
     QString line;
-    if ( file.open(IO_ReadOnly | IO_Translate) )
+    if ( file.open(QIODevice::ReadOnly | QIODevice::Text) )
     {
-        QTextStream t( &file );        // use a text stream
+        Q3TextStream t( &file );        // use a text stream
         QRegExp rx( cpuNbr+"\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)");
         line = t.readLine();
         rx.search( line );
+        
+        /*
+        KDE4
+        
         while( (line = t.readLine()) !=0 && rx.cap(0) == "" )
         {
             rx.search( line );
@@ -90,6 +96,7 @@ void CPUSensor::getTicks (long &u,long &s,long &n,long &i)
         //idle
         i = rx.cap(4).toLong();
         file.close();
+        */
     }
 #endif
 #endif
@@ -134,6 +141,9 @@ void CPUSensor::update()
     QString format;
     int load = getCPULoad();
 
+    /*
+    KDE4
+    
     QObjectListIt it( *objList );
     while (it != 0)
     {
@@ -155,6 +165,7 @@ void CPUSensor::update()
         meter->setValue( format );
         ++it;
     }
+    */
 }
 
 void CPUSensor::setMaxValue( SensorParams *sp )

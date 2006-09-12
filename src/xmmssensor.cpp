@@ -11,6 +11,8 @@
 
 #ifdef HAVE_XMMS
 #include <xmmsctrl.h>
+//Added by qt3to4:
+#include <Q3CString>
 #endif // HAVE_XMMS
 
 XMMSSensor::XMMSSensor( int interval, const QString &encoding )
@@ -34,6 +36,9 @@ void XMMSSensor::update()
     QString format;
     SensorParams *sp;
     Meter *meter;
+    /*
+    KDE4
+    
     QObjectListIt it( *objList );
 
 #ifdef HAVE_XMMS
@@ -50,7 +55,7 @@ void XMMSSensor::update()
         isPlaying = xmms_remote_is_playing(0);
         pos = xmms_remote_get_playlist_pos(0);
         qDebug("unicode start");
-        title = codec->toUnicode( QCString( xmms_remote_get_playlist_title( 0, pos ) )  );
+        title = codec->toUnicode( Q3CString( xmms_remote_get_playlist_title( 0, pos ) )  );
         qDebug("unicode end");
         if( title.isEmpty() )
             title = "XMMS";
@@ -129,6 +134,7 @@ void XMMSSensor::update()
         ++it;
 
     }
+    */
 
 }
 

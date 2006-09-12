@@ -11,6 +11,8 @@
 #include <krun.h>
 #include <stdlib.h>
 #include "textlabel.h"
+//Added by qt3to4:
+#include <QMouseEvent>
 
 TextLabel::TextLabel(karamba *k, int x,int y,int w,int h):
   Meter(k, x,y,w,h), alignment(Qt::AlignLeft), clip(0), bgColor(0, 0, 0),
@@ -21,7 +23,7 @@ TextLabel::TextLabel(karamba *k, int x,int y,int w,int h):
     if( h != 0 || w != 0)
         clip = 0;
     else
-        clip = Qt::DontClip;
+        clip = Qt::TextDontClip;
 
     if( h == 0 || w == 0)
     {

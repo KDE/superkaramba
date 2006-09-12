@@ -11,7 +11,7 @@
 Sensor::Sensor(int iMsec)
 {
     objList = new QObjectList();
-    objList->setAutoDelete( true );
+    //objList->setAutoDelete( true );   //KDE4
     msec = iMsec;
 }
 
@@ -37,6 +37,9 @@ void Sensor::addMeter( SensorParams *sp )
 
 SensorParams* Sensor::hasMeter( Meter *meter )
 {
+  /*
+  KDE4
+  
   QObjectListIt it( *objList );
   while ( it != 0 )
     {
@@ -46,6 +49,8 @@ SensorParams* Sensor::hasMeter( Meter *meter )
         }
       ++it;
     }
+  
+  */
   return NULL;
 }
 
@@ -53,8 +58,12 @@ void Sensor::deleteMeter( Meter *meter )
 {
   SensorParams* sp = hasMeter(meter);
 
+  /*
+  KDE4
+  
   if (sp)
     objList->removeRef(sp);
+  */
 }
 
 void Sensor::setMaxValue( SensorParams* )

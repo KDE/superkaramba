@@ -26,6 +26,8 @@
 #include <qrect.h>
 #include <qevent.h>
 #include <qregexp.h>
+//Added by qt3to4:
+#include <QMouseEvent>
 
 #include <kprocess.h>
 #include <kprocio.h>

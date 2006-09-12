@@ -12,10 +12,13 @@
 #include "sensor.h"
 #include "sensorparams.h"
 #include <qdatetime.h>
+//Added by qt3to4:
+#include <QKeyEvent>
+#include <QMouseEvent>
 #include <kdatepicker.h>
-#include <qvbox.h>
+#include <q3vbox.h>
 
-class DatePicker : public QVBox
+class DatePicker : public Q3VBox
 {
 public:
 	DatePicker(QWidget*);

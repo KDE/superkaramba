@@ -37,7 +37,7 @@ class SKNewStuff;
 class ThemeFile;
 class KArchiveDirectory;
 
-class ThemesDlg : public ThemesLayout
+class ThemesDlg : public Ui_ThemesLayout
 {
     Q_OBJECT
 

@@ -19,13 +19,13 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  ****************************************************************************/
 #include "karamba.h"
-#include <qlistbox.h>
+#include <q3listbox.h>
 
-class KarambaListBoxItem : public QListBoxText 
+class KarambaListBoxItem : public Q3ListBoxText 
 {
 
 public:
   QString appId; 
-  KarambaListBoxItem( QListBox* listbox, const QString & text=QString::null );
+  KarambaListBoxItem( Q3ListBox* listbox, const QString & text=QString::null );
 
 };

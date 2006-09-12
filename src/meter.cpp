@@ -8,6 +8,8 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 #include "meter.h"
+//Added by qt3to4:
+#include <QMouseEvent>
 
 Meter::Meter(karamba* k, int ix, int iy, int iw, int ih):
   boundingBox(ix, iy, iw, ih), leftButtonAction(""), middleButtonAction(""),

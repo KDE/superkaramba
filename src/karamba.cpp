@@ -22,7 +22,6 @@
  ****************************************************************************/
 
 #include "karamba_python.h"
-#include "dcopinterface_stub.h"
 #include "richtextlabel.h"
 #include "karamba.h"
 #include "karambaapp.h"
@@ -43,7 +42,17 @@
 #include <kparts/part.h>
 
 #include <qdir.h>
-#include <qwidgetlist.h>
+#include <qwidget.h>
+//Added by qt3to4:
+#include <QWheelEvent>
+#include <QPixmap>
+#include <QMouseEvent>
+#include <QCloseEvent>
+#include <QDragEnterEvent>
+#include <QKeyEvent>
+#include <QDropEvent>
+#include <QPaintEvent>
+#include <QDesktopWidget>
 
 // Menu IDs
 #define EDITSCRIPT 1
@@ -51,8 +60,8 @@
 
 karamba::karamba(QString fn, QString name, bool reloading, int instance,
     bool sub_theme):
-    QWidget(0,"karamba", Qt::WGroupLeader | WStyle_Customize |
-            WRepaintNoErase| WStyle_NoBorder | WDestructiveClose  ),
+    QWidget(0,"karamba", Qt::WGroupLeader | Qt::WStyle_Customize |
+            Qt::WNoAutoErase| Qt::WStyle_NoBorder | Qt::WDestructiveClose  ),
     meterList(0), imageList(0), clickList(0), kpop(0), widgetMask(0),
     config(0), kWinModule(0), tempUnit('C'), m_instance(instance),
     sensorList(0), timeList(0),
@@ -67,7 +76,7 @@ karamba::karamba(QString fn, QString name, bool reloading, int instance,
   prettyName = name;
   m_sub_theme = sub_theme;
 
-  KURL url;
+  KUrl url;
 
   if(fn.find('/') == -1)
     url.setFileName(fn);
@@ -115,7 +124,7 @@ karamba::karamba(QString fn, QString name, bool reloading, int instance,
   if (!QFileInfo(themeConfigFile).exists())
   {
     // Create config file
-    themeConfigFile.open(IO_ReadWrite);
+    themeConfigFile.open(QIODevice::ReadWrite);
     themeConfigFile.close();
   }
 
@@ -131,7 +140,7 @@ karamba::karamba(QString fn, QString name, bool reloading, int instance,
   }
 
   widgetMask = 0;
-  info = new NETWinInfo( qt_xdisplay(), winId(), qt_xrootwin(), NET::WMState );
+  info = new NETWinInfo( QX11Info::display(), winId(), QX11Info::appRootWindow(), NET::WMState );
 
   // could be replaced with TaskManager
   kWinModule = new KWinModule();
@@ -154,7 +163,7 @@ karamba::karamba(QString fn, QString name, bool reloading, int instance,
   connect(&taskManager, SIGNAL(startupRemoved(Startup*)), this,
            SLOT(startupRemoved(Startup*)) );
 
-  themeConfMenu = new KPopupMenu( this);
+  themeConfMenu = new KMenu( this);
   themeConfMenu -> setCheckable(true);
 
   /* XXX - need to be able to delete all these DesktopChangeSlot objects */
@@ -162,7 +171,7 @@ karamba::karamba(QString fn, QString name, bool reloading, int instance,
 
   int mid;
 
-  toDesktopMenu = new KPopupMenu (this);
+  toDesktopMenu = new KMenu (this);
   toDesktopMenu -> setCheckable(true);
   mid = toDesktopMenu -> insertItem (i18n("&All Desktops"),
                                      dslot = new DesktopChangeSlot(this,0),
@@ -181,17 +190,17 @@ karamba::karamba(QString fn, QString name, bool reloading, int instance,
   }
 
 
-  kpop = new KPopupMenu( this );
+  kpop = new KMenu( this );
   kpop -> setCheckable(true);
 
   accColl = new KActionCollection( this );
   menuAccColl = new KActionCollection( this );
 
   kpop->insertItem( SmallIconSet("reload"),i18n("Update"), this,
-                    SLOT(updateSensors()), Key_F5 );
+                    SLOT(updateSensors()), Qt::Key_F5 );
   toggleLocked = new KToggleAction (  i18n("Toggle &Locked Position"),
                                       SmallIconSet("locked"),
-                                      CTRL+Key_L, this,
+                                      Qt::CTRL+Qt::Key_L, this,
                                       SLOT( slotToggleLocked() ),
                                       accColl, "Locked position" );
   accColl->insert(toggleLocked);
@@ -200,7 +209,7 @@ karamba::karamba(QString fn, QString name, bool reloading, int instance,
   toggleLocked->plug(kpop);
 
   toggleFastTransforms = new KToggleAction(i18n("Use &Fast Image Scaling"),
-                         CTRL+Key_F, this,
+                                           Qt::CTRL+Qt::Key_F, this,
                          SLOT( slotToggleFastTransforms() ),
                          accColl, "Fast transformations");
 
@@ -216,9 +225,9 @@ karamba::karamba(QString fn, QString name, bool reloading, int instance,
   kpop->insertItem(i18n("To Des&ktop"), toDesktopMenu);
 
   kpop->insertItem( SmallIconSet("reload3"),i18n("&Reload Theme"),this,
-                    SLOT(reloadConfig()), CTRL+Key_R );
+                    SLOT(reloadConfig()), Qt::CTRL+Qt::Key_R );
   kpop->insertItem( SmallIconSet("fileclose"),i18n("&Close This Theme"), this,
-                    SLOT(killWidget()), CTRL+Key_C );
+                    SLOT(killWidget()), Qt::CTRL+Qt::Key_C );
 
   if(!SuperKarambaSettings::showSysTray())
     showMenuExtension();
@@ -235,22 +244,25 @@ karamba::karamba(QString fn, QString name, bool reloading, int instance,
   defaultTextField = new TextField();
 
   meterList = new QObjectList();
-  meterList->setAutoDelete( true );
+  //meterList->setAutoDelete( true );   // KDE4
   sensorList = new QObjectList();
-  sensorList->setAutoDelete( true );
+  //sensorList->setAutoDelete( true );  // KDE4
   clickList = new QObjectList();
   timeList = new QObjectList();
   imageList = new QObjectList();
   menuList = new QObjectList();
-  menuList->setAutoDelete( true );
+  //menuList->setAutoDelete( true );    // KDE4
+
+/*
+KDE4
 
   client = kapp->dcopClient();
   if (!client->isAttached())
     client->attach();
   appId = client->registerAs(qApp->name());
+*/
 
-
-  setBackgroundMode( NoBackground);
+  setBackgroundMode(Qt::NoBackground);
   if( !(onTop || managed))
     KWin::lowerWindow( winId() );
 
@@ -262,8 +274,11 @@ karamba::karamba(QString fn, QString name, bool reloading, int instance,
   }
   else
   {
+/*
+Not used in KDE4
     kroot = new KarambaRootPixmap((QWidget*)this);
     kroot->start();
+*/
   }
 
   // Karamba specific Config Entries
@@ -309,7 +324,7 @@ karamba::karamba(QString fn, QString name, bool reloading, int instance,
   this->setMouseTracking(true);
 
 
-  setFocusPolicy(QWidget::StrongFocus);
+  setFocusPolicy(Qt::StrongFocus);
 }
 
 karamba::~karamba()
@@ -373,7 +388,7 @@ bool karamba::parseConfig()
 
   if(m_theme.open())
   {
-    QValueStack<QPoint> offsetStack;
+    Q3ValueStack<QPoint> offsetStack;
     LineParser lineParser;
     int x=0;
     int y=0;
@@ -437,8 +452,8 @@ bool karamba::parseConfig()
         if(lineParser.getBoolean("MANAGED"))
         {
           managed = true;
-          reparent(0, Qt::WType_Dialog | WStyle_Customize | WStyle_NormalBorder
-                      |  WRepaintNoErase | WDestructiveClose, pos());
+          reparent(0, Qt::WType_Dialog | Qt::WStyle_Customize | Qt::WStyle_NormalBorder
+              |  Qt::WRepaintNoErase | Qt::WDestructiveClose, pos());
         }
         else
         {
@@ -813,12 +828,17 @@ void karamba::makePassive()
   if(managed)
     return;
 
+  /*
+  KDE4
+  foreach...
+  
   QObject *meter;
-  for (meter = meterList->first(); meter; meter = meterList->next())
+  for (meter = meterList->first(); meter; meter = meterList->next())    //KDE
   {
     if((meter)->isA("Input"))
       return;
   }
+  */
 
   // Matthew Kay: set window type to "dock" (plays better with taskbar themes
   // this way)
@@ -879,7 +899,7 @@ void karamba::editConfig()
     path = m_theme.file();
   }
 
-  KRun::runURL( KURL( path ), "text/plain" );
+  //KRun::runURL( KUrl( path ), "text/plain" );   //KDE4
 }
 
 void karamba::editScript()
@@ -896,7 +916,7 @@ void karamba::editScript()
   {
       path = QFileInfo(m_theme.file()).dirPath() + "/" + m_theme.name() + ".py";
   }
-  KRun::runURL( KURL( path ), "text/plain" );
+  //KRun::runURL( KURL( path ), "text/plain" );   // KDE4
 }
 
 QString karamba::findSensorFromMap(Sensor* sensor)
@@ -914,6 +934,11 @@ QString karamba::findSensorFromMap(Sensor* sensor)
 
 Sensor* karamba::findSensorFromList(Meter* meter)
 {
+  /*
+  KDE4
+  
+  foreach
+  
   //qDebug("karamba::findSensorFromList");
   QObjectListIt it( *sensorList ); // iterate over meters
 
@@ -923,6 +948,8 @@ Sensor* karamba::findSensorFromList(Meter* meter)
       return ((Sensor*)*it);
     ++it;
   }
+  
+  */
   return NULL;
 }
 
@@ -948,7 +975,7 @@ void karamba::deleteMeterFromSensors(Meter* meter)
     {
       QString s = findSensorFromMap(sensor);
       sensorMap.erase(s);
-      sensorList->removeRef(sensor);
+      //sensorList->removeRef(sensor);    //KDE4
     }
   }
 }
@@ -1150,6 +1177,9 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
 #endif // HAVE_XMMS
 
 
+/*
+Not used in KDE4
+
   if( sens == "NOATUN" )
   {
     sensor = sensorMap["NOATUN"];
@@ -1166,6 +1196,7 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
     sensor->addMeter(sp);
     sensor->setMaxValue(sp);
   }
+*/
 
   if( sens == "PROGRAM")
   {
@@ -1240,12 +1271,19 @@ void karamba::setIncomingData(QString theme, QString obj)
 
    //kapp->dcopClient()->send( app->dcopClient()->appId(), "KarambaIface", "themeNotify(QString,QString)", data );
 
+  /*
+  
+  KDE4
+  
+  DBUS
+  
   DCOPClient *c = kapp->dcopClient();
   if (!c->isAttached())
     c->attach();
 
   if(app->dcopStub())
     app->dcopStub()->setIncomingData(theme, obj);
+  */
 }
 
 void karamba::callTheme(QString theme, QString txt)
@@ -1260,12 +1298,20 @@ void karamba::callTheme(QString theme, QString txt)
 
    //kapp->dcopClient()->send( app->dcopClient()->appId(), "KarambaIface", "themeNotify(QString,QString)", data );
 
+    /*
+  
+  KDE4
+  
+  DBUS
+  
   DCOPClient *c = kapp->dcopClient();
   if (!c->isAttached())
     c->attach();
 
   if(app->dcopStub())
     app->dcopStub()->themeNotify(theme, txt);
+  
+    */
 }
 
 void karamba::themeNotify(QString theme, QString txt)
@@ -1312,17 +1358,22 @@ void karamba::changeInterval(int interval)
 void karamba::passClick(QMouseEvent *e)
 {
   //qDebug("karamba::passClick");
+  /*
+  KDE4
   QObjectListIt it2( *timeList ); // iterate over meters
   while ( it2 != 0 )
   {
     (( DateSensor* ) *it2)->toggleCalendar( e );
     ++it2;
   }
-
+    */
 
   // We create a temporary click list here because original
   // can change during the loop (infinite loop Bug 994359)
   QObjectList clickListTmp(*clickList);
+  /*
+  KDE4
+  
   QObjectListIt it(clickListTmp);
   while (it != 0)
   {
@@ -1335,7 +1386,8 @@ void karamba::passClick(QMouseEvent *e)
     }
     ++it;
   }
-
+  */
+  
   //Everything below is to call the python callback function
   if (pythonIface && pythonIface->isExtensionLoaded() && haveUpdated)
   {
@@ -1377,7 +1429,7 @@ void karamba::management_popup( void )
 void karamba::mousePressEvent( QMouseEvent *e )
 {
   //qDebug("karamba::mousePressEvent");
-  if( e->button() == RightButton && !want_right_button )
+  if( e->button() == Qt::RightButton && !want_right_button )
   {
     management_popup();
   }
@@ -1434,9 +1486,13 @@ void karamba::mouseMoveEvent( QMouseEvent *e )
   else
   {
     // Change cursor over ClickArea
+    /*
+    KDE4
+    
     QObjectListIt it(*clickList);
+    */
     bool insideArea = false;
-
+    /*
     while (it != 0)
     {
       insideArea = ((Meter*)(*it)) -> insideActiveArea(e -> x(), e ->y());
@@ -1446,24 +1502,29 @@ void karamba::mouseMoveEvent( QMouseEvent *e )
       }
       ++it;
     }
+    */
 
     if(insideArea)
     {
-      if( cursor().shape() != PointingHandCursor )
-        setCursor( PointingHandCursor );
+      if( cursor().shape() != Qt::PointingHandCursor )
+        setCursor( Qt::PointingHandCursor );
     }
     else
     {
-      if( cursor().shape() != ArrowCursor )
-        setCursor( ArrowCursor );
+      if( cursor().shape() != Qt::ArrowCursor )
+        setCursor( Qt::ArrowCursor );
     }
 
+    /*
+    KDE4
+    
     QObjectListIt image_it( *imageList);        // iterate over image sensors
     while ( image_it != 0 )
     {
       ((ImageLabel*) *image_it)->rolloverImage(e);
       ++image_it;
     }
+    */
   }
 
   if (pythonIface && pythonIface->isExtensionLoaded())
@@ -1474,13 +1535,13 @@ void karamba::mouseMoveEvent( QMouseEvent *e )
     // This will work now, but only when you move at least
     // one pixel in any direction with your mouse.
     //if( e->button() == Qt::LeftButton )
-    if( e->state() == LeftButton)
+    if( e->state() == Qt::LeftButton)
       button = 1;
     //else if( e->button() == Qt::MidButton )
-    else if( e->state() == MidButton )
+    else if( e->state() == Qt::MidButton )
       button = 2;
     //else if( e->button() == Qt::RightButton )
-    else if( e->state() == RightButton )
+    else if( e->state() == Qt::RightButton )
       button = 3;
 
     pythonIface->widgetMouseMoved(this, e->x(), e->y(), button);
@@ -1509,12 +1570,16 @@ void karamba::paintEvent ( QPaintEvent *e)
     }
   }
   QRect rect = e->rect();
-  bitBlt(this,rect.topLeft(),&pm,rect,Qt::CopyROP);
+  //bitBlt(this,rect.topLeft(),&pm,rect,CopyROP); KDE4 Qt:CopyROP??
 }
 
 void karamba::updateSensors()
 {
   //qDebug("karamba::updateSensors");
+  /*
+  
+  KDE
+  
   QObjectListIt it( *sensorList ); // iterate over meters
   while ( it != 0 )
   {
@@ -1522,7 +1587,12 @@ void karamba::updateSensors()
     ++it;
   }
   QTimer::singleShot( 500, this, SLOT(step()) );
+  */
 }
+
+/*
+KDE4
+KSharedPixmap gone
 
 void karamba::updateBackground(KSharedPixmap* kpm)
 {
@@ -1582,11 +1652,12 @@ void karamba::updateBackground(KSharedPixmap* kpm)
   }
   repaint();
 }
+*/
 
 void karamba::currentDesktopChanged( int i )
 {
   //qDebug("karamba::currentDesktopChanged");
-  kroot->repaint( true );
+  //kroot->repaint( true );	// Not used in KDE4
   if (pythonIface && pythonIface->isExtensionLoaded())
     pythonIface->desktopChanged(this, i);
 }
@@ -1594,7 +1665,7 @@ void karamba::currentDesktopChanged( int i )
 void karamba::currentWallpaperChanged(int i )
 {
   //qDebug("karamba::currentWallpaperChanged");
-  kroot->repaint( true );
+  //kroot->repaint( true );	// Not used in KDE4
   if (pythonIface && pythonIface->isExtensionLoaded())
     pythonIface->wallpaperChanged(this, i);
 }
@@ -1602,6 +1673,9 @@ void karamba::currentWallpaperChanged(int i )
 void karamba::externalStep()
 {
   //kdDebug() << k_funcinfo << pm.size() << endl;
+  /*
+  KDE4
+  
   if (widgetUpdate)
   {
     QPixmap buffer = QPixmap(size());
@@ -1623,6 +1697,7 @@ void karamba::externalStep()
     bitBlt(&pm,0,0,&buffer,0,Qt::CopyROP);
     repaint();
   }
+  */
 }
 
 void karamba::step()
@@ -1634,6 +1709,10 @@ void karamba::step()
     QPixmap buffer = QPixmap(size());
     buffer.fill(Qt::black);
 
+    /*
+    
+    KDE4
+    
     QObjectListIt it( *meterList ); // iterate over meters
     p.begin(&buffer);
 
@@ -1648,6 +1727,7 @@ void karamba::step()
 
     bitBlt(&pm,0,0,&buffer,0,Qt::CopyROP);
     update();
+    */
   }
 
   if (pythonIface && pythonIface->isExtensionLoaded())
@@ -1743,8 +1823,8 @@ void karamba::addMenuConfigOption(QString key, QString name)
   SignalBridge* action = new SignalBridge(this, key, menuAccColl);
   KToggleAction* confItem = new KToggleAction (name, KShortcut::null(),
                                                action, SLOT(receive()),
-                                               menuAccColl, key.ascii());
-  confItem -> setName(key.ascii());
+                                               menuAccColl, key);
+  //confItem -> setName(key); //KDE4 private??
 
   menuAccColl -> insert(confItem);
 
@@ -1796,17 +1876,17 @@ void karamba::passMenuItemClicked(int id)
   //Everything below is to call the python callback function
   if (pythonIface && pythonIface->isExtensionLoaded())
   {
-    KPopupMenu* menu = 0;
+    KMenu* menu = 0;
     for(int i = 0; i < (int)menuList->count(); i++)
     {
-      KPopupMenu* tmp;
+      KMenu* tmp;
       if(i==0)
       {
-        tmp = (KPopupMenu*) menuList->first();
+        tmp = (KMenu*) menuList->first();
       }
       else
       {
-        tmp = (KPopupMenu*) menuList->next();
+        //tmp = (KMenu*) menuList->next();    //KDE4
       }
       if(tmp != 0)
       {
@@ -1897,7 +1977,7 @@ void karamba::readProperties(KConfig* config)
 void karamba::dragEnterEvent(QDragEnterEvent* event)
 {
   //qDebug("karamba::dragEnterEvent");
-  event->accept(QTextDrag::canDecode(event));
+  event->accept(Q3TextDrag::canDecode(event));
 }
 
 //Handle the drop part of a drag and drop event.
@@ -1906,7 +1986,7 @@ void karamba::dropEvent(QDropEvent* event)
   //qDebug("karamba::dropEvent");
   QString text;
 
-  if ( QTextDrag::decode(event, text) )
+  if ( Q3TextDrag::decode(event, text) )
   {
     //Everything below is to call the python callback function
     if (pythonIface && pythonIface->isExtensionLoaded())
@@ -1992,20 +2072,20 @@ int DesktopChangeSlot::menuId()
 
 void karamba::showMenuExtension()
 {
-  kglobal = new KPopupMenu(this);
+  kglobal = new KMenu(this);
 
   trayMenuToggleId = kglobal->insertItem(SmallIconSet("superkaramba"),
                                          i18n("Show System Tray Icon"), this,
                                          SLOT(slotToggleSystemTray()),
-                                         CTRL+Key_S);
+                                         Qt::CTRL+Qt::Key_S);
 
   trayMenuThemeId = kglobal->insertItem(SmallIconSet("knewstuff"),
                                         i18n("&Manage Themes..."), this,
-                                        SLOT(slotShowTheme()), CTRL+Key_M);
+                                        SLOT(slotShowTheme()), Qt::CTRL+Qt::Key_M);
 
   trayMenuQuitId = kglobal->insertItem(SmallIconSet("exit"),
                                        i18n("&Quit SuperKaramba"), this,
-                                       SLOT(slotQuit()), CTRL+Key_Q);
+                                       SLOT(slotQuit()), Qt::CTRL+Qt::Key_Q);
 
   kglobal->polish();
 

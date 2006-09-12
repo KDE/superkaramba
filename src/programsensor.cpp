@@ -10,6 +10,8 @@
 #include "programsensor.h"
 
 #include <qstringlist.h>
+//Added by qt3to4:
+#include <Q3CString>
 ProgramSensor::ProgramSensor(const QString &progName, int interval, QString encoding )
         : Sensor( interval )
 {
@@ -37,15 +39,18 @@ ProgramSensor::~ProgramSensor()
 void ProgramSensor::receivedStdout(KProcess *, char *buffer, int len)
 {
     buffer[len] = 0;
-    sensorResult += codec->toUnicode( QCString(buffer) );
+    sensorResult += codec->toUnicode( Q3CString(buffer) );
 }
 
 void ProgramSensor::processExited(KProcess *)
 {
+  /*
+  KDE4
+  
     int lineNbr;
     SensorParams *sp;
     Meter *meter;
-    QValueVector<QString> lines;
+    Q3ValueVector<QString> lines;
     QStringList stringList = QStringList::split('\n',sensorResult,true);
     QStringList::ConstIterator end( stringList.end() );
     for ( QStringList::ConstIterator it = stringList.begin(); it != end; ++it )
@@ -79,6 +84,7 @@ void ProgramSensor::processExited(KProcess *)
     }
 
     sensorResult = "";
+  */
 }
 
 void ProgramSensor::update()

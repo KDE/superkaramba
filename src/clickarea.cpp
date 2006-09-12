@@ -12,6 +12,8 @@
 #include "clickarea.h"
 
 #include <kservicegroup.h>
+//Added by qt3to4:
+#include <QMouseEvent>
 
 
 ClickArea::ClickArea(karamba* k, int x, int y, int w, int h )
@@ -36,8 +38,8 @@ bool ClickArea::click( QMouseEvent *e )
 	if (!svc_name.isEmpty())
 	{
 		KService sv(svc_name, svc_onClick, svc_icon);
-		KURL::List l;
-		KRun::run(sv, l);
+		KUrl::List l;
+                //KRun::run(sv, l);     //KDE4
 		return false;
 	}
 	else

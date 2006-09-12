@@ -25,11 +25,18 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <klocale.h>
 #include <kdebug.h>
 #include <kconfig.h>
-#include <kiconloader.h>
+#include <kicontheme.h>
 #include <kwinmodule.h>
 #include <netwm.h>
 #include <qtimer.h>
 #include <qimage.h>
+//Added by qt3to4:
+#include <Q3ValueList>
+#include <Q3PtrList>
+#include <QPixmap>
+#include <QDesktopWidget>
+
+#include <kiconloader.h>
 
 #include <X11/X.h>
 #include <X11/Xlib.h>
@@ -38,7 +45,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "taskmanager.h"
 #include "taskmanager.moc"
 
-template class QPtrList<Task>;
+template class Q3PtrList<Task>;
 
 // Hack: create a global KWinModule without a parent. We
 // can't make it a child of TaskManager because more than one
@@ -62,9 +69,9 @@ TaskManager::TaskManager(QObject *parent, const char *name)
     connect(kwin_module, SIGNAL(windowChanged(WId,unsigned int)), SLOT(windowChanged(WId,unsigned int)));
 
     // register existing windows
-    const QValueList<WId> windows = kwin_module->windows();
-    QValueList<WId>::ConstIterator end( windows.end() );
-    for (QValueList<WId>::ConstIterator it = windows.begin(); it != end; ++it )
+    const Q3ValueList<WId> windows = kwin_module->windows();
+    Q3ValueList<WId>::ConstIterator end( windows.end() );
+    for (Q3ValueList<WId>::ConstIterator it = windows.begin(); it != end; ++it )
   windowAdded(*it);
 
     // set active window
@@ -114,7 +121,7 @@ Task* TaskManager::findTask(WId w)
 
 void TaskManager::windowAdded(WId w )
 {
-  NETWinInfo info(qt_xdisplay(),  w, qt_xrootwin(),
+  NETWinInfo info(QX11Info::display(),  w, QX11Info::appRootWindow(),
                   NET::WMWindowType | NET::WMPid | NET::WMState );
   #ifdef KDE_3_2
   NET::WindowType windowType = info.windowType(NET_ALL_TYPES_MASK);
@@ -133,7 +140,7 @@ void TaskManager::windowAdded(WId w )
   }
 
   Window transient_for_tmp;
-  if (XGetTransientForHint(qt_xdisplay(), (Window) w, &transient_for_tmp))
+  if (XGetTransientForHint(QX11Info::display(), (Window) w, &transient_for_tmp))
   {
     WId transient_for = (WId) transient_for_tmp;
 
@@ -142,7 +149,7 @@ void TaskManager::windowAdded(WId w )
       return;
 
     // lets see if this is a transient for an existing task
-    if (transient_for != qt_xrootwin() && transient_for != 0 )
+    if (transient_for != QX11Info::appRootWindow() && transient_for != 0 )
     {
       Task* t = findTask(transient_for);
       if (t)
@@ -188,7 +195,7 @@ void TaskManager::windowRemoved(WId w )
 void TaskManager::windowChanged(WId w, unsigned int dirty)
 {
     if( dirty & NET::WMState ) {
-        NETWinInfo info ( qt_xdisplay(),  w, qt_xrootwin(), NET::WMState );
+        NETWinInfo info ( QX11Info::display(),  w, QX11Info::appRootWindow(), NET::WMState );
         if ( (info.state() & NET::SkipTaskbar) != 0 ) {
             windowRemoved( w );
             _skiptaskbar_windows.push_front( w );
@@ -310,9 +317,12 @@ int TaskManager::numberOfDesktops() const
 
 bool TaskManager::isOnTop(const Task* task)
 {
+  /*
+  KDE4
+  
     if(!task) return false;
 
-    for (QValueList<WId>::ConstIterator it = kwin_module->stackingOrder().fromLast();
+    for (Q3ValueList<WId>::ConstIterator it = kwin_module->stackingOrder().fromLast();
          it != kwin_module->stackingOrder().end(); --it ) {
   for (Task* t = _tasks.first(); t != 0; t = _tasks.next() ) {
       if ( (*it) == t->window() ) {
@@ -325,6 +335,7 @@ bool TaskManager::isOnTop(const Task* task)
   }
     }
     return false;
+  */
 }
 
 
@@ -343,10 +354,11 @@ Task::Task(WId win, TaskManager * parent, const char *name) :
   _pixmap = KWin::icon(_win, 16, 16, true);
 
   // try to guess the icon from the classhint
+   
   if(_pixmap.isNull())
     KGlobal::instance()->iconLoader()->loadIcon(className().lower(),
-            KIcon::Small,KIcon::Small,
-            KIcon::DefaultState, 0, true);
+            K3Icon::Small,K3Icon::Small,
+            K3Icon::DefaultState, 0, true);
 
   // load xapp icon
   if (_pixmap.isNull())
@@ -373,7 +385,7 @@ void Task::refresh(bool icon)
     if(_pixmap.isNull())
     {
         KGlobal::instance()->iconLoader()->loadIcon(className().lower(),
-            KIcon::Small, KIcon::Small, KIcon::DefaultState, 0, true);
+            K3Icon::Small, K3Icon::Small, K3Icon::DefaultState, 0, true);
     }
 
     // load xapp icon
@@ -474,19 +486,19 @@ bool Task::isModified() const
 
 QString Task::iconName() const
 {
-    NETWinInfo ni( qt_xdisplay(),  _win, qt_xrootwin(), NET::WMIconName);
+    NETWinInfo ni( QX11Info::display(),  _win, QX11Info::appRootWindow(), NET::WMIconName);
     return QString::fromUtf8(ni.iconName());
 }
 QString Task::visibleIconName() const
 {
-    NETWinInfo ni( qt_xdisplay(),  _win, qt_xrootwin(), NET::WMVisibleIconName);
+    NETWinInfo ni( QX11Info::display(),  _win, QX11Info::appRootWindow(), NET::WMVisibleIconName);
     return QString::fromUtf8(ni.visibleIconName());
 }
 
 QString Task::className()
 {
     XClassHint hint;
-    if(XGetClassHint(qt_xdisplay(), _win, &hint)) {
+    if(XGetClassHint(QX11Info::display(), _win, &hint)) {
   QString nh( hint.res_name );
   XFree( hint.res_name );
   XFree( hint.res_class );
@@ -498,7 +510,7 @@ QString Task::className()
 QString Task::classClass()
 {
     XClassHint hint;
-    if(XGetClassHint(qt_xdisplay(), _win, &hint)) {
+    if(XGetClassHint(QX11Info::display(), _win, &hint)) {
   QString ch( hint.res_class );
   XFree( hint.res_name );
   XFree( hint.res_class );
@@ -532,20 +544,20 @@ QPixmap Task::bestIcon( int size, bool &isStaticIcon )
   isStaticIcon = false;
 
   switch( size ) {
-  case KIcon::SizeSmall:
+  case K3Icon::SizeSmall:
     {
       pixmap = icon( 16, 16, true  );
 
       // Icon of last resort
       if( pixmap.isNull() ) {
   pixmap = KGlobal::iconLoader()->loadIcon( "go",
-              KIcon::NoGroup,
-              KIcon::SizeSmall );
+              K3Icon::NoGroup,
+              K3Icon::SizeSmall );
   isStaticIcon = true;
       }
     }
     break;
-  case KIcon::SizeMedium:
+  case K3Icon::SizeMedium:
     {
       //
       // Try 34x34 first for KDE 2.1 icons with shadows, if we don't
@@ -562,13 +574,13 @@ QPixmap Task::bestIcon( int size, bool &isStaticIcon )
       // Icon of last resort
       if( pixmap.isNull() ) {
   pixmap = KGlobal::iconLoader()->loadIcon( "go",
-              KIcon::NoGroup,
-              KIcon::SizeMedium );
+              K3Icon::NoGroup,
+              K3Icon::SizeMedium );
   isStaticIcon = true;
       }
     }
     break;
-  case KIcon::SizeLarge:
+  case K3Icon::SizeLarge:
     {
       // If there's a 48x48 icon in the hints then use it
       pixmap = icon( size, size, false  );
@@ -576,9 +588,9 @@ QPixmap Task::bestIcon( int size, bool &isStaticIcon )
       // If not, try to get one from the classname
       if ( pixmap.isNull() || pixmap.width() != size || pixmap.height() != size ) {
   pixmap = KGlobal::iconLoader()->loadIcon( className(),
-              KIcon::NoGroup,
+              K3Icon::NoGroup,
               size,
-              KIcon::DefaultState,
+              K3Icon::DefaultState,
               0L,
               true );
   isStaticIcon = true;
@@ -593,7 +605,7 @@ QPixmap Task::bestIcon( int size, bool &isStaticIcon )
       // Icon of last resort
       if( pixmap.isNull() ) {
   pixmap = KGlobal::iconLoader()->loadIcon( "go",
-              KIcon::NoGroup,
+              K3Icon::NoGroup,
               size );
   isStaticIcon = true;
       }
@@ -620,7 +632,7 @@ bool Task::idMatch( const QString& id1, const QString& id2 )
 
 void Task::maximize()
 {
-  NETWinInfo ni( qt_xdisplay(),  _win, qt_xrootwin(), NET::WMState);
+  NETWinInfo ni( QX11Info::display(),  _win, QX11Info::appRootWindow(), NET::WMState);
   ni.setState( NET::Max, NET::Max );
 
 #ifdef KDE_3_2
@@ -633,7 +645,7 @@ void Task::maximize()
 
 void Task::restore()
 {
-  NETWinInfo ni( qt_xdisplay(),  _win, qt_xrootwin(), NET::WMState);
+  NETWinInfo ni( QX11Info::display(),  _win, QX11Info::appRootWindow(), NET::WMState);
   ni.setState( 0, NET::Max );
 #ifdef KDE_3_2
   if (_info.mappingState() == NET::Iconic)
@@ -645,31 +657,31 @@ void Task::restore()
 
 void Task::iconify()
 {
-  XIconifyWindow( qt_xdisplay(), _win, qt_xscreen() );
+  XIconifyWindow( QX11Info::display(), _win, QX11Info::appScreen () );  //appScreen or screen; KDE4
 }
 
 void Task::close()
 {
-    NETRootInfo ri( qt_xdisplay(),  NET::CloseWindow );
+    NETRootInfo ri( QX11Info::display(),  NET::CloseWindow );
     ri.closeWindowRequest( _win );
 }
 
 void Task::raise()
 {
 //    kdDebug(1210) << "Task::raise(): " << name() << endl;
-    XRaiseWindow( qt_xdisplay(), _win );
+    XRaiseWindow( QX11Info::display(), _win );
 }
 
 void Task::lower()
 {
 //    kdDebug(1210) << "Task::lower(): " << name() << endl;
-    XLowerWindow( qt_xdisplay(), _win );
+    XLowerWindow( QX11Info::display(), _win );
 }
 
 void Task::activate()
 {
 //    kdDebug(1210) << "Task::activate():" << name() << endl;
-    NETRootInfo ri( qt_xdisplay(), 0 );
+    NETRootInfo ri( QX11Info::display(), 0 );
     ri.setActiveWindow( _win );
 }
 
@@ -686,7 +698,7 @@ void Task::activateRaiseOrIconify()
 
 void Task::toDesktop(int desk)
 {
-  NETWinInfo ni(qt_xdisplay(), _win, qt_xrootwin(), NET::WMDesktop);
+  NETWinInfo ni(QX11Info::display(), _win, QX11Info::appRootWindow(), NET::WMDesktop);
   if (desk == 0)
   {
 #ifdef KDE_3_2
@@ -722,7 +734,7 @@ void Task::toCurrentDesktop()
 
 void Task::setAlwaysOnTop(bool stay)
 {
-    NETWinInfo ni( qt_xdisplay(),  _win, qt_xrootwin(), NET::WMState);
+    NETWinInfo ni( QX11Info::display(),  _win, QX11Info::appRootWindow(), NET::WMState);
     if(stay)
         ni.setState( NET::StaysOnTop, NET::StaysOnTop );
     else
@@ -736,7 +748,7 @@ void Task::toggleAlwaysOnTop()
 
 void Task::setShaded(bool shade)
 {
-    NETWinInfo ni( qt_xdisplay(),  _win, qt_xrootwin(), NET::WMState);
+    NETWinInfo ni( QX11Info::display(),  _win, QX11Info::appRootWindow(), NET::WMState);
     if(shade)
         ni.setState( NET::Shaded, NET::Shaded );
     else
@@ -750,7 +762,7 @@ void Task::toggleShaded()
 
 void Task::publishIconGeometry(QRect rect)
 {
-    NETWinInfo ni( qt_xdisplay(),  _win, qt_xrootwin(), NET::WMIconGeometry);
+    NETWinInfo ni( QX11Info::display(),  _win, QX11Info::appRootWindow(), NET::WMIconGeometry);
     NETRect r;
     r.pos.x = rect.x();
     r.pos.y = rect.y();
@@ -773,7 +785,7 @@ void Task::updateThumbnail()
    // by the thumbnail generation. This makes things much smoother
    // on slower machines.
    //
-  QWidget *rootWin = qApp->desktop();
+  QDesktopWidget *rootWin = qApp->desktop();
 #ifdef KDE_3_2
   QRect geom = _info.geometry();
 #else

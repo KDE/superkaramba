@@ -10,9 +10,11 @@
 #include "memsensor.h"
 #include <qfile.h>
 #include <qglobal.h>
-#include <qtextstream.h>
+#include <q3textstream.h>
 #include <qstring.h>
 #include <qregexp.h>
+//Added by qt3to4:
+#include <Q3CString>
 
 #ifdef Q_OS_FREEBSD
 #include <sys/time.h>
@@ -77,7 +79,7 @@ MemSensor::~MemSensor()
 void MemSensor::receivedStdout(KProcess *, char *buffer, int len )
 {
     buffer[len] = 0;
-    sensorResult += QString( QCString(buffer) );
+    sensorResult += QString( Q3CString(buffer) );
 }
 #else
 void MemSensor::receivedStdout(KProcess *, char *, int)
@@ -275,9 +277,9 @@ void MemSensor::readValues()
 #else
     QFile file("/proc/meminfo");
     QString line;
-    if ( file.open(IO_ReadOnly | IO_Translate) )
+    if ( file.open(QIODevice::ReadOnly | QIODevice::Text) )
     {
-        QTextStream t( &file );        // use a text stream
+        Q3TextStream t( &file );        // use a text stream
         meminfo = t.read();
         file.close();
     }
@@ -286,6 +288,9 @@ void MemSensor::readValues()
 
 void MemSensor::update()
 {
+  /*
+  KDE4
+  
     readValues();
     QString format;
     SensorParams *sp;
@@ -335,6 +340,7 @@ void MemSensor::update()
     if (set)
         MaxSet = true;
 #endif
+    */
 }
 
 void MemSensor::setMaxValue( SensorParams *sp )

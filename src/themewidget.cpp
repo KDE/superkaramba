@@ -24,9 +24,11 @@
 #include <klocale.h>
 #include <qlabel.h>
 #include <qlayout.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 ThemeWidget::ThemeWidget(QWidget *parent, const char *name)
-  : ThemeWidgetLayout(parent, name), m_themeFile(0)
+  : Ui_ThemeWidgetLayout(parent, name), m_themeFile(0)
 {
   running->setText("");
   setDescriptionMaxHeight();

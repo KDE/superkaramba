@@ -25,10 +25,10 @@
 
 #include <sensor.h>
 #include <qfile.h>
-#include <qtextstream.h>
+#include <q3textstream.h>
 #include <qstring.h>
 #include <qtextcodec.h>
-#include <qvaluevector.h>
+#include <q3valuevector.h>
 /**
  *
  * Hans Karlsson

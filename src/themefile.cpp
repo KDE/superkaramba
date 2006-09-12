@@ -32,10 +32,12 @@
 #include <kstandarddirs.h>
 #include <klocale.h>
 #include <kio/netaccess.h>
-#include <qtextstream.h>
+#include <q3textstream.h>
 #include <qfileinfo.h>
 #include <qdom.h>
 #include <qdir.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 class ZipFile
 {
@@ -66,7 +68,7 @@ class ZipFile
 
       m_zip = new KZip(zipfile);
 
-      if(!m_zip->open(IO_ReadOnly))
+      if(!m_zip->open(QIODevice::ReadOnly))
       {
         qDebug("Unable to open '%s' for reading.", zipfile.ascii());
         return;
@@ -143,7 +145,7 @@ bool ThemeFile::open()
     m_ba = m_zip->data();
     if(m_ba.size() > 0)
     {
-      m_stream = new QTextStream(m_ba, IO_ReadOnly);
+      m_stream = new Q3TextStream(m_ba, QIODevice::ReadOnly);
       result = true;
     }
   }
@@ -151,9 +153,9 @@ bool ThemeFile::open()
   {
     m_fl.setName(m_file);
 
-    if(m_fl.open(IO_ReadOnly|IO_Translate))
+    if(m_fl.open(QIODevice::ReadOnly|QIODevice::Text))
     {
-      m_stream = new QTextStream(&m_fl);        // use a text stream
+      m_stream = new Q3TextStream(&m_fl);        // use a text stream
       result = true;
     }
   }
@@ -373,7 +375,7 @@ QByteArray ThemeFile::readThemeFile(const QString& filename) const
   {
     QFile file(path() + "/" + filename);
 
-    if(file.open(IO_ReadOnly))
+    if(file.open(QIODevice::ReadOnly))
     {
       ba = file.readAll();
       file.close();
@@ -388,7 +390,7 @@ bool ThemeFile::isZipFile(const QString& filename)
 {
   QFile file(filename);
 
-  if(file.open(IO_ReadOnly))
+  if(file.open(QIODevice::ReadOnly))
   {
     unsigned char buf[5];
 
