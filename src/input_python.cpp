@@ -3,7 +3,7 @@
 *
 *  Copyright (C) 2003 Hans Karlsson <karlsson.h@home.se>
 *  Copyright (C) 2003-2004 Adam Geitgey <adam@rootnode.org>
-*  Copyright (c) 2004 Petri Damstén <damu@iki.fi>
+*  Copyright (c) 2004 Petri Damstï¿½ <damu@iki.fi>
 *  Copyright (c) 2005 Alexander Wiedenbruch <mail@wiedenbruch.de>
 *
 *  This file is part of SuperKaramba.
@@ -64,7 +64,7 @@ PyObject* py_deleteInputBox(PyObject *, PyObject *args)
   if (!checkKarambaAndMeter(widget, meter, "Input"))
     return NULL;
 
-  bool result = ((karamba*)widget)->meterList->removeRef((Meter*)meter);
+  bool result = ((karamba*)widget)->meterList->removeAll((Meter*)meter);
 
   ((karamba*)widget)->makePassive();
 

@@ -3,7 +3,7 @@
 *
 *  Copyright (C) 2003 Hans Karlsson <karlsson.h@home.se>
 *  Copyright (C) 2003-2004 Adam Geitgey <adam@rootnode.org>
-*  Copyright (c) 2004 Petri Damstén <damu@iki.fi>
+*  Copyright (c) 2004 Petri Damstï¿½ <damu@iki.fi>
 *
 *  This file is part of SuperKaramba.
 *
@@ -37,7 +37,7 @@ long createMenu(long widget)
 {
   karamba* currTheme = (karamba*)widget;
 
-  KPopupMenu* tmp = new KPopupMenu(currTheme);
+  KMenu* tmp = new KMenu(currTheme);
   currTheme->menuList->append (tmp );
 
   currTheme->connect(tmp, SIGNAL(activated(int)), currTheme,
@@ -54,20 +54,21 @@ PyObject* py_create_menu(PyObject *, PyObject *args)
   return Py_BuildValue((char*)"l", createMenu(widget));
 }
 
-bool menuExists(karamba* currTheme, KPopupMenu* menu)
+bool menuExists(karamba* currTheme, KMenu* menu)
 {
   bool foundMenu = false;
-  KPopupMenu* tmp;
 
+  /*
+  KDE4 NEEDS TO BE TESTED
   for(int i = 0; i < (int)currTheme->menuList->count(); i++)
   {
     if(i==0)
     {
-      tmp = (KPopupMenu*) currTheme->menuList->first();
+      tmp = (KMenu*) currTheme->menuList->first();
     }
     else
     {
-      tmp = (KPopupMenu*) currTheme->menuList->next();
+      tmp = (KMenu*) currTheme->menuList->next();
     }
     if(tmp != 0)
     {
@@ -79,14 +80,30 @@ bool menuExists(karamba* currTheme, KPopupMenu* menu)
     }
   }
   return foundMenu;
+  */
+  
+  QObject *tmp;
+  foreach(tmp, *currTheme->menuList)
+  {
+    if(tmp != 0)
+    {
+      if(qobject_cast<KMenu*>(tmp) == menu)
+      {
+        foundMenu = true;
+        break;
+      }
+    }
+  }
+  
+  return foundMenu;
 }
 
 long deleteMenu(long widget, long menu)
 {
   karamba* currTheme = (karamba*)widget;
-  KPopupMenu* tmp = (KPopupMenu*)menu;
+  KMenu* tmp = (KMenu*)menu;
 
-  currTheme->menuList->removeRef(tmp);
+  currTheme->menuList->removeAll(tmp);
 
   return 1;
 }
@@ -102,7 +119,7 @@ PyObject* py_delete_menu(PyObject *, PyObject *args)
 long addMenuItem(long widget, long menu, QString text, QString icon)
 {
   karamba* currTheme = (karamba*)widget;
-  KPopupMenu* tmp = (KPopupMenu*)menu;
+  KMenu* tmp = (KMenu*)menu;
 
   long id = 0;
   if(menuExists(currTheme, tmp))
@@ -129,7 +146,7 @@ PyObject* py_add_menu_item(PyObject *, PyObject *args)
 long addMenuSeparator(long widget, long menu)
 {
   karamba* currTheme = (karamba*)widget;
-  KPopupMenu* tmp = (KPopupMenu*)menu;
+  KMenu* tmp = (KMenu*)menu;
 
   long id = 0;
   if(menuExists(currTheme, tmp))
@@ -153,7 +170,7 @@ PyObject* py_add_menu_separator(PyObject *, PyObject *args)
 long removeMenuItem(long widget, long menu, long id)
 {
   karamba* currTheme = (karamba*)widget;
-  KPopupMenu* tmp = (KPopupMenu*)menu;
+  KMenu* tmp = (KMenu*)menu;
 
   if(menuExists(currTheme,tmp))
   {
@@ -177,7 +194,7 @@ PyObject* py_remove_menu_item(PyObject *, PyObject *args)
 long popupMenu(long widget, long menu, long x, long y)
 {
   karamba* currTheme = (karamba*)widget;
-  KPopupMenu* tmp = (KPopupMenu*)menu;
+  KMenu* tmp = (KMenu*)menu;
 
   if(menuExists(currTheme,tmp))
   {

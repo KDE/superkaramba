@@ -141,31 +141,26 @@ void CPUSensor::update()
     QString format;
     int load = getCPULoad();
 
-    /*
-    KDE4
-    
-    QObjectListIt it( *objList );
-    while (it != 0)
+    QObject *it;
+    foreach(it, *objList)
     {
-        sp = (SensorParams*)(*it);
-        meter = sp->getMeter();
-        format = sp->getParam( "FORMAT" );
+      sp = qobject_cast<SensorParams*>(it);
+      meter = sp->getMeter();
+      format = sp->getParam( "FORMAT" );
 
-        if( format.length() == 0)
-        {
-            format = "%v";
-        }
-        format.replace( QRegExp("%load", false), QString::number( load ) );
-        format.replace( QRegExp("%user", false), QString::number( user ) );
-        format.replace( QRegExp("%nice", false), QString::number( nice ) );
-        format.replace( QRegExp("%idle", false), QString::number( idle ) );
-        format.replace( QRegExp("%system", false), QString::number( system ) );
-        format.replace( QRegExp("%v", false), QString::number( load ) );
+      if( format.length() == 0)
+      {
+        format = "%v";
+      }
+      format.replace( QRegExp("%load", false), QString::number( load ) );
+      format.replace( QRegExp("%user", false), QString::number( user ) );
+      format.replace( QRegExp("%nice", false), QString::number( nice ) );
+      format.replace( QRegExp("%idle", false), QString::number( idle ) );
+      format.replace( QRegExp("%system", false), QString::number( system ) );
+      format.replace( QRegExp("%v", false), QString::number( load ) );
 
-        meter->setValue( format );
-        ++it;
+      meter->setValue( format );
     }
-    */
 }
 
 void CPUSensor::setMaxValue( SensorParams *sp )

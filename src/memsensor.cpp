@@ -288,14 +288,10 @@ void MemSensor::readValues()
 
 void MemSensor::update()
 {
-  /*
-  KDE4
-  
     readValues();
     QString format;
     SensorParams *sp;
     Meter *meter;
-    QObjectListIt it( *objList );
 #if (defined(Q_OS_FREEBSD) && __FreeBSD_version < 500018)
     bool set = false;
 #endif
@@ -305,9 +301,10 @@ void MemSensor::update()
     int totalSwap = getSwapTotal();
     int usedSwap = totalSwap - getSwapFree();
 
-    while (it != 0)
+    QObject *it;
+    foreach(it, *objList)
     {
-        sp = (SensorParams*)(*it);
+        sp = qobject_cast<SensorParams*>(it);
 #if (defined(Q_OS_FREEBSD) && __FreeBSD_version < 500018)
         if ( (!MaxSet) && (totalSwap > 0) ) {
            setMaxValue(sp);
@@ -334,13 +331,11 @@ void MemSensor::update()
         format.replace( QRegExp("%ts", false), QString::number( (int)(totalSwap/1024.0+0.5)));
 
         meter->setValue(format);
-        ++it;
     }
 #if (defined(Q_OS_FREEBSD) && __FreeBSD_version < 500018)
     if (set)
         MaxSet = true;
 #endif
-    */
 }
 
 void MemSensor::setMaxValue( SensorParams *sp )

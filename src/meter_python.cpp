@@ -20,6 +20,8 @@
 #include "meter_python.h"
 #include "lineparser.h"
 
+#include <QList>
+
 bool checkKaramba(long widget)
 {
 /*
@@ -157,14 +159,14 @@ PyObject* QString2PyString(QString string)
 long getMeter(long widget, char* name)
 {
   karamba* theme = (karamba*)widget;
-  QObjectListIt it( *theme->meterList ); // iterate over meters
 
-  while ( it != 0 )
+  QObject *meter;
+  foreach(meter, *theme->meterList)
   {
-    if (strcmp(((Meter*) *it)->name(), name) == 0)
-      return (long)*it;
-    ++it;
+    if (strcmp(((Meter*) meter)->name(), name) == 0)
+      return (long)meter;
   }
+
   return 0;
 }
 

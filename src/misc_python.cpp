@@ -32,9 +32,11 @@
 #include <qobject.h>
 //Added by qt3to4:
 #include <Q3CString>
+#include <QList>
 
 #include <kglobal.h>
 #include <klocale.h>
+#include <kservice.h>
 
 #include "kdebug.h"
 #include "karamba.h"
@@ -86,13 +88,13 @@ PyObject* py_run_command(PyObject*, PyObject* args)
   i.setAscii(icon);
 
   KService svc(n, c, i);
-  KURL::List l;
+  KUrl::List l;
 
   for (int i = 0; i < PyList_Size(lst); i++)
   {
     l.append(PyString2QString(PyList_GetItem(lst, i)));
   }
-  KRun::run(svc, l);
+  KRun::run(svc, l, 0);
   return Py_BuildValue("l", 1);
 }
 
@@ -169,7 +171,7 @@ long attachClickArea(long widget, long meter, QString LeftButton, QString Middle
   Meter* currMeter = (Meter*) meter;
 
   // Look if currMeter has an ClickArea attached.
-  bool meterAlreadyClickable = currTheme->clickList->containsRef(currMeter);
+  bool meterAlreadyClickable = currTheme->clickList->indexOf(currMeter) >= 0;
 
   // if currMeter is of type ImageLabel*
   if (ImageLabel* image = dynamic_cast<ImageLabel*>(currMeter))
@@ -562,15 +564,13 @@ int translateAll(long widget, int x, int y)
 {
   karamba* currTheme = (karamba*)widget;
 
-  QObjectListIt it2( *currTheme->meterList ); // iterate over meters
-
-  while ( it2 != 0 )
+  QObject *meter;
+  foreach(meter, *currTheme->meterList)
   {
-    ((Meter*) *it2)->setSize(((Meter*) *it2)->getX()+x,
-                             ((Meter*) *it2)->getY()+y,
-                             ((Meter*) *it2)->getWidth(),
-                             ((Meter*) *it2)->getHeight());
-    ++it2;
+    ((Meter*) meter)->setSize(((Meter*) meter)->getX()+x,
+                             ((Meter*) meter)->getY()+y,
+                             ((Meter*) meter)->getWidth(),
+                             ((Meter*) meter)->getHeight());
   }
 
   if (currTheme->systray != 0)

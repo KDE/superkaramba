@@ -3,7 +3,7 @@
 *
 *  Copyright (C) 2003 Hans Karlsson <karlsson.h@home.se>
 *  Copyright (C) 2003-2004 Adam Geitgey <adam@rootnode.org>
-*  Copyright (c) 2004 Petri Damstén <damu@iki.fi>
+*  Copyright (c) 2004 Petri Damstï¿½ <damu@iki.fi>
 *
 *  This file is part of SuperKaramba.
 *
@@ -139,10 +139,14 @@ PyObject* py_write_config_entry(PyObject *, PyObject *args)
 // API-Function readConfigEntry
 QVariant readConfigEntry(long widget, QString key)
 {
+  /*
+  KDE4
+  
   karamba* currTheme = (karamba*)widget;
 
   currTheme -> config -> setGroup("theme");
   return currTheme -> config -> readEntry(key);
+  */
 }
 
 PyObject* py_read_config_entry(PyObject *, PyObject *args)

@@ -38,6 +38,7 @@
 #include <QMouseEvent>
 #include <QKeyEvent>
 #include <QDragEnterEvent>
+#include <QList>
 #include <kapplication.h>
 
 #include <kwinmodule.h>
@@ -126,14 +127,15 @@ class karamba :  public QWidget
 public:
     karamba(QString fn, QString name, bool reloading = false,
             int instance = -1, bool sub_theme = false);
-    QObjectList *menuList;
+    QList<QObject*> *menuList;
 
     virtual ~karamba();
     const ThemeFile& theme() const { return m_theme; };
 
-    QObjectList *meterList;
-    QObjectList *imageList;
-    QObjectList *clickList;
+    QList<QObject*> *meterList;
+    QList<QObject*> *imageList;
+    QList<QObject*> *clickList;
+
     void setSensor(const LineParser& lineParser, Meter* meter);
     QString getSensor(Meter* meter);
     QString findSensorFromMap(Sensor* sensor);
@@ -229,8 +231,8 @@ private:
     void meterClicked(QMouseEvent*, Meter*);
 
     QMap<QString, Sensor*> sensorMap;
-    QObjectList *sensorList;
-    QObjectList *timeList;
+    QList<QObject*> *sensorList;
+    QList<QObject*> *timeList;
 
     QTime lowerTimer;
     // use only the first occurance of KARAMBA in a config file

@@ -7,10 +7,12 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
+
 #include "sensor.h"
+
 Sensor::Sensor(int iMsec)
 {
-    objList = new QObjectList();
+    objList = new QList<QObject*>();
     //objList->setAutoDelete( true );   //KDE4
     msec = iMsec;
 }
@@ -26,8 +28,8 @@ void Sensor::start()
 
 Sensor::~Sensor()
 {
-objList->clear();
-delete objList;
+  objList->clear();
+  delete objList;
 }
 
 void Sensor::addMeter( SensorParams *sp )
@@ -51,6 +53,16 @@ SensorParams* Sensor::hasMeter( Meter *meter )
     }
   
   */
+  
+  QObject *it;
+  foreach(it, *objList)
+  {
+    if ((qobject_cast<SensorParams*>(it))->getMeter() == meter)
+    {
+      return qobject_cast<SensorParams*>(it);
+    }
+  }
+  
   return NULL;
 }
 
@@ -58,12 +70,8 @@ void Sensor::deleteMeter( Meter *meter )
 {
   SensorParams* sp = hasMeter(meter);
 
-  /*
-  KDE4
-  
   if (sp)
-    objList->removeRef(sp);
-  */
+    objList->removeAll(sp);
 }
 
 void Sensor::setMaxValue( SensorParams* )

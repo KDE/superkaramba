@@ -1,7 +1,7 @@
 /****************************************************************************
 *  graph_python.h  -  Functions for graph python api
 *
-*  Copyright (c) 2004 Petri Damstén <damu@iki.fi>
+*  Copyright (c) 2004 Petri Damstï¿½ <damu@iki.fi>
 *
 *  This file is part of SuperKaramba.
 *
@@ -56,7 +56,7 @@ PyObject* py_deleteGraph(PyObject *, PyObject *args)
 
   ((karamba*)widget)->deleteMeterFromSensors((Meter*)meter);
   return Py_BuildValue((char*)"l",
-      ((karamba*)widget)->meterList->removeRef((Meter*)meter));
+      ((karamba*)widget)->meterList->removeAll((Meter*)meter));
 }
 
 PyObject* py_getThemeGraph(PyObject *self, PyObject *args)

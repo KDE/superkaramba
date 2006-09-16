@@ -16,6 +16,8 @@
 #include <qmap.h>
 #include <qtimer.h>
 
+#include <QList>
+
 #include "sensorparams.h"
 
 class Sensor : public QObject
@@ -37,7 +39,7 @@ private:
     QTimer timer;
 
 protected:
-    QObjectList *objList;
+    QList <QObject*> *objList;
 
 public slots:
     virtual void update()=0;

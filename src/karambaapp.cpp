@@ -24,9 +24,9 @@
 #include <qtooltip.h>
 
 #include "themesdlg.h"
-#include "karambainterface.h"
+//#include "karambainterface.h"
 #include "karambaapp.h"
-#include "dcopinterface_stub.h"
+//#include "dcopinterface_stub.h"
 #include "karamba.h"
 #include "superkarambasettings.h"
 #include "qwidget.h"
@@ -37,7 +37,7 @@ KarambaApplication::KarambaApplication() :
     m_helpMenu(0), iface(0), themeListWindow(0), dcopIfaceStub(0),
     karambaList(0), sysTrayIcon(0)
 {
-  iface = new KarambaIface();
+  //iface = new KarambaIface(); // KDE4
   karambaList = new QObjectList();
   // register ourselves as a dcop client
   
@@ -69,6 +69,11 @@ void KarambaApplication::initDcopStub(Q3CString app)
 
 QString KarambaApplication::getMainKaramba()
 {
+  /*
+  KDE4
+  
+  DBUS
+  
   QStringList karambas = getKarambas();
   QStringList::Iterator it;
 
@@ -81,16 +86,14 @@ QString KarambaApplication::getMainKaramba()
       return *it;
   }
   return QString::null;
+  */
 }
 
 bool KarambaApplication::themeExists(QString pretty_name)
 {
-  QWidgetList  *list = QApplication::allWidgets();
-  QWidgetListIt it( *list );         // iterate over the widgets
-  QWidget * w;
-  while ( (w=it.current()) != 0 ) // for each widget...
+  QWidget *w;
+  foreach(w, QApplication::allWidgets())
   {
-    ++it;
     if (QString(w->name()).startsWith("karamba"))
     {
       karamba* k = (karamba*) w;
@@ -98,12 +101,16 @@ bool KarambaApplication::themeExists(QString pretty_name)
         return true;
     }
   }
-  delete list; // delete the list, not the widgets
   return false;
 }
 
 QStringList KarambaApplication::getKarambas()
 {
+  /*
+  KDE4
+  
+  DBUS
+  
   QCStringList applst = dcopClient()->registeredApplications();
   QCStringList::Iterator it;
   Q3CString s;
@@ -115,6 +122,7 @@ QStringList KarambaApplication::getKarambas()
       result.append(s);
   }
   return result;
+  */
 }
 
 void KarambaApplication::checkSuperKarambaDir()
@@ -145,14 +153,16 @@ void KarambaApplication::setUpSysTray(KAboutData* about)
   themeListWindow = new ThemesDlg();
 
   //Set up systray icon
-  sysTrayIcon = new KSystemTray(themeListWindow);
+  sysTrayIcon = new KSystemTrayIcon((QWidget*)themeListWindow);
 
-  KPopupMenu *menu = sysTrayIcon->contextMenu();
+  QMenu *menu = sysTrayIcon->contextMenu();
   menu->insertItem(SmallIconSet("superkaramba"),
                    i18n("Hide System Tray Icon"), this,
                    SLOT(globalHideSysTray()));
   menu->insertSeparator();
 
+  /*
+  KDE4
   m_helpMenu = new KHelpMenu(themeListWindow, about);
   action = KStdAction::help(m_helpMenu, SLOT(appHelpActivated()),
                             sysTrayIcon->actionCollection());
@@ -163,10 +173,12 @@ void KarambaApplication::setUpSysTray(KAboutData* about)
   action = KStdAction::aboutKDE(m_helpMenu, SLOT(aboutKDE()),
                                 sysTrayIcon->actionCollection());
   action->plug(menu);
-
+  
+  
   sysTrayIcon->setPixmap(sysTrayIcon->loadIcon("superkaramba"));
   setToolTip();
-
+  */
+  
   if(SuperKarambaSettings::showSysTray())
     sysTrayIcon->show();
   else
@@ -183,14 +195,14 @@ void KarambaApplication::showKarambaMenuExtension(bool show)
 
   if(show)
   {
-    for (k = karambaList->first(); k; k = karambaList->next())
+    foreach(k, *karambaList)
     {
       ((karamba*)k)->showMenuExtension();
     }
   }
   else
   {
-    for (k = karambaList->first(); k; k = karambaList->next())
+    foreach(k, *karambaList)
     {
       ((karamba*)k)->hideMenuExtension();
     }
@@ -199,11 +211,15 @@ void KarambaApplication::showKarambaMenuExtension(bool show)
 
 void KarambaApplication::setToolTip(const QString &tip)
 {
+  /*
+  KDE4
+  
   QToolTip::remove(sysTrayIcon);
   if(tip.isNull())
     QToolTip::add(sysTrayIcon, i18n("SuperKaramba"));
   else
     QToolTip::add(sysTrayIcon, tip);
+  */
 }
 
 void KarambaApplication::buildToolTip()
@@ -229,7 +245,7 @@ void KarambaApplication::buildToolTip()
     {
       toolTip +=
           "<tr><td align=right>" +
-          i18n("1 Running Theme:", "%n Running Themes:", list.count()) +
+          i18np("1 Running Theme:", "%n Running Themes:", list.count()) +
           "</td><td align=left>" + (*it) + "</td></tr>";
       firstRun = false;
     }
@@ -272,7 +288,7 @@ void KarambaApplication::checkCommandLine(KCmdLineArgs *args, QStringList &lst)
     {
       if( args->arg(i) != "" )
       {
-        KURL url = args->url(i);
+        KUrl url = args->url(i);
 
         lst.push_back(url.path());
       }
@@ -299,6 +315,11 @@ bool KarambaApplication::startThemes(QStringList &lst)
 
 void KarambaApplication::addKaramba(karamba* k, bool reloading)
 {
+  /*
+  KDE4
+  
+  DBUS
+  
   if(!reloading && karambaApp->dcopStub())
   {
     int instance = karambaApp->dcopStub()->themeAdded(
@@ -306,19 +327,26 @@ void KarambaApplication::addKaramba(karamba* k, bool reloading)
     k->setInstance(instance);
   }
   karambaList->append(k);
+  */
 }
 
 void KarambaApplication::deleteKaramba(karamba* k, bool reloading)
 {
+  /*
+  KDE4
+  
+  DBUS
+  
   if(!reloading && karambaApp->dcopStub())
     karambaApp->dcopStub()->themeClosed(
         karambaApp->dcopClient()->appId(), k->theme().file(), k->instance());
-  karambaList->removeRef(k);
+  karambaList->removeAll(k);
+  */
 }
 
 bool KarambaApplication::hasKaramba(karamba* k)
 {
-  return karambaList->containsRef(k) > 0;
+  return karambaList->indexOf(k) >= 0;
 }
 
 // XXX: I guess this should be made with mutex/semaphores
@@ -382,7 +410,7 @@ void KarambaApplication::showThemeDialog()
 {
   //kdDebug() << k_funcinfo << endl;
   if(themeListWindow)
-    themeListWindow->show();
+    ((QWidget*)(themeListWindow))->show();
 }
 
 void KarambaApplication::quitSuperKaramba()
@@ -395,6 +423,11 @@ void KarambaApplication::quitSuperKaramba()
 
 void KarambaApplication::globalQuitSuperKaramba()
 {
+  /*
+  KDE4
+  
+  DBUS
+  
   QStringList apps = getKarambas();
   QStringList::Iterator it;
 
@@ -403,10 +436,16 @@ void KarambaApplication::globalQuitSuperKaramba()
     dcopIface_stub dcop((*it).ascii(), dcopIface()->objId());
     dcop.quit();
   }
+  */
 }
 
 void KarambaApplication::globalShowThemeDialog()
 {
+  /*
+  KDE4
+  
+  DBUS
+  
   QStringList apps = getKarambas();
   QStringList::Iterator it;
 
@@ -415,6 +454,7 @@ void KarambaApplication::globalShowThemeDialog()
     dcopIface_stub dcop((*it).ascii(), dcopIface()->objId());
     dcop.showThemeDialog();
   }
+  */
 }
 
 void KarambaApplication::globalHideSysTray(bool hide)
@@ -426,11 +466,17 @@ void KarambaApplication::globalHideSysTray(bool hide)
   SuperKarambaSettings::setShowSysTray(!hide);
   SuperKarambaSettings::writeConfig();
 
+  /*
+  KDE4
+  
+  DBUS
+  
   for (it = apps.begin(); it != apps.end(); ++it)
   {
     dcopIface_stub dcop((*it).ascii(), dcopIface()->objId());
     dcop.hideSystemTray(hide);
   }
+  */
 }
 
 #include "karambaapp.moc"

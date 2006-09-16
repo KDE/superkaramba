@@ -3,7 +3,7 @@
 *
 *  Copyright (C) 2003 Hans Karlsson <karlsson.h@home.se>
 *  Copyright (C) 2003-2004 Adam Geitgey <adam@rootnode.org>
-*  Copyright (c) 2004 Petri Damstén <damu@iki.fi>
+*  Copyright (c) 2004 Petri Damstï¿½ <damu@iki.fi>
 *
 *  This file is part of SuperKaramba.
 *
@@ -101,7 +101,9 @@ PyObject* py_create_widget_mask(PyObject *, PyObject *args)
 long redrawWidgetBackground(long widget)
 {
   karamba* currTheme = (karamba*)widget;
-  currTheme->kroot->repaint(true);
+  
+  //currTheme->kroot->repaint(true);  KDE4
+  
   return 1;
 }
 

@@ -24,7 +24,7 @@ sensorparams.cpp
 sensorsensor.cpp
 textfilesensor.cpp
 clickarea.cpp
-noatunsensor.cpp
+#noatunsensor.cpp
 karambarootpixmap.cpp
 clickmap.cpp
 rsssensor.cpp
@@ -33,7 +33,7 @@ taskmanager.cpp
 showdesktop.cpp
 richtextlabel.cpp
 karambasessionmanaged.cpp
-systemtray.cpp
+#systemtray.cpp
 bar_python.cpp
 meter_python.cpp
 textlabel_python.cpp
@@ -47,7 +47,7 @@ widget_python.cpp
 menu_python.cpp
 karambalistboxitem.cpp
 graph_python.cpp
-karambainterface.cpp
+#karambainterface.cpp
 karambaapp.cpp
 karamba_python.cpp
 lineparser.cpp

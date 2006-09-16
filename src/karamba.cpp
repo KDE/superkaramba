@@ -243,15 +243,12 @@ karamba::karamba(QString fn, QString name, bool reloading, int instance,
   fixedPosition = false;
   defaultTextField = new TextField();
 
-  meterList = new QObjectList();
-  //meterList->setAutoDelete( true );   // KDE4
-  sensorList = new QObjectList();
-  //sensorList->setAutoDelete( true );  // KDE4
-  clickList = new QObjectList();
-  timeList = new QObjectList();
-  imageList = new QObjectList();
-  menuList = new QObjectList();
-  //menuList->setAutoDelete( true );    // KDE4
+  meterList = new QList<QObject*>();
+  imageList = new QList<QObject*>();
+  clickList = new QList<QObject*>();
+  sensorList = new QList<QObject*>();
+  timeList = new QList<QObject*>();
+  menuList = new QList<QObject*>();
 
 /*
 KDE4
@@ -828,17 +825,12 @@ void karamba::makePassive()
   if(managed)
     return;
 
-  /*
-  KDE4
-  foreach...
-  
   QObject *meter;
-  for (meter = meterList->first(); meter; meter = meterList->next())    //KDE
+  foreach(meter, *meterList)
   {
     if((meter)->isA("Input"))
       return;
   }
-  */
 
   // Matthew Kay: set window type to "dock" (plays better with taskbar themes
   // this way)
@@ -934,22 +926,15 @@ QString karamba::findSensorFromMap(Sensor* sensor)
 
 Sensor* karamba::findSensorFromList(Meter* meter)
 {
-  /*
-  KDE4
-  
-  foreach
-  
-  //qDebug("karamba::findSensorFromList");
-  QObjectListIt it( *sensorList ); // iterate over meters
+  qDebug("karamba::findSensorFromList");
 
-  while ( it != 0 )
+  QObject *sensor;
+  foreach(sensor, *sensorList)
   {
-    if (((Sensor*) *it)->hasMeter(meter))
-      return ((Sensor*)*it);
-    ++it;
+    if (((Sensor*) sensor)->hasMeter(meter))
+      return ((Sensor*) sensor);
   }
   
-  */
   return NULL;
 }
 
@@ -975,7 +960,7 @@ void karamba::deleteMeterFromSensors(Meter* meter)
     {
       QString s = findSensorFromMap(sensor);
       sensorMap.erase(s);
-      //sensorList->removeRef(sensor);    //KDE4
+      sensorList->removeAll(sensor);
     }
   }
 }
@@ -1358,36 +1343,30 @@ void karamba::changeInterval(int interval)
 void karamba::passClick(QMouseEvent *e)
 {
   //qDebug("karamba::passClick");
-  /*
-  KDE4
-  QObjectListIt it2( *timeList ); // iterate over meters
-  while ( it2 != 0 )
+  
+  QObject *time;
+  foreach(time, *timeList)
   {
-    (( DateSensor* ) *it2)->toggleCalendar( e );
-    ++it2;
+    ((DateSensor*) time)->toggleCalendar(e);
   }
-    */
+  
 
   // We create a temporary click list here because original
   // can change during the loop (infinite loop Bug 994359)
-  QObjectList clickListTmp(*clickList);
-  /*
-  KDE4
-  
-  QObjectListIt it(clickListTmp);
-  while (it != 0)
+  QList<QObject*> clickListTmp(*clickList);
+
+  QObject *click;
+  foreach(click, *clickList)
   {
-    Meter* meter = (Meter*)(*it);
+    Meter* meter = (Meter*)(click);
     // Check if meter is still in list
-    if (clickList->containsRef(meter) && meter->click(e))
+    if (clickList->indexOf(meter) >= 0 && meter->click(e))
     {
       // callback
       meterClicked(e, meter);
     }
-    ++it;
   }
-  */
-  
+
   //Everything below is to call the python callback function
   if (pythonIface && pythonIface->isExtensionLoaded() && haveUpdated)
   {
@@ -1486,23 +1465,17 @@ void karamba::mouseMoveEvent( QMouseEvent *e )
   else
   {
     // Change cursor over ClickArea
-    /*
-    KDE4
-    
-    QObjectListIt it(*clickList);
-    */
     bool insideArea = false;
-    /*
-    while (it != 0)
+
+    QObject *click;
+    foreach(click, *clickList)
     {
-      insideArea = ((Meter*)(*it)) -> insideActiveArea(e -> x(), e ->y());
+      insideArea = ((Meter*)(click)) -> insideActiveArea(e -> x(), e ->y());
       if (insideArea)
       {
-         break;
+        break;
       }
-      ++it;
     }
-    */
 
     if(insideArea)
     {
@@ -1515,16 +1488,11 @@ void karamba::mouseMoveEvent( QMouseEvent *e )
         setCursor( Qt::ArrowCursor );
     }
 
-    /*
-    KDE4
-    
-    QObjectListIt image_it( *imageList);        // iterate over image sensors
-    while ( image_it != 0 )
+    QObject *image;
+    foreach(image, *imageList)
     {
-      ((ImageLabel*) *image_it)->rolloverImage(e);
-      ++image_it;
+      ((ImageLabel*) image)->rolloverImage(e);;
     }
-    */
   }
 
   if (pythonIface && pythonIface->isExtensionLoaded())
@@ -1576,18 +1544,14 @@ void karamba::paintEvent ( QPaintEvent *e)
 void karamba::updateSensors()
 {
   //qDebug("karamba::updateSensors");
-  /*
   
-  KDE
-  
-  QObjectListIt it( *sensorList ); // iterate over meters
-  while ( it != 0 )
+  QObject *sensor;
+  foreach(sensor, *sensorList)
   {
-    ((Sensor*) *it)->update();
-    ++it;
+    ((Sensor*)sensor)->update();
   }
+  
   QTimer::singleShot( 500, this, SLOT(step()) );
-  */
 }
 
 /*
@@ -1612,18 +1576,18 @@ void karamba::updateBackground(KSharedPixmap* kpm)
   pm = QPixmap(size());
   buffer.fill(Qt::black);
 
-  QObjectListIt it( *imageList ); // iterate over meters
   p.begin(&buffer);
   bitBlt(&buffer,0,0,&background,0,Qt::CopyROP);
 
-  while ( it != 0 )
+  QObject *image;
+  foreach(image, *imageList)
   {
-    if (((ImageLabel*) *it)->background == 1)
+    if (((ImageLabel*) image)->background == 1)
     {
-      ((ImageLabel*) *it)->mUpdate(&p, 1);
+      ((ImageLabel*) image)->mUpdate(&p, 1);
     }
-    ++it;
   }
+
   p.end();
 
   bitBlt(&pm,0,0,&buffer,0,Qt::CopyROP);
@@ -1634,15 +1598,15 @@ void karamba::updateBackground(KSharedPixmap* kpm)
   pm = QPixmap(size());
   buffer2.fill(Qt::black);
 
-  QObjectListIt it2( *meterList ); // iterate over meters
   p.begin(&buffer2);
   bitBlt(&buffer2,0,0,&background,0,Qt::CopyROP);
 
-  while ( it2 != 0 )
+  QObject *meter;
+  foreach(meter, *meterList)
   {
-    ((Meter*) *it2)->mUpdate(&p);
-    ++it2;
+    ((Meter*) meter)->mUpdate(&p);
   }
+
   p.end();
 
   bitBlt(&pm,0,0,&buffer2,0,Qt::CopyROP);
@@ -1673,9 +1637,7 @@ void karamba::currentWallpaperChanged(int i )
 void karamba::externalStep()
 {
   //kdDebug() << k_funcinfo << pm.size() << endl;
-  /*
-  KDE4
-  
+
   if (widgetUpdate)
   {
     QPixmap buffer = QPixmap(size());
@@ -1683,21 +1645,25 @@ void karamba::externalStep()
     pm = QPixmap(size());
     buffer.fill(Qt::black);
 
-    QObjectListIt it( *meterList ); // iterate over meters
+    /* KDE4 QPixmap::gradWidget
     p.begin(&buffer);
     bitBlt(&buffer,0,0,&background,0,Qt::CopyROP);
+    */
 
-    while ( it != 0 )
+    QObject *meter;
+    foreach(meter, *meterList)
     {
-      ((Meter*) *it)->mUpdate(&p);
-      ++it;
+      ((Meter*) meter)->mUpdate(&p);
     }
+
+    /* KDE4 QPixmap::gradWidget
     p.end();
 
     bitBlt(&pm,0,0,&buffer,0,Qt::CopyROP);
     repaint();
+    */
   }
-  */
+
 }
 
 void karamba::step()
@@ -1708,21 +1674,20 @@ void karamba::step()
     pm = QPixmap(size());
     QPixmap buffer = QPixmap(size());
     buffer.fill(Qt::black);
-
-    /*
     
-    KDE4
-    
-    QObjectListIt it( *meterList ); // iterate over meters
+    /* KDE4 QPixmap::gradWidget
     p.begin(&buffer);
 
     bitBlt(&buffer,0,0,&background,0,Qt::CopyROP);
-
-    while (it != 0)
+    */
+    
+    QObject *meter;
+    foreach(meter, *meterList)
     {
-      ((Meter*) *it)->mUpdate(&p);
-      ++it;
+      ((Meter*) meter)->mUpdate(&p);
     }
+    
+    /* KDE4 QPixmap::gradWidget
     p.end();
 
     bitBlt(&pm,0,0,&buffer,0,Qt::CopyROP);
@@ -1874,6 +1839,9 @@ void karamba::passMenuItemClicked(int id)
 {
   //qDebug("karamba::passMenuItemClicked");
   //Everything below is to call the python callback function
+  
+  /*
+  KDE4 NEEDS TO BE TESTED; See NEW CODE BELOW
   if (pythonIface && pythonIface->isExtensionLoaded())
   {
     KMenu* menu = 0;
@@ -1886,7 +1854,7 @@ void karamba::passMenuItemClicked(int id)
       }
       else
       {
-        //tmp = (KMenu*) menuList->next();    //KDE4
+        tmp = (KMenu*) menuList->next();    //KDE4
       }
       if(tmp != 0)
       {
@@ -1897,6 +1865,27 @@ void karamba::passMenuItemClicked(int id)
         }
       }
     }
+    pythonIface->menuItemClicked(this, menu, id);
+  }
+  */
+
+  if (pythonIface && pythonIface->isExtensionLoaded())
+  {
+    KMenu* menu = 0;
+    
+    QObject *tmp;
+    foreach(tmp, *menuList)
+    {
+      if(tmp != 0)
+      {
+        if((qobject_cast<KMenu*>(tmp))->isItemVisible(id))
+        {
+          menu = qobject_cast<KMenu*>(tmp);
+          break;
+        }
+      }
+    }
+    
     pythonIface->menuItemClicked(this, menu, id);
   }
 }

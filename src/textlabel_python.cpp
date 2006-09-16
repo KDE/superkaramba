@@ -3,7 +3,7 @@
 *
 *  Copyright (C) 2003 Hans Karlsson <karlsson.h@home.se>
 *  Copyright (C) 2003-2004 Adam Geitgey <adam@rootnode.org>
-*  Copyright (c) 2004 Petri Damstén <damu@iki.fi>
+*  Copyright (c) 2004 Petri Damstï¿½ <damu@iki.fi>
 *
 *  This file is part of SuperKaramba.
 *
@@ -58,9 +58,9 @@ PyObject* py_deleteText(PyObject *, PyObject *args)
     return NULL;
 
   ((karamba*)widget)->deleteMeterFromSensors((Meter*)meter);
-  ((karamba*)widget)->clickList->removeRef((Meter*)meter);
+  ((karamba*)widget)->clickList->removeAll((Meter*)meter);
   return Py_BuildValue((char*)"l",
-      ((karamba*)widget)->meterList->removeRef((Meter*)meter));
+      ((karamba*)widget)->meterList->removeAll((Meter*)meter));
 }
 
 PyObject* py_getThemeText(PyObject *self, PyObject *args)

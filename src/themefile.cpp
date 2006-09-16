@@ -119,7 +119,7 @@ class ZipFile
     const KArchiveDirectory* m_dir;
 };
 
-ThemeFile::ThemeFile(const KURL& url)
+ThemeFile::ThemeFile(const KUrl& url)
   : m_stream(0), m_locale(0), m_zip(0)
 {
   if(url.isValid())
@@ -207,7 +207,7 @@ QPixmap ThemeFile::icon() const
   return QPixmap(readThemeFile(m_icon));
 }
 
-bool ThemeFile::set(const KURL &url)
+bool ThemeFile::set(const KUrl &url)
 {
   if(!url.isLocalFile() && !url.protocol().isEmpty())
   {
@@ -215,13 +215,13 @@ bool ThemeFile::set(const KURL &url)
        i18n("You are about to install and run %1 SuperKaramba theme. Since "
             "themes can contain executable code you should only install themes "
             "from sources that you trust. Continue?"), i18n("Executable Code Warning"), i18n("Install")
-           .arg(url.prettyURL()))
+           .arg(url.prettyUrl()))
        == KMessageBox::Cancel)
     {
       return false;
     }
 
-    QDir themeDir(locateLocal("appdata", "themes/", true));
+    QDir themeDir(KStandardDirs::locateLocal("appdata", "themes/", true));
     QFileInfo localFile = themeDir.filePath(url.fileName());
 
     if(localFile.exists())
