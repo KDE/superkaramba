@@ -1,241 +1,195 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>ThemesLayout</class>
-<widget class="QDialog">
-    <property name="name">
-        <cstring>ThemesLayout</cstring>
-    </property>
-    <property name="geometry">
-        <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>399</width>
-            <height>517</height>
-        </rect>
-    </property>
-    <property name="minimumSize">
-        <size>
-            <width>0</width>
-            <height>0</height>
-        </size>
-    </property>
-    <property name="caption">
-        <string>SuperKaramba Themes</string>
-    </property>
-    <vbox>
-        <property name="name">
-            <cstring>unnamed</cstring>
+<ui version="4.0" >
+ <class>ThemesLayout</class>
+ <widget class="QDialog" name="ThemesLayout" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>317</width>
+    <height>517</height>
+   </rect>
+  </property>
+  <property name="minimumSize" >
+   <size>
+    <width>0</width>
+    <height>0</height>
+   </size>
+  </property>
+  <property name="windowTitle" >
+   <string>SuperKaramba Themes</string>
+  </property>
+  <layout class="QVBoxLayout" >
+   <property name="margin" >
+    <number>11</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item>
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="labelSearch" >
+       <property name="text" >
+        <string>&amp;Search:</string>
+       </property>
+       <property name="buddy" >
+        <cstring>editSearch</cstring>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="editSearch" />
+     </item>
+     <item>
+      <widget class="QLabel" name="labelShow" >
+       <property name="text" >
+        <string>S&amp;how:</string>
+       </property>
+       <property name="buddy" >
+        <cstring>comboShow</cstring>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="comboShow" >
+       <item>
+        <property name="text" >
+         <string>All</string>
         </property>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>layout2</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>labelSearch</cstring>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Search:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>editSearch</cstring>
-                    </property>
-                </widget>
-                <widget class="QLineEdit">
-                    <property name="name">
-                        <cstring>editSearch</cstring>
-                    </property>
-                </widget>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>labelShow</cstring>
-                    </property>
-                    <property name="text">
-                        <string>S&amp;how:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>comboShow</cstring>
-                    </property>
-                </widget>
-                <widget class="QComboBox">
-                    <item>
-                        <property name="text">
-                            <string>All</string>
-                        </property>
-                    </item>
-                    <item>
-                        <property name="text">
-                            <string>Running</string>
-                        </property>
-                    </item>
-                    <property name="name">
-                        <cstring>comboShow</cstring>
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
-        <widget class="KWidgetListbox">
-            <property name="name">
-                <cstring>tableThemes</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>7</hsizetype>
-                    <vsizetype>7</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="focusPolicy">
-                <enum>StrongFocus</enum>
-            </property>
-        </widget>
-        <widget class="QLayoutWidget">
-            <property name="name">
-                <cstring>layoutButtons</cstring>
-            </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <spacer>
-                    <property name="name">
-                        <cstring>spacer</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>40</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-                <widget class="KPushButton">
-                    <property name="name">
-                        <cstring>buttonAddToDesktop</cstring>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>0</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-		    <property name="stdItem" stdset="0">
-			    <number>27</number>
-		    </property>
-                    <property name="text">
-                        <string>&amp;Add to Desktop</string>
-                    </property>
-                </widget>
-                <widget class="KPushButton">
-                    <property name="name">
-                        <cstring>buttonClose</cstring>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>0</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-                    <property name="text">
-                        <string>&amp;Close</string>
-                    </property>
-                    <property name="stdItem" stdset="0">
-                        <number>13</number>
-                    </property>
-                </widget>
-            </hbox>
-        </widget>
-    </vbox>
-</widget>
-<customwidgets>
-    <customwidget>
-        <class>KWidgetListbox</class>
-        <header location="local">kwidgetlistbox.h</header>
-        <sizehint>
-            <width>-1</width>
-            <height>-1</height>
-        </sizehint>
-        <container>0</container>
-        <sizepolicy>
-            <hordata>5</hordata>
-            <verdata>5</verdata>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-        </sizepolicy>
-        <pixmap>image0</pixmap>
-        <signal>selected(int)</signal>
-        <signal>doubleClicked(int, int, int, const QPoint&amp;)</signal>
-    </customwidget>
-</customwidgets>
-<images>
-    <image name="image0">
-        <data format="XBM.GZ" length="79">789c534e494dcbcc4b554829cdcdad8c2fcf4c29c95030e0524611cd48cd4ccf28010a1797249664262b2467241641a592324b8aa363156c15aab914146aadb90067111b1f</data>
-    </image>
-</images>
-<connections>
-    <connection>
-        <sender>buttonClose</sender>
-        <signal>clicked()</signal>
-        <receiver>ThemesLayout</receiver>
-        <slot>close()</slot>
-    </connection>
-    <connection>
-        <sender>buttonAddToDesktop</sender>
-        <signal>clicked()</signal>
-        <receiver>ThemesLayout</receiver>
-        <slot>addToDesktop()</slot>
-    </connection>
-    <connection>
-        <sender>tableThemes</sender>
-        <signal>selected(int)</signal>
-        <receiver>ThemesLayout</receiver>
-        <slot>selectionChanged(int)</slot>
-    </connection>
-    <connection>
-        <sender>editSearch</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>ThemesLayout</receiver>
-        <slot>search(const QString&amp;)</slot>
-    </connection>
-    <connection>
-        <sender>comboShow</sender>
-        <signal>activated(const QString&amp;)</signal>
-        <receiver>ThemesLayout</receiver>
-        <slot>search(const QString&amp;)</slot>
-    </connection>
-    <connection>
-        <sender>tableThemes</sender>
-        <signal>doubleClicked(int,int,int,const QPoint&amp;)</signal>
-        <receiver>ThemesLayout</receiver>
-        <slot>addToDesktop()</slot>
-    </connection>
-</connections>
-<tabstops>
-    <tabstop>editSearch</tabstop>
-    <tabstop>comboShow</tabstop>
-    <tabstop>tableThemes</tabstop>
-    <tabstop>buttonAddToDesktop</tabstop>
-    <tabstop>buttonClose</tabstop>
-</tabstops>
-<slots>
-    <slot access="protected">addToDesktop()</slot>
-    <slot access="protected">selectionChanged(int)</slot>
-    <slot access="protected">search(const QString&amp;)</slot>
-</slots>
-<layoutdefaults spacing="6" margin="11"/>
-<layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
-<includehints>
-    <includehint>kwidgetlistbox.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-    <includehint>kpushbutton.h</includehint>
-</includehints>
-</UI>
+       </item>
+       <item>
+        <property name="text" >
+         <string>Running</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="KWidgetListbox" name="tableThemes" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>7</hsizetype>
+       <vsizetype>7</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="focusPolicy" >
+      <enum>Qt::StrongFocus</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType" >
+        <enum>QSizePolicy::Expanding</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="KPushButton" name="buttonAddToDesktop" >
+       <property name="minimumSize" >
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="text" >
+        <string>&amp;Add to Desktop</string>
+       </property>
+       <property name="stdItem" stdset="0" >
+        <number>27</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="KPushButton" name="buttonClose" >
+       <property name="minimumSize" >
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="text" >
+        <string>&amp;Close</string>
+       </property>
+       <property name="stdItem" stdset="0" >
+        <number>13</number>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11" />
+ <layoutfunction spacing="KDialog::spacingHint" margin="KDialog::marginHint" />
+ <customwidgets>
+  <customwidget>
+   <class>KWidgetListbox</class>
+   <extends>QWidget</extends>
+   <header>kwidgetlistbox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KPushButton</class>
+   <extends>QPushButton</extends>
+   <header>kpushbutton.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>editSearch</tabstop>
+  <tabstop>comboShow</tabstop>
+  <tabstop>tableThemes</tabstop>
+  <tabstop>buttonAddToDesktop</tabstop>
+  <tabstop>buttonClose</tabstop>
+ </tabstops>
+ <includes>
+  <include location="local" >kwidgetlistbox.h</include>
+  <include location="local" >kpushbutton.h</include>
+  <include location="local" >kpushbutton.h</include>
+ </includes>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonClose</sender>
+   <signal>clicked()</signal>
+   <receiver>ThemesLayout</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

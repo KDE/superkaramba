@@ -209,12 +209,17 @@ static PyMethodDef karamba_methods[] = {
     {(char*)"performTaskAction", py_perform_task_action, METH_VARARGS, (char*)"Do something with a task, such as minimize it"},
 
     // System Tray - systray_python.cpp
+    /*
+    KDE4
     {(char*)"createSystray", py_create_systray, METH_VARARGS, (char*)"Create a Systray"},
     {(char*)"hideSystray", py_hide_systray, METH_VARARGS, (char*)"Hide the Systray"},
     {(char*)"showSystray", py_show_systray, METH_VARARGS, (char*)"Show the Systray"},
     {(char*)"moveSystray", py_move_systray, METH_VARARGS, (char*)"Move the Systray"},
     {(char*)"getCurrentWindowCount", py_get_current_window_count, METH_VARARGS, (char*)"Get current Window count"},
     {(char*)"updateSystrayLayout", py_update_systray_layout, METH_VARARGS, (char*)"Update Systray layout"},
+    {(char*)"getSystraySize", py_get_systray_size, METH_VARARGS, 
+    (char*)"Get the size of the Systray"},
+    */
 
     // Misc - misc_python.cpp
     {(char*)"getThemePath", py_get_theme_path, METH_VARARGS,  (char*)"Get the file path of the theme"},
@@ -302,8 +307,6 @@ static PyMethodDef karamba_methods[] = {
 
     {(char*)"setWidgetOnTop", py_set_widget_on_top, METH_VARARGS,
       (char*)"changes 'on top' status"},
-    {(char*)"getSystraySize", py_get_systray_size, METH_VARARGS, 
-      (char*)"Get the size of the Systray"},
     {(char*)"getPrettyThemeName", py_get_pretty_name, METH_VARARGS,  
       (char*)"Get the pretty name of the theme"},
     {(char*)"openNamedTheme", py_open_named_theme, METH_VARARGS, 
@@ -328,8 +331,11 @@ static PyMethodDef karamba_methods[] = {
       (char*)"Activates the Management Popup menu"},
 
   // service groups
+   /* KDE4
     {(char*)"getServiceGroups", py_get_service_groups, METH_VARARGS, 
       (char*)"Get KDE Service Groups"},
+      
+   */
 
     {NULL, NULL, 0 ,NULL}
 };

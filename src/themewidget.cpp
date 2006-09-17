@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005 Petri Damstén <petri.damsten@iki.fi>
+ * Copyright (C) 2005 Petri Damstï¿½ <petri.damsten@iki.fi>
  *
  * This file is part of SuperKaramba.
  *
@@ -28,7 +28,7 @@
 #include <QPixmap>
 
 ThemeWidget::ThemeWidget(QWidget *parent, const char *name)
-  : Ui_ThemeWidgetLayout(parent, name), m_themeFile(0)
+  : Ui_ThemeWidgetLayout(), m_themeFile(0)
 {
   running->setText("");
   setDescriptionMaxHeight();
@@ -39,7 +39,7 @@ ThemeWidget::ThemeWidget(ThemeFile* tf)
 {
   QPixmap pixmap = m_themeFile->icon();
   if(!pixmap.isNull())
-    icon->setPixmap(pixmap);
+    iconLabel->setPixmap(pixmap);
   QString version;
   if(!m_themeFile->version().isEmpty())
     version = " - " + m_themeFile->version();
@@ -103,6 +103,9 @@ void ThemeWidget::showButton(bool show)
 
 void ThemeWidget::setDescriptionMaxHeight()
 {
+  /*
+  KDE4
+  
   if(layoutText->geometry().height() <= 0)
     return;
   int height = layoutText->geometry().height() - themeName->height() -
@@ -110,6 +113,7 @@ void ThemeWidget::setDescriptionMaxHeight()
   if(buttonGo->isVisible())
     height -= layoutButton->geometry().height() + layoutText->spacing();
   description->setMaximumHeight(height);
+  */
 }
 
 #include "themewidget.moc"

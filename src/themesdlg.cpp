@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005 Petri Damstén <petri.damsten@iki.fi>
+ * Copyright (C) 2005 Petri Damstï¿½ <petri.damsten@iki.fi>
  *
  * This file is part of SuperKaramba.
  *
@@ -18,8 +18,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  ****************************************************************************/
 #include "karambaapp.h"
-#include "dcopinterface_stub.h"
-#include "karambainterface.h"
+//#include "dcopinterface_stub.h"
+//#include "karambainterface.h"
 #include "themesdlg.h"
 #include "themewidget.h"
 #include "kwidgetlistbox.h"
@@ -51,8 +51,10 @@
 #include <kio/job.h>
 #include <kprotocolinfo.h>
 
+// KDE4 check the casts
+
 ThemesDlg::ThemesDlg(QWidget *parent, const char *name)
- : ThemesLayout(parent, name)
+ : Ui_ThemesLayout()
 {
   populateListbox();
 #ifdef HAVE_KNEWSTUFF
@@ -108,7 +110,7 @@ QStringList ThemesDlg::themes()
 
   for(uint i = 2; i < tableThemes->count(); ++i)
   {
-    w = static_cast<ThemeWidget*>(tableThemes->item(i));
+    w = (ThemeWidget*)(tableThemes->item(i));
 
     result.append(w->themeFile()->file());
   }
@@ -126,31 +128,31 @@ void ThemesDlg::populateListbox()
   tableThemes->clear();
 
   item = new ThemeWidget;
-  item->icon->setPixmap(KGlobal::iconLoader()->loadIcon("knewstuff",
-                        KIcon::NoGroup, KIcon::SizeHuge));
+  item->iconLabel->setPixmap(KGlobal::iconLoader()->loadIcon("knewstuff",
+                             K3Icon::NoGroup, K3Icon::SizeHuge));
   item->setHeaderText(i18n("Get New Stuff"));
   item->setDescriptionText(i18n("Download new themes."));
 
   item->buttonGo->setText(i18n("New Stuff..."));
 #ifdef HAVE_KNEWSTUFF
   item->buttonGo->setEnabled(true);
-  connect(item->buttonGo, SIGNAL(clicked()),
+  QObject::connect(item->buttonGo, SIGNAL(clicked()),
           this, SLOT(getNewStuff()));
 #else
   item->buttonGo->setEnabled(false);
 #endif
-  tableThemes->insertItem(item);
+  tableThemes->insertItem((QWidget*)(item));
 
   item = new ThemeWidget;
-  item->icon->setPixmap(KGlobal::iconLoader()->loadIcon("ksysguard",
-                        KIcon::NoGroup, KIcon::SizeHuge));
+  item->iconLabel->setPixmap(KGlobal::iconLoader()->loadIcon("ksysguard",
+                        K3Icon::NoGroup, K3Icon::SizeHuge));
   item->setHeaderText(i18n("Open Local Theme"));
   item->setDescriptionText(i18n("Add local theme to the list."));
   item->buttonGo->setProperty("stdItem", 18);
   item->buttonGo->setText(i18n("Open..."));
-  connect(item->buttonGo, SIGNAL(clicked()),
-          this, SLOT(openLocalTheme()));
-  tableThemes->insertItem(item);
+  QObject::connect((QObject*)(item->buttonGo), SIGNAL(clicked()),
+                   (QObject*)(this), SLOT(openLocalTheme()));
+  tableThemes->insertItem((QWidget*)item);
 
   dirs = ksd.findDirs("data", QString(kapp->name()) + "/themes");
   // Get custom dirs from config here?
@@ -162,10 +164,10 @@ void ThemesDlg::populateListbox()
     for(QStringList::Iterator it = t.begin(); it != t.end(); ++it )
     {
       item = new ThemeWidget(new ThemeFile(dir.filePath(*it)));
-      tableThemes->insertItem(item);
+      tableThemes->insertItem((QWidget*)item);
       item->buttonGo->setText(i18n("Uninstall"));
-      connect(item->buttonGo, SIGNAL(clicked()),
-              this, SLOT(uninstall()));
+      QObject::connect((QObject*)item->buttonGo, SIGNAL(clicked()),
+                        (QObject*)this, SLOT(uninstall()));
     }
   }
   t = SuperKarambaSettings::userAddedThemes();
@@ -176,10 +178,10 @@ void ThemesDlg::populateListbox()
     if(file->isValid())
     {
       item = new ThemeWidget(file);
-      tableThemes->insertItem(item);
+      tableThemes->insertItem((QWidget*)item);
       item->buttonGo->setText(i18n("Uninstall"));
-      connect(item->buttonGo, SIGNAL(clicked()),
-              this, SLOT(uninstall()));
+      QObject::connect((QObject*)item->buttonGo, SIGNAL(clicked()),
+                        (QObject*)this, SLOT(uninstall()));
     }
     else
       delete file;
@@ -189,7 +191,7 @@ void ThemesDlg::populateListbox()
 
 void ThemesDlg::addToDesktop()
 {
-  ThemeWidget* w = static_cast<ThemeWidget*>(tableThemes->selectedItem());
+  ThemeWidget* w = (ThemeWidget*)(tableThemes->selectedItem());
   if(w)
   {
     ThemeFile* tf = w->themeFile();
@@ -203,9 +205,10 @@ void ThemesDlg::addToDesktop()
 void ThemesDlg::openLocalTheme()
 {
   QStringList fileNames;
-  fileNames = KFileDialog::getOpenFileNames(":<themes>",
+  fileNames = KFileDialog::getOpenFileNames(KUrl(), //"KDE4 :<themes>",
                   i18n("*.theme *.skz|Themes"),
-                  this, i18n("Open Themes"));
+                  (QWidget*)this, i18n("Open Themes"));
+  
   for(QStringList::Iterator it = fileNames.begin(); it != fileNames.end(); ++it)
   {
     ThemeFile file(*it);
@@ -241,10 +244,10 @@ void ThemesDlg::selectionChanged(int index)
 
   for(uint i=2; i < tableThemes->count(); ++i)
   {
-    ThemeWidget* w = static_cast<ThemeWidget*>(tableThemes->item(i));
+    ThemeWidget* w = (ThemeWidget*)(tableThemes->item(i));
     w->showButton(false);
   }
-  ThemeWidget* w = static_cast<ThemeWidget*>(tableThemes->item(index));
+  ThemeWidget* w = (ThemeWidget*)(tableThemes->item(index));
   ThemeFile* themeFile = w->themeFile();
   if(themeFile && themeFile->canUninstall())
       w->showButton(true);
@@ -257,7 +260,7 @@ int ThemesDlg::themeIndex(QString file)
 
   for(uint i = 2; i < tableThemes->count(); ++i)
   {
-    w = static_cast<ThemeWidget*>(tableThemes->item(i));
+    w = (ThemeWidget*)(tableThemes->item(i));
 
     if(w->themeFile()->file() == file)
       return i;
@@ -267,7 +270,7 @@ int ThemesDlg::themeIndex(QString file)
 
 void ThemesDlg::addSkzThemeToDialog(const QString &file)
 {
-  kdDebug() << "addSkzThemeToDialog(): file = " << file << endl;
+  //kdDebug() << "addSkzThemeToDialog(): file = " << file << endl;
   addThemeToList(file);
   writeNewStuffConfig(file);
 }
@@ -361,10 +364,10 @@ int ThemesDlg::addThemeToList(const QString &file)
   {
     ThemeWidget* item = new ThemeWidget(new ThemeFile(file));
 
-    i = tableThemes->insertItem(item);
+    i = tableThemes->insertItem((QWidget*)item);
     item->buttonGo->setText(i18n("Uninstall"));
-    connect(item->buttonGo, SIGNAL(clicked()),
-            this, SLOT(uninstall()));
+    QObject::connect((QObject*)item->buttonGo, SIGNAL(clicked()),
+                      (QObject*)this, SLOT(uninstall()));
   }
   tableThemes->setSelected(i);
   return i;
@@ -375,7 +378,7 @@ int ThemesDlg::addTheme(const QString& , const QString &file)
   int i = addThemeToList(file);
   int result = -1;
 
-  ThemeWidget* w = static_cast<ThemeWidget*>(tableThemes->item(i));
+  ThemeWidget* w = (ThemeWidget*)(tableThemes->item(i));
   if(w)
     result = w->addInstance();
   karambaApp->buildToolTip();
@@ -386,7 +389,7 @@ void ThemesDlg::removeTheme(const QString&, const QString& file, int instance)
 {
   int i = themeIndex(file);
 
-  ThemeWidget* w = static_cast<ThemeWidget*>(tableThemes->item(i));
+  ThemeWidget* w = (ThemeWidget*)(tableThemes->item(i));
   if(w)
     w->removeInstance(instance);
   karambaApp->buildToolTip();
@@ -402,8 +405,8 @@ bool ThemesDlg::filter(int index, QWidget* widget, void* data)
   if(index < 2)
     return true;
 
-  ThemesDlg* dlg = static_cast<ThemesDlg*>(data);
-  ThemeWidget* w = static_cast<ThemeWidget*>(widget);
+  ThemesDlg* dlg = (ThemesDlg*)(data);
+  ThemeWidget* w = (ThemeWidget*)(widget);
 
   if(dlg->comboShow->currentItem() == 1) // Running themes
     if(w->instances() == 0)
@@ -429,20 +432,28 @@ bool ThemesDlg::isDownloaded( const QString& path )
   kdDebug() << "isDownloaded path: " << path << endl;
   KConfig* config = KGlobal::config();
   config->setGroup("KNewStuffNames");
-  return !config->readEntry(path).isEmpty();
+  return !config->readEntry(path, QString()).isEmpty();
 }
 
 void ThemesDlg::uninstall()
 {
-  ThemeWidget* w = static_cast<ThemeWidget*>(tableThemes->selectedItem());
+  ThemeWidget* w = (ThemeWidget*)(tableThemes->selectedItem());
   ThemeFile* tf = w->themeFile();
-  KURL trash("trash:/");
-  KURL theme(tf->file());
+  KUrl trash("trash:/");
+  KUrl theme(tf->file());
   QString tempPath(tf->path());
 
+  /*
+  KDE 4
+  
+  DBUS
+  
   karambaApp->dcopIface()->closeTheme(tf->name());
+  
   if(!KProtocolInfo::isKnownProtocol(trash))
     trash = KGlobalSettings::trashPath();
+  
+  */
 
   if(!tf->isZipTheme())
   {
@@ -456,14 +467,14 @@ void ThemesDlg::uninstall()
       kdDebug() << "moving " << remDir.path() << " to the trash" << endl;
       KIO::move(remDir.path(), trash);
     }
-    tableThemes->removeItem(w);
+    tableThemes->removeItem((QWidget*)w);
     
     //some themes have multiple .theme files
     //find all .themes that could be listed in the dialog for the directory removed
     Q3PtrList<ThemeWidget> list;
     for(uint i = 2; i < tableThemes->count(); ++i)
     {
-      ThemeWidget* tempW = static_cast<ThemeWidget*>(tableThemes->item(i));
+      ThemeWidget* tempW = (ThemeWidget*)(tableThemes->item(i));
       ThemeFile* tempTf = tempW->themeFile();
       if( tempTf->path().compare( tempPath ) == 0 )
       {
@@ -473,8 +484,8 @@ void ThemesDlg::uninstall()
     ThemeWidget *twPtr;
     for ( twPtr = list.first(); twPtr; twPtr = list.next() )
     {
-      karambaApp->dcopIface()->closeTheme(twPtr->themeFile()->name());
-      tableThemes->removeItem( twPtr );
+      //karambaApp->dcopIface()->closeTheme(twPtr->themeFile()->name());  //KDE4 DBUS
+      tableThemes->removeItem( (QWidget*)twPtr );
     }
 #ifdef HAVE_KNEWSTUFF
     // Remove theme from KNewStuffStatus
@@ -505,7 +516,7 @@ void ThemesDlg::uninstall()
       kdDebug() << "moving " << remDir.path() << " to the trash" << endl;
       KIO::move(remDir.path(), trash);
     }
-    tableThemes->removeItem(w);
+    tableThemes->removeItem((QWidget*)w);
 #ifdef HAVE_KNEWSTUFF
     // Remove theme from KNewStuffStatus
     KConfig* config = KGlobal::config();
@@ -532,7 +543,7 @@ QStringList ThemesDlg::runningThemes()
 
   for(uint i = 2; i < tableThemes->count(); ++i)
   {
-    w = static_cast<ThemeWidget*>(tableThemes->item(i));
+    w = (ThemeWidget*)(tableThemes->item(i));
 
     if(w->instances() > 0)
       list.append(w->themeFile()->name());

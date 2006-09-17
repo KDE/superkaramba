@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005 Petri Damstén <petri.damsten@iki.fi>
+ * Copyright (C) 2005 Petri Damstï¿½ <petri.damsten@iki.fi>
  *
  * This file is part of SuperKaramba.
  *
@@ -21,7 +21,7 @@
 #define THEMEWIDGET_H
 
 #include "themefile.h"
-#include <themewidget_layout.h>
+#include "ui_themewidget_layout.h"
 //Added by qt3to4:
 #include <Q3ValueList>
 
@@ -29,7 +29,7 @@
 @author See README for the list of authors
 */
 
-class ThemeWidget : public Ui_ThemeWidgetLayout
+class ThemeWidget : public QWidget, public Ui_ThemeWidgetLayout
 {
     Q_OBJECT
   public:

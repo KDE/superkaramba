@@ -123,7 +123,7 @@ int main(int argc, char **argv)
     {
       //Set up systray icon
       app.setUpSysTray(&about);
-      app.initDcopStub();
+      //app.initDcopStub(); /KDE4 DBUS
     }
 
     KarambaApplication::unlockKaramba();

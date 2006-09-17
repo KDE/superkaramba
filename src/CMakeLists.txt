@@ -41,7 +41,7 @@ richtextlabel_python.cpp
 imagelabel_python.cpp
 config_python.cpp
 misc_python.cpp
-systray_python.cpp
+#systray_python.cpp
 task_python.cpp
 widget_python.cpp
 menu_python.cpp
@@ -65,9 +65,9 @@ input_python.cpp
 #dcopinterface.h
 )
 
-KDE4_ADD_UI3_FILES(superkaramba_SRCS
-themes_layout.ui
+KDE4_ADD_UI_FILES(superkaramba_SRCS
 themewidget_layout.ui
+themes_layout.ui
 )
 
 KDE4_ADD_KCFG_FILES(superkaramba_SRCS

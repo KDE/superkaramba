@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005 Petri Damstén <petri.damsten@iki.fi>
+ * Copyright (C) 2005 Petri Damstï¿½ <petri.damsten@iki.fi>
  *
  * This file is part of SuperKaramba.
  *
@@ -21,7 +21,7 @@
 #ifndef THEMESDLG_H
 #define THEMESDLG_H
 
-#include <themes_layout.h>
+#include "ui_themes_layout.h"
 #include "karambaapp.h"
 
 #ifdef HAVE_CONFIG_H
@@ -37,7 +37,7 @@ class SKNewStuff;
 class ThemeFile;
 class KArchiveDirectory;
 
-class ThemesDlg : public Ui_ThemesLayout
+class ThemesDlg : public QWidget, public Ui_ThemesLayout
 {
     Q_OBJECT
 

@@ -25,7 +25,7 @@
  *  along with SuperKaramba; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  ****************************************************************************/
-#include <config.h>
+//#include <config.h> //KDE4
 
 #include "themelocale.h"
 #include "themefile.h"
@@ -161,7 +161,7 @@ void ThemeLocale::setLanguage(const QStringList &languages)
 
     if(m_theme->fileExists(file))
     {
-      QBuffer buffer(m_theme->readThemeFile(file));
+      QBuffer buffer(&m_theme->readThemeFile(file));
       tl_nl_load_domain(&buffer, buffer.size(), &m_domain);
       m_language = *it;
       return;
@@ -171,7 +171,7 @@ void ThemeLocale::setLanguage(const QStringList &languages)
 
 QStringList ThemeLocale::languageList()
 {
-  KConfig* config = KGlobal::instance()->config();
+  KConfig* config = KGlobal::config();
   // Reset the list and add the new languages
   QStringList languageList;
   languageList +=
