@@ -272,11 +272,11 @@ void ImageLabel::applyTransformations(bool useSmoothScale)
 
 void ImageLabel::slotCopyResult(KIO::Job* job)
 {
-  QString tempFile = ((KIO::FileCopyJob*)job)->destURL().path();
+  QString tempFile = ((KIO::FileCopyJob*)job)->destUrl().path();
   if(job->error() == 0)
   {
     setValue(tempFile);
-    imagePath = ((KIO::FileCopyJob*)job)->srcURL().path();
+    imagePath = ((KIO::FileCopyJob*)job)->srcUrl().path();
     emit pixmapLoaded();
   }
   else
