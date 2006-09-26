@@ -58,10 +58,8 @@
 #define EDITSCRIPT 1
 #define THEMECONF  2
 
-karamba::karamba(QString fn, QString name, bool reloading, int instance,
-    bool sub_theme):
-    QWidget(0,"karamba", Qt::WGroupLeader | Qt::WStyle_Customize |
-            Qt::WNoAutoErase| Qt::WStyle_NoBorder | Qt::WDestructiveClose  ),
+karamba::karamba(QString fn, QString name, bool reloading, int instance, bool sub_theme):
+    QWidget(0, Qt::WA_GroupLeader & Qt::FramelessWindowHint & Qt::WA_DeleteOnClose  ),
     meterList(0), imageList(0), clickList(0), kpop(0), widgetMask(0),
     config(0), kWinModule(0), tempUnit('C'), m_instance(instance),
     sensorList(0), timeList(0),
@@ -78,7 +76,7 @@ karamba::karamba(QString fn, QString name, bool reloading, int instance,
 
   KUrl url;
 
-  if(fn.find('/') == -1)
+  if(!fn.contains('/'))
     url.setFileName(fn);
   else
     url = fn;
@@ -116,7 +114,7 @@ karamba::karamba(QString fn, QString name, bool reloading, int instance,
   QString instanceString;
   if(m_instance > 1)
     instanceString = QString("-%1").arg(m_instance);
-  QString cfg = QDir::home().absPath() + "/.superkaramba/"
+  QString cfg = QDir::home().absolutePath() + "/.superkaramba/"
       + m_theme.id() + instanceString + ".rc";
   kdDebug() << cfg << endl;
   QFile themeConfigFile(cfg);
@@ -259,7 +257,7 @@ KDE4
   appId = client->registerAs(qApp->name());
 */
 
-  setBackgroundMode(Qt::NoBackground);
+  //setBackgroundMode(Qt::NoBackground);
   if( !(onTop || managed))
     KWin::lowerWindow( winId() );
 
@@ -449,8 +447,9 @@ bool karamba::parseConfig()
         if(lineParser.getBoolean("MANAGED"))
         {
           managed = true;
-          reparent(0, Qt::WType_Dialog | Qt::WStyle_Customize | Qt::WStyle_NormalBorder
-              |  Qt::WRepaintNoErase | Qt::WDestructiveClose, pos());
+          Qt::WindowFlags flags = Qt::Dialog;
+          flags & Qt::WA_DeleteOnClose;
+          setWindowFlags(flags);
         }
         else
         {

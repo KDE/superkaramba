@@ -475,11 +475,7 @@ bool Task::isOnTop() const
 bool Task::isModified() const
 {
   static QString modStr = QString::fromUtf8("[") + i18n("modified") + QString::fromUtf8("]");
-#ifdef KDE_3_2
-  int modStrPos = _info.visibleName().find(modStr);
-#else
-  int modStrPos = _info.visibleName.find(modStr);
-#endif
+  int modStrPos = _info.visibleName.contains(modStr);
 
   return ( modStrPos != -1 );
 }
