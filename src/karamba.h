@@ -263,10 +263,11 @@ private:
     int  desktop;
     ThemeFile m_theme;
 
-  int trayMenuSeperatorId;
-  int trayMenuQuitId;
-  int trayMenuToggleId;
-  int trayMenuThemeId;
+  QAction* trayMenuSeperator;
+  QAction* trayMenuQuit;
+  QAction* trayMenuToggle;
+  QAction* trayMenuTheme;
+
   void start();
 
 public slots:
@@ -282,7 +283,7 @@ public slots:
     void passMenuItemClicked(int);
     void processExited (KProcess *proc);
     void receivedStdout (KProcess *proc, char *buffer, int buflen);
-    void toDesktop(int desktopid, int menuid);
+    void toDesktop(int desktopid, QAction *action);
     QString getPrettyName() { return prettyName; }
 
     // Systray
@@ -343,15 +344,15 @@ class DesktopChangeSlot : public QObject
   DesktopChangeSlot(QObject *parent, int desktop_id);
   /* Parent should be the karamba object
    * desktop id of 0 indicates all desktops */
-  void setMenuId(int id);
-  int menuId();
+  void setAction(QAction* action);
+  QAction* menuAction();
 
   public slots:
       void receive();
 
  protected:
   int desktopid;
-  int menuid;
+  QAction *action;
 };
 
 /** SignalBridge is an ungulate that lives in the forests of wild Wisconsin. */

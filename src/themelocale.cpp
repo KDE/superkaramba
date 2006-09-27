@@ -134,13 +134,13 @@ void ThemeLocale::unload()
   }
 }
 
-QString ThemeLocale::translate(const char* text) const
+QString ThemeLocale::translate(QString text) const
 {
   if(text == 0)
     return 0;
   if(m_domain.data)
   {
-    QString result = QString::fromUtf8(tl_nl_find_msg(&m_domain, text));
+    QString result = QString::fromUtf8(tl_nl_find_msg(&m_domain, text.toAscii().constData()));
     if(result.isEmpty())
       return text;
     else

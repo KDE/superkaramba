@@ -41,6 +41,8 @@
 #include <kparts/componentfactory.h>
 #include <kparts/part.h>
 
+#include <kicon.h>
+
 #include <qdir.h>
 #include <qwidget.h>
 //Added by qt3to4:
@@ -65,8 +67,8 @@ karamba::karamba(QString fn, QString name, bool reloading, int instance, bool su
     sensorList(0), timeList(0),
     themeConfMenu(0), toDesktopMenu(0), kglobal(0), clickPos(0, 0), accColl(0),
     menuAccColl(0), toggleLocked(0), pythonIface(0), defaultTextField(0),
-    trayMenuSeperatorId(-1), trayMenuQuitId(-1), trayMenuToggleId(-1),
-    trayMenuThemeId(-1),
+    trayMenuSeperator(0), trayMenuQuit(0), trayMenuToggle(0),
+    trayMenuTheme(0),
     m_sysTimer(NULL)
 {
   themeStarted = false;
@@ -93,10 +95,10 @@ karamba::karamba(QString fn, QString name, bool reloading, int instance, bool su
   if(prettyName.isEmpty())
     prettyName = QString("%1 - %2").arg(m_theme.name()).arg(m_instance);
 
-  kdDebug() << "Starting theme: " << m_theme.name()
+  kDebug() << "Starting theme: " << m_theme.name()
             << " pretty name: " << prettyName << endl;
   QString qName = "karamba - " + prettyName;
-  setObjectName(qName.ascii());
+  setObjectName(qName);
 
   KDirWatch *dirWatch = new KDirWatch( this );
   connect(dirWatch, SIGNAL( dirty( const QString & ) ),
@@ -116,7 +118,7 @@ karamba::karamba(QString fn, QString name, bool reloading, int instance, bool su
     instanceString = QString("-%1").arg(m_instance);
   QString cfg = QDir::home().absolutePath() + "/.superkaramba/"
       + m_theme.id() + instanceString + ".rc";
-  kdDebug() << cfg << endl;
+  kDebug() << cfg << endl;
   QFile themeConfigFile(cfg);
   // Tests if config file Exists
   if (!QFileInfo(themeConfigFile).exists())
@@ -133,7 +135,7 @@ karamba::karamba(QString fn, QString name, bool reloading, int instance, bool su
   m_reloading = reloading;
   if(m_theme.pythonModuleExists())
   {
-    kdDebug() << "Loading python module: " << m_theme.pythonModule() << endl;
+    kDebug() << "Loading python module: " << m_theme.pythonModule() << endl;
     QTimer::singleShot(0, this, SLOT(initPythonInterface()));
   }
 
@@ -161,40 +163,38 @@ karamba::karamba(QString fn, QString name, bool reloading, int instance, bool su
   connect(&taskManager, SIGNAL(startupRemoved(Startup*)), this,
            SLOT(startupRemoved(Startup*)) );
 
-  themeConfMenu = new KMenu( this);
-  themeConfMenu -> setCheckable(true);
+  themeConfMenu = new KMenu(this);
 
   /* XXX - need to be able to delete all these DesktopChangeSlot objects */
   DesktopChangeSlot *dslot;
 
-  int mid;
+  QAction *maction;
 
   toDesktopMenu = new KMenu (this);
-  toDesktopMenu -> setCheckable(true);
-  mid = toDesktopMenu -> insertItem (i18n("&All Desktops"),
-                                     dslot = new DesktopChangeSlot(this,0),
+  maction = toDesktopMenu -> addAction (i18n("&All Desktops"),
+                                     dslot = new DesktopChangeSlot(this, 0),
                                      SLOT(receive()));
-  dslot->setMenuId(mid);
+  dslot->setAction(maction);
 
-  toDesktopMenu -> insertSeparator();
+  toDesktopMenu -> addSeparator();
   for (int ndesktop=1; ndesktop <= kWinModule->numberOfDesktops(); ndesktop++)
   {
     QString name = i18n("Desktop &");
     name += ('0' + ndesktop);
 
-    mid = toDesktopMenu -> insertItem (name,
+    maction = toDesktopMenu -> addAction (name,
         dslot = new DesktopChangeSlot(this, ndesktop), SLOT(receive()));
-    dslot->setMenuId(mid);
+
+    dslot->setAction(maction);
   }
 
 
   kpop = new KMenu( this );
-  kpop -> setCheckable(true);
 
   accColl = new KActionCollection( this );
   menuAccColl = new KActionCollection( this );
 
-  kpop->insertItem( SmallIconSet("reload"),i18n("Update"), this,
+  kpop->addAction( SmallIconSet("reload"),i18n("Update"), this,
                     SLOT(updateSensors()), Qt::Key_F5 );
   toggleLocked = new KToggleAction (  i18n("Toggle &Locked Position"),
                                       SmallIconSet("locked"),
@@ -216,21 +216,19 @@ karamba::karamba(QString fn, QString name, bool reloading, int instance, bool su
 
   toggleFastTransforms -> plug(kpop);
 
-  kpop->insertSeparator();
+  kpop->addSeparator();
 
-  kpop->insertItem(i18n("Configure &Theme"), themeConfMenu, THEMECONF);
-  kpop->setItemEnabled(THEMECONF, false);
-  kpop->insertItem(i18n("To Des&ktop"), toDesktopMenu);
+  kpop->addMenu(themeConfMenu);
+  //kpop->setItemEnabled(THEMECONF, false);   // KDE4
+  kpop->addMenu(toDesktopMenu);
 
-  kpop->insertItem( SmallIconSet("reload3"),i18n("&Reload Theme"),this,
+  kpop->addAction( SmallIconSet("reload3"),i18n("&Reload Theme"),this,
                     SLOT(reloadConfig()), Qt::CTRL+Qt::Key_R );
-  kpop->insertItem( SmallIconSet("fileclose"),i18n("&Close This Theme"), this,
+  kpop->addAction( SmallIconSet("fileclose"),i18n("&Close This Theme"), this,
                     SLOT(killWidget()), Qt::CTRL+Qt::Key_C );
 
   if(!SuperKarambaSettings::showSysTray())
     showMenuExtension();
-
-  kpop->polish();
 
   numberOfConfMenuItems = 0;
 
@@ -521,13 +519,13 @@ bool karamba::parseConfig()
         QByteArray ba;
         if( info.isRelative() )
         {
-          absPath.setAscii(m_theme.path().ascii());
-          absPath.append(path.ascii());
+          absPath = m_theme.path();
+          absPath.append(path);
           ba = m_theme.readThemeFile(path);
         }
         else
         {
-          absPath.setAscii(path.ascii());
+          absPath = path;
           ba = m_theme.readThemeFile(info.fileName());
         }
         if(m_theme.isZipTheme())
@@ -544,7 +542,7 @@ bool karamba::parseConfig()
         m_interval = (m_interval == 0) ? 1000 : m_interval;
 
         QString temp = lineParser.getString("TEMPUNIT", "C").toUpper();
-        tempUnit = temp.ascii()[0];
+        tempUnit = temp.at(0).toAscii();
         foundKaramba = true;
       }
 
@@ -607,7 +605,7 @@ bool karamba::parseConfig()
           tmp->parseImages(file, file_roll, x,y, xon, yon);
         tmp->setBackground(bg);
         if (!name.isEmpty())
-          tmp->setObjectName(name.ascii());
+          tmp->setObjectName(name);
         if (!tiptext.isEmpty())
           tmp->setTooltip(tiptext);
 
@@ -668,11 +666,11 @@ bool karamba::parseConfig()
           TextLabel *tmp = new TextLabel(this, x, y, w, h );
           tmp->setTextProps(tmpText);
           tmp->setValue(
-              m_theme.locale()->translate(lineParser.getString("VALUE").ascii()));
+              m_theme.locale()->translate(lineParser.getString("VALUE")));
 
           QString name = lineParser.getString("NAME");
           if (!name.isEmpty())
-            tmp->setObjectName(name.ascii());
+            tmp->setObjectName(name);
 
           setSensor(lineParser, (Meter*)tmp);
           meterList->append ( tmp );
@@ -699,14 +697,14 @@ bool karamba::parseConfig()
           bool dUl = lineParser.getBoolean("UNDERLINE");
 
           tmp->setText(
-              m_theme.locale()->translate(lineParser.getString("VALUE").ascii()), dUl);
+              m_theme.locale()->translate(lineParser.getString("VALUE")), dUl);
           tmp->setTextProps( tmpText );
           tmp->setWidth(w);
           tmp->setHeight(h);
 
           QString name = lineParser.getString("NAME");
           if (!name.isEmpty())
-            tmp->setObjectName(name.ascii());
+            tmp->setObjectName(name);
 
           setSensor(lineParser, (Meter*)tmp);
           clickList -> append(tmp);
@@ -719,11 +717,11 @@ bool karamba::parseConfig()
 
           QString name = lineParser.getString("NAME");
           if (!name.isEmpty())
-            tmp->setObjectName(name.ascii());
+            tmp->setObjectName(name);
 
           tmp->setTextProps(tmpText);
           tmp->setValue(
-              m_theme.locale()->translate(lineParser.getString("VALUE").ascii()));
+              m_theme.locale()->translate(lineParser.getString("VALUE")));
 
           meterList->append(tmp);
           passive = false;
@@ -733,14 +731,14 @@ bool karamba::parseConfig()
       if(lineParser.meter() == "BAR")
       {
         Bar *tmp = new Bar(this, x, y, w, h );
-        tmp->setImage(lineParser.getString("PATH").ascii());
+        tmp->setImage(lineParser.getString("PATH"));
         tmp->setVertical(lineParser.getBoolean("VERTICAL"));
         tmp->setMax(lineParser.getInt("MAX", 100));
         tmp->setMin(lineParser.getInt("MIN", 0));
         tmp->setValue(lineParser.getInt("VALUE"));
         QString name = lineParser.getString("NAME");
         if (!name.isEmpty())
-          tmp->setObjectName(name.ascii());
+          tmp->setObjectName(name);
         setSensor(lineParser, (Meter*)tmp );
         meterList->append ( tmp );
       }
@@ -754,7 +752,7 @@ bool karamba::parseConfig()
         tmp->setMin(lineParser.getInt("MIN", 0));
         QString name = lineParser.getString("NAME");
         if (!name.isEmpty())
-          tmp->setObjectName(name.ascii());
+          tmp->setObjectName(name);
 
         tmp->setColor(lineParser.getColor("COLOR"));
 
@@ -827,7 +825,7 @@ void karamba::makePassive()
   QObject *meter;
   foreach(meter, *meterList)
   {
-    if((meter)->isA("Input"))
+    if(meter->inherits("Input"))  // KDE4 Or meatObject::className
       return;
   }
 
@@ -905,7 +903,9 @@ void karamba::editScript()
   }
   else
   {
-      path = QFileInfo(m_theme.file()).dirPath() + "/" + m_theme.name() + ".py";
+      //path = QFileInfo(m_theme.file()).dirPath() + "/" + m_theme.name() + ".py";
+      QDir dir;
+      path = dir.filePath(m_theme.file())  + "/" + m_theme.name() + ".py";
   }
   //KRun::runURL( KURL( path ), "text/plain" );   // KDE4
 }
@@ -917,7 +917,7 @@ QString karamba::findSensorFromMap(Sensor* sensor)
   QMap<QString,Sensor*>::ConstIterator end( sensorMap.end() );
   for ( it = sensorMap.begin(); it != end; ++it )
   {
-    if (it.data() == sensor)
+    if (it.value() == sensor)
       return it.key();
   }
   return "";
@@ -958,7 +958,7 @@ void karamba::deleteMeterFromSensors(Meter* meter)
     if (sensor->isEmpty())
     {
       QString s = findSensorFromMap(sensor);
-      sensorMap.erase(s);
+      sensorMap.remove(s);
       sensorList->removeAll(sensor);
     }
   }
@@ -986,7 +986,7 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
     }
     SensorParams *sp = new SensorParams(meter);
     sp->addParam("FORMAT",
-                 m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
+                 m_theme.locale()->translate(lineParser.getString("FORMAT")));
     sp->addParam("DECIMALS",lineParser.getString("DECIMALS"));
 
     sensor->addMeter(sp);
@@ -1006,7 +1006,7 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
     }
     SensorParams *sp = new SensorParams(meter);
     sp->addParam("FORMAT",
-        m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
+                 m_theme.locale()->translate(lineParser.getString("FORMAT")));
 
     sensor->addMeter(sp);
     sensor->setMaxValue(sp);
@@ -1039,7 +1039,7 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
     }
     sp->addParam("MOUNTPOINT",mntPt);
     sp->addParam("FORMAT",
-                 m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
+                 m_theme.locale()->translate(lineParser.getString("FORMAT")));
     sensor->addMeter(sp);
     sensor->setMaxValue(sp);
   }
@@ -1058,7 +1058,7 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
     }
     SensorParams *sp = new SensorParams(meter);
     sp->addParam("FORMAT",
-                 m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
+                 m_theme.locale()->translate(lineParser.getString("FORMAT")));
     sp->addParam("DECIMALS", lineParser.getString("DECIMALS"));
     sensor->addMeter(sp);
   }
@@ -1076,7 +1076,7 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
     }
     SensorParams *sp = new SensorParams(meter);
     sp->addParam("FORMAT",
-                 m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
+                 m_theme.locale()->translate(lineParser.getString("FORMAT")));
     sensor->addMeter(sp);
   }
 
@@ -1092,7 +1092,7 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
     }
     SensorParams *sp = new SensorParams(meter);
     sp->addParam("FORMAT",
-                 m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
+                 m_theme.locale()->translate(lineParser.getString("FORMAT")));
     sp->addParam("TYPE", lineParser.getString("TYPE"));
     sensor->addMeter(sp);
   }
@@ -1132,7 +1132,7 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
     }
     SensorParams *sp = new SensorParams(meter);
     sp->addParam("FORMAT",
-                 m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
+                 m_theme.locale()->translate(lineParser.getString("FORMAT")));
     sp->addParam("CALWIDTH",lineParser.getString("CALWIDTH"));
     sp->addParam("CALHEIGHT",lineParser.getString("CALHEIGHT"));
     sensor->addMeter(sp);
@@ -1154,7 +1154,7 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
     }
     SensorParams *sp = new SensorParams(meter);
     sp->addParam("FORMAT",
-                 m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
+                 m_theme.locale()->translate(lineParser.getString("FORMAT")));
     sensor->addMeter(sp);
     sensor->setMaxValue(sp);
   }
@@ -1206,7 +1206,7 @@ Not used in KDE4
   {
     QString source = lineParser.getString("SOURCE");
     QString format =
-        m_theme.locale()->translate(lineParser.getString("FORMAT").ascii());
+        m_theme.locale()->translate(lineParser.getString("FORMAT"));
 
     sensor = sensorMap["RSS"+source];
     if (sensor == 0)
@@ -1247,7 +1247,7 @@ void karamba::setIncomingData(QString theme, QString obj)
 {
   KarambaApplication* app = (KarambaApplication*)qApp;
 
-  kdDebug() << "karamba::setIncomingData " << theme << obj << endl;
+  kDebug() << "karamba::setIncomingData " << theme << obj << endl;
    //QByteArray data;
    //QDataStream dataStream( data, IO_WriteOnly );
    //dataStream << theme;
@@ -1273,7 +1273,7 @@ void karamba::setIncomingData(QString theme, QString obj)
 void karamba::callTheme(QString theme, QString txt)
 {
   KarambaApplication* app = (KarambaApplication*)qApp;
-  kdDebug() << "karamba::callTheme " << theme << txt << endl;
+  kDebug() << "karamba::callTheme " << theme << txt << endl;
   //qWarning("karamba::callTheme");
    //QByteArray data;
    //QDataStream dataStream( data, IO_WriteOnly );
@@ -1300,10 +1300,10 @@ void karamba::callTheme(QString theme, QString txt)
 
 void karamba::themeNotify(QString theme, QString txt)
 {
-  kdDebug() << "karamba::themeNotify" << theme << txt << endl;
+  kDebug() << "karamba::themeNotify" << theme << txt << endl;
   if (pythonIface->isExtensionLoaded())
   {
-      pythonIface->themeNotify(this, theme.ascii(), txt.ascii());
+    pythonIface->themeNotify(this, theme.toAscii().constData(), txt.toAscii().constData());
   }
 }
 
@@ -1454,10 +1454,11 @@ void karamba::keyPressed(const QString& s, const Meter* meter)
     pythonIface->keyPressed(this, meter, s);
 }
 
+// KDE4 state() -> buttons() ???
 void karamba::mouseMoveEvent( QMouseEvent *e )
 {
   //qDebug("karamba::mouseMoveEvent");
-  if( e->state() !=  0 && e->state() < 16 && !toggleLocked -> isChecked() )
+  if( e->buttons() !=  0 && e->buttons() < 16 && !toggleLocked -> isChecked() )
   {
     move( e->globalPos() - clickPos );
   }
@@ -1502,13 +1503,13 @@ void karamba::mouseMoveEvent( QMouseEvent *e )
     // This will work now, but only when you move at least
     // one pixel in any direction with your mouse.
     //if( e->button() == Qt::LeftButton )
-    if( e->state() == Qt::LeftButton)
+    if( e->buttons() == Qt::LeftButton)
       button = 1;
     //else if( e->button() == Qt::MidButton )
-    else if( e->state() == Qt::MidButton )
+    else if( e->buttons() == Qt::MidButton )
       button = 2;
     //else if( e->button() == Qt::RightButton )
-    else if( e->state() == Qt::RightButton )
+    else if( e->buttons() == Qt::RightButton )
       button = 3;
 
     pythonIface->widgetMouseMoved(this, e->x(), e->y(), button);
@@ -1525,7 +1526,7 @@ void karamba::closeEvent ( QCloseEvent *  qc)
 
 void karamba::paintEvent ( QPaintEvent *e)
 {
-  //kdDebug() << k_funcinfo << pm.size() << endl;
+  //kDebug() << k_funcinfo << pm.size() << endl;
   if(pm.width() == 0)
     return;
   if( !(onTop || managed))
@@ -1559,7 +1560,7 @@ KSharedPixmap gone
 
 void karamba::updateBackground(KSharedPixmap* kpm)
 {
-  //kdDebug() << k_funcinfo << pm.size() << endl;
+  //kDebug() << k_funcinfo << pm.size() << endl;
   // if pm width == 0 this is the first time we come here and we should start
   // the theme. This is because we need the background before starting.
   //if(pm.width() == 0)
@@ -1635,7 +1636,7 @@ void karamba::currentWallpaperChanged(int i )
 
 void karamba::externalStep()
 {
-  //kdDebug() << k_funcinfo << pm.size() << endl;
+  //kDebug() << k_funcinfo << pm.size() << endl;
 
   if (widgetUpdate)
   {
@@ -1667,7 +1668,7 @@ void karamba::externalStep()
 
 void karamba::step()
 {
-  //kdDebug() << k_funcinfo << pm.size() << endl;
+  //kDebug() << k_funcinfo << pm.size() << endl;
   if (widgetUpdate && haveUpdated)
   {
     pm = QPixmap(size());
@@ -1718,11 +1719,11 @@ void karamba::slotToggleLocked()
   //qDebug("karamba::slotToggleLocked");
   if(toggleLocked->isChecked())
   {
-    toggleLocked->setIconSet(SmallIconSet("lock"));
+    toggleLocked->setIcon(KIcon(SmallIconSet("lock")));   //KDE4
   }
   else
   {
-    toggleLocked->setIconSet(SmallIconSet("move"));
+    toggleLocked->setIcon(KIcon(SmallIconSet("move")));   // KDE4
   }
 }
 
@@ -1782,7 +1783,8 @@ void karamba::slotToggleConfigOption(QString key, bool value)
 void karamba::addMenuConfigOption(QString key, QString name)
 {
   //qDebug("karamba::addMenuConfigOption");
-  kpop -> setItemEnabled(THEMECONF, true);
+  //kpop -> setItemEnabled(THEMECONF, true);  // KDE4
+  themeConfMenu->setEnabled(true);
 
   SignalBridge* action = new SignalBridge(this, key, menuAccColl);
   KToggleAction* confItem = new KToggleAction (name, KShortcut::null(),
@@ -1806,10 +1808,9 @@ void karamba::addMenuConfigOption(QString key, QString name)
 bool karamba::setMenuConfigOption(QString key, bool value)
 {
   //qDebug("karamba::setMenuConfigOption");
-  KToggleAction* menuAction = ((KToggleAction*)menuAccColl -> action(key.ascii()));
+  KToggleAction* menuAction = ((KToggleAction*)menuAccColl -> action(key));
   if (menuAction == NULL)
   {
-    qWarning("Menu action %s not found.", key.ascii());
     return false;
   }
   else
@@ -1822,10 +1823,9 @@ bool karamba::setMenuConfigOption(QString key, bool value)
 bool karamba::readMenuConfigOption(QString key)
 {
   //qDebug("karamba::readMenuConfigOption");
-  KToggleAction* menuAction = ((KToggleAction*)menuAccColl -> action(key.ascii()));
+  KToggleAction* menuAction = ((KToggleAction*)menuAccColl -> action(key));
   if (menuAction == NULL)
   {
-    qWarning("Menu action %s not found.", key.ascii());
     return false;
   }
   else
@@ -1877,11 +1877,13 @@ void karamba::passMenuItemClicked(int id)
     {
       if(tmp != 0)
       {
+        /* KDE4
         if((qobject_cast<KMenu*>(tmp))->isItemVisible(id))
         {
           menu = qobject_cast<KMenu*>(tmp);
           break;
         }
+        */
       }
     }
     
@@ -1965,7 +1967,8 @@ void karamba::readProperties(KConfig* config)
 void karamba::dragEnterEvent(QDragEnterEvent* event)
 {
   //qDebug("karamba::dragEnterEvent");
-  event->accept(Q3TextDrag::canDecode(event));
+  if(Q3TextDrag::canDecode(event))
+    event->accept();
 }
 
 //Handle the drop part of a drag and drop event.
@@ -1985,12 +1988,14 @@ void karamba::dropEvent(QDropEvent* event)
   }
 }
 
-void karamba::toDesktop(int id, int menuid)
+void karamba::toDesktop(int id, QAction *action)
 {
   //qDebug("karamba::toDesktop");
   int i;
 
   desktop = id;
+  /*
+  KDE4
   for (i=0; ; i++)
   {
     int mid = toDesktopMenu->idAt(i);
@@ -1999,7 +2004,8 @@ void karamba::toDesktop(int id, int menuid)
 
     toDesktopMenu->setItemChecked(mid, false);
   }
-  toDesktopMenu->setItemChecked(menuid, true);
+  */
+  action->setChecked(true);
 
   if (desktop)
     info->setDesktop( desktop);
@@ -2022,19 +2028,19 @@ void karamba::toggleWidgetUpdate( bool b)
 }
 
 SignalBridge::SignalBridge(QObject* parent, QString name, KActionCollection* ac)
-  : QObject(parent, name.ascii()), collection(ac)
+  : QObject(parent), collection(ac)
 {
-  setObjectName(name.ascii());
+  setObjectName(name);
 }
 
 void SignalBridge::receive()
 {
-  emit enabled(name(), ((KToggleAction*)collection -> action(name())) ->
+  emit enabled(objectName(), ((KToggleAction*)collection -> action(objectName())) ->
 isChecked());
 }
 
 DesktopChangeSlot::DesktopChangeSlot(QObject *parent, int id)
-    : QObject(parent, "")
+    : QObject(parent)
 {
   desktopid = id;
 }
@@ -2045,50 +2051,48 @@ void DesktopChangeSlot::receive()
 
   // XXX - check type cast
 
-  k->toDesktop(desktopid, menuid);
+  k->toDesktop(desktopid, action);
 }
 
-void DesktopChangeSlot::setMenuId(int id)
+void DesktopChangeSlot::setAction(QAction* actionId)
 {
-  menuid = id;
+  action = actionId;
 }
 
-int DesktopChangeSlot::menuId()
+QAction *DesktopChangeSlot::menuAction()
 {
-  return menuid;
+  return action;
 }
 
 void karamba::showMenuExtension()
 {
   kglobal = new KMenu(this);
 
-  trayMenuToggleId = kglobal->insertItem(SmallIconSet("superkaramba"),
+  trayMenuToggle = kglobal->addAction(SmallIconSet("superkaramba"),
                                          i18n("Show System Tray Icon"), this,
                                          SLOT(slotToggleSystemTray()),
                                          Qt::CTRL+Qt::Key_S);
 
-  trayMenuThemeId = kglobal->insertItem(SmallIconSet("knewstuff"),
+  trayMenuTheme = kglobal->addAction(SmallIconSet("knewstuff"),
                                         i18n("&Manage Themes..."), this,
                                         SLOT(slotShowTheme()), Qt::CTRL+Qt::Key_M);
 
-  trayMenuQuitId = kglobal->insertItem(SmallIconSet("exit"),
+  trayMenuQuit = kglobal->addAction(SmallIconSet("exit"),
                                        i18n("&Quit SuperKaramba"), this,
                                        SLOT(slotQuit()), Qt::CTRL+Qt::Key_Q);
 
-  kglobal->polish();
-
-  trayMenuSeperatorId = kpop->insertSeparator();
-  kpop->insertItem("SuperKaramba", kglobal);
+  trayMenuSeperator = kpop->addSeparator();
+  kpop->addMenu(kglobal);
 }
 
 void karamba::hideMenuExtension()
 {
   if(kglobal)
   {
-    kpop->removeItem(trayMenuSeperatorId);
-    kglobal->removeItem(trayMenuToggleId);
-    kglobal->removeItem(trayMenuThemeId);
-    kglobal->removeItem(trayMenuQuitId);
+    kpop->removeAction(trayMenuSeperator);
+    kglobal->removeAction(trayMenuToggle);
+    kglobal->removeAction(trayMenuTheme);
+    kglobal->removeAction(trayMenuQuit);
 
     delete kglobal;
     kglobal = 0;

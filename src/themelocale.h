@@ -42,7 +42,7 @@ class ThemeLocale
     ThemeLocale(ThemeFile* theme);
     ~ThemeLocale();
 
-    QString translate(const char* text) const;
+    QString translate(QString text) const;
     void setLanguage(const QStringList &languages);
     QString language() const { return m_language; };
 

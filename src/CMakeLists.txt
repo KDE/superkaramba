@@ -1,7 +1,5 @@
 INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}  )
 
-ADD_DEFINITIONS(-DQT3_SUPPORT)
-
 ########### next target ###############
 
 SET(superkaramba_SRCS

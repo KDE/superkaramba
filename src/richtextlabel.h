@@ -59,7 +59,7 @@ class RichTextLabel : public Meter
     Q3SimpleRichText* text;
     QString source;
     QFont font;
-    QColorGroup colorGrp;
+    QPalette colorGrp;
     bool underlineLinks;
     QSize originalSize;
 };

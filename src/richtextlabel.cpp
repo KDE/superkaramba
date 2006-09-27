@@ -19,7 +19,7 @@ RichTextLabel::RichTextLabel(karamba* k) :
     Meter(k, 0, 0, 100, 100),
     text(0),
     source(""),
-    colorGrp(k->colorGroup()),
+    colorGrp(k->palette()),
     underlineLinks(false)
 {
   originalSize = QSize(0, 0);
