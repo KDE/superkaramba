@@ -408,7 +408,7 @@ bool ThemesDlg::filter(int index, QWidget* widget, void* data)
   ThemesDlg* dlg = (ThemesDlg*)(data);
   ThemeWidget* w = (ThemeWidget*)(widget);
 
-  if(dlg->comboShow->currentItem() == 1) // Running themes
+  if(dlg->comboShow->currentIndex() == 1) // Running themes
     if(w->instances() == 0)
       return false;
 
