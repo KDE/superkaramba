@@ -181,18 +181,17 @@ QStringList ThemeLocale::languageList()
 
   // same order as setlocale use
   // HPB: Only run splitLocale on the environment variables..
-  QStringList langs;
+  QList<QString> langs;
 
-  langs << QFile::decodeName(::getenv("LC_ALL"));
-  langs << QFile::decodeName(::getenv("LC_MESSAGES"));
-  langs << QFile::decodeName(::getenv("LANG"));
+  langs.append(QFile::decodeName(::getenv("LC_ALL")));
+  langs.append(QFile::decodeName(::getenv("LC_MESSAGES")));
+  langs.append(QFile::decodeName(::getenv("LANG")));
 
-  // KDE4 Needs testing
-  QStringList::Iterator it;
-  for(it = langs.begin(); it < langs.end(); ++it)
+  QString lang;
+  foreach(lang, langs)
   {
     QString ln, ct, chrset;
-    KLocale::splitLocale(*it, ln, ct, chrset);
+    KLocale::splitLocale(lang, ln, ct, chrset);
     /*
     We don't use these in zip themes...
     if (!ct.isEmpty())
@@ -202,7 +201,7 @@ QStringList ThemeLocale::languageList()
         langs.insert(it, ln + '_' + ct + '.' + chrset);
     }
     */
-    langs.insert(it, ln);
+    langs.insert(0, ln);
   }
   languageList += langs;
   // Remove empty strings
