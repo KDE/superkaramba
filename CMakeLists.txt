@@ -22,7 +22,6 @@ ADD_SUBDIRECTORY( src )
 ADD_SUBDIRECTORY( icons )
 ADD_SUBDIRECTORY( mimetypes )
 
-ADD_DEFINITIONS(QT3_SUPPORT)
 
 
 ########### install files ###############

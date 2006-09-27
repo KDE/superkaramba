@@ -29,7 +29,7 @@
 @author See README for the list of authors
 */
 
-class ThemeWidget : public QWidget, public Ui_ThemeWidgetLayout
+class ThemeWidget : public QWidget, public Ui::ThemeWidgetLayout
 {
     Q_OBJECT
   public:

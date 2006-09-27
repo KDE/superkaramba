@@ -28,8 +28,10 @@
 #include <QPixmap>
 
 ThemeWidget::ThemeWidget(QWidget *parent, const char *name)
-  : Ui_ThemeWidgetLayout(), m_themeFile(0)
+  : QWidget(parent), m_themeFile(0)
 {
+  setupUi(this);
+
   running->setText("");
   setDescriptionMaxHeight();
 }
@@ -37,6 +39,8 @@ ThemeWidget::ThemeWidget(QWidget *parent, const char *name)
 ThemeWidget::ThemeWidget(ThemeFile* tf)
   : m_themeFile(tf)
 {
+  setupUi(this);
+  
   QPixmap pixmap = m_themeFile->icon();
   if(!pixmap.isNull())
     iconLabel->setPixmap(pixmap);

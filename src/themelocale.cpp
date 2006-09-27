@@ -187,9 +187,9 @@ QStringList ThemeLocale::languageList()
   langs << QFile::decodeName(::getenv("LC_MESSAGES"));
   langs << QFile::decodeName(::getenv("LANG"));
 
-  for(QStringList::Iterator it = langs.begin();
-      it != langs.end();
-      ++it )
+  // KDE4 Needs testing
+  QStringList::Iterator it;
+  for(it = langs.begin(); it < langs.end(); ++it)
   {
     QString ln, ct, chrset;
     KLocale::splitLocale(*it, ln, ct, chrset);

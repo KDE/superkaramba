@@ -85,8 +85,8 @@ QString KarambaApplication::getMainKaramba()
     if (dcop.isMainKaramba())
       return *it;
   }
-  return QString::null;
   */
+  return QString::null;
 }
 
 bool KarambaApplication::themeExists(QString pretty_name)

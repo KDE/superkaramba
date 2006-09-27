@@ -54,8 +54,10 @@
 // KDE4 check the casts
 
 ThemesDlg::ThemesDlg(QWidget *parent, const char *name)
- : Ui_ThemesLayout()
+  : QDialog(parent)
 {
+  setupUi(this);
+
   populateListbox();
 #ifdef HAVE_KNEWSTUFF
   mNewStuff = 0;

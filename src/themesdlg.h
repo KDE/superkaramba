@@ -37,7 +37,7 @@ class SKNewStuff;
 class ThemeFile;
 class KArchiveDirectory;
 
-class ThemesDlg : public QWidget, public Ui_ThemesLayout
+class ThemesDlg : public QDialog, public Ui::ThemesLayout
 {
     Q_OBJECT
 
