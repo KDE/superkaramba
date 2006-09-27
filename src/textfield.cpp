@@ -104,7 +104,7 @@ int TextField::getFontSize() const
 
 void TextField::setAlignment( const QString &align )
 {
-    QString a = align.upper();
+    QString a = align.toUpper();
     if( a == "LEFT" || a.isEmpty() )
         alignment = Qt::AlignLeft;
     if( a == "RIGHT" )

@@ -135,7 +135,7 @@ int TextLabel::getFontSize() const
 
 void TextLabel::setAlignment( QString align )
 {
-    QString a = align.upper();
+    QString a = align.toUpper();
     if( a == "LEFT" || a.isEmpty() )
         alignment = Qt::AlignLeft;
     if( a == "RIGHT" )
@@ -178,7 +178,7 @@ void TextLabel::setScroll(char* type, QPoint speed, int gap, int pause)
 {
   ScrollType t = TextLabel::ScrollNone;
   QString a = type;
-  a = a.upper();
+  a = a.toUpper();
   if(a == "NONE")
     t = TextLabel::ScrollNone;
   else if( a == "NORMAL" )

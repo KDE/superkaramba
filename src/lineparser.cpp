@@ -38,7 +38,7 @@ void LineParser::set(const QString& line)
   m_line = line;
 
   rx.search(m_line);
-  m_meter = rx.cap(1).upper();
+  m_meter = rx.cap(1).toUpper();
 }
 
 int LineParser::getInt(QString w, int def) const
