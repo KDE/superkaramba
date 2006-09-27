@@ -151,7 +151,7 @@ bool ThemeFile::open()
   }
   else
   {
-    m_fl.setName(m_file);
+    m_fl.setFileName(m_file);
 
     if(m_fl.open(QIODevice::ReadOnly|QIODevice::Text))
     {

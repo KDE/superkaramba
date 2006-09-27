@@ -53,7 +53,7 @@ void RssSensor::update()
     if(KIO::NetAccess::download(KUrl(source), tmpFile))
 #endif
     {
-        file.setName(tmpFile);
+        file.setFileName(tmpFile);
         if ( file.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
             if ( doc.setContent( &file ) )

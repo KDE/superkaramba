@@ -96,7 +96,7 @@ karamba::karamba(QString fn, QString name, bool reloading, int instance, bool su
   kdDebug() << "Starting theme: " << m_theme.name()
             << " pretty name: " << prettyName << endl;
   QString qName = "karamba - " + prettyName;
-  setName(qName.ascii());
+  setObjectName(qName.ascii());
 
   KDirWatch *dirWatch = new KDirWatch( this );
   connect(dirWatch, SIGNAL( dirty( const QString & ) ),
@@ -607,7 +607,7 @@ bool karamba::parseConfig()
           tmp->parseImages(file, file_roll, x,y, xon, yon);
         tmp->setBackground(bg);
         if (!name.isEmpty())
-          tmp->setName(name.ascii());
+          tmp->setObjectName(name.ascii());
         if (!tiptext.isEmpty())
           tmp->setTooltip(tiptext);
 
@@ -672,7 +672,7 @@ bool karamba::parseConfig()
 
           QString name = lineParser.getString("NAME");
           if (!name.isEmpty())
-            tmp->setName(name.ascii());
+            tmp->setObjectName(name.ascii());
 
           setSensor(lineParser, (Meter*)tmp);
           meterList->append ( tmp );
@@ -706,7 +706,7 @@ bool karamba::parseConfig()
 
           QString name = lineParser.getString("NAME");
           if (!name.isEmpty())
-            tmp->setName(name.ascii());
+            tmp->setObjectName(name.ascii());
 
           setSensor(lineParser, (Meter*)tmp);
           clickList -> append(tmp);
@@ -719,7 +719,7 @@ bool karamba::parseConfig()
 
           QString name = lineParser.getString("NAME");
           if (!name.isEmpty())
-            tmp->setName(name.ascii());
+            tmp->setObjectName(name.ascii());
 
           tmp->setTextProps(tmpText);
           tmp->setValue(
@@ -740,7 +740,7 @@ bool karamba::parseConfig()
         tmp->setValue(lineParser.getInt("VALUE"));
         QString name = lineParser.getString("NAME");
         if (!name.isEmpty())
-          tmp->setName(name.ascii());
+          tmp->setObjectName(name.ascii());
         setSensor(lineParser, (Meter*)tmp );
         meterList->append ( tmp );
       }
@@ -754,7 +754,7 @@ bool karamba::parseConfig()
         tmp->setMin(lineParser.getInt("MIN", 0));
         QString name = lineParser.getString("NAME");
         if (!name.isEmpty())
-          tmp->setName(name.ascii());
+          tmp->setObjectName(name.ascii());
 
         tmp->setColor(lineParser.getColor("COLOR"));
 
@@ -2024,7 +2024,7 @@ void karamba::toggleWidgetUpdate( bool b)
 SignalBridge::SignalBridge(QObject* parent, QString name, KActionCollection* ac)
   : QObject(parent, name.ascii()), collection(ac)
 {
-  setName(name.ascii());
+  setObjectName(name.ascii());
 }
 
 void SignalBridge::receive()
