@@ -62,7 +62,7 @@ void SensorSensor::processExited(KProcess *)
 #endif
     while( it != stringList.end())
     {
-        rx.search( *it );
+        rx.indexIn( *it );
 
         if ( !rx.cap(0).isEmpty())
         {

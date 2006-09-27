@@ -33,7 +33,7 @@ CPUSensor::CPUSensor( QString cpu, int interval ) :
 {
     cpuNbr = cpu;
     QRegExp rx("^\\d+$");
-    if( rx.search( cpu.toLower() ) == -1)
+    if( rx.indexIn( cpu.toLower() ) == -1)
         cpuNbr = "";
     cpuNbr = "cpu"+cpuNbr;
     getCPULoad();
@@ -78,14 +78,14 @@ void CPUSensor::getTicks (long &u,long &s,long &n,long &i)
         Q3TextStream t( &file );        // use a text stream
         QRegExp rx( cpuNbr+"\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)");
         line = t.readLine();
-        rx.search( line );
+        rx.indexIn( line );
         
         /*
         KDE4
         
         while( (line = t.readLine()) !=0 && rx.cap(0) == "" )
         {
-            rx.search( line );
+            rx.indexIn( line );
         }
         //user
         u = rx.cap(1).toLong();

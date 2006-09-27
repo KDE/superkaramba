@@ -76,7 +76,7 @@ void ClickMap::mUpdate( QPainter *p )
 void ClickMap::setValue( QString v )
 {
     QRegExp rx("^http://", false );
-    if ( rx.search( v ) == -1 )
+    if ( rx.indexIn( v ) == -1 )
     {
         displays.append( v );
     }

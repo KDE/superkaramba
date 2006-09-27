@@ -109,7 +109,7 @@ int MemSensor::getMemTotal()
     return (mem / 1024);
 #else
     QRegExp rx( "MemTotal:\\s*(\\d+)" );
-    rx.search( meminfo );
+    rx.indexIn( meminfo );
     return ( rx.cap(1).toInt() );
 #endif
 }
@@ -133,7 +133,7 @@ int MemSensor::getMemFree()
     return pagetok(uvmexp.free);
 #else
     QRegExp rx( "MemFree:\\s*(\\d+)" );
-    rx.search( meminfo );
+    rx.indexIn( meminfo );
     return ( rx.cap(1).toInt() );
 #endif
 }
@@ -154,7 +154,7 @@ int MemSensor::getBuffers()
     return (buf_mem / 1024);
 #else
     QRegExp rx( "Buffers:\\s*(\\d+)" );
-    rx.search( meminfo );
+    rx.indexIn( meminfo );
     return ( rx.cap(1).toInt() );
 #endif
 }
@@ -172,8 +172,8 @@ int MemSensor::getCached()
 #else
     QRegExp rx1( "Cached:\\s*(\\d+)" );
     QRegExp rx2( "SwapCached:\\s*(\\d+)" );
-    rx1.search( meminfo );
-    rx2.search( meminfo );
+    rx1.indexIn( meminfo );
+    rx2.indexIn( meminfo );
     return ( rx1.cap(1).toInt() + rx2.cap(1).toInt() );
 #endif
 }
@@ -216,7 +216,7 @@ int MemSensor::getSwapTotal()
     return STotal;
 #else
     QRegExp rx( "SwapTotal:\\s*(\\d+)" );
-    rx.search( meminfo );
+    rx.indexIn( meminfo );
     return ( rx.cap(1).toInt() );
 #endif
 }
@@ -261,7 +261,7 @@ int MemSensor::getSwapFree()
     return SFree;
 #else
     QRegExp rx( "SwapFree:\\s*(\\d+)" );
-    rx.search( meminfo );
+    rx.indexIn( meminfo );
     return ( rx.cap(1).toInt() );
 #endif
 }

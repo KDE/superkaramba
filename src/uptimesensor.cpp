@@ -75,7 +75,7 @@ void UptimeSensor::update()
         file.close();
 
         QRegExp rx( "^\\d+" );
-        rx.search(line);
+        rx.indexIn(line);
         int uptime = rx.cap(0).toInt();
         int days = uptime / 86400;
         uptime -= days * 86400;

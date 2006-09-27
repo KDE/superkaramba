@@ -294,7 +294,7 @@ void ImageLabel::setValue(QString fn)
   QString fileName = *sList.begin();
   KUrl url(fileName);
   QRegExp rx("^[a-zA-Z]{1,5}:/",false);
-  bool protocol = (rx.search(fileName)!=-1)?true:false;
+  bool protocol = (rx.indexIn(fileName)!=-1)?true:false;
   QPixmap pm;
 
   if(protocol && url.isLocalFile() == false)
@@ -445,7 +445,7 @@ void ImageLabel::parseImages(QString fn, QString fn_roll, int _xoff,
   QString path;
 
   QRegExp rx("^http://",false);
-  bool fileOnNet = (rx.search(fileName)!=-1)?true:false;
+  bool fileOnNet = (rx.indexIn(fileName)!=-1)?true:false;
 
 
   if( fileInfo.isRelative() && !fileOnNet )
@@ -493,7 +493,7 @@ void ImageLabel::parseImages(QString fn, QString fn_roll, int _xoff,
   fileName = *sList.begin();
   fileInfo = QFileInfo( fileName );
 
-  fileOnNet = (rx.search(fileName)!=-1)?true:false;
+  fileOnNet = (rx.indexIn(fileName)!=-1)?true:false;
 
 
   if( fileInfo.isRelative() && !fileOnNet )

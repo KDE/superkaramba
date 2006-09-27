@@ -37,14 +37,14 @@ DiskSensor::~DiskSensor()
 int DiskSensor::getFreeSpace(QString mntPt) const
 {
     QRegExp rx( "^\\S*\\s*\\d+\\s+\\d+\\s+(\\d+)");
-    rx.search(mntMap[mntPt]);
+    rx.indexIn(mntMap[mntPt]);
     return rx.cap(1).toInt();
 }
 
 int DiskSensor::getUsedSpace(QString mntPt) const
 {
     QRegExp rx( "^\\S*\\s*\\d+\\s+(\\d+)\\s+\\d+");
-    rx.search(mntMap[mntPt]);
+    rx.indexIn(mntMap[mntPt]);
     return rx.cap(1).toInt();
 }
 
@@ -52,7 +52,7 @@ int DiskSensor::getTotalSpace(QString mntPt) const
 {
 
     QRegExp rx( "^\\S*\\s*(\\d+)\\s+\\d+\\s+\\d+");
-    rx.search(mntMap[mntPt]);
+    rx.indexIn(mntMap[mntPt]);
 
     return rx.cap(1).toInt();
 
@@ -61,7 +61,7 @@ int DiskSensor::getTotalSpace(QString mntPt) const
 int DiskSensor::getPercentUsed(QString mntPt) const
 {
     QRegExp rx( "\\s+(\\d+)%\\s+");
-    rx.search(mntMap[mntPt]);
+    rx.indexIn(mntMap[mntPt]);
     return rx.cap(1).toInt();
 }
 
@@ -88,7 +88,7 @@ void DiskSensor::processExited(KProcess *)
 
     while( it != stringList.end())
     {
-        rx.search( *it );
+        rx.indexIn( *it );
         if ( !rx.cap(0).isEmpty())
         {
             mntMap[rx.cap(1)] = *it;

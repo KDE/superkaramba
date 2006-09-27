@@ -117,7 +117,7 @@ void NetworkSensor::getInOutBytes ( unsigned long &in,unsigned long &out) const
         if ( line.contains( device ) )
         {
             QRegExp rx( "\\W+"+device+":\\D*(\\d+)(?:\\D+\\d+){7}\\D+(\\d+)", false);
-            rx.search(line);
+            rx.indexIn(line);
             in = rx.cap(1).toULong();
             out = rx.cap(2).toULong();
        }
