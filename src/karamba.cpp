@@ -1336,7 +1336,7 @@ void karamba::meterClicked(QMouseEvent* e, Meter* meter)
 void karamba::changeInterval(int interval)
 {
   if (m_sysTimer != NULL)
-    m_sysTimer->changeInterval(interval);
+    m_sysTimer->setInterval(interval);
 }
 
 void karamba::passClick(QMouseEvent *e)
