@@ -20,7 +20,7 @@
 
 NetworkSensor::NetworkSensor( QString dev, int interval ):Sensor( interval )
 {
-   device = dev.lower();
+   device = dev.toLower();
 
 #ifdef __FreeBSD__
    /* Determine number of interfaces */

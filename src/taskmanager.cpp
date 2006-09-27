@@ -356,7 +356,7 @@ Task::Task(WId win, TaskManager * parent, const char *name) :
   // try to guess the icon from the classhint
    
   if(_pixmap.isNull())
-    KGlobal::instance()->iconLoader()->loadIcon(className().lower(),
+    KGlobal::instance()->iconLoader()->loadIcon(className().toLower(),
             K3Icon::Small,K3Icon::Small,
             K3Icon::DefaultState, 0, true);
 
@@ -384,7 +384,7 @@ void Task::refresh(bool icon)
     // try to guess the icon from the classhint
     if(_pixmap.isNull())
     {
-        KGlobal::instance()->iconLoader()->loadIcon(className().lower(),
+        KGlobal::instance()->iconLoader()->loadIcon(className().toLower(),
             K3Icon::Small, K3Icon::Small, K3Icon::DefaultState, 0, true);
     }
 

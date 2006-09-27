@@ -33,7 +33,7 @@ CPUSensor::CPUSensor( QString cpu, int interval ) :
 {
     cpuNbr = cpu;
     QRegExp rx("^\\d+$");
-    if( rx.search( cpu.lower() ) == -1)
+    if( rx.search( cpu.toLower() ) == -1)
         cpuNbr = "";
     cpuNbr = "cpu"+cpuNbr;
     getCPULoad();

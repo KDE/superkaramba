@@ -412,16 +412,16 @@ bool ThemesDlg::filter(int index, QWidget* widget, void* data)
     if(w->instances() == 0)
       return false;
 
-  QString searchText = dlg->editSearch->text().lower();
+  QString searchText = dlg->editSearch->text().toLower();
   if(searchText.isEmpty())
   {
     return true;
   }
   else
   {
-    if(w->themeName->text().lower().contains(searchText))
+    if(w->themeName->text().toLower().contains(searchText))
       return true;
-    if(w->description->text().lower().contains(searchText))
+    if(w->description->text().toLower().contains(searchText))
       return true;
   }
   return false;

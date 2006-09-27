@@ -83,7 +83,7 @@ QString LineParser::getString(QString w, QString def) const
 
 bool LineParser::getBoolean(QString w, bool def) const
 {
-  QString boolean = getString(w, "-").lower();
+  QString boolean = getString(w, "-").toLower();
   if(boolean == "-")
     return def;
   else if (boolean == "true") // true / false
