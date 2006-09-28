@@ -91,7 +91,7 @@ void TextLabel::calculateTextSize()
 
 void TextLabel::setValue( QString text)
 {
-    value = QStringList::split('\n',text);
+    value = text.split('\n');
     calculateTextSize();
 }
 
@@ -230,10 +230,10 @@ int TextLabel::drawText(QPainter *p, int x, int y, int width, int height,
   {
     p->setPen(getBGColor());
     p->drawText(x + shadow, y + shadow, width, height,
-                alignment | clip | Qt::ExpandTabs, text);
+                alignment | clip | Qt::TextExpandTabs, text);
   }
   p->setPen(getColor());
-  p->drawText(x, y, width, height, alignment | clip | Qt::ExpandTabs, text);
+  p->drawText(x, y, width, height, alignment | clip | Qt::TextExpandTabs, text);
   return 0;
 }
 
@@ -323,11 +323,11 @@ void TextLabel::mUpdate(QPainter *p)
       // Draw more instances of text if scroll type is normal scroll
       if(scrollType == ScrollNormal)
       {
-        textRect.addCoords(next.x(), next.y(), next.x(), next.y());
+        textRect.adjust(next.x(), next.y(), next.x(), next.y());
         while(textRect.intersects(meterRect))
         {
           drawText(p, textRect.x(), textRect.y() + i, width, height, *it);
-          textRect.addCoords(next.x(), next.y(), next.x(), next.y());
+          textRect.adjust(next.x(), next.y(), next.x(), next.y());
         }
       }
       i += lineHeight;

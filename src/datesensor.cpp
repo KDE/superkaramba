@@ -12,8 +12,9 @@
 #include <qapplication.h>
 //Added by qt3to4:
 #include <QMouseEvent>
-#include <Q3Frame>
 #include <QKeyEvent>
+#include <QVBoxLayout>
+
 DateSensor::DateSensor( int interval ) : Sensor( interval )
 {
 	hidden = true;
@@ -57,13 +58,16 @@ void DateSensor::slotCalendarDeleted()
 
 
 DatePicker::DatePicker(QWidget *parent)
-    : Q3VBox( parent, 0, Qt::WType_TopLevel | Qt::WDestructiveClose |
-             Qt::WStyle_Customize | Qt::WStyle_StaysOnTop | Qt::WStyle_NoBorder )
+  : QWidget(parent, Qt::Window | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint)
 {
-    setFrameStyle( Q3Frame::PopupPanel | Q3Frame::Raised );
-    //KWin::setOnAllDesktops( handle(), true );
-    picker = new KDatePicker(this);
+    setAttribute(Qt::WA_DeleteOnClose);
+
+    picker = new KDatePicker();
     picker->setCloseButton(true);
+
+    QVBoxLayout *layout = new QVBoxLayout;
+    layout->addWidget(picker);
+    setLayout(layout);
 
     /* name and icon for kicker's taskbar */
     //setCaption(i18n("Calendar"));
@@ -72,7 +76,7 @@ DatePicker::DatePicker(QWidget *parent)
 
 void DatePicker::keyReleaseEvent(QKeyEvent *e)
 {
-        Q3VBox::keyReleaseEvent(e);
+        QWidget::keyReleaseEvent(e);
         if (e->key() == Qt::Key_Escape)
                 close();
 }

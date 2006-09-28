@@ -152,12 +152,12 @@ void CPUSensor::update()
       {
         format = "%v";
       }
-      format.replace( QRegExp("%load", false), QString::number( load ) );
-      format.replace( QRegExp("%user", false), QString::number( user ) );
-      format.replace( QRegExp("%nice", false), QString::number( nice ) );
-      format.replace( QRegExp("%idle", false), QString::number( idle ) );
-      format.replace( QRegExp("%system", false), QString::number( system ) );
-      format.replace( QRegExp("%v", false), QString::number( load ) );
+      format.replace( QRegExp("%load", Qt::CaseInsensitive), QString::number( load ) );
+      format.replace( QRegExp("%user", Qt::CaseInsensitive), QString::number( user ) );
+      format.replace( QRegExp("%nice", Qt::CaseInsensitive), QString::number( nice ) );
+      format.replace( QRegExp("%idle", Qt::CaseInsensitive), QString::number( idle ) );
+      format.replace( QRegExp("%system", Qt::CaseInsensitive), QString::number( system ) );
+      format.replace( QRegExp("%v", Qt::CaseInsensitive), QString::number( load ) );
 
       meter->setValue( format );
     }

@@ -18,7 +18,7 @@
 #include <kdatepicker.h>
 #include <q3vbox.h>
 
-class DatePicker : public Q3VBox
+class DatePicker : public QWidget
 {
 public:
 	DatePicker(QWidget*);

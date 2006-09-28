@@ -116,14 +116,14 @@ void NetworkSensor::getInOutBytes ( unsigned long &in,unsigned long &out) const
         
         if ( line.contains( device ) )
         {
-            QRegExp rx( "\\W+"+device+":\\D*(\\d+)(?:\\D+\\d+){7}\\D+(\\d+)", false);
+            QRegExp rx( "\\W+"+device+":\\D*(\\d+)(?:\\D+\\d+){7}\\D+(\\d+)", Qt::CaseInsensitive);
             rx.indexIn(line);
             in = rx.cap(1).toULong();
             out = rx.cap(2).toULong();
        }
         else
         {
-            qDebug("Network sensor: can not find %s", device.ascii());
+            qDebug("Network sensor: can not find %s", device.toAscii().constData());
             in = 0;
             out = 0;
         }

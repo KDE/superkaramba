@@ -318,17 +318,17 @@ void MemSensor::update()
             format = "%um";
         }
 
-        format.replace( QRegExp("%fmb", false), QString::number( (int)(( totalMem - usedMemNoBuffers)/1024.0+0.5)));
-        format.replace( QRegExp("%fm", false), QString::number( (int)( ( totalMem - usedMem  )/1024.0+0.5) ));
+        format.replace( QRegExp("%fmb", Qt::CaseInsensitive), QString::number( (int)(( totalMem - usedMemNoBuffers)/1024.0+0.5)));
+        format.replace( QRegExp("%fm", Qt::CaseInsensitive), QString::number( (int)( ( totalMem - usedMem  )/1024.0+0.5) ));
 
-        format.replace( QRegExp("%umb", false), QString::number( (int)((usedMemNoBuffers)/1024.0+0.5)));
-        format.replace( QRegExp("%um", false), QString::number( (int)((usedMem)/1024.0+0.5 )));
+        format.replace( QRegExp("%umb", Qt::CaseInsensitive), QString::number( (int)((usedMemNoBuffers)/1024.0+0.5)));
+        format.replace( QRegExp("%um", Qt::CaseInsensitive), QString::number( (int)((usedMem)/1024.0+0.5 )));
 
-        format.replace( QRegExp("%tm", false), QString::number( (int)( (totalMem)/1024.0+0.5)));
+        format.replace( QRegExp("%tm", Qt::CaseInsensitive), QString::number( (int)( (totalMem)/1024.0+0.5)));
 
-        format.replace( QRegExp("%fs", false), QString::number( (int)((totalSwap - usedSwap)/1024.0+0.5)));
-        format.replace( QRegExp("%us", false), QString::number( (int)(usedSwap/1024.0+0.5)));
-        format.replace( QRegExp("%ts", false), QString::number( (int)(totalSwap/1024.0+0.5)));
+        format.replace( QRegExp("%fs", Qt::CaseInsensitive), QString::number( (int)((totalSwap - usedSwap)/1024.0+0.5)));
+        format.replace( QRegExp("%us", Qt::CaseInsensitive), QString::number( (int)(usedSwap/1024.0+0.5)));
+        format.replace( QRegExp("%ts", Qt::CaseInsensitive), QString::number( (int)(totalSwap/1024.0+0.5)));
 
         meter->setValue(format);
     }
