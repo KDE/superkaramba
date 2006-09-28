@@ -56,7 +56,7 @@ template class Q3PtrList<Task>;
 KWinModule* kwin_module = 0;
 
 TaskManager::TaskManager(QObject *parent, const char *name)
-    : QObject(parent, name), _active(0), _startup_info( NULL )
+    : QObject(parent), _active(0), _startup_info( NULL )
 {
 
     kwin_module = new KWinModule();
@@ -340,7 +340,7 @@ bool TaskManager::isOnTop(const Task* task)
 
 
 Task::Task(WId win, TaskManager * parent, const char *name) :
-  QObject(parent, name),
+  QObject(parent),
   _active(false), _win(win),
   _lastWidth(0), _lastHeight(0), _lastResize(false), _lastIcon(),
   _thumbSize(0.2), _thumb(), _grab()
@@ -392,7 +392,7 @@ void Task::refresh(bool icon)
     if (_pixmap.isNull())
       _pixmap = SmallIcon("kcmx");
 
-    _lastIcon.resize(0,0);
+    _lastIcon = QPixmap(0, 0);
     emit iconChanged();
   }
   emit changed();
@@ -805,16 +805,16 @@ void Task::generateThumbnail()
    width = width * _thumbSize;
    height = height * _thumbSize;
 
-   img = img.smoothScale( (int) width, (int) height );
-   _thumb = img;
-   _grab.resize( 0, 0 ); // Makes grab a null image.
+   img = img.scaled((int)width, (int)height, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+   _thumb = QPixmap::fromImage(img);
+   _grab = QPixmap(0, 0);
 
    emit thumbnailChanged();
 }
 
 Startup::Startup( const KStartupInfoId& id, const KStartupInfoData& data,
-    QObject * parent, const char *name)
-    : QObject(parent, name), _id( id ), _data( data )
+    QObject *parent)
+    : QObject(parent), _id( id ), _data( data )
 {
 }
 

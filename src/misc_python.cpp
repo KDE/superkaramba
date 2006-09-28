@@ -83,9 +83,9 @@ PyObject* py_run_command(PyObject*, PyObject* args)
   QString c;
   QString i;
 
-  n.setAscii(name);
-  c.setAscii(command);
-  i.setAscii(icon);
+  n = QString::fromAscii(name);
+  c = QString::fromAscii(command);
+  i = QString::fromAscii(icon);
 
   KService svc(n, c, i);
   KUrl::List l;
@@ -219,27 +219,27 @@ PyObject* py_attach_clickArea(PyObject*, PyObject* args, PyObject* dict)
   QString lB, mB, rB;
   if (LeftButton != NULL)
   {
-      lB.setAscii(LeftButton);
+      lB = QString::fromAscii(LeftButton);
   }
   else
   {
-      lB.setAscii("");
+      lB = QString::fromAscii("");
   }
   if (MiddleButton != NULL)
   {
-      mB.setAscii(MiddleButton);
+      mB = QString::fromAscii(MiddleButton);
   }
   else
   {
-      mB.setAscii("");
+      mB = QString::fromAscii("");
   }
   if (RightButton != NULL)
   {
-       rB.setAscii(RightButton);
+       rB = QString::fromAscii(RightButton);
   }
   else
   {
-       rB.setAscii("");
+       rB = QString::fromAscii("");
   }
   return Py_BuildValue((char*)"l", attachClickArea(widget, meter, lB, mB, rB));
 }
@@ -334,7 +334,7 @@ long removeClickArea(long widget, long click) {
   karamba* currTheme = (karamba*)widget;
   ClickArea *tmp = (ClickArea*)click;
 
-  currTheme -> clickList -> remove(tmp);
+  currTheme -> clickList -> removeAll(tmp);
 
   delete tmp;
   return (long)tmp;
@@ -349,9 +349,9 @@ long createServiceClickArea(long widget, long x, long y, long w, long h, char *n
   QString e;
   QString i;
 
-  n.setAscii(name);
-  e.setAscii(exec);
-  i.setAscii(icon);
+  n = QString::fromAscii(name);
+  e = QString::fromAscii(exec);
+  i = QString::fromAscii(icon);
 
   tmp->setServiceOnClick(n, e, i);
 
@@ -365,7 +365,7 @@ long createClickArea(long widget, long x, long y, long w, long h, char* text) {
   ClickArea *tmp = new ClickArea(currTheme, x, y, w, h );
   QString onclick;
 
-  onclick.setAscii(text);
+  onclick = QString::fromAscii(text);
 
   tmp->setOnClick(onclick );
 
@@ -446,7 +446,7 @@ long openNamedTheme(char* path, char *name, bool is_sub_theme) {
   QString filename;
   karamba* currTheme = 0;
 
-  filename.setAscii(path);
+  filename = QString::fromAscii(path);
 
   QFileInfo file( filename );
 
@@ -471,7 +471,7 @@ long openTheme(char* path)
   QString filename;
   karamba* currTheme = 0;
 
-  filename.setAscii(path);
+  filename = QString::fromAscii(path);
 
   QFileInfo file( filename );
 

@@ -239,7 +239,7 @@ bool ThemeFile::set(const KUrl &url)
       }
     }
     if(!KIO::NetAccess::file_copy(url, localFile.filePath(), -1, true,
-      false, kapp->mainWidget()))
+        false, kapp->activeWindow()))
     {
       return false;
     }
@@ -271,7 +271,7 @@ bool ThemeFile::set(const KUrl &url)
   }
   else
   {
-    m_path = fi.dirPath(true) + "/";
+    m_path = fi.absoluteDir().absolutePath() + "/";
     m_zipTheme = false;
   }
   parseXml();
@@ -334,9 +334,9 @@ void ThemeFile::parseXml()
 bool ThemeFile::canUninstall() const
 {
   QFileInfo fi(file());
-  if(fi.permission(QFileInfo::WriteUser) ||
-     fi.permission(QFileInfo::WriteGroup) ||
-     fi.permission(QFileInfo::WriteOther))
+  if(fi.permission(QFile::WriteUser) ||
+     fi.permission(QFile::WriteGroup) ||
+     fi.permission(QFile::WriteOther))
     return true;
   return false;
 }
@@ -398,7 +398,7 @@ bool ThemeFile::isZipFile(const QString& filename)
   {
     unsigned char buf[5];
 
-    if(file.readBlock((char*)buf, 4) == 4)
+    if(file.read((char*)buf, 4) == 4)
     {
       if(buf[0] == 'P' && buf[1] == 'K' && buf[2] == 3 && buf[3] == 4)
         return true;

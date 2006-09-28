@@ -379,8 +379,7 @@ class Startup: public QObject
     Q_PROPERTY( QString icon READ icon )
 
 public:
-    Startup( const KStartupInfoId& id, const KStartupInfoData& data, QObject * parent,
-        const char *name = 0);
+    Startup( const KStartupInfoId& id, const KStartupInfoData& data, QObject * parent);
     virtual ~Startup();
 
     /**

@@ -188,6 +188,10 @@ private:
   int xoff,xon;
   int yoff,yon;
   QString imagePath;
+
+  QString toolTipText;
+
+  bool event(QEvent *event);
 };
 
 #endif // IMAGELABEL_H

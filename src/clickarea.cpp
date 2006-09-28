@@ -46,7 +46,7 @@ bool ClickArea::click( QMouseEvent *e )
 	{
 		QString program;
 		program = onClick;
-		program.replace( QRegExp("%v", false), value );
+                program.replace( QRegExp("%v", Qt::CaseInsensitive), value );
 
 		if( !program.isEmpty() )
 		{

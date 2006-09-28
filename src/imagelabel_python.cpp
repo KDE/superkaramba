@@ -54,7 +54,7 @@ ImageLabel* createImageLabel(karamba *theme, long x, long y,
   
   if(path)
   {
-    file.setAscii(path);
+    file = QString::fromAscii(path);
     tmp->setValue(file);
     //tmp->parseImages(file, fakefile, x,y, 0, 0);
   }

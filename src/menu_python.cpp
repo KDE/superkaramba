@@ -116,17 +116,17 @@ PyObject* py_delete_menu(PyObject *, PyObject *args)
   return Py_BuildValue((char*)"l", deleteMenu(widget, menu));
 }
 
-long addMenuItem(long widget, long menu, QString text, QString icon)
+QAction *addMenuItem(long widget, long menu, QString text, QString icon)
 {
   karamba* currTheme = (karamba*)widget;
   KMenu* tmp = (KMenu*)menu;
 
-  long id = 0;
+  QAction *action = 0;
   if(menuExists(currTheme, tmp))
   {
-    id = tmp->insertItem(SmallIconSet(icon), text);
+    action = tmp->addAction(SmallIconSet(icon), text);
   }
-  return id;
+  return action;
 }
 
 PyObject* py_add_menu_item(PyObject *, PyObject *args)
@@ -138,23 +138,23 @@ PyObject* py_add_menu_item(PyObject *, PyObject *args)
     return NULL;
   QString icon;
   QString text;
-  icon.setAscii(i);
+  icon = QString::fromAscii(i);
   text = PyString2QString(t);
   return Py_BuildValue((char*)"l", addMenuItem(widget, menu, text, icon));
 }
 
-long addMenuSeparator(long widget, long menu)
+QAction* addMenuSeparator(long widget, long menu)
 {
   karamba* currTheme = (karamba*)widget;
   KMenu* tmp = (KMenu*)menu;
 
-  long id = 0;
+  QAction *sep = 0;
   if(menuExists(currTheme, tmp))
   {
-    id = tmp->insertSeparator();
+    sep = tmp->addSeparator();
   }
 
-  return id;
+  return sep;
 }
 
 PyObject* py_add_menu_separator(PyObject *, PyObject *args)
@@ -167,14 +167,14 @@ PyObject* py_add_menu_separator(PyObject *, PyObject *args)
   return Py_BuildValue((char*)"l", addMenuSeparator(widget, menu));
 }
 
-long removeMenuItem(long widget, long menu, long id)
+long removeMenuItem(long widget, long menu, QAction *action)
 {
   karamba* currTheme = (karamba*)widget;
   KMenu* tmp = (KMenu*)menu;
 
   if(menuExists(currTheme,tmp))
   {
-    tmp->removeItem(id);
+    tmp->removeAction(action);
     return 1;
   }
   else
@@ -188,7 +188,7 @@ PyObject* py_remove_menu_item(PyObject *, PyObject *args)
   long widget, menu, id;
   if (!PyArg_ParseTuple(args, (char*)"lll:removeMenuItem", &widget, &menu, &id))
     return NULL;
-  return Py_BuildValue((char*)"l", removeMenuItem(widget, menu, id));
+  return Py_BuildValue((char*)"l", removeMenuItem(widget, menu, (QAction*)id));
 }
 
 long popupMenu(long widget, long menu, long x, long y)

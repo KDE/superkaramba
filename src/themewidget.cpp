@@ -63,9 +63,16 @@ ThemeWidget::~ThemeWidget()
 
 int ThemeWidget::addInstance()
 {
+  /*
   int i = 1;
   while(m_instancePool.find(i) != m_instancePool.end())
     ++i;
+  */
+
+  int i = 1;
+  while(m_instancePool.indexOf(i) >= 0)
+    ++i;
+
   m_instancePool.append(i);
   updateRunning();
   return i;
@@ -73,7 +80,7 @@ int ThemeWidget::addInstance()
 
 void ThemeWidget::removeInstance(int instance)
 {
-  m_instancePool.remove(instance);
+  m_instancePool.removeAll(instance);
   updateRunning();
 }
 

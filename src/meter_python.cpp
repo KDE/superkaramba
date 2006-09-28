@@ -62,7 +62,7 @@ bool checkMeter(long widget, long meter, const char* type)
     PyErr_SetString(PyExc_ValueError, tmp.toAscii().constData());
     return false;
   }
-  if (!((QObject*)meter)->isA(type))
+  if (!((QObject*)meter)->inherits(type))
   {
     QString tmp;
 
@@ -80,12 +80,12 @@ bool checkKarambaAndMeter(long widget, long meter, const char* type)
 
 // This just throws awya extra bytes.
 // I guess there is a better way to do this...
-QString fromUcs4(Q_UINT32* ucs4)
+QString fromUcs4(quint32* ucs4)
 {
   QString result = "";
   while(*ucs4 != 0)
   {
-    result += QChar((Q_UINT16)*ucs4);
+    result += QChar((quint16)*ucs4);
     ++ucs4;
   }
   return result;
@@ -98,15 +98,15 @@ QString PyString2QString(PyObject* text)
     if (PyString_CheckExact(text))
     {
         char* t = PyString_AsString(text);
-        qtext.setAscii(t);
+        qtext = QString::fromAscii(t);
     }
     else if (PyUnicode_CheckExact(text))
     {
         Py_UNICODE* t = PyUnicode_AsUnicode(text);
         if(sizeof(Py_UNICODE) == 4)
-          qtext = fromUcs4((Q_UINT32*)t);
+          qtext = fromUcs4((quint32*)t);
         else
-          qtext = QString::fromUcs2((Q_UINT16*)t);
+          qtext.setUtf16((quint16*)t, sizeof(t) / 4);
     }
     else
     {
@@ -163,7 +163,7 @@ long getMeter(long widget, char* name)
   QObject *meter;
   foreach(meter, *theme->meterList)
   {
-    if (strcmp(((Meter*) meter)->name(), name) == 0)
+    if(((Meter*) meter)->objectName() == name)
       return (long)meter;
   }
 

@@ -80,7 +80,7 @@ void DiskSensor::receivedStdout(KProcess *, char *buffer, int len )
 
 void DiskSensor::processExited(KProcess *)
 {
-    QStringList stringList = QStringList::split('\n',sensorResult);
+  QStringList stringList = sensorResult.split('\n');
     sensorResult = "";
     QStringList::Iterator it = stringList.begin();
     //QRegExp rx( "^(/dev/).*(/\\S*)$");
@@ -116,31 +116,31 @@ void DiskSensor::processExited(KProcess *)
       {
         format = "%u";
       }
-      format.replace( QRegExp("%fp", false),QString::number(getPercentFree(mntPt)));
-      format.replace( QRegExp("%fg",false),
+      format.replace( QRegExp("%fp", Qt::CaseInsensitive),QString::number(getPercentFree(mntPt)));
+      format.replace( QRegExp("%fg",Qt::CaseInsensitive),
                       QString::number(getFreeSpace(mntPt)/(1024*1024)));
-      format.replace( QRegExp("%fkb",false),
+      format.replace( QRegExp("%fkb",Qt::CaseInsensitive),
                       QString::number(getFreeSpace(mntPt)*8) );
-      format.replace( QRegExp("%fk",false),
+      format.replace( QRegExp("%fk",Qt::CaseInsensitive),
                       QString::number(getFreeSpace(mntPt)) );
-      format.replace( QRegExp("%f", false),QString::number(getFreeSpace(mntPt)/1024));
+      format.replace( QRegExp("%f", Qt::CaseInsensitive),QString::number(getFreeSpace(mntPt)/1024));
 
-      format.replace( QRegExp("%up", false),QString::number(getPercentUsed(mntPt)));
-      format.replace( QRegExp("%ug",false),
+      format.replace( QRegExp("%up", Qt::CaseInsensitive),QString::number(getPercentUsed(mntPt)));
+      format.replace( QRegExp("%ug",Qt::CaseInsensitive),
                       QString::number(getUsedSpace(mntPt)/(1024*1024)));
-      format.replace( QRegExp("%ukb",false),
+      format.replace( QRegExp("%ukb",Qt::CaseInsensitive),
                       QString::number(getUsedSpace(mntPt)*8) );
-      format.replace( QRegExp("%uk",false),
+      format.replace( QRegExp("%uk",Qt::CaseInsensitive),
                       QString::number(getUsedSpace(mntPt)) );
-      format.replace( QRegExp("%u", false),QString::number(getUsedSpace(mntPt)/1024));
+      format.replace( QRegExp("%u", Qt::CaseInsensitive),QString::number(getUsedSpace(mntPt)/1024));
 
-      format.replace( QRegExp("%tg",false),
+      format.replace( QRegExp("%tg",Qt::CaseInsensitive),
                       QString::number(getTotalSpace(mntPt)/(1024*1024)));
-      format.replace( QRegExp("%tkb",false),
+      format.replace( QRegExp("%tkb",Qt::CaseInsensitive),
                       QString::number(getTotalSpace(mntPt)*8));
-      format.replace( QRegExp("%tk",false),
+      format.replace( QRegExp("%tk",Qt::CaseInsensitive),
                       QString::number(getTotalSpace(mntPt)));
-      format.replace( QRegExp("%t", false),QString::number(getTotalSpace(mntPt)/1024));
+      format.replace( QRegExp("%t", Qt::CaseInsensitive),QString::number(getTotalSpace(mntPt)/1024));
 
       meter->setValue(format);
     }

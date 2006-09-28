@@ -165,8 +165,6 @@ ImageLabel::~ImageLabel()
   }
   if(!old_tip_rect.isNull())
   {
-    //QToolTip::remove(m_karamba, old_tip_rect);  KDE4
-    QToolTip::remove(m_karamba);
   }
 }
 
@@ -244,14 +242,13 @@ void ImageLabel::applyTransformations(bool useSmoothScale)
         // KDE and QT seem to miss a high quality image rotation
         QMatrix rotMat;
         rotMat.rotate(rot_angle);
-        pixmap = pixmap.xForm(rotMat);
+        pixmap = pixmap.transformed(rotMat);
     }
     if (doScale)
     {
         if (m_karamba -> useSmoothTransforms() || useSmoothScale)
         {
-            pixmap.convertFromImage(
-              pixmap.toImage().smoothScale(scale_w, scale_h));
+          pixmap = QPixmap::fromImage(pixmap.toImage().scaled(scale_w, scale_h, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
         }
         else
         {
@@ -259,7 +256,7 @@ void ImageLabel::applyTransformations(bool useSmoothScale)
             double heightFactor = ((double)scale_h) / ((double)pixmap.height());
             QMatrix scaleMat;
             scaleMat.scale(widthFactor, heightFactor);
-            pixmap = pixmap.xForm(scaleMat);
+            pixmap = pixmap.transformed(scaleMat);
         }
     }
     if (imageEffect != 0)
@@ -290,10 +287,10 @@ void ImageLabel::slotCopyResult(KIO::Job* job)
 void ImageLabel::setValue(QString fn)
 {
   // use the first line
-  QStringList sList = QStringList::split( "\n", fn );
+  QStringList sList = fn.split("\n");
   QString fileName = *sList.begin();
   KUrl url(fileName);
-  QRegExp rx("^[a-zA-Z]{1,5}:/",false);
+  QRegExp rx("^[a-zA-Z]{1,5}:/",Qt::CaseInsensitive);
   bool protocol = (rx.indexIn(fileName)!=-1)?true:false;
   QPixmap pm;
 
@@ -439,12 +436,12 @@ void ImageLabel::parseImages(QString fn, QString fn_roll, int _xoff,
   yon = _yon;
 
   // use the first line
-  QStringList sList = QStringList::split( "\n", fn );
+  QStringList sList = fn.split("\n");
   QString fileName = *sList.begin();
   QFileInfo fileInfo( fileName );
   QString path;
 
-  QRegExp rx("^http://",false);
+  QRegExp rx("^http://", Qt::CaseInsensitive);
   bool fileOnNet = (rx.indexIn(fileName)!=-1)?true:false;
 
 
@@ -489,7 +486,7 @@ void ImageLabel::parseImages(QString fn, QString fn_roll, int _xoff,
     return;
 
   rollover=true;
-  sList = QStringList::split( "\n", fn_roll );
+  sList = fn_roll.split("\n");
   fileName = *sList.begin();
   fileInfo = QFileInfo( fileName );
 
@@ -577,9 +574,7 @@ void ImageLabel::rolloverImage(QMouseEvent *e)
 
 void ImageLabel::setTooltip(QString txt)
 {
-  QRect rect(getX(),getY(),pixmapWidth,pixmapHeight);
-  QToolTip::add(m_karamba, rect, txt);
-  old_tip_rect = QRect(rect.topLeft(), rect.bottomRight());
+  toolTipText = txt;
 }
 
 
@@ -642,6 +637,14 @@ void ImageLabel::attachClickArea(QString leftMouseButton,
     leftButtonAction = leftMouseButton;
     middleButtonAction = middleMouseButton;
     rightButtonAction = rightMouseButton;
+}
+
+bool ImageLabel::event(QEvent *event)
+{
+  if(event->type() == QEvent::ToolTip)
+    QToolTip::showText(QPoint(getX(),getY()), toolTipText, m_karamba);
+
+  return true;
 }
 
 #include "imagelabel.moc"

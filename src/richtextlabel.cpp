@@ -14,6 +14,7 @@
 #include "richtextlabel.h"
 //Added by qt3to4:
 #include <QMouseEvent>
+#include <QColorGroup>
 
 RichTextLabel::RichTextLabel(karamba* k) :
     Meter(k, 0, 0, 100, 100),
@@ -29,7 +30,7 @@ RichTextLabel::RichTextLabel(karamba* k, int x, int y, int w, int h) :
     Meter(k, x, y, w, h),
     text(0),
     source(""),
-    colorGrp(k->colorGroup()),
+    colorGrp(k->palette()),
     underlineLinks(false)
 {
   kDebug() << k_funcinfo << x << ", " << y << ", " << w << ", " << h << endl;
@@ -129,7 +130,7 @@ void RichTextLabel::setTextProps(TextField* t)
   {
     setFontSize(t->getFontSize());
     setFont(t->getFont());
-    colorGrp.setColor(QColorGroup::Text, t->getColor());
+    colorGrp.setColor(QPalette::Text, t->getColor());
   }
 }
 
@@ -154,7 +155,7 @@ void RichTextLabel::mUpdate(QPainter* p)
   int w = getWidth();
   int h = getHeight();
   QRect clipRect(x, y, w, h);
-  text->draw(p, x, y, clipRect, colorGrp, 0 /* no background */);
+  //text->draw(p, x, y, clipRect, grp, 0 /* no background */);  // KDE4
 }
 
 bool RichTextLabel::click(QMouseEvent* e)
@@ -201,12 +202,12 @@ bool RichTextLabel::insideActiveArea(int x, int y)
   return text->anchorAt(point) != ""; // && text -> inText(point);
 }
 
-void RichTextLabel::setColorGroup(const QColorGroup &colorg)
+void RichTextLabel::setColorGroup(const QPalette &colorg)
 {
   colorGrp = colorg;
 }
 
-const QColorGroup & RichTextLabel::getColorGroup() const
+const QPalette& RichTextLabel::getColorGroup() const
 {
   return colorGrp;
 }

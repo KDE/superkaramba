@@ -55,7 +55,7 @@ PyObject* py_add_menu_config_option(PyObject *, PyObject *args)
     return NULL;
 
   QString k, n;
-  k.setAscii(key);
+  k = QString::fromAscii(key);
   n = PyString2QString(name);
 
   return Py_BuildValue((char*)"l", addMenuConfigOption(widget, k, n));
@@ -80,7 +80,7 @@ PyObject* py_set_menu_config_option(PyObject *, PyObject *args)
     return NULL;
 
   QString k;
-  k.setAscii(key);
+  k = QString::fromAscii(key);
 
   return Py_BuildValue((char*)"l", setMenuConfigOption(widget, k, (bool)value));
 }
@@ -103,7 +103,7 @@ PyObject* py_read_menu_config_option(PyObject *, PyObject *args)
     return NULL;
 
   QString k;
-  k.setAscii(key);
+  k = QString::fromAscii(key);
 
   return Py_BuildValue((char*)"l", readMenuConfigOption(widget, k));
 }
@@ -130,8 +130,8 @@ PyObject* py_write_config_entry(PyObject *, PyObject *args)
   if (!checkKaramba(widget))
     return NULL;
   QString k, v;
-  k.setAscii(key);
-  v.setAscii(value);
+  k = QString::fromAscii(key);
+  v = QString::fromAscii(value);
 
   return Py_BuildValue((char*)"l", writeConfigEntry(widget, k, value));
 }
@@ -158,11 +158,11 @@ PyObject* py_read_config_entry(PyObject *, PyObject *args)
   if (!checkKaramba(widget))
     return NULL;
   QString k;
-  k.setAscii(key);
+  k = QString::fromAscii(key);
 
   QVariant entry = readConfigEntry(widget, k);
   QString type;
-  type.setAscii(entry.typeName());
+  type = QString::fromAscii(entry.typeName());
 
   if (type == "Bool")
   {

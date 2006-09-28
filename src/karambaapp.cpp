@@ -94,7 +94,7 @@ bool KarambaApplication::themeExists(QString pretty_name)
   QWidget *w;
   foreach(w, QApplication::allWidgets())
   {
-    if (QString(w->name()).startsWith("karamba"))
+    if (QString(w->objectName()).startsWith("karamba"))
     {
       karamba* k = (karamba*) w;
       if (k->getPrettyName() == pretty_name)
@@ -128,11 +128,11 @@ QStringList KarambaApplication::getKarambas()
 void KarambaApplication::checkSuperKarambaDir()
 {
   // Create ~/.superkaramba if necessary
-  QDir configDir(QDir::home().absPath() + "/.superkaramba");
+  QDir configDir(QDir::home().absolutePath() + "/.superkaramba");
   if (!configDir.exists())
   {
     qWarning("~/.superkaramba doesn't exist");
-    if(!configDir.mkdir(QDir::home().absPath() + "/.superkaramba"))
+    if(!configDir.mkdir(QDir::home().absolutePath() + "/.superkaramba"))
     {
         qWarning("Couldn't create Directory ~/.superkaramba");
     }
@@ -156,10 +156,10 @@ void KarambaApplication::setUpSysTray(KAboutData* about)
   sysTrayIcon = new KSystemTrayIcon((QWidget*)themeListWindow);
 
   QMenu *menu = sysTrayIcon->contextMenu();
-  menu->insertItem(SmallIconSet("superkaramba"),
+  menu->addAction(SmallIconSet("superkaramba"),
                    i18n("Hide System Tray Icon"), this,
                    SLOT(globalHideSysTray()));
-  menu->insertSeparator();
+  menu->addSeparator();
 
   /*
   KDE4
@@ -273,7 +273,7 @@ void KarambaApplication::checkPreviousSession(KApplication &app,
     QString restartThemes = config->readEntry("OpenThemes");
 
     //Get themes that were running
-    lst = QStringList::split(QString(";"), restartThemes);
+    lst = restartThemes.split(QString(";"));
   }
 }
 
@@ -354,7 +354,7 @@ bool KarambaApplication::hasKaramba(karamba* k)
 
 bool KarambaApplication::lockKaramba()
 {
-  QString file = QDir::home().absPath() + "/.superkaramba/.lock";
+  QString file = QDir::home().absolutePath() + "/.superkaramba/.lock";
   mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP;
 
   fd = open(file.toAscii().constData(), O_CREAT | O_RDWR | O_TRUNC, mode);

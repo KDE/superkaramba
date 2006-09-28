@@ -3,7 +3,7 @@
 *
 *  Copyright (C) 2003 Hans Karlsson <karlsson.h@home.se>
 *  Copyright (C) 2003-2004 Adam Geitgey <adam@rootnode.org>
-*  Copyright (c) 2004 Petri Damstén <damu@iki.fi>
+*  Copyright (c) 2004 Petri Damstï¿½ <damu@iki.fi>
 *
 *  This file is part of SuperKaramba.
 *
@@ -143,7 +143,7 @@ PyObject* getTaskInfo(long widget, long ctask)
     //Task Name
     if (currTask->name() != NULL)
     {
-      PyList_Append(pList, PyString_FromString(currTask->name().latin1()));
+      PyList_Append(pList, PyString_FromString(currTask->name().toLatin1().constData()));
     }
     else
     {
@@ -153,7 +153,7 @@ PyObject* getTaskInfo(long widget, long ctask)
     //Icon Name
     if (currTask->iconName() != NULL)
     {
-      PyList_Append(pList, PyString_FromString(currTask->iconName().latin1()));
+      PyList_Append(pList, PyString_FromString(currTask->iconName().toLatin1().constData()));
     }
     else
     {
@@ -163,7 +163,7 @@ PyObject* getTaskInfo(long widget, long ctask)
     //Class Name
     if (currTask->className() != NULL)
     {
-      PyList_Append(pList, PyString_FromString(currTask->className().latin1()));
+      PyList_Append(pList, PyString_FromString(currTask->className().toLatin1().constData()));
     }
     else
     {
@@ -235,7 +235,7 @@ PyObject* getStartupInfo(long widget, long cstartup)
         //Startup Name
         if (startup -> text() != NULL)
         {
-            PyList_Append(pList, PyString_FromString(startup -> text().latin1()));
+            PyList_Append(pList, PyString_FromString(startup -> text().toLatin1().constData()));
         }
         else
         {
@@ -245,7 +245,7 @@ PyObject* getStartupInfo(long widget, long cstartup)
         //Icon Name
         if (startup -> icon() != NULL)
         {
-            PyList_Append(pList, PyString_FromString(startup -> icon().latin1()));
+            PyList_Append(pList, PyString_FromString(startup -> icon().toLatin1().constData()));
         }
         else
         {
@@ -255,7 +255,7 @@ PyObject* getStartupInfo(long widget, long cstartup)
         //Executable Name
         if (startup -> bin() != NULL)
         {
-            PyList_Append(pList, PyString_FromString(startup -> bin().latin1()));
+            PyList_Append(pList, PyString_FromString(startup -> bin().toLatin1().constData()));
         }
         else
         {
@@ -297,7 +297,7 @@ PyObject* getTaskNames(long widget)
     Task* task;
     for (task = taskList.first(); task; task = taskList.next())
     {
-        const char* tmp = task->name().latin1();
+        const char* tmp = task->name().toLatin1().constData();
         if(tmp == 0)
           continue;
         pString = PyString_FromString(tmp);

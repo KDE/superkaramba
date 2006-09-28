@@ -53,7 +53,7 @@ class ThemeWidget : public QWidget, public Ui::ThemeWidgetLayout
 
   private:
     ThemeFile* m_themeFile;
-    Q3ValueList<int> m_instancePool;
+    QList<int> m_instancePool;
 };
 
 #endif

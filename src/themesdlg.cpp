@@ -80,7 +80,7 @@ void ThemesDlg::saveUserAddedThemes()
 {
   KStandardDirs ksd;
   QStringList t = themes();
-  QStringList dirs = ksd.findDirs("data", QString(kapp->name()) + "/themes");
+  QStringList dirs = ksd.findDirs("data", QString(kapp->objectName()) + "/themes");
   QStringList::Iterator it = t.begin();
   bool remove;
 
@@ -97,7 +97,7 @@ void ThemesDlg::saveUserAddedThemes()
       }
     }
     if(remove)
-      it = t.remove(it);
+      it = t.erase(it);
     else
       ++it;
   }
@@ -156,13 +156,17 @@ void ThemesDlg::populateListbox()
                    (QObject*)(this), SLOT(openLocalTheme()));
   tableThemes->insertItem((QWidget*)item);
 
-  dirs = ksd.findDirs("data", QString(kapp->name()) + "/themes");
+  dirs = ksd.findDirs("data", QString(kapp->objectName()) + "/themes");
   // Get custom dirs from config here?
   QStringList::Iterator itend( dirs.end() );
   for(QStringList::Iterator it = dirs.begin(); it != itend; ++it )
   {
+    QStringList types;
+    types << "*.skz" << "*.theme";
+
     dir.setPath(*it);
-    t = dir.entryList("*.skz; *.theme");
+
+    t = dir.entryList(types);
     for(QStringList::Iterator it = t.begin(); it != t.end(); ++it )
     {
       item = new ThemeWidget(new ThemeFile(dir.filePath(*it)));

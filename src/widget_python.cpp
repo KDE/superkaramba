@@ -65,11 +65,11 @@ long createWidgetMask(long widget, char* path)
   QBitmap bm;
   QString maskpath;
   QString rootPath;
-  rootPath.setAscii(currTheme->theme().path().toAscii().constData());
+  rootPath = QString::fromAscii(currTheme->theme().path().toAscii().constData());
 
   currTheme->clearMask();
 
-  maskpath.setAscii(path);
+  maskpath = QString::fromAscii(path);
   rootPath.append(maskpath.toAscii().constData());
 
   if(currTheme->theme().isZipTheme())

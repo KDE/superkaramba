@@ -21,7 +21,7 @@
 #include <qsize.h>
 //Added by qt3to4:
 #include <QMouseEvent>
-#include <QColorGroup>  //KDE4 QT Support
+#include <QPalette>  //KDE4 QT Support
 #include "karamba.h"
 
 class RichTextLabel : public Meter
@@ -44,8 +44,8 @@ class RichTextLabel : public Meter
     void setFixedPitch(bool);
     bool getFixedPitch() const;
     void setTextProps( TextField* t );
-    void setColorGroup(const QColorGroup &colorg);
-    const QColorGroup &getColorGroup() const;
+    void setColorGroup(const QPalette &colorg);
+    const QPalette& getColorGroup() const;
     void setWidth(int width);
 
     virtual bool insideActiveArea(int, int);

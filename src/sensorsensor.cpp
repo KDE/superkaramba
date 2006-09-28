@@ -52,7 +52,7 @@ void SensorSensor::receivedStdout(KProcess *, char *buffer, int len )
 
 void SensorSensor::processExited(KProcess *)
 {
-    QStringList stringList = QStringList::split('\n',sensorResult);
+    QStringList stringList = sensorResult.split('\n');
     sensorResult = "";
     QStringList::Iterator it = stringList.begin();
 #if defined __FreeBSD__ || defined(Q_OS_NETBSD)

@@ -24,21 +24,28 @@
 #include <QShowEvent>
 
 KWidgetListbox::KWidgetListbox(QWidget *parent, const char *name)
- : Q3Table(parent, name)
+  : QTableWidget(parent)
 {
-  setNumRows(0);
-  setNumCols(1);
+  setRowCount(0);
+  setColumnCount(1);
+  /*
+  KDE4
   setColumnStretchable(0, true);
   setLeftMargin(0);
   setTopMargin(0);
+  */
   horizontalHeader()->hide();
   verticalHeader()->hide();
-  setSelectionMode(Q3Table::NoSelection);
-  setFocusStyle(Q3Table::FollowStyle);
+  /*
+  setSelectionMode(QTableView::NoSelection);
+  setFocusStyle(QTableView::FollowStyle);
+  */
   connect(this, SIGNAL(currentChanged(int, int)),
           this, SLOT(selectionChanged(int, int)));
+  /*
   setHScrollBarMode(Q3ScrollView::AlwaysOff);
   setVScrollBarMode(Q3ScrollView::Auto);
+  */
 }
 
 KWidgetListbox::~KWidgetListbox()
@@ -48,9 +55,7 @@ KWidgetListbox::~KWidgetListbox()
 
 void KWidgetListbox::clear()
 {
-  for(int i = 0; i < numRows(); ++i)
-    clearCellWidget(i, 0);
-  setNumRows(0);
+  QTableWidget::clear();
 }
 
 int KWidgetListbox::insertItem(QWidget* item, int index)
@@ -59,8 +64,8 @@ int KWidgetListbox::insertItem(QWidget* item, int index)
 
   if(index == -1)
   {
-    row = numRows();
-    setNumRows(row + 1);
+    row = rowCount();
+    setRowCount(row + 1);
   }
   else
     return -1;
@@ -78,7 +83,7 @@ void KWidgetListbox::setSelected(QWidget* item)
 
 void KWidgetListbox::selectionChanged(int row, int col)
 {
-  ensureCellVisible(row, col);
+  //ensureCellVisible(row, col);  //KDE4
   updateColors();
   emit selected(row);
 }
@@ -116,7 +121,7 @@ QWidget* KWidgetListbox::item(int index) const
 
 int KWidgetListbox::index(QWidget* itm) const
 {
-  for(int i = 0; i < numRows(); ++i)
+  for(int i = 0; i < rowCount(); ++i)
     if(item(i) == itm)
       return i;
   return -1;
@@ -125,7 +130,7 @@ int KWidgetListbox::index(QWidget* itm) const
 bool KWidgetListbox::even(int index)
 {
   int v = 0;
-  for(int i = 0; i < numRows(); ++i)
+  for(int i = 0; i < rowCount(); ++i)
   {
     if(index == i)
       break;
@@ -138,7 +143,7 @@ bool KWidgetListbox::even(int index)
 void KWidgetListbox::updateColors()
 {
   int v = 0;
-  for(int i = 0; i < numRows(); ++i)
+  for(int i = 0; i < rowCount(); ++i)
   {
     if(!isRowHidden(i))
     {
@@ -154,25 +159,39 @@ void KWidgetListbox::setItemColors(int index, bool even)
 
   if(index == selected())
   {
-    itm->setPaletteBackgroundColor(KGlobalSettings::highlightColor());
-    itm->setPaletteForegroundColor(KGlobalSettings::highlightedTextColor());
+    QPalette bgPalette;
+    bgPalette.setColor(itm->backgroundRole(), KGlobalSettings::highlightColor());
+    itm->setPalette(bgPalette);
+
+    QPalette fgPalette;
+    fgPalette.setColor(itm->foregroundRole(), KGlobalSettings::highlightedTextColor());
+    itm->setPalette(fgPalette);
   }
   else if(even)
   {
-    itm->setPaletteBackgroundColor(KGlobalSettings::baseColor());
-    itm->setPaletteForegroundColor(KGlobalSettings::textColor());
+    QPalette bgPalette;
+    bgPalette.setColor(itm->backgroundRole(), KGlobalSettings::baseColor());
+    itm->setPalette(bgPalette);
+
+    QPalette fgPalette;
+    fgPalette.setColor(itm->foregroundRole(), KGlobalSettings::textColor());
+    itm->setPalette(fgPalette);
   }
   else
   {
-    itm->setPaletteBackgroundColor(
-        KGlobalSettings::alternateBackgroundColor());
-    itm->setPaletteForegroundColor(KGlobalSettings::textColor());
+    QPalette bgPalette;
+    bgPalette.setColor(itm->backgroundRole(), KGlobalSettings::alternateBackgroundColor());
+    itm->setPalette(bgPalette);
+
+    QPalette fgPalette;
+    fgPalette.setColor(itm->foregroundRole(), KGlobalSettings::textColor());
+    itm->setPalette(fgPalette);
   }
 }
 
 void KWidgetListbox::showItems(show_callback func, void* data)
 {
-  for(int i = 0; i < numRows(); ++i)
+  for(int i = 0; i < rowCount(); ++i)
   {
     if(func == 0)
       showRow(i);
@@ -190,11 +209,11 @@ void KWidgetListbox::showItems(show_callback func, void* data)
 void KWidgetListbox::showEvent(QShowEvent*)
 {
   //kDebug() << k_funcinfo << endl;
-  repaintContents(false);
+  repaint();
 }
 
 void KWidgetListbox::paintCell(QPainter*, int, int, const QRect&,
-                               bool, const QColorGroup&)
+                               bool, const QPalette&)
 {
   //kDebug() << k_funcinfo << endl;
 }

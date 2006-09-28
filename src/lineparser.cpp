@@ -43,7 +43,7 @@ void LineParser::set(const QString& line)
 
 int LineParser::getInt(QString w, int def) const
 {
-  QRegExp rx( "\\W+" + w +"=([-]?\\d+)", false );
+  QRegExp rx( "\\W+" + w +"=([-]?\\d+)", Qt::CaseInsensitive );
   if (rx.indexIn(m_line) != -1)
     return rx.cap(1).toInt();
   else
@@ -52,7 +52,7 @@ int LineParser::getInt(QString w, int def) const
 
 QColor LineParser::getColor(QString w, QColor def) const
 {
-  QRegExp rx( "\\W+" + w + "=([-]?\\d+),([-]?\\d+),([-]?\\d+)", false );
+  QRegExp rx( "\\W+" + w + "=([-]?\\d+),([-]?\\d+),([-]?\\d+)", Qt::CaseInsensitive );
   if (rx.indexIn(m_line) != -1)
     return QColor(rx.cap(1).toInt(), rx.cap(2).toInt(), rx.cap(3).toInt());
   else
@@ -62,12 +62,12 @@ QColor LineParser::getColor(QString w, QColor def) const
 QString LineParser::getString(QString w, QString def) const
 {
   QString result;
-  QRegExp rx( "\\W+" + w + "=\"([^\"]*)\"", false );
+  QRegExp rx( "\\W+" + w + "=\"([^\"]*)\"", Qt::CaseInsensitive );
 
   bool found = (rx.indexIn(m_line)==-1)?false:true;
   if (rx.cap(1).isEmpty())
   {
-    rx = QRegExp(w + "=(\\S+)", false);
+    rx = QRegExp(w + "=(\\S+)", Qt::CaseInsensitive);
     found = (rx.indexIn(m_line)==-1)?false:true;
     result = rx.cap(1);
   }
