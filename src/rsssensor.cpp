@@ -28,7 +28,7 @@ RssSensor::RssSensor( const QString &src, int interval, const QString &form, con
 
     if( !encoding.isEmpty() )
     {
-        codec = QTextCodec::codecForName( encoding.ascii() );
+        codec = QTextCodec::codecForName( encoding.toAscii().constData() );
         if ( codec == 0)
             codec = QTextCodec::codecForLocale();
     }
@@ -71,7 +71,7 @@ void RssSensor::update()
         }
     }
     else {
-        qDebug( "Error Downloading: %s", source.ascii());
+        qDebug( "Error Downloading: %s", source.toAscii().constData());
     }
 
     if ( OK )

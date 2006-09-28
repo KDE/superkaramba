@@ -56,7 +56,7 @@ bool KSessionManaged::saveState(QSessionManager&)
   delete list;                      // delete the list, not the widgets
   */
 
-  qDebug("Open themes %s", openThemes.ascii());
+  qDebug("Open themes %s", openThemes.toAscii().constData());
   config->writeEntry("OpenThemes", openThemes);
   return true;
 }

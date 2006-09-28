@@ -178,7 +178,7 @@ PyObject* py_read_config_entry(PyObject *, PyObject *args)
 
   if (type == "QString")
   {
-    return Py_BuildValue((char*)"s", entry.toString().ascii());
+    return Py_BuildValue((char*)"s", entry.toString().toAscii().constData());
   }
   // Add more types if needed
   return NULL;

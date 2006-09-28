@@ -266,7 +266,7 @@ PyObject* py_toggle_show_desktop(PyObject *, PyObject *args)
 const char* getPrettyName(long widget) {
   karamba* currTheme = (karamba*)widget;
 
-  return currTheme->prettyName.ascii();
+  return currTheme->prettyName.toAscii().constData();
 }
 
 PyObject* py_get_pretty_name(PyObject *, PyObject *args)
@@ -281,7 +281,7 @@ PyObject* py_get_pretty_name(PyObject *, PyObject *args)
 const char* getThemePath(long widget) {
   karamba* currTheme = (karamba*)widget;
 
-  return currTheme->theme().path().ascii();
+  return currTheme->theme().path().toAscii().constData();
 }
 
 PyObject* py_get_theme_path(PyObject *, PyObject *args)
@@ -302,7 +302,7 @@ PyObject* py_language(PyObject *, PyObject *args)
   if (!checkKaramba(widget))
     return NULL;
   return Py_BuildValue((char*)"s",
-      ((karamba*)widget)->theme().locale()->language().ascii());
+      ((karamba*)widget)->theme().locale()->language().toAscii().constData());
 }
 
 PyObject* py_userLanguage(PyObject *, PyObject *args)
@@ -312,7 +312,7 @@ PyObject* py_userLanguage(PyObject *, PyObject *args)
     return NULL;
   if (!checkKaramba(widget))
     return NULL;
-  return Py_BuildValue((char*)"s", KGlobal::locale()->language().ascii());
+  return Py_BuildValue((char*)"s", KGlobal::locale()->language().toAscii().constData());
 }
 
 PyObject* py_read_theme_file(PyObject *, PyObject *args)

@@ -48,9 +48,9 @@ ThemeWidget::ThemeWidget(ThemeFile* tf)
   if(!m_themeFile->version().isEmpty())
     version = " - " + m_themeFile->version();
   themeName->setText(
-      m_themeFile->locale()->translate(m_themeFile->name().ascii()) + version);
+      m_themeFile->locale()->translate(m_themeFile->name().toAscii().constData()) + version);
   description->setText(
-      m_themeFile->locale()->translate(m_themeFile->description().ascii()));
+      m_themeFile->locale()->translate(m_themeFile->description().toAscii().constData()));
   running->setText("");
   buttonGo->hide();
   setDescriptionMaxHeight();

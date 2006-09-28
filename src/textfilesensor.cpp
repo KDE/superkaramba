@@ -18,7 +18,7 @@ TextFileSensor::TextFileSensor( const QString &fn, bool iRdf, int interval, cons
 
     if( !encoding.isEmpty() )
     {
-        codec = QTextCodec::codecForName( encoding.ascii() );
+        codec = QTextCodec::codecForName( encoding.toAscii().constData() );
         if ( codec == 0)
             codec = QTextCodec::codecForLocale();
     }

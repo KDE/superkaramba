@@ -132,7 +132,7 @@ PyObject* py_getBarImage(PyObject *, PyObject *args)
     return NULL;
   if (!checkKarambaAndMeter(widget, meter, "Bar"))
     return NULL;
-  return Py_BuildValue((char*)"s", ((Bar*)meter)->getImage().ascii());
+  return Py_BuildValue((char*)"s", ((Bar*)meter)->getImage().toAscii().constData());
 }
 
 PyObject* py_setBarImage(PyObject *, PyObject *args)

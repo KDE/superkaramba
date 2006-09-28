@@ -70,13 +70,13 @@ class ZipFile
 
       if(!m_zip->open(QIODevice::ReadOnly))
       {
-        qDebug("Unable to open '%s' for reading.", zipfile.ascii());
+        qDebug("Unable to open '%s' for reading.", zipfile.toAscii().constData());
         return;
       }
       m_dir = m_zip->directory();
       if(m_dir == 0)
       {
-        qDebug("Error reading directory contents of file %s", zipfile.ascii());
+        qDebug("Error reading directory contents of file %s", zipfile.toAscii().constData());
         return;
       }
     }
@@ -102,7 +102,7 @@ class ZipFile
       else
       {
         if(!m_filename.isEmpty())
-          qDebug("Error reading file %s from zip", m_filename.ascii());
+          qDebug("Error reading file %s from zip", m_filename.toAscii().constData());
         return QByteArray();
       }
     }

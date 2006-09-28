@@ -194,7 +194,7 @@ PyObject* py_getTextFont(PyObject *, PyObject *args)
     return NULL;
   if (!checkKarambaAndMeter(widget, textSensor, "TextLabel"))
     return NULL;
-  return Py_BuildValue((char*)"s", ((TextLabel*)textSensor)->getFont().ascii());
+  return Py_BuildValue((char*)"s", ((TextLabel*)textSensor)->getFont().toAscii().constData());
 }
 
 PyObject* py_setTextAlign(PyObject *, PyObject *args)
@@ -217,7 +217,7 @@ PyObject* py_getTextAlign(PyObject *, PyObject *args)
     return NULL;
   if (!checkKarambaAndMeter(widget, textSensor, "TextLabel"))
     return NULL;
-  return Py_BuildValue((char*)"s", ((TextLabel*)textSensor)->getAlignment().ascii());
+  return Py_BuildValue((char*)"s", ((TextLabel*)textSensor)->getAlignment().toAscii().constData());
 }
 
 PyObject* py_setTextScroll(PyObject *, PyObject *args)

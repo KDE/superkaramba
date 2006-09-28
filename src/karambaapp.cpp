@@ -357,7 +357,7 @@ bool KarambaApplication::lockKaramba()
   QString file = QDir::home().absPath() + "/.superkaramba/.lock";
   mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP;
 
-  fd = open(file.ascii(), O_CREAT | O_RDWR | O_TRUNC, mode);
+  fd = open(file.toAscii().constData(), O_CREAT | O_RDWR | O_TRUNC, mode);
   if (fd < 0)
   {
     qWarning("Open failed in lock.");

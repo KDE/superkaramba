@@ -353,14 +353,14 @@ KarambaPython::KarambaPython(const ThemeFile& theme, bool reloading):
   // load the .py file for this .theme
   PyRun_SimpleString((char*)"import sys");
   //Add theme path to python path so that we can find the python file
-  snprintf(pypath, 1023, "sys.path.insert(0, '%s')", theme.path().ascii());
+  snprintf(pypath, 1023, "sys.path.insert(0, '%s')", theme.path().toAscii().constData());
   PyRun_SimpleString(pypath);
   PyRun_SimpleString((char*)"sys.path.insert(0, '')");
 
   PyImport_AddModule((char*)"karamba");
   Py_InitModule((char*)"karamba", karamba_methods);
 
-  pName = PyString_FromString(theme.pythonModule().ascii());
+  pName = PyString_FromString(theme.pythonModule().toAscii().constData());
   pModule = PyImport_Import(pName);
   
   fprintf(stderr, "%s\n", pypath);
@@ -386,7 +386,7 @@ KarambaPython::KarambaPython(const ThemeFile& theme, bool reloading):
     fprintf(stderr, "\n");
     fprintf(stderr,
             "It means that I couldn't load a python add-on %s.py\n",
-            theme.pythonModule().ascii());
+            theme.pythonModule().toAscii().constData());
     fprintf(stderr, "If this is a regular theme and doesn't use python\n");
     fprintf(stderr, "extensions, then nothing is wrong.\n");
     fprintf(stderr,
@@ -518,7 +518,7 @@ bool KarambaPython::widgetClosed(karamba* k)
 
 bool KarambaPython::menuOptionChanged(karamba* k, QString key, bool value)
 {
-  PyObject* pArgs = Py_BuildValue((char*)"(lsi)", k, key.ascii(), (int)value);
+  PyObject* pArgs = Py_BuildValue((char*)"(lsi)", k, key.toAscii().constData(), (int)value);
   return callObject("menuOptionChanged", pArgs);
 }
 
@@ -536,7 +536,7 @@ bool KarambaPython::meterClicked(karamba* k, Meter* meter, int button)
 
 bool KarambaPython::meterClicked(karamba* k, QString anchor, int button)
 {
-  PyObject* pArgs = Py_BuildValue((char*)"(lsi)", k, anchor.ascii(), button);
+  PyObject* pArgs = Py_BuildValue((char*)"(lsi)", k, anchor.toAscii().constData(), button);
   return callObject("meterClicked", pArgs);
 }
 

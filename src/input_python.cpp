@@ -140,7 +140,7 @@ PyObject* py_getInputBoxFont(PyObject *, PyObject *args)
   if (!checkKarambaAndMeter(widget, inputBox, "Input"))
     return NULL;
 
-  return Py_BuildValue((char*)"s", ((Input*)inputBox)->getFont().ascii());
+  return Py_BuildValue((char*)"s", ((Input*)inputBox)->getFont().toAscii().constData());
 }
 
 PyObject* py_setInputBoxFontColor(PyObject *, PyObject *args)

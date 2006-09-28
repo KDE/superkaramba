@@ -162,7 +162,7 @@ PyObject* py_getRichTextFont(PyObject *, PyObject *args)
     return NULL;
   if (!checkKarambaAndMeter(widget, textSensor, "RichTextLabel"))
     return NULL;
-  return Py_BuildValue((char*)"s", ((RichTextLabel*)textSensor)->getFont().ascii());
+  return Py_BuildValue((char*)"s", ((RichTextLabel*)textSensor)->getFont().toAscii().constData());
 }
 
 // Set the width of a Rich Text Label

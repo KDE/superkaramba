@@ -281,8 +281,8 @@ void ImageLabel::slotCopyResult(KIO::Job* job)
   }
   else
   {
-    qWarning("Error downloading (%s): %s", job->errorText().ascii(),
-                                           tempFile.ascii());
+    qWarning("Error downloading (%s): %s", job->errorText().toAscii().constData(),
+                                           tempFile.toAscii().constData());
   }
   KIO::NetAccess::removeTempFile(tempFile);
 }
@@ -468,11 +468,11 @@ void ImageLabel::parseImages(QString fn, QString fn_roll, int _xoff,
     {
       pixmap_off = QPixmap(tmpFile);
       KIO::NetAccess::removeTempFile(tmpFile);
-      qDebug( "Downloaded: %s to %s", path.ascii(), tmpFile.ascii() );
+      qDebug( "Downloaded: %s to %s", path.toAscii().constData(), tmpFile.toAscii().constData() );
     }
     else
     {
-      qDebug( "Error Downloading: %s", path.ascii());
+      qDebug( "Error Downloading: %s", path.toAscii().constData());
     }
   }
   else
@@ -516,11 +516,11 @@ void ImageLabel::parseImages(QString fn, QString fn_roll, int _xoff,
     {
       pixmap_on = QPixmap(tmpFile);
       KIO::NetAccess::removeTempFile(tmpFile);
-      qDebug( "Downloaded: %s to %s", path.ascii(), tmpFile.ascii());
+      qDebug( "Downloaded: %s to %s", path.toAscii().constData(), tmpFile.toAscii().constData());
     }
     else
     {
-      qDebug( "Error Downloading: %s", path.ascii());
+      qDebug( "Error Downloading: %s", path.toAscii().constData());
     }
   }
   else
