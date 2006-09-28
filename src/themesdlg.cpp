@@ -294,7 +294,7 @@ void ThemesDlg::addThemeToDialog(const KArchiveDirectory *archiveDir,
     else
     {
       QFileInfo fi(*it);
-      if(fi.extension( FALSE ) == "theme")
+      if(fi.suffix() == "theme")
       {
         addThemeToList(destDir + *it);
         writeNewStuffConfig(destDir);

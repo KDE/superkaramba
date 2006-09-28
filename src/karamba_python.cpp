@@ -549,7 +549,7 @@ bool KarambaPython::widgetClicked(karamba* k, int x, int y, int button)
 bool KarambaPython::keyPressed(karamba* k, const Meter* meter,
                                const QString& text)
 {
-  PyObject* pArgs = Py_BuildValue((char*)"(lls)", k, meter, text.ucs2());
+  PyObject* pArgs = Py_BuildValue((char*)"(lls)", k, meter, text.utf16());
   return callObject("keyPressed", pArgs);
 }
 

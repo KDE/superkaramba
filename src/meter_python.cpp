@@ -120,7 +120,7 @@ PyObject* QString2PyString(QString string)
 {
   PyObject *pyString;
 
-  const unsigned short* tmp = string.ucs2();
+  const unsigned short* tmp = string.utf16();
   bool dofree = false;
 
   if(tmp)

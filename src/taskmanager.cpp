@@ -798,7 +798,7 @@ void Task::generateThumbnail()
    if ( _grab.isNull() )
       return;
 
-   QImage img = _grab.convertToImage();
+   QImage img = _grab.toImage();
 
    double width = img.width();
    double height = img.height();

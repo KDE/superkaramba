@@ -218,7 +218,7 @@ void ImageLabel::smoothScale(int w, int h)
 //  double widthFactor = ((double)w) / ((double)realpixmap.width());
 //  double heightFactor = ((double)h) / ((double)realpixmap.height());
 
-//  pixmap.convertFromImage(realpixmap.convertToImage().smoothScale(w, h));
+//  pixmap.convertFromImage(realpixmap.toImage().smoothScale(w, h));
 
 //  setWidth(pixmap.width());
 //  setHeight(pixmap.height());
@@ -251,7 +251,7 @@ void ImageLabel::applyTransformations(bool useSmoothScale)
         if (m_karamba -> useSmoothTransforms() || useSmoothScale)
         {
             pixmap.convertFromImage(
-              pixmap.convertToImage().smoothScale(scale_w, scale_h));
+              pixmap.toImage().smoothScale(scale_w, scale_h));
         }
         else
         {
@@ -352,7 +352,7 @@ void ImageLabel::mUpdate(QPainter* p, int backgroundUpdate)
       {
         //Blend this image with a color
 
-        QImage image = pixmap.convertToImage();
+        QImage image = pixmap.toImage();
 
         QImage result = KImageEffect::blend(QColor(255,0,0), image, 0.5f);
         p->drawImage(getX(),getY(),result);
@@ -382,7 +382,7 @@ void ImageLabel::mUpdate(QPainter* p)
     {
       //Blend this image with a color
 
-      QImage image = pixmap.convertToImage();
+      QImage image = pixmap.toImage();
 
       QImage result = KImageEffect::blend(QColor(255,0,0), image, 0.5f);
       p->drawImage(getX(),getY(),result);
