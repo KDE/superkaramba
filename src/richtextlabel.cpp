@@ -32,7 +32,7 @@ RichTextLabel::RichTextLabel(karamba* k, int x, int y, int w, int h) :
     colorGrp(k->colorGroup()),
     underlineLinks(false)
 {
-  kdDebug() << k_funcinfo << x << ", " << y << ", " << w << ", " << h << endl;
+  kDebug() << k_funcinfo << x << ", " << y << ", " << w << ", " << h << endl;
   originalSize = QSize(w, h);
 }
 

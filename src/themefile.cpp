@@ -385,7 +385,7 @@ QByteArray ThemeFile::readThemeFile(const QString& filename) const
       file.close();
     }
   }
-  //kdDebug() << "Read theme file: " << filename << ", " << time.elapsed()
+  //kDebug() << "Read theme file: " << filename << ", " << time.elapsed()
   //    << "ms" << endl;
   return ba;
 }

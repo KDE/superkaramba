@@ -145,7 +145,7 @@ void KarambaApplication::checkSuperKarambaDir()
 
 void KarambaApplication::setUpSysTray(KAboutData* about)
 {
-  //kdDebug() << k_funcinfo << endl;
+  //kDebug() << k_funcinfo << endl;
   KAction* action;
 
   //Create theme list window.
@@ -385,7 +385,7 @@ void KarambaApplication::unlockKaramba()
 
 void KarambaApplication::hideSysTray(bool hide)
 {
-  //kdDebug() << k_funcinfo << endl;
+  //kDebug() << k_funcinfo << endl;
   if(hide)
   {
     if(sysTrayIcon)
@@ -408,7 +408,7 @@ void KarambaApplication::hideSysTray(bool hide)
 
 void KarambaApplication::showThemeDialog()
 {
-  //kdDebug() << k_funcinfo << endl;
+  //kDebug() << k_funcinfo << endl;
   if(themeListWindow)
     ((QWidget*)(themeListWindow))->show();
 }
@@ -459,7 +459,7 @@ void KarambaApplication::globalShowThemeDialog()
 
 void KarambaApplication::globalHideSysTray(bool hide)
 {
-  //kdDebug() << k_funcinfo << endl;
+  //kDebug() << k_funcinfo << endl;
   QStringList apps = getKarambas();
   QStringList::Iterator it;
 

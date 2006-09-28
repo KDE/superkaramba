@@ -66,7 +66,7 @@ ThemesDlg::ThemesDlg(QWidget *parent, const char *name)
 
 ThemesDlg::~ThemesDlg()
 {
-  //kdDebug() << k_funcinfo << endl;
+  //kDebug() << k_funcinfo << endl;
   saveUserAddedThemes();
 #ifdef HAVE_KNEWSTUFF
   if(mNewStuff)
@@ -272,7 +272,7 @@ int ThemesDlg::themeIndex(QString file)
 
 void ThemesDlg::addSkzThemeToDialog(const QString &file)
 {
-  //kdDebug() << "addSkzThemeToDialog(): file = " << file << endl;
+  //kDebug() << "addSkzThemeToDialog(): file = " << file << endl;
   addThemeToList(file);
   writeNewStuffConfig(file);
 }
@@ -280,7 +280,7 @@ void ThemesDlg::addSkzThemeToDialog(const QString &file)
 void ThemesDlg::addThemeToDialog(const KArchiveDirectory *archiveDir,
                            const QString& destDir)
 {
-  kdDebug() << "addThemeToDialog(): destDir = " << destDir << endl;
+  kDebug() << "addThemeToDialog(): destDir = " << destDir << endl;
   QStringList entries = archiveDir->entries();
 
   QStringList::Iterator end( entries.end() );
@@ -349,7 +349,7 @@ void ThemesDlg::configSanityCheck()
     }
     if( removeKey )
     {
-      kdDebug() << "sanityCheck() deleting entry " << keyName << endl;
+      kDebug() << "sanityCheck() deleting entry " << keyName << endl;
       config->setGroup("KNewStuffStatus");
       config->deleteEntry( keyName );
     }
@@ -360,7 +360,7 @@ void ThemesDlg::configSanityCheck()
 
 int ThemesDlg::addThemeToList(const QString &file)
 {
-  kdDebug() << "addThemeToList() file: " << file << endl;
+  kDebug() << "addThemeToList() file: " << file << endl;
   int i = themeIndex(file);
   if(i < 0)
   {
@@ -431,7 +431,7 @@ bool ThemesDlg::filter(int index, QWidget* widget, void* data)
 
 bool ThemesDlg::isDownloaded( const QString& path )
 {
-  kdDebug() << "isDownloaded path: " << path << endl;
+  kDebug() << "isDownloaded path: " << path << endl;
   KConfig* config = KGlobal::config();
   config->setGroup("KNewStuffNames");
   return !config->readEntry(path, QString()).isEmpty();
@@ -459,14 +459,14 @@ void ThemesDlg::uninstall()
 
   if(!tf->isZipTheme())
   {
-    kdDebug() << "encountered unpacked theme" << endl;
+    kDebug() << "encountered unpacked theme" << endl;
     //Don't move it to the trash if it is a local theme
     if(isDownloaded(tempPath))
     {
       QFileInfo remPath(tf->path());
       QDir remDir(remPath.dir());
       remDir.cdUp();
-      kdDebug() << "moving " << remDir.path() << " to the trash" << endl;
+      kDebug() << "moving " << remDir.path() << " to the trash" << endl;
       KIO::move(remDir.path(), trash);
     }
     tableThemes->removeItem((QWidget*)w);
@@ -496,11 +496,11 @@ void ThemesDlg::uninstall()
     QString name = config->readEntry(tempPath);
     if(!name.isEmpty())
     {
-      kdDebug() << "removing " << tempPath << " under KNewStuffNames from superkarambarc" 
+      kDebug() << "removing " << tempPath << " under KNewStuffNames from superkarambarc" 
                 << endl;
       kapp->config()->deleteEntry(tempPath);
       config->setGroup("KNewStuffStatus");
-      kdDebug() << "removing " << name << " under KNewStuffStatus from superkarambarc" 
+      kDebug() << "removing " << name << " under KNewStuffStatus from superkarambarc" 
                 << endl;
       kapp->config()->deleteEntry(name);
       kapp->config()->sync();
@@ -510,12 +510,12 @@ void ThemesDlg::uninstall()
   }
   else
   {
-    kdDebug() << "encountered skz theme" << endl;
+    kDebug() << "encountered skz theme" << endl;
     if(isDownloaded(theme.path()))
     {
       QFileInfo remPath(theme.path());
       QDir remDir(remPath.dir());
-      kdDebug() << "moving " << remDir.path() << " to the trash" << endl;
+      kDebug() << "moving " << remDir.path() << " to the trash" << endl;
       KIO::move(remDir.path(), trash);
     }
     tableThemes->removeItem((QWidget*)w);
@@ -526,10 +526,10 @@ void ThemesDlg::uninstall()
     QString name = config->readEntry(theme.path());
     if(!name.isEmpty())
     {
-      kdDebug() << "removing " << theme.path() << " from superkarambarc" << endl;
+      kDebug() << "removing " << theme.path() << " from superkarambarc" << endl;
       kapp->config()->deleteEntry(theme.path());
       config->setGroup("KNewStuffStatus");
-      kdDebug() << "removing " << name << " from superkarambarc" << endl;
+      kDebug() << "removing " << name << " from superkarambarc" << endl;
       kapp->config()->deleteEntry(name);
       kapp->config()->sync();
     }

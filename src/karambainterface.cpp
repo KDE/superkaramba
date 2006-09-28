@@ -87,7 +87,7 @@ void KarambaIface::openNamedTheme(QString filename, QString name, bool is_sub_th
 
 void KarambaIface::closeTheme(QString name)
 {
-  kdDebug() << "KarambaIface::closeTheme: " << name << endl;
+  kDebug() << "KarambaIface::closeTheme: " << name << endl;
   karamba* k;
 
   while((k = getKaramba(name)))

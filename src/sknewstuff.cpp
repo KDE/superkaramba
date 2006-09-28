@@ -47,7 +47,7 @@ SKNewStuff::SKNewStuff( ThemesDlg *dlg ) :
 
 bool SKNewStuff::install( const QString &fileName )
 {
-  kdDebug() << "SKNewStuff::install(): " << fileName << endl;
+  kDebug() << "SKNewStuff::install(): " << fileName << endl;
 
   KMimeType::Ptr result = KMimeType::findByURL(fileName);
   KStandardDirs myStdDir;
@@ -57,7 +57,7 @@ bool SKNewStuff::install( const QString &fileName )
   const QString destDir = baseDestDir + base + "/";
   KStandardDirs::makeDir( destDir );
 
-  kdDebug() << "SKNewStuff::install() mimetype: " << result->name() << endl;
+  kDebug() << "SKNewStuff::install() mimetype: " << result->name() << endl;
 
   if( result->name() == "application/x-gzip" ||
       result->name() == "application/x-tgz" ||
@@ -68,7 +68,7 @@ bool SKNewStuff::install( const QString &fileName )
       result->name() == "application/x-tar" ||
       result->name() == "application/x-tarz")
   {
-    kdDebug() << "SKNewStuff::install() gzip/bzip2 mimetype encountered" <<
+    kDebug() << "SKNewStuff::install() gzip/bzip2 mimetype encountered" <<
         endl;
     KTar archive( fileName );
     if ( !archive.open( QIODevice::ReadOnly ) )
@@ -82,7 +82,7 @@ bool SKNewStuff::install( const QString &fileName )
   else if(result->name() == "application/x-zip" ||
           result->name() == "application/x-superkaramba")
   {
-    kdDebug() << "SKNewStuff::install() zip mimetype encountered" << endl;
+    kDebug() << "SKNewStuff::install() zip mimetype encountered" << endl;
     //TODO: write a routine to check if this is a valid .skz file
     //otherwise we need to unpack it like it is an old theme that was packaged
     //as a .zip instead of .bz2 or .tar.gz
@@ -98,16 +98,16 @@ bool SKNewStuff::install( const QString &fileName )
   }
   else if(result->name() == "plain/text")
   {
-    kdDebug() << "SKNewStuff::install() plain text" << endl;
+    kDebug() << "SKNewStuff::install() plain text" << endl;
   }
   else if(result->name() == "text/html")
   {
-    kdDebug() << "SKNewStuff::install() text/html" << endl;
+    kDebug() << "SKNewStuff::install() text/html" << endl;
     KRun::runURL( m_sourceLink, "text/html");
   }
   else
   {
-    kdDebug() << "SKNewStuff::install() Error no compatible mimetype encountered to install"
+    kDebug() << "SKNewStuff::install() Error no compatible mimetype encountered to install"
               << endl;
     return false;
   }
@@ -116,7 +116,7 @@ bool SKNewStuff::install( const QString &fileName )
 
 bool SKNewStuff::createUploadFile( const QString &fileName )
 {
-  kdDebug() << "SKNewStuff::createUploadFile(): " << fileName << endl;
+  kDebug() << "SKNewStuff::createUploadFile(): " << fileName << endl;
   return true;
 }
 
@@ -125,12 +125,12 @@ QString SKNewStuff::downloadDestination( KNS::Entry *entry )
   KURL source = entry->payload();
   m_sourceLink = source;
 
-  kdDebug() << "SKNewStuff::downloadDestination() url: "
+  kDebug() << "SKNewStuff::downloadDestination() url: "
     << source.url() <<  " fileName: " << source.fileName() << endl;
   QString file(source.fileName());
   if ( file.isEmpty() )
   {
-    kdDebug() << "The file was empty. " << source.url() << 
+    kDebug() << "The file was empty. " << source.url() << 
       " must be a URL link." << endl;
     KRun::runURL( source, "text/html");
     return file;
