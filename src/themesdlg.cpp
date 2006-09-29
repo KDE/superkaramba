@@ -62,6 +62,9 @@ ThemesDlg::ThemesDlg(QWidget *parent, const char *name)
 #ifdef HAVE_KNEWSTUFF
   mNewStuff = 0;
 #endif
+
+  connect(buttonAddToDesktop, SIGNAL(clicked()), this, SLOT(addToDesktop()));
+  connect(tableThemes, SIGNAL(selected(int)), this, SLOT(selectionChanged(int)));
 }
 
 ThemesDlg::~ThemesDlg()
@@ -130,6 +133,7 @@ void ThemesDlg::populateListbox()
   tableThemes->clear();
 
   item = new ThemeWidget;
+
   item->iconLabel->setPixmap(KGlobal::iconLoader()->loadIcon("knewstuff",
                              K3Icon::NoGroup, K3Icon::SizeHuge));
   item->setHeaderText(i18n("Get New Stuff"));
@@ -143,8 +147,9 @@ void ThemesDlg::populateListbox()
 #else
   item->buttonGo->setEnabled(false);
 #endif
-  tableThemes->insertItem((QWidget*)(item));
 
+  tableThemes->insertItem((QWidget*)(item));
+  
   item = new ThemeWidget;
   item->iconLabel->setPixmap(KGlobal::iconLoader()->loadIcon("ksysguard",
                         K3Icon::NoGroup, K3Icon::SizeHuge));

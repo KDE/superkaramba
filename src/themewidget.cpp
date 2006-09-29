@@ -115,8 +115,6 @@ void ThemeWidget::showButton(bool show)
 void ThemeWidget::setDescriptionMaxHeight()
 {
   /*
-  KDE4
-  
   if(layoutText->geometry().height() <= 0)
     return;
   int height = layoutText->geometry().height() - themeName->height() -

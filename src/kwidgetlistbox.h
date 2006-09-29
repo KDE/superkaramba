@@ -63,6 +63,7 @@ class KWidgetListbox : public QTableWidget
 
   protected slots:
     void selectionChanged(int row, int col);
+    void resizeEvent(QResizeEvent *e);
 
   signals:
     void selected(int index);

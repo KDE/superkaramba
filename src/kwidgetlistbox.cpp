@@ -22,26 +22,23 @@
 #include <kglobalsettings.h>
 //Added by qt3to4:
 #include <QShowEvent>
+#include <QScrollBar>
 
 KWidgetListbox::KWidgetListbox(QWidget *parent, const char *name)
   : QTableWidget(parent)
 {
   setRowCount(0);
   setColumnCount(1);
-  /*
-  KDE4
-  setColumnStretchable(0, true);
-  setLeftMargin(0);
-  setTopMargin(0);
-  */
+
   horizontalHeader()->hide();
   verticalHeader()->hide();
-  /*
-  setSelectionMode(QTableView::NoSelection);
-  setFocusStyle(QTableView::FollowStyle);
-  */
-  connect(this, SIGNAL(currentChanged(int, int)),
+  
+  setSelectionMode(QAbstractItemView::NoSelection);
+  //setFocusStyle(QTableView::FollowStyle);
+ 
+  connect(this, SIGNAL(cellClicked(int, int)),
           this, SLOT(selectionChanged(int, int)));
+   
   /*
   setHScrollBarMode(Q3ScrollView::AlwaysOff);
   setVScrollBarMode(Q3ScrollView::Auto);
@@ -71,8 +68,10 @@ int KWidgetListbox::insertItem(QWidget* item, int index)
     return -1;
 
   setRowHeight(row, item->height());
+ 
   setCellWidget(row, 0, item);
   setItemColors(row, even(row));
+
   return row;
 }
 
@@ -81,9 +80,9 @@ void KWidgetListbox::setSelected(QWidget* item)
   setSelected(index(item));
 }
 
-void KWidgetListbox::selectionChanged(int row, int col)
+void KWidgetListbox::selectionChanged(int row, int column)
 {
-  //ensureCellVisible(row, col);  //KDE4
+  setCurrentCell(row, column);
   updateColors();
   emit selected(row);
 }
@@ -216,6 +215,25 @@ void KWidgetListbox::paintCell(QPainter*, int, int, const QRect&,
                                bool, const QPalette&)
 {
   //kDebug() << k_funcinfo << endl;
+}
+
+void KWidgetListbox::resizeEvent(QResizeEvent *e)
+{
+  QTableWidget::resizeEvent(e);
+
+  #warning No better way?
+  unsigned int wscroll = 0;
+
+  QScrollBar *bar = verticalScrollBar();
+  if(bar->isVisible())
+    wscroll = 5;
+  
+  setColumnWidth(0, width() - 5 - wscroll);
+
+  for(unsigned int i = 0; i < rowCount(); i++)
+  {
+    setRowHeight(i, 150);
+  }
 }
 
 #include "kwidgetlistbox.moc"
