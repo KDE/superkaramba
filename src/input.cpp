@@ -61,7 +61,7 @@ void Input::setColor(QColor c)
 
 QColor Input::getBGColor() const
 {
-  return edit->backgroundColor();
+  return edit->palette().color(edit->backgroundRole());
 }
 
 QColor Input::getColor() const
@@ -125,40 +125,37 @@ QString Input::getFont() const
 void Input::setFontColor(QColor fontColor)
 {
   QPalette palette = edit->palette();
-  palette.setColor(QColorGroup::Text, fontColor);
+  palette.setColor(QPalette::Text, fontColor);
   edit->setPalette(palette);
 }
 
 QColor Input::getFontColor() const
 {
-  const QColorGroup &color = edit->colorGroup();
-  return color.text();
+  return edit->palette().color(QPalette::Text);
 }
 
 void Input::setSelectionColor(QColor selectionColor)
 {
   QPalette palette = edit->palette();
-  palette.setColor(QColorGroup::Highlight, selectionColor);
+  palette.setColor(QPalette::Highlight, selectionColor);
   edit->setPalette(palette);
 }
 
 QColor Input::getSelectionColor() const
 {
-  const QColorGroup &color = edit->colorGroup();
-  return color.highlight();
+  return edit->palette().color(QPalette::Highlight);
 }
 
 void Input::setSelectedTextColor(QColor selectedTextColor)
 {
   QPalette palette = edit->palette();
-  palette.setColor(QColorGroup::HighlightedText, selectedTextColor);
+  palette.setColor(QPalette::HighlightedText, selectedTextColor);
   edit->setPalette(palette);
 }
 
 QColor Input::getSelectedTextColor() const
 {
-  const QColorGroup &color = edit->colorGroup();
-  return color.highlightedText();
+  return edit->palette().color(QPalette::HighlightedText);
 }
 
 void Input::setFontSize(int size)

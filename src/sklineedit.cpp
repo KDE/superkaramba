@@ -53,7 +53,10 @@ void SKLineEdit::setFrameColor(QColor c)
 
 void SKLineEdit::setBackgroundColor(QColor c)
 {
-  QLineEdit::setBackgroundColor(c);
+  QPalette palette;
+  palette.setColor(backgroundRole(), c);
+  setPalette(palette);
+
   repaint();
 }
 

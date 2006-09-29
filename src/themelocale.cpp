@@ -46,7 +46,7 @@
 # define W(flag, data) ((flag) ? SWAP (data) : (data))
 #endif
 
-typedef Q_UINT32 nls_uint32;
+typedef quint32 nls_uint32;
 
 struct loaded_domain
 {
@@ -174,8 +174,7 @@ QStringList ThemeLocale::languageList()
   KConfig* config = KGlobal::config();
   // Reset the list and add the new languages
   QStringList languageList;
-  languageList +=
-      QStringList::split(':', QFile::decodeName(::getenv("KDE_LANG")));
+  languageList += QFile::decodeName(::getenv("KDE_LANG")).split(':');
 
   languageList += config->readListEntry("Language", ':');
 
@@ -209,7 +208,7 @@ QStringList ThemeLocale::languageList()
   for(QStringList::Iterator it=languageList.begin(); it!=end;)
   {
     if((*it).isEmpty())
-      it = languageList.remove(it);
+      it = languageList.erase(it);
     else
       ++it;
   }
@@ -372,7 +371,7 @@ void tl_nl_load_domain (QIODevice* device, int size,
     read_ptr = (char *) data;
     do
     {
-      long int nb = (long int) device->readBlock (read_ptr, to_read);
+      long int nb = (long int) device->read (read_ptr, to_read);
       if (nb == -1)
       {
         device->close();
