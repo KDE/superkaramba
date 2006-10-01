@@ -278,7 +278,7 @@ public slots:
     void currentDesktopChanged(int);
     void currentWallpaperChanged(int);
     void slotToggleConfigOption(QString key, bool);
-    //void updateBackground(KSharedPixmap*);			// KDE4
+    void updateBackground();
     void passMenuOptionChanged(QString key, bool);
     void passMenuItemClicked(int);
     void processExited (KProcess *proc);

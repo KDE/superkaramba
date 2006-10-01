@@ -33,7 +33,7 @@ class ThemeWidget : public QWidget, public Ui::ThemeWidgetLayout
 {
     Q_OBJECT
   public:
-    ThemeWidget(QWidget *parent = 0, const char *name = 0);
+    ThemeWidget(QWidget *parent = 0);
     ThemeWidget(ThemeFile* tf);
     ~ThemeWidget();
 

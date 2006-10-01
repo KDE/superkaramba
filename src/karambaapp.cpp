@@ -326,8 +326,8 @@ void KarambaApplication::addKaramba(karamba* k, bool reloading)
         karambaApp->dcopClient()->appId(), k->theme().file());
     k->setInstance(instance);
   }
-  karambaList->append(k);
   */
+  karambaList->append(k);
 }
 
 void KarambaApplication::deleteKaramba(karamba* k, bool reloading)

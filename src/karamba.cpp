@@ -61,7 +61,7 @@
 #define THEMECONF  2
 
 karamba::karamba(QString fn, QString name, bool reloading, int instance, bool sub_theme):
-    QWidget(0, Qt::WA_GroupLeader & Qt::FramelessWindowHint & Qt::WA_DeleteOnClose  ),
+    QWidget(0, Qt::FramelessWindowHint),
     meterList(0), imageList(0), clickList(0), kpop(0), widgetMask(0),
     config(0), kWinModule(0), tempUnit('C'), m_instance(instance),
     sensorList(0), timeList(0),
@@ -88,6 +88,9 @@ karamba::karamba(QString fn, QString name, bool reloading, int instance, bool su
     QTimer::singleShot(100, this, SLOT(killWidget()));
     return;
   }
+
+  setAttribute(Qt::WA_DeleteOnClose);
+  
   // Add self to list of open themes
   // This also updates instance number
   karambaApp->addKaramba(this, reloading);
@@ -316,8 +319,9 @@ Not used in KDE4
   haveUpdated = 0;
   this->setMouseTracking(true);
 
-
   setFocusPolicy(Qt::StrongFocus);
+
+  start();
 }
 
 karamba::~karamba()
@@ -1554,22 +1558,19 @@ void karamba::updateSensors()
   QTimer::singleShot( 500, this, SLOT(step()) );
 }
 
-/*
-KDE4
-KSharedPixmap gone
-
-void karamba::updateBackground(KSharedPixmap* kpm)
+void karamba::updateBackground()
 {
-  //kDebug() << k_funcinfo << pm.size() << endl;
+  //kDebug() << k_funcinfo << endl;
   // if pm width == 0 this is the first time we come here and we should start
   // the theme. This is because we need the background before starting.
   //if(pm.width() == 0)
+  /*
   if( !themeStarted )
   {
     themeStarted = true;
     start();
   }
-  background = QPixmap(*kpm);
+  background = QPixmap(size());
 
   QPixmap buffer = QPixmap(size());
 
@@ -1577,7 +1578,8 @@ void karamba::updateBackground(KSharedPixmap* kpm)
   buffer.fill(Qt::black);
 
   p.begin(&buffer);
-  bitBlt(&buffer,0,0,&background,0,Qt::CopyROP);
+  //bitBlt(&buffer,0,0,&background,0,Qt::CopyROP)
+  buffer = background.copy(0, 0, background.width(), background.height());
 
   QObject *image;
   foreach(image, *imageList)
@@ -1615,8 +1617,8 @@ void karamba::updateBackground(KSharedPixmap* kpm)
     systray->updateBackgroundPixmap(buffer2);
   }
   repaint();
+  */
 }
-*/
 
 void karamba::currentDesktopChanged( int i )
 {
@@ -1645,8 +1647,9 @@ void karamba::externalStep()
     pm = QPixmap(size());
     buffer.fill(Qt::black);
 
-    /* KDE4 QPixmap::gradWidget
     p.begin(&buffer);
+    
+    /* KDE4 QPixmap::gradWidget
     bitBlt(&buffer,0,0,&background,0,Qt::CopyROP);
     */
 
@@ -1656,9 +1659,9 @@ void karamba::externalStep()
       ((Meter*) meter)->mUpdate(&p);
     }
 
-    /* KDE4 QPixmap::gradWidget
     p.end();
 
+    /* KDE4 QPixmap::gradWidget
     bitBlt(&pm,0,0,&buffer,0,Qt::CopyROP);
     repaint();
     */
@@ -1668,16 +1671,16 @@ void karamba::externalStep()
 
 void karamba::step()
 {
-  //kDebug() << k_funcinfo << pm.size() << endl;
+  //kDebug() << k_funcinfo << endl;
   if (widgetUpdate && haveUpdated)
   {
     pm = QPixmap(size());
     QPixmap buffer = QPixmap(size());
     buffer.fill(Qt::black);
     
-    /* KDE4 QPixmap::gradWidget
     p.begin(&buffer);
-
+    
+    /* KDE4 QPixmap::gradWidget
     bitBlt(&buffer,0,0,&background,0,Qt::CopyROP);
     */
     
@@ -1687,20 +1690,21 @@ void karamba::step()
       ((Meter*) meter)->mUpdate(&p);
     }
     
-    /* KDE4 QPixmap::gradWidget
     p.end();
-
+    
+    /*
     bitBlt(&pm,0,0,&buffer,0,Qt::CopyROP);
-    update();
     */
+    update();
   }
-
+ 
   if (pythonIface && pythonIface->isExtensionLoaded())
   {
     if (haveUpdated == 0)
       pythonIface->initWidget(this);
-    else
+    /*else
       pythonIface->widgetUpdated(this);
+      */
   }
 
   if (haveUpdated == 0)
