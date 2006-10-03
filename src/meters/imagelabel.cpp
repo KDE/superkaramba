@@ -28,7 +28,7 @@
 #include <kpixmapeffect.h>
 #include <kdebug.h>
 #include <kimageeffect.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kio/job.h>
 #include "karamba_python.h"
 #include "karambaapp.h"
@@ -287,8 +287,10 @@ void ImageLabel::setValue(QString fn)
 
     if(protocol && url.isLocalFile() == false)
     {
-        KTempFile tmpFile;
-        KIO::FileCopyJob* copy = KIO::file_copy(fileName, tmpFile.name(), 0600,
+        KTemporaryFile tmpFile;
+        tmpFile.setAutoRemove(false);
+        tmpFile.open();
+        KIO::FileCopyJob* copy = KIO::file_copy(fileName, tmpFile.fileName(), 0600,
                                                 true, false, false);
         connect(copy, SIGNAL(result(KJob*)),
                 this, SLOT(slotCopyResult(KJob*)));
