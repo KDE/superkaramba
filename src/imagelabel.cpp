@@ -29,7 +29,7 @@
 //#include <QPixmapeffect.h>
 #include <kdebug.h>
 #include <kimageeffect.h>
-#include <ktempfile.h>
+#include <ktemporaryfile.h>
 #include <kio/job.h>
 #include "karambaapp.h"
 #include "imagelabel.h"
@@ -296,8 +296,10 @@ void ImageLabel::setValue(QString fn)
 
   if(protocol && url.isLocalFile() == false)
   {
-    KTempFile tmpFile;
-    KIO::FileCopyJob* copy = KIO::file_copy(fileName, tmpFile.name(), 0600,
+    KTemporaryFile tmpFile;
+    tmpFile.setAutoRemove(false);
+    tmpFile.open();
+    KIO::FileCopyJob* copy = KIO::file_copy(fileName, tmpFile.fileName(), 0600,
                                             true, false, false);
     connect(copy, SIGNAL(result(KIO::Job*)),
             this, SLOT(slotCopyResult(KIO::Job*)));
