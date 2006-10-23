@@ -83,12 +83,12 @@ set(superkaramba_SRCS ${libsk_sensors_SRCS} ${libsk_meters_SRCS} ${libsk_python_
    themeinfo.cpp 
    skthemehandler.cpp )
 
-kde4_automoc(superkaramba ${superkaramba_SRCS})
+kde4_automoc(${superkaramba_SRCS})
 
 kde4_add_ui_files(superkaramba_SRCS themes_layout.ui themewidget_layout.ui )
 
 
-kde4_add_kcfg_files(superkaramba superkaramba_SRCS superkarambasettings.kcfgc )
+kde4_add_kcfg_files(superkaramba_SRCS superkarambasettings.kcfgc )
 
 kde4_add_executable(superkaramba ${superkaramba_SRCS})
 
