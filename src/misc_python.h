@@ -76,24 +76,29 @@ PyObject* py_execute_command(PyObject* self, PyObject* args);
 *   up your widget while the command executes.
 *
 *   To use it, call executeInteractive with the reference to your widget and
-*   a list of command options. The array is simply a list that contains the
+*   an array of command options. The array is simply a list that contains the
 *   command as the first entry, and each option as a seperate list entry.
-*   Output from the command is returned via the commandOutput callback.
+*   Make sure to catch the returning value from executeInteractive(); it will
+*   be the identifier (process number) for the command.
 *
-*   The command returns the process number of the command. This is useful if
-*   you want to run more than one program at a time. The number will allow
-*   you to figure out which program is outputting in the commandOutput
-*   callback.
+*   Output from the command triggers commandOutput callback. Among other items
+*   commandOutput gives the process number of the command that gave the output.
+*   This allows you to identify the output when running more than one command
+*   at a time.
 *
-*   Example: Run the command "ls -la *.zip"
+*   Example: 
+*   To run the command "ls -la *.zip"
 *
-*   myCommand = ["ls", "-la", "*.zip"]
-*   karamba.executeInteractive(widget, myCommand)
+*      myCommand = ["ls", "-la", "*.zip"]
+*      procID = karamba.executeInteractive(widget, myCommand)
+*
+*   To catch the output, screen commandOutput output for procID.
+*
 * ARGUMENTS
 *   * long widget -- karamba
 *   * list command -- command to execute
 * RETURN VALUE
-*   1 if successful
+*   identification number of the executed command process
 */
 PyObject* py_execute_command_interactive(PyObject* self, PyObject* args);
 
@@ -172,7 +177,8 @@ PyObject* py_toggle_show_desktop(PyObject *self, PyObject *args);
 *   string getThemePath(widget)
 * DESCRIPTION
 *   Returns a string containing the directory where your theme was loaded
-*   from.
+*   from. If you are running the theme from (compressed) skz (zip) file, the
+*   return value will be the path of that file, including the file name.
 * ARGUMENTS
 *   * long widget -- karamba
 * RETURN VALUE
@@ -186,6 +192,7 @@ PyObject* py_get_theme_path(PyObject *self, PyObject *args);
 *   string language(widget)
 * DESCRIPTION
 *   Returns a string containing default language of a translation file.
+*   Please, see userLanguage to obtain the preferred KDE interface language.
 * ARGUMENTS
 *   * long widget -- karamba
 * RETURN VALUE
@@ -193,17 +200,20 @@ PyObject* py_get_theme_path(PyObject *self, PyObject *args);
 */
 PyObject* py_language(PyObject *self, PyObject *args);
 
-/** Misc/language
- *
- * SYNOPSIS
- *   string userLanguage(widget)
- * DESCRIPTION
- *   Returns a string containing the global KDE user language.
- * ARGUMENTS
- *   * long widget -- karamba
- * RETURN VALUE
- *   user language or empty string.
- */
+/** Misc/userLanguage
+*
+* SYNOPSIS
+*   string userLanguage(widget)
+* DESCRIPTION
+*   Returns a string containing the language name abbreviation for the
+*   language user chose for the KDE session in Region & Language settings.
+*   Implemented in version 0.40. Parse ~/.kde/share/config/kdeglobals
+*   for 'Language' directly for earlier clients.
+* ARGUMENTS
+*   * long widget -- karamba
+* RETURN VALUE
+*   user language or empty string.
+*/
 PyObject* py_userLanguage(PyObject *self, PyObject *args);
 
 
@@ -212,7 +222,7 @@ PyObject* py_userLanguage(PyObject *self, PyObject *args);
 * SYNOPSIS
 *   string readThemeFile(widget, file)
 * DESCRIPTION
-*   Returns a string containing the file
+*   Returns a string containing the contents of the file.
 * ARGUMENTS
 *   * long widget -- karamba
 *   * string file -- name of the file to read
@@ -228,7 +238,7 @@ PyObject* py_read_theme_file(PyObject *self, PyObject *args);
 * DESCRIPTION
 *    This creates a clickable area at x,y with width and height w,h. When
 *    this area is clicked, cmd_to_run will be executed. The mouse will change
-*    to the clickable icon when over this area.
+*    to the clickable icon while hovering over this area.
 * ARGUMENTS
 *   * long widget -- karamba
 *   * long x -- x coordinate
@@ -261,9 +271,9 @@ PyObject* py_open_theme(PyObject *self, PyObject *args);
 * DESCRIPTION
 *   Reloads current theme.
 * ARGUMENTS
-*   * long widget -- karamba
+*   * string theme -- path to new theme
 * RETURN VALUE
-*   a handle to the widget created
+*   1 if successful
 */
 PyObject* py_reload_theme(PyObject *self, PyObject *args);
 
@@ -285,7 +295,7 @@ PyObject* py_get_number_of_desktops(PyObject *self, PyObject *args);
 * SYNOPSIS
 *   long translateAll(widget, relative_x, relative_y)
 * DESCRIPTION
-*   Moves all widgets within a theme in a particular direction relative from
+*   Moves all widgets within a theme in a particular direction relative to
 *   the previous spot without moving the parent theme widget.
 * ARGUMENTS
 *   * long widget -- karamba
@@ -390,18 +400,18 @@ PyObject* py_create_service_click_area(PyObject *self, PyObject *args);
 PyObject* py_remove_click_area(PyObject *self, PyObject *args);
 
 
-/** Misc/getPrettyName
+/** Misc/getPrettyThemeName
 *
 *  SYNOPSIS
-*    string getPrettyName(theme)
+*    string getPrettyThemeName(theme)
 *  DESCRIPTION
-*    When a theme is created (with openNamedTheme), there is an
+*    When a theme is created with openNamedTheme, there is an
 *    option to give the theme an alternative name.
 *    This is useful if you open several widgets from the same theme:
 *    you need to give them unique names in order to contact them
 *    (for example, with callTheme or with setIncomingData)
 *  ARGUMENTS
-*    * string theme -- path to new theme
+*    * string theme -- path to the theme
 *  RETURN VALUE
 *    the pretty name of the theme
 */
@@ -435,14 +445,17 @@ PyObject* py_open_named_theme(PyObject *self, PyObject *args);
 *  SYNOPSIS
 *    long callTheme(widget, theme, info)
 *  DESCRIPTION
-*  Calls a theme - identified by the pretty name - and passes it a string.
-*  This will work, despite superkaramba being multithreaded, because it
-*  uses the DCOP interface to contact the other theme.  If you need to
-*  pass complex arguments (dictionaries, lists etc.) then use the python
+*  Sends a string to the theme identified by the pretty name.
+*  If you need to pass complex arguments (dictionaries, lists), use python
 *  "repr" and "eval" functions to marshall and unmarshall the data structure.
+*  (themeNotify Will be called in the target theme when message is received)
+*
+*  Note: As a bug/feature of SuperKaramba version 0.40, multiple instances of
+*  the same theme share global variables. If you want to communicate to other
+*  instances of the same theme, just communicate through global variables.
 *  ARGUMENTS
 *    * long widget -- karamba
-*    * string theme -- path to theme to be called
+*    * string theme -- pretty name of the theme to be called
 *    * string info -- a string containing the info to be passed to the theme
 *  RETURN VALUE
 *    1 if successful
@@ -464,7 +477,7 @@ PyObject* py_call_theme(PyObject *self, PyObject *args);
 *  having info passed to it put into a queue, instead of being overwritten.
 *  ARGUMENTS
 *    * long widget -- karamba
-*    * string theme -- path to theme to have information passed to it.
+*    * string theme -- pretty name of theme the information is passed to.
 *    * string info -- a string containing the info to be passed to the theme
 *  RETURN VALUE
 *    1 if successful
@@ -491,7 +504,7 @@ PyObject* py_get_incoming_data(PyObject *self, PyObject *args);
 *  SYNOPSIS
 *    long getUpdateTime(widget)
 *  DESCRIPTION
-*    returns the last stored update time.  intended for use 
+*    returns the last stored update time. Intended for use 
 *    so that the next refresh interval can work out how long ago
 *    the mouse was last moved over the widget.
 *  ARGUMENTS

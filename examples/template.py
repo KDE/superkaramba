@@ -82,6 +82,13 @@ def meterClicked(widget, meter, button):
 def commandOutput(widget, pid, output):
     pass
 
+#This gets called when another theme sends a message.
+#  widget = reference to your theme
+#  caller = "pretty" name or regular name (name of theme file with a number attached) of sending theme
+#  output = the text sent.
+def themeNotify(widget, caller, message):
+    pass
+
 #This gets called when an item is dropped on this widget.
 # NOTE you have to call acceptDrops() before your widget will accept drops.
 #  widget = reference to your theme
@@ -148,6 +155,6 @@ def wallpaperChanged(widget, desktop):
 #  char = the key that was pressed
 def keyPressed(widget, meter, char):
     pass
-    
+
 # This will be printed when the widget loads.
 print "Loaded my python extension!"
