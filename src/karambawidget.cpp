@@ -206,7 +206,7 @@ KarambaWidget::KarambaWidget(QString fn, bool reloading, int instance, QWidget *
 
     toggleFastTransforms = new KToggleAction(i18n("Use &Fast Image Scaling"), accColl, "Fast transformations");
     connect(toggleFastTransforms, SIGNAL(triggered(bool) ), SLOT( slotToggleFastTransforms() ));
-    toggleFastTransforms->setShortcut(Qt::CTRL + Qt::Key_F);
+    toggleFastTransforms->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_F));
 
     accColl->insert(toggleFastTransforms);
     toggleFastTransforms -> setChecked(true);
