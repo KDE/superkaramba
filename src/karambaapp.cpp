@@ -261,7 +261,7 @@ void KarambaApplication::checkCommandLine(KCmdLineArgs *args, QStringList &lst)
   {
     for(int i = 0; i < (args->count()); i++)
     {
-      if( args->arg(i) != "" )
+      if( args->arg(i) && *args->arg(i) )
       {
         KURL url = args->url(i);
 
