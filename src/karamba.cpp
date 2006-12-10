@@ -91,14 +91,18 @@ karamba::karamba(QString fn, QString name, bool reloading, int instance,
   QString qName = "karamba - " + prettyName;
   setName(qName.ascii());
 
-  KDirWatch *dirWatch = new KDirWatch( this );
+  KDirWatch *dirWatch = KDirWatch::self();
   connect(dirWatch, SIGNAL( dirty( const QString & ) ),
           SLOT( slotFileChanged( const QString & ) ) );
-  dirWatch->addFile(m_theme.file());
+
+  if(!dirWatch->contains(m_theme.file()))
+    dirWatch->addFile(m_theme.file());
+
   if(!m_theme.isZipTheme() && m_theme.pythonModuleExists())
   {
     QString pythonFile = m_theme.path() + "/" + m_theme.pythonModule() + ".py";
-    dirWatch->addFile(pythonFile);
+    if(!dirWatch->contains(pythonFile))
+      dirWatch->addFile(pythonFile);
   }
 
   widgetUpdate = true;
@@ -657,7 +661,7 @@ bool karamba::parseConfig()
           TextLabel *tmp = new TextLabel(this, x, y, w, h );
           tmp->setTextProps(tmpText);
           tmp->setValue(
-              m_theme.locale()->translate(lineParser.getString("VALUE").ascii()));
+              m_theme.locale()->translate(lineParser.getString("VALUE")));
 
           QString name = lineParser.getString("NAME");
           if (!name.isEmpty())
@@ -1216,9 +1220,14 @@ void karamba::setSensor(const LineParser& lineParser, Meter* meter)
   }
 }
 
-void karamba::slotFileChanged( const QString & )
+void karamba::slotFileChanged( const QString & file)
 {
-  reloadConfig();
+  //kdDebug() << "fileChanged: " << file << endl;
+
+  QString pythonFile = m_theme.path() + "/" + m_theme.pythonModule() + ".py";
+
+  if(file == m_theme.file() || file == pythonFile)
+    reloadConfig();
 }
 
 void karamba::passMenuOptionChanged(QString key, bool value)
