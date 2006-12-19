@@ -18,7 +18,7 @@
 #include <kmessagebox.h>
 #include <kdebug.h>
 #include <khelpmenu.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <QToolTip>
 #include <QByteArray>
 #include <QtAlgorithms>
@@ -187,13 +187,13 @@ void KarambaApplication::setUpSysTray(KAboutData* about)
     menu->insertSeparator();
 
     m_helpMenu = new KHelpMenu(themeListWindow, about);
-    action = KStdAction::help(m_helpMenu, SLOT(appHelpActivated()),
+    action = KStandardAction::help(m_helpMenu, SLOT(appHelpActivated()),
                               sysTrayIcon->actionCollection());
     menu->addAction( action );
-    action = KStdAction::aboutApp(m_helpMenu, SLOT(aboutApplication()),
+    action = KStandardAction::aboutApp(m_helpMenu, SLOT(aboutApplication()),
                                   sysTrayIcon->actionCollection());
     menu->addAction( action );
-    action = KStdAction::aboutKDE(m_helpMenu, SLOT(aboutKDE()),
+    action = KStandardAction::aboutKDE(m_helpMenu, SLOT(aboutKDE()),
                                   sysTrayIcon->actionCollection());
     menu->addAction( action );
 
