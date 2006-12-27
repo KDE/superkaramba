@@ -201,7 +201,7 @@ karamba::karamba(QString fn, QString name, bool reloading, int instance, bool su
   accColl = new KActionCollection( this );
   menuAccColl = new KActionCollection( this );
 
-  kpop->addAction( SmallIconSet("reload"),i18n("Update"), this,
+  kpop->addAction( KIcon("reload"),i18n("Update"), this,
                     SLOT(updateSensors()), Qt::Key_F5 );
 
   toggleLocked = new KToggleAction(KIcon("move"),i18n("Toggle &Locked Position"), accColl, "Locked position");
@@ -215,9 +215,9 @@ karamba::karamba(QString fn, QString name, bool reloading, int instance, bool su
   //kpop->setItemEnabled(THEMECONF, false);   // KDE4
   kpop->addMenu(toDesktopMenu);
 
-  kpop->addAction( SmallIconSet("reload3"),i18n("&Reload Theme"),this,
+  kpop->addAction( KIcon("reload3"),i18n("&Reload Theme"),this,
                     SLOT(reloadConfig()), Qt::CTRL+Qt::Key_R );
-  kpop->addAction( SmallIconSet("fileclose"),i18n("&Close This Theme"), this,
+  kpop->addAction( KIcon("fileclose"),i18n("&Close This Theme"), this,
                     SLOT(killWidget()), Qt::CTRL+Qt::Key_C );
 
   if(!SuperKarambaSettings::showSysTray())
@@ -269,15 +269,15 @@ Not used in KDE4
 
   // Karamba specific Config Entries
   bool locked = toggleLocked->isChecked();
-  locked = config->readBoolEntry("lockedPosition", locked);
+  locked = config->readEntry("lockedPosition", locked);
   toggleLocked->setChecked(locked);
 
-  if (!config -> readBoolEntry("fastTransforms", true))
+  if (!config -> readEntry("fastTransforms", true))
   {
     //gone
   }
 
-  desktop = config -> readNumEntry("desktop", desktop);
+  desktop = config -> readEntry("desktop", desktop);
   if (desktop > kWinModule->numberOfDesktops())
   {
     desktop = 0;
@@ -294,8 +294,8 @@ Not used in KDE4
   config -> setGroup("theme");
   if (config -> hasKey("widgetPosX") && config -> hasKey("widgetPosY"))
   {
-    int xpos = config -> readNumEntry("widgetPosX");
-    int ypos = config -> readNumEntry("widgetPosY");
+    int xpos = config -> readEntry("widgetPosX", 0);
+    int ypos = config -> readEntry("widgetPosY", 0);
 
     if (xpos < 0)
       xpos = 0;
@@ -1748,9 +1748,9 @@ void karamba::addMenuConfigOption(QString key, QString name)
   themeConfMenu->setEnabled(true);
 
   SignalBridge* action = new SignalBridge(this, key, menuAccColl);
-  KToggleAction* confItem = new KToggleAction (name, KShortcut::null(),
-                                               action, SLOT(receive()),
-                                               menuAccColl, key);
+  
+  KToggleAction* confItem = new KToggleAction(name, menuAccColl, key);
+  connect(confItem, SIGNAL(triggered(bool)), action, SLOT(receive()));
   //confItem -> setName(key); //KDE4 private??
 
   menuAccColl -> insert(confItem);
@@ -1759,9 +1759,9 @@ void karamba::addMenuConfigOption(QString key, QString name)
           this, SLOT( slotToggleConfigOption(QString, bool) ));
 
   config -> setGroup("config menu");
-  confItem -> setChecked(config -> readBoolEntry(key));
+  confItem -> setChecked(config -> readEntry(key, false));
 
-  confItem -> plug(themeConfMenu);
+  themeConfMenu -> addAction(confItem);
 
   numberOfConfMenuItems++;
 }
@@ -2029,16 +2029,16 @@ void karamba::showMenuExtension()
 {
   kglobal = new KMenu(this);
 
-  trayMenuToggle = kglobal->addAction(SmallIconSet("superkaramba"),
+  trayMenuToggle = kglobal->addAction(KIcon("superkaramba"),
                                          i18n("Show System Tray Icon"), this,
                                          SLOT(slotToggleSystemTray()),
                                          Qt::CTRL+Qt::Key_S);
 
-  trayMenuTheme = kglobal->addAction(SmallIconSet("knewstuff"),
+  trayMenuTheme = kglobal->addAction(KIcon("knewstuff"),
                                         i18n("&Manage Themes..."), this,
                                         SLOT(slotShowTheme()), Qt::CTRL+Qt::Key_M);
 
-  trayMenuQuit = kglobal->addAction(SmallIconSet("exit"),
+  trayMenuQuit = kglobal->addAction(KIcon("exit"),
                                        i18n("&Quit SuperKaramba"), this,
                                        SLOT(slotQuit()), Qt::CTRL+Qt::Key_Q);
 
