@@ -322,8 +322,6 @@ private slots:
     void killWidget();
     void editConfig();
     void editScript();
-    void slotToggleLocked();
-    void slotToggleFastTransforms();
     void popupNotify(int);
     void slotFileChanged( const QString & );
 

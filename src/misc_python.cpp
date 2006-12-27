@@ -315,6 +315,28 @@ PyObject* py_userLanguage(PyObject *, PyObject *args)
   return Py_BuildValue((char*)"s", KGlobal::locale()->language().toAscii().constData());
 }
 
+PyObject* py_userLanguages(PyObject *, PyObject *args)
+{
+  long widget;
+  if (!PyArg_ParseTuple(args, (char*)"l:language", &widget))
+    return NULL;
+  if (!checkKaramba(widget))
+    return NULL;
+
+  unsigned int noOfLangs = KGlobal::locale()->languageList().count();
+
+  PyObject *list, *item;
+  list = PyList_New(noOfLangs);
+    
+  for(unsigned int i = 0; i < noOfLangs; i++)
+  {
+     item = Py_BuildValue((char*)"s", KGlobal::locale()->languageList()[i].toAscii().constData());
+     PyList_SetItem(list, i, item);
+  }
+  
+  return list;
+}
+
 PyObject* py_read_theme_file(PyObject *, PyObject *args)
 {
   long widget;

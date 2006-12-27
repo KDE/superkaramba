@@ -207,6 +207,26 @@ PyObject* py_language(PyObject *self, PyObject *args);
 PyObject* py_userLanguage(PyObject *self, PyObject *args);
 
 
+/** Misc/userLanguages
+*
+* SYNOPSIS
+*   string userLanguages(widget)
+* DESCRIPTION
+*   Returns a list (array) containing the language name abbreviations for the
+*   preferred interface languages user chose for KDE session in Region & 
+*   Language settings.
+*   Having the whole array of preferred languages available is important for
+*   cases when you cannot provide interface translation for the 1st preferred
+*   language, but can for consecutive languages.
+*   (Implemented in version 0.42.)
+* ARGUMENTS
+*   * long widget -- karamba
+* RETURN VALUE
+*   list (array) with user languages in the order of preference.
+*/
+PyObject* py_userLanguages(PyObject *self, PyObject *args);
+
+
 /** Misc/readThemeFile
 *
 * SYNOPSIS

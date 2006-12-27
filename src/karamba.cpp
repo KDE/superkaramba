@@ -103,14 +103,18 @@ karamba::karamba(QString fn, QString name, bool reloading, int instance, bool su
   QString qName = "karamba - " + prettyName;
   setObjectName(qName);
 
-  KDirWatch *dirWatch = new KDirWatch( this );
+  KDirWatch *dirWatch = KDirWatch::self();
   connect(dirWatch, SIGNAL( dirty( const QString & ) ),
           SLOT( slotFileChanged( const QString & ) ) );
-  dirWatch->addFile(m_theme.file());
+
+  if(!dirWatch->contains(m_theme.file()))
+    dirWatch->addFile(m_theme.file());
+
   if(!m_theme.isZipTheme() && m_theme.pythonModuleExists())
   {
     QString pythonFile = m_theme.path() + "/" + m_theme.pythonModule() + ".py";
-    dirWatch->addFile(pythonFile);
+    if(!dirWatch->contains(pythonFile))
+      dirWatch->addFile(pythonFile);
   }
 
   widgetUpdate = true;
@@ -199,25 +203,11 @@ karamba::karamba(QString fn, QString name, bool reloading, int instance, bool su
 
   kpop->addAction( SmallIconSet("reload"),i18n("Update"), this,
                     SLOT(updateSensors()), Qt::Key_F5 );
-  toggleLocked = new KToggleAction (  i18n("Toggle &Locked Position"),
-                                      SmallIconSet("locked"),
-                                      Qt::CTRL+Qt::Key_L, this,
-                                      SLOT( slotToggleLocked() ),
-                                      accColl, "Locked position" );
-  accColl->insert(toggleLocked);
-  toggleLocked -> setChecked(true);
 
-  toggleLocked->plug(kpop);
-
-  toggleFastTransforms = new KToggleAction(i18n("Use &Fast Image Scaling"),
-                                           Qt::CTRL+Qt::Key_F, this,
-                         SLOT( slotToggleFastTransforms() ),
-                         accColl, "Fast transformations");
-
-  accColl->insert(toggleFastTransforms);
-  toggleFastTransforms -> setChecked(true);
-
-  toggleFastTransforms -> plug(kpop);
+  toggleLocked = new KToggleAction(KIcon("move"),i18n("Toggle &Locked Position"), accColl, "Locked position");
+  toggleLocked->setShortcut(KShortcut(Qt::CTRL+Qt::Key_L));
+  toggleLocked->setCheckedState(KGuiItem("Toggle &Locked Position", KIcon("lock")));
+  kpop->addAction(toggleLocked);
 
   kpop->addSeparator();
 
@@ -281,12 +271,10 @@ Not used in KDE4
   bool locked = toggleLocked->isChecked();
   locked = config->readBoolEntry("lockedPosition", locked);
   toggleLocked->setChecked(locked);
-  slotToggleLocked();
 
   if (!config -> readBoolEntry("fastTransforms", true))
   {
-    toggleFastTransforms -> setChecked(false);
-    slotToggleFastTransforms();
+    //gone
   }
 
   desktop = config -> readNumEntry("desktop", desktop);
@@ -405,7 +393,6 @@ bool karamba::parseConfig()
       {
         //qDebug("karamba found");
         toggleLocked->setChecked(lineParser.getBoolean("LOCKED"));
-        slotToggleLocked();
 
         x = ( x < 0 ) ? 0:x;
         y = ( y < 0 ) ? 0:y;
@@ -482,7 +469,6 @@ bool karamba::parseConfig()
           move(x,0);
           KWin::setStrut( winId(), 0, 0, h, 0 );
           toggleLocked->setChecked( true );
-          slotToggleLocked();
           toggleLocked->setEnabled(false);
         }
 
@@ -492,7 +478,6 @@ bool karamba::parseConfig()
           move( x, dh - h );
           KWin::setStrut( winId(), 0, 0, 0, h );
           toggleLocked->setChecked( true );
-          slotToggleLocked();
           toggleLocked->setEnabled(false);
         }
 
@@ -502,7 +487,6 @@ bool karamba::parseConfig()
           move( dw - w, y );
           KWin::setStrut( winId(), 0, w, 0, 0 );
           toggleLocked->setChecked( true );
-          slotToggleLocked();
           toggleLocked->setEnabled(false);
         }
 
@@ -511,7 +495,6 @@ bool karamba::parseConfig()
           move( 0, y );
           KWin::setStrut( winId(), w, 0, 0, 0 );
           toggleLocked->setChecked( true );
-          slotToggleLocked();
           toggleLocked->setEnabled(false);
         }
 
@@ -1235,9 +1218,14 @@ Not used in KDE4
   }
 }
 
-void karamba::slotFileChanged( const QString & )
+void karamba::slotFileChanged( const QString & file)
 {
-  reloadConfig();
+  //kdDebug() << "fileChanged: " << file << endl;
+
+  QString pythonFile = m_theme.path() + "/" + m_theme.pythonModule() + ".py";
+
+  if(file == m_theme.file() || file == pythonFile)
+    reloadConfig();
 }
 
 void karamba::passMenuOptionChanged(QString key, bool value)
@@ -1717,37 +1705,6 @@ void karamba::widgetClosed()
   if (pythonIface && pythonIface->isExtensionLoaded())
     pythonIface->widgetClosed(this);
 }
-
-void karamba::slotToggleLocked()
-{
-  //qDebug("karamba::slotToggleLocked");
-  if(toggleLocked->isChecked())
-  {
-    toggleLocked->setIcon(KIcon(SmallIconSet("lock")));   //KDE4
-  }
-  else
-  {
-    toggleLocked->setIcon(KIcon(SmallIconSet("move")));   // KDE4
-  }
-}
-
-void karamba::slotToggleFastTransforms()
-{
-  //qDebug("karamba::slotToggleFastTransforms");
-  //    bool fastTransforms = toggleFastTransforms -> isChecked();
-  //    if (toggleFastTransforms -> isChecked())
-  //    {
-  //     toggleFastTransforms -> setIconSet(SmallIconSet("ok"));
-  //    }
-  //    else
-  //    {
-  //     QPixmap ok_disabled;
-  //            toggleFastTransforms -> setIconSet(ok_disabled);
-  //    }
-  //config.setGroup("internal");
-  //config.writeEntry("fastTransforms", toggleFastTransforms -> isChecked());
-}
-
 
 bool karamba::useSmoothTransforms()
 {

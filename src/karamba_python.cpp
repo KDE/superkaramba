@@ -229,6 +229,8 @@ static PyMethodDef karamba_methods[] = {
         (char*)"Return default language of a translation file."},
     {(char*)"userLanguage", py_userLanguage, METH_VARARGS,
         (char*)"Return user language."},
+    {(char*)"userLanguages", py_userLanguages, METH_VARARGS,
+        (char*)"Return preferred user languages."},
     {(char*)"openTheme", py_open_theme, METH_VARARGS,
         (char*)"Open a new theme"},
     {(char*)"reloadTheme", py_reload_theme, METH_VARARGS,
