@@ -101,7 +101,7 @@ int main(int argc, char **argv)
     about.addAuthor("Luke Kenneth Casson Leighton", 0, "lkcl@lkcl.net");
     KCmdLineArgs::init(argc, argv, &about);
     KCmdLineArgs::addCmdLineOptions(options);
-    KSessionManaged ksm;
+    KarambaSessionManaged ksm;
     //karamba *mainWin = 0;
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     QStringList lst;

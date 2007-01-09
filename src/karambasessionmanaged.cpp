@@ -26,7 +26,7 @@
 #include "karamba.h"
 #include "qwidgetlist.h"
 
-bool KSessionManaged::saveState(QSessionManager&)
+bool KarambaSessionManaged::saveState(QSessionManager&)
 {
   KConfig* config = kapp->sessionConfig();
 
@@ -57,7 +57,7 @@ bool KSessionManaged::saveState(QSessionManager&)
   return true;
 }
 
-bool KSessionManaged::commitData(QSessionManager&)
+bool KarambaSessionManaged::commitData(QSessionManager&)
 {
   return true;
 }

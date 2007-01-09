@@ -20,3 +20,11 @@
 *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 ****************************************************************************/
 
+class KarambaSessionManaged : public KSessionManaged
+{
+public:
+    KarambaSessionManaged() {};
+
+    virtual bool commitData( QSessionManager& );
+    virtual bool saveState( QSessionManager& );
+};
