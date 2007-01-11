@@ -1695,7 +1695,9 @@ void KarambaWidget::addMenuConfigOption(QString key, QString name)
     SignalBridge* action = new SignalBridge(this, key, menuAccColl);
     KToggleAction *confItem = new KToggleAction(name, menuAccColl, key.ascii());
     connect(confItem, SIGNAL(triggered(bool) ), action, SLOT(receive()));
+#ifdef __GNUC__
 #warning "kde4: port it :confItem -> setName(key.ascii());"
+#endif
     //confItem -> setName(key.ascii());
 
     menuAccColl -> insert(confItem);

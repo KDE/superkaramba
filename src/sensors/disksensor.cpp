@@ -119,7 +119,9 @@ void DiskSensor::processExited(KProcess *)
     }
     stringList.clear();
 
+#ifdef __GNUC__
     #warning Fix this
+#endif
 #warning Fixed :))
     QList<QString> mntPts= data.keys();
     foreach(QString mntPt, mntPts)

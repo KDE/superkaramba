@@ -143,7 +143,9 @@ void RichTextLabel::setWidth(int p_width)
 
 void RichTextLabel::paintEvent(QPaintEvent* )
 {
+#ifdef __GNUC__
 #warning need to optimize this
+#endif
     QPainter p(this);
     QTextBlock block = textDoc->begin();
     qreal y = 0;

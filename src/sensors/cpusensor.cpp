@@ -40,7 +40,9 @@ CPUSensor* CPUSensor::self()
 CPUSensor::CPUSensor(int interval )
         :   Sensor(interval)
 {
+#ifdef __GNUC__
 #warning Inefficient propgramming, no freebsd support
+#endif
 /* actually, we are doing here the changing of cpu0 to cpu1 and so on and then getCPULoad(), but what we should have done actually is calling getCPULoad() once, which would fillup the data Map correctly.*/
     QFile file("/proc/stat");
     QString line;

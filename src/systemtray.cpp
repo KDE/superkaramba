@@ -38,7 +38,9 @@ Systemtray::Systemtray(QWidget* parent)
         : QWidget(parent,0,0)
 {
     setBackgroundOrigin(ParentOrigin);
+#ifdef __GNUC__
 #warning please test how FixedPixmap is replaced best
+#endif
     //setBackgroundMode(Qt::FixedPixmap);
 }
 
