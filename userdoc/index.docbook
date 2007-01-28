@@ -72,14 +72,16 @@ widgets on your &kde; desktop.</para>
 <answer>
 <!-- FIXME: Now part of KDE, this should point users at their distribution -->
 <!-- for the next release -->
-<para>The &superkaramba; web site (http://netdragon.sourceforge.net) has a list of user-submitted RPMs for several distributions. Other user-subm
-itted RPMs have been posted to kde-look.org and to the &superkaramba; Help
+<para>The &superkaramba; web site (<ulink
+url="http://netdragon.sourceforge.net"></ulink>) has a 
+list of user-submitted RPMs for several distributions. Other user-submitted 
+RPMs have been posted to kde-look.org and to the &superkaramba; Help
 forum.</para>
 </answer>
 </qandaentry>
 <qandaentry>
-<question><para>When I try to compile, I get this error:</para>
-<screen><computeroutput>Python.h: No such file or directory</computeroutput></screen>
+<question><para>When I try to compile, I get this error:
+<screen><computeroutput>Python.h: No such file or directory</computeroutput></screen></para>
 </question>
 <answer><para>You will need to install the <literal>python-devel</literal>
 package.  Once that package is installed you should run
@@ -87,8 +89,8 @@ package.  Once that package is installed you should run
 </answer>
 </qandaentry>
 <qandaentry>
-<question><para>When I try to compile, I get this error:</para>
-<screen><computeroutput>cannot find -lselinux</computeroutput></screen>
+<question><para>When I try to compile, I get this error:
+<screen><computeroutput>cannot find -lselinux</computeroutput></screen></para>
 </question>
 <answer>
 <para>You will need to install the <literal>libselinux-devel</literal>
@@ -105,7 +107,7 @@ from the command line it says <computeroutput>command not
 found</computeroutput>.</para>
 </question>
 <answer>
-<para>In some distributions ./configure has a default prefix path that
+<para>In some distributions <command>./configure</command> has a default prefix path that
 differs to what you might expect. For example, in &Mandrake; the default
 prefix is <filename class="directory">/usr/local/kde</filename> and the
 executable is installed in <filename
@@ -115,8 +117,8 @@ class="directory">/usr/local/kde/bin</filename>.</para>
 <parameter>--prefix=/usr</parameter></command> to specify the prefix that
 you prefer and then try <command>make</command> and <command>make
 install</command> again. Or you could create a symbolic link in your
-preferred directory that links to the executable. Or you could add the
-install directory to your $<envar>PATH</envar>.</para>
+preferred folder that links to the executable. Or you could add the
+install folder to your $<envar>PATH</envar>.</para>
 </answer>
 </qandaentry>
 </qandadiv>
@@ -131,8 +133,8 @@ running?</para>
 <answer><para>Many themes depend on &kicker; and will not work well without
 it. If you don't want &kicker; to show on your desktop, you can set it to
 auto-hide. Another solution is to change the auto-hide setting in a
-<filename>~/.kde</filename> file. For more information see the wiki page about
-<ulink
+<filename>~/.kde/share/autostart/panel.desktop</filename> file.
+For more information see the wiki page about <ulink
 url="http://wiki.kdenews.org/tiki-print.php?page=Secret+Config+Settings">secret
 configuration settings</ulink>.</para>
 </answer>
@@ -146,7 +148,7 @@ running?</para>
 while a regular kicker systray is running, the theme will
 <quote>steal</quote> all the icons from the first systray.  This is because
 in &kde; and Gnome, the systray icons are really little windows and there is
-only one copy of each running. If you want to run a system tray theme, you can
+only one copy of each running. If you want to run a system tray theme, you must
 remove the system tray from &kicker;.</para> 
 </answer>
 </qandaentry>
@@ -159,9 +161,9 @@ remove the system tray from &kicker;.</para>
 support is enabled, any theme that is left running when you logout will
 automatically start on startup. For some themes you will also need to &RMB;
 click and reload the theme at least once after running it so that the config
-file will get written to your home directory.</para>
+file will get written to your home folder.</para>
 <para>Another solution is to create a desktop config file in the &kde;
-autostart directory.</para> 
+autostart folder.</para> 
 <para>To create a desktop config file, open an editor and enter the
 following:</para>
 <screen><userinput>[Desktop Entry]
@@ -171,7 +173,7 @@ Type=Application
 X-KDE-StartupNotify=false</userinput></screen>
 <para>Then save it as
 <filename><replaceable>themename</replaceable>.desktop</filename> into the
-autostart directory at <filename
+autostart folder at <filename
 class="directory">$<envar>KDEHOME</envar>/Autostart/</filename>.</para>
 </answer>
 </qandaentry>
