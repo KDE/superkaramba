@@ -206,7 +206,7 @@ void ThemesDlg::openLocalTheme()
 
 void ThemesDlg::getNewStuff()
 {
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     config->setGroup("KNewStuff");
     config->writeEntry("ProvidersUrl",
                        "http://download.kde.org/khotnewstuff/karamba-providers.xml");
@@ -254,7 +254,7 @@ void ThemesDlg::newSkzTheme(const QString &file)
 {
     addThemeToList(file);
 
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
     QStringList keys = config->entryMap("KNewStuffStatus").keys();
 
     for(QStringList::Iterator it = m_newStuffStatus.begin();
@@ -351,7 +351,7 @@ void ThemesDlg::uninstall()
     tableThemes->removeItem(w);
 
     // Remove theme from KNewStuffStatus
-    KConfig* config = KGlobal::config();
+    KSharedConfig::Ptr config = KGlobal::config();
 
     config->setGroup("KNewStuffNames");
     QString name = config->readEntry(theme.path(),QString());
