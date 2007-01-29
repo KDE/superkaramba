@@ -68,7 +68,7 @@ bool SKNewStuff::install( const QString &fileName )
 
     KMimeType::Ptr result = KMimeType::findByURL(fileName);
     KStandardDirs myStdDir;
-    const QString destDir =myStdDir.saveLocation("data", kapp->instanceName() + "/themes/", true);
+    const QString destDir =myStdDir.saveLocation("data", KGlobal::mainComponent().componentName() + "/themes/", true);
     KStandardDirs::makeDir( destDir );
 
     kDebug() << "SKNewStuff::install() mimetype: " << result->name() << endl;

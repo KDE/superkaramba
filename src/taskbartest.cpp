@@ -66,7 +66,7 @@ int main(int argc, char **argv)
 //     //      KSGRD::SensorMgr  foo ;//  p->engage( "" );
 
 
-//     //KConfig *kconfig = KGlobal::config();
+//     //KSharedConfig::Ptr kconfig = KGlobal::config();
 //     //kconfig->setGroup("karamba");
 //     //kconfig->writeEntry("test", "/home/hk/foofoo");
 //     //kconfig->sync();

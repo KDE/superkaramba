@@ -33,7 +33,7 @@
 #include <kconfig.h>
 #include <kglobal.h>
 #include <klocale.h>
-#include <kinstance.h>
+#include <kcomponentdata.h>
 #include <qbuffer.h>
 #include <qglobal.h>
 #include <qiodevice.h>
@@ -172,7 +172,7 @@ void ThemeLocale::setLanguage(const QStringList &languages)
 
 QStringList ThemeLocale::languageList()
 {
-    KConfig* config = KGlobal::instance()->config();
+    KConfig* config = KGlobal::mainComponent().config();
     // Reset the list and add the new languages
     QStringList languageList;
     languageList +=
