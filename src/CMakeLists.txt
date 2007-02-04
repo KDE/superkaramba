@@ -92,7 +92,7 @@ kde4_add_kcfg_files(superkaramba_SRCS superkarambasettings.kcfgc )
 
 kde4_add_executable(superkaramba ${superkaramba_SRCS})
 
-target_link_libraries(superkaramba  ${KDE4_KIO_LIBS} ${XMMS_LIBRARIES} kutils  ${PYTHON_LIBRARIES} knewstuff)
+target_link_libraries(superkaramba  ${KDE4_KIO_LIBS} ${XMMS_LIBRARIES} ${KDE4_KUTILS_LIBS} ${PYTHON_LIBRARIES} knewstuff)
 
 install(TARGETS superkaramba  DESTINATION ${BIN_INSTALL_DIR} )
 
