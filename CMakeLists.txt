@@ -1,17 +1,16 @@
 project(superkaramba)
+include(MacroBoolTo01)
+include(CheckIncludeFiles)
 
+macro_bool_to_01(KDE4_XMMS HAVE_XMMS)
+check_include_files(sys/types.h HAVE_SYS_TYPES_H)
 configure_file(config-superkaramba.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-superkaramba.h )
 
 
 add_subdirectory( src ) 
 add_subdirectory( icons ) 
 
-
-
-
 ########### install files ###############
-
-
 
 
 

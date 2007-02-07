@@ -23,12 +23,7 @@
 #ifndef _KARAMBAWIDGET_H_
 #define _KARAMBAWIDGET_H_
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <QWidget>
-#include <kapplication.h>
 
 #include <kwinmodule.h>
 #include <kwin.h>
