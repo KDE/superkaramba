@@ -2,7 +2,9 @@ project(superkaramba)
 include(MacroBoolTo01)
 include(CheckIncludeFiles)
 
+macro_optional_find_package(Xmms)
 macro_bool_to_01(KDE4_XMMS HAVE_XMMS)
+macro_log_feature(XMMS_FOUND "libxmms" "Xmms is used into superkaramba" "http://www.xmms.org/")
 check_include_files(sys/types.h HAVE_SYS_TYPES_H)
 configure_file(config-superkaramba.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-superkaramba.h )
 
