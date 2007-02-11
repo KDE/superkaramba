@@ -24,11 +24,6 @@
 #include <kurl.h>
 #include "karambaapp.h"
 
-#ifdef HAVE_CONFIG_H
-  #include <config.h>
-#endif
-
-#ifdef HAVE_KNEWSTUFF
 #include "knewstuff/knewstuff.h"
 #include "knewstuff/entry.h"
 
@@ -46,8 +41,7 @@ class SKNewStuff : public KNewStuff
 
   private:
     ThemesDlg *mDlg;
-    KURL m_sourceLink;
+    KUrl m_sourceLink;
 };
 
-#endif //HAVE_KNEWSTUFF
 #endif //SKNEWSTUFF_H

@@ -30,13 +30,8 @@
 #include <qdir.h>
 #include <qfileinfo.h>
 
-#ifdef HAVE_CONFIG_H
-  #include <config.h>
-#endif
-
 #include "karambaapp.h"
 #include "themesdlg.h"
-#ifdef HAVE_KNEWSTUFF
 #include "sknewstuff.h"
 
 SKNewStuff::SKNewStuff( ThemesDlg *dlg ) :
@@ -49,11 +44,11 @@ bool SKNewStuff::install( const QString &fileName )
 {
   kDebug() << "SKNewStuff::install(): " << fileName << endl;
 
-  KMimeType::Ptr result = KMimeType::findByURL(fileName);
+  KMimeType::Ptr result = KMimeType::findByUrl(fileName);
   KStandardDirs myStdDir;
   QFileInfo fi(fileName);
   QString base = fi.baseName();
-  QString baseDestDir =myStdDir.saveLocation("data", kapp->instanceName() + "/themes/", true);
+  QString baseDestDir = myStdDir.saveLocation("data", KGlobal::mainComponent().componentName() + "/themes/", true);
   const QString destDir = baseDestDir + base + "/";
   KStandardDirs::makeDir( destDir );
 
@@ -86,8 +81,8 @@ bool SKNewStuff::install( const QString &fileName )
     //TODO: write a routine to check if this is a valid .skz file
     //otherwise we need to unpack it like it is an old theme that was packaged
     //as a .zip instead of .bz2 or .tar.gz
-    KURL sourceFile(fileName);
-    KURL destFile( destDir + sourceFile.fileName() );
+    KUrl sourceFile(fileName);
+    KUrl destFile( destDir + sourceFile.fileName() );
     if(!KIO::NetAccess::file_copy( sourceFile, destFile ))
     {
       return false;
@@ -103,7 +98,7 @@ bool SKNewStuff::install( const QString &fileName )
   else if(result->name() == "text/html")
   {
     kDebug() << "SKNewStuff::install() text/html" << endl;
-    KRun::runURL( m_sourceLink, "text/html");
+    KRun::runUrl(m_sourceLink, "text/html", 0);
   }
   else
   {
@@ -122,7 +117,7 @@ bool SKNewStuff::createUploadFile( const QString &fileName )
 
 QString SKNewStuff::downloadDestination( KNS::Entry *entry )
 {
-  KURL source = entry->payload();
+  KUrl source = entry->payload();
   m_sourceLink = source;
 
   kDebug() << "SKNewStuff::downloadDestination() url: "
@@ -132,9 +127,8 @@ QString SKNewStuff::downloadDestination( KNS::Entry *entry )
   {
     kDebug() << "The file was empty. " << source.url() << 
       " must be a URL link." << endl;
-    KRun::runURL( source, "text/html");
+    KRun::runUrl(source, "text/html", 0);
     return file;
   }
   return KGlobal::dirs()->saveLocation( "tmp" ) + source.fileName();
 }
-#endif //HAVE_KNEWSTUFF

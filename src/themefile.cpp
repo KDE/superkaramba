@@ -32,7 +32,7 @@
 #include <kstandarddirs.h>
 #include <klocale.h>
 #include <kio/netaccess.h>
-#include <q3textstream.h>
+#include <QTextStream>
 #include <qfileinfo.h>
 #include <qdom.h>
 #include <qdir.h>
@@ -145,7 +145,7 @@ bool ThemeFile::open()
     m_ba = m_zip->data();
     if(m_ba.size() > 0)
     {
-      m_stream = new Q3TextStream(m_ba, QIODevice::ReadOnly);
+      m_stream = new QTextStream(m_ba, QIODevice::ReadOnly);
       result = true;
     }
   }
@@ -155,7 +155,7 @@ bool ThemeFile::open()
 
     if(m_fl.open(QIODevice::ReadOnly|QIODevice::Text))
     {
-      m_stream = new Q3TextStream(&m_fl);        // use a text stream
+      m_stream = new QTextStream(&m_fl);        // use a text stream
       result = true;
     }
   }
@@ -255,6 +255,8 @@ bool ThemeFile::set(const KUrl &url)
       return false;
   }
 
+  m_UrlPath = url;
+
   QFileInfo fi(m_file);
 
   m_name = fi.completeBaseName();
@@ -285,6 +287,11 @@ bool ThemeFile::set(const KUrl &url)
 
   m_locale = new ThemeLocale(this);
   return isValid();
+}
+
+KUrl ThemeFile::getUrlPath()
+{
+  return m_UrlPath;
 }
 
 void ThemeFile::parseXml()

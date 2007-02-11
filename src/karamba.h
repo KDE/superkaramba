@@ -1,8 +1,9 @@
 /*
+ * Copyright (C) 2003-2004 Adam Geitgey <adam@rootnode.org>
  * Copyright (C) 2003 Hans Karlsson <karlsson.h@home.se>
  * Copyright (C) 2004,2005 Luke Kenneth Casson Leighton <lkcl@lkcl.net>
- * Copyright (C) 2003-2004 Adam Geitgey <adam@rootnode.org>
  * Copyright (c) 2005 Ryan Nickell <p0z3r@earthlink.net>
+ * Copyright (c) 2007 Alexander Wiedenbruch <mail@wiedenbruch.de>
  *
  * This file is part of SuperKaramba.
  *
@@ -21,354 +22,218 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  ****************************************************************************/
 
-#ifndef _KARAMBA_H_
-#define _KARAMBA_H_
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
+#ifndef KARAMBA_H
+#define KARAMBA_H
 
-#include <qwidget.h>
-//Added by qt3to4:
-#include <Q3CString>
-#include <QCloseEvent>
-#include <QDropEvent>
-#include <QWheelEvent>
-#include <QPaintEvent>
-#include <QMouseEvent>
-#include <QKeyEvent>
-#include <QDragEnterEvent>
-#include <QList>
-#include <kapplication.h>
+#include <QGraphicsView>
+#include <QGraphicsScene>
+#include <QGraphicsItem>
+#include <QThread>
+#include <QTimer>
+#include <QMutex>
+#include <QMutexLocker>
+#include <QSignalMapper>
 
-#include <kwinmodule.h>
-#include <kwin.h>
-
-#include <qfile.h>
-#include <kfile.h>
-#include <qfileinfo.h>
-#include <kaction.h>
-#include <qtimer.h>
-#include <qpixmap.h>
-#include <qpainter.h>
-
-//#include <krootpixmap.h>
-
-#include <qregexp.h>
-#include <qlabel.h>
-#include <qobject.h>
-#include <qstring.h>
-#include <qstringlist.h>
-#include <q3valuestack.h>
-//#include <dcopclient.h>
-#include <kmenu.h>
-#include <qcursor.h>
-#include <netwm.h>
-#include <kiconloader.h>
-#include <kfiledialog.h>
-#include <qmap.h>
 #include <kurl.h>
-#include <krun.h>
-#include <qdatetime.h>
-#include <qbitmap.h>
-#include <kconfig.h>
-#include <kprocess.h>
-#include <q3dragobject.h>
-#include <ktoggleaction.h>
-
+#include <kmenu.h>
+#include <netwm.h>
 #include <kactioncollection.h>
+#include <ktoggleaction.h>
+#include <kwinmodule.h>
+#include <kconfig.h>
 
-//#include "karambarootpixmap.h"
-
-#include "bar.h"
-#include "textlabel.h"
-#include "imagelabel.h"
-#include "graph.h"
-#include "input.h"
-
-#include "clickarea.h"
-
-#include "sensorparams.h"
-#include "memsensor.h"
-#include "datesensor.h"
-#include "uptimesensor.h"
-#include "memsensor.h"
-#include "cpusensor.h"
-#include "networksensor.h"
-#include "xmmssensor.h"
-#include "programsensor.h"
-#include "disksensor.h"
-#include "sensorsensor.h"
-#include "textfilesensor.h"
-
-#include "clickmap.h"
-#include "rsssensor.h"
-//#include "clickable.h"
-#include "taskmanager.h"
-#include "showdesktop.h"
-#include "systemtray.h"
+#include "karambaapp.h"
 #include "themefile.h"
+#include "taskmanager.h"
+#include "systemtray.h"
 
-/**
- * @short Application Main Window
- * @author Adam Geitgey <adam@rootnode.org>
- * @author Hans Karlsson <karlsson.h@home.se>
- * @author Luke Kenneth Casson Leighton <lkcl@lkcl.net>
- * @version 0.26
- */
+#include "meters/textfield.h"
+#include "meters/richtextlabel.h"
+#include "meters/bar.h"
+#include "meters/graph.h"
 
-class KarambaPython;
-class LineParser;
+#include "sensors/sensor.h"
+#include "sensors/mem.h"
+#include "sensors/disk.h"
+#include "sensors/network.h"
+#include "sensors/date.h"
+#include "sensors/program.h"
+#include "sensors/sensorparams.h"
+#include "sensors/textfile.h"
+#include "sensors/rss.h"
+#include "sensors/uptime.h"
+#include "sensors/lmsensor.h"
 
-class karamba :  public QWidget
+#include "python/karamba.h"
+
+#include <QGraphicsItemGroup>
+
+class Meter;
+
+class Karamba : public QObject, public QGraphicsItemGroup
 {
     Q_OBJECT
 
-public:
-    karamba(QString fn, QString name, bool reloading = false,
-            int instance = -1, bool sub_theme = false);
-    QList<QObject*> *menuList;
+  public:
+    Karamba(KUrl themeFile, QGraphicsView *view = 0,
+            QGraphicsScene *scene = 0, int instance = -1);
 
-    virtual ~karamba();
-    const ThemeFile& theme() const { return m_theme; };
+    virtual ~Karamba();
 
-    QList<QObject*> *meterList;
-    QList<QObject*> *imageList;
-    QList<QObject*> *clickList;
+    QRectF boundingRect() const;
 
-    void setSensor(const LineParser& lineParser, Meter* meter);
-    QString getSensor(Meter* meter);
-    QString findSensorFromMap(Sensor* sensor);
-    void deleteMeterFromSensors(Meter* meter);
-    Sensor* findSensorFromList(Meter* meter);
-    KMenu* keditpop;
-    KMenu *kpop;
-    QBitmap* widgetMask;
-    //KarambaRootPixmap *kroot;				// Not used in KDE4
-    TaskManager taskManager;
-    Systemtray* systray;
-    KProcess* currProcess;
-    bool useSmoothTransforms();
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
+                    QWidget *widget);
 
-    void changeInterval(int interval);
-    void setWidgetUpdate(bool wu) { widgetUpdate = wu; };
-    bool getWidgetUpdate() { return widgetUpdate; };
+    QGraphicsScene* getScene();
+    QGraphicsView* getView();
 
-    //bool hasMeter(Meter* meter) { return meterList->containsRef(meter) > 0; };	//KDE4
-    bool hasMeter(Meter* meter) { return meterList->indexOf(meter) >= 0; };	//KDE4
-
-    char getTempUnit() { return tempUnit; };
-    void addMenuConfigOption(QString key, QString name);
-    bool setMenuConfigOption(QString key, bool value);
-    bool readMenuConfigOption(QString key);
-    void writeConfigData();
-    TextField* getDefaultTextProps() { return defaultTextField; };
-    int instance() const { return m_instance; };
-    void setInstance(int instance) { m_instance = instance; };
-    void closeTheme(bool reloading = false);
     void keyPressed(const QString& s, const Meter* meter);
 
-    int numberOfConfMenuItems;
-    KConfig* config;
-    QString prettyName;
-    bool m_sub_theme;
-    bool isSubTheme() { return m_sub_theme; }
+    ThemeFile& theme();
 
-    void toggleWidgetUpdate( bool );
+    int testCallback(int value);
 
-    KWinModule*    kWinModule;
+    bool hasMeter(Meter* meter);
+    bool removeMeter(Meter *meter);
+    QString getSensor(Meter* meter);
+    void setSensor(const LineParser& lineParser, Meter* meter);
+    void deleteMeterFromSensors(Meter* meter);
+    TextField* getDefaultTextProps();
+    void updateSensors();
+    void setFixedSize(u_int w, u_int h);
+    void move(u_int x, u_int y);
+    bool readMenuConfigOption(QString key);
+    KConfig* getConfig();
+    //void removePopupMenu(KMenu *menu);
+    bool popupMenuExisting(KMenu *menu);
+    QString prettyName(); 
+    int getNumberOfDesktops();
+    double getUpdateTime();
+    void setUpdateTime(double newTime);
+    void setWantRightButton(bool enable);
+    void changeInterval(u_int newInterval);
+    void addMenuConfigOption(QString key, QString name);
+    bool setMenuConfigOption(QString key, bool value);
+    KMenu* addPopupMenu();
+    QAction* addMenuItem(KMenu *menu, QString text,
+              QString icon);
+    void popupMenu(KMenu *menu, QPoint pos);
+    void deletePopupMenu(KMenu *menu);
+    void deleteMenuItem(QAction *action);
+    void scaleImageLabel(Meter *meter, int width,
+              int height);
+    void moveMeter(Meter *meter, int x, int y);
+    void popupGlobalMenu();
 
-    QString incomingData;
-    QString getIncomingData() { return incomingData; }
-    void _setIncomingData(QString data) { incomingData = data; }
-    void setIncomingData(QString theme, QString data);
-
-    void themeNotify(QString theme, QString txt);
-    void callTheme(QString theme, QString txt);
-
-    double getUpdateTime() { return update_time; }
-    void setUpdateTime(double time) { update_time = time; }
-
-    void makeActive();
-    void makePassive();
-
+    void writeConfigData();
+    
     void showMenuExtension();
     void hideMenuExtension();
 
-protected:
-    void mousePressEvent( QMouseEvent *);
-    void wheelEvent( QWheelEvent *);
-    void mouseReleaseEvent( QMouseEvent *);
-    void mouseDoubleClickEvent( QMouseEvent *);
-    void mouseMoveEvent( QMouseEvent *);
-    void keyPressEvent ( QKeyEvent * e );
-    void closeEvent ( QCloseEvent *);
-    void paintEvent ( QPaintEvent *);
-    void saveProperties(KConfig *);
-    void readProperties(KConfig *);
-    void dragEnterEvent(QDragEnterEvent* event);
-    void dropEvent(QDropEvent* event);
+    KProcess *currProcess;
+    Systemtray *systray;
 
-private:
-    bool widgetUpdate;
-    bool repaintInProgress;
-    //bool reloading;
-    bool want_right_button;
-
-    NETWinInfo* info;
-    bool onTop;
-    bool managed;
-    bool fixedPosition;
-    bool haveUpdated;
-    char tempUnit;
-    double update_time;
-    int m_instance;
-
-    bool parseConfig();
-
-    void passClick( QMouseEvent* );
-    void passWheelClick( QWheelEvent* );
-    void meterClicked(QMouseEvent*, Meter*);
-
-    QMap<QString, Sensor*> sensorMap;
-    QList<QObject*> *sensorList;
-    QList<QObject*> *timeList;
-
-    QTime lowerTimer;
-    // use only the first occurance of KARAMBA in a config file
-    bool foundKaramba;
-
-    KMenu* themeConfMenu;
-    KMenu* toDesktopMenu;
-    KMenu* kglobal;
-
-    //DCOPClient *client;		// KDE4
-    Q3CString appId;
-
-    QPixmap pm;
-    QPixmap background;
-    QPainter p;
-
-    QPoint clickPos;
-    KActionCollection* accColl;
-    KActionCollection* menuAccColl;
-    KToggleAction *toggleLocked;
-    // use highquality scale and rotate algorithms
-    KToggleAction *toggleFastTransforms;
-
-    // Python module references
-    KarambaPython* pythonIface;
-    TextField *defaultTextField;
-
-    int  desktop;
-    ThemeFile m_theme;
-
-  QAction* trayMenuSeperator;
-  QAction* trayMenuQuit;
-  QAction* trayMenuToggle;
-  QAction* trayMenuTheme;
-
-  void start();
-
-public slots:
-    void step();
-    void externalStep();
-    void widgetClosed();
-    void updateSensors();
-    void currentDesktopChanged(int);
-    void currentWallpaperChanged(int);
-    void slotToggleConfigOption(QString key, bool);
-    void updateBackground();
-    void passMenuOptionChanged(QString key, bool);
-    void passMenuItemClicked(int);
-    void processExited (KProcess *proc);
-    void receivedStdout (KProcess *proc, char *buffer, int buflen);
-    void toDesktop(int desktopid, QAction *action);
-    QString getPrettyName() { return prettyName; }
-
-    // Systray
-    void systrayUpdated();
-
-    // Task Manager
-    void startupAdded(Startup*);
-    void startupRemoved(Startup*);
-
-    void taskAdded(Task*);
-    void taskRemoved(Task*);
-    void activeTaskChanged(Task*);
+  public Q_SLOTS:
+    void closeWidget();
     void reloadConfig();
+    void processExited(KProcess *proc);
+    void receivedStdout(KProcess *proc, char *buffer, int buflen);
+    void startupAdded(Startup::StartupPtr);
+    void startupRemoved(Startup::StartupPtr);
+    void taskAdded(Task::TaskPtr);
+    void taskRemoved(Task::TaskPtr);
+    void activeTaskChanged(Task::TaskPtr);
+    void passMenuItemClicked(QAction* action);
+    void slotFileChanged(const QString &file);
 
-    void setAlwaysOnTop(bool stay);
-
-    /**
-     * If true, then when a right button is pressed on the theme,
-     * the theme's python widgetMouseMoved function is called.
-     */
-    void setWantRightButton(bool yesno) { want_right_button = yesno; }
-
-    /**
-     * can be used to fire up the karamba management popup menu
-     */
-    void management_popup( void );
-
-private:
-    bool m_reloading;
-    bool themeStarted;
-    QTimer *m_sysTimer;
-    int m_interval;
-
-private slots:
+  private Q_SLOTS:
     void initPythonInterface();
-    void killWidget();
-    void editConfig();
-    void editScript();
-    void popupNotify(int);
-    void slotFileChanged( const QString & );
-
+    void slotToggleLocked();
     void slotToggleSystemTray();
-    void slotQuit();
     void slotShowTheme();
-};
+    void slotQuit();
+    void currentDesktopChanged(int i);
+    void slotToggleConfigOption(QObject*);
+    void slotDesktopChanged(int desktop);
 
-/*
- * Slot to receive the event of moving the karamba object
- * to a new desktop. Generated by karamba::toDesktopMenu items
- */
-class DesktopChangeSlot : public QObject
-{
-  Q_OBJECT
+    void step();
 
-  public:
-  DesktopChangeSlot(QObject *parent, int desktop_id);
-  /* Parent should be the karamba object
-   * desktop id of 0 indicates all desktops */
-  void setAction(QAction* action);
-  QAction* menuAction();
-
-  public slots:
-      void receive();
-
- protected:
-  int desktopid;
-  QAction *action;
-};
-
-/** SignalBridge is an ungulate that lives in the forests of wild Wisconsin. */
-class SignalBridge : public QObject
-{
-  Q_OBJECT
-
-  public:
-    SignalBridge(QObject* parent, QString, KActionCollection*);
-
-  signals:
-    void enabled(QString, bool);
-
-  public slots:
-    void receive();
+  protected:
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
+    void wheelEvent(QGraphicsSceneWheelEvent *event);
+    void hoverMoveEvent(QGraphicsSceneHoverEvent *event);
+    void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
+    void dropEvent(QGraphicsSceneDragDropEvent *event);
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+    void timerEvent(QTimerEvent *event);
+    void keyPressEvent(QKeyEvent *event);
 
   private:
-    KActionCollection* collection;
+    ThemeFile m_theme;
+    QGraphicsScene *m_scene;
+    QGraphicsView *m_view;
+
+    KWinModule *m_KWinModule;
+
+    KarambaPython *m_python;
+    
+    bool m_foundKaramba;
+    bool m_onTop;
+    bool m_managed;
+
+    NETWinInfo *m_info;
+
+    QRect size;
+
+    u_int m_desktop;
+
+    u_int m_interval;
+
+    char m_tempUnit;
+
+    TextField *m_defaultTextField;
+
+    int m_scaleStep;
+    bool m_showMenu;
+
+    QList<Sensor*> *m_sensorList;
+    QMap<QString, Sensor*> m_sensorMap;
+
+    KMenu *m_popupMenu;
+    KToggleAction *m_toggleLocked;
+    KMenu *m_themeConfMenu;
+    KMenu *m_toDesktopMenu;
+    KMenu *m_globalMenu;
+
+    QTimer *m_stepTimer;
+
+    QSignalMapper *m_signalMapperConfig;
+    QSignalMapper *m_signalMapperDesktop;
+
+    KConfig *m_config;
+
+    int m_instance;
+
+    QList<KMenu*> *m_menuList;
+
+    QString m_prettyName;
+
+    double m_updateTime;
+
+    bool m_wantRightButton;
+
+    QPoint m_mouseClickPos;
+
+    bool m_globalView;
+
+    bool parseConfig();
+    Sensor *findSensorFromList(Meter *meter);
+    QString findSensorFromMap(Sensor *sensor);
+
+    void preparePopupMenu();
 };
 
-#endif // _KARAMBA_H_
+#endif // KARAMBA_H

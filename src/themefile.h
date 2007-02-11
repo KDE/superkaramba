@@ -26,15 +26,15 @@
 
 #include <kurl.h>
 #include <qstring.h>
-#include <q3cstring.h>
+#include <string.h>
 #include <qpixmap.h>
 #include <qfile.h>
-#include <q3valuevector.h>
+#include <QVector>
+#include <QTextStream>
 
 #include <QDir>
 
 class LineParser;
-class Q3TextStream;
 class ThemeLocale;
 class ZipFile;
 
@@ -44,7 +44,7 @@ class ZipFile;
 class ThemeFile
 {
   public:
-    typedef Q3ValueVector<ThemeFile> List;
+    typedef QVector<ThemeFile> List;
 
     ThemeFile(const KUrl& url = KUrl());
     ~ThemeFile();
@@ -71,6 +71,7 @@ class ThemeFile
     bool fileExists(const QString& filename) const;
     const ThemeLocale* locale() const { return m_locale; };
     bool canUninstall() const;
+    KUrl getUrlPath();
 
     bool set(const KUrl& url);
     bool open();
@@ -95,7 +96,7 @@ class ThemeFile
     QString m_icon;
     QString m_version;
     QString m_license;
-    Q3TextStream* m_stream;
+    QTextStream* m_stream;
     QByteArray m_ba;
     QFile m_fl;
     QString m_description;
@@ -104,6 +105,7 @@ class ThemeFile
     QString m_homepage;
     ThemeLocale* m_locale;
     ZipFile* m_zip;
+    KUrl m_UrlPath;
 };
 
 #endif

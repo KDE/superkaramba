@@ -21,8 +21,8 @@
 
 #include <qobject.h>
 //Added by qt3to4:
-#include <Q3CString>
-#include <Q3ValueList>
+#include <QString>
+#include <QList>
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kwinmodule.h>
@@ -39,17 +39,15 @@
 #include <X11/Xlib.h>
 
 Systemtray::Systemtray(QWidget* parent)
-  : QWidget(parent,0,0)
+  : QWidget(parent)
 {
-  setBackgroundOrigin(ParentOrigin);
-  setBackgroundMode(FixedPixmap);
-  //m_Wins.setAutoDelete(true);	//KDE4
 }
 
 
 Systemtray::~Systemtray()
 {
-  //m_Wins.clear();		// KDE4
+  while(m_Wins.isEmpty())
+    delete m_Wins.takeFirst();
 }
 
 int Systemtray::getTraySize() {
@@ -57,8 +55,6 @@ int Systemtray::getTraySize() {
 	return (int) kwin_module->systemTrayWindows().size();
 }
 
-/*
-QXEmbed in Qt4?? KDE4??
 void Systemtray::updateBackgroundPixmap ( const QPixmap & pixmap) {
   QXEmbed *emb;
   setPaletteBackgroundPixmap (pixmap);
@@ -79,7 +75,6 @@ void Systemtray::updateBackgroundPixmap ( const QPixmap & pixmap) {
     XUnmapWindow(qt_xdisplay(), hack);
     XDestroyWindow(qt_xdisplay(), hack);
 }
-*/
 
 void Systemtray::initSystray( void )
 {

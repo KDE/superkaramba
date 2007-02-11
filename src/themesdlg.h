@@ -23,17 +23,11 @@
 
 #include "ui_themes_layout.h"
 #include "karambaapp.h"
-
-#ifdef HAVE_CONFIG_H
-  #include <config.h>
-#endif
+#include "sknewstuff.h"
 
 /**
 @author See README for the list of authors
 */
-#ifdef HAVE_KNEWSTUFF
-class SKNewStuff;
-#endif
 class ThemeFile;
 class KArchiveDirectory;
 
@@ -70,11 +64,9 @@ class ThemesDlg : public QDialog, public Ui::ThemesLayout
     int themeIndex(QString file);
     QStringList themes();
 
-#ifdef HAVE_KNEWSTUFF
   private:
     SKNewStuff *mNewStuff;
     QStringList m_newStuffStatus;
-#endif
 };
 
 #endif

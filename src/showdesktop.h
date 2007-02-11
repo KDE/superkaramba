@@ -34,7 +34,7 @@ class ShowDesktop : public QObject
     Q_OBJECT
 
 public:
-    static ShowDesktop* the();
+    static ShowDesktop* self();
     bool desktopShowing() { return showingDesktop; }
 
 public slots:

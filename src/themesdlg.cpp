@@ -25,13 +25,7 @@
 #include "kwidgetlistbox.h"
 #include "karamba.h"
 
-#ifdef HAVE_CONFIG_H
-  #include <config.h>
-#endif
-
-#ifdef HAVE_KNEWSTUFF
-  #include "sknewstuff.h"
-#endif
+#include "sknewstuff.h"
 
 #include "superkarambasettings.h"
 #include <karchive.h>
@@ -48,20 +42,18 @@
 #include <qlabel.h>
 #include <qcombobox.h>
 #include <q3ptrlist.h>
-#include <kio/job.h>
+#include <kio/copyjob.h>
 #include <kprotocolinfo.h>
-
-// KDE4 check the casts
+#include <kcomponentdata.h>
 
 ThemesDlg::ThemesDlg(QWidget *parent, const char *name)
   : QDialog(parent)
 {
   setupUi(this);
+  setObjectName(name);
 
   populateListbox();
-#ifdef HAVE_KNEWSTUFF
   mNewStuff = 0;
-#endif
 
   connect(buttonAddToDesktop, SIGNAL(clicked()), this, SLOT(addToDesktop()));
   connect(tableThemes, SIGNAL(selected(int)), this, SLOT(selectionChanged(int)));
@@ -71,12 +63,10 @@ ThemesDlg::~ThemesDlg()
 {
   //kDebug() << k_funcinfo << endl;
   saveUserAddedThemes();
-#ifdef HAVE_KNEWSTUFF
   if(mNewStuff)
   {
     delete mNewStuff;
   }
-#endif
 }
 
 void ThemesDlg::saveUserAddedThemes()
@@ -134,24 +124,20 @@ void ThemesDlg::populateListbox()
 
   item = new ThemeWidget;
 
-  item->iconLabel->setPixmap(KGlobal::iconLoader()->loadIcon("knewstuff",
+  item->iconLabel->setPixmap(KIconLoader::global()->loadIcon("knewstuff",
                              K3Icon::NoGroup, K3Icon::SizeHuge));
   item->setHeaderText(i18n("Get New Stuff"));
   item->setDescriptionText(i18n("Download new themes."));
 
   item->buttonGo->setText(i18n("New Stuff..."));
-#ifdef HAVE_KNEWSTUFF
   item->buttonGo->setEnabled(true);
   QObject::connect(item->buttonGo, SIGNAL(clicked()),
           this, SLOT(getNewStuff()));
-#else
-  item->buttonGo->setEnabled(false);
-#endif
 
   tableThemes->insertItem((QWidget*)(item));
   
   item = new ThemeWidget;
-  item->iconLabel->setPixmap(KGlobal::iconLoader()->loadIcon("ksysguard",
+  item->iconLabel->setPixmap(KIconLoader::global()->loadIcon("ksysguard",
                         K3Icon::NoGroup, K3Icon::SizeHuge));
   item->setHeaderText(i18n("Open Local Theme"));
   item->setDescriptionText(i18n("Add local theme to the list."));
@@ -208,7 +194,8 @@ void ThemesDlg::addToDesktop()
     ThemeFile* tf = w->themeFile();
     if(tf)
     {
-      (new karamba(tf->file(), QString()))->show();
+      Karamba *k = new Karamba(tf->file());
+      karambaApp->addKaramba(k);
     }
   }
 }
@@ -216,7 +203,7 @@ void ThemesDlg::addToDesktop()
 void ThemesDlg::openLocalTheme()
 {
   QStringList fileNames;
-  fileNames = KFileDialog::getOpenFileNames(KUrl(), //"KDE4 :<themes>",
+  fileNames = KFileDialog::getOpenFileNames(KUrl(),
                   i18n("*.theme *.skz|Themes"),
                   (QWidget*)this, i18n("Open Themes"));
   
@@ -224,14 +211,16 @@ void ThemesDlg::openLocalTheme()
   {
     ThemeFile file(*it);
     if(file.isValid())
-      (new karamba(*it, QString()))->show();
+    {
+      Karamba *k = new Karamba(*it);
+      karambaApp->addKaramba(k);
+    }
   }
 }
 
 void ThemesDlg::getNewStuff()
 {
-#ifdef HAVE_KNEWSTUFF
-  KConfig* config = KGlobal::config();
+  KSharedConfigPtr config = KGlobal::config();
   config->setGroup("KNewStuff");
   config->writePathEntry("ProvidersUrl",
       QString::fromLatin1("http://download.kde.org/khotnewstuff/karamba-providers.xml"));
@@ -246,7 +235,6 @@ void ThemesDlg::getNewStuff()
     mNewStuff = new SKNewStuff(this);
   }
   mNewStuff->download();
-#endif
 }
 
 void ThemesDlg::selectionChanged(int index)
@@ -314,14 +302,13 @@ void ThemesDlg::addThemeToDialog(const KArchiveDirectory *archiveDir,
 
 void ThemesDlg::writeNewStuffConfig(const QString &file)
 {
-#ifdef HAVE_KNEWSTUFF
-  KConfig* config = KGlobal::config();
+  KSharedConfigPtr config = KGlobal::config();
   QStringList keys = config->entryMap("KNewStuffStatus").keys();
 
   for(QStringList::Iterator it = m_newStuffStatus.begin();
       it != m_newStuffStatus.end(); ++it)
   {
-    keys.remove(*it);
+    keys.erase(it);
   }
   if(!keys.isEmpty())
   {
@@ -329,13 +316,11 @@ void ThemesDlg::writeNewStuffConfig(const QString &file)
     config->writeEntry(file, keys[0]);
     config->sync();
   }
-#endif
 }
 
 void ThemesDlg::configSanityCheck()
 {
-#ifdef HAVE_KNEWSTUFF
-  KConfig* config = KGlobal::config();
+  KSharedConfigPtr config = KGlobal::config();
   QStringList statusKeys = config->entryMap("KNewStuffStatus").keys();
   QStringList nameKeys = config->entryMap("KNewStuffNames").keys();
   QStringList removeList;
@@ -349,7 +334,7 @@ void ThemesDlg::configSanityCheck()
     for(QStringList::Iterator it2 = nameKeys.begin();
         it2 != nameKeys.end(); ++it2)
     {
-      QString tempName(config->readEntry(*it2));
+      QString tempName(config->readEntry(*it2, QString()));
       if( tempName.compare(keyName) == 0)
       {
         removeKey = false;
@@ -364,7 +349,6 @@ void ThemesDlg::configSanityCheck()
     }
   }
   config->sync();
-#endif
 }
 
 int ThemesDlg::addThemeToList(const QString &file)
@@ -441,7 +425,7 @@ bool ThemesDlg::filter(int index, QWidget* widget, void* data)
 bool ThemesDlg::isDownloaded( const QString& path )
 {
   kDebug() << "isDownloaded path: " << path << endl;
-  KConfig* config = KGlobal::config();
+  KSharedConfigPtr config = KGlobal::config();
   config->setGroup("KNewStuffNames");
   return !config->readEntry(path, QString()).isEmpty();
 }
@@ -450,22 +434,11 @@ void ThemesDlg::uninstall()
 {
   ThemeWidget* w = (ThemeWidget*)(tableThemes->selectedItem());
   ThemeFile* tf = w->themeFile();
-  KUrl trash("trash:/");
   KUrl theme(tf->file());
   QString tempPath(tf->path());
 
-  /*
-  KDE 4
+  karambaApp->closeTheme(tf->name());
   
-  DBUS
-  
-  karambaApp->dcopIface()->closeTheme(tf->name());
-  
-  if(!KProtocolInfo::isKnownProtocol(trash))
-    trash = KGlobalSettings::trashPath();
-  
-  */
-
   if(!tf->isZipTheme())
   {
     kDebug() << "encountered unpacked theme" << endl;
@@ -476,7 +449,7 @@ void ThemesDlg::uninstall()
       QDir remDir(remPath.dir());
       remDir.cdUp();
       kDebug() << "moving " << remDir.path() << " to the trash" << endl;
-      KIO::move(remDir.path(), trash);
+      KIO::trash(remDir.path());
     }
     tableThemes->removeItem((QWidget*)w);
     
@@ -495,27 +468,25 @@ void ThemesDlg::uninstall()
     ThemeWidget *twPtr;
     for ( twPtr = list.first(); twPtr; twPtr = list.next() )
     {
-      //karambaApp->dcopIface()->closeTheme(twPtr->themeFile()->name());  //KDE4 DBUS
+      karambaApp->closeTheme(twPtr->themeFile()->name());
       tableThemes->removeItem( (QWidget*)twPtr );
     }
-#ifdef HAVE_KNEWSTUFF
     // Remove theme from KNewStuffStatus
-    KConfig* config = KGlobal::config();
+    KSharedConfigPtr config = KGlobal::config();
     config->setGroup("KNewStuffNames");
-    QString name = config->readEntry(tempPath);
+    QString name = config->readEntry(tempPath, QString());
     if(!name.isEmpty())
     {
+      // kapp-config() -> KGlobal::config()
       kDebug() << "removing " << tempPath << " under KNewStuffNames from superkarambarc" 
                 << endl;
-      kapp->config()->deleteEntry(tempPath);
-      config->setGroup("KNewStuffStatus");
+      KGlobal::config()->deleteEntry(tempPath);
+      KGlobal::config()->setGroup("KNewStuffStatus");
       kDebug() << "removing " << name << " under KNewStuffStatus from superkarambarc" 
                 << endl;
-      kapp->config()->deleteEntry(name);
-      kapp->config()->sync();
+      KGlobal::config()->deleteEntry(name);
+      KGlobal::config()->sync();
     }
-#endif
-    
   }
   else
   {
@@ -525,24 +496,22 @@ void ThemesDlg::uninstall()
       QFileInfo remPath(theme.path());
       QDir remDir(remPath.dir());
       kDebug() << "moving " << remDir.path() << " to the trash" << endl;
-      KIO::move(remDir.path(), trash);
+      KIO::trash(remDir.path());
     }
     tableThemes->removeItem((QWidget*)w);
-#ifdef HAVE_KNEWSTUFF
     // Remove theme from KNewStuffStatus
-    KConfig* config = KGlobal::config();
+    KSharedConfigPtr config = KGlobal::config();
     config->setGroup("KNewStuffNames");
-    QString name = config->readEntry(theme.path());
+    QString name = config->readEntry(theme.path(), QString());
     if(!name.isEmpty())
     {
       kDebug() << "removing " << theme.path() << " from superkarambarc" << endl;
-      kapp->config()->deleteEntry(theme.path());
-      config->setGroup("KNewStuffStatus");
+       KGlobal::config()->deleteEntry(theme.path());
+       KGlobal::config()->setGroup("KNewStuffStatus");
       kDebug() << "removing " << name << " from superkarambarc" << endl;
-      kapp->config()->deleteEntry(name);
-      kapp->config()->sync();
+       KGlobal::config()->deleteEntry(name);
+       KGlobal::config()->sync();
     }
-#endif
   }
   selectionChanged(tableThemes->selected());
 }

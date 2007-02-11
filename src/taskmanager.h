@@ -27,17 +27,39 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <sys/types.h>
 
-#include <qpoint.h>
-#include <qobject.h>
-#include <q3valuelist.h>
-#include <q3ptrlist.h>
-#include <qpixmap.h>
+#include <QObject>
+#include <QPixmap>
+#include <QPoint>
+#include <QMimeData>
+#include <QMap>
+#include <QPixmap>
+#include <QDrag>
+#include <QRect>
+#include <QVector>
 
-#include <kwin.h>
+#include <ksharedptr.h>
 #include <kstartupinfo.h>
-#include "karambaapp.h"
+#include <kwin.h>
 
+#if defined(HAVE_XCOMPOSITE) && \
+    defined(HAVE_XRENDER) && \
+    defined(HAVE_XFIXES)
+#include <X11/Xlib.h>
+#include <X11/extensions/Xcomposite.h>
+#include <X11/extensions/Xfixes.h>
+#include <X11/extensions/Xrender.h>
+#include <fixx11h.h>
+#if XCOMPOSITE_VERSION >= 00200 && \
+    XFIXES_VERSION >= 20000 && \
+    (RENDER_MAJOR > 0 || RENDER_MINOR >= 6)
+#define THUMBNAILING_POSSIBLE
+#endif
+#endif
+
+class KWinModule;
 class TaskManager;
+
+typedef QList<WId> WindowList;
 
 /**
  * A dynamic interface to a task (main window).
@@ -45,16 +67,16 @@ class TaskManager;
  * @see TaskManager
  * @see KWinModule
  */
-class Task: public QObject
+class KDE_EXPORT Task: public QObject, public KShared
 {
     Q_OBJECT
-    Q_PROPERTY( QString name READ name )
     Q_PROPERTY( QString visibleName READ visibleName )
+    Q_PROPERTY( QString name READ name )
     Q_PROPERTY( QString visibleNameWithState READ visibleNameWithState )
-    Q_PROPERTY( QString iconName READ iconName )
-    Q_PROPERTY( QString visibleIconName READ visibleIconName )
     Q_PROPERTY( QPixmap pixmap READ pixmap )
     Q_PROPERTY( bool maximized READ isMaximized )
+    Q_PROPERTY( bool minimized READ isMinimized )
+    // KDE4 deprecated
     Q_PROPERTY( bool iconified READ isIconified )
     Q_PROPERTY( bool shaded READ isShaded WRITE setShaded )
     Q_PROPERTY( bool active READ isActive )
@@ -62,36 +84,26 @@ class Task: public QObject
     Q_PROPERTY( bool onAllDesktops READ isOnAllDesktops )
     Q_PROPERTY( bool alwaysOnTop READ isAlwaysOnTop WRITE setAlwaysOnTop )
     Q_PROPERTY( bool modified READ isModified )
+    Q_PROPERTY( bool demandsAttention READ demandsAttention )
     Q_PROPERTY( int desktop READ desktop )
     Q_PROPERTY( double thumbnailSize READ thumbnailSize WRITE setThumbnailSize )
     Q_PROPERTY( bool hasThumbnail READ hasThumbnail )
     Q_PROPERTY( QPixmap thumbnail READ thumbnail )
 
 public:
-    Task( WId win, TaskManager * parent, const char *name = 0 );
+    typedef KSharedPtr<Task> TaskPtr;
+    typedef QVector<Task::TaskPtr> List;
+    typedef QMap<WId, Task::TaskPtr> Dict;
+
+    Task(WId win, QObject *parent, const char *name = 0);
     virtual ~Task();
 
-    TaskManager* taskManager() const { return (TaskManager*) parent(); }
-
     WId window() const { return _win; }
-#ifdef KDE_3_2
-    QString name() const { return _info.name(); }
+    KWin::WindowInfo info() const { return _info; }
+
     QString visibleName() const { return _info.visibleName(); }
-    /**
-     * Returns the desktop on which this task's window resides.
-     */
-    int desktop() const { return _info.desktop(); }
-#else
-    QString name() const { return _info.name; }
-    QString visibleName() const { return _info.visibleName; }
-    /**
-     * Returns the desktop on which this task's window resides.
-     */
-    int desktop() const { return _info.desktop; }
-#endif
     QString visibleNameWithState() const { return _info.visibleNameWithState(); }
-    QString iconName() const;
-    QString visibleIconName() const;
+    QString name() const { return _info.name(); }
     QString className();
     QString classClass();
 
@@ -99,28 +111,28 @@ public:
      * A list of the window ids of all transient windows (dialogs) associated
      * with this task.
      */
-    Q3ValueList<WId> transients() const { return _transients; }
+    WindowList transients() const { return _transients; }
 
     /**
-     * Returns a 16x16 (KIcon::Small) icon for the task. This method will
+     * Returns a 16x16 (K3Icon::Small) icon for the task. This method will
      * only fall back to a static icon if there is no icon of any size in
      * the WM hints.
      */
     QPixmap pixmap() const { return _pixmap; }
 
     /**
-     * Returns the best icon for any of the KIcon::StdSizes. If there is no
+     * Returns the best icon for any of the K3Icon::StdSizes. If there is no
      * icon of the specified size specified in the WM hints, it will try to
      * get one using KIconLoader.
      *
      * <pre>
      *   bool gotStaticIcon;
-     *   QPixmap icon = myTask->icon( KIcon::SizeMedium, gotStaticIcon );
+     *   QPixmap icon = myTask->icon( K3Icon::SizeMedium, gotStaticIcon );
      * </pre>
      *
-     * @param size Any of the constants in KIcon::StdSizes.
+     * @param size Any of the constants in K3Icon::StdSizes.
      * @param isStaticIcon Set to true if KIconLoader was used, false otherwise.
-     * @see KIcon
+     * @see K3Icon
      */
     QPixmap bestIcon( int size, bool &isStaticIcon );
 
@@ -149,7 +161,13 @@ public:
     bool isMaximized() const;
 
     /**
-     * Returns true if the task's window is iconified.
+     * Returns true if the task's window is minimized.
+     */
+    bool isMinimized() const;
+
+    /**
+     * @deprecated
+     * Returns true if the task's window is minimized(iconified).
      */
     bool isIconified() const;
 
@@ -186,6 +204,17 @@ public:
     bool isAlwaysOnTop() const;
 
     /**
+     * Returns true if the task's window will remain at the bottom of the
+     * stacking order.
+     */
+    bool isKeptBelowOthers() const;
+
+    /**
+     * Returns true if the task's window is in full screen mode
+     */
+    bool isFullScreen() const;
+
+    /**
      * Returns true if the document the task is editing has been modified.
      * This is currently handled heuristically by looking for the string
      * '[i18n_modified]' in the window title where i18n_modified is the
@@ -193,16 +222,51 @@ public:
      */
     bool isModified() const ;
 
+    /**
+     * Returns the desktop on which this task's window resides.
+     */
+    int desktop() const { return _info.desktop(); }
+
+    /**
+     * Returns true if the task is not active but demands user's attention.
+     */
+    bool demandsAttention() const;
+
+
+    /**
+    * Returns true if the window is on the specified screen of a multihead configuration
+    */
+    bool isOnScreen( int screen ) const;
+
+    /**
+     * Returns true if the task should be shown in taskbar-like apps
+     */
+    bool showInTaskbar() const { return _info.state() ^ NET::SkipTaskbar; }
+
+    /**
+     * Returns true if the task should be shown in pager-like apps
+     */
+    bool showInPager() const { return _info.state() ^ NET::SkipPager; }
+
+    /**
+     * Returns the geometry for this window
+     */
+    QRect geometry() const { return _info.geometry(); }
+
     // internal
 
     //* @internal
-    void refresh(bool icon = false);
+    void refresh(unsigned int dirty);
     //* @internal
-    void addTransient( WId w ) { _transients.append( w ); }
+    void refreshIcon();
     //* @internal
-    void removeTransient( WId w ) { _transients.remove( w ); }
+    void addTransient( WId w, const NETWinInfo& info );
     //* @internal
-    bool hasTransient( WId w ) const { return _transients.contains( w ); }
+    void removeTransient( WId w );
+    //* @internal
+    bool hasTransient(WId w) const { return _transients.indexOf(w) != -1; }
+    //* @internal
+    void updateDemandsAttentionState( WId w );
     //* @internal
     void setActive(bool a);
 
@@ -232,13 +296,18 @@ public:
      */
     const QPixmap &thumbnail() const { return _thumb; }
 
-public slots:
+    QPixmap thumbnail(int maxDimension);
+
+    void updateWindowPixmap();
+
+public Q_SLOTS:
     // actions
 
     /**
      * Maximise the main window of this task.
      */
-    void maximize();
+    void setMaximized(bool);
+    void toggleMaximized();
 
     /**
      * Restore the main window of the task (if it was iconified).
@@ -246,12 +315,23 @@ public slots:
     void restore();
 
     /**
-     * Iconify the task.
+     * Move the window of this task.
      */
-    void iconify();
+    void move();
 
     /**
-     * Activate the task's window.
+     * Resize the window of this task.
+     */
+    void resize();
+
+    /**
+     * Iconify the task.
+     */
+    void setIconified(bool);
+    void toggleIconified();
+
+    /**
+     * Close the task's window.
      */
     void close();
 
@@ -284,6 +364,18 @@ public slots:
     void toggleAlwaysOnTop();
 
     /**
+     * If true, the task's window will remain at the bottom of the stacking order.
+     */
+    void setKeptBelowOthers(bool);
+    void toggleKeptBelowOthers();
+
+    /**
+     * If true, the task's window will enter full screen mode.
+     */
+    void setFullScreen(bool);
+    void toggleFullScreen();
+
+    /**
      * If true then the task's window will be shaded. Most window managers
      * represent this state by displaying on the window's title bar.
      */
@@ -313,7 +405,7 @@ public slots:
      */
     void updateThumbnail();
 
-signals:
+Q_SIGNALS:
     /**
      * Indicates that this task has changed in some way.
      */
@@ -339,20 +431,21 @@ signals:
      */
     void thumbnailChanged();
 
-protected slots:
+protected Q_SLOTS:
     //* @internal
     void generateThumbnail();
+
+protected:
+    void findWindowFrameId();
 
 private:
     bool                _active;
     WId                 _win;
+    WId                 m_frameId;
     QPixmap             _pixmap;
-#ifdef KDE_3_2
     KWin::WindowInfo    _info;
-#else
-    KWin::Info          _info;
-#endif
-    Q3ValueList<WId>     _transients;
+    WindowList          _transients;
+    WindowList          _transients_demanding_attention;
 
     int                 _lastWidth;
     int                 _lastHeight;
@@ -362,16 +455,46 @@ private:
     double _thumbSize;
     QPixmap _thumb;
     QPixmap _grab;
-
-    class TaskPrivate *d;
+    QRect m_iconGeometry;
+#ifdef THUMBNAILING_POSSIBLE
+    Pixmap              m_windowPixmap;
+#endif // THUMBNAILING_POSSIBLE
 };
+
+
+/**
+ * Provids a drag object for tasks across desktops.
+ * FIXME: should be folded into the Task class the same way it has been with
+ *        AppletInfo and KUrl
+ */
+class KDE_EXPORT TaskDrag : public QDrag
+{
+public:
+    /**
+     * Constructs a task drag object for a task list.
+     */
+    TaskDrag(const Task::List& tasks, QWidget* source = 0);
+    ~TaskDrag();
+
+    /**
+     * Returns true if the mime source can be decoded to a TaskDrag.
+     */
+    static bool canDecode( const QMimeData* e );
+
+    /**
+     * Decodes the tasks from the mime source and returns them if successful.
+     * Otherwise an empty task list is returned.
+     */
+    static Task::List decode( const QMimeData* e );
+};
+
 
 /**
  * Represents a task which is in the process of starting.
  *
  * @see TaskManager
  */
-class Startup: public QObject
+class KDE_EXPORT Startup: public QObject, public KShared
 {
     Q_OBJECT
     Q_PROPERTY( QString text READ text )
@@ -379,7 +502,11 @@ class Startup: public QObject
     Q_PROPERTY( QString icon READ icon )
 
 public:
-    Startup( const KStartupInfoId& id, const KStartupInfoData& data, QObject * parent);
+    typedef KSharedPtr<Startup> StartupPtr;
+    typedef QVector<Startup::StartupPtr> List;
+
+    Startup( const KStartupInfoId& id, const KStartupInfoData& data, QObject * parent,
+        const char *name = 0);
     virtual ~Startup();
 
     /**
@@ -399,7 +526,7 @@ public:
     void update( const KStartupInfoData& data );
     const KStartupInfoId& id() const { return _id; }
 
-signals:
+Q_SIGNALS:
     /**
      * Indicates that this startup has changed in some way.
      */
@@ -411,9 +538,6 @@ private:
     class StartupPrivate *d;
 };
 
-typedef Q3PtrList<Task> TaskList;
-typedef Q3PtrList<Startup> StartupList;
-
 
 /**
  * A generic API for task managers. This class provides an easy way to
@@ -423,29 +547,36 @@ typedef Q3PtrList<Startup> StartupList;
  * @see Task
  * @see Startup
  * @see KWinModule
- * @version $Id: taskmanager.h,v 1.2 2004/11/17 10:16:47 kodaaja Exp $
  */
-class TaskManager : public QObject
+class KDE_EXPORT TaskManager : public QObject
 {
     Q_OBJECT
     Q_PROPERTY( int currentDesktop READ currentDesktop )
     Q_PROPERTY( int numberOfDesktops READ numberOfDesktops )
 
 public:
-    TaskManager( QObject *parent = 0, const char *name = 0 );
-    virtual ~TaskManager();
+    static TaskManager* self();
+    ~TaskManager();
 
     /**
-     * Returns a list of all current tasks. Return type changed to
-     * QPtrList in KDE 3.
+     * Returns the task for a given WId, or 0 if there is no such task.
      */
-    TaskList tasks() const { return _tasks; }
+    Task::TaskPtr findTask(WId w);
 
     /**
-     * Returns a list of all current startups. Return type changed to
-     * QPtrList in KDE 3.
+     * Returns the task for a given location, or 0 if there is no such task.
      */
-    StartupList startups() const { return _startups; }
+    Task::TaskPtr findTask(int desktop, const QPoint& p);
+
+    /**
+     * Returns a list of all current tasks.
+     */
+    Task::Dict tasks() const { return m_tasksByWId; }
+
+    /**
+     * Returns a list of all current startups.
+     */
+    Startup::List startups() const { return _startups; }
 
     /**
      * Returns the name of the nth desktop.
@@ -465,34 +596,47 @@ public:
     /**
      * Returns true if the specified task is on top.
      */
-    bool isOnTop( const Task*);
-signals:
-    /**
-     * Emitted when the active window changed.
-     */
-    void activeTaskChanged(Task*);
+    bool isOnTop(const Task*);
 
+    /**
+     * Tells the task manager whether or not we care about geometry
+     * updates. This generates a lot of activity so should only be used
+     * when necessary.
+     */
+    void trackGeometry() { m_trackGeometry = true; }
+
+    /**
+    * Returns whether the Window with WId wid is on the screen screen
+    */
+    static bool isOnScreen( int screen, const WId wid );
+
+    KWinModule* winModule() const { return m_winModule; }
+
+    void setXCompositeEnabled(bool state);
+    static bool xCompositeEnabled() { return m_xCompositeEnabled != 0; }
+
+Q_SIGNALS:
     /**
      * Emitted when a new task has started.
      */
-    void taskAdded(Task*);
+    void taskAdded(Task::TaskPtr);
 
     /**
      * Emitted when a task has terminated.
      */
-    void taskRemoved(Task*);
+    void taskRemoved(Task::TaskPtr);
 
     /**
      * Emitted when a new task is expected.
      */
-    void startupAdded(Startup*);
+    void startupAdded(Startup::StartupPtr);
 
     /**
      * Emitted when a startup item should be removed. This could be because
      * the task has started, because it is known to have died, or simply
      * as a result of a timeout.
      */
-    void startupRemoved(Startup*);
+    void startupRemoved(Startup::StartupPtr);
 
     /**
      * Emitted when the current desktop changes.
@@ -502,9 +646,10 @@ signals:
     /**
      * Emitted when a window changes desktop.
      */
-    void windowChanged(WId);
+    void windowChanged(Task::TaskPtr);
+    void windowChangedGeometry(Task::TaskPtr);
 
-protected slots:
+protected Q_SLOTS:
     //* @internal
     void windowAdded(WId);
     //* @internal
@@ -519,28 +664,30 @@ protected slots:
     //* @internal
     void killStartup( const KStartupInfoId& );
     //* @internal
-    void killStartup(Startup*);
+    void killStartup(Startup::StartupPtr);
 
     //* @internal
     void gotNewStartup( const KStartupInfoId&, const KStartupInfoData& );
     //* @internal
     void gotStartupChange( const KStartupInfoId&, const KStartupInfoData& );
-    //* @internal
-    void gotRemoveStartup( const KStartupInfoId& );
 
 protected:
-    /**
-     * Returns the task for a given WId, or 0 if there is no such task.
-     */
-    Task* findTask(WId w);
     void configure_startup();
+    void updateWindowPixmap(WId);
 
 private:
-    Task*               _active;
-    TaskList           _tasks;
-    Q3ValueList< WId >   _skiptaskbar_windows;
-    StartupList         _startups;
-    KStartupInfo*       _startup_info;
+    TaskManager();
+
+    Task::TaskPtr               _active;
+    Task::Dict m_tasksByWId;
+    WindowList _skiptaskbar_windows;
+    Startup::List _startups;
+    KStartupInfo* _startup_info;
+    KWinModule* m_winModule;
+    bool m_trackGeometry;
+
+    static TaskManager* m_self;
+    static uint m_xCompositeEnabled;
 
     class TaskManagerPrivate *d;
 };

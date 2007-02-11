@@ -1,6 +1,7 @@
 /***************************************************************************
  *   Copyright (C) 2003-2004 Adam Geitgey <adam@rootnode.org>              *
  *   Copyright (C) 2003 Hans Karlsson <karlsson.h@home.se>                 *
+ *   Copyright (C) 2007 Alexander Wiedenbruch <mail@wiedenbruch.de>        *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -11,87 +12,73 @@
 #ifndef KARAMBAAPP_H
 #define KARAMBAAPP_H
 
-#include "kapplication.h"
-#include <kdeversion.h>
-#include <ksystemtrayicon.h>
-//Added by qt3to4:
-#include <Q3CString>
+#include <QGraphicsView>
+#include <QGraphicsScene>
+#include <QSystemTrayIcon>
 
-#undef KDE_3_2
-#undef KDE_3_3
-#if defined(KDE_MAKE_VERSION)
-#if KDE_VERSION >= KDE_MAKE_VERSION(3,2,0)
-#define KDE_3_2
-#endif
-#if KDE_VERSION >= KDE_MAKE_VERSION(3,3,0)
-#define KDE_3_3
-#endif
-#endif
+#include <kuniqueapplication.h>
+#include <kdeversion.h>
+#include <kcmdlineargs.h>
+#include <ksystemtrayicon.h>
+#include <khelpmenu.h>
+#include <kstandardaction.h>
+
+#include "mainwidget.h"
+#include "karamba.h"
+#include "themesdlg.h"
 
 #define karambaApp ((KarambaApplication*)qApp)
 
-class karamba;
-class KarambaIface;
-class KCmdLineArgs;
-class ThemesDlg;
-class dcopIface_stub;
-class KHelpMenu;
-class KAboutData;
+class Karamba;
 
-class KarambaApplication : public KApplication
+class KarambaApplication : public KUniqueApplication
 {
-    Q_OBJECT
-
-    friend class KarambaIface;
-
-  private:
-    static int fd;
-    KHelpMenu* m_helpMenu;
-
-    void showKarambaMenuExtension(bool show = true);
-    void setToolTip(const QString &tip = QString::null);
-
-  protected:
-    KarambaIface* iface;
-    ThemesDlg* themeListWindow;
-    dcopIface_stub* dcopIfaceStub;
-    QObjectList *karambaList;
-    KSystemTrayIcon* sysTrayIcon;
+  Q_OBJECT
 
   public:
-    KarambaApplication();
+    KarambaApplication(Display *display, Qt::HANDLE visual, Qt::HANDLE colormap);
     ~KarambaApplication();
 
-    QString getMainKaramba();
-    QStringList getKarambas();
-    bool themeExists(QString pretty_name);
-    void initDcopStub(Q3CString app = "");
-    void setUpSysTray(KAboutData* about);
-    void checkPreviousSession(KApplication &app, QStringList &lst);
-    void checkCommandLine(KCmdLineArgs *args, QStringList &lst);
-    bool startThemes(QStringList &lst);
-    KarambaIface* dcopIface() { return iface; };
-    dcopIface_stub* dcopStub() { return dcopIfaceStub; };
-    QWidget* parentWindow() { return (QWidget*)themeListWindow; };
+    int newInstance();
 
-    void addKaramba(karamba* k, bool reloading = false);
-    void deleteKaramba(karamba* k, bool reloading = false);
-    bool hasKaramba(karamba* k);
+    void removeKaramba(Karamba *k);
 
-    static bool lockKaramba();
-    static void unlockKaramba();
-    static void checkSuperKarambaDir();
+    bool hasKaramba(Karamba *k);
+    
+    bool themeExists(QString prettyName);
 
-  public slots:
+    void addKaramba(Karamba *newK);
+
     void buildToolTip();
-    void globalQuitSuperKaramba();
-    void globalShowThemeDialog();
+
+    void setUpSysTray(KAboutData* about);
+
+    void closeTheme(QString themeName);
+
+  private:
+    QGraphicsScene *m_scene;
+    MainWidget *m_view;
+
+    QList<Karamba*> m_karambas;
+
+    KSystemTrayIcon *m_sysTrayIcon;
+    KHelpMenu *m_helpMenu;
+
+    ThemesDlg *m_themesDialog;
+
+    void checkCommandLine(KCmdLineArgs *args, QList<KUrl> &lst);
+    void startThemes(QList<KUrl> &lst);
+    void checkPreviousSession(QList<KUrl> &lst);
+    void setToolTip(const QString &tip = QString());
+    void hideSysTray(bool hide = true);
+    void showKarambaMenuExtension(bool show = true);
+     
+  public Q_SLOTS:
     void globalHideSysTray(bool hide = true);
 
-  protected slots:
-    void quitSuperKaramba();
-    void showThemeDialog();
-    void hideSysTray(bool hide = true);
+    void globalQuitSuperKaramba();
+
+    void globalShowThemeDialog(QSystemTrayIcon::ActivationReason reason = QSystemTrayIcon::Unknown);
 };
 
-#endif // KARAMBAAPP_H
+#endif // 

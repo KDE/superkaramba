@@ -221,7 +221,9 @@ void KWidgetListbox::resizeEvent(QResizeEvent *e)
 {
   QTableWidget::resizeEvent(e);
 
-  #warning No better way?
+  #ifdef __GNUC__
+    #warning No better way?
+  #endif
   unsigned int wscroll = 0;
 
   QScrollBar *bar = verticalScrollBar();

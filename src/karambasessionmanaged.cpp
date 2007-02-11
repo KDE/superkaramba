@@ -22,46 +22,43 @@
 
 #include <kapplication.h>
 #include <kconfig.h>
+#include <ksessionmanager.h>
 #include "karambasessionmanaged.h"
 #include "karamba.h"
 #include "qwidget.h"
 
-bool KSessionManaged::saveState(QSessionManager&)
+bool KarambaSessionManaged::saveState(QSessionManager&)
 {
   KConfig* config = kapp->sessionConfig();
 
   config->setGroup("General Options");
 
-  QString openThemes="";
+  QList<QString> openThemes;
 
-  /*
-  KDE4
-  
-  QWidgetList  *list = QApplication::allWidgets();
-  QWidgetListIt it( *list );         // iterate over the widgets
-  QWidget * w;
-  while ( (w=it.current()) != 0 ) // for each widget...
+  #ifdef __GNUC__
+    #warning check if this works in all globalView cases
+  #endif
+  QWidgetList list = QApplication::allWidgets();
+  foreach(QWidget *w, list)
   {
-    ++it;
-    if (QString(w->name()).startsWith("karamba"))
+    if (QString(w->objectName()).startsWith("karamba"))
     {
-      karamba* k = (karamba*) w;
+      Karamba* k = (Karamba*) w;
+      /* Sub theme ever used
       if (k->isSubTheme())
         continue;
-      openThemes += QFileInfo(k->theme().file()).absFilePath();
+      */
+      QString path = QFileInfo(k->theme().file()).absoluteFilePath();
       k->writeConfigData();
-      openThemes += ";";
+      openThemes.append(path);
     }
   }
-  delete list;                      // delete the list, not the widgets
-  */
 
-  qDebug("Open themes %s", openThemes.toAscii().constData());
   config->writeEntry("OpenThemes", openThemes);
   return true;
 }
 
-bool KSessionManaged::commitData(QSessionManager&)
+bool KarambaSessionManaged::commitData(QSessionManager&)
 {
   return true;
 }

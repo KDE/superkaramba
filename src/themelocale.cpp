@@ -171,12 +171,12 @@ void ThemeLocale::setLanguage(const QStringList &languages)
 
 QStringList ThemeLocale::languageList()
 {
-  KConfig* config = KGlobal::config();
+  KConfig* config = KGlobal::config().data();
   // Reset the list and add the new languages
   QStringList languageList;
   languageList += QFile::decodeName(::getenv("KDE_LANG")).split(':');
 
-  languageList += config->readListEntry("Language", ':');
+  languageList += config->readEntry("Language", QStringList(), ':');
 
   // same order as setlocale use
   // HPB: Only run splitLocale on the environment variables..
