@@ -1,150 +1,34 @@
-INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}  )
+PROJECT(superkaramba)
 
-########### next target ###############
+SET(CMAKE_MODULE_PATH $ENV{KDEDIR}/share/apps/cmake/modules)
 
-SET(superkaramba_SRCS
-main.cpp
-karamba.cpp
-mainwidget.cpp
-karambaapp.cpp
-lineparser.cpp
-themefile.cpp
-themelocale.cpp
-themesdlg.cpp
-themewidget.cpp
-kwidgetlistbox.cpp
-taskmanager.cpp
-#systemtray.cpp
-showdesktop.cpp
-sknewstuff.cpp
-karambasessionmanaged.cpp
+INCLUDE(KDE4Macros)
 
-meters/meter.cpp
-meters/bar.cpp
-meters/textlabel.cpp
-meters/imagelabel.cpp
-meters/graph.cpp
-meters/textfield.cpp
-meters/richtextlabel.cpp
-meters/input.cpp
-meters/clickarea.cpp
-meters/clickmap.cpp
+FIND_PACKAGE(KDE4 REQUIRED)
+FIND_PACKAGE(PythonLibs REQUIRED)
+#FIND_PACKAGE(XMMS REQUIRED)
 
-sensors/sensor.cpp
-sensors/date.cpp
-sensors/mem.cpp
-sensors/uptime.cpp
-sensors/cpu.cpp
-sensors/network.cpp
-sensors/program.cpp
-sensors/disk.cpp
-sensors/sensorparams.cpp
-sensors/lmsensor.cpp
-sensors/textfile.cpp
-sensors/rss.cpp
+ADD_DEFINITIONS(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 
-python/karamba.cpp
-python/meter.cpp
-python/bar.cpp
-python/textlabel.cpp
-python/imagelabel.cpp
-python/graph.cpp
-python/richtextlabel.cpp
-python/input.cpp
-python/misc.cpp
-python/svcgrp.cpp
-python/menu.cpp
-#python/systray.cpp
-python/widget.cpp
-python/task.cpp
-python/config.cpp
+INCLUDE_DIRECTORIES(
+${CMAKE_CURRENT_SOURCE_DIR}
+${CMAKE_CURRENT_BINARY_DIR}
+${QT_INCLUDES}
+${KDE4_INCLUDE_DIR}
+${PYTHON_INCLUDE_PATH}
 )
 
-KDE4_ADD_UI_FILES(superkaramba_SRCS
-themewidget_layout.ui
-themes_layout.ui
-)
-
-KDE4_ADD_KCFG_FILES(superkaramba_SRCS
-superkarambasettings.kcfgc
-)
-
-KDE4_AUTOMOC(${superkaramba_SRCS})
-
-KDE4_ADD_EXECUTABLE(superkaramba ${superkaramba_SRCS})
-
-TARGET_LINK_LIBRARIES(superkaramba 
-${QT_AND_KDECORE_LIBS} 
-${KDE4_KDEUI_LIBRARY}
-${KDE4_KNEWSTUFF_LIBS}
-${KDE4_KIO_LIBS}
-${PYTHON_LIBRARIES}
-#${QT_QTOPENGL_LIBRARY}
-)
-
-INSTALL_TARGETS(/bin superkaramba )
+ADD_SUBDIRECTORY( src )
+ADD_SUBDIRECTORY( icons )
+ADD_SUBDIRECTORY( mimetypes )
 
 
 ########### install files ###############
 
-INSTALL_FILES( /share/apps/superkaramba FILES superkarambaui.rc )
-INSTALL_FILES(  FILES superkaramba.desktop )
 
 #original Makefile.am contents follow:
 
-## set the include path for X, qt and KDE
-#INCLUDES = $(all_includes) $(XMMS_INCLUDES) $(PYTHONINC)
+#SUBDIRS = src icons mimetypes
 #
-## these are the headers for your project
-#noinst_HEADERS = karamba.h karambaapp.h karamba_python.h lineparser.h \
-#							themefile.h themesdlg.h themewidget.h kwidgetlistbox.h themelocale.h input.h \
-#		sklineedit.h input_python.h
+#include $(top_srcdir)/admin/Doxyfile.am
 #
-## let automoc handle all of the meta source files (moc)
-#METASOURCES = AUTO
-#
-#messages: rc.cpp
-#	$(EXTRACTRC) *.ui >> rc.cpp
-#	$(XGETTEXT) *.cpp -o $(podir)/superkaramba.pot
-#
-##########################################################################
-## APPLICATION SECTION
-##########################################################################
-## this is the program that gets installed.  it's name is used for all
-## of the other Makefile.am variables
-#bin_PROGRAMS = superkaramba
-#
-## the application source, library search path, and link libraries
-#superkaramba_SOURCES = main.cpp karamba.cpp meter.cpp bar.cpp sensor.cpp \
-#					datesensor.cpp textlabel.cpp memsensor.cpp uptimesensor.cpp cpusensor.cpp \
-#					networksensor.cpp imagelabel.cpp graph.cpp xmmssensor.cpp programsensor.cpp \
-#					disksensor.cpp sensorparams.cpp sensorsensor.cpp textfilesensor.cpp clickarea.cpp \
-#					noatunsensor.cpp karambarootpixmap.cpp clickmap.cpp rsssensor.cpp textfield.cpp \
-#					taskmanager.cpp showdesktop.cpp richtextlabel.cpp karambasessionmanaged.cpp \
-#					systemtray.cpp bar_python.cpp meter_python.cpp textlabel_python.cpp \
-#					richtextlabel_python.cpp imagelabel_python.cpp config_python.cpp misc_python.cpp \
-#					systray_python.cpp task_python.cpp widget_python.cpp menu_python.cpp \
-#					karambalistboxitem.cpp graph_python.cpp dcopinterface.skel dcopinterface.stub \
-#					karambainterface.cpp karambaapp.cpp karamba_python.cpp lineparser.cpp themefile.cpp \
-#					themesdlg.cpp themes_layout.ui themewidget_layout.ui themewidget.cpp \
-#					kwidgetlistbox.cpp sknewstuff.h sknewstuff.cpp superkarambasettings.kcfgc themelocale.cpp \
-#			input.cpp sklineedit.cpp input_python.cpp
-#
-## kde_cfg_DATA = superkaramba.kcfg
-#
-#superkaramba_LDFLAGS = -Wl,-export-dynamic  $(KDE_RPATH) $(all_libraries) $(PYTHONLIB) $(XMMS_LDFLAGS)
-##superkaramba_LDADD = -lkio $(LIB_KDEUI) $(XMMS_LDADD) $(LIBPYTHON) $(LIBKVM) $(MY_LIBKNEWSTUFF)
-#superkaramba_LDADD = -lkio $(LIB_KDEUI) $(XMMS_LIBS) $(LIBPYTHON) $(LIBKVM) $(MY_LIBKNEWSTUFF)
-#
-## this is where the desktop file will go
-#shelldesktopdir = $(kde_appsdir)/Utilities
-#shelldesktop_DATA = superkaramba.desktop
-#
-## this is where the shell's XML-GUI resource file goes
-#shellrcdir = $(kde_datadir)/superkaramba
-#shellrc_DATA = superkarambaui.rc
-#
-#AM_CFLAGS =
-#AM_CXXFLAGS =
-#AM_FFLAGS =
-#SUBDIRS =
