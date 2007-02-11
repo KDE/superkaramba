@@ -26,10 +26,11 @@
 
 #include <Python.h>
 #include <qobject.h>
-#include "karamba.h"
-#include "meter.h"
-#include "meter_python.h"
-#include "bar_python.h"
+#include "../karamba.h"
+#include "meters/meter.h"
+#include "python/meter.h"
+#include "meters/bar.h"
+#include "python/bar.h"
 
 PyObject* py_createBar(PyObject *, PyObject *args)
 {
@@ -40,10 +41,10 @@ PyObject* py_createBar(PyObject *, PyObject *args)
   if (!checkKaramba(widget))
     return NULL;
 
-  Bar *tmp = new Bar((karamba*)widget, x,y,w,h);
+  Bar *tmp = new Bar((Karamba*)widget, x,y,w,h);
   if (text && text[0] != '\0')
     tmp->setImage(text);
-  ((karamba*)widget)->meterList->append(tmp);
+  ((Karamba*)widget)->addToGroup(tmp);
   return (Py_BuildValue((char*)"l", (long)tmp));
 }
 
@@ -55,15 +56,14 @@ PyObject* py_deleteBar(PyObject *, PyObject *args)
   if (!checkKarambaAndMeter(widget, meter, "Bar"))
     return NULL;
 
-  ((karamba*)widget)->deleteMeterFromSensors((Meter*)meter);
+  ((Karamba*)widget)->deleteMeterFromSensors((Meter*)meter);
   return Py_BuildValue((char*)"l",
-      ((karamba*)widget)->meterList->removeAll((Meter*)meter));
+      ((Karamba*)widget)->removeMeter((Meter*)meter));
 }
 
 PyObject* py_getThemeBar(PyObject *self, PyObject *args)
 {
-  return py_getThemeMeter(self, args, "Bar");
-}
+  return py_getThemeMeter(self, args, "Bar");}
 
 PyObject* py_getBarSize(PyObject *self, PyObject *args)
 {
