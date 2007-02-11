@@ -20,10 +20,10 @@
 #ifndef THEMEWIDGET_H
 #define THEMEWIDGET_H
 
-#include <QList>
-
 #include "themefile.h"
 #include "ui_themewidget_layout.h"
+//Added by qt3to4:
+#include <Q3ValueList>
 
 /**
 @author See README for the list of authors
@@ -32,32 +32,26 @@
 class ThemeWidget : public QWidget, public Ui::ThemeWidgetLayout
 {
     Q_OBJECT
-public:
-    ThemeWidget(QWidget *parent = 0, const char *name = 0);
+  public:
+    ThemeWidget(QWidget *parent = 0);
     ThemeWidget(ThemeFile* tf);
-    virtual ~ThemeWidget();
+    ~ThemeWidget();
 
-    ThemeFile* themeFile() const
-    {
-        return m_themeFile;
-    };
+    ThemeFile* themeFile() const { return m_themeFile; };
 
     int  addInstance();
-    int  instances() const
-    {
-        return m_instancePool.count();
-    };
+    int  instances() const { return m_instancePool.count(); };
     void removeInstance(int instance);
 
     void setDescriptionText(QString text);
     void setHeaderText(QString text);
     void showButton(bool show);
 
-protected:
+  protected:
     void updateRunning();
     void setDescriptionMaxHeight();
 
-private:
+  private:
     ThemeFile* m_themeFile;
     QList<int> m_instancePool;
 };

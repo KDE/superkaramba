@@ -11,10 +11,11 @@
 #ifndef CLICKMAP_H
 #define CLICKMAP_H
 
-#include <meter.h>
-#include "clickable.h"
+#include "meter.h"
 #include "textfield.h"
-
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QGraphicsSceneMouseEvent>
 
 /**
  *
@@ -22,13 +23,15 @@
  **/
 class ClickMap : public Meter
 {
-    Q_OBJECT
+Q_OBJECT
 public:
-    ClickMap(KarambaWidget* k, int x, int y, int w, int h);
+    ClickMap(Karamba* k, int x, int y, int w, int h);
     ~ClickMap();
 
-    virtual bool click( QMouseEvent* );
-    void mUpdate( QPainter* );
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
+                QWidget *widget = 0);
+
     void setValue( QString );
     void setValue( int );
     void setTextProps( TextField * );

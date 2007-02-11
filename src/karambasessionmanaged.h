@@ -20,3 +20,20 @@
 *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 ****************************************************************************/
 
+#include <ksessionmanager.h>
+
+#ifndef KARAMBASM_H_
+#define KARAMBASM_H_
+
+class KarambaSessionManaged : public KSessionManager
+{
+  public:
+    KarambaSessionManaged() {};
+
+    virtual bool commitData( QSessionManager& );
+    virtual bool saveState( QSessionManager& );
+
+    virtual ~KarambaSessionManaged() {};
+};
+
+#endif

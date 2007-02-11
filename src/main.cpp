@@ -20,102 +20,112 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  ****************************************************************************/
 
-#include <karambaapp.h>
-#include <QObject>
+#include "karambaapp.h"
+#include "karambasessionmanaged.h"
+#include "python/karamba.h"
 
-#include <kaboutdata.h>
-#include <kcmdlineargs.h>
 #include <klocale.h>
-#include <kconfig.h>
-#include <kmainwindow.h>
-#include <qfileinfo.h>
-#include <qstringlist.h>
 #include <kconfig.h>
 #include <kstandarddirs.h>
 #include <kdeversion.h>
+#include <kcmdlineargs.h>
+#include <kaboutdata.h>
 
-#include "karambawidget.h"
-#include "karambasessionmanaged.h"
-#include "karambainterface.h"
-#include "karamba_python.h"
+#include <X11/extensions/Xrender.h>
 
 static const char *description =
     I18N_NOOP("A KDE Eye-candy Application");
 
-static const char *version = "0.37-RC2";
+static const char *version = "0.50";
 
 static KCmdLineOptions options[] =
-    {
-        // { "+[URL]", I18N_NOOP( "Document to open" ), 0 },
-        // { "!nosystray", I18N_NOOP("Disable systray icon"), 0 },
-        { "+file", I18N_NOOP("A required argument 'file'"), 0 },
-        { 0, 0, 0 }
-    };
-
-// This is for redirecting all qWarning, qDebug,... messages to file.
-// Usefull when testing session management issues etc.
-// #define KARAMBA_LOG 1
-
-#ifdef KARAMBA_LOG
-
-void karambaMessageOutput(QtMsgType type, const char *msg)
 {
-    FILE* fp = fopen("/tmp/karamba.log", "a");
-    if(fp)
-    {
-        pid_t pid = getpid();
-
-        switch ( type )
-        {
-        case QtDebugMsg:
-            fprintf( fp, "Debug (%d): %s\n", pid, msg );
-            break;
-        case QtWarningMsg:
-            if (strncmp(msg, "X Error", 7) != 0)
-                fprintf( fp, "Warning (%d): %s\n", pid, msg );
-            break;
-        case QtFatalMsg:
-            fprintf( fp, "Fatal (%d): %s\n", pid, msg );
-            abort();                    // deliberately core dump
-        }
-        fclose(fp);
-    }
-}
-
-#endif
+  // { "+[URL]", I18N_NOOP( "Document to open" ), 0 },
+  // { "!nosystray", I18N_NOOP("Disable systray icon"), 0 },
+  { "+file", I18N_NOOP("A required argument 'file'"), 0 },
+  { 0, 0, 0 }
+};
 
 int main(int argc, char **argv)
 {
-#ifdef KARAMBA_LOG
-    qInstallMsgHandler(karambaMessageOutput);
-#endif
+    // Taken from KRunner by A. Seigo
+    Display *dpy = XOpenDisplay(0); // open default display
+    if (!dpy)
+    {
+        qWarning("Cannot connect to the X server");
+        exit(1);
+    }
+
+    bool argbVisual = false ;
+    bool haveCompManager = !XGetSelectionOwner(dpy, XInternAtom(dpy,
+                                                 "_NET_WM_CM_S0", false));
+    haveCompManager = true;
+    Colormap colormap = 0;
+    Visual *visual = 0;
+
+    kDebug() << "Composition Manager: " << haveCompManager << endl;
+
+    if(haveCompManager)
+    {
+        int screen = DefaultScreen(dpy);
+        int eventBase, errorBase;
+
+        if(XRenderQueryExtension(dpy, &eventBase, &errorBase))
+        {
+            int nvi;
+            XVisualInfo templ;
+            templ.screen  = screen;
+            templ.depth   = 32;
+            templ.c_class = TrueColor;
+            XVisualInfo *xvi = XGetVisualInfo(dpy, VisualScreenMask |
+                                                   VisualDepthMask |
+                                                   VisualClassMask,
+                                              &templ, &nvi);
+            for(int i = 0; i < nvi; ++i)
+            {
+                XRenderPictFormat *format = XRenderFindVisualFormat(dpy,
+                                                                    xvi[i].visual);
+                if(format->type == PictTypeDirect && format->direct.alphaMask)
+                {
+                    visual = xvi[i].visual;
+                    colormap = XCreateColormap(dpy, RootWindow(dpy, screen),
+                                               visual, AllocNone);
+                    argbVisual = true;
+                    break;
+                }
+            }
+        }
+    }
 
     KAboutData about("superkaramba", I18N_NOOP("SuperKaramba"),
                      version, description,
                      KAboutData::License_GPL,
-                     "(c) 2003-2005 The SuperKaramba developers");
+                     "(c) 2003-2006 The SuperKaramba developers");
     about.addAuthor("Adam Geitgey", 0, "adam@rootnode.org");
     about.addAuthor("Hans Karlsson", 0, "karlsson.h@home.se");
     about.addAuthor("Ryan Nickell", 0, "p0z3r@earthlink.net");
     about.addAuthor("Petri Damstén", 0, "petri.damsten@iki.fi");
-
+    about.addAuthor("Alexander Wiedenbruch", 0, "mail@wiedenbruch.de");
+    about.addAuthor("Luke Kenneth Casson Leighton", 0, "lkcl@lkcl.net");
     KCmdLineArgs::init(argc, argv, &about);
+    KCmdLineArgs::addCmdLineOptions(options);
+    KarambaApplication::addCmdLineOptions();
+    KarambaSessionManaged ksm;
 
-    // Create ~/.superkaramba if necessary
-    QDir configDir(QDir::home().absolutePath() + "/.superkaramba");
-    if (!configDir.exists())
+    if(!KarambaApplication::start())
     {
-        qWarning("~/.superkaramba doesn't exist");
-        if(!configDir.mkdir(QDir::home().absolutePath() + "/.superkaramba"))
-        {
-            qWarning("Couldn't create Directory ~/.superkaramba");
-        }
-        else
-        {
-            qWarning("created ~/.superkaramba");
-        }
+      fprintf(stderr, "SuperKaramba is already running!\n");
+      exit(0);
     }
 
-    KarambaApplication app;
-    return app.exec();
+    KarambaApplication app(dpy, Qt::HANDLE(visual), Qt::HANDLE(colormap));
+
+    app.setUpSysTray(&about);
+
+    int ret = 0;
+    KarambaPython::initPython();
+    ret = app.exec();
+    KarambaPython::shutdownPython();
+
+    return ret;
 }

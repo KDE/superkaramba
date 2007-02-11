@@ -22,17 +22,22 @@
 #ifndef CLICKAREA_H
 #define CLICKAREA_H
 
-#include <QString>
+#include <qstring.h>
 #include <qrect.h>
 #include <qevent.h>
-#include <QRegExp>
+#include <qregexp.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QGraphicsSceneMouseEvent>
+#include <QRect>
+#include <QPainter>
 
 #include <kprocess.h>
 #include <kprocio.h>
 #include <krun.h>
 
-#include <meter.h>
-#include "clickable.h"
+#include <meters/meter.h>
+//#include "clickable.h"
 /**
  *
  * Hans Karlsson
@@ -41,23 +46,31 @@ class ClickArea : public Meter
 {
     Q_OBJECT
 public:
-    ClickArea(KarambaWidget* k, int x, int y, int w, int h );
+    ClickArea(Karamba* k, bool preview, int x, int y, int w, int h );
 
     ~ClickArea();
 
-    virtual bool click( QMouseEvent* );
     void setOnClick( QString );
+    void setServiceOnClick( QString , QString, QString);
     void setOnMiddleClick( QString );
 
+    bool mouseEvent(QGraphicsSceneMouseEvent *e);
 
     QRect getRectangle();
 
     void mUpdate( QPainter* );
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
+                            QWidget *widget = 0);
+
     void setValue( int );
     void setValue( QString );
 
-    QRect rect;
+    bool m_preview;
+
     QString onClick;
+    QString svc_onClick;
+    QString svc_name;
+    QString svc_icon;
     QString onMiddleClick;
     QString value;
 };

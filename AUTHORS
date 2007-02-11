@@ -18,13 +18,18 @@ Ralph Churchill <mrchucho@yahoo.com>
 
 Ryan Nickell <p0z3r@earthlink.net>
 
-Petri DamstÃ©n <petri.damsten@iki.fi>
+Petri Damstén <petri.damsten@iki.fi>
 
 Ivica Ico Bukvic <ico@fuse.net>
 http://meowing.ccm.uc.edu/~ico/
  - Various additions/fixes
  
 Sarah Elan <selan@users.sf.net>
+
+Luke Kenneth Casson Leighton <lkcl@lkcl.net>
+ - Python API functions, theme inter-communication
+ - Karamba "object"-style auto-wrapper to OO-itise python interface
+ - drag-drop receives x,y coordinates of mouse at drop time.
 
 HELP, PATCHES, AND EXISTING CODE:
 
@@ -33,8 +38,12 @@ Matthias Elter <elter@kde.org>
 
 Vova Kuznetsov <kv000@mail.ru>
 
+Alexander Wiedenbruch <Alexander@wiedenbruch.de> - Patches and Testing
+
+Scott Grayban <sgrayban@mandriva.org> - Mandriva RPM Packager
 
 THANKS:
 
 The graphics in the welcome dialog are derived from crystalsvg icons by
 everaldo <everaldo@everaldo.com>
+

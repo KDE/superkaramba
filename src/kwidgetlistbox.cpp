@@ -20,183 +20,222 @@
 #include "kwidgetlistbox.h"
 #include <kdebug.h>
 #include <kglobalsettings.h>
-#include <Q3Table>
-#include <Q3ScrollView>
+//Added by qt3to4:
+#include <QShowEvent>
+#include <QScrollBar>
 
 KWidgetListbox::KWidgetListbox(QWidget *parent, const char *name)
-        : Q3Table(parent, name)
+  : QTableWidget(parent)
 {
-    setNumRows(0);
-    setNumCols(1);
-    setColumnStretchable(0, true);
-    setLeftMargin(0);
-    setTopMargin(0);
-    horizontalHeader()->hide();
-    verticalHeader()->hide();
-    setSelectionMode(Q3Table::NoSelection);
-    setFocusStyle(Q3Table::FollowStyle);
-    connect(this, SIGNAL(currentChanged(int, int)),
-            this, SLOT(selectionChanged(int, int)));
-    setHScrollBarMode(Q3ScrollView::AlwaysOff);
-    setVScrollBarMode(Q3ScrollView::Auto);
+  setRowCount(0);
+  setColumnCount(1);
+
+  horizontalHeader()->hide();
+  verticalHeader()->hide();
+  
+  setSelectionMode(QAbstractItemView::NoSelection);
+  //setFocusStyle(QTableView::FollowStyle);
+ 
+  connect(this, SIGNAL(cellClicked(int, int)),
+          this, SLOT(selectionChanged(int, int)));
+   
+  /*
+  setHScrollBarMode(Q3ScrollView::AlwaysOff);
+  setVScrollBarMode(Q3ScrollView::Auto);
+  */
 }
 
 KWidgetListbox::~KWidgetListbox()
 {
-    clear();
+  clear();
 }
 
 void KWidgetListbox::clear()
 {
-    for(int i = 0; i < numRows(); ++i)
-        clearCellWidget(i, 0);
-    setNumRows(0);
+  QTableWidget::clear();
 }
 
 int KWidgetListbox::insertItem(QWidget* item, int index)
 {
-    int row;
+  int row;
 
-    if(index == -1)
-    {
-        row = numRows();
-        setNumRows(row + 1);
-    }
-    else
-        return -1;
+  if(index == -1)
+  {
+    row = rowCount();
+    setRowCount(row + 1);
+  }
+  else
+    return -1;
 
-    setRowHeight(row, item->height());
-    setCellWidget(row, 0, item);
-    setItemColors(row, even(row));
-    return row;
+  setRowHeight(row, item->height());
+ 
+  setCellWidget(row, 0, item);
+  setItemColors(row, even(row));
+
+  return row;
 }
 
 void KWidgetListbox::setSelected(QWidget* item)
 {
-    setSelected(index(item));
+  setSelected(index(item));
 }
 
-void KWidgetListbox::selectionChanged(int row, int col)
+void KWidgetListbox::selectionChanged(int row, int column)
 {
-    ensureCellVisible(row, col);
-    updateColors();
-    emit selected(row);
+  setCurrentCell(row, column);
+  updateColors();
+  emit selected(row);
 }
 
 void KWidgetListbox::removeItem(QWidget* item)
 {
-    removeItem(index(item));
+  removeItem(index(item));
 }
 
 void KWidgetListbox::removeItem(int index)
 {
-    removeRow(index);
-    updateColors();
+  removeRow(index);
+  updateColors();
 }
 
 void KWidgetListbox::setSelected(int index)
 {
-    setCurrentCell(index, 0);
+  setCurrentCell(index, 0);
 }
 
 int KWidgetListbox::selected() const
 {
-    return currentRow();
+  return currentRow();
 }
 
 QWidget* KWidgetListbox::selectedItem() const
 {
-    return item(selected());
+  return item(selected());
 }
 
 QWidget* KWidgetListbox::item(int index) const
 {
-    return cellWidget(index, 0);
+  return cellWidget(index, 0);
 }
 
 int KWidgetListbox::index(QWidget* itm) const
 {
-    for(int i = 0; i < numRows(); ++i)
-        if(item(i) == itm)
-            return i;
-    return -1;
+  for(int i = 0; i < rowCount(); ++i)
+    if(item(i) == itm)
+      return i;
+  return -1;
 }
 
 bool KWidgetListbox::even(int index)
 {
-    int v = 0;
-    for(int i = 0; i < numRows(); ++i)
-    {
-        if(index == i)
-            break;
-        if(!isRowHidden(i))
-            ++v;
-    }
-    return (v%2 == 0);
+  int v = 0;
+  for(int i = 0; i < rowCount(); ++i)
+  {
+    if(index == i)
+      break;
+    if(!isRowHidden(i))
+      ++v;
+  }
+  return (v%2 == 0);
 }
 
 void KWidgetListbox::updateColors()
 {
-    int v = 0;
-    for(int i = 0; i < numRows(); ++i)
+  int v = 0;
+  for(int i = 0; i < rowCount(); ++i)
+  {
+    if(!isRowHidden(i))
     {
-        if(!isRowHidden(i))
-        {
-            setItemColors(i, (v%2 == 0));
-            ++v;
-        }
+      setItemColors(i, (v%2 == 0));
+      ++v;
     }
+  }
 }
 
 void KWidgetListbox::setItemColors(int index, bool even)
 {
-    QWidget* itm = item(index);
+  QWidget* itm = item(index);
 
-    if(index == selected())
-    {
-        itm->setPaletteBackgroundColor(KGlobalSettings::highlightColor());
-        itm->setPaletteForegroundColor(KGlobalSettings::highlightedTextColor());
-    }
-    else if(even)
-    {
-        itm->setPaletteBackgroundColor(KGlobalSettings::baseColor());
-        itm->setPaletteForegroundColor(KGlobalSettings::textColor());
-    }
-    else
-    {
-        itm->setPaletteBackgroundColor(
-            KGlobalSettings::alternateBackgroundColor());
-        itm->setPaletteForegroundColor(KGlobalSettings::textColor());
-    }
+  if(index == selected())
+  {
+    QPalette bgPalette;
+    bgPalette.setColor(itm->backgroundRole(), KGlobalSettings::highlightColor());
+    itm->setPalette(bgPalette);
+
+    QPalette fgPalette;
+    fgPalette.setColor(itm->foregroundRole(), KGlobalSettings::highlightedTextColor());
+    itm->setPalette(fgPalette);
+  }
+  else if(even)
+  {
+    QPalette bgPalette;
+    bgPalette.setColor(itm->backgroundRole(), KGlobalSettings::baseColor());
+    itm->setPalette(bgPalette);
+
+    QPalette fgPalette;
+    fgPalette.setColor(itm->foregroundRole(), KGlobalSettings::textColor());
+    itm->setPalette(fgPalette);
+  }
+  else
+  {
+    QPalette bgPalette;
+    bgPalette.setColor(itm->backgroundRole(), KGlobalSettings::alternateBackgroundColor());
+    itm->setPalette(bgPalette);
+
+    QPalette fgPalette;
+    fgPalette.setColor(itm->foregroundRole(), KGlobalSettings::textColor());
+    itm->setPalette(fgPalette);
+  }
 }
 
 void KWidgetListbox::showItems(show_callback func, void* data)
 {
-    for(int i = 0; i < numRows(); ++i)
+  for(int i = 0; i < rowCount(); ++i)
+  {
+    if(func == 0)
+      showRow(i);
+    else
     {
-        if(func == 0)
-            showRow(i);
-        else
-        {
-            if(func(i, item(i), data))
-                showRow(i);
-            else
-                hideRow(i);
-        }
+      if(func(i, item(i), data))
+        showRow(i);
+      else
+        hideRow(i);
     }
-    updateColors();
+  }
+  updateColors();
 }
 
 void KWidgetListbox::showEvent(QShowEvent*)
 {
-    //kDebug() << k_funcinfo << endl;
-    repaintContents(false);
+  //kDebug() << k_funcinfo << endl;
+  repaint();
 }
 
 void KWidgetListbox::paintCell(QPainter*, int, int, const QRect&,
-                               bool, const QColorGroup&)
+                               bool, const QPalette&)
 {
-    //kDebug() << k_funcinfo << endl;
+  //kDebug() << k_funcinfo << endl;
+}
+
+void KWidgetListbox::resizeEvent(QResizeEvent *e)
+{
+  QTableWidget::resizeEvent(e);
+
+  #ifdef __GNUC__
+    #warning No better way?
+  #endif
+  unsigned int wscroll = 0;
+
+  QScrollBar *bar = verticalScrollBar();
+  if(bar->isVisible())
+    wscroll = 5;
+  
+  setColumnWidth(0, width() - 5 - wscroll);
+
+  for(unsigned int i = 0; i < rowCount(); i++)
+  {
+    setRowHeight(i, 150);
+  }
 }
 
 #include "kwidgetlistbox.moc"

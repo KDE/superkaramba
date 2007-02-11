@@ -1,0 +1,29 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<!DOCTYPE KDevPrjSession>
+<KDevPrjSession>
+ <DocsAndViews NumberOfDocuments="1" >
+  <Doc0 NumberOfViews="1" URL="file:///home/damu/files/code/linux/kdereview/superkaramba/src/dcopinterface.h" >
+   <View0 line="0" Type="Source" />
+  </Doc0>
+ </DocsAndViews>
+ <pluginList>
+  <kdevdebugger>
+   <breakpointList>
+    <breakpoint0 location="/usr/src/superkaramba.cvs/src/meter_python.cpp:27" type="1" condition="" enabled="1" />
+    <breakpoint1 location="/usr/src/superkaramba.cvs/src/meter_python.cpp:182" type="1" condition="" enabled="1" />
+    <breakpoint2 location="/usr/src/superkaramba.cvs/src/themelistwindow.cpp:141" type="1" condition="" enabled="1" />
+    <breakpoint3 location="/usr/src/superkaramba.cvs/src/karambainterface.cpp:95" type="1" condition="" enabled="1" />
+    <breakpoint4 location="/usr/src/superkaramba.cvs/src/karamba.cpp:1" type="1" condition="" enabled="1" />
+   </breakpointList>
+  </kdevdebugger>
+  <kdevbookmarks>
+   <bookmarks/>
+  </kdevbookmarks>
+  <kdevvalgrind>
+   <executable path="" params="/usr/src/superkaramba.cvs/examples/richtext/rtext.theme" />
+   <valgrind path="/usr/bin/valgrind" params="--tool=memcheck --gen-suppressions=yes" />
+   <calltree path="" params="" />
+   <kcachegrind path="" />
+  </kdevvalgrind>
+ </pluginList>
+</KDevPrjSession>

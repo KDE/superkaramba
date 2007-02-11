@@ -1,14 +1,11 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>ThemesLayout</class>
  <widget class="QDialog" name="ThemesLayout" >
   <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>399</width>
+    <width>317</width>
     <height>517</height>
    </rect>
   </property>
@@ -23,7 +20,7 @@
   </property>
   <layout class="QVBoxLayout" >
    <property name="margin" >
-    <number>10</number>
+    <number>11</number>
    </property>
    <property name="spacing" >
     <number>6</number>
@@ -122,6 +119,12 @@
          <height>0</height>
         </size>
        </property>
+       <property name="text" >
+        <string>&amp;Add to Desktop</string>
+       </property>
+       <property name="stdItem" stdset="0" >
+        <number>27</number>
+       </property>
       </widget>
      </item>
      <item>
@@ -132,6 +135,12 @@
          <height>0</height>
         </size>
        </property>
+       <property name="text" >
+        <string>&amp;Close</string>
+       </property>
+       <property name="stdItem" stdset="0" >
+        <number>13</number>
+       </property>
       </widget>
      </item>
     </layout>
@@ -140,30 +149,18 @@
  </widget>
  <layoutdefault spacing="6" margin="11" />
  <layoutfunction spacing="KDialog::spacingHint" margin="KDialog::marginHint" />
- <pixmapfunction></pixmapfunction>
  <customwidgets>
   <customwidget>
    <class>KWidgetListbox</class>
-   <extends></extends>
+   <extends>QWidget</extends>
    <header>kwidgetlistbox.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
   </customwidget>
   <customwidget>
    <class>KPushButton</class>
-   <extends>QWidget</extends>
+   <extends>QPushButton</extends>
    <header>kpushbutton.h</header>
-   <container>1</container>
-   <pixmap></pixmap>
   </customwidget>
-  <customwidget>
-   <class>KDialog</class>
-   <extends>QDialog</extends>
-   <header>kdialog.h</header>
-   <container>2</container>
-   <pixmap></pixmap>
-  </customwidget>
-</customwidgets>
+ </customwidgets>
  <tabstops>
   <tabstop>editSearch</tabstop>
   <tabstop>comboShow</tabstop>
@@ -171,6 +168,28 @@
   <tabstop>buttonAddToDesktop</tabstop>
   <tabstop>buttonClose</tabstop>
  </tabstops>
+ <includes>
+  <include location="local" >kwidgetlistbox.h</include>
+  <include location="local" >kpushbutton.h</include>
+  <include location="local" >kpushbutton.h</include>
+ </includes>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>buttonClose</sender>
+   <signal>clicked()</signal>
+   <receiver>ThemesLayout</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

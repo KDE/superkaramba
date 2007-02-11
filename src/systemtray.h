@@ -7,7 +7,7 @@
                   2001      Carsten Pfeiffer <pfeiffer@kde.org>
                   2001      Martijn Klingens <mklingens@yahoo.com>
  ***************************************************************************
- 
+
  ***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -21,10 +21,11 @@
 #ifndef TESTCARDAPPLET_H
 #define TESTCARDAPPLET_H
 
-#include <QObject>
+#include <qobject.h>
 #include <qpixmap.h>
-#include <QX11EmbedWidget>
+
 #include <QList>
+#include <QWidget>
 
 class KWinModule;
 
@@ -37,7 +38,7 @@ class Systemtray : public QWidget
 public:
     Systemtray(QWidget* parent);
     ~Systemtray();
-
+    
     void updateBackgroundPixmap ( const QPixmap & );
 
     int getCurrentWindowCount();
@@ -46,10 +47,11 @@ public:
 
 public slots:
     void updateTrayWindows();
+    int getTraySize();
     void systemTrayWindowAdded( WId w );
     void systemTrayWindowRemoved( WId w );
     void layoutSystray();
-
+    
 signals:
     void updated();
 
@@ -57,7 +59,7 @@ private:
     KWinModule *kwin_module;
     QList<WId> systemTrayWindows;
 
-    QList<QX11EmbedWidget> m_Wins;
+    //QList<QXEmbed> m_Wins;
 
     Atom net_system_tray_selection;
     Atom net_system_tray_opcode;

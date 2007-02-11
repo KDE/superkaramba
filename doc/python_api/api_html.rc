@@ -1,0 +1,36 @@
+# Superkaramba python api html documentation config for ROBODOc
+#
+items:
+    SYNOPSIS
+    DESCRIPTION
+    ARGUMENTS
+    RETURN VALUE
+ignore items:
+options:
+    --singledoc
+    --src .apiHeaders
+    --doc python_api
+    --html
+    #--tell
+    --nopre
+    #--lock
+    #--index
+    --toc
+    --nodesc
+    --css api.css
+headertypes:
+    p "Python API"        karamba_python_api
+ignore files:
+    README
+    CVS
+    *.bak
+    *~
+    *.cpp
+    Makefile*
+    *.rc
+header markers:
+    //****
+remark markers:
+    //
+end markers:
+    //***

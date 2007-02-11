@@ -23,28 +23,34 @@
 
 #include "ui_themes_layout.h"
 #include "karambaapp.h"
+#include "sknewstuff.h"
 
 /**
 @author See README for the list of authors
 */
-class SKNewStuff;
+class ThemeFile;
+class KArchiveDirectory;
 
-class ThemesDlg : public QDialog, private Ui::ThemesLayout
+class ThemesDlg : public QDialog, public Ui::ThemesLayout
 {
     Q_OBJECT
 
-public:
+  public:
     ThemesDlg(QWidget *parent = 0, const char *name = 0);
-    virtual ~ThemesDlg();
+    ~ThemesDlg();
 
     int addTheme(const QString &appId, const QString &file);
     void removeTheme(const QString &appId, const QString &file, int instance);
     int addThemeToList(const QString &file);
-    void newSkzTheme(const QString &file);
+    void addSkzThemeToDialog(const QString &file);
+    void addThemeToDialog(const KArchiveDirectory *archiveDir, const QString& destDir);
+    void writeNewStuffConfig(const QString &file);
+    void configSanityCheck();
+    bool isDownloaded(const QString &path);
     void saveUserAddedThemes();
     QStringList runningThemes();
 
-protected slots:
+  protected slots:
     virtual void addToDesktop();
     virtual void selectionChanged(int);
     virtual void openLocalTheme();
@@ -52,13 +58,13 @@ protected slots:
     virtual void search(const QString& text);
     virtual void uninstall();
 
-protected:
+  protected:
     static bool filter(int index, QWidget* widget, void* data);
     void populateListbox();
     int themeIndex(QString file);
     QStringList themes();
 
-private:
+  private:
     SKNewStuff *mNewStuff;
     QStringList m_newStuffStatus;
 };

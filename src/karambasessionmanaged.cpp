@@ -22,34 +22,43 @@
 
 #include <kapplication.h>
 #include <kconfig.h>
+#include <ksessionmanager.h>
 #include "karambasessionmanaged.h"
-#include "karambawidget.h"
+#include "karamba.h"
+#include "qwidget.h"
 
-bool KSessionManaged::saveState(QSessionManager&)
+bool KarambaSessionManaged::saveState(QSessionManager&)
 {
-    KConfig* config = kapp->sessionConfig();
+  KConfig* config = kapp->sessionConfig();
 
-    config->setGroup("General Options");
+  config->setGroup("General Options");
 
-    QString openThemes="";
+  QList<QString> openThemes;
 
-    foreach (QWidget *w, QApplication::allWidgets())
+  #ifdef __GNUC__
+    #warning check if this works in all globalView cases
+  #endif
+  QWidgetList list = QApplication::allWidgets();
+  foreach(QWidget *w, list)
+  {
+    if (QString(w->objectName()).startsWith("karamba"))
     {
-        if (QString(w->name()).startsWith("karamba"))
-        {
-            KarambaWidget* k = (KarambaWidget*) w;
-            openThemes += QFileInfo(k->theme().file()).absoluteFilePath();
-            k->writeConfigData();
-            openThemes += ";";
-        }
+      Karamba* k = (Karamba*) w;
+      /* Sub theme ever used
+      if (k->isSubTheme())
+        continue;
+      */
+      QString path = QFileInfo(k->theme().file()).absoluteFilePath();
+      k->writeConfigData();
+      openThemes.append(path);
     }
+  }
 
-    qDebug("Open themes %s", openThemes.ascii());
-    config->writeEntry("OpenThemes", openThemes);
-    return true;
+  config->writeEntry("OpenThemes", openThemes);
+  return true;
 }
 
-bool KSessionManaged::commitData(QSessionManager&)
+bool KarambaSessionManaged::commitData(QSessionManager&)
 {
-    return true;
+  return true;
 }

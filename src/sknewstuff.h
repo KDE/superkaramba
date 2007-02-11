@@ -21,7 +21,9 @@
 #ifndef SKNEWSTUFF_H
 #define SKNEWSTUFF_H
 
+#include <kurl.h>
 #include "karambaapp.h"
+
 #include "knewstuff/knewstuff.h"
 #include "knewstuff/entry.h"
 
@@ -30,19 +32,16 @@ class KArchiveDirectory;
 
 class SKNewStuff : public KNewStuff
 {
-public:
+  public:
     SKNewStuff( ThemesDlg * );
 
     bool install( const QString &fileName );
     bool createUploadFile( const QString &fileName );
     QString downloadDestination( KNS::Entry *entry );
 
-protected:
-    void addThemes(const KArchiveDirectory *archiveDir,
-                   const QString& destDir);
-
-private:
+  private:
     ThemesDlg *mDlg;
+    KUrl m_sourceLink;
 };
 
-#endif
+#endif //SKNEWSTUFF_H

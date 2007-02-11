@@ -1,3 +1,5 @@
+//Added by qt3to4:
+#include <Q3ValueList>
 /*
  * Copyright (C) 2003-2004 Adam Geitgey <adam@rootnode.org>
  * Copyright (c) 2005 Ryan Nickell <p0z3r@earthlink.net>
@@ -22,8 +24,6 @@
 #ifndef __showdesktop_h__
 #define __showdesktop_h__
 
-#include <QList>
-
 class KWinModule;
 
 /**
@@ -34,18 +34,12 @@ class ShowDesktop : public QObject
     Q_OBJECT
 
 public:
-    static ShowDesktop* the();
-    bool desktopShowing()
-    {
-        return showingDesktop;
-    }
+    static ShowDesktop* self();
+    bool desktopShowing() { return showingDesktop; }
 
 public slots:
     void showDesktop( bool show );
-    void toggle()
-    {
-        showDesktop( !desktopShowing() );
-    }
+    void toggle() { showDesktop( !desktopShowing() ); }
 
 signals:
     void desktopShown( bool shown );
@@ -59,7 +53,7 @@ private:
 
     bool              showingDesktop;
     KWinModule*       kWinModule;
-    QList<WId>   iconifiedList;
+    Q3ValueList<WId>   iconifiedList;
 
 };
 

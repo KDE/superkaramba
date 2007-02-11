@@ -20,7 +20,7 @@
 #ifndef THEMELOCALE_H
 #define THEMELOCALE_H
 
-#include <QString>
+#include <qstring.h>
 #include <qstringlist.h>
 
 class ThemeFile;
@@ -31,29 +31,24 @@ class ThemeFile;
 
 struct sk_kde_loaded_l10nfile
 {
-    int decided;
-    const void *data;
-    sk_kde_loaded_l10nfile() : decided(0), data(0)
-    {}
-}
-;
+  int decided;
+  const void *data;
+  sk_kde_loaded_l10nfile() : decided(0), data(0) {}
+};
 
 class ThemeLocale
 {
-public:
+  public:
     ThemeLocale(ThemeFile* theme);
     ~ThemeLocale();
 
-    QString translate(const char* text) const;
+    QString translate(QString text) const;
     void setLanguage(const QStringList &languages);
-    QString language() const
-    {
-        return m_language;
-    };
+    QString language() const { return m_language; };
 
     static QStringList languageList();
 
-private:
+  private:
     sk_kde_loaded_l10nfile m_domain;
     ThemeFile* m_theme;
     QString m_language;

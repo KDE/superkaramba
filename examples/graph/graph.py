@@ -15,7 +15,6 @@ def initWidget(widget):
     graphs[5] = karamba.getThemeGraph(widget, "graph5")
     graphs[6] = karamba.getThemeGraph(widget, "graph6")
     graphs[7] = karamba.getThemeGraph(widget, "graph7")
-    print "initWidget called"
         
 
 #this is called everytime your widget is updated

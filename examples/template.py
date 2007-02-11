@@ -86,7 +86,9 @@ def commandOutput(widget, pid, output):
 # NOTE you have to call acceptDrops() before your widget will accept drops.
 #  widget = reference to your theme
 #  dropText = the text of the dropped item (probably a URL to it's location in KDE)
-def itemDropped(widget, dropText):
+#  x = the x position on the theme relative to the upper left corner
+#  y = the y position on the theme relative to the upper left corner
+def itemDropped(widget, dropText, x, y):
     pass
 
 

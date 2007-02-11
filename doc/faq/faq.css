@@ -1,0 +1,36 @@
+h1                    { padding-top: 0.25in;
+                        padding-bottom: 0.25in;
+                        color: black;
+                        font-size: 24pt;
+                        font-family: Verdana, Arial, Helvetica, sans-serif;
+                        font-weight: bold;
+			text-align: center;
+                      }
+
+h2                    { font-size: 18pt;
+                      }
+h3                    { font-size: 12pt;
+                      }
+
+p			{
+			font-family: Verdana, Arial, Helvetica, sans-serif;
+			font-size: 10pt;
+			}
+
+pre  	  		{
+			font-family: Courier, serif;
+                        background-color: #dddddd;
+			}
+
+
+
+code			{
+			font-family: Courier, serif;
+			}
+
+tt			{
+			font-family: Courier, serif;
+			}
+
+
+

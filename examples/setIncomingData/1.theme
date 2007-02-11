@@ -1,0 +1,2 @@
+KARAMBA x=200 y=50 w=100 h=20 INTERVAL=1000 LOCKED=true
+TEXT x=0 Y=0 w=300 h=20 value="Click me!"

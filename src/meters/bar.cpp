@@ -8,123 +8,172 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-#include "karambawidget.h"
-
 #include "bar.h"
-#include "bar.moc"
-#include "karamba_python.h"
+#include "karamba.h"
+#include <kdebug.h>
 
-Bar::Bar(KarambaWidget* k, int x, int y, int w, int h)
-        : Meter(k, x, y, w, h),
-        value(0),
-        barValue(0),
-        vertical(false)
+Bar::Bar(Karamba* k, int x, int y, int w, int h) : Meter(k, x, y, w, h)
 {
-    m_minValue = 0;
-    m_maxValue = 100;
+  value = 0;
+  minValue = 0;
+  maxValue = 100;
+  barValue = 0;
+  vertical = false;
+  oldBarValue = -1;
+
+  m_timer = new QTimer(this);
+  connect(m_timer, SIGNAL(timeout()), this, SLOT(valueChanged()));
 }
 
 Bar::~Bar()
-{}
+{
+  delete m_timer;
+}
 
 bool Bar::setImage(QString fileName)
 {
-    QFileInfo fileInfo(fileName);
-    bool res = false;
+  QFileInfo fileInfo(fileName);
+  bool res = false;
 
-    if(m_karamba->theme().isThemeFile(fileName))
-    {
-        QByteArray ba = m_karamba->theme().readThemeFile(fileName);
-        res = pixmap.loadFromData(ba);
-    }
-    else
-    {
-        res = pixmap.load(fileName);
-    }
+  if(m_karamba->theme().isThemeFile(fileName))
+  {
+    QByteArray ba = m_karamba->theme().readThemeFile(fileName);
+    res = pixmap.loadFromData(ba);
+  }
+  else
+  {
+    res = pixmap.load(fileName);
+  }
+  pixmapWidth = pixmap.width();
+  pixmapHeight = pixmap.height();
 
-    pixmapWidth = pixmap.width();
-    pixmapHeight = pixmap.height();
-
-    if(width()==0 || height()==0)
-    {
-        resize(pixmapWidth,pixmapHeight);
-    }
-
-    if(res)
-    {
-        imagePath = fileName;
-    }
-
-    return res;
+  if(getWidth()==0 || getHeight()==0)
+  {
+    setWidth(pixmapWidth);
+    setHeight(pixmapHeight);
+  }
+  if(res)
+    imagePath = fileName;
+  return res;
 }
 
-void Bar::setValue(int v)
+void Bar::setValue( int v )
 {
-    v= qMin(v , m_maxValue);
-    v=qMax(v,m_minValue);
-    barValue = v;
+  if(v > maxValue)
+  {
+    v = maxValue;
+  }
 
-    int diff = m_maxValue - m_minValue;
-    if(diff != 0)
-    {
-        if(vertical)
-        {
-            value = int((v-m_minValue)*height() / diff + 0.5);
-        }
-        else // horizontal
-        {
-            value = int((v-m_minValue)*width() / diff + 0.5);
-        }
-    }
-    else
-    {
-        value = 0;
-    }
+  if(v < minValue)
+  {
+    v = minValue;
+  }
+
+  oldBarValue = barValue;
+  barValue = v;
+  
+  m_timer->start(5);
 }
 
 void Bar::setValue(QString v)
 {
-    setValue((int)(v.toDouble() + 0.5));
+  setValue((int)(v.toDouble() + 0.5));
+}
+
+//void Bar::timerEvent(QTimerEvent *event)
+void Bar::valueChanged()
+{
+  int diff = maxValue - minValue;
+  int size = 0;
+
+  if(diff != 0)
+  {
+    if(vertical)
+      size = getHeight();
+    else
+      size = getWidth();
+    
+    if(oldBarValue < barValue)
+    {
+      if(value < int((barValue-minValue)*size / diff + 0.5))
+      {
+        value++;
+        oldBarValue++;
+      }
+      else
+      {
+        m_timer->stop();
+      }
+    }
+    else if(oldBarValue > barValue)
+    {
+      if(value > int((barValue-minValue)*size / diff + 0.5))
+      {
+        value--;
+        oldBarValue--;
+      }
+      else
+      {
+        m_timer->stop();
+      }
+    }
+    else
+    {
+      m_timer->stop();
+      value = int((barValue-minValue)*size / diff + 0.5);
+    }
+  }
+  else
+  {
+    value = 0;
+    m_timer->stop();
+  }
+
+  update();
 }
 
 void Bar::setMax(int m)
 {
-    m_maxValue = m;
-    recalculateValue();
+  Meter::setMax(m);
+  recalculateValue();
 }
 
 void Bar::setMin(int m)
 {
-    m_minValue = m;
-    recalculateValue();
+  Meter::setMin(m);
+  recalculateValue();
 }
 
 void Bar::setVertical(bool b)
 {
-    vertical = b;
+  vertical = b;
 }
 
-void Bar::paintEvent(QPaintEvent*)
+void Bar::paint(QPainter *p, const QStyleOptionGraphicsItem *option,
+                QWidget *widget)
 {
-    QPainter p(this);
-    //only draw image if not hidden
+  Q_UNUSED(option);
+  Q_UNUSED(widget);
+
+  int x, y, width, height;
+  x = getX();
+  y = getY();
+  width = getWidth();
+  height = getHeight();
+
+  //only draw image if not hidden
+  if(hidden == 0)
+  {
+    p->setOpacity(m_opacity);
     if(vertical)
-        {
-            //  int v = int( (value-minValue)*height / (maxValue-minValue) + 0.5 );
-            p.drawTiledPixmap(0, height()-value, width(), value, pixmap, 0,
-                               pixmapHeight-value);
-        }
+    {
+      p->drawTiledPixmap(x, y+height-value, width, value, pixmap, 0, pixmapHeight-value);
+    }
     else // horizontal
-        {
-            //int v = int( (value-minValue)*width / (maxValue-minValue) + 0.5 );
-            p.drawTiledPixmap(0, 0, value, height(), pixmap);
-        }
-        if ((*pythonIface) && (*pythonIface)->isExtensionLoaded())
-            (*pythonIface)->widgetUpdated(m_karamba);
+    {
+      p->drawTiledPixmap(x, y, value, height, pixmap);
+    }
+  }
 }
 
-void Bar::updateData()
-{
-    setValue(decodeDot(m_format.remove('%')).toInt());
-    update();
-}
+#include "bar.moc"

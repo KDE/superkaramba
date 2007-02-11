@@ -1,0 +1,4 @@
+# simple test of service group stuff.  displays your kde menu.
+
+karamba  x=0 y=0 w=600 h=800 locked=true 
+

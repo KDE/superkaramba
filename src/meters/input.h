@@ -21,50 +21,89 @@
 #ifndef INPUT_H
 #define INPUT_H
 
-#include <meter.h>
-#include <sklineedit.h>
+#include "meter.h"
 
 #include <qpainter.h>
-#include <QColor>
-#include <QLineEdit>
-#include <QWidget>
-#include <QString>
-#include <QFont>
+#include <qcolor.h>
+#include <qlineedit.h>
+#include <qwidget.h>
+#include <qstring.h>
+#include <qfont.h>
+#include <QTextLayout>
 
 #include "textfield.h"
+#include "karamba.h"
 
 class Input : public Meter
 {
-    Q_OBJECT
+Q_OBJECT
 public:
-    Input(KarambaWidget* k, int ix, int iy, int iw, int ih);
-    Input();
+  Input(Karamba* k, int ix, int iy, int iw, int ih);
+  Input();
 
-    ~Input();
+  ~Input();
 
-    void setValue(QString text);
-    QString getStringValue() const;
+  void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
+                  QWidget *widget);
 
-    void setBGColor(QColor c);
-    QColor getBGColor() const;
-    void setSelectionColor(QColor selectionColor);
-    QColor getSelectionColor() const;
-    void setSelectedTextColor(QColor selectedTextColor);
-    QColor getSelectedTextColor() const;
-    void setTextProps(TextField*);
+  void setValue(QString text);
+  QString getStringValue() const;
 
-    void setMeterFont(QString f);
-    QString getFont() const;
-    void setFontSize(int size);
-    int getFontSize() const;
-    void setFGColor(QColor c);
-    QColor getFGColor() const;
-    
+  void setBGColor(QColor c);
+  QColor getBGColor() const;
+  void setColor(QColor c);
+  QColor getColor() const;
+  void setFontColor(QColor fontColor);
+  QColor getFontColor() const;
+  void setSelectionColor(QColor selectionColor);
+  QColor getSelectionColor() const;
+  void setSelectedTextColor(QColor selectedTextColor);
+  QColor getSelectedTextColor() const;
+  void setTextProps(TextField*);
 
-private:
-    QLineEdit *edit;
+  void hide();
+  void show();
+
+  void setSize(int ix, int iy, int iw, int ih);
+  void setX(int ix);
+  void setY(int iy);
+  void setWidth(int iw);
+  void setHeight(int ih);
+
+  void setFont(QString f);
+  QString getFont() const;
+  void setFontSize(int size);
+  int getFontSize() const;
+  
+  void setInputFocus();
+  void clearInputFocus();
+  void keyPress(QKeyEvent *event);
+  void mouseEvent(QGraphicsSceneMouseEvent *event);
+
 protected:
-    void paintEvent(QPaintEvent*);
+  void focusOutEvent(QFocusEvent *event);
+  
+private:
+  QFont m_font;
+
+  QColor m_bgColor;
+  QColor m_fgColor;
+  QColor m_fontColor;
+  QColor m_selectedTextColor;
+  QColor m_selectionColor;
+
+  QString m_text;
+
+  QTextLayout m_textLayout;
+
+  double m_hscroll;
+  int m_cursorPos;
+  bool m_cursorVisible;
+
+  QTimer m_cursorTimer;
+
+private Q_SLOTS:
+  void blinkCursor();
 };
 
 #endif

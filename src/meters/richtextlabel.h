@@ -12,71 +12,55 @@
 #define RICHTEXTLABEL_H
 
 #include "meter.h"
-#include <QString>
-#include <q3simplerichtext.h>
+#include <qstring.h>
 #include <qpainter.h>
-#include <QFont>
+#include <qfont.h>
 #include <qfontmetrics.h>
 #include <qrect.h>
 #include <qsize.h>
-#include "karambawidget.h"
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QPalette>  //KDE4 QT Support
+#include <QTextDocument>
+#include "karamba.h"
 
-class QTextDocument;
 class RichTextLabel : public Meter
 {
     Q_OBJECT
-public:
-    RichTextLabel(KarambaWidget*);
-    RichTextLabel(KarambaWidget* k, int x, int y, int w, int h);
+  public:
+    RichTextLabel(Karamba*);
+    RichTextLabel(Karamba* k, int x, int y, int w, int h);
     ~RichTextLabel();
 
-    void setText(QString text, QString f="");
+    void setText(QString text, bool linkUnderline = false);
     void setValue(QString text);
     void setValue(int v);
-    virtual QString getStringValue() const
-    {
-        return source;
-    };
+    QString getStringValue() { return source; };
 
-    void setFontString(QString font);
-    QString getFont() const
-    {
-        return font().family();
-    }
+    void setFont(QString font);
+    QString getFont() const;
     void setFontSize(int);
     int getFontSize() const;
     void setFixedPitch(bool);
     bool getFixedPitch() const;
     void setTextProps( TextField* t );
-    void setColorGroup(const QColorGroup &colorg);
-    const QColorGroup &getColorGroup() const;
+    void setColorGroup(const QPalette &colorg);
+    const QPalette& getColorGroup() const;
     void setWidth(int width);
 
-    virtual bool insideActiveArea(qreal,qreal);
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
+                    QWidget *widget = 0);
 
- //   virtual bool click(QMouseEvent*);
- //   virtual void mUpdate(QPainter*);
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
-    QString anchorAt(qreal, qreal);
-    inline Qt::TextFormat textFormat() { return m_type;}
-    void setTextFormat(Qt::TextFormat f) 
-    {
-        m_type=f;
-    }  
+  private:
+    QTextDocument* text;
 
-public slots:
-    void updateData();
-
-private:
-    QTextDocument* textDoc;
     QString source;
-    QColorGroup colorGrp;
+    QFont font;
+    QPalette colorGrp;
     bool underlineLinks;
     QSize originalSize;
-    Qt::TextFormat m_type;
-    QPainter p;
-protected:
-    virtual void paintEvent(QPaintEvent* pe);
 };
 
 #endif

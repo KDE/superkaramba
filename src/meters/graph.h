@@ -13,63 +13,28 @@
 
 #include "meter.h"
 #include <qpainter.h>
-#include <QColor>
+#include <qcolor.h>
 
 class Graph : public Meter
 {
-    Q_OBJECT
+Q_OBJECT
 
 public:
-    Graph(KarambaWidget* k, int ix, int iy, int iw, int ih, int nbrPoints);
-    Graph();
-    ~Graph();
+  Graph(Karamba* k, int ix, int iy, int iw, int ih, int nbrPoints);
+  Graph();
+  ~Graph();
 
-    void setValue(double);
-    int getValue()
-    {
-        return values.last();
-    };
-    void setValue( QString );
-
-    virtual void setMax(int max)
-    {
-        m_maxValue = (double)max;
-    };
-    virtual void setMin(int min)
-    {
-        m_minValue = (double) min;
-    };
-    virtual int getMax()
-    {
-        return (int)m_minValue;
-    };
-    virtual int getMin()
-    {
-        return (int)m_maxValue;
-    };
-
-    virtual void setColor(QColor clr)
-    {
-        m_color = clr;
-    };
-    virtual QColor getColor()
-    {
-        return m_color;
-    };
-
-    
-public slots:
-    void updateData();
+  void setValue( int );
+  int getValue() { return lastValue; };
+  void setValue( QString );
+  void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
+                  QWidget *widget);
 
 private:
-    QList<int> values;
+  int nbrPoints;
+  int lastValue;
 
-    double m_minValue;
-    double m_maxValue;
-
-    QColor m_color;
-protected:
-    virtual void paintEvent(QPaintEvent*);
+  QPolygonF m_points;
 };
 
 #endif // GRAPH_H

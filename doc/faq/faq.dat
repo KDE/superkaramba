@@ -1,0 +1,75 @@
+<c>Installation
+<q>Where can I find SuperKaramba RPMs?
+<a>The SuperKaramba web site (<a href="http://netdragon.sourceforge.net">http://netdragon.sourceforge.net</a>) has a list of user-submitted RPMs for several distributions. Other user-submitted RPMs have been posted to <a href="http://www.kde-look.org">kde-look.org</a> and to the SuperKaramba Help forum.
+
+<c>Installation
+<q>When I try to compile, I get this error: "Python.h: No such file or directory"
+<a>You will need to install the python-devel package. Once that package is installed you can ./configure and make again.
+
+<c>Installation
+<q>When I try to compile, I get this error: "cannot find -lselinux"
+<a>You will need to install the libselinux-devel package. Once that package is installed you can ./configure and make again.
+
+<c>Installation
+<q>After running ./configure,make, and make install, the superkaramba executable is not where I expected it to be. When I try to run superkaramba from the command line it says "command not found".
+<a>In some distributions ./configure points to different path than you might expect. For example, in Mandrake the default ./configure prefix is /usr/local/kde and the executable is installed in /usr/local/kde/bin. There are a few things you can do to fix this. You could run ./configure --prefix=/usr to specify the prefix that you prefer and then try make and make install again. Or you could create a symbolic link in your preferred directory that links to the executable. Or you could add the install directory to your $PATH.
+
+<c>General
+<q>How do I get rid of the KDE taskbar? Do I have to keep kicker running?
+<a>Many themes depend on kicker and will not work well without it. If you don't want kicker to show on your desktop, you can set it to auto-hide. Another solution is to change the auto-hide setting in a ~/.kde file. For more information see <a href="http://wiki.kdenews.org/tiki-print.php?page=Secret+Config+Settings">http://wiki.kdenews.org/tiki-print.php?page=Secret+Config+Settings</a>.
+
+<c>General
+<q>Can I run a systray theme while the kicker systray is running?
+<a>It's better not to. If you run a theme with a SysTray on it while a regular kicker systray is running, the theme will "steal" all the icons from the first systray.  This is because in KDE and Gnome, the systray icons are really little windows and there is only one copy of each running. If you want to run a systray theme, you can remove the systray from kicker.
+
+<c>General
+<q>How do I set up my themes to run automatically on startup?
+<a>Turn on KDE session support in the KDE control panel. When session support is enabled, any theme that is left running when you logout will automatically start on startup. For some themes you will also need to right-click and reload the theme at least once after running it so that the config file will get written to your home directory. Another solution is to create a desktop config file in the KDE autostart directory. 
+To create a desktop config file, open KWrite and enter the following:<pre>
+            [Desktop Entry]
+            Exec=superkaramba {location of theme file}.theme
+            Name={theme name}
+            Type=Application
+            X-KDE-StartupNotify=false
+</pre>Then save it as {theme}.desktop into /home/{user}/.kde/Autostart/.
+
+<c>Troubleshooting
+<q>All of my themes are "always on top" of the other windows.
+<a>This problem should be fixed in the most recent release.
+
+<c>Troubleshooting
+<q>My themes start up in different locations when I start KDE.
+<a>Close all superkaramba themes and then delete any session files in ~/.kde/share/config/session/ that begin with superkaramba. Restart KDE and start your themes again. Now they will stay in the right place.
+
+<c>Troubleshooting
+<q>The backgrounds of my themes are black instead of transparent.
+<a>In KDE, transparency only works when the desktop background is a wallpaper image that is centered or scaled. If the background is a plain color or a tiled image then superkaramba themes will not be transparent. In Gnome, there is a known issue that themes will have a black background even when a wallpaper is set.  Unfortunately there is no current solution. Your theme should work fine otherwise.
+
+<c>General
+<q>Why is the Edit Script option disabled when I right-click on a theme?
+<a>Some karamba themes don't include a python script. This is normal and those themes will still work fine without one. However, if the theme does use a python script, superkaramba may have not been able to load the script. This is usually due to python errors. Run the theme from the command line to find out the specific error message.
+
+<c>General
+<q>Why is the Configure Theme menu disabled when I right-click on a theme?
+<a>The Configure Theme menu is only enabled if the theme has added options to it. Some themes do not have any configuration options or use a different configuration method.
+
+<c>Installation Guides
+<q>Suse 9.1 Personal
+<a>To install on SuSE 9.1 Personal, ensure the following packages are installed, which you verify via YaST:<br>
+qt3-devel<br>
+kdelibs3-devel<br>
+python-devel<br><br>
+Once the above are installed, unzip your SuperKaramba tarball to its own folder.  Now, via terminal, login as root and cd (change directory) to the unzipped SuperKaramba folder. Install with following commands:<br>
+./configure --prefix=/opt/kde3/<br>
+make<br>
+make install<br>
+make clean<br><br>
+You're done! To start SuperKaramba, you should now be able to find SuperKaramba in your "Utilities" folder in the main Menu.<br><br>
+* This has not been tested on SuSE 9.1 Professional or previous versions of SuSE.  However, the need to use the ./configure --prefix=/opt/kde3/ command has been needed in previous versions by some people.
+
+<c>Installation Guides
+<q>Mandrake (9.0 and up)
+<a>Unzip your SuperKaramba tarball to its own folder.  Now, via terminal, cd (change directory) to the unzipped SuperKaramba folder. Install with following commands:<br>
+./configure --prefix=/usr<br>
+make<br>
+(login as root) make install

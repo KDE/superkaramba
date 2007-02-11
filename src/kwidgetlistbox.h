@@ -20,7 +20,10 @@
 #ifndef KWIDGETLISTBOX_H
 #define KWIDGETLISTBOX_H
 
-#include <q3table.h>
+#include <QTableWidget>
+//Added by qt3to4:
+#include <QShowEvent>
+#include <QHeaderView>
 
 /**
 @author See README for the list of authors
@@ -28,11 +31,11 @@
 
 typedef bool (*show_callback) (int index, QWidget* widget, void* data);
 
-class KWidgetListbox : public Q3Table
+class KWidgetListbox : public QTableWidget
 {
     Q_OBJECT
 
-public:
+  public:
     KWidgetListbox(QWidget *parent = 0, const char *name = 0);
     ~KWidgetListbox();
 
@@ -46,25 +49,23 @@ public:
     QWidget* selectedItem() const;
     QWidget* item(int index) const;
     int index(QWidget* itm) const;
-    uint count() const
-    {
-        return numRows();
-    };
+    uint count() const { return rowCount(); };
 
     void showItems(show_callback func = 0, void* data = 0);
 
     void paintCell(QPainter* p, int row, int col, const QRect& cr,
-                   bool selected, const QColorGroup& cg);
-protected:
+                   bool selected, const QPalette& cg);
+  protected:
     void setItemColors(int index, bool even);
     void updateColors();
     bool even(int index);
     virtual void showEvent(QShowEvent* e);
 
-protected slots:
+  protected slots:
     void selectionChanged(int row, int col);
+    void resizeEvent(QResizeEvent *e);
 
-signals:
+  signals:
     void selected(int index);
 };
 

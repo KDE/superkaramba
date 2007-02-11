@@ -25,16 +25,20 @@
 #define IMAGELABEL_H
 
 #include "meter.h"
+#include <QPixmap>
 #include <qimage.h>
 #include <qpixmap.h>
 #include <qpainter.h>
-#include <QString>
+#include <qstring.h>
 #include <qstringlist.h>
+#include <QGraphicsSceneMouseEvent>
 #include <kurl.h>
 #include <kio/netaccess.h>
-#include <QRegExp>
-#include <QTimer>
-#include "karambawidget.h"
+#include <qregexp.h>
+#include <qtimer.h>
+#include "karamba.h"
+
+#include <kio/copyjob.h>
 
 class ImageLabel;
 class KIO::CopyJob;
@@ -43,33 +47,33 @@ class KIO::CopyJob;
 class Effect : public QObject
 {
 
-    Q_OBJECT
+Q_OBJECT
 
 public:
-    Effect(ImageLabel*, int millisec);
+  Effect(ImageLabel*, int millisec);
 
-    virtual ~Effect();
+  virtual ~Effect();
 
-    virtual QPixmap apply(const QPixmap& pixmap) = 0;
+  virtual QPixmap apply(QPixmap pixmap) = 0;
 
-    void startTimer();
+  void startTimer();
 
 protected:
-    ImageLabel* myImage;
+  ImageLabel* myImage;
 
-    int millisec;
+  int millisec;
 };
 
 // Intensity
 class Intensity : public Effect
 {
 public:
-    Intensity(ImageLabel*, float r, int millisec);
+  Intensity(ImageLabel*, float r, int millisec);
 
-    QPixmap apply(const QPixmap& pixmap);
+  QPixmap apply(QPixmap pixmap);
 
 private:
-    float ratio;
+  float ratio;
 };
 
 
@@ -77,119 +81,123 @@ private:
 class ChannelIntensity : public Effect
 {
 public:
-    ChannelIntensity(ImageLabel*, float r, QString c, int millisec);
+  ChannelIntensity(ImageLabel*, float r, QString c, int millisec);
 
-    QPixmap apply(const QPixmap& pixmap);
+  QPixmap apply(QPixmap pixmap);
 
 private:
-    float ratio;
-    int channel;
+  float ratio;
+  int channel;
 };
 
 // ToGray
 class ToGray : public Effect
 {
 public:
-    ToGray(ImageLabel*, int millisec);
+  ToGray(ImageLabel*, int millisec);
 
-    QPixmap apply(const QPixmap& pixmap);
+  QPixmap apply(QPixmap pixmap);
 };
 
 class ImageLabel : public Meter
 {
 
-    Q_OBJECT
+Q_OBJECT
 
 public:
-    ImageLabel(KarambaWidget* k, int ix,int iy,int iw,int ih );
-    ImageLabel(KarambaWidget* k);
-    ~ImageLabel();
-    void setValue( QString imagePath );
+  ImageLabel(Karamba* k, int ix,int iy,int iw,int ih );
+  ImageLabel(Karamba* k);
+  ~ImageLabel();
+  void setValue( QString imagePath );
 
-    void setValue( int );
-    void setValue( QPixmap& );
-    virtual QString getStringValue() const
-    {
-        return imagePath;
-    };
-    void scale( int, int );
-    void smoothScale( int, int );
+  void setValue( int );
+  void setValue( QPixmap& );
+  QString getStringValue() { return imagePath; };
+  void scale( int, int );
+  void smoothScale( int, int );
 
-    void rotate(int);
-    void removeImageTransformations();
-    void mUpdate( QPainter * );
-    void mUpdate( QPainter *, int );
+  void rotate(int);
+  void removeImageTransformations();
+  void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
+                   QWidget *widget);
 
-    void rolloverImage(QMouseEvent *e);
-    void parseImages( QString fn, QString fn_roll, int, int, int, int );
-//     virtual void show();
-//     virtual void hide();
+  void rolloverImage(QMouseEvent *e);
+  void parseImages( QString fn, QString fn_roll, int, int, int, int );
+  virtual void show();
+  virtual void hide();
 
-    void setTooltip(QString txt);
-    int cblend;
-    int background;
-    // Pixmap Effects
-    void removeEffects();
-    void intensity(float ratio, int millisec);
-    void channelIntensity(float ratio, QString channel, int millisec);
-    void toGray(int millisec);
-    void setBackground(int b);
+  void setTooltip(QString txt);
+  int cblend;
+  int background;
+  // Pixmap Effects
+  void removeEffects();
+  void intensity(float ratio, int millisec);
+  void channelIntensity(float ratio, QString channel, int millisec);
+  void toGray(int millisec);
+  void setBackground(int b);
 
-    void attachClickArea(QString leftMouseButton, QString middleMouseButton,
-                         QString rightMouseButton);
+  void attachClickArea(QString leftMouseButton, QString middleMouseButton,
+                       QString rightMouseButton);
 
-//    virtual bool click(QMouseEvent*);
+  bool mouseEvent(QGraphicsSceneMouseEvent *e);
+
+  void allowClick(bool);
+  bool clickable();
 
 private slots:
 
-    // gets called if a timed effects needs to bee removed
-    void slotEffectExpired();
-    void slotCopyResult(KJob* job);
+  // gets called if a timed effects needs to bee removed
+  void slotEffectExpired();
+  void slotCopyResult(KIO::Job* job);
 
 signals:
-    void pixmapLoaded();
+  void pixmapLoaded();
 
 private:
-    void applyTransformations(bool useSmoothScale = false);
-    int pixmapWidth;
-    int pixmapHeight;
-    int pixmapOffWidth;
-    int pixmapOffHeight;
-    int pixmapOnWidth;
-    int pixmapOnHeight;
+  void applyTransformations(bool useSmoothScale = false);
+  int pixmapWidth;
+  int pixmapHeight;
+  int pixmapOffWidth;
+  int pixmapOffHeight;
+  int pixmapOnWidth;
+  int pixmapOnHeight;
 
-    // true if Image has been scaled
-    bool doScale;
-    // true if Image has been rotated
-    bool doRotate;
+  bool m_allowClick;
 
-    // Contains the current Effect or is 0 if no Effect is applied
-    Effect* imageEffect;
+  // true if Image has been scaled
+  bool doScale;
+  // true if Image has been rotated
+  bool doRotate;
 
-    // Scale Matrix
-    //QWMatrix scaleMat;
-    int scale_w;
-    int scale_h;
-    // Rotation Matrix
-    //QWMatrix rotMat;
-    int rot_angle;
+  // Contains the current Effect or is 0 if no Effect is applied
+  Effect* imageEffect;
 
-    QPixmap pixmap;
-    QPixmap realpixmap;
+  // Scale Matrix
+  //QWMatrix scaleMat;
+  int scale_w;
+  int scale_h;
+  // Rotation Matrix
+  //QWMatrix rotMat;
+  int rot_angle;
 
-    QRect rect_off, rect_on;
-    QRect old_tip_rect;
+  QPixmap pixmap;
+  QPixmap realpixmap;
 
-    bool zoomed;
-    //QString fn, fn_roll;
-    bool rollover;
-    QPixmap pixmap_off;
-    QPixmap pixmap_on;
-    int xoff,xon;
-    int yoff,yon;
-    QString imagePath;
-protected:
-    void paintEvent(QPaintEvent*); 
+  QRect rect_off, rect_on;
+  QRect old_tip_rect;
+
+  bool zoomed;
+  //QString fn, fn_roll;
+  bool rollover;
+  QPixmap pixmap_off;
+  QPixmap pixmap_on;
+  int xoff,xon;
+  int yoff,yon;
+  QString imagePath;
+
+  QString toolTipText;
+
+  bool event(QEvent *event);
 };
 
 #endif // IMAGELABEL_H

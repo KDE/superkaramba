@@ -8,65 +8,76 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-#include <QString>
-
 #include "graph.h"
-#include "graph.moc"
+#include <qstring.h>
+
 #include <kdebug.h>
-#include "karamba_python.h"
-Graph::Graph(KarambaWidget* k, int x, int y, int w, int h, int nbrPts)
-        :   Meter(k, x, y, w, h)
+
+Graph::Graph(Karamba* k, int x, int y, int w, int h, int nbrPts):
+  Meter(k, x, y, w, h), lastValue(0)
 {
-    nbrPts = (nbrPts==0)? 50:nbrPts ;
-    for(int i = 0; i < nbrPts; i++)
+    nbrPoints = (nbrPts == 0) ? 50 : nbrPts;
+
+    for(int i = 0; i < nbrPoints; i++)
     {
-        values.append(0);
+      m_points << QPoint(x + w + 2, y + h);
+
+      m_points.translate(((qreal)-w-1) / nbrPoints, 0);
     }
 
-    m_minValue = 0;
-    m_maxValue = 100;
+    minValue = 0;
+    maxValue = 100;
 }
 
 Graph::~Graph()
-{}
-
-void Graph::setValue(double v)
 {
-    kDebug() << v << endl;
-    v=qMin(v,m_maxValue);
-    v=qMax(v,m_minValue);
-    values.removeFirst();
-    values.append( qRound(v / m_maxValue * (height()-1)));
+}
+
+void Graph::setValue( int v)
+{
+    if( v > maxValue)
+    {
+        // maxValue = v;
+        v = maxValue;
+    }
+    if( v < minValue)
+    {
+        //minValue = v;
+        v = minValue;
+    }
+    lastValue = v;
+    
+    QPoint newPoint(getX() +  getWidth() - 1,
+          getHeight() - v * getHeight() /maxValue + getY());
+
+    m_points.translate(((qreal)-getWidth()-1) / nbrPoints, 0);
+
+    m_points << newPoint;
+
+    if(m_points.count() > nbrPoints)
+      m_points.remove(0);
+
     update();
 }
 
-void Graph::setValue(QString v)
+void Graph::setValue( QString v )
 {
-    setValue(v.toDouble());
+  setValue((int)(v.toDouble() + 0.5));
 }
 
-void Graph::updateData()
+void Graph::paint(QPainter *p, const QStyleOptionGraphicsItem *option,
+                QWidget *widget)
 {
-    setValue(decodeDot(m_format.remove('%')).toInt());
-//     QVariantMap map = values.toMap();
-//     setValue(map[m_format].toInt());
+  Q_UNUSED(option);
+  Q_UNUSED(widget);
+
+  if(hidden == 0)
+  {
+    p->setPen(color);
+    p->setOpacity(m_opacity);
+    
+    p->drawPolyline(m_points);
+  }
 }
 
-void Graph::paintEvent( QPaintEvent *)
-{
-    QPainter p(this);
-    double step = (width() / (float)(values.size()-1));
-    double xPos = 0;
-    double nextXPos = 0;
-    p.setPen(m_color);
-    /*may be we can use here drawLines() instead of drawLine()? */
-    for (int i = 0; i < values.size()- 1 ; i ++)
-    {
-        nextXPos=xPos+step;
-        p.drawLine( (int)xPos, (height() -(int) values.at(i))-1 ,
-                     (int)nextXPos, (height() - (int) values.at(i+1))-1);
-        xPos = nextXPos;
-    }
-    if ((*pythonIface) && (*pythonIface)->isExtensionLoaded())
-            (*pythonIface)->widgetUpdated(m_karamba);
-}
+#include "graph.moc"

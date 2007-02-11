@@ -32,84 +32,87 @@
 #include <kstandarddirs.h>
 #include <klocale.h>
 #include <kio/netaccess.h>
-#include <qtextstream.h>
+#include <QTextStream>
 #include <qfileinfo.h>
 #include <qdom.h>
-#include <QDir>
+#include <qdir.h>
+//Added by qt3to4:
+#include <QPixmap>
 
 class ZipFile
 {
-public:
+  public:
     ZipFile() :
-            m_zip(0), m_file(0)
-    {}
+      m_zip(0), m_file(0)
+    {
+    }
     void setFile(const QString& filename)
     {
-        m_filename = filename;
-        if(filename.isEmpty())
-            return;
+      m_filename = filename;
+      if(filename.isEmpty())
+        return;
 
-        const KArchiveEntry* entry;
+      const KArchiveEntry* entry;
 
-        entry = m_dir->entry(filename);
-        if(entry == 0 || !entry->isFile())
-        {
-            m_file = 0;
-            return;
-        }
-        m_file = static_cast<const KArchiveFile*>(entry);
+      entry = m_dir->entry(filename);
+      if(entry == 0 || !entry->isFile())
+      {
+        m_file = 0;
+        return;
+      }
+      m_file = static_cast<const KArchiveFile*>(entry);
     }
     void setZip(const QString& zipfile)
     {
-        closeZip();
+      closeZip();
 
-        m_zip = new KZip(zipfile);
+      m_zip = new KZip(zipfile);
 
-        if(!m_zip->open(QIODevice::ReadOnly))
-        {
-            qDebug("Unable to open '%s' for reading.", zipfile.ascii());
-            return;
-        }
-        m_dir = m_zip->directory();
-        if(m_dir == 0)
-        {
-            qDebug("Error reading directory contents of file %s", zipfile.ascii());
-            return;
-        }
+      if(!m_zip->open(QIODevice::ReadOnly))
+      {
+        qDebug("Unable to open '%s' for reading.", zipfile.toAscii().constData());
+        return;
+      }
+      m_dir = m_zip->directory();
+      if(m_dir == 0)
+      {
+        qDebug("Error reading directory contents of file %s", zipfile.toAscii().constData());
+        return;
+      }
     }
 
     virtual ~ZipFile()
     {
-        closeZip();
+      closeZip();
     }
 
     void closeZip()
     {
-        if(m_zip)
-        {
-            m_zip->close();
-            delete  m_zip;
-        }
+      if(m_zip)
+      {
+        m_zip->close();
+        delete  m_zip;
+      }
     }
 
     QByteArray data()
     {
-        if(m_file)
-            return m_file->data();
-        else
-        {
-            if(!m_filename.isEmpty())
-                qDebug("Error reading file %s from zip", m_filename.ascii());
-            return QByteArray();
-        }
+      if(m_file)
+        return m_file->data();
+      else
+      {
+        if(!m_filename.isEmpty())
+          qDebug("Error reading file %s from zip", m_filename.toAscii().constData());
+        return QByteArray();
+      }
     }
 
     bool exists()
     {
-        return (m_file != 0);
+      return (m_file != 0);
     }
 
-private:
+  private:
     KZip* m_zip;
     const KArchiveFile* m_file;
     QString m_filename;
@@ -117,301 +120,308 @@ private:
 };
 
 ThemeFile::ThemeFile(const KUrl& url)
-        : m_stream(0), m_locale(0), m_zip(0)
+  : m_stream(0), m_locale(0), m_zip(0)
 {
-    if(url.isValid())
-        set
-            (url);
+  if(url.isValid())
+    set(url);
 }
 
 ThemeFile::~ThemeFile()
 {
-    delete m_stream;
-    delete m_locale;
-    delete m_zip;
+  delete m_stream;
+  delete m_locale;
+  delete m_zip;
 }
 
 bool ThemeFile::open()
 {
-    bool result = false;
+  bool result = false;
 
-    close();
+  close();
 
-    if(m_zipTheme)
+  if(m_zipTheme)
+  {
+    m_zip->setFile(m_theme);
+    m_ba = m_zip->data();
+    if(m_ba.size() > 0)
     {
-        m_zip->setFile(m_theme);
-        m_ba = m_zip->data();
-        if(m_ba.size() > 0)
-        {
-            m_stream = new QTextStream(m_ba, QIODevice::ReadOnly);
-            result = true;
-        }
+      m_stream = new QTextStream(m_ba, QIODevice::ReadOnly);
+      result = true;
     }
-    else
-    {
-        m_fl.setName(m_file);
+  }
+  else
+  {
+    m_fl.setFileName(m_file);
 
-        if(m_fl.open(QIODevice::ReadOnly|QIODevice::Text))
-        {
-            m_stream = new QTextStream(&m_fl);        // use a text stream
-            result = true;
-        }
+    if(m_fl.open(QIODevice::ReadOnly|QIODevice::Text))
+    {
+      m_stream = new QTextStream(&m_fl);        // use a text stream
+      result = true;
     }
-    return result;
+  }
+  return result;
 }
 
 bool ThemeFile::nextLine(LineParser& parser)
 {
-    parser.set("");
+  parser.set("");
 
-    if(m_stream)
-    {
-        QString result = m_stream->readLine();
+  if(m_stream)
+  {
+    QString result = m_stream->readLine();
 
-        if(result.isNull())
-            return false;
-        parser.set(result);
-        return true;
-    }
-    return false;
+    if(result.isNull())
+      return false;
+    parser.set(result);
+    return true;
+  }
+  return false;
 }
 
 bool ThemeFile::close()
 {
-    if(m_stream)
-    {
-        delete m_stream;
-        m_stream = 0;
-        m_fl.close();
-        m_ba.resize(0);
-        return true;
-    }
-    return false;
+  if(m_stream)
+  {
+    delete m_stream;
+    m_stream = 0;
+    m_fl.close();
+    m_ba.resize(0);
+    return true;
+  }
+  return false;
 }
 
 bool ThemeFile::isValid() const
 {
-    return (exists() && !m_name.isEmpty() && !m_theme.isEmpty());
+  return (exists() && !m_name.isEmpty() && !m_theme.isEmpty());
 }
 
 bool ThemeFile::exists() const
 {
-    QFileInfo file(m_file);
-    return file.exists();
+  QFileInfo file(m_file);
+  return file.exists();
 }
 
 QPixmap ThemeFile::icon() const
 {
-    return QPixmap(readThemeFile(m_icon));
+  return QPixmap(readThemeFile(m_icon));
 }
 
-bool ThemeFile::set
-    (const KUrl &url)
+bool ThemeFile::set(const KUrl &url)
 {
-    if(!url.isLocalFile() && !url.protocol().isEmpty())
+  if(!url.isLocalFile() && !url.protocol().isEmpty())
+  {
+    if(KMessageBox::warningContinueCancel(kapp->activeWindow(),
+       i18n("You are about to install and run %1 SuperKaramba theme. Since "
+            "themes can contain executable code you should only install themes "
+            "from sources that you trust. Continue?"),
+       i18n("Executable Code Warning"),
+       KGuiItem(i18n("Install").arg(url.prettyUrl())) )
+       //i18n("Install").arg(url.prettyUrl()))
+       == KMessageBox::Cancel)
     {
-        if(KMessageBox::warningContinueCancel(kapp->activeWindow(),
-                                              i18n("You are about to install and run %1 SuperKaramba theme. Since "
-                                                   "themes can contain executable code you should only install themes "
-                                                   "from sources that you trust. Continue?", url.prettyUrl()),
-                                              i18n("Executable Code Warning"), i18n("Install"))
-                == KMessageBox::Cancel)
-        {
-            return false;
-        }
-
-        QDir themeDir(locateLocal("appdata", "themes/", true));
-        QFileInfo localFile = themeDir.filePath(url.fileName());
-
-        if(localFile.exists())
-        {
-            if(KMessageBox::warningContinueCancel(kapp->activeWindow(),
-                                                  i18n("%1 already exists. Do you want to overwrite it?",
-                                                   localFile.filePath()),i18n("File Exists"),i18n("Overwrite"))
-                    == KMessageBox::Cancel)
-            {
-                return false;
-            }
-        }
-        if(!KIO::NetAccess::file_copy(url, localFile.filePath(), -1, true,
-                                      false, kapp->mainWidget()))
-        {
-            return false;
-        }
-        m_file = localFile.filePath();
+      return false;
     }
+
+    QDir themeDir(KStandardDirs::locateLocal("appdata", "themes/", true));
+    QFileInfo localFile = themeDir.filePath(url.fileName());
+
+    if(localFile.exists())
+    {
+      if(KMessageBox::warningContinueCancel(kapp->activeWindow(),
+            i18n("%1 already exists. Do you want to overwrite it?").arg(localFile.filePath()),
+             i18n("File Exists"),
+             KGuiItem(i18n("Overwrite"))
+             )
+         == KMessageBox::Cancel)
+      {
+        return false;
+      }
+    }
+    if(!KIO::NetAccess::file_copy(url, localFile.filePath(), -1, true,
+        false, kapp->activeWindow()))
+    {
+      return false;
+    }
+    m_file = localFile.filePath();
+  }
+  else
+  {
+    if(url.directory().isEmpty() || url.directory() == "/")
+      m_file = canonicalFile(QDir::current().filePath(url.fileName()));
     else
-    {
-        if(url.directory().isEmpty() || url.directory() == "/")
-            m_file = canonicalFile(QDir::current().filePath(url.fileName()));
-        else
-            m_file = canonicalFile(url.path());
-        if(!exists())
-            return false;
-    }
+      m_file = canonicalFile(url.path());
+    if(!exists())
+      return false;
+  }
 
-    QFileInfo fi(m_file);
+  m_UrlPath = url;
 
-    m_name = fi.baseName();
-    m_theme = m_name + ".theme";
-    m_python = m_name;
-    m_id = m_name;
+  QFileInfo fi(m_file);
 
-    if(isZipFile(m_file))
-    {
-        m_path = m_file;
-        m_zipTheme = true;
-        m_zip = new ZipFile();
-        m_zip->setZip(m_file);
-    }
-    else
-    {
-        m_path = fi.absolutePath() + "/";
-        m_zipTheme = false;
-    }
-    parseXml();
+  m_name = fi.completeBaseName();
+  m_theme = m_name + ".theme";
+  m_python = m_name;
+  m_id = m_name;
 
-    QFileInfo fimo(m_python);
-    if(m_python.isEmpty())
-        fimo.setFile(m_theme);
-    else
-        fimo.setFile(m_python);
-    m_mo = fimo.baseName();
+  if(isZipFile(m_file))
+  {
+    m_path = m_file;
+    m_zipTheme = true;
+    m_zip = new ZipFile();
+    m_zip->setZip(m_file);
+  }
+  else
+  {
+    m_path = fi.absoluteDir().absolutePath() + "/";
+    m_zipTheme = false;
+  }
+  parseXml();
 
-    m_locale = new ThemeLocale(this);
-    return isValid();
+  QFileInfo fimo(m_python);
+  if(m_python.isEmpty())
+    fimo.setFile(m_theme);
+  else
+    fimo.setFile(m_python);
+  m_mo = fimo.completeBaseName();
+
+  m_locale = new ThemeLocale(this);
+  return isValid();
+}
+
+KUrl ThemeFile::getUrlPath()
+{
+  return m_UrlPath;
 }
 
 void ThemeFile::parseXml()
 {
-    if(!fileExists("maindata.xml"))
-        return;
-    QByteArray ba = readThemeFile("maindata.xml");
-    QDomDocument doc("superkaramba_theme");
-    doc.setContent(ba);
-    QDomElement element = doc.documentElement();
+  if(!fileExists("maindata.xml"))
+    return;
+  QByteArray ba = readThemeFile("maindata.xml");
+  QDomDocument doc("superkaramba_theme");
+  doc.setContent(ba);
+  QDomElement element = doc.documentElement();
 
-    QDomNode n = element.firstChild();
-    while(!n.isNull())
+  QDomNode n = element.firstChild();
+  while(!n.isNull())
+  {
+    QDomElement e = n.toElement();
+    if(!e.isNull())
     {
-        QDomElement e = n.toElement();
-        if(!e.isNull())
-        {
-            if(e.tagName() == "name")
-                m_name = e.text();
-            else if(e.tagName() == "themefile")
-                m_theme = e.text();
-            else if(e.tagName() == "python_module")
-            {
-                m_python = e.text();
-                if(m_python.right(3).toLower() == ".py")
-                    m_python.remove(m_python.length() - 3, 3);
-            }
-            else if(e.tagName() == "description")
-                m_description = e.text();
-            else if(e.tagName() == "author")
-                m_author = e.text();
-            else if(e.tagName() == "author_email")
-                m_authorEmail = e.text();
-            else if(e.tagName() == "homepage")
-                m_homepage = e.text();
-            else if(e.tagName() == "icon")
-                m_icon = e.text();
-            else if(e.tagName() == "version")
-                m_version = e.text();
-            else if(e.tagName() == "license")
-                m_license = e.text();
-        }
-        n = n.nextSibling();
+      if(e.tagName() == "name")
+        m_name = e.text();
+      else if(e.tagName() == "themefile")
+        m_theme = e.text();
+      else if(e.tagName() == "python_module")
+      {
+        m_python = e.text();
+        if(m_python.right(3).toLower() == ".py")
+          m_python.remove(m_python.length() - 3, 3);
+      }
+      else if(e.tagName() == "description")
+        m_description = e.text();
+      else if(e.tagName() == "author")
+        m_author = e.text();
+      else if(e.tagName() == "author_email")
+        m_authorEmail = e.text();
+      else if(e.tagName() == "homepage")
+        m_homepage = e.text();
+      else if(e.tagName() == "icon")
+        m_icon = e.text();
+      else if(e.tagName() == "version")
+        m_version = e.text();
+      else if(e.tagName() == "license")
+        m_license = e.text();
     }
+    n = n.nextSibling();
+  }
 }
 
 bool ThemeFile::canUninstall() const
 {
-    if(!isZipTheme())
-        return false;
-    QFileInfo fi(file());
-    if(fi.permission(QFileInfo::WriteUser) ||
-            fi.permission(QFileInfo::WriteGroup) ||
-            fi.permission(QFileInfo::WriteOther))
-        return true;
-    return false;
+  QFileInfo fi(file());
+  if(fi.permission(QFile::WriteUser) ||
+     fi.permission(QFile::WriteGroup) ||
+     fi.permission(QFile::WriteOther))
+    return true;
+  return false;
 }
 
 bool ThemeFile::isThemeFile(const QString& filename) const
 {
-    QFileInfo fileInfo(filename);
+  QFileInfo fileInfo(filename);
 
-    return fileInfo.isRelative();
+  return fileInfo.isRelative();
 }
 
 bool ThemeFile::fileExists(const QString& filename) const
 {
-    if(isThemeFile(filename))
+  if(isThemeFile(filename))
+  {
+    if(isZipTheme())
     {
-        if(isZipTheme())
-        {
-            m_zip->setFile(filename);
-            return m_zip->exists();
-        }
-        else
-            return QFileInfo(path() + "/" + filename).exists();
+      m_zip->setFile(filename);
+      return m_zip->exists();
     }
     else
-        return QFileInfo(filename).exists();
+      return QFileInfo(path() + "/" + filename).exists();
+  }
+  else
+    return QFileInfo(filename).exists();
 }
 
 QByteArray ThemeFile::readThemeFile(const QString& filename) const
 {
-    //QTime time;
-    //time.start();
-    QByteArray ba;
+  //QTime time;
+  //time.start();
+  QByteArray ba;
 
-    if(isZipTheme())
-    {
-        m_zip->setFile(filename);
-        ba = m_zip->data();
-    }
-    else
-    {
-        QFile file(path() + "/" + filename);
+  if(isZipTheme())
+  {
+    m_zip->setFile(filename);
+    ba = m_zip->data();
+  }
+  else
+  {
+    QFile file(path() + "/" + filename);
 
-        if(file.open(QIODevice::ReadOnly))
-        {
-            ba = file.readAll();
-            file.close();
-        }
+    if(file.open(QIODevice::ReadOnly))
+    {
+      ba = file.readAll();
+      file.close();
     }
-    //kDebug() << "Read theme file: " << filename << ", " << time.elapsed()
-    //    << "ms" << endl;
-    return ba;
+  }
+  //kDebug() << "Read theme file: " << filename << ", " << time.elapsed()
+  //    << "ms" << endl;
+  return ba;
 }
 
 bool ThemeFile::isZipFile(const QString& filename)
 {
-    QFile file(filename);
+  QFile file(filename);
 
-    if(file.open(QIODevice::ReadOnly))
+  if(file.open(QIODevice::ReadOnly))
+  {
+    unsigned char buf[5];
+
+    if(file.read((char*)buf, 4) == 4)
     {
-        unsigned char buf[5];
-
-        if(file.readBlock((char*)buf, 4) == 4)
-        {
-            if(buf[0] == 'P' && buf[1] == 'K' && buf[2] == 3 && buf[3] == 4)
-                return true;
-        }
+      if(buf[0] == 'P' && buf[1] == 'K' && buf[2] == 3 && buf[3] == 4)
+        return true;
     }
-    return false;
+  }
+  return false;
 }
 
 bool ThemeFile::pythonModuleExists() const
 {
-    return (!m_python.isEmpty() && fileExists(m_python + ".py"));
+  return (!m_python.isEmpty() && fileExists(m_python + ".py"));
 }
 
 QString ThemeFile::canonicalFile(const QString& file)
 {
-    // Get absolute path with NO symlinks
-    QFileInfo fi(file);
-    return QDir(fi.dir().canonicalPath()).filePath(fi.fileName());
+  // Get absolute path with NO symlinks
+  QFileInfo fi(file);
+  return QDir(fi.dir().canonicalPath()).filePath(fi.fileName());
 }

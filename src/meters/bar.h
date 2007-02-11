@@ -12,63 +12,43 @@
 
 #include "meter.h"
 #include <qpixmap.h>
-#include <QString>
+#include <qstring.h>
 #include <qpainter.h>
+#include <QTimerEvent>
 
 class Bar : public Meter
 {
-    Q_OBJECT
-    Q_PROPERTY(QString imagePath READ getImage WRITE setImage)
-    Q_PROPERTY(int barValue READ getValue WRITE setValue)
-    Q_PROPERTY(int max READ getMax WRITE setMax)
-    Q_PROPERTY(int min READ getMin WRITE setMin)
-    Q_PROPERTY(bool vertical READ getVertical WRITE setVertical)
+Q_OBJECT
 public:
-    Bar(KarambaWidget* k,int ix,int iy,int iw,int ih );
+    Bar(Karamba* k,int ix,int iy,int iw,int ih );
     ~Bar();
 
-    void mUpdate( QPainter * );
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
+                    QWidget *widget);
 
-    virtual void setMax(int max);
-    virtual void setMin(int min);
-    virtual int getMax()
-    {
-        return m_minValue;
-    };
-    virtual int getMin()
-    {
-        return m_maxValue;
-    };
+    virtual void setMax( int m );
+    virtual void setMin( int m );
 
 public slots:
     bool setImage( QString imagePath );
-    QString getImage()
-    {
-        return imagePath;
-    };
+    QString getImage() { return imagePath; };
 
     void setValue( int );
-    int  getValue()
-    {
-        return barValue;
-    };
+    int  getValue() { return barValue; };
     void setValue( QString );
-    void recalculateValue()
-    {
-        setValue(barValue);
-    };
+    void recalculateValue() {setValue(barValue); };
 
     void setVertical( bool );
-    int  getVertical()
-    {
-        return vertical;
-    };
+    int  getVertical() { return vertical; };
 
-    void updateData();
+    void valueChanged();
 
 private:
     int barValue;
+    int oldBarValue;
     int value;
+
+    QTimer *m_timer;
 
     int pixmapWidth;
     int pixmapHeight;
@@ -78,11 +58,8 @@ private:
     QString imagePath;
     QPixmap pixmap;
 
-    int m_minValue;
-    int m_maxValue;
-protected:
-    void paintEvent(QPaintEvent* event);
-        
-}
-;
+  protected:
+    //void timerEvent(QTimerEvent *event);
+};
+
 #endif // BAR_H

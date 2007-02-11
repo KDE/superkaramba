@@ -1,47 +1,34 @@
-project(superkaramba)
-include(MacroBoolTo01)
-include(CheckIncludeFiles)
+PROJECT(superkaramba)
 
-macro_optional_find_package(Xmms)
-macro_bool_to_01(KDE4_XMMS HAVE_XMMS)
-macro_log_feature(XMMS_FOUND "libxmms" "Xmms is used into superkaramba" "http://www.xmms.org/")
-check_include_files(sys/types.h HAVE_SYS_TYPES_H)
-configure_file(config-superkaramba.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-superkaramba.h )
+SET(CMAKE_MODULE_PATH $ENV{KDEDIR}/share/apps/cmake/modules)
 
+INCLUDE(KDE4Macros)
 
-add_subdirectory( src ) 
-add_subdirectory( icons ) 
+FIND_PACKAGE(KDE4 REQUIRED)
+FIND_PACKAGE(PythonLibs REQUIRED)
+#FIND_PACKAGE(XMMS REQUIRED)
+
+ADD_DEFINITIONS(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
+
+INCLUDE_DIRECTORIES(
+${CMAKE_CURRENT_SOURCE_DIR}
+${CMAKE_CURRENT_BINARY_DIR}
+${QT_INCLUDES}
+${KDE4_INCLUDE_DIR}
+${PYTHON_INCLUDE_PATH}
+)
+
+ADD_SUBDIRECTORY( src )
+ADD_SUBDIRECTORY( icons )
+ADD_SUBDIRECTORY( mimetypes )
+
 
 ########### install files ###############
-
 
 
 #original Makefile.am contents follow:
 
 #SUBDIRS = src icons mimetypes
-#INCLUDES =  $(XMMS_INCLUDES) $(all_includes)
-#LIBS = $(XMMS_LIBS) $(all_libraries)
-#$(top_srcdir)/configure.in: configure.in.in $(top_srcdir)/subdirs
-#	cd $(top_srcdir) && $(MAKE) -f admin/Makefile.common configure.in ;
-#
-#$(top_srcdir)/subdirs:
-#	cd $(top_srcdir) && $(MAKE) -f admin/Makefile.common subdirs
-#
-#$(top_srcdir)/acinclude.m4: $(top_srcdir)/admin/acinclude.m4.in $(top_srcdir)/admin/libtool.m4.in
-#	@cd $(top_srcdir) && cat admin/acinclude.m4.in admin/libtool.m4.in > acinclude.m4
-#
-#MAINTAINERCLEANFILES = subdirs configure.in acinclude.m4 configure.files
-#
-#package-messages:
-#	cd $(top_srcdir) && $(MAKE) -f admin/Makefile.common package-messages
-#	$(MAKE) -C po merge
-#
-#EXTRA_DIST = admin COPYING configure.in.in
-#
-#dist-hook:
-#	cd $(top_distdir) && perl admin/am_edit -padmin
-#	cd $(top_distdir) && $(MAKE) -f admin/Makefile.common subdirs
-#
 #
 #include $(top_srcdir)/admin/Doxyfile.am
 #
