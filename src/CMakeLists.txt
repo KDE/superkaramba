@@ -82,13 +82,13 @@ ${PYTHON_LIBRARIES}
 #${QT_QTOPENGL_LIBRARY}
 )
 
-INSTALL_TARGETS(/bin superkaramba )
+install(TARGETS superkaramba DESTINATION ${BIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-INSTALL_FILES( /share/apps/superkaramba FILES superkarambaui.rc )
-INSTALL_FILES(  FILES superkaramba.desktop )
+install(FILES superkarambaui.rc DESTINATION ${DATA_INSTALL_DIR}/superkaramba)
+install(FILES superkaramba.desktop  DESTINATION ${XDG_APPS_DIR})
 
 #original Makefile.am contents follow:
 
