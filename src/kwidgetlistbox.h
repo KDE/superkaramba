@@ -53,17 +53,11 @@ class KWidgetListbox : public QTableWidget
 
     void showItems(show_callback func = 0, void* data = 0);
 
-    void paintCell(QPainter* p, int row, int col, const QRect& cr,
-                   bool selected, const QPalette& cg);
   protected:
-    void setItemColors(int index, bool even);
-    void updateColors();
-    bool even(int index);
     virtual void showEvent(QShowEvent* e);
 
   protected slots:
     void selectionChanged(int row, int col);
-    void resizeEvent(QResizeEvent *e);
 
   signals:
     void selected(int index);

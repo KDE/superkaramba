@@ -57,6 +57,8 @@ ThemesDlg::ThemesDlg(QWidget *parent, const char *name)
 
   connect(buttonAddToDesktop, SIGNAL(clicked()), this, SLOT(addToDesktop()));
   connect(tableThemes, SIGNAL(selected(int)), this, SLOT(selectionChanged(int)));
+  connect(editSearch, SIGNAL(textChanged(QString)), this, SLOT(search(QString)));
+  connect(comboShow, SIGNAL(activated(QString)), this, SLOT(search(QString)));
 }
 
 ThemesDlg::~ThemesDlg()

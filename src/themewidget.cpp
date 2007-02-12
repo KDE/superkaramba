@@ -24,8 +24,8 @@
 #include <klocale.h>
 #include <qlabel.h>
 #include <qlayout.h>
-//Added by qt3to4:
 #include <QPixmap>
+#include <QPaintEvent>
 
 ThemeWidget::ThemeWidget(QWidget *parent)
   : QWidget(parent), m_themeFile(0)
@@ -118,15 +118,13 @@ void ThemeWidget::showButton(bool show)
 
 void ThemeWidget::setDescriptionMaxHeight()
 {
-  /*
-  if(layoutText->geometry().height() <= 0)
-    return;
-  int height = layoutText->geometry().height() - themeName->height() -
-               layoutText->spacing();
+  int h = height() - themeName->height() - 5;
+  
   if(buttonGo->isVisible())
-    height -= layoutButton->geometry().height() + layoutText->spacing();
-  description->setMaximumHeight(height);
-  */
+    h -= buttonGo->height() + 15;
+
+  description->setWordWrap(true);
+  description->setMaximumHeight(h);
 }
 
 #include "themewidget.moc"

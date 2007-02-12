@@ -1,4 +1,4 @@
-/*
+  /*
  * Copyright (C) 2005 Petri Damst� <petri.damsten@iki.fi>
  *
  * This file is part of SuperKaramba.
@@ -20,7 +20,6 @@
 #include "kwidgetlistbox.h"
 #include <kdebug.h>
 #include <kglobalsettings.h>
-//Added by qt3to4:
 #include <QShowEvent>
 #include <QScrollBar>
 
@@ -33,16 +32,16 @@ KWidgetListbox::KWidgetListbox(QWidget *parent, const char *name)
   horizontalHeader()->hide();
   verticalHeader()->hide();
   
-  setSelectionMode(QAbstractItemView::NoSelection);
-  //setFocusStyle(QTableView::FollowStyle);
+  setSelectionMode(QAbstractItemView::SingleSelection);
  
   connect(this, SIGNAL(cellClicked(int, int)),
           this, SLOT(selectionChanged(int, int)));
    
-  /*
-  setHScrollBarMode(Q3ScrollView::AlwaysOff);
-  setVScrollBarMode(Q3ScrollView::Auto);
-  */
+  setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+  
+  horizontalHeader()->setStretchLastSection(true);
+  setAlternatingRowColors(true);
 }
 
 KWidgetListbox::~KWidgetListbox()
@@ -57,8 +56,7 @@ void KWidgetListbox::clear()
 
 int KWidgetListbox::insertItem(QWidget* item, int index)
 {
-  int row;
-
+  int row = 0;
   if(index == -1)
   {
     row = rowCount();
@@ -68,9 +66,7 @@ int KWidgetListbox::insertItem(QWidget* item, int index)
     return -1;
 
   setRowHeight(row, item->height());
- 
   setCellWidget(row, 0, item);
-  setItemColors(row, even(row));
 
   return row;
 }
@@ -83,7 +79,6 @@ void KWidgetListbox::setSelected(QWidget* item)
 void KWidgetListbox::selectionChanged(int row, int column)
 {
   setCurrentCell(row, column);
-  updateColors();
   emit selected(row);
 }
 
@@ -95,7 +90,6 @@ void KWidgetListbox::removeItem(QWidget* item)
 void KWidgetListbox::removeItem(int index)
 {
   removeRow(index);
-  updateColors();
 }
 
 void KWidgetListbox::setSelected(int index)
@@ -126,68 +120,6 @@ int KWidgetListbox::index(QWidget* itm) const
   return -1;
 }
 
-bool KWidgetListbox::even(int index)
-{
-  int v = 0;
-  for(int i = 0; i < rowCount(); ++i)
-  {
-    if(index == i)
-      break;
-    if(!isRowHidden(i))
-      ++v;
-  }
-  return (v%2 == 0);
-}
-
-void KWidgetListbox::updateColors()
-{
-  int v = 0;
-  for(int i = 0; i < rowCount(); ++i)
-  {
-    if(!isRowHidden(i))
-    {
-      setItemColors(i, (v%2 == 0));
-      ++v;
-    }
-  }
-}
-
-void KWidgetListbox::setItemColors(int index, bool even)
-{
-  QWidget* itm = item(index);
-
-  if(index == selected())
-  {
-    QPalette bgPalette;
-    bgPalette.setColor(itm->backgroundRole(), KGlobalSettings::highlightColor());
-    itm->setPalette(bgPalette);
-
-    QPalette fgPalette;
-    fgPalette.setColor(itm->foregroundRole(), KGlobalSettings::highlightedTextColor());
-    itm->setPalette(fgPalette);
-  }
-  else if(even)
-  {
-    QPalette bgPalette;
-    bgPalette.setColor(itm->backgroundRole(), KGlobalSettings::baseColor());
-    itm->setPalette(bgPalette);
-
-    QPalette fgPalette;
-    fgPalette.setColor(itm->foregroundRole(), KGlobalSettings::textColor());
-    itm->setPalette(fgPalette);
-  }
-  else
-  {
-    QPalette bgPalette;
-    bgPalette.setColor(itm->backgroundRole(), KGlobalSettings::alternateBackgroundColor());
-    itm->setPalette(bgPalette);
-
-    QPalette fgPalette;
-    fgPalette.setColor(itm->foregroundRole(), KGlobalSettings::textColor());
-    itm->setPalette(fgPalette);
-  }
-}
-
 void KWidgetListbox::showItems(show_callback func, void* data)
 {
   for(int i = 0; i < rowCount(); ++i)
@@ -202,40 +134,11 @@ void KWidgetListbox::showItems(show_callback func, void* data)
         hideRow(i);
     }
   }
-  updateColors();
 }
 
 void KWidgetListbox::showEvent(QShowEvent*)
 {
-  //kDebug() << k_funcinfo << endl;
   repaint();
-}
-
-void KWidgetListbox::paintCell(QPainter*, int, int, const QRect&,
-                               bool, const QPalette&)
-{
-  //kDebug() << k_funcinfo << endl;
-}
-
-void KWidgetListbox::resizeEvent(QResizeEvent *e)
-{
-  QTableWidget::resizeEvent(e);
-
-  #ifdef __GNUC__
-    #warning No better way?
-  #endif
-  unsigned int wscroll = 0;
-
-  QScrollBar *bar = verticalScrollBar();
-  if(bar->isVisible())
-    wscroll = 5;
-  
-  setColumnWidth(0, width() - 5 - wscroll);
-
-  for(unsigned int i = 0; i < rowCount(); i++)
-  {
-    setRowHeight(i, 150);
-  }
 }
 
 #include "kwidgetlistbox.moc"
