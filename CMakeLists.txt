@@ -1,10 +1,5 @@
 PROJECT(superkaramba)
 
-SET(CMAKE_MODULE_PATH $ENV{KDEDIR}/share/apps/cmake/modules)
-
-INCLUDE(KDE4Macros)
-
-FIND_PACKAGE(KDE4 REQUIRED)
 FIND_PACKAGE(PythonLibs REQUIRED)
 #FIND_PACKAGE(XMMS REQUIRED)
 
@@ -22,13 +17,3 @@ ADD_SUBDIRECTORY( src )
 ADD_SUBDIRECTORY( icons )
 ADD_SUBDIRECTORY( mimetypes )
 
-
-########### install files ###############
-
-
-#original Makefile.am contents follow:
-
-#SUBDIRS = src icons mimetypes
-#
-#include $(top_srcdir)/admin/Doxyfile.am
-#
