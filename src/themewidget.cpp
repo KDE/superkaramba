@@ -92,7 +92,7 @@ void ThemeWidget::updateRunning()
 {
   int i = instances();
   if(i > 0)
-    running->setText(i18n("<p align=\"center\">%1 running</p>").arg(i));
+    running->setText(i18n("<p align=\"center\">%1 running</p>", i));
   else
     running->setText("");
 }
