@@ -132,6 +132,9 @@ class Karamba : public QObject, public QGraphicsItemGroup
     void showMenuExtension();
     void hideMenuExtension();
 
+    int instance();
+    void setInstance(int instance);
+
     KProcess *currProcess;
     Systemtray *systray;
 

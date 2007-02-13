@@ -62,20 +62,10 @@ ThemeWidget::~ThemeWidget()
 }
 
 int ThemeWidget::addInstance()
-{/*
-  int i = 1;
-  while(m_instancePool.find(i) != m_instancePool.end())
-    ++i;*/
-
-  #ifdef __GNUC__
-    #warning This doesn't work for now
-  #endif
-
+{
   int i = 1;
   while(m_instancePool.indexOf(i) >= 0)
-  {
    ++i;
-  }
 
   m_instancePool.append(i);
   updateRunning();

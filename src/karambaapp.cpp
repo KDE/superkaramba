@@ -88,6 +88,9 @@ void KarambaApplication::removeKaramba(Karamba *k)
   if(m_scene)
     m_scene->removeItem(k);
 
+  m_themesDialog->removeTheme(k->prettyName(), k->theme().file(), k->instance());
+
+
   delete k;
 
   buildToolTip();
@@ -98,13 +101,17 @@ void KarambaApplication::closeTheme(QString themeName)
   foreach(Karamba *k, m_karambas)
   {
     if(k->objectName() == themeName)
+    {
       k->closeWidget();
+    }
   }
 }
 
 void KarambaApplication::addKaramba(Karamba *newK)
 {
   m_karambas.append(newK);
+  int instance = m_themesDialog->addTheme(newK->prettyName(), newK->theme().file());
+  newK->setInstance(instance);
 
   buildToolTip();
 }

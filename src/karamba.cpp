@@ -1653,4 +1653,14 @@ void Karamba::hideMenuExtension()
   delete m_globalMenu;
 }
 
+int Karamba::instance()
+{
+  return m_instance;
+}
+
+void Karamba::setInstance(int instance)
+{
+  m_instance = instance;
+}
+
 #include "karamba.moc"
