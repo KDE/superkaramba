@@ -420,39 +420,39 @@ PyObject* py_create_click_area(PyObject *, PyObject *args)
 #endif
 static long callTheme(long widget, char* path, char *str)
 {
-/*
-  Karamba* currTheme = (Karamba*) widget;
 
+  Karamba* currTheme = (Karamba*) widget;
+/*
   if (currTheme)
     currTheme->callTheme(QString(path), QString(str));
-
-  return (long)currTheme;*/
+*/
+  return (long)currTheme;
 }
 
 #ifdef __GNUC__
   #warning wait for DBUS
 #endif
 static long setIncomingData(long widget, char* path, char *obj)
-{/*
+{
   Karamba* currTheme = (Karamba*) widget;
-
+/*
   if (currTheme)
     currTheme->setIncomingData(QString(path), QString(obj));
-
-  return (long)currTheme;*/
+*/
+  return (long)currTheme;
 }
 
 #ifdef __GNUC__
   #warning wait for DBUS
 #endif
 static QString getIncomingData(long widget)
-{/*
+{
   Karamba* currTheme = (Karamba*) widget;
-
+/*
   if (currTheme)
     return currTheme->getIncomingData();
-
-  return QString("");*/
+*/
+  return QString("");
 }
 
 /*
