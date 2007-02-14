@@ -1611,7 +1611,7 @@ void Karamba::keyPressEvent(QKeyEvent *event)
   {
     if(input->hasFocus())
     {
-      input->keyPress(event);     
+      input->keyPress(event);
     }
   }
 

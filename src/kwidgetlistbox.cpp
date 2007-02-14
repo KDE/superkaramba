@@ -38,7 +38,6 @@ KWidgetListbox::KWidgetListbox(QWidget *parent, const char *name)
           this, SLOT(selectionChanged(int, int)));
    
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
   
   horizontalHeader()->setStretchLastSection(true);
   setAlternatingRowColors(true);

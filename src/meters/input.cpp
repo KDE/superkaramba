@@ -55,20 +55,21 @@ void Input::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
   painter->setPen(m_fgColor);
   QBrush oldBrush = painter->brush();
   painter->setBrush(m_bgColor);
-  painter->drawRoundRect(boundingRect(), 20, 100);
+  painter->drawRect(boundingRect());
   painter->setBrush(oldBrush);
 
   QTextLine line = m_textLayout.lineAt(0);
 
-  int widthUsed = qRound(line.naturalTextWidth()) + 1 + 10;
+  int widthUsed = qRound(line.naturalTextWidth()) + 1 + 5;
 
-  QRectF innerRect(boundingRect().x() + 10, boundingRect().y() + 2,
-                boundingRect().width() - 20, boundingRect().height() - 4);
+  QRectF innerRect(boundingRect().x() + 5, boundingRect().y() + 2,
+                boundingRect().width() - 10, boundingRect().height() - 4);
   painter->setClipRect(innerRect);
 
   QPointF topLeft = innerRect.topLeft();
+
   double curPos = line.cursorToX(m_cursorPos);
-  if(10 + widthUsed <= innerRect.width())
+  if(5 + widthUsed <= innerRect.width())
   {
     m_hscroll = 0;
   }
@@ -86,7 +87,6 @@ void Input::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
   }
   topLeft.rx() -= m_hscroll;
 
-  m_textLayout.setFont(m_font);
   painter->setPen(m_fontColor);
   m_textLayout.draw(painter, topLeft, QVector<QTextLayout::FormatRange>(),
                 innerRect);
@@ -101,7 +101,7 @@ void Input::mouseEvent(QGraphicsSceneMouseEvent *event)
 
   QPoint pos = mapFromParent(event->pos()).toPoint() - boundingRect().topLeft().toPoint();
 
-  m_cursorPos = line.xToCursor(pos.x() - 10 + m_hscroll);
+  m_cursorPos = line.xToCursor(pos.x() - 5 + m_hscroll);
 
   m_cursorVisible = true;
 
@@ -126,36 +126,54 @@ void Input::blinkCursor()
 
 void Input::keyPress(QKeyEvent *event)
 {
+  bool append = true;
+  
   switch(event->key())
   {
     case Qt::Key_Backspace:
-            m_text.remove(m_cursorPos-1, 1);
-            m_cursorPos--;
+            if(m_cursorPos > 0)
+            {
+              m_text.remove(m_cursorPos-1, 1);
+              m_cursorPos--;
+            }
+            append = false;
             break;
 
     case Qt::Key_Delete:
             m_text.remove(m_cursorPos, 1);
+            append = false;
             break;
     
     case Qt::Key_Left:
             m_cursorPos--;
+            append = false;
             break;
 
     case Qt::Key_Right:
             m_cursorPos++;
+            append = false;
             break;
 
     case Qt::Key_Home:
             m_cursorPos = 0;
+            append = false;
             break;
 
     case Qt::Key_End:
             m_cursorPos = m_text.length();
+            append = false;
             break;
 
-    default:
-            m_text.insert(m_cursorPos, event->text());
-            m_cursorPos += event->text().length();
+    case Qt::Key_Enter:
+    case Qt::Key_Return:
+            append = false;
+            break;
+  }
+
+  if(append)
+  {
+    m_text.insert(m_cursorPos, event->text());
+    m_cursorPos += event->text().length();
   }
 
   if(m_cursorPos < 0)
@@ -164,7 +182,9 @@ void Input::keyPress(QKeyEvent *event)
     m_cursorPos = m_text.length();
 
   m_textLayout.setText(m_text);
-  
+ 
+  m_textLayout.setFont(m_font);
+
   m_textLayout.beginLayout();
   QTextLine line = m_textLayout.createLine();
   line.setLineWidth(getWidth());
@@ -180,6 +200,8 @@ void Input::setValue(QString text)
 {
   m_text = text;
   m_textLayout.setText(m_text);
+
+  m_textLayout.setFont(m_font);
 
   m_textLayout.beginLayout();
   QTextLine line = m_textLayout.createLine();
@@ -255,6 +277,17 @@ void Input::setHeight(int ih)
 void Input::setFont(QString f)
 {
   m_font.setFamily(f);
+  
+  m_textLayout.setText(m_text);
+
+  m_textLayout.setFont(m_font);
+
+  m_textLayout.beginLayout();
+  QTextLine line = m_textLayout.createLine();
+  line.setLineWidth(getWidth());
+  line.setPosition(QPointF(0, 0));
+  m_textLayout.endLayout();
+
   update();
 }
 

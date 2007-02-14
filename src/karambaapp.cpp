@@ -221,7 +221,6 @@ void KarambaApplication::buildToolTip()
 void KarambaApplication::setToolTip(const QString &tip)
 {
   m_sysTrayIcon->setToolTip(tip);
-  kDebug() << tip << endl;
 }
 
 void KarambaApplication::globalHideSysTray(bool hide)
