@@ -22,7 +22,7 @@
 #include <QGraphicsSceneMouseEvent>
 
 RichTextLabel::RichTextLabel(Karamba* k) :
-    Meter(k, 0, 0, 100, 100),
+    Meter(k, 0, 0, 0, 0),
     text(0),
     source(""),
     colorGrp(QApplication::palette()),
@@ -169,28 +169,36 @@ void RichTextLabel::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
   int w = getWidth();
   int h = getHeight();
 
-  //painter->drawRect(x,y,w,h);
-  
   painter->translate(x, y);
   painter->setOpacity(m_opacity);
 
   text->drawContents(painter, QRect(0, 0, w, h));
 }
 
-void RichTextLabel::mousePressEvent(QGraphicsSceneMouseEvent *event)
+bool RichTextLabel::mouseEvent(QGraphicsSceneMouseEvent *event)
 {
-  QString link = text->documentLayout()->anchorAt(event->pos());
+  QPointF pos = event->pos() - boundingRect().topLeft();
+
+  QString link = text->documentLayout()->anchorAt(pos);
   kDebug() << link << endl;
   if(link[0] != '#')
   {
-    KRun::runCommand(link);
+    if(event->button() == Qt::LeftButton)
+      KRun::runCommand(link);
+
+    return false;
   }
   else
   {
-    #ifdef __GNUC__
-      #warning callback
-    #endif
+    return true;
   }
+}
+
+QString RichTextLabel::getAnchor(QPointF point)
+{
+  QPointF pos = point - boundingRect().topLeft();
+
+  return text->documentLayout()->anchorAt(pos).remove(0, 1);
 }
 
 void RichTextLabel::setColorGroup(const QPalette &colorg)

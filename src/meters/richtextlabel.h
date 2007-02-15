@@ -51,7 +51,8 @@ class RichTextLabel : public Meter
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                     QWidget *widget = 0);
 
-    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    bool mouseEvent(QGraphicsSceneMouseEvent *event);
+    QString getAnchor(QPointF point);
 
   private:
     QTextDocument* text;

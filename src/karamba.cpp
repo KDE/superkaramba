@@ -1075,8 +1075,17 @@ void Karamba::writeConfigData()
   m_config->setGroup("theme");
   
   // Widget Position
-  m_config->writeEntry("widgetPosX", x());
-  m_config->writeEntry("widgetPosY", y());
+  if(!m_globalView)
+  {
+    m_config->writeEntry("widgetPosX", m_view->x());
+    m_config->writeEntry("widgetPosY", m_view->y());
+  }
+  else
+  {
+    m_config->writeEntry("widgetPosX", x());
+    m_config->writeEntry("widgetPosY", y());
+  }
+
   
   // Widget Size
   m_config->writeEntry("widgetWidth", boundingRect().width());
@@ -1479,6 +1488,16 @@ void Karamba::mousePressEvent(QGraphicsSceneMouseEvent *event)
     else if(ClickArea* area = dynamic_cast<ClickArea*>(item))
     {
       pass = area->mouseEvent(event);
+    }
+    else if(RichTextLabel* rich = dynamic_cast<RichTextLabel*>(item))
+    {
+      allowClick = false;
+      pass = rich->mouseEvent(event);
+      if(pass)
+      {
+        QString anchor = rich->getAnchor(event->pos());
+        m_python->meterClicked(this, anchor.toAscii().data(), button);
+      }
     }
 
     if(pass && allowClick && m_python)
