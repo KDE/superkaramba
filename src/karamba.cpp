@@ -301,8 +301,11 @@ bool Karamba::parseConfig()
           w = 300;
           h = 300;
         }
-        setFixedSize(w, h);
-        m_view->setFixedSize(w + 5, h + 5);
+
+        if(m_globalView)
+          setFixedSize(w, h);
+        else
+          m_view->setFixedSize(w + 5, h + 5);
 
         if(lineParser.getBoolean("RIGHT"))
         {
@@ -1085,7 +1088,6 @@ void Karamba::writeConfigData()
     m_config->writeEntry("widgetPosX", x());
     m_config->writeEntry("widgetPosY", y());
   }
-
   
   // Widget Size
   m_config->writeEntry("widgetWidth", boundingRect().width());
@@ -1130,8 +1132,8 @@ void Karamba::preparePopupMenu()
 
   m_themeConfMenu = new KMenu();
   m_themeConfMenu->setTitle(i18n("Configure &Theme"));
-  m_themeConfMenu->setEnabled(false);
-  m_popupMenu->addMenu(m_themeConfMenu);
+  QAction *newAC = m_popupMenu->addMenu(m_themeConfMenu);
+  newAC->setVisible(false);
 
   m_toDesktopMenu = new KMenu();
   m_toDesktopMenu->setTitle(i18n("To Des&ktop"));
@@ -1181,9 +1183,10 @@ void Karamba::slotDesktopChanged(int desktop)
 
 void Karamba::addMenuConfigOption(QString key, QString name)
 {
-  m_themeConfMenu->setEnabled(true);
+  m_themeConfMenu->menuAction()->setVisible(true);
 
-  KToggleAction *newAction= new KToggleAction(name, this);
+  KAction *newAction= new KToggleAction(name, this);
+
   newAction->setObjectName(key);
   connect(newAction, SIGNAL(triggered()), m_signalMapperConfig, SLOT(map()));
   m_signalMapperConfig->setMapping(newAction, newAction);
@@ -1458,6 +1461,9 @@ void Karamba::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
   m_mouseClickPos = event->pos().toPoint();
 
+  if(!m_toggleLocked->isChecked())
+    return;
+
   int button = 0;
   if(event->button() == Qt::LeftButton)
     button = 1;
@@ -1612,7 +1618,7 @@ void Karamba::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
   if(!m_globalView)
   {
-    if(m_toggleLocked->isChecked())
+    if(!m_toggleLocked->isChecked())
       m_view->move(event->screenPos()-m_mouseClickPos);
   }
   else

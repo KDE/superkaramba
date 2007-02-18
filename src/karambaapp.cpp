@@ -159,7 +159,7 @@ int KarambaApplication::newInstance()
   if(lst.count() > 0)
     startThemes(lst);
   else
-  {
+  { 
     if(m_themesDialog)
       m_themesDialog->show();
   }
@@ -320,6 +320,6 @@ void KarambaApplication::setUpSysTray(KAboutData* about)
                      this, SLOT(globalQuitSuperKaramba()));
   connect(m_sysTrayIcon,
       SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
-      this, SLOT(globalShowThemeDialog()QSystemTrayIcon::ActivationReason));
+      this, SLOT(globalShowThemeDialog(QSystemTrayIcon::ActivationReason)));
 }
 #include "karambaapp.moc"
