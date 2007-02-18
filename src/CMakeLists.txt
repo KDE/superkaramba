@@ -18,6 +18,7 @@ taskmanager.cpp
 showdesktop.cpp
 sknewstuff.cpp
 karambasessionmanaged.cpp
+karambainterface.cpp
 
 meters/meter.cpp
 meters/bar.cpp
@@ -78,6 +79,7 @@ ${QT_AND_KDECORE_LIBS}
 ${KDE4_KDEUI_LIBRARY}
 ${KDE4_KNEWSTUFF_LIBS}
 ${KDE4_KIO_LIBS}
+${KDE4_KROSSCORE_LIBS}
 ${PYTHON_LIBRARIES}
 #${QT_QTOPENGL_LIBRARY}
 )

@@ -29,6 +29,7 @@
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QGraphicsItem>
+#include <QGraphicsItemGroup>
 #include <QThread>
 #include <QTimer>
 #include <QMutex>
@@ -47,6 +48,7 @@
 #include "themefile.h"
 #include "taskmanager.h"
 #include "systemtray.h"
+#include "karambainterface.h"
 
 #include "meters/textfield.h"
 #include "meters/richtextlabel.h"
@@ -67,9 +69,8 @@
 
 #include "python/karamba.h"
 
-#include <QGraphicsItemGroup>
-
 class Meter;
+class KarambaInterface;
 
 class Karamba : public QObject, public QGraphicsItemGroup
 {
@@ -181,7 +182,9 @@ class Karamba : public QObject, public QGraphicsItemGroup
 
     KWinModule *m_KWinModule;
 
+    bool m_useKross;
     KarambaPython *m_python;
+    KarambaInterface *m_interface;
     
     bool m_foundKaramba;
     bool m_onTop;

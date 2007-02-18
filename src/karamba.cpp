@@ -54,7 +54,7 @@
 Karamba::Karamba(KUrl themeFile, QGraphicsView *view, QGraphicsScene *scene,
     int instance) :
     QObject(), QGraphicsItemGroup(0, scene),
-    m_scene(scene), m_view(view), m_python(0), m_foundKaramba(false), m_onTop(false),
+    m_scene(scene), m_view(view), m_useKross(false), m_python(0), m_interface(0), m_foundKaramba(false), m_onTop(false),
     m_managed(false), m_desktop(0), m_interval(0), m_tempUnit('C'),
     m_scaleStep(-1), m_showMenu(false), m_popupMenu(0),
     m_stepTimer(0), m_signalMapperConfig(0), m_signalMapperDesktop(0), m_config(0), m_instance(instance),
@@ -246,11 +246,19 @@ void Karamba::initPythonInterface()
 {
   m_stepTimer = new QTimer(this);
 
-  m_python = new KarambaPython(m_theme, false);
-  m_python->initWidget(this);
+  if(!m_useKross)
+  {
+    m_python = new KarambaPython(m_theme, false);
+    m_python->initWidget(this);
+  }
+  else
+  {
+    m_interface = new KarambaInterface(this);
+    m_interface->callInitWidget(this);
+  }
+
   update();
 
-  //m_stepTimer = new QTimer(this);
   connect(m_stepTimer, SIGNAL(timeout()), SLOT(step()));
   m_stepTimer->start(m_interval);
 }
@@ -264,6 +272,9 @@ void Karamba::step()
 {
   if(m_python)
     m_python->widgetUpdated(this);
+
+  if(m_interface)
+    m_interface->callWidgetUpdated(this);
 }
 
 bool Karamba::parseConfig()
