@@ -60,6 +60,8 @@ Karamba::Karamba(KUrl themeFile, QGraphicsView *view, QGraphicsScene *scene,
     m_stepTimer(0), m_signalMapperConfig(0), m_signalMapperDesktop(0), m_config(0), m_instance(instance),
     m_menuList(0), m_wantRightButton(false), m_globalView(true)
 {
+//m_useKross=true;
+
   if(m_view == 0 && m_scene == 0)
   {
     m_scene = new QGraphicsScene;

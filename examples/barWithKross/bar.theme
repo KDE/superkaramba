@@ -1,0 +1,26 @@
+KARAMBA x=100 y=10 w=600 h=580 INTERVAL=1000 LOCKED=true
+DEFAULTFONT font="Bitstream Vera Sans" fontsize=16 color=200,200,200
+
+TEXT x=0 Y=0 w=600 h=20 VALUE="createBar & deleteBar" name=text0
+BAR x=0 Y=20 w=200 h=20 path=hor.png value=100 min=0 max=100 name=bar0
+
+TEXT x=0 Y=45 w=600 h=20 VALUE="getBarSize & resizeBar" name=text1
+BAR x=0 Y=65 w=100 h=20 path=hor.png value=100 min=0 max=100 name=bar1
+
+TEXT x=0 Y=90 w=600 h=20 VALUE="getBarPos & moveBar" name=text2
+BAR x=0 Y=110 w=200 h=20 path=hor.png value=100 min=0 max=100 name=bar2
+
+TEXT x=0 Y=135 w=600 h=20 VALUE="hideBar & showBar" name=text3
+BAR x=0 Y=155 w=200 h=20 path=hor.png value=100 min=0 max=100 name=bar3
+
+TEXT x=0 Y=180 w=600 h=20 VALUE="getBarSensor & setBarSensor" name=text4
+BAR x=0 Y=200 w=200 h=20 path=hor.png value=50 min=0 max=100 name=bar4
+
+TEXT x=0 Y=225 w=600 h=20 VALUE="getBarValue & setBarValue" name=text5
+BAR x=0 Y=245 w=200 h=20 path=hor.png value=50 min=0 max=100 name=bar5
+
+TEXT x=0 Y=270 w=600 h=20 VALUE="getBarMinMax & setBarMinMax" name=text6
+BAR x=0 Y=290 w=200 h=20 path=hor.png value=50 min=0 max=100 name=bar6
+
+TEXT x=0 Y=315 w=600 h=20 VALUE="getBarVertical, setBarVertical, setBarImage & getBarImage" name=text7
+BAR x=0 Y=335 w=200 h=20 path=hor.png value=100 min=0 max=100 name=bar7
