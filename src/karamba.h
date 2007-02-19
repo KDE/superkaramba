@@ -104,7 +104,6 @@ class Karamba : public QObject, public QGraphicsItemGroup
     TextField* getDefaultTextProps();
     void updateSensors();
     void setFixedSize(u_int w, u_int h);
-    void move(u_int x, u_int y);
     bool readMenuConfigOption(QString key);
     KConfig* getConfig();
     //void removePopupMenu(KMenu *menu);
@@ -135,6 +134,10 @@ class Karamba : public QObject, public QGraphicsItemGroup
 
     int instance();
     void setInstance(int instance);
+
+    void moveToPos(QPoint pos);
+    void resizeTo(int width, int height);
+    QPoint getPosition();
 
     KProcess *currProcess;
     Systemtray *systray;

@@ -198,10 +198,9 @@ int TextLabel::getShadow() const
     return shadow;
 }
 
-void TextLabel::setScroll(char* type, QPoint speed, int gap, int pause)
+void TextLabel::setScroll(QString a, QPoint speed, int gap, int pause)
 {
   ScrollType t = TextLabel::ScrollNone;
-  QString a = type;
   a = a.toUpper();
   if(a == "NONE")
     t = TextLabel::ScrollNone;

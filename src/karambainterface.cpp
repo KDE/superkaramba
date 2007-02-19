@@ -282,24 +282,89 @@ void KarambaInterface::callWidgetUpdated(Karamba *k)
   emit widgetUpdated(k);
 }
 
-void KarambaInterface::callMeterClicked(Karamba *k, Meter *m, int button)
-{/*
-  QVariantList params;
-  params << QVariant::fromValue((QObject*)k);
-  params << QVariant::fromValue((QObject*)m);
-  params << QVariant::fromValue(button);
+void KarambaInterface::callWidgetClosed(Karamba *k)
+{
+  emit widgetClosed(k);
+}
 
-  m_action->callFunction("meterClicked", params);*/
+void KarambaInterface::callMenuOptionChanged(Karamba *k, QString key, bool value)
+{
+  emit menuOptionChanged(k, key, value);
+}
+
+void KarambaInterface::callMenuItemClicked(Karamba* k, KMenu* menu, int id)
+{
+  emit menuItemClicked(k, menu, id);
+}
+
+void KarambaInterface::callActiveTaskChanged(Karamba *k, Task* t)
+{
+  emit activeTaskChanged(k, (long long)t);
+}
+
+void KarambaInterface::callTaskAdded(Karamba *k, Task *t)
+{
+  emit taskAdded(k, (long long)t);
+}
+
+void KarambaInterface::callTaskRemoved(Karamba *k, Task *t)
+{
+  emit taskRemoved(k, (long long)t);
+}
+
+void KarambaInterface::callStartupAdded(Karamba *k, Startup *t)
+{
+  emit startupAdded(k, (long long)t);
+}
+
+void KarambaInterface::callStartupRemoved(Karamba *k, Startup *t)
+{
+  emit startupRemoved(k, (long long)t);
+}
+
+void KarambaInterface::callCommandFinished(Karamba *k, int pid)
+{
+  emit commandFinished(k, pid);
+}
+
+void KarambaInterface::callCommandOutput(Karamba *k, int pid, char* buffer)
+{
+  emit commandOutput(k, pid, buffer);
+}
+
+void KarambaInterface::callItemDropped(Karamba *k, QString text, int x, int y)
+{
+  emit itemDropped(k, text, x, y);
+}
+
+void KarambaInterface::callMeterClicked(Karamba *k, Meter *m, int button)
+{
+  emit meterClicked(k, m, button);
 }
 
 void KarambaInterface::callMeterClicked(Karamba *k, QString str, int button)
-{/*
-  QVariantList params;
-  params << QVariant::fromValue((QObject*)k);
-  params << QVariant::fromValue(str);
-  params << QVariant::fromValue(button);
+{
+  emit meterClicked(k, str, button);
+}
 
-  m_action->callFunction("meterClicked", params);*/
+void KarambaInterface::callWidgetClicked(Karamba *k, int x, int y, int button)
+{
+  emit widgetClicked(k, x, y, button);
+}
+
+void KarambaInterface::callDesktopChanged(Karamba *k, int desktop)
+{
+  emit desktopChanged(k, desktop);
+}
+
+void KarambaInterface::callWidgetMouseMoved(Karamba *k, int x, int y, int button)
+{
+  emit widgetMouseMoved(k, x, y, button);
+}
+
+void KarambaInterface::callKeyPressed(Karamba *k, Meter *meter, QString key)
+{
+  emit keyPressed(k, meter, key);
 }
 
 // Calls from scripts --------------------
@@ -755,5 +820,750 @@ bool KarambaInterface::rotateImage(Karamba *k, ImageLabel *image, int deg)
   image->rotate(deg);
   return true;
 }
+
+
+
+
+bool KarambaInterface::addMenuConfigOption(Karamba *k, QString key, QString name)
+{
+  if(!checkKaramba(k))
+    return false;
+
+  k->addMenuConfigOption(key, name);
+  return true;
+}
+
+QString KarambaInterface::readConfigEntry(Karamba *k, QString key)
+{
+  if(!checkKaramba(k))
+    return QString::null;
+
+  k->getConfig()->setGroup("theme");
+  return k->getConfig()->readEntry(key, QString());
+}
+
+bool KarambaInterface::readMenuConfigOption(Karamba *k, QString key)
+{
+  if(!checkKaramba(k))
+    return false;
+
+  return k->readMenuConfigOption(key);
+}
+
+bool KarambaInterface::setMenuConfigOption(Karamba *k, QString key, bool value)
+{
+  if(!checkKaramba(k))
+    return false;
+
+  return k->setMenuConfigOption(key, value);
+}
+
+bool KarambaInterface::writeConfigEntry(Karamba *k, QString key, QString value)
+{
+  if(!checkKaramba(k))
+    return false;
+
+  k->getConfig()->setGroup("theme");
+  k->getConfig()->writeEntry(key, value);
+
+  return true;
+}
+
+
+
+
+
+
+QObject* KarambaInterface::createInputBox(Karamba* k, int x, int y, int w, int h, QString text)
+{
+  if(!checkKaramba(k))
+    return NULL;
+
+  Input *tmp = new Input(k, x, y, w, h);
+  tmp->setValue(text);
+  tmp->setTextProps(k->getDefaultTextProps());
+
+  k->addToGroup(tmp);
+
+  return tmp;
+}
+
+bool KarambaInterface::deleteInputBox(Karamba *k, Input *input)
+{
+  if(!checkKarambaAndMeter(k, input, "Input"))
+    return false;
+
+  return k->removeMeter(input);
+}
+
+bool KarambaInterface::moveInputBox(Karamba *k, Input *input, int x, int y)
+{
+  return moveMeter(k, input, "Input", x, y);
+}
+
+QVariantList KarambaInterface::getInputBoxPos(Karamba *k, Input *input)
+{
+  return getMeterPos(k, input, "Input");
+}
+
+bool KarambaInterface::resizeInputBox(Karamba *k, Input *input, int width, int height)
+{
+  return resizeMeter(k, input, "Input", width, height);
+}
+
+QVariantList KarambaInterface::getInputBoxSize(Karamba *k, Input *input)
+{
+  return getMeterSize(k, input, "Input");
+}
+
+QObject* KarambaInterface::changeInputBoxValue(Karamba *k, Input *input, QString text)
+{
+  return setMeterStringValue(k, input, "Input", text);
+}
+
+QString KarambaInterface::getInputBoxValue(Karamba *k, Input *input)
+{
+  return getMeterStringValue(k, input, "Input");
+}
+
+QObject* KarambaInterface::getThemeInputBox(Karamba *k, QString meter)
+{
+  return getThemeMeter(k, meter, "Input");
+}
+
+bool KarambaInterface::hideInputBox(Karamba *k, Input *input)
+{
+  return hideMeter(k, input, "Input");
+}
+
+bool KarambaInterface::showInputBox(Karamba *k, Input *input)
+{
+  return showMeter(k, input, "Input");
+}
+
+bool KarambaInterface::changeInputBoxFont(Karamba *k, Input *input, QString font)
+{
+  if(!checkKarambaAndMeter(k, input, "Input"))
+    return false;
+
+  input->setFont(font);
+  return true;
+}
+
+QString KarambaInterface::getInputBoxFont(Karamba *k, Input *input)
+{
+  if(!checkKarambaAndMeter(k, input, "Input"))
+    return QString::null;
+
+  return input->getFont();
+}
+
+bool KarambaInterface::changeInputBoxFontColor(Karamba *k, Input *input, int red, int green, int blue)
+{
+  if(!checkKarambaAndMeter(k, input, "Input"))
+    return false;
+
+  input->setFontColor(QColor(red, green, blue));
+  return true;
+}
+
+QVariantList KarambaInterface::getInputBoxFontColor(Karamba *k, Input *input)
+{
+  if(!checkKarambaAndMeter(k, input, "Input"))
+    return QVariantList();
+
+  QVariantList ret;
+  
+  QColor color = input->getFontColor();
+  ret << color.red();
+  ret << color.green();
+  ret << color.blue();
+
+  return ret;
+}
+
+bool KarambaInterface::changeInputBoxSelectionColor(Karamba *k, Input *input, int red, int green, int blue)
+{
+  if(!checkKarambaAndMeter(k, input, "Input"))
+    return false;
+  
+  input->setSelectionColor(QColor(red, green, blue));
+  return true;
+}
+
+QVariantList KarambaInterface::getInputBoxSelectionColor(Karamba *k, Input *input)
+{
+  if(!checkKarambaAndMeter(k, input, "Input"))
+    return QVariantList();
+
+  QVariantList ret;
+  
+  QColor color = input->getSelectionColor();
+  ret << color.red();
+  ret << color.green();
+  ret << color.blue();
+
+  return ret;
+}
+
+bool KarambaInterface::changeInputBoxBackgroundColor(Karamba *k, Input *input, int red, int green, int blue)
+{
+  if(!checkKarambaAndMeter(k, input, "Input"))
+    return false;
+  
+  input->setBGColor(QColor(red, green, blue));
+  return true;
+}
+
+QVariantList KarambaInterface::getInputBoxBackgroundColor(Karamba *k, Input *input)
+{
+  if(!checkKarambaAndMeter(k, input, "Input"))
+    return QVariantList();
+
+  QVariantList ret;
+  
+  QColor color = input->getBGColor();
+  ret << color.red();
+  ret << color.green();
+  ret << color.blue();
+
+  return ret;
+}
+
+bool KarambaInterface::changeInputBoxFrameColor(Karamba *k, Input *input, int red, int green, int blue)
+{
+  if(!checkKarambaAndMeter(k, input, "Input"))
+    return false;
+  
+  input->setColor(QColor(red, green, blue));
+  return true;
+}
+
+QVariantList KarambaInterface::getInputBoxFrameColor(Karamba *k, Input *input)
+{
+  if(!checkKarambaAndMeter(k, input, "Input"))
+    return QVariantList();
+
+  QVariantList ret;
+  
+  QColor color = input->getColor();
+  ret << color.red();
+  ret << color.green();
+  ret << color.blue();
+
+  return ret;
+}
+
+bool KarambaInterface::changeInputBoxSelectedTextColor(Karamba *k, Input *input, int red, int green, int blue)
+{
+  if(!checkKarambaAndMeter(k, input, "Input"))
+    return false;
+  
+  input->setSelectedTextColor(QColor(red, green, blue));
+  return true;
+}
+
+QVariantList KarambaInterface::getInputBoxSelectedTextColor(Karamba *k, Input *input)
+{
+  if(!checkKarambaAndMeter(k, input, "Input"))
+    return QVariantList();
+
+  QVariantList ret;
+  
+  QColor color = input->getSelectedTextColor();
+  ret << color.red();
+  ret << color.green();
+  ret << color.blue();
+
+  return ret;
+}
+
+bool KarambaInterface::changeInputBoxFontSize(Karamba *k, Input *input, int size)
+{
+  if(!checkKarambaAndMeter(k, input, "Input"))
+    return false;
+  
+  input->setFontSize(size);
+  return true;
+}
+
+int KarambaInterface::getInputBoxFontSize(Karamba *k, Input *input)
+{
+  if(!checkKarambaAndMeter(k, input, "Input"))
+    return 0;
+
+  return input->getFontSize();
+}
+
+bool KarambaInterface::setInputFocus(Karamba *k, Input *input)
+{
+  if(!checkKarambaAndMeter(k, input, "Input"))
+    return false;
+
+  input->setInputFocus();
+  return true;
+}
+
+bool KarambaInterface::clearInputFocus(Karamba *k, Input *input)
+{
+  if(!checkKarambaAndMeter(k, input, "Input"))
+    return false;
+
+  input->clearInputFocus();
+  return true;
+}
+
+QObject* KarambaInterface::getInputFocus(Karamba *k)
+{
+  if(!checkKaramba(k))
+    return 0;
+
+  QGraphicsItem *focusItem = k->getScene()->focusItem();
+  return dynamic_cast<Input*>(focusItem);
+}
+
+
+
+bool KarambaInterface::menuExists(Karamba* k, KMenu* menu)
+{
+  return k->popupMenuExisting(menu);
+}
+
+
+QObject* KarambaInterface::addMenuItem(Karamba *k, KMenu *menu, QString text, QString icon)
+{
+  if(!checkKaramba(k))
+    return 0;
+
+  QAction *action = 0;
+  if(menuExists(k, menu))
+  {
+    action = k->addMenuItem(menu, text, icon);
+  }
+
+  return action;
+}
+
+QObject* KarambaInterface::addMenuSeperator(Karamba *k, KMenu *menu)
+{
+  if(!checkKaramba(k))
+    return 0;
+
+  QAction *sep = 0;
+  if(menuExists(k, menu))
+  {
+    sep = menu->addSeparator();
+  }
+
+  return sep;
+}
+
+QObject* KarambaInterface::createMenu(Karamba *k)
+{
+  if(!checkKaramba(k))
+    return 0;
+
+  return k->addPopupMenu();
+}
+
+bool KarambaInterface::deleteMenu(Karamba *k, KMenu *menu)
+{
+  if(!checkKaramba(k))
+    return false;
+
+  if(menuExists(k, menu))
+  {
+    k->deletePopupMenu(menu);
+    return true;
+  }
+  
+  return false;
+}
+
+
+bool KarambaInterface::popupMenu(Karamba *k, KMenu *menu, int x, int y)
+{
+  if(!checkKaramba(k))
+    return false;
+
+  if(menuExists(k, menu))
+  {
+    k->popupMenu(menu, QPoint(x, y));
+    return true;
+  }
+  
+  return false;
+}
+
+bool KarambaInterface::removeMenuItem(Karamba *k, KMenu *menu, QAction *action)
+{
+  if(!checkKaramba(k))
+    return false;
+
+  if(menuExists(k, menu))
+  {
+    k->deleteMenuItem(action);
+    return true;
+  }
+  
+  return false;
+}
+
+
+
+
+QObject* KarambaInterface::createRichText(Karamba* k, QString text, bool underline)
+{
+  if(!checkKaramba(k))
+    return NULL;
+
+  RichTextLabel *tmp = new RichTextLabel(k);
+  tmp->setText(text, underline);
+  tmp->setTextProps(k->getDefaultTextProps());
+  
+  k->addToGroup(tmp);
+
+  return tmp;
+}
+
+bool KarambaInterface::deleteRichText(Karamba *k, RichTextLabel *label)
+{
+  if(!checkKarambaAndMeter(k, label, "RichTextLabel"))
+    return false;
+
+  return k->removeMeter(label);
+}
+
+bool KarambaInterface::moveRichText(Karamba *k, RichTextLabel *label, int x, int y)
+{
+  return moveMeter(k, label, "RichTextLabel", x, y);
+}
+
+QVariantList KarambaInterface::getRichTextPos(Karamba *k, RichTextLabel *label)
+{
+  return getMeterPos(k, label, "RichTextLabel");
+}
+
+bool KarambaInterface::resizeRichText(Karamba *k, RichTextLabel *label, int width, int height)
+{
+  return resizeMeter(k, label, "RichTextLabel", width, height);
+}
+
+bool KarambaInterface::setRichTextWidth(Karamba *k, RichTextLabel *label, int width)
+{
+  if(!checkKarambaAndMeter(k, label, "RichTextLabel"))
+    return false;
+
+  label->setWidth(width);
+  return true;
+}
+
+QVariantList KarambaInterface::getRichTextSize(Karamba *k, RichTextLabel *label)
+{
+  return getMeterSize(k, label, "RichTextLabel");
+}
+
+QObject* KarambaInterface::changeRichText(Karamba *k, RichTextLabel *label, QString text)
+{
+  return setMeterStringValue(k, label, "RichTextLabel", text);
+}
+
+QString KarambaInterface::getRichTextValue(Karamba *k, RichTextLabel *label)
+{
+  return getMeterStringValue(k, label, "RichTextLabel");
+}
+
+QObject* KarambaInterface::getThemeRichText(Karamba *k, QString meter)
+{
+  return getThemeMeter(k, meter, "RichTextLabel");
+}
+
+bool KarambaInterface::hideRichText(Karamba *k, RichTextLabel *label)
+{
+  return hideMeter(k, label, "RichTextLabel");
+}
+
+bool KarambaInterface::showRichText(Karamba *k, RichTextLabel *label)
+{
+  return showMeter(k, label, "RichTextLabel");
+}
+
+bool KarambaInterface::changeRichTextFont(Karamba *k, RichTextLabel *label, QString font)
+{
+  if(!checkKarambaAndMeter(k, label, "RichTextLabel"))
+    return false;
+
+  label->setFont(font);
+  return true;
+}
+
+QString KarambaInterface::getRichTextFont(Karamba *k, RichTextLabel *label)
+{
+  if(!checkKarambaAndMeter(k, label, "RichTextLabel"))
+    return QString::null;
+
+  return label->getFont();
+}
+
+bool KarambaInterface::changeRichTextSize(Karamba *k, RichTextLabel *label, int size)
+{
+  if(!checkKarambaAndMeter(k, label, "RichTextLabel"))
+    return false;
+  
+  label->setFontSize(size);
+  return true;
+}
+
+int KarambaInterface::getRichTextFontSize(Karamba *k, RichTextLabel *label)
+{
+  if(!checkKarambaAndMeter(k, label, "RichTextLabel"))
+    return 0;
+
+  return label->getFontSize();
+}
+
+bool KarambaInterface::setRichTextSensor(Karamba *k, RichTextLabel *label, QString sensor)
+{
+  return setMeterSensor(k, label, "RichTextLabel", sensor);
+}
+
+QString KarambaInterface::getRichTextSensor(Karamba *k, RichTextLabel *label)
+{
+  return getMeterSensor(k, label, "RichTextLabel");
+}
+
+
+
+QObject* KarambaInterface::createText(Karamba* k, int x, int y, int width, int height, QString text)
+{
+  if(!checkKaramba(k))
+    return NULL;
+
+  TextLabel *tmp = new TextLabel(k, x, y, width, height);
+  tmp->setValue(text);
+  tmp->setTextProps(k->getDefaultTextProps());
+
+  k->addToGroup(tmp);
+
+  return tmp;
+}
+
+bool KarambaInterface::deleteText(Karamba *k, TextLabel *text)
+{
+  if(!checkKarambaAndMeter(k, text, "TextLabel"))
+    return false;
+
+  return k->removeMeter(text);
+}
+
+bool KarambaInterface::moveText(Karamba *k, TextLabel *text, int x, int y)
+{
+  return moveMeter(k, text, "TextLabel", x, y);
+}
+
+QVariantList KarambaInterface::getTextPos(Karamba *k, TextLabel *text)
+{
+  return getMeterPos(k, text, "TextLabel");
+}
+
+bool KarambaInterface::setTextSensor(Karamba *k, TextLabel *text, QString sensor)
+{
+  return setMeterSensor(k, text, "TextLabel", sensor);
+}
+
+QString KarambaInterface::getTextSensor(Karamba *k, TextLabel *text)
+{
+  return getMeterSensor(k, text, "TextLabel");
+}
+
+bool KarambaInterface::resizeText(Karamba *k, TextLabel *text, int width, int height)
+{
+  return resizeMeter(k, text, "TextLabel", width, height);
+}
+
+QVariantList KarambaInterface::getTextSize(Karamba *k, TextLabel *text)
+{
+  return getMeterSize(k, text, "TextLabel");
+}
+
+QObject* KarambaInterface::getThemeText(Karamba *k, QString meter)
+{
+  return getThemeMeter(k, meter, "TextLabel");
+}
+
+bool KarambaInterface::hideText(Karamba *k, TextLabel *text)
+{
+  return hideMeter(k, text, "TextLabel");
+}
+
+bool KarambaInterface::showText(Karamba *k, TextLabel *text)
+{
+  return showMeter(k, text, "TextLabel");
+}
+
+QObject* KarambaInterface::changeText(Karamba *k, TextLabel *label, QString text)
+{
+  return setMeterStringValue(k, label, "TextLabel", text);
+}
+
+QString KarambaInterface::getTextValue(Karamba *k, TextLabel *label)
+{
+  return getMeterStringValue(k, label, "TextLabel");
+}
+
+bool KarambaInterface::changeTextShadow(Karamba *k, TextLabel *label, int shadow)
+{
+  if(!checkKarambaAndMeter(k, label, "TextLabel"))
+    return false;
+
+  label->setShadow(shadow);
+  return true;
+}
+
+int KarambaInterface::getTextShadow(Karamba *k, TextLabel *text)
+{
+  if(!checkKarambaAndMeter(k, text, "TextLabel"))
+    return -1;
+
+  return text->getShadow();
+}
+
+bool KarambaInterface::changeTextFont(Karamba *k, TextLabel *text, QString font)
+{
+  if(!checkKarambaAndMeter(k, text, "TextLabel"))
+    return false;
+
+  text->setFont(font);
+  return true;
+}
+
+QString KarambaInterface::getTextFont(Karamba *k, TextLabel *text)
+{
+  if(!checkKarambaAndMeter(k, text, "TextLabel"))
+    return false;
+
+  return text->getFont();
+}
+
+bool KarambaInterface::changeTextColor(Karamba *k, TextLabel *text, int red, int green, int blue)
+{
+  return setMeterColor(k, text, "TextLabel", red, green, blue);
+}
+
+QVariantList KarambaInterface::getTextColor(Karamba *k, TextLabel *text)
+{
+  return getMeterColor(k, text, "TextLabel");
+}
+
+bool KarambaInterface::changeTextSize(Karamba *k, TextLabel *text, int size)
+{
+  if(!checkKarambaAndMeter(k, text, "TextLabel"))
+    return false;
+
+  text->setFontSize(size);
+  return true;
+}
+
+int KarambaInterface::getTextFontSize(Karamba *k, TextLabel *text)
+{
+   if(!checkKarambaAndMeter(k, text, "TextLabel"))
+    return -1;
+
+  return text->getFontSize();
+}
+
+QString KarambaInterface::getTextAlign(Karamba *k, TextLabel *text)
+{
+   if(!checkKarambaAndMeter(k, text, "TextLabel"))
+    return false;
+
+  return text->getAlignment();
+}
+
+bool KarambaInterface::setTextAlign(Karamba *k, TextLabel *text, QString alignment)
+{
+  if(!checkKarambaAndMeter(k, text, "TextLabel"))
+    return false;
+
+  text->setAlignment(alignment);
+  return true;
+}
+
+bool KarambaInterface::setTextScroll(Karamba *k, TextLabel *text, QString type, int x, int y, int gap, int pause)
+{
+  if(!checkKarambaAndMeter(k, text, "TextLabel"))
+    return false;
+
+  text->setScroll(type, QPoint(x, y), gap, pause);
+  return true;
+}
+
+
+
+// This is kept for compatibility only
+bool KarambaInterface::createWidgetMask(Karamba *k, QString mask)
+{
+  return true;
+}
+
+QVariantList KarambaInterface::getWidgetPostion(Karamba *k)
+{
+  if(!checkKaramba(k))
+    return QVariantList();
+
+  QPoint pos = k->getPosition();
+  QVariantList ret;
+  ret << pos.x();
+  ret << pos.y();
+
+  return ret;
+}
+
+bool KarambaInterface::moveWidget(Karamba *k, int x, int y)
+{
+  if(!checkKaramba(k))
+    return false;
+
+  k->moveToPos(QPoint(x, y));
+  return true;
+}
+
+bool KarambaInterface::redrawWidget(Karamba *k)
+{
+  if(!checkKaramba(k))
+    return false;
+
+  foreach(QGraphicsItem *item, ((QGraphicsItemGroup*)k)->children())
+   item->update();
+
+  return true;
+}
+
+// This is kept for compatibility only
+bool KarambaInterface::redrawWidgetBackground(Karamba *k)
+{
+  Q_UNUSED(k);
+
+  return true;
+}
+
+bool KarambaInterface::resizeWidget(Karamba *k, int width, int height)
+{
+  if(!checkKaramba(k))
+    return false;
+
+  k->resizeTo(width, height);
+  return true;
+}
+
+// This is kept for compatibility only
+bool KarambaInterface::toggleWidgetRedraw(Karamba *k, bool enable)
+{
+  Q_UNUSED(k);
+  Q_UNUSED(enable);
+
+  return true;
+}
+
 
 #include "karambainterface.moc"

@@ -107,7 +107,7 @@ long resizeWidget(long widget, long x, long y)
 {
   Karamba* currTheme = (Karamba*)widget;
   //currTheme->test = true;
-  currTheme->setFixedSize((int)x,(int)y);
+  currTheme->resizeTo((int)x,(int)y);
   //currTheme->test = false;
   return 1;
 }
@@ -126,7 +126,7 @@ PyObject* py_resize_widget(PyObject *, PyObject *args)
 long moveWidget(long widget, long x, long y)
 {
   Karamba* currTheme = (Karamba*)widget;
-  currTheme->move((int)x, (int)y);
+  currTheme->moveToPos(QPoint((int)x, (int)y));
   return 1;
 }
 

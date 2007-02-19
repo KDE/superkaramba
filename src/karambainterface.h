@@ -31,9 +31,15 @@
 #include "meters/bar.h"
 #include "meters/graph.h"
 #include "meters/imagelabel.h"
+#include "meters/input.h"
+#include "meters/richtextlabel.h"
+#include "meters/textlabel.h"
 
 class Karamba;
 class ImageLabel;
+class Input;
+class RichTextLabel;
+class TextLabel;
 
 class KarambaInterface : public QObject
 {
@@ -46,12 +52,44 @@ class KarambaInterface : public QObject
     // Calls to scripts ----------------------
     void callInitWidget(Karamba *k);
     void callWidgetUpdated(Karamba *k);
+    void callWidgetClosed(Karamba *k);
+    void callMenuOptionChanged(Karamba *k, QString key, bool value);
+    void callMenuItemClicked(Karamba* k, KMenu* menu, int id);
+    void callActiveTaskChanged(Karamba *k, Task* t);
+    void callTaskAdded(Karamba *k, Task *t);
+    void callTaskRemoved(Karamba *k, Task *t);
+    void callStartupAdded(Karamba *k, Startup *t);
+    void callStartupRemoved(Karamba *k, Startup *t);
+    void callCommandFinished(Karamba *k, int pid);
+    void callCommandOutput(Karamba *k, int pid, char* buffer);
+    void callItemDropped(Karamba *k, QString text, int x, int y);
     void callMeterClicked(Karamba *k, Meter *m, int button);
     void callMeterClicked(Karamba *k, QString str, int button);
+    void callWidgetClicked(Karamba *k, int x, int y, int button);
+    void callDesktopChanged(Karamba *k, int desktop);
+    void callWidgetMouseMoved(Karamba *k, int x, int y, int button);
+    void callKeyPressed(Karamba *k, Meter *meter, QString key);
 
   Q_SIGNALS:
     void initWidget(QObject*);
     void widgetUpdated(QObject*);
+    void widgetClosed(QObject*);
+    void menuItemClicked(QObject*, QObject*, int id);
+    void menuOptionChanged(QObject*, QString, bool);
+    void activeTaskChanged(QObject*, long long);
+    void taskAdded(QObject*, long long);
+    void taskRemoved(QObject*, long long);
+    void startupAdded(QObject*, long long);
+    void startupRemoved(QObject*, long long);
+    void commandFinished(QObject*, int);
+    void commandOutput(QObject*, int, char*);
+    void itemDropped(QObject*, QString, int, int);
+    void meterClicked(QObject*, QObject*, int);
+    void meterClicked(QObject*, QString, int);
+    void widgetClicked(QObject*, int, int, int);
+    void desktopChanged(QObject*, int);
+    void widgetMouseMoved(QObject*, int, int, int);
+    void keyPressed(QObject*, QObject*, QString);
 
   private:
     Karamba *m_karamba;
@@ -79,6 +117,7 @@ class KarambaInterface : public QObject
     QVariantList getMeterColor(Karamba *k, Meter *m, QString type);
     QString getMeterStringValue(Karamba *k, Meter *m, QString type);
     QObject* setMeterStringValue(Karamba *k, Meter *m, QString type, QString value);
+    bool menuExists(Karamba* currTheme, KMenu* menu);
 
 
 
@@ -104,14 +143,15 @@ class KarambaInterface : public QObject
     bool getBarVertical(Karamba *k, Bar *bar);
     bool setBarImage(Karamba *k, Bar *bar, QString image);
     QString getBarImage(Karamba *k, Bar *bar);
-/*
+    
+    
     // Config
-    long addMenuConfigOption
-    long readConfigEntry
-    long readMenuConfigOption
-    long setMenuConfigOption
-    long writeConfigEntry
-*/
+    bool addMenuConfigOption(Karamba *k, QString key, QString name);
+    QString readConfigEntry(Karamba *k, QString key);
+    bool readMenuConfigOption(Karamba *k, QString key);
+    bool setMenuConfigOption(Karamba *k, QString key, bool value);
+    bool writeConfigEntry(Karamba *k, QString key, QString value);
+
     // Graph
     QObject* createGraph(Karamba* k, int x, int y, int w, int h, int points);
     bool deleteGraph(Karamba *k, Graph *graph);
@@ -161,45 +201,46 @@ class KarambaInterface : public QObject
     bool removeImageTransformations(Karamba *k, ImageLabel *image);
     bool resizeImageSmooth(Karamba *k, ImageLabel *image, int width, int height);
     bool rotateImage(Karamba *k, ImageLabel *image, int deg);
-/*
+
     // InputBox
-    long changeInputBox
-    long changeInputBoxBackgroundColor
-    long changeInputBoxFont
-    long changeInputBoxFontColor
-    long changeInputBoxFontSize
-    long changeInputBoxFrameColor
-    long changeInputBoxSelectedTextColor
-    long changeInputBoxSelectionColor
-    long clearInputFocus
-    long createInputBox
-    long deleteInputBox
-    long getInputBoxBackgroundColor
-    long getInputBoxFont
-    long getInputBoxFontColor
-    long getInputBoxFontSize
-    long getInputBoxFrameColor
-    long getInputBoxPos
-    long getInputBoxSelectedTextColor
-    long getInputBoxSelectionColor
-    long getInputBoxSize
-    long getInputBoxValue
-    long getInputFocus
-    long getThemeInputBox
-    long hideInputBox
-    long moveInputBox
-    long resizeInputBox
-    long setInputFocus
-    long showInputBox
+    QObject* createInputBox(Karamba* k, int x, int y, int w, int h, QString text);
+    bool deleteInputBox(Karamba *k, Input *input);
+    bool moveInputBox(Karamba *k, Input *input, int x, int y);
+    QVariantList getInputBoxPos(Karamba *k, Input *input);
+    bool resizeInputBox(Karamba *k, Input *input, int width, int height);
+    QVariantList getInputBoxSize(Karamba *k, Input *input);
+    QObject* changeInputBoxValue(Karamba *k, Input *input, QString text);
+    QString getInputBoxValue(Karamba *k, Input *input);
+    QObject* getThemeInputBox(Karamba *k, QString meter);
+    bool hideInputBox(Karamba *k, Input *input);
+    bool showInputBox(Karamba *k, Input *input);
+    bool changeInputBoxFont(Karamba *k, Input *input, QString font);
+    bool changeInputBoxFontColor(Karamba *k, Input *input, int red, int green, int blue);
+    QString getInputBoxFont(Karamba *k, Input *input);
+    QVariantList getInputBoxFontColor(Karamba *k, Input *input);
+    bool changeInputBoxSelectionColor(Karamba *k, Input *input, int red, int green, int blue);
+    QVariantList getInputBoxSelectionColor(Karamba *k, Input *input);
+    bool changeInputBoxBackgroundColor(Karamba *k, Input *input, int red, int green, int blue);
+    QVariantList getInputBoxBackgroundColor(Karamba *k, Input *input);
+    bool changeInputBoxFrameColor(Karamba *k, Input *input, int red, int green, int blue);
+    QVariantList getInputBoxFrameColor(Karamba *k, Input *input);
+    bool changeInputBoxSelectedTextColor(Karamba *k, Input *input, int red, int green, int blue);
+    QVariantList getInputBoxSelectedTextColor(Karamba *k, Input *input);
+    bool changeInputBoxFontSize(Karamba *k, Input *input, int size);
+    int getInputBoxFontSize(Karamba *k, Input *input);
+    bool setInputFocus(Karamba *k, Input *input);
+    bool clearInputFocus(Karamba *k, Input *input);
+    QObject* getInputFocus(Karamba *k);
 
     // Menu
-    long addMenuItem
-    long addMenuSeparator
-    long createMenu
-    long deleteMenu
-    long popupMenu
-    long removeMenuItem
+    QObject* addMenuItem(Karamba *k, KMenu *menu, QString text, QString icon);
+    QObject* addMenuSeperator(Karamba *k, KMenu *menu);
+    QObject* createMenu(Karamba *k);
+    bool deleteMenu(Karamba *k, KMenu *menu);
+    bool popupMenu(Karamba *k, KMenu *menu, int x, int y);
+    bool removeMenuItem(Karamba *k, KMenu *menu, QAction *action);
 
+/*
     // Misc
     long acceptDrops
     long attachClickArea
@@ -232,27 +273,28 @@ class KarambaInterface : public QObject
     long translateAll
     long userLanguage
     long wantRightButton
-
+*/
     // RichText
-    long changeRichText
-    long changeRichTextFont
-    long changeRichTextSize
-    long createRichText
-    long deleteRichText
-    long getRichTextFont
-    long getRichTextFontSize
-    long getRichTextPos
-    long getRichTextSensor
-    long getRichTextSize
-    long getRichTextValue
-    long getThemeRichText
-    long hideRichText
-    long moveRichText
-    long resizeRichText
-    long setRichTextSensor
-    long setRichTextWidth
-    long showRichText
-
+    QObject* createRichText(Karamba* k, QString text, bool underline = false);
+    bool deleteRichText(Karamba *k, RichTextLabel *label);
+    bool moveRichText(Karamba *k, RichTextLabel *label, int x, int y);
+    QVariantList getRichTextPos(Karamba *k, RichTextLabel *label);
+    bool resizeRichText(Karamba *k, RichTextLabel *label, int width, int height);
+    bool setRichTextWidth(Karamba *k, RichTextLabel *label, int width);
+    QVariantList getRichTextSize(Karamba *k, RichTextLabel *label);
+    QObject* changeRichText(Karamba *k, RichTextLabel *label, QString text);
+    QString getRichTextValue(Karamba *k, RichTextLabel *label);
+    QObject* getThemeRichText(Karamba *k, QString meter);
+    bool hideRichText(Karamba *k, RichTextLabel *label);
+    bool showRichText(Karamba *k, RichTextLabel *label);
+    bool changeRichTextFont(Karamba *k, RichTextLabel *label, QString font);
+    QString getRichTextFont(Karamba *k, RichTextLabel *label);
+    bool changeRichTextSize(Karamba *k, RichTextLabel *label, int size);
+    int getRichTextFontSize(Karamba *k, RichTextLabel *label);
+    bool setRichTextSensor(Karamba *k, RichTextLabel *label, QString sensor);
+    QString getRichTextSensor(Karamba *k, RichTextLabel *label);
+    
+/*
     // Systray
     long createSystray
     long getCurrentWindowCount
@@ -260,47 +302,49 @@ class KarambaInterface : public QObject
     long moveSystray
     long showSystray
     long updateSystrayLayout
+
+    // Task
     long getStartupInfo
     long getStartupList
     long getTaskInfo
     long getTaskList
     long getTaskNames
     long performTaskAction
-
+*/
     // Text
-    long changeText
-    long changeTextColor
-    long changeTextFont
-    long changeTextShadow
-    long changeTextSize
-    long createText
-    long deleteText
-    long getTextAlign
-    long getTextColor
-    long getTextFont
-    long getTextFontSize
-    long getTextPos
-    long getTextSensor
-    long getTextShadow
-    long getTextSize
-    long getTextValue
-    long getThemeText
-    long hideText
-    long moveText
-    long resizeText
-    long setTextAlign
-    long setTextSensor
-    long showText
-
+    QObject* createText(Karamba* k, int x, int y, int width, int height, QString text);
+    bool deleteText(Karamba *k, TextLabel *text);
+    bool moveText(Karamba *k, TextLabel *text, int x, int y);
+    QVariantList getTextPos(Karamba *k, TextLabel *text);
+    bool setTextSensor(Karamba *k, TextLabel *text, QString sensor);
+    QString getTextSensor(Karamba *k, TextLabel *text);
+    bool resizeText(Karamba *k, TextLabel *text, int width, int height);
+    QVariantList getTextSize(Karamba *k, TextLabel *text);
+    QObject* getThemeText(Karamba *k, QString meter);
+    bool hideText(Karamba *k, TextLabel *text);
+    bool showText(Karamba *k, TextLabel *text);
+    QObject* changeText(Karamba *k, TextLabel *label, QString text);
+    QString getTextValue(Karamba *k, TextLabel *label);
+    bool changeTextShadow(Karamba *k, TextLabel *label, int shadow);
+    int getTextShadow(Karamba *k, TextLabel *text);
+    bool changeTextFont(Karamba *k, TextLabel *text, QString font);
+    QString getTextFont(Karamba *k, TextLabel *text);
+    bool changeTextColor(Karamba *k, TextLabel *text, int red, int green, int blue);
+    QVariantList getTextColor(Karamba *k, TextLabel *text);
+    bool changeTextSize(Karamba *k, TextLabel *text, int size);
+    int getTextFontSize(Karamba *k, TextLabel *text);
+    QString getTextAlign(Karamba *k, TextLabel *text);
+    bool setTextAlign(Karamba *k, TextLabel *text, QString alignment);
+    bool setTextScroll(Karamba *k, TextLabel *text, QString type, int x = 0, int y = 0, int gap = 0, int pause = 0);
+    
     // Widget
-    long createWidgetMask
-    long getWidgetPosition
-    long moveWidget
-    long redrawWidget
-    long redrawWidgetBackground
-    long resizeWidget
-    long toggleWidgetRedraw
-    */
+    bool createWidgetMask(Karamba *k, QString mask);
+    QVariantList getWidgetPostion(Karamba *k);
+    bool moveWidget(Karamba *k, int x, int y);
+    bool redrawWidget(Karamba *k);
+    bool redrawWidgetBackground(Karamba *k);
+    bool resizeWidget(Karamba *k, int width, int height);
+    bool toggleWidgetRedraw(Karamba *k, bool enable);
 };
 
 #endif

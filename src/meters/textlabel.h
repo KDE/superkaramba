@@ -61,7 +61,7 @@ public:
     bool getFixedPitch() const;
     int getShadow() const;
     void setScroll(ScrollType type, QPoint speed, int gap, int pause);
-    void setScroll(char* type, QPoint speed, int gap, int pause);
+    void setScroll(QString type, QPoint speed, int gap, int pause);
 
     void attachClickArea(QString leftMouseButton, QString middleMouseButton,
                          QString rightMouseButton);

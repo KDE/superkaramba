@@ -60,8 +60,6 @@ Karamba::Karamba(KUrl themeFile, QGraphicsView *view, QGraphicsScene *scene,
     m_stepTimer(0), m_signalMapperConfig(0), m_signalMapperDesktop(0), m_config(0), m_instance(instance),
     m_menuList(0), m_wantRightButton(false), m_globalView(true)
 {
-//m_useKross=true;
-
   if(m_view == 0 && m_scene == 0)
   {
     m_scene = new QGraphicsScene;
@@ -198,7 +196,7 @@ Karamba::Karamba(KUrl themeFile, QGraphicsView *view, QGraphicsScene *scene,
       ypos = 0;
 
     if(m_globalView)
-      move(xpos, ypos);
+      setPos(xpos, ypos);
     else
       m_view->move(xpos, ypos);
   }
@@ -219,6 +217,11 @@ Karamba::~Karamba()
   if(m_python)
   {
     delete m_python;
+  }
+
+  if(m_interface)
+  {
+    delete m_interface;
   }
 
   int items = m_sensorList->count();
@@ -340,8 +343,8 @@ bool Karamba::parseConfig()
           y = 0;
         }
 
-        if(m_globalView)
-          move(x,y);
+        if(!m_globalView)
+          setPos(x,y);
         else
           m_view->move(x,y);
 
@@ -386,7 +389,7 @@ bool Karamba::parseConfig()
 
         if(lineParser.getBoolean("TOPBAR"))
         {
-          move(x,0);
+          setPos(x,0);
           KWin::setStrut( m_view->winId(), 0, 0, h, 0 );
           //toggleLocked->setChecked(true);
           //toggleLocked->setEnabled(false);
@@ -395,7 +398,7 @@ bool Karamba::parseConfig()
         if(lineParser.getBoolean("BOTTOMBAR"))
         {
           int dh = QApplication::desktop()->height();
-          move( x, dh - h );
+          setPos( x, dh - h );
           KWin::setStrut( m_view->winId(), 0, 0, 0, h );
           //toggleLocked->setChecked(true);
           //toggleLocked->setEnabled(false);
@@ -404,7 +407,7 @@ bool Karamba::parseConfig()
         if(lineParser.getBoolean("RIGHTBAR"))
         {
           int dw = QApplication::desktop()->width();
-          move( dw - w, y );
+          setPos( dw - w, y );
           KWin::setStrut( m_view->winId(), 0, w, 0, 0 );
           //toggleLocked->setChecked(true);
           //toggleLocked->setEnabled(false);
@@ -412,7 +415,7 @@ bool Karamba::parseConfig()
 
         if(lineParser.getBoolean("LEFTBAR"))
         {
-          move( 0, y );
+          setPos( 0, y );
           KWin::setStrut( m_view->winId(), w, 0, 0, 0 );
           //toggleLocked->setChecked( true );
           //toggleLocked->setEnabled(false);
@@ -1071,6 +1074,9 @@ void Karamba::closeWidget()
   if(m_python)
     m_python->widgetClosed(this);
 
+  if(m_interface)
+    m_interface->callWidgetClosed(this);
+
   m_scene->removeItem(this);
 
   writeConfigData();
@@ -1218,6 +1224,9 @@ void Karamba::slotToggleConfigOption(QObject* sender)
 
   if(m_python)
     m_python->menuOptionChanged(this, action->objectName(), action->isChecked());
+
+  if(m_interface)
+    m_interface->callMenuOptionChanged(this, action->objectName(), action->isChecked());
 }
 
 bool Karamba::setMenuConfigOption(QString key, bool value)
@@ -1324,6 +1333,10 @@ void Karamba::passMenuItemClicked(QAction* action)
 {
   if(m_python)
     m_python->menuItemClicked(this, (KMenu*)action->parentWidget(), (long)action);
+
+  if(m_interface)
+    m_interface->callMenuItemClicked(this, (KMenu*)action->parentWidget(), (long)action);
+
 }
 
 void Karamba::popupGlobalMenu()
@@ -1412,42 +1425,63 @@ void Karamba::activeTaskChanged(Task::TaskPtr t)
 {
   if(m_python)
     m_python->activeTaskChanged(this, t.data());
+
+  if(m_interface)
+    m_interface->callActiveTaskChanged(this, t.data());
 }
 
 void Karamba::taskAdded(Task::TaskPtr t)
 {
   if(m_python)
     m_python->taskAdded(this, t.data());
+
+  if(m_interface)
+    m_interface->callTaskAdded(this, t.data());
 }
 
 void Karamba::taskRemoved(Task::TaskPtr t)
 {
   if(m_python)
     m_python->taskRemoved(this, t.data());
+
+  if(m_interface)
+    m_interface->callTaskRemoved(this, t.data());
 }
 
 void Karamba::startupAdded(Startup::StartupPtr t)
 {
   if(m_python)
     m_python->startupAdded(this, t.data());
+
+  if(m_interface)
+    m_interface->callStartupAdded(this, t.data());
 }
 
 void Karamba::startupRemoved(Startup::StartupPtr t)
 {
   if(m_python)
     m_python->startupRemoved(this, t.data());
+
+  if(m_interface)
+    m_interface->callStartupRemoved(this, t.data());
 }
 
 void Karamba::processExited(KProcess* proc)
 {
   if(m_python)
     m_python->commandFinished(this, (int)proc->pid());
+
+  if(m_interface)
+    m_interface->callCommandFinished(this, (int)proc->pid());
 }
 
 void Karamba::receivedStdout(KProcess *proc, char *buffer, int)
 {
   if(m_python)
     m_python->commandOutput(this, (int)proc->pid(), buffer);
+
+  if(m_interface)
+    m_interface->callCommandOutput(this, (int)proc->pid(), buffer);
 }
 
 void Karamba::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
@@ -1463,7 +1497,12 @@ void Karamba::dropEvent(QGraphicsSceneDragDropEvent *event)
   {
     if(m_python)
       m_python->itemDropped(this, event->mimeData()->text(),
-                  (int)event->pos().x(), (int)event->pos().y());
+                (int)event->pos().x(), (int)event->pos().y());
+
+    if(m_interface)
+      m_interface->callItemDropped(this, event->mimeData()->text(),
+                (int)event->pos().x(), (int)event->pos().y());
+
   }
 }
 
@@ -1515,12 +1554,21 @@ void Karamba::mousePressEvent(QGraphicsSceneMouseEvent *event)
       if(pass)
       {
         QString anchor = rich->getAnchor(event->pos());
-        m_python->meterClicked(this, anchor.toAscii().data(), button);
+        if(m_python)
+          m_python->meterClicked(this, anchor.toAscii().data(), button);
+        if(m_interface)
+          m_interface->callMeterClicked(this, anchor, button);
       }
     }
 
-    if(pass && allowClick && m_python)
-     m_python->meterClicked(this, (Meter*)item, button);
+    if(pass && allowClick)
+    {
+      if(m_python)
+        m_python->meterClicked(this, (Meter*)item, button);
+
+      if(m_interface)
+        m_interface->callMeterClicked(this, (Meter*)item, button);
+    }
 
     if(Input *input = dynamic_cast<Input*>(item))
     {
@@ -1538,8 +1586,13 @@ void Karamba::mousePressEvent(QGraphicsSceneMouseEvent *event)
   }
 
   if(m_python)
-    m_python->widgetClicked(this, (int)event->pos().x(), (int)event->pos().y(),
-                                                        button);
+    m_python->widgetClicked(this, (int)event->pos().x(),
+        (int)event->pos().y(), button);
+
+  if(m_interface)
+    m_interface->callWidgetClicked(this, (int)event->pos().x(),
+        (int)event->pos().y(), button);
+
 //  QGraphicsItemGroup::mousePressEvent(event);
 }
 
@@ -1552,6 +1605,9 @@ void Karamba::currentDesktopChanged(int i)
 {
   if(m_python)
     m_python->desktopChanged(this, i);
+
+  if(m_interface)
+    m_interface->callDesktopChanged(this, i);
 }
 
 void Karamba::wheelEvent(QGraphicsSceneWheelEvent *event)
@@ -1565,12 +1621,20 @@ void Karamba::wheelEvent(QGraphicsSceneWheelEvent *event)
 
   if(m_python)
     m_python->widgetClicked(this, (int)event->pos().x(), (int)event->pos().y(), button);
+
+  if(m_interface)
+    m_interface->callWidgetClicked(this, (int)event->pos().x(), (int)event->pos().y(), button);
+
 }
 
 void Karamba::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
 { 
   if(m_python)
     m_python->widgetMouseMoved(this, (int)event->pos().x(), (int)event->pos().y(), 0/*button*/);
+
+  if(m_interface)
+    m_interface->callWidgetMouseMoved(this, (int)event->pos().x(), (int)event->pos().y(), 0/*button*/);
+
 }
 
 QGraphicsScene* Karamba::getScene()
@@ -1608,18 +1672,15 @@ void Karamba::keyPressed(const QString& s, const Meter* meter)
 {
   if(m_python)
     m_python->keyPressed(this, meter, s);
+
+  if(m_interface)
+    m_interface->callKeyPressed(this, (Meter*)meter, s);
 }
 
 void Karamba::setFixedSize(u_int w, u_int h)
 {
   size.setWidth(w);
   size.setHeight(h);
-}
-
-void Karamba::move(u_int x, u_int y)
-{
-  size.setX(x);
-  size.setY(y);
 }
 
 ThemeFile& Karamba::theme()
@@ -1699,6 +1760,33 @@ int Karamba::instance()
 void Karamba::setInstance(int instance)
 {
   m_instance = instance;
+}
+
+void Karamba::moveToPos(QPoint pos)
+{
+  if(m_globalView)
+    m_view->move(pos);
+  else
+    setPos(pos);
+}
+
+void Karamba::resizeTo(int width, int height)
+{
+  if(m_globalView)
+    m_view->setFixedSize(width, height);
+  else
+  {
+    size.setWidth(width);
+    size.setHeight(height);
+  }
+}
+
+QPoint Karamba::getPosition()
+{
+  if(m_globalView)
+    return m_view->pos();
+  else
+    return pos().toPoint();
 }
 
 #include "karamba.moc"
