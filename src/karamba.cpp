@@ -167,8 +167,6 @@ Karamba::Karamba(KUrl themeFile, QGraphicsView *view, QGraphicsScene *scene,
   }
 
   m_config = new KConfig(cfg, KConfig::NoGlobals );
-  m_config->sync();
-
 
   // Karamba specific Config Entries
   KConfigGroup cg(m_config, "internal");
