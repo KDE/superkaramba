@@ -318,9 +318,8 @@ bool Karamba::parseConfig()
           h = 300;
         }
 
-        if(m_globalView)
-          setFixedSize(w, h);
-        else
+        setFixedSize(w, h);
+        if(!m_globalView)
           m_view->setFixedSize(w + 5, h + 5);
 
         if(lineParser.getBoolean("RIGHT"))
@@ -1772,13 +1771,10 @@ void Karamba::moveToPos(QPoint pos)
 
 void Karamba::resizeTo(int width, int height)
 {
-  if(m_globalView)
+  if(!m_globalView)
     m_view->setFixedSize(width, height);
-  else
-  {
-    size.setWidth(width);
-    size.setHeight(height);
-  }
+  
+  setFixedSize(width, height);
 }
 
 QPoint Karamba::getPosition()
