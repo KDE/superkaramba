@@ -29,10 +29,6 @@
 
 bool KarambaSessionManaged::saveState(QSessionManager&)
 {
-  KConfig* config = kapp->sessionConfig();
-
-  config->setGroup("General Options");
-
   QList<QString> openThemes;
 
   #ifdef __GNUC__
@@ -54,7 +50,8 @@ bool KarambaSessionManaged::saveState(QSessionManager&)
     }
   }
 
-  config->writeEntry("OpenThemes", openThemes);
+  KConfig* config = kapp->sessionConfig();
+  config->group("General Options").writeEntry("OpenThemes", openThemes);
   return true;
 }
 

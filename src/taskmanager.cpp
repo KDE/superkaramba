@@ -98,8 +98,8 @@ TaskManager::~TaskManager()
 
 void TaskManager::configure_startup()
 {
-    KConfig c("klaunchrc");
-    c.setGroup("FeedbackStyle");
+    KConfig config("klaunchrc");
+    KConfigGroup c(&config, "FeedbackStyle");
     if (!c.readEntry("TaskbarButton", QVariant(true)).toBool())
         return;
     _startup_info = new KStartupInfo( KStartupInfo::CleanOnCantDetect, this );
@@ -112,7 +112,7 @@ void TaskManager::configure_startup()
     connect( _startup_info,
         SIGNAL( gotRemoveStartup( const KStartupInfoId&, const KStartupInfoData& )),
         SLOT( killStartup( const KStartupInfoId& )));
-    c.setGroup( "TaskbarButtonSettings" );
+    c.changeGroup( "TaskbarButtonSettings" );
     _startup_info->setTimeout( c.readEntry( "Timeout", 30 ));
 }
 

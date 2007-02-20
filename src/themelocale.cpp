@@ -25,8 +25,6 @@
  *  along with SuperKaramba; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  ****************************************************************************/
-//#include <config.h> //KDE4
-
 #include "themelocale.h"
 #include "themefile.h"
 #include <kdebug.h>
@@ -171,12 +169,16 @@ void ThemeLocale::setLanguage(const QStringList &languages)
 
 QStringList ThemeLocale::languageList()
 {
-  KConfig* config = KGlobal::config().data();
+  // config calls replaced with
+  // KGlobal::locale()->languageList()
+
+  //KSharedConfigPtr config = KGlobal::config();
   // Reset the list and add the new languages
   QStringList languageList;
   languageList += QFile::decodeName(::getenv("KDE_LANG")).split(':');
 
-  languageList += config->readEntry("Language", QStringList(), ':');
+  //languageList += config->readEntry("Language", QStringList(), ':');
+  languageList += KGlobal::locale()->languageList();
 
   // same order as setlocale use
   // HPB: Only run splitLocale on the environment variables..

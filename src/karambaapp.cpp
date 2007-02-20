@@ -132,8 +132,7 @@ void KarambaApplication::checkPreviousSession(QList<KUrl> &lst)
   if(isSessionRestored())
   {
     KConfig* config = sessionConfig();
-    config->setGroup("General Options");
-    QList<QString> themePaths = config->readEntry("OpenThemes", QList<QString>());
+    QList<QString> themePaths = config->group("General Options").readEntry("OpenThemes", QList<QString>());
     foreach(QString path, themePaths)
       lst.append(KUrl(path));
   }

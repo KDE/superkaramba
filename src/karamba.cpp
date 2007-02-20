@@ -168,15 +168,16 @@ Karamba::Karamba(KUrl themeFile, QGraphicsView *view, QGraphicsScene *scene,
 
   m_config = new KConfig(cfg, KConfig::NoGlobals );
   m_config->sync();
-  m_config->setGroup("internal");
+
 
   // Karamba specific Config Entries
+  KConfigGroup cg(m_config, "internal");
   bool locked = m_toggleLocked->isChecked();
-  locked = m_config->readEntry("lockedPosition", locked);
+  locked = cg.readEntry("lockedPosition", locked);
   m_toggleLocked->setChecked(locked);
 
   int desktop = 0;
-  desktop = m_config->readEntry("desktop", desktop);
+  desktop = cg.readEntry("desktop", desktop);
   if(desktop > m_KWinModule->numberOfDesktops())
   {
     desktop = 0;
@@ -184,11 +185,11 @@ Karamba::Karamba(KUrl themeFile, QGraphicsView *view, QGraphicsScene *scene,
 
   slotDesktopChanged(desktop);
 
-  m_config->setGroup("theme");
-  if(m_config->hasKey("widgetPosX") && m_config->hasKey("widgetPosY"))
+  cg.changeGroup("theme");
+  if(cg.hasKey("widgetPosX") && cg.hasKey("widgetPosY"))
   {
-    int xpos = m_config->readEntry("widgetPosX", 0);
-    int ypos = m_config->readEntry("widgetPosY", 0);
+    int xpos = cg.readEntry("widgetPosX", 0);
+    int ypos = cg.readEntry("widgetPosY", 0);
 
     if(xpos < 0)
       xpos = 0;
@@ -342,7 +343,7 @@ bool Karamba::parseConfig()
           y = 0;
         }
 
-        if(!m_globalView)
+        if(m_globalView)
           setPos(x,y);
         else
           m_view->move(x,y);
@@ -1090,26 +1091,27 @@ KConfig* Karamba::getConfig()
 
 void Karamba::writeConfigData()
 {
-  m_config->setGroup("internal");
-  m_config->writeEntry("lockedPosition", m_toggleLocked-> isChecked() );
-  m_config->writeEntry("desktop", m_desktop);
-  m_config->setGroup("theme");
+  KConfigGroup cg(m_config, "internal");
+  cg.writeEntry("lockedPosition", m_toggleLocked-> isChecked() );
+  cg.writeEntry("desktop", m_desktop);
+
+  cg.changeGroup("theme");
 
   // Widget Position
   if(!m_globalView)
   {
-    m_config->writeEntry("widgetPosX", m_view->x());
-    m_config->writeEntry("widgetPosY", m_view->y());
+    cg.writeEntry("widgetPosX", m_view->x());
+    cg.writeEntry("widgetPosY", m_view->y());
   }
   else
   {
-    m_config->writeEntry("widgetPosX", x());
-    m_config->writeEntry("widgetPosY", y());
+    cg.writeEntry("widgetPosX", x());
+    cg.writeEntry("widgetPosY", y());
   }
 
   // Widget Size
-  m_config->writeEntry("widgetWidth", boundingRect().width());
-  m_config->writeEntry("widgetHeight", boundingRect().height());
+  cg.writeEntry("widgetWidth", boundingRect().width());
+  cg.writeEntry("widgetHeight", boundingRect().height());
 
   // write changes to DiskSensor
   m_config->sync();
@@ -1210,16 +1212,14 @@ void Karamba::addMenuConfigOption(QString key, QString name)
   m_signalMapperConfig->setMapping(newAction, newAction);
   m_themeConfMenu->addAction(newAction);
 
-  m_config->setGroup("config menu");
-  newAction->setChecked(m_config->readEntry(key, false));
+  newAction->setChecked(m_config->group("config menu").readEntry(key, false));
 }
 
 void Karamba::slotToggleConfigOption(QObject* sender)
 {
   KToggleAction *action = (KToggleAction*)sender;
 
-  m_config->setGroup("config menu");
-  m_config->writeEntry(action->objectName(), action->isChecked());
+  m_config->group("config menu").writeEntry(action->objectName(), action->isChecked());
 
   if(m_python)
     m_python->menuOptionChanged(this, action->objectName(), action->isChecked());

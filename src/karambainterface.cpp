@@ -838,8 +838,7 @@ QString KarambaInterface::readConfigEntry(Karamba *k, QString key)
   if(!checkKaramba(k))
     return QString::null;
 
-  k->getConfig()->setGroup("theme");
-  return k->getConfig()->readEntry(key, QString());
+  return k->getConfig()->group("theme").readEntry(key, QString());
 }
 
 bool KarambaInterface::readMenuConfigOption(Karamba *k, QString key)
@@ -863,8 +862,7 @@ bool KarambaInterface::writeConfigEntry(Karamba *k, QString key, QString value)
   if(!checkKaramba(k))
     return false;
 
-  k->getConfig()->setGroup("theme");
-  k->getConfig()->writeEntry(key, value);
+  k->getConfig()->group("theme").writeEntry(key, value);
 
   return true;
 }

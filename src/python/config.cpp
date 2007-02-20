@@ -113,8 +113,7 @@ long writeConfigEntry(long widget, QString key, QString value)
 {
   Karamba* currTheme = (Karamba*)widget;
 
-  currTheme->getConfig()->setGroup("theme");
-  currTheme->getConfig()->writeEntry(key, value);
+  currTheme->getConfig()->group("theme").writeEntry(key, value);
 
   return 1;
 }
@@ -141,8 +140,7 @@ QString readConfigEntry(long widget, QString key)
 {
   Karamba* currTheme = (Karamba*)widget;
 
-  currTheme->getConfig()->setGroup("theme");
-  return currTheme->getConfig()->readEntry(key, QString());
+  return currTheme->getConfig()->group("theme").readEntry(key, QString());
 }
 
 PyObject* py_read_config_entry(PyObject *, PyObject *args)

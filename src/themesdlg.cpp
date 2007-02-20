@@ -222,12 +222,13 @@ void ThemesDlg::openLocalTheme()
 
 void ThemesDlg::getNewStuff()
 {
-  KSharedConfigPtr config = KGlobal::config();
-  config->setGroup("KNewStuff");
-  config->writePathEntry("ProvidersUrl",
+  KSharedConfigPtr cfg = KGlobal::config();
+  KConfigGroup config(cfg, "KNewStuff");
+  config.writePathEntry("ProvidersUrl",
       QString::fromLatin1("http://download.kde.org/khotnewstuff/karamba-providers.xml"));
-  config->sync();
-  m_newStuffStatus = config->entryMap("KNewStuffStatus").keys();
+  config.sync();
+
+  m_newStuffStatus = cfg->group("KNewStuffStatus").entryMap().keys();
   //This check is b/c KNewStuff will download, throw an error, 
   //and still have the entry in the config that it was successful
   configSanityCheck();
@@ -314,8 +315,7 @@ void ThemesDlg::writeNewStuffConfig(const QString &file)
   }
   if(!keys.isEmpty())
   {
-    config->setGroup("KNewStuffNames");
-    config->writeEntry(file, keys[0]);
+    config->group("KNewStuffNames").writeEntry(file, keys[0]);
     config->sync();
   }
 }
@@ -332,11 +332,10 @@ void ThemesDlg::configSanityCheck()
   {
     QString keyName(*it);
     bool removeKey = true;
-    config->setGroup("KNewStuffNames");
     for(QStringList::Iterator it2 = nameKeys.begin();
         it2 != nameKeys.end(); ++it2)
     {
-      QString tempName(config->readEntry(*it2, QString()));
+      QString tempName(config->group("KNewStuffNames").readEntry(*it2, QString()));
       if( tempName.compare(keyName) == 0)
       {
         removeKey = false;
@@ -346,8 +345,7 @@ void ThemesDlg::configSanityCheck()
     if( removeKey )
     {
       kDebug() << "sanityCheck() deleting entry " << keyName << endl;
-      config->setGroup("KNewStuffStatus");
-      config->deleteEntry( keyName );
+      config->group("KNewStuffStatus").deleteEntry( keyName );
     }
   }
   config->sync();
@@ -428,8 +426,7 @@ bool ThemesDlg::isDownloaded( const QString& path )
 {
   kDebug() << "isDownloaded path: " << path << endl;
   KSharedConfigPtr config = KGlobal::config();
-  config->setGroup("KNewStuffNames");
-  return !config->readEntry(path, QString()).isEmpty();
+  return !config->group("KNewStuffNames").readEntry(path, QString()).isEmpty();
 }
 
 void ThemesDlg::uninstall()
@@ -475,18 +472,16 @@ void ThemesDlg::uninstall()
     }
     // Remove theme from KNewStuffStatus
     KSharedConfigPtr config = KGlobal::config();
-    config->setGroup("KNewStuffNames");
-    QString name = config->readEntry(tempPath, QString());
+    QString name = config->group("KNewStuffNames").readEntry(tempPath, QString());
     if(!name.isEmpty())
     {
       // kapp-config() -> KGlobal::config()
       kDebug() << "removing " << tempPath << " under KNewStuffNames from superkarambarc" 
                 << endl;
-      KGlobal::config()->deleteEntry(tempPath);
-      KGlobal::config()->setGroup("KNewStuffStatus");
+      KGlobal::config()->group("KNewStuffNames").deleteEntry(tempPath);
       kDebug() << "removing " << name << " under KNewStuffStatus from superkarambarc" 
                 << endl;
-      KGlobal::config()->deleteEntry(name);
+      KGlobal::config()->group("KNewStuffStatus").deleteEntry(name);
       KGlobal::config()->sync();
     }
   }
@@ -503,15 +498,13 @@ void ThemesDlg::uninstall()
     tableThemes->removeItem((QWidget*)w);
     // Remove theme from KNewStuffStatus
     KSharedConfigPtr config = KGlobal::config();
-    config->setGroup("KNewStuffNames");
-    QString name = config->readEntry(theme.path(), QString());
+    QString name = config->group("KNewStuffNames").readEntry(theme.path(), QString());
     if(!name.isEmpty())
     {
       kDebug() << "removing " << theme.path() << " from superkarambarc" << endl;
-       KGlobal::config()->deleteEntry(theme.path());
-       KGlobal::config()->setGroup("KNewStuffStatus");
+       KGlobal::config()->group("KNewStuffNames").deleteEntry(theme.path());
       kDebug() << "removing " << name << " from superkarambarc" << endl;
-       KGlobal::config()->deleteEntry(name);
+       KGlobal::config()->group("KNewStuffStatus").deleteEntry(name);
        KGlobal::config()->sync();
     }
   }
