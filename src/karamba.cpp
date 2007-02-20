@@ -114,7 +114,7 @@ Karamba::Karamba(KUrl themeFile, QGraphicsView *view, QGraphicsScene *scene,
 
   setAcceptsHoverEvents(true);
   setAcceptDrops(true);
-  
+
   // Setup of the Task Manager Callbacks
   connect(TaskManager::self(), SIGNAL(activeTaskChanged(Task::TaskPtr)), this,
                   SLOT(activeTaskChanged(Task::TaskPtr)));
@@ -138,7 +138,7 @@ Karamba::Karamba(KUrl themeFile, QGraphicsView *view, QGraphicsScene *scene,
               SLOT(slotDesktopChanged(int)));
 
   preparePopupMenu();
-  
+
   parseConfig();
 
   if(!(m_onTop || m_managed))
@@ -152,11 +152,11 @@ Karamba::Karamba(KUrl themeFile, QGraphicsView *view, QGraphicsScene *scene,
   QString instanceString;
   if(m_instance > 1)
     instanceString = QString("-%1").arg(m_instance);
-  
+
   QString cfg = QDir::home().absolutePath() + "/.superkaramba/"
                 + m_theme.id() + instanceString + ".rc";
   kDebug() << cfg << endl;
-  
+
   QFile themeConfigFile(cfg);
   // Tests if config file Exists
   if(!QFileInfo(themeConfigFile).exists())
@@ -165,8 +165,8 @@ Karamba::Karamba(KUrl themeFile, QGraphicsView *view, QGraphicsScene *scene,
     themeConfigFile.open(QIODevice::ReadWrite);
     themeConfigFile.close();
   }
-   
-  m_config = new KConfig(cfg, false, false);
+
+  m_config = new KConfig(cfg, KConfig::NoGlobals );
   m_config->sync();
   m_config->setGroup("internal");
 
@@ -461,7 +461,7 @@ bool Karamba::parseConfig()
         m_tempUnit = temp.at(0).toAscii();
         m_foundKaramba = true;
       }
-      
+
       if(lineParser.meter() == "THEME")
       {
         QString path = lineParser.getString("PATH");
@@ -471,7 +471,7 @@ bool Karamba::parseConfig()
 
         new Karamba(path, m_view, m_scene);
       }
-      
+
       if(lineParser.meter() == "<GROUP>")
       {
         int offsetX = offsetStack.top().x();
@@ -492,11 +492,11 @@ bool Karamba::parseConfig()
         bool preview = lineParser.getBoolean("PREVIEW");
         ClickArea *tmp = new ClickArea(this, preview, x, y, w, h);
         tmp->setOnClick(lineParser.getString("ONCLICK"));
-        
+
 
         setSensor(lineParser, (Meter*)tmp);
       }
-      
+
       if(lineParser.meter() == "SENSOR=PROGRAM")
       {
         setSensor(lineParser, 0 );
@@ -530,7 +530,7 @@ bool Karamba::parseConfig()
 
         setSensor(lineParser, (Meter*)tmp);
       }
-      
+
       if(lineParser.meter() == "DEFAULTFONT" )
       {
         delete m_defaultTextField;
@@ -589,7 +589,7 @@ bool Karamba::parseConfig()
 
           setSensor(lineParser, (Meter*)tmp);
         }
-        
+
         if(lineParser.meter() == "CLICKMAP")
         {
           m_view->setInteractive(true);
@@ -628,7 +628,7 @@ bool Karamba::parseConfig()
         if(lineParser.meter() == "INPUT")
         {
           Input *tmp = new Input(this, x, y, w, h);
-          
+
           QString name = lineParser.getString("NAME");
           //if (!name.isEmpty())
             //tmp->setObjectName(name);
@@ -636,7 +636,7 @@ bool Karamba::parseConfig()
           tmp->setTextProps(tmpText);
           tmp->setValue(
               m_theme.locale()->translate(lineParser.getString("VALUE")));
-          
+
           //meterList->append(tmp);
           //passive = false;
         }
@@ -686,7 +686,7 @@ bool Karamba::parseConfig()
           //KDE 3.2 addition for the always on top issues
           //KWin::setState(m_view->winId(), NET::KeepBelow);
     }
- 
+
     m_theme.close();
   }
   //qDebug("parseConfig ok: %d", foundKaramba);
@@ -729,7 +729,7 @@ Sensor* Karamba::findSensorFromList(Meter* meter)
     if(((Sensor*)sensor)->hasMeter(meter))
       return ((Sensor*)sensor);
   }
-  
+
   return NULL;
 }
 
@@ -754,7 +754,7 @@ void Karamba::deleteMeterFromSensors(Meter* meter)
 QString Karamba::getSensor(Meter* meter)
 {
   Sensor* sensor = findSensorFromList(meter);
-  
+
   if(sensor)
     return findSensorFromMap(sensor);
 
@@ -764,7 +764,7 @@ QString Karamba::getSensor(Meter* meter)
 bool Karamba::removeMeter(Meter* meter)
 {
   QList<QGraphicsItem*> items = QGraphicsItemGroup::children();
-  
+
   if(items.contains(meter))
   {
     deleteMeterFromSensors(meter);
@@ -787,7 +787,7 @@ void Karamba::setSensor(const LineParser& lineParser, Meter* meter)
   {
     QString cpuNbr = lineParser.getString("CPU");
     sensor = m_sensorMap["CPU"+cpuNbr];
-    
+
     if(sensor == 0)
     {
       int interval = lineParser.getInt("INTERVAL");
@@ -805,7 +805,7 @@ void Karamba::setSensor(const LineParser& lineParser, Meter* meter)
     sensor->addMeter(sp);
     sensor->setMaxValue(sp);
   }
- 
+
   if(sens == "MEMORY")
   {
     sensor = m_sensorMap["MEMORY"];
@@ -824,7 +824,7 @@ void Karamba::setSensor(const LineParser& lineParser, Meter* meter)
     sensor->addMeter(sp);
     sensor->setMaxValue(sp);
   }
-  
+
   if(sens == "DISK")
   {
     sensor = m_sensorMap["DISK"];
@@ -892,7 +892,7 @@ void Karamba::setSensor(const LineParser& lineParser, Meter* meter)
     SensorParams *sp = new SensorParams(meter);
     sp->addParam("FORMAT",
                  m_theme.locale()->translate(lineParser.getString("FORMAT")));
-    
+
     sensor->addMeter(sp);
   }
 
@@ -920,7 +920,7 @@ void Karamba::setSensor(const LineParser& lineParser, Meter* meter)
     QString path = lineParser.getString("PATH");
     bool rdf = lineParser.getBoolean("RDF");
     sensor = m_sensorMap["TEXTFILE"+path];
-    
+
     if(sensor == 0)
     {
       int interval = lineParser.getInt("INTERVAL");
@@ -952,7 +952,7 @@ void Karamba::setSensor(const LineParser& lineParser, Meter* meter)
                  m_theme.locale()->translate(lineParser.getString("FORMAT")));
     sp->addParam("CALWIDTH",lineParser.getString("CALWIDTH"));
     sp->addParam("CALHEIGHT",lineParser.getString("CALHEIGHT"));
-    
+
     sensor->addMeter(sp);
   }
 
@@ -1004,11 +1004,11 @@ Not used in KDE4
   {
     QString progName = lineParser.getString("PROGRAM");
     sensor = m_sensorMap["PROGRAM"+progName];
-    
+
     if(sensor == 0)
     {
       int interval = lineParser.getInt("INTERVAL");
-      
+
       interval = (interval == 0) ? 3600000 : interval;
       QString encoding = lineParser.getString("ENCODING");
 
@@ -1094,7 +1094,7 @@ void Karamba::writeConfigData()
   m_config->writeEntry("lockedPosition", m_toggleLocked-> isChecked() );
   m_config->writeEntry("desktop", m_desktop);
   m_config->setGroup("theme");
-  
+
   // Widget Position
   if(!m_globalView)
   {
@@ -1106,11 +1106,11 @@ void Karamba::writeConfigData()
     m_config->writeEntry("widgetPosX", x());
     m_config->writeEntry("widgetPosY", y());
   }
-  
+
   // Widget Size
   m_config->writeEntry("widgetWidth", boundingRect().width());
   m_config->writeEntry("widgetHeight", boundingRect().height());
-  
+
   // write changes to DiskSensor
   m_config->sync();
 }
@@ -1294,7 +1294,7 @@ void Karamba::deletePopupMenu(KMenu *menu)
 }
 
 void Karamba::deleteMenuItem(QAction *action)
-{ 
+{
   foreach(KMenu* menu, *m_menuList)
   {
     QList<QAction*> actions = menu->actions();
@@ -1365,7 +1365,7 @@ void Karamba::slotQuit()
 }
 
 QRectF Karamba::boundingRect() const
-{ 
+{
   return size;
 }
 
@@ -1409,7 +1409,7 @@ void Karamba::timerEvent(QTimerEvent *event)
     m_scaleStep--;
 
   update();
- 
+
   if((m_scaleStep == -1) || (m_scaleStep == 10))
     killTimer(event->timerId());
 */
@@ -1580,7 +1580,7 @@ void Karamba::mousePressEvent(QGraphicsSceneMouseEvent *event)
   {
     m_showMenu = !m_showMenu;
     //startTimer(4);
-    
+
     //m_popupMenu->exec(mapToScene(event->pos()).toPoint());
   }
 
@@ -1627,7 +1627,7 @@ void Karamba::wheelEvent(QGraphicsSceneWheelEvent *event)
 }
 
 void Karamba::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
-{ 
+{
   if(m_python)
     m_python->widgetMouseMoved(this, (int)event->pos().x(), (int)event->pos().y(), 0/*button*/);
 

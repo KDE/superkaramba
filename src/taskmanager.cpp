@@ -98,7 +98,7 @@ TaskManager::~TaskManager()
 
 void TaskManager::configure_startup()
 {
-    KConfig c("klaunchrc", true);
+    KConfig c("klaunchrc");
     c.setGroup("FeedbackStyle");
     if (!c.readEntry("TaskbarButton", QVariant(true)).toBool())
         return;
