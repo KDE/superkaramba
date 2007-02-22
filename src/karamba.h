@@ -208,7 +208,7 @@ class Karamba : public QObject, public QGraphicsItemGroup
     int m_scaleStep;
     bool m_showMenu;
 
-    QList<Sensor*> *m_sensorList;
+    QList<Sensor*> m_sensorList;
     QMap<QString, Sensor*> m_sensorMap;
 
     KMenu *m_popupMenu;
@@ -226,7 +226,7 @@ class Karamba : public QObject, public QGraphicsItemGroup
 
     int m_instance;
 
-    QList<KMenu*> *m_menuList;
+    QList<KMenu*> m_menuList;
 
     QString m_prettyName;
 

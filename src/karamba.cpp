@@ -51,14 +51,37 @@
 #include "sensors/cpu.h"
 
 
-Karamba::Karamba(KUrl themeFile, QGraphicsView *view, QGraphicsScene *scene,
-    int instance) :
-    QObject(), QGraphicsItemGroup(0, scene),
-    m_scene(scene), m_view(view), m_useKross(false), m_python(0), m_interface(0), m_foundKaramba(false), m_onTop(false),
-    m_managed(false), m_desktop(0), m_interval(0), m_tempUnit('C'),
-    m_scaleStep(-1), m_showMenu(false), m_popupMenu(0),
-    m_stepTimer(0), m_signalMapperConfig(0), m_signalMapperDesktop(0), m_config(0), m_instance(instance),
-    m_menuList(0), m_wantRightButton(false), m_globalView(true)
+Karamba::Karamba(KUrl themeFile, QGraphicsView *view, QGraphicsScene *scene, int instance)
+  : QObject(),
+    QGraphicsItemGroup(0, scene),
+    m_scene(0),
+    m_view(0),
+    m_KWinModule(0),
+    m_useKross(false),
+    m_python(0),
+    m_interface(0),
+    m_foundKaramba(false),
+    m_onTop(false),
+    m_managed(false),
+    m_info(0),
+    m_desktop(0),
+    m_interval(0),
+    m_tempUnit('C'),
+    m_defaultTextField(0),
+    m_scaleStep(-1),
+    m_showMenu(false),
+    m_popupMenu(0),
+    m_toggleLocked(0),
+    m_themeConfMenu(0),
+    m_toDesktopMenu(0),
+    m_globalMenu(0),
+    m_stepTimer(0),
+    m_signalMapperConfig(0),
+    m_signalMapperDesktop(0),
+    m_config(0),
+    m_instance(instance),
+    m_wantRightButton(false),
+    m_globalView(true)
 {
   if(m_view == 0 && m_scene == 0)
   {
@@ -100,8 +123,6 @@ Karamba::Karamba(KUrl themeFile, QGraphicsView *view, QGraphicsScene *scene,
 
   m_defaultTextField = new TextField();
 
-  m_sensorList = new QList<Sensor*>();
-
   m_KWinModule = new KWinModule();
   connect(m_KWinModule,SIGNAL(currentDesktopChanged(int)), this,
           SLOT(currentDesktopChanged(int)));
@@ -126,8 +147,6 @@ Karamba::Karamba(KUrl themeFile, QGraphicsView *view, QGraphicsScene *scene,
                   SLOT(startupAdded(Startup::StartupPtr)));
   connect(TaskManager::self(), SIGNAL(startupRemoved(Startup::StartupPtr)), this,
                   SLOT(startupRemoved(Startup::StartupPtr)));
-
-  m_menuList = new QList<KMenu*>;
 
   m_signalMapperConfig = new QSignalMapper(this);
   connect(m_signalMapperConfig, SIGNAL(mapped(QObject*)), this,
@@ -223,13 +242,8 @@ Karamba::~Karamba()
     delete m_interface;
   }
 
-  int items = m_sensorList->count();
-  for(int i = 0; i < items; i++)
-  {
-    Sensor *s = (Sensor*)m_sensorList->takeFirst();
-    delete s;
-  }
-  delete m_sensorList;
+  qDeleteAll(m_sensorList);
+  m_sensorList.clear();
 
   delete m_globalMenu;
   delete m_toDesktopMenu;
@@ -720,16 +734,15 @@ QString Karamba::findSensorFromMap(Sensor* sensor)
   return "";
 }
 
-Sensor* Karamba::findSensorFromList(Meter* meter)
+Sensor *Karamba::findSensorFromList(Meter* meter)
 {
-  QObject *sensor;
-  foreach(sensor, *m_sensorList)
+  foreach(Sensor *sensor, m_sensorList)
   {
-    if(((Sensor*)sensor)->hasMeter(meter))
-      return ((Sensor*)sensor);
+    if (sensor->hasMeter(meter))
+      return sensor;
   }
 
-  return NULL;
+  return 0;
 }
 
 void Karamba::deleteMeterFromSensors(Meter* meter)
@@ -744,7 +757,7 @@ void Karamba::deleteMeterFromSensors(Meter* meter)
     {
       QString s = findSensorFromMap(sensor);
       m_sensorMap.remove(s);
-      m_sensorList->removeAll(sensor);
+      m_sensorList.removeAll(sensor);
       delete sensor;
     }
   }
@@ -792,7 +805,7 @@ void Karamba::setSensor(const LineParser& lineParser, Meter* meter)
       int interval = lineParser.getInt("INTERVAL");
       interval = (interval == 0) ? 1000 : interval;
       sensor = (m_sensorMap["CPU" + cpuNbr] = new CPUSensor(cpuNbr, interval));
-      m_sensorList->append(sensor);
+      m_sensorList.append(sensor);
     }
 
     SensorParams *sp = new SensorParams(meter);
@@ -813,7 +826,7 @@ void Karamba::setSensor(const LineParser& lineParser, Meter* meter)
       int interval = lineParser.getInt("INTERVAL");
       interval = (interval == 0) ? 3000 : interval;
       sensor = (m_sensorMap["MEMORY"] = new MemSensor(interval));
-      m_sensorList->append(sensor);
+      m_sensorList.append(sensor);
     }
 
     SensorParams *sp = new SensorParams(meter);
@@ -833,7 +846,7 @@ void Karamba::setSensor(const LineParser& lineParser, Meter* meter)
       int interval = lineParser.getInt("INTERVAL");
       interval = (interval == 0) ? 5000 : interval;
       sensor = (m_sensorMap["DISK"] = new DiskSensor(interval));
-      m_sensorList->append(sensor);
+      m_sensorList.append(sensor);
     }
     // meter->setMax( ((DiskSensor*)sensor)->getTotalSpace(mntPt)/1024 );
     SensorParams *sp = new SensorParams(meter);
@@ -866,7 +879,7 @@ void Karamba::setSensor(const LineParser& lineParser, Meter* meter)
     {
       sensor = (m_sensorMap["NETWORK"+device] =
           new NetworkSensor(device, interval));
-      m_sensorList->append(sensor);
+      m_sensorList.append(sensor);
     }
 
     SensorParams *sp = new SensorParams(meter);
@@ -885,7 +898,7 @@ void Karamba::setSensor(const LineParser& lineParser, Meter* meter)
       int interval = lineParser.getInt("INTERVAL");
       interval = (interval == 0) ? 60000 : interval;
       sensor = (m_sensorMap["UPTIME"] = new UptimeSensor(interval));
-      m_sensorList->append(sensor);
+      m_sensorList.append(sensor);
     }
 
     SensorParams *sp = new SensorParams(meter);
@@ -904,7 +917,7 @@ void Karamba::setSensor(const LineParser& lineParser, Meter* meter)
       int interval = lineParser.getInt("INTERVAL");
       interval = (interval == 0) ? 30000 : interval;
       sensor = (m_sensorMap["SENSOR"] = new SensorSensor(interval, m_tempUnit));
-      m_sensorList->append(sensor);
+      m_sensorList.append(sensor);
     }
 
     SensorParams *sp = new SensorParams(meter);
@@ -928,7 +941,7 @@ void Karamba::setSensor(const LineParser& lineParser, Meter* meter)
 
       sensor = (m_sensorMap["TEXTFILE"+path] =
                    new TextFileSensor( path, rdf, interval, encoding ) );
-      m_sensorList->append(sensor);
+      m_sensorList.append(sensor);
     }
 
     SensorParams *sp = new SensorParams(meter);
@@ -943,7 +956,7 @@ void Karamba::setSensor(const LineParser& lineParser, Meter* meter)
       int interval = lineParser.getInt("INTERVAL");
       interval = (interval == 0) ? 60000 : interval;
       sensor = (m_sensorMap["DATE"] = new DateSensor(interval));
-      m_sensorList->append(sensor);
+      m_sensorList.append(sensor);
     }
     SensorParams *sp = new SensorParams(meter);
 
@@ -1013,7 +1026,7 @@ Not used in KDE4
 
       sensor = (m_sensorMap["PROGRAM"+progName] =
                   new ProgramSensor(progName, interval, encoding ));
-      m_sensorList->append(sensor);
+      m_sensorList.append(sensor);
     }
 
     SensorParams *sp = new SensorParams(meter);
@@ -1037,7 +1050,7 @@ Not used in KDE4
 
       sensor = ( m_sensorMap["RSS"+source] =
                    new RssSensor( source, interval, format, encoding ) );
-      m_sensorList->append( sensor );
+      m_sensorList.append( sensor );
     }
     SensorParams *sp = new SensorParams(meter);
     sp->addParam("SOURCE",lineParser.getString("SOURCE"));
@@ -1055,8 +1068,7 @@ Not used in KDE4
 
 void Karamba::updateSensors()
 {
-  Sensor *sensor;
-  foreach(sensor, *m_sensorList)
+  foreach(Sensor *sensor, m_sensorList)
     sensor->update();
 }
 
@@ -1257,14 +1269,14 @@ bool Karamba::readMenuConfigOption(QString key)
   return false;
 }
 
-KMenu* Karamba::addPopupMenu()
+KMenu *Karamba::addPopupMenu()
 {
   KMenu *tmp = new KMenu();
 
   connect(tmp, SIGNAL(triggered(QAction*)), this,
                      SLOT(passMenuItemClicked(QAction*)));
 
-  m_menuList->append(tmp);
+  m_menuList.append(tmp);
   return tmp;
 }
 
@@ -1285,15 +1297,15 @@ void Karamba::popupMenu(KMenu *menu, QPoint pos)
 
 void Karamba::deletePopupMenu(KMenu *menu)
 {
-  int index = m_menuList->indexOf(menu);
-  m_menuList->takeAt(index);
+  int index = m_menuList.indexOf(menu);
+  m_menuList.takeAt(index);
 
   delete menu;
 }
 
 void Karamba::deleteMenuItem(QAction *action)
 {
-  foreach(KMenu* menu, *m_menuList)
+  foreach(KMenu* menu, m_menuList)
   {
     QList<QAction*> actions = menu->actions();
     if(actions.contains(action))
@@ -1306,7 +1318,7 @@ void Karamba::deleteMenuItem(QAction *action)
 
 bool Karamba::popupMenuExisting(KMenu *menu)
 {
-  return m_menuList->contains(menu);
+  return m_menuList.contains(menu);
 }
 
 void Karamba::scaleImageLabel(Meter *meter, int width,
@@ -1746,7 +1758,7 @@ void Karamba::showMenuExtension()
 
 void Karamba::hideMenuExtension()
 {
-  delete m_globalMenu;
+//  delete m_globalMenu;
 }
 
 int Karamba::instance()
