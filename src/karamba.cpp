@@ -1761,7 +1761,7 @@ void Karamba::setInstance(int instance)
 
 void Karamba::moveToPos(QPoint pos)
 {
-  if(m_globalView)
+  if(!m_globalView)
     m_view->move(pos);
   else
     setPos(pos);
@@ -1777,7 +1777,7 @@ void Karamba::resizeTo(int width, int height)
 
 QPoint Karamba::getPosition()
 {
-  if(m_globalView)
+  if(!m_globalView)
     return m_view->pos();
   else
     return pos().toPoint();

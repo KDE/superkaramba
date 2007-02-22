@@ -33,20 +33,6 @@
 #include "python/meter.h"
 #include "python/widget.h"
 
-/* now a method we need to expose to Python */
-int getWidgetXCoordinate(long widget)
-{
-  Karamba* currTheme = (Karamba*)widget;
-  return (int)currTheme->x();
-}
-
-/* now a method we need to expose to Python */
-int getWidgetYCoordinate(long widget)
-{
-  Karamba* currTheme = (Karamba*)widget;
-  return (int)currTheme->y();
-}
-
 PyObject* py_get_widget_position(PyObject *, PyObject *args)
 {
   long widget;
@@ -54,8 +40,9 @@ PyObject* py_get_widget_position(PyObject *, PyObject *args)
     return NULL;
   if (!checkKaramba(widget))
     return NULL;
-  return Py_BuildValue((char*)"(i,i)", getWidgetXCoordinate(widget),
-                                getWidgetYCoordinate(widget));
+
+  QPoint pos = ((Karamba*)widget)->getPosition();
+  return Py_BuildValue((char*)"(i,i)", pos.x(), pos.y());
 }
 
 // Keep compatibility
