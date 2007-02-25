@@ -6,7 +6,6 @@ b = 0
 
 #this is called when you widget is initialized
 def initWidget(widget):
-    global bars, b
     bars[0] = karamba.getThemeBar(widget, "bar0")
     bars[1] = karamba.getThemeBar(widget, "bar1")
     bars[2] = karamba.getThemeBar(widget, "bar2")
@@ -20,8 +19,6 @@ def initWidget(widget):
 #this is called everytime your widget is updated
 #the update inverval is specified in the .theme file
 def widgetUpdated(widget):
-    global bars, b
-    
     # vertical & bitmap
     b = karamba.getBarVertical(widget, bars[7])
     print "getVertical: " + str(b)
@@ -91,3 +88,6 @@ def widgetMouseMoved(widget, x, y, button):
 
 # This will be printed when the widget loads.
 print "Loaded Bar test python extension!"
+#import karamba
+#karamba.connect("initWidget(QObject*)", initWidget)
+#karamba.connect("widgetUpdated(QObject*)", widgetUpdated)
