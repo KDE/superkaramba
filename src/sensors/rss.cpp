@@ -8,12 +8,18 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-#include "karambaapp.h"
-#include "rss.h"
-#include <qdom.h>
-#include <qregexp.h>
+#include <QDomDocument>
+#include <QDomElement>
+#include <QDomNode>
+#include <QRegExp>
+#include <QFile>
+
 #include <kurl.h>
 #include <kio/netaccess.h>
+
+#include "karambaapp.h"
+#include "rss.h"
+#include "rss.moc"
 
 RssSensor::RssSensor( const QString &src, int interval, const QString &form, const QString &enc)
     : Sensor(interval),
@@ -127,4 +133,3 @@ void RssSensor::update()
     KIO::NetAccess::removeTempFile( tmpFile );
 }
 
-#include "rss.moc"

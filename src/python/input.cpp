@@ -28,12 +28,17 @@
 #endif
 
 #include <Python.h>
-#include <qobject.h>
-#include "karamba.h"
+
+#include <QObject>
+#include <QGraphicsScene>
+
 #include "meters/meter.h"
 #include "meters/input.h"
+
 #include "python/meter.h"
 #include "python/input.h"
+
+#include "../karamba.h"
 
 PyObject* py_createInputBox(PyObject *, PyObject *args)
 {

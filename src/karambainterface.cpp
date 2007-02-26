@@ -18,9 +18,16 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  ****************************************************************************/
 
-#include "lineparser.h"
+#include <QGraphicsScene>
 
+#include <kdebug.h>
+#include <kmenu.h>
+
+#include "karamba.h"
+#include "karambaapp.h"
+#include "lineparser.h"
 #include "karambainterface.h"
+#include "karambainterface.moc"
 
 KarambaInterface::KarambaInterface(Karamba *k)
   : QObject(),
@@ -1563,5 +1570,3 @@ bool KarambaInterface::toggleWidgetRedraw(Karamba *k, bool enable)
   return true;
 }
 
-
-#include "karambainterface.moc"

@@ -27,11 +27,15 @@
 #endif
 
 #include <Python.h>
+
 #include <qobject.h>
-#include "karamba.h"
+
 #include "meters/richtextlabel.h"
+
 #include "python/meter.h"
 #include "python/richtextlabel.h"
+
+#include "../karamba.h"
 
 PyObject* py_createRichText(PyObject *, PyObject *args)
 {

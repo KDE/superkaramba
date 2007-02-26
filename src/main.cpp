@@ -120,7 +120,7 @@ int main(int argc, char **argv)
 
     KarambaApplication app(dpy, Qt::HANDLE(visual), Qt::HANDLE(colormap));
 
-    app.setUpSysTray(&about);
+    app.setupSysTray(&about);
 
     int ret = 0;
     KarambaPython::initPython();

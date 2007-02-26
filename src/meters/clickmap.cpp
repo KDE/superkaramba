@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2003 by Ralph M. Churchill                              *
- *   mrchucho@yahoo.com                                                    *
+ *   Copyright (C) 2003 by Ralph M. Churchill <mrchucho@yahoo.com>         *
+ *   Copyright (C) 2007 Matt Broadstone <mbroadst@gmail.com>               *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -8,14 +8,17 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-#include "clickmap.h"
-#include <qregexp.h>
-//Added by qt3to4:
-#include <QMouseEvent>
 #include <krun.h>
 
+#include <QRegExp>
+#include <QPainter>
+#include <QGraphicsSceneMouseEvent>
+
+#include "clickmap.h"
+#include "clickmap.moc"
+
 ClickMap::ClickMap(Karamba* k, int x, int y, int w, int h )
-    :Meter(k, x, y, w, h )
+    :   Meter(k, x, y, w, h )
 {
 /*
     if( h != 0 || w != 0)
@@ -42,14 +45,15 @@ void ClickMap::setTextProps( TextField *t )
 
 void ClickMap::mousePressEvent(QGraphicsSceneMouseEvent *e)
 {
-  int index = (int)((e->pos().y() - getY()) / text.getLineHeight()) + 1;
-  if (index >= 1 && index <= (int)displays.count()) {
-    // qDebug( "You clicked item " + QString::number( index ) + ", " +
-   //  displays[index - 1] + " " + links[index - 1] );
-   KRun::runCommand("konqueror " + links[index - 1]);
-  }
+    int index = (int)((e->pos().y() - getY()) / text.getLineHeight()) + 1;
+    if (index >= 1 && index <= (int)displays.count())
+    {
+        // qDebug( "You clicked item " + QString::number( index ) + ", " +
+        //  displays[index - 1] + " " + links[index - 1] );
+        KRun::runCommand("konqueror " + links[index - 1]);
+    }
 
-  return;
+    return;
 }
 
 void ClickMap::paint(QPainter *p, const QStyleOptionGraphicsItem *option,
@@ -65,7 +69,7 @@ void ClickMap::paint(QPainter *p, const QStyleOptionGraphicsItem *option,
     p->setOpacity(m_opacity);
 
     QStringList::Iterator it = displays.begin();
-    while( it != displays.end() && (row <= getHeight() || getHeight() == -1 )   )
+    while (it != displays.end() && (row <= getHeight() || getHeight() == -1 ))
     {
         p->setPen( text.getColor() );
         // p->drawText(x,y+i,width,height,  Qt::AlignCenter | Qt::ExpandTabs, *it);
@@ -78,15 +82,11 @@ void ClickMap::paint(QPainter *p, const QStyleOptionGraphicsItem *option,
 
 void ClickMap::setValue( QString v )
 {
-  QRegExp rx("^http://", Qt::CaseInsensitive);
+    QRegExp rx("^http://", Qt::CaseInsensitive);
     if ( rx.indexIn( v ) == -1 )
-    {
         displays.append( v );
-    }
     else
-    {
         links.append( v );
-    }
 }
 
 void ClickMap::setValue( int v )
@@ -98,4 +98,3 @@ void ClickMap::setValue( int v )
     }
 }
 
-#include "clickmap.moc"

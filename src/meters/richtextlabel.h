@@ -1,6 +1,7 @@
 /***************************************************************************
- *   Copyright (C) 2003 by Wilfried Huss                                   *
- *   Wilfried.Huss@gmx.at                                                  *
+ *   Copyright (C) 2003 by Wilfried Huss <Wilfried.Huss@gmx.at>            *
+ *   Copyright (C) 2003 Matt Broadstone <mbroadst@gmail.com>               *
+ *                                                                         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -11,23 +12,18 @@
 #ifndef RICHTEXTLABEL_H
 #define RICHTEXTLABEL_H
 
-#include "meter.h"
-#include <qstring.h>
-#include <qpainter.h>
-#include <qfont.h>
-#include <qfontmetrics.h>
-#include <qrect.h>
-#include <qsize.h>
-//Added by qt3to4:
-#include <QMouseEvent>
-#include <QPalette>  //KDE4 QT Support
-#include <QTextDocument>
-#include "karamba.h"
+#include <QFont>
+#include <QPalette>
 
+#include "meter.h"
+
+class QTextDocument;
+class Karamba;
+class TextField;
 class RichTextLabel : public Meter
 {
     Q_OBJECT
-  public:
+public:
     RichTextLabel(Karamba*);
     RichTextLabel(Karamba* k, int x, int y, int w, int h);
     ~RichTextLabel();
@@ -54,7 +50,7 @@ class RichTextLabel : public Meter
     bool mouseEvent(QGraphicsSceneMouseEvent *event);
     QString getAnchor(QPointF point);
 
-  private:
+private:
     QTextDocument* text;
 
     QString source;
@@ -62,6 +58,7 @@ class RichTextLabel : public Meter
     QPalette colorGrp;
     bool underlineLinks;
     QSize originalSize;
+
 };
 
 #endif

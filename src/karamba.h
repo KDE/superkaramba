@@ -26,52 +26,30 @@
 #ifndef KARAMBA_H
 #define KARAMBA_H
 
-#include <QGraphicsView>
-#include <QGraphicsScene>
-#include <QGraphicsItem>
 #include <QGraphicsItemGroup>
-#include <QThread>
-#include <QTimer>
-#include <QMutex>
-#include <QMutexLocker>
-#include <QSignalMapper>
 
 #include <kurl.h>
-#include <kmenu.h>
 #include <netwm.h>
-#include <kactioncollection.h>
-#include <ktoggleaction.h>
-#include <kwinmodule.h>
-#include <kconfig.h>
 
-#include "karambaapp.h"
 #include "themefile.h"
 #include "taskmanager.h"
-#include "systemtray.h"
-#include "karambainterface.h"
 
-#include "meters/textfield.h"
-#include "meters/richtextlabel.h"
-#include "meters/bar.h"
-#include "meters/graph.h"
+class QGraphicsView;
+class QGraphicsScene;
+class QSignalMapper;
 
-#include "sensors/sensor.h"
-#include "sensors/mem.h"
-#include "sensors/disk.h"
-#include "sensors/network.h"
-#include "sensors/date.h"
-#include "sensors/program.h"
-#include "sensors/sensorparams.h"
-#include "sensors/textfile.h"
-#include "sensors/rss.h"
-#include "sensors/uptime.h"
-#include "sensors/lmsensor.h"
-
-#include "python/karamba.h"
+class KMenu;
+class KToggleAction;
+class KWinModule;
+class KConfig;
+class KProcess;
 
 class Meter;
+class Sensor;
+class Systemtray;
+class TextField;
 class KarambaInterface;
-
+class KarambaPython;
 class Karamba : public QObject, public QGraphicsItemGroup
 {
     Q_OBJECT

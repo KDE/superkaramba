@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2003 by Ralph M. Churchill                              *
- *   mrchucho@yahoo.com                                                    *
+ *   Copyright (C) 2003 by Ralph M. Churchill <mrchucho@yahoo.com>         *
+ *   Copyright (C) 2007 Matt Broadstone <mbroadst@gmail.com>               *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -11,19 +11,12 @@
 #ifndef CLICKMAP_H
 #define CLICKMAP_H
 
-#include "meter.h"
 #include "textfield.h"
-//Added by qt3to4:
-#include <QMouseEvent>
-#include <QGraphicsSceneMouseEvent>
+#include "meter.h"
 
-/**
- *
- * Ralph M. Churchill
- **/
 class ClickMap : public Meter
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     ClickMap(Karamba* k, int x, int y, int w, int h);
     ~ClickMap();
@@ -41,6 +34,7 @@ private:
 
     QStringList links;
     QStringList displays;
+
 };
 
 #endif

@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2003 by Hans Karlsson                                   *
- *   karlsson.h@home.se                                                      *
+ *   Copyright (C) 2003 by Hans Karlsson <karlsson.h@home.se>              *
+ *   Copyright (C) 2003 Matt Broadstone <mbroadst@gmail.com>               *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -11,11 +11,9 @@
 #define BAR_H
 
 #include "meter.h"
-#include <qpixmap.h>
-#include <qstring.h>
-#include <qpainter.h>
-#include <QTimerEvent>
 
+class QPainter;
+class QTimer;
 class Bar : public Meter
 {
 Q_OBJECT
@@ -58,8 +56,6 @@ private:
     QString imagePath;
     QPixmap pixmap;
 
-  protected:
-    //void timerEvent(QTimerEvent *event);
 };
 
 #endif // BAR_H

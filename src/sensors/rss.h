@@ -11,14 +11,9 @@
 #ifndef RSSSENSOR_H
 #define RSSSENSOR_H
 
-#include "sensors/sensor.h"
-#include <qstring.h>
-#include <qtextcodec.h>
+#include "sensor.h"
 
-/**
- *
- * Ralph M. Churchill
- **/
+class QTextCodec;
 class RssSensor : public Sensor
 {
     Q_OBJECT

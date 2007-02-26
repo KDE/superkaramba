@@ -27,11 +27,17 @@
 #endif
 
 #include <Python.h>
-#include <qobject.h>
-#include "../karamba.h"
+
+#include <QObject>
+
+#include <kconfig.h>
+
 #include "meters/meter.h"
+
 #include "python/meter.h"
 #include "python/config.h"
+
+#include "../karamba.h"
 
 // API-Function addMenuConfigOption
 long addMenuConfigOption(long widget, QString key, QString name)

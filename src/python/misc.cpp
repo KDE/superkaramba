@@ -28,27 +28,30 @@
 #endif
 
 #include <Python.h>
-#include <qglobal.h>
-#include <qobject.h>
+
+#include <QObject>
 #include <QList>
 
 #include <kglobal.h>
 #include <klocale.h>
 #include <kservice.h>
 #include <krun.h>
-#include "showdesktop.h"
+#include <kdebug.h>
 
-#include "kdebug.h"
-#include "../karamba.h"
-#include "karambaapp.h"
-#include "themefile.h"
-#include "themelocale.h"
 #include "meters/meter.h"
 #include "meters/imagelabel.h"
 #include "meters/textlabel.h"
 #include "meters/clickarea.h"
+
 #include "python/meter.h"
 #include "python/misc.h"
+
+#include "showdesktop.h"
+#include "karambaapp.h"
+#include "themefile.h"
+#include "themelocale.h"
+#include "../karamba.h"
+#include "../systemtray.h"
 
 /* now a method we need to expose to Python */
 long acceptDrops(long widget)

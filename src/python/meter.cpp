@@ -14,8 +14,8 @@
 
 #include <Python.h>
 #include <qobject.h>
-#include "karamba.h"
-#include "karambaapp.h"
+#include "../karamba.h"
+#include "../karambaapp.h"
 #include "meters/meter.h"
 #include "python/meter.h"
 #include "lineparser.h"

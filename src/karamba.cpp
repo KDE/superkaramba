@@ -22,40 +22,66 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  ****************************************************************************/
 
-
-
+#include <QGraphicsView>
+#include <QGraphicsScene>
 #include <QStack>
 #include <QDesktopWidget>
 #include <QApplication>
 #include <QX11Info>
 #include <QBitmap>
+#include <QSignalMapper>
 
 #include <kdebug.h>
 #include <kwin.h>
 #include <kicon.h>
 #include <klocale.h>
 #include <kdirwatch.h>
+#include <kmenu.h>
+#include <kwinmodule.h>
+#include <kconfig.h>
+#include <ktoggleaction.h>
 
-#include "karamba.h"
-#include "lineparser.h"
-#include "themelocale.h"
-#include "superkarambasettings.h"
-
+#include "meters/textfield.h"
+#include "meters/richtextlabel.h"
+#include "meters/bar.h"
+#include "meters/graph.h"
 #include "meters/textlabel.h"
 #include "meters/input.h"
 #include "meters/imagelabel.h"
 #include "meters/clickarea.h"
 #include "meters/clickmap.h"
-#include "meters/richtextlabel.h"
 
+#include "sensors/sensor.h"
+#include "sensors/mem.h"
+#include "sensors/disk.h"
+#include "sensors/network.h"
+#include "sensors/date.h"
+#include "sensors/program.h"
+#include "sensors/sensorparams.h"
+#include "sensors/textfile.h"
+#include "sensors/rss.h"
+#include "sensors/uptime.h"
+#include "sensors/lmsensor.h"
 #include "sensors/cpu.h"
 
+#include "python/karamba.h"
+
+#include "karambaapp.h"
+#include "systemtray.h"
+#include "karambainterface.h"
+#include "mainwidget.h"
+#include "lineparser.h"
+#include "themelocale.h"
+#include "superkarambasettings.h"
+
+#include "karamba.h"
+#include "karamba.moc"
 
 Karamba::Karamba(KUrl themeFile, QGraphicsView *view, QGraphicsScene *scene, int instance)
   : QObject(),
     QGraphicsItemGroup(0, scene),
-    m_scene(0),
-    m_view(0),
+    m_scene(scene),
+    m_view(view),
     m_KWinModule(0),
     m_useKross(false),
     m_python(0),
@@ -1793,4 +1819,3 @@ QPoint Karamba::getPosition()
     return pos().toPoint();
 }
 
-#include "karamba.moc"

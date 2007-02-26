@@ -10,22 +10,16 @@
 #ifndef TEXTLABEL_H
 #define TEXTLABEL_H
 
-#include "meter.h"
-
-#include <qstring.h>
-#include <qpainter.h>
-#include <qcolor.h>
-#include <qfont.h>
-#include <qfontmetrics.h>
-#include <qstringlist.h>
-#include <qrect.h>
-//Added by qt3to4:
-#include <QGraphicsSceneMouseEvent>
+#include <QColor>
+#include <QFont>
+#include <QStringList>
+#include <QRectF>
 
 #include "textfield.h"
+#include "meter.h"
 
-//class Meter;
-
+class QPainter;
+class Karamba;
 class TextLabel : public Meter
 {
 Q_OBJECT
