@@ -42,6 +42,7 @@ KarambaApplication::~KarambaApplication()
   {
     Karamba *k = m_karambas.takeFirst();
     k->closeWidget();
+    removeKaramba(k);
   }
 
   delete m_view;
@@ -84,7 +85,7 @@ void KarambaApplication::startThemes(QList<KUrl> &lst)
 void KarambaApplication::removeKaramba(Karamba *k)
 {
   m_karambas.removeAll(k);
-  
+
   if(m_scene)
     m_scene->removeItem(k);
 
@@ -103,6 +104,7 @@ void KarambaApplication::closeTheme(QString themeName)
     if(k->objectName() == themeName)
     {
       k->closeWidget();
+      removeKaramba(k);
     }
   }
 }
@@ -168,14 +170,16 @@ int KarambaApplication::newInstance()
 
 void KarambaApplication::globalQuitSuperKaramba()
 {
-  Karamba *k;
-  foreach(k, m_karambas)
+  foreach(Karamba *k, m_karambas)
+  {
     k->closeWidget();
+    removeKaramba(k);
+  }
 
   if(m_themesDialog)
     m_themesDialog->saveUserAddedThemes();
 
-  KarambaApplication::exit(0);
+  quit();
 }
 
 bool KarambaApplication::hasKaramba(Karamba *k)
