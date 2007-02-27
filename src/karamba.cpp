@@ -1116,6 +1116,8 @@ void Karamba::closeWidget()
   m_scene->removeItem(this);
 
   writeConfigData();
+
+  karambaApp->removeKaramba(this);
 }
 
 KConfig* Karamba::getConfig()
