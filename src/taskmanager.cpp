@@ -100,7 +100,7 @@ void TaskManager::configure_startup()
 {
     KConfig config("klaunchrc");
     KConfigGroup c(&config, "FeedbackStyle");
-    if (!c.readEntry("TaskbarButton", QVariant(true)).toBool())
+    if (!c.readEntry("TaskbarButton", true))
         return;
     _startup_info = new KStartupInfo( KStartupInfo::CleanOnCantDetect, this );
     connect( _startup_info,
