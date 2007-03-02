@@ -353,7 +353,7 @@ void ImageLabel::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
       if (cblend == 0)
       {
         //draw the pixmap
-        painter->drawPixmap(getX(),getY(),pixmap);
+        painter->drawPixmap(0, 0, pixmap);
       }
       else
       {
@@ -362,7 +362,7 @@ void ImageLabel::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
         QImage image = pixmap.toImage();
 
         QImage result = KImageEffect::blend(QColor(255,0,0), image, 0.5f);
-        painter->drawImage(getX(),getY(),result);
+        painter->drawImage(0, 0, result);
       }
     }
     // start Timer

@@ -96,7 +96,7 @@ void Input::mouseEvent(QGraphicsSceneMouseEvent *event)
 {
     QTextLine line = m_textLayout.lineAt(0);
 
-    QPoint pos = mapFromParent(event->pos()).toPoint() - boundingRect().topLeft().toPoint();
+    QPoint pos = mapFromParent(event->pos()).toPoint();
     m_cursorPos = line.xToCursor(pos.x() - 5 + m_hscroll);
     m_cursorVisible = true;
 

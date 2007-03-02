@@ -32,6 +32,11 @@ Meter::Meter(Karamba* k, int ix, int iy, int iw, int ih)
         m_karamba(k),
         m_opacity(0.0)
 {
+    boundingBox = QRect(0, 0, iw, ih);
+
+    QPointF ps = QPointF(ix, iy);
+    setPos(ps.x(), ps.y());
+
     m_opacityTimer = new QTimer(this);
     connect(m_opacityTimer, SIGNAL(timeout()), this, SLOT(fadeIn()));
     m_opacityTimer->start(10);
@@ -107,7 +112,8 @@ void Meter::setSize(int ix, int iy, int iw, int ih)
 {
     prepareGeometryChange();
 
-    boundingBox.setRect(ix, iy, iw, ih);
+    boundingBox.setRect(0, 0, iw, ih);
+    setPos(ix, iy);
     recalculateValue();
 
     update();
@@ -120,21 +126,19 @@ void Meter::setThemePath( QString path )
 
 int Meter::getX()
 {
-    return boundingBox.x();
+    return x();
 }
 
 int Meter::getY()
 {
-    return boundingBox.y();
+    return y();
 }
 
 void Meter::setX(int newx)
 {
     prepareGeometryChange();
-
-    int temp = boundingBox.width();
-    boundingBox.setX(newx);
-    boundingBox.setWidth(temp);
+    
+    setPos(newx, y());
 
     update();
 }
@@ -142,10 +146,8 @@ void Meter::setX(int newx)
 void Meter::setY(int newy)
 {
     prepareGeometryChange();
-
-    int temp = boundingBox.height();
-    boundingBox.setY(newy);
-    boundingBox.setHeight(temp);
+  
+    setPos(x(), newy);
 
     update();
 }

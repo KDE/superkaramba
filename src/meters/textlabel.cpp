@@ -298,7 +298,7 @@ int TextLabel::drawText(QPainter *p, int x, int y, int width, int height,
 }
 
 bool TextLabel::calculateScrollCoords(QRect meterRect, QRect &textRect,
-                                        QPoint &next, int &x, int &y)
+                                        QPoint &next, int x, int y)
 {
     if (scrollType == ScrollBackAndForth &&
         (scrollSpeed.x() != 0 && textSize.width() < getWidth() ||
@@ -360,11 +360,9 @@ void TextLabel::paint(QPainter *p, const QStyleOptionGraphicsItem *option,
     {
         int i = 0; //lineHeight;
         int row = 1;
-        int x = getX();
-        int y = getY();
         int width = getWidth();
         int height = getHeight();
-        QRect meterRect(x, y, width, height);
+        QRect meterRect(0, 0, width, height);
         QRect textRect;
         QPoint next;
 
@@ -372,8 +370,8 @@ void TextLabel::paint(QPainter *p, const QStyleOptionGraphicsItem *option,
         p->setOpacity(m_opacity);
         if (scrollType != ScrollNone)
         {
-            p->setClipRect(x, y, width, height);
-            if (!calculateScrollCoords(meterRect, textRect, next, x, y))
+            p->setClipRect(0, 0, width, height);
+            if (!calculateScrollCoords(meterRect, textRect, next, 0, 0))
             {
                 p->setClipping(false);
                 return;
@@ -385,7 +383,7 @@ void TextLabel::paint(QPainter *p, const QStyleOptionGraphicsItem *option,
         QStringList::Iterator it = value.begin();
         while (it != value.end() && (row <= height || height == -1 ))
         {
-            drawText(p, x, y + i, width, height, *it);
+            drawText(p, 0, 0 + i, width, height, *it);
 
             // Draw more instances of text if scroll type is normal scroll
             if (scrollType == ScrollNormal)

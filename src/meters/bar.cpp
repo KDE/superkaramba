@@ -154,9 +154,7 @@ void Bar::paint(QPainter *p, const QStyleOptionGraphicsItem *option,
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-    int x, y, width, height;
-    x = getX();
-    y = getY();
+    int width, height;
     width = getWidth();
     height = getHeight();
 
@@ -165,8 +163,8 @@ void Bar::paint(QPainter *p, const QStyleOptionGraphicsItem *option,
     {
         p->setOpacity(m_opacity);
         if(vertical)
-            p->drawTiledPixmap(x, y+height-value, width, value, pixmap, 0, pixmapHeight-value);
+            p->drawTiledPixmap(0, 0+height-value, width, value, pixmap, 0, pixmapHeight-value);
         else // horizontal
-            p->drawTiledPixmap(x, y, value, height, pixmap);
+            p->drawTiledPixmap(0, 0, value, height, pixmap);
     }
 }

@@ -90,7 +90,7 @@ private:
     int drawText(QPainter *p, int x, int y, int width, int height,
                  QString text);
     bool calculateScrollCoords(QRect meterRect, QRect &textRect,
-                               QPoint &next, int &x, int &y);
+                               QPoint &next, int x, int y);
     void calculateTextSize();
 };
 

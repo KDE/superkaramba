@@ -20,7 +20,7 @@ Graph::Graph(Karamba* k, int x, int y, int w, int h, int nbrPts):
 
     for(int i = 0; i < nbrPoints; i++)
     {
-      m_points << QPoint(x + w + 2, y + h);
+      m_points << QPoint(w + 2, h);
 
       m_points.translate(((qreal)-w-1) / nbrPoints, 0);
     }
@@ -47,8 +47,8 @@ void Graph::setValue( int v)
     }
     lastValue = v;
     
-    QPoint newPoint(getX() +  getWidth() - 1,
-          getHeight() - v * getHeight() /maxValue + getY());
+    QPoint newPoint(getWidth() - 1,
+          getHeight() - v * getHeight() / maxValue);
 
     m_points.translate(((qreal)-getWidth()-1) / nbrPoints, 0);
 

@@ -166,12 +166,9 @@ void RichTextLabel::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
     if(hidden || text == 0)
         return;
 
-    int x = getX();
-    int y = getY();
     int w = getWidth();
     int h = getHeight();
 
-    painter->translate(x, y);
     painter->setOpacity(m_opacity);
 
     text->drawContents(painter, QRect(0, 0, w, h));
@@ -179,7 +176,7 @@ void RichTextLabel::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
 
 bool RichTextLabel::mouseEvent(QGraphicsSceneMouseEvent *event)
 {
-    QPointF pos = event->pos() - boundingRect().topLeft();
+    QPointF pos = mapFromParent(event->pos());
 
     QString link = text->documentLayout()->anchorAt(pos);
     kDebug() << link << endl;
