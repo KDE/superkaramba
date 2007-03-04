@@ -292,7 +292,7 @@ void KarambaInterface::callMenuOptionChanged(Karamba *k, QString key, bool value
   emit menuOptionChanged(k, key, value);
 }
 
-void KarambaInterface::callMenuItemClicked(Karamba* k, KMenu* menu, int id)
+void KarambaInterface::callMenuItemClicked(Karamba* k, KMenu* menu, QAction *id)
 {
   emit menuItemClicked(k, menu, id);
 }

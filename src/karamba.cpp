@@ -1370,7 +1370,7 @@ void Karamba::passMenuItemClicked(QAction* action)
     m_python->menuItemClicked(this, (KMenu*)action->parentWidget(), (long)action);
 
   if(m_interface)
-    m_interface->callMenuItemClicked(this, (KMenu*)action->parentWidget(), (long)action);
+    m_interface->callMenuItemClicked(this, (KMenu*)action->parentWidget(), action);
 
 }
 

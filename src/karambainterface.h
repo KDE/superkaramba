@@ -54,7 +54,7 @@ class KarambaInterface : public QObject
     void callWidgetUpdated(Karamba *k);
     void callWidgetClosed(Karamba *k);
     void callMenuOptionChanged(Karamba *k, QString key, bool value);
-    void callMenuItemClicked(Karamba* k, KMenu* menu, int id);
+    void callMenuItemClicked(Karamba* k, KMenu* menu, QAction* id);
     void callActiveTaskChanged(Karamba *k, Task* t);
     void callTaskAdded(Karamba *k, Task *t);
     void callTaskRemoved(Karamba *k, Task *t);
@@ -74,7 +74,7 @@ class KarambaInterface : public QObject
     void initWidget(QObject*);
     void widgetUpdated(QObject*);
     void widgetClosed(QObject*);
-    void menuItemClicked(QObject*, QObject*, int id);
+    void menuItemClicked(QObject*, QObject*, QObject*);
     void menuOptionChanged(QObject*, QString, bool);
     void activeTaskChanged(QObject*, long long);
     void taskAdded(QObject*, long long);
