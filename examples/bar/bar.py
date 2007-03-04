@@ -88,21 +88,39 @@ def widgetMouseMoved(widget, x, y, button):
 
 # This will be printed when the widget loads.
 print "Loaded Bar test python extension!"
+
 #import karamba
-#karamba.connect("initWidget(QObject*)", initWidget)
-#karamba.connect("widgetUpdated(QObject*)", widgetUpdated)
-#karamba.connect("widgetClosed(QObject*)", widgetClosed)
-#karamba.connect("menuItemClicked(QObject*, QObject*, int)", menuItemClicked)
-#karamba.connect("menuOptionChanged(QObject*, QString, bool)", menuOptionChanged)
-#karamba.connect("activeTaskChanged(QObject*, long long)", activeTaskChanged)
-#karamba.connect("taskAdded(QObject*, long long)", taskAdded)
-#karamba.connect("taskRemoved(QObject*, long long)", taskRemoved)
-#karamba.connect("startupAdded(QObject*, long long)", startupAdded)
-#karamba.connect("startupRemoved(QObject*, long long)", startupRemoved)
-#karamba.connect("commandFinished(QObject*, int)", commandFinished)
-#karamba.connect("itemDropped(QObject*, QString, int, int)", itemDropped)
-#karamba.connect("meterClicked(QObject*, QObject*, int)", meterClicked)
-#karamba.connect("widgetClicked(QObject*, int, int, int)", widgetClicked)
-#karamba.connect("desktopChanged(QObject*, int)", desktopChanged)
-#karamba.connect("widgetMouseMoved(QObject*, int, int, int)", widgetMouseMoved)
-#karamba.connect("keyPressed(QObject*, QObject*, QString)", keyPressed)
+#try: karamba.connect("initWidget(QObject*)", initWidget)
+#except NameError: pass
+#try: karamba.connect("widgetUpdated(QObject*)", widgetUpdated)
+#except NameError: pass
+#try: karamba.connect("widgetClosed(QObject*)", widgetClosed)
+#except NameError: pass
+#try: karamba.connect("menuItemClicked(QObject*, QObject*, int)", menuItemClicked)
+#except NameError: pass
+#try: karamba.connect("menuOptionChanged(QObject*, QString, bool)", menuOptionChanged)
+#except NameError: pass
+#try: karamba.connect("activeTaskChanged(QObject*, long long)", activeTaskChanged)
+#except NameError: pass
+#try: karamba.connect("taskAdded(QObject*, long long)", taskAdded)
+#except NameError: pass
+#try: karamba.connect("taskRemoved(QObject*, long long)", taskRemoved)
+#except NameError: pass
+#try: karamba.connect("startupAdded(QObject*, long long)", startupAdded)
+#except NameError: pass
+#try: karamba.connect("startupRemoved(QObject*, long long)", startupRemoved)
+#except NameError: pass
+#try: karamba.connect("commandFinished(QObject*, int)", commandFinished)
+#except NameError: pass
+#try: karamba.connect("itemDropped(QObject*, QString, int, int)", itemDropped)
+#except NameError: pass
+#try: karamba.connect("meterClicked(QObject*, QObject*, int)", meterClicked)
+#except NameError: pass
+#try: karamba.connect("widgetClicked(QObject*, int, int, int)", widgetClicked)
+#except NameError: pass
+#try: karamba.connect("desktopChanged(QObject*, int)", desktopChanged)
+#except NameError: pass
+#try: karamba.connect("widgetMouseMoved(QObject*, int, int, int)", widgetMouseMoved)
+#except NameError: pass
+#try: karamba.connect("keyPressed(QObject*, QObject*, QString)", keyPressed)
+#except NameError: pass
