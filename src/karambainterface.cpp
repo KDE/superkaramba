@@ -1218,7 +1218,7 @@ QString KarambaInterface::getThemePath(Karamba *k)
 {
   if(!checkKaramba(k))
     return QString();
-  return k->theme().path().toAscii().constData();
+  return k->theme().path();
 }
 
 
