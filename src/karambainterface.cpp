@@ -22,6 +22,7 @@
 
 #include <kdebug.h>
 #include <kmenu.h>
+#include <krun.h>
 
 #include "karamba.h"
 #include "karambaapp.h"
@@ -273,19 +274,11 @@ QObject* KarambaInterface::setMeterStringValue(Karamba *k, Meter *m, QString typ
 // Calls to scripts ----------------------
 void KarambaInterface::callInitWidget(Karamba *k)
 {
-//  QVariantList params;
-//  params << QVariant::fromValue((QObject*)k);
-
-  //m_action->callFunction("initWidget", params);
   emit initWidget(k);
 }
 
 void KarambaInterface::callWidgetUpdated(Karamba *k)
 {
-//  QVariantList params;
-//  params << QVariant::fromValue((QObject*)k);
-
-  //m_action->callFunction("widgetUpdated", params);
   emit widgetUpdated(k);
 }
 
@@ -1149,7 +1142,7 @@ QObject* KarambaInterface::addMenuItem(Karamba *k, KMenu *menu, QString text, QS
   return action;
 }
 
-QObject* KarambaInterface::addMenuSeperator(Karamba *k, KMenu *menu)
+QObject* KarambaInterface::addMenuSeparator(Karamba *k, KMenu *menu)
 {
   if(!checkKaramba(k))
     return 0;
@@ -1214,12 +1207,69 @@ bool KarambaInterface::removeMenuItem(Karamba *k, KMenu *menu, QAction *action)
   return false;
 }
 
+
+
+bool KarambaInterface::acceptDrops(Karamba *k)
+{
+    if (!checkKaramba(k)) {
+        return false;
+    }
+
+    k->setAcceptDrops(true);
+    return true;
+}
+
+
+
+bool KarambaInterface::attachClickArea(Karamba *k, Meter *m,
+        QString leftButton, QString middleButton, QString rightButton)
+{
+    if (!checkKaramba(k)) {
+        return false;
+    }
+
+    if (ImageLabel* image = dynamic_cast<ImageLabel*>(m)) {
+        image->attachClickArea(leftButton, middleButton, rightButton);
+        image->allowClick(true);
+    }
+    else if (TextLabel* text = dynamic_cast<TextLabel*>(m)) {
+        text->attachClickArea(leftButton, middleButton, rightButton);
+        text->allowClick(true);
+    }
+    else {
+        return false;
+    }
+
+    return true;
+}
+
+bool KarambaInterface::changeInterval(Karamba *k, int interval)
+{
+    if (!checkKaramba(k)) {
+        return false;
+    }
+
+    k->changeInterval(interval);
+    return true;
+}
+
+int KarambaInterface::execute(QString command)
+{
+    return KRun::runCommand(command);
+}
+
+
+
 QString KarambaInterface::getThemePath(Karamba *k)
 {
   if(!checkKaramba(k))
     return QString();
   return k->theme().path();
 }
+
+
+
+
 
 
 
@@ -1517,7 +1567,7 @@ bool KarambaInterface::createWidgetMask(Karamba *k, QString mask)
   return true;
 }
 
-QVariantList KarambaInterface::getWidgetPostion(Karamba *k)
+QVariantList KarambaInterface::getWidgetPosition(Karamba *k)
 {
   if(!checkKaramba(k))
     return QVariantList();

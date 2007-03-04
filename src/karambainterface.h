@@ -234,21 +234,29 @@ class KarambaInterface : public QObject
 
     // Menu
     QObject* addMenuItem(Karamba *k, KMenu *menu, QString text, QString icon);
-    QObject* addMenuSeperator(Karamba *k, KMenu *menu);
+    QObject* addMenuSeparator(Karamba *k, KMenu *menu);
     QObject* createMenu(Karamba *k);
     bool deleteMenu(Karamba *k, KMenu *menu);
     bool popupMenu(Karamba *k, KMenu *menu, int x, int y);
     bool removeMenuItem(Karamba *k, KMenu *menu, QAction *action);
 
     // Misc
+
+    bool acceptDrops(Karamba *k);
+    bool attachClickArea(Karamba *k, Meter *m, QString leftButton = QString(),
+            QString middleButton = QString(), QString rightButton = QString());
+
 /*
-    long acceptDrops
-    long attachClickArea
     long callTheme
-    long changeInterval
+*/
+    bool changeInterval(Karamba *k, int interval);
+/*
     long createClickArea
     long createServiceClickArea
-    long execute
+*/
+    int execute(QString command);
+
+/*
     long executeInteractive
     long getIncomingData
     long getIp
@@ -341,7 +349,7 @@ class KarambaInterface : public QObject
     
     // Widget
     bool createWidgetMask(Karamba *k, QString mask);
-    QVariantList getWidgetPostion(Karamba *k);
+    QVariantList getWidgetPosition(Karamba *k);
     bool moveWidget(Karamba *k, int x, int y);
     bool redrawWidget(Karamba *k);
     bool redrawWidgetBackground(Karamba *k);
