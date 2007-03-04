@@ -96,7 +96,7 @@ print "Loaded Bar test python extension!"
 #except NameError: pass
 #try: karamba.connect("widgetClosed(QObject*)", widgetClosed)
 #except NameError: pass
-#try: karamba.connect("menuItemClicked(QObject*, QObject*, int)", menuItemClicked)
+#try: karamba.connect("menuItemClicked(QObject*, QObject*, QObject*)", menuItemClicked)
 #except NameError: pass
 #try: karamba.connect("menuOptionChanged(QObject*, QString, bool)", menuOptionChanged)
 #except NameError: pass
