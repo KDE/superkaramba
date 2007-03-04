@@ -1214,6 +1214,12 @@ bool KarambaInterface::removeMenuItem(Karamba *k, KMenu *menu, QAction *action)
   return false;
 }
 
+QString KarambaInterface::getThemePath(Karamba *k)
+{
+  if(!checkKaramba(k))
+    return QString();
+  return k->theme().path().toAscii().constData();
+}
 
 
 

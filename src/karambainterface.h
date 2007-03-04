@@ -240,8 +240,8 @@ class KarambaInterface : public QObject
     bool popupMenu(Karamba *k, KMenu *menu, int x, int y);
     bool removeMenuItem(Karamba *k, KMenu *menu, QAction *action);
 
-/*
     // Misc
+/*
     long acceptDrops
     long attachClickArea
     long callTheme
@@ -255,7 +255,9 @@ class KarambaInterface : public QObject
     long getNumberOfDesktop
     long getPrettyThemeName
     long getServiceGroups
-    long getThemePath
+*/
+    QString getThemePath(Karamba *k);
+/*
     long getUpdateTime
     long hide
     long language
