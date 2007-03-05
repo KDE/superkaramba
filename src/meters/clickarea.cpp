@@ -17,8 +17,8 @@
 #include <kdebug.h>
 
 
-ClickArea::ClickArea(Karamba* k, bool preview, int x, int y, int w, int h )
-        : Meter(k, x, y, w, h ), m_preview(preview)
+ClickArea::ClickArea(Karamba* k, bool preview, int x, int y, int w, int h)
+        : Meter(k, x, y, w, h), m_preview(preview)
 {
     value = "";
     setAcceptedMouseButtons(Qt::LeftButton);
@@ -29,45 +29,41 @@ ClickArea::~ClickArea()
 
 bool ClickArea::mouseEvent(QGraphicsSceneMouseEvent *e)
 {
-	//KShellProcess ksp;
-  Q_UNUSED(e);
+    //KShellProcess ksp;
+    Q_UNUSED(e);
 
-	if (!svc_name.isEmpty())
-	{
-		KService sv(svc_name, svc_onClick, svc_icon);
-		KUrl::List l;
-    KRun::run(sv, l, 0);
-		return false;
-	}
-	else
-	{
-		QString program;
-		program = onClick;
-    program.replace( QRegExp("%v", Qt::CaseInsensitive), value );
+    if (!svc_name.isEmpty()) {
+        KService sv(svc_name, svc_onClick, svc_icon);
+        KUrl::List l;
+        KRun::run(sv, l, 0);
+        return false;
+    } else {
+        QString program;
+        program = onClick;
+        program.replace(QRegExp("%v", Qt::CaseInsensitive), value);
 
-		if( !program.isEmpty() )
-		{
-			//qDebug(program);
-			KRun::runCommand(program);
-		}
-	}
+        if (!program.isEmpty()) {
+            //qDebug(program);
+            KRun::runCommand(program);
+        }
+    }
 
-  return false;
+    return false;
 }
 
-void ClickArea::setOnClick( QString oc )
+void ClickArea::setOnClick(QString oc)
 {
     onClick = oc;
 }
 
-void ClickArea::setServiceOnClick( QString name , QString exec, QString icon )
+void ClickArea::setServiceOnClick(QString name , QString exec, QString icon)
 {
     svc_name = name;
     svc_onClick = exec;
     svc_icon = icon;
 }
 
-void ClickArea::setOnMiddleClick( QString oc )
+void ClickArea::setOnMiddleClick(QString oc)
 {
     onMiddleClick = oc;
 }
@@ -79,23 +75,23 @@ QRect ClickArea::getRectangle()
 }
 
 void ClickArea::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-        QWidget *widget)
+                      QWidget *widget)
 {
-  Q_UNUSED(option);
-  Q_UNUSED(widget);
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
 
-  if(m_preview)
-    painter->drawRect(boundingBox);
+    if (m_preview)
+        painter->drawRect(boundingBox);
 }
 
 
-void ClickArea::setValue( int v)
+void ClickArea::setValue(int v)
 {
-    setValue( QString::number( v ) );
+    setValue(QString::number(v));
 }
 
 
-void ClickArea::setValue( QString v )
+void ClickArea::setValue(QString v)
 {
     value = v;
 }

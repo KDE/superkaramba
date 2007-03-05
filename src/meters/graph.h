@@ -17,24 +17,27 @@
 
 class Graph : public Meter
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
-  Graph(Karamba* k, int ix, int iy, int iw, int ih, int nbrPoints);
-  Graph();
-  ~Graph();
+    Graph(Karamba* k, int ix, int iy, int iw, int ih, int nbrPoints);
+    Graph();
+    ~Graph();
 
-  void setValue( int );
-  int getValue() { return lastValue; };
-  void setValue( QString );
-  void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-                  QWidget *widget);
+    void setValue(int);
+    int getValue()
+    {
+        return lastValue;
+    };
+    void setValue(QString);
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
+               QWidget *widget);
 
 private:
-  int nbrPoints;
-  int lastValue;
+    int nbrPoints;
+    int lastValue;
 
-  QPolygonF m_points;
+    QPolygonF m_points;
 };
 
 #endif // GRAPH_H

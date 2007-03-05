@@ -25,14 +25,17 @@ class Sensor : public QObject
     Q_OBJECT
 
 public:
-    Sensor( int msec = 1000 );
+    Sensor(int msec = 1000);
     void start();
     virtual ~Sensor();
-    void addMeter( SensorParams *s );
-    SensorParams* hasMeter( Meter *meter );
-    void deleteMeter( Meter *meter );
-    int isEmpty() { return objList->isEmpty(); };
-    virtual void setMaxValue( SensorParams *s );
+    void addMeter(SensorParams *s);
+    SensorParams* hasMeter(Meter *meter);
+    void deleteMeter(Meter *meter);
+    int isEmpty()
+    {
+        return objList->isEmpty();
+    };
+    virtual void setMaxValue(SensorParams *s);
 
 private:
     int msec;
@@ -42,7 +45,7 @@ protected:
     QList <QObject*> *objList;
 
 public slots:
-    virtual void update()=0;
+    virtual void update() = 0;
 
 };
 

@@ -14,15 +14,14 @@
 #include <kdebug.h>
 
 Graph::Graph(Karamba* k, int x, int y, int w, int h, int nbrPts):
-  Meter(k, x, y, w, h), lastValue(0)
+        Meter(k, x, y, w, h), lastValue(0)
 {
     nbrPoints = (nbrPts == 0) ? 50 : nbrPts;
 
-    for(int i = 0; i < nbrPoints; i++)
-    {
-      m_points << QPoint(w + 2, h);
+    for (int i = 0; i < nbrPoints; i++) {
+        m_points << QPoint(w + 2, h);
 
-      m_points.translate(((qreal)-w-1) / nbrPoints, 0);
+        m_points.translate(((qreal) - w - 1) / nbrPoints, 0);
     }
 
     minValue = 0;
@@ -30,54 +29,50 @@ Graph::Graph(Karamba* k, int x, int y, int w, int h, int nbrPts):
 }
 
 Graph::~Graph()
-{
-}
+{}
 
-void Graph::setValue( int v)
+void Graph::setValue(int v)
 {
-    if( v > maxValue)
-    {
+    if (v > maxValue) {
         // maxValue = v;
         v = maxValue;
     }
-    if( v < minValue)
-    {
+    if (v < minValue) {
         //minValue = v;
         v = minValue;
     }
     lastValue = v;
-    
-    QPoint newPoint(getWidth() - 1,
-          getHeight() - v * getHeight() / maxValue);
 
-    m_points.translate(((qreal)-getWidth()-1) / nbrPoints, 0);
+    QPoint newPoint(getWidth() - 1,
+                    getHeight() - v * getHeight() / maxValue);
+
+    m_points.translate(((qreal) - getWidth() - 1) / nbrPoints, 0);
 
     m_points << newPoint;
 
-    if(m_points.count() > nbrPoints)
-      m_points.remove(0);
+    if (m_points.count() > nbrPoints)
+        m_points.remove(0);
 
     update();
 }
 
-void Graph::setValue( QString v )
+void Graph::setValue(QString v)
 {
-  setValue((int)(v.toDouble() + 0.5));
+    setValue((int)(v.toDouble() + 0.5));
 }
 
 void Graph::paint(QPainter *p, const QStyleOptionGraphicsItem *option,
-                QWidget *widget)
+                  QWidget *widget)
 {
-  Q_UNUSED(option);
-  Q_UNUSED(widget);
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
 
-  if(hidden == 0)
-  {
-    p->setPen(color);
-    p->setOpacity(m_opacity);
-    
-    p->drawPolyline(m_points);
-  }
+    if (hidden == 0) {
+        p->setPen(color);
+        p->setOpacity(m_opacity);
+
+        p->drawPolyline(m_points);
+    }
 }
 
 #include "graph.moc"

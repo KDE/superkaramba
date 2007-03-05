@@ -43,11 +43,10 @@
 MemSensor::MemSensor(int msec) : Sensor(msec)
 {
 #if defined Q_OS_FREEBSD || defined(Q_OS_NETBSD)
-   /* get the page size with "getpagesize" and calculate pageshift from it */
+    /* get the page size with "getpagesize" and calculate pageshift from it */
     int pagesize = getpagesize();
     pageshift = 0;
-    while (pagesize > 1)
-    {
+    while (pagesize > 1) {
         pageshift++;
         pagesize >>= 1;
     }
@@ -55,10 +54,10 @@ MemSensor::MemSensor(int msec) : Sensor(msec)
     /* we only need the amount of log(2)1024 for our conversion */
     pageshift -= 10;
 # if (defined(Q_OS_FREEBSD) && __FreeBSD_version < 500018)
-    connect(&ksp, SIGNAL(receivedStdout(KProcess *, char *, int )),
-            this,SLOT(receivedStdout(KProcess *, char *, int )));
+    connect(&ksp, SIGNAL(receivedStdout(KProcess *, char *, int)),
+            this, SLOT(receivedStdout(KProcess *, char *, int)));
     connect(&ksp, SIGNAL(processExited(KProcess *)),
-            this,SLOT(processExited( KProcess * )));
+            this, SLOT(processExited(KProcess *)));
 
     swapTotal = swapUsed = 0;
 
@@ -77,21 +76,20 @@ MemSensor::~MemSensor()
 {}
 
 #ifdef Q_OS_FREEBSD
-void MemSensor::receivedStdout(KProcess *, char *buffer, int len )
+void MemSensor::receivedStdout(KProcess *, char *buffer, int len)
 {
     buffer[len] = 0;
-    sensorResult += QString( buffer );
+    sensorResult += QString(buffer);
 }
 #else
 void MemSensor::receivedStdout(KProcess *, char *, int)
-{
-}
+{}
 #endif
 
 void MemSensor::processExited(KProcess *)
 {
 #ifdef Q_OS_FREEBSD
-    QStringList stringList = QStringList::split('\n',sensorResult);
+    QStringList stringList = QStringList::split('\n', sensorResult);
     sensorResult = "";
     QStringList itemsList = QStringList::split(' ', stringList[1]);
 
@@ -109,9 +107,9 @@ int MemSensor::getMemTotal()
     sysctlbyname("hw.physmem", &mem, &size, NULL, 0);
     return (mem / 1024);
 #else
-    QRegExp rx( "MemTotal:\\s*(\\d+)" );
-    rx.indexIn( meminfo );
-    return ( rx.cap(1).toInt() );
+    QRegExp rx("MemTotal:\\s*(\\d+)");
+    rx.indexIn(meminfo);
+    return (rx.cap(1).toInt());
 #endif
 }
 
@@ -130,12 +128,12 @@ int MemSensor::getMemFree()
     mib[0] = CTL_VM;
     mib[1] = VM_UVMEXP2;
     ssize = sizeof(uvmexp);
-    sysctl(mib,2,&uvmexp,&ssize,NULL,0);
+    sysctl(mib, 2, &uvmexp, &ssize, NULL, 0);
     return pagetok(uvmexp.free);
 #else
-    QRegExp rx( "MemFree:\\s*(\\d+)" );
-    rx.indexIn( meminfo );
-    return ( rx.cap(1).toInt() );
+    QRegExp rx("MemFree:\\s*(\\d+)");
+    rx.indexIn(meminfo);
+    return (rx.cap(1).toInt());
 #endif
 }
 
@@ -154,9 +152,9 @@ int MemSensor::getBuffers()
     sysctlbyname("vm.bufmem", &buf_mem, &size, NULL, 0);
     return (buf_mem / 1024);
 #else
-    QRegExp rx( "Buffers:\\s*(\\d+)" );
-    rx.indexIn( meminfo );
-    return ( rx.cap(1).toInt() );
+    QRegExp rx("Buffers:\\s*(\\d+)");
+    rx.indexIn(meminfo);
+    return (rx.cap(1).toInt());
 #endif
 }
 
@@ -171,11 +169,11 @@ int MemSensor::getCached()
 #elif defined(Q_OS_NETBSD)
     return 0;
 #else
-    QRegExp rx1( "Cached:\\s*(\\d+)" );
-    QRegExp rx2( "SwapCached:\\s*(\\d+)" );
-    rx1.indexIn( meminfo );
-    rx2.indexIn( meminfo );
-    return ( rx1.cap(1).toInt() + rx2.cap(1).toInt() );
+    QRegExp rx1("Cached:\\s*(\\d+)");
+    QRegExp rx2("SwapCached:\\s*(\\d+)");
+    rx1.indexIn(meminfo);
+    rx2.indexIn(meminfo);
+    return (rx1.cap(1).toInt() + rx2.cap(1).toInt());
 #endif
 }
 
@@ -210,15 +208,15 @@ int MemSensor::getSwapTotal()
     mib[1] = VM_UVMEXP;
     ssize = sizeof(uvmexp);
 
-    if (sysctl(mib,2,&uvmexp,&ssize,NULL,0) != -1) {
-	pagesize = uvmexp.pagesize;
-	STotal = (pagesize*uvmexp.swpages) >> 10;
+    if (sysctl(mib, 2, &uvmexp, &ssize, NULL, 0) != -1) {
+        pagesize = uvmexp.pagesize;
+        STotal = (pagesize * uvmexp.swpages) >> 10;
     }
     return STotal;
 #else
-    QRegExp rx( "SwapTotal:\\s*(\\d+)" );
-    rx.indexIn( meminfo );
-    return ( rx.cap(1).toInt() );
+    QRegExp rx("SwapTotal:\\s*(\\d+)");
+    rx.indexIn(meminfo);
+    return (rx.cap(1).toInt());
 #endif
 }
 
@@ -253,17 +251,17 @@ int MemSensor::getSwapFree()
     mib[1] = VM_UVMEXP;
     ssize = sizeof(uvmexp);
 
-    if (sysctl(mib,2,&uvmexp,&ssize,NULL,0) != -1) {
-	pagesize = uvmexp.pagesize;
-	STotal = (pagesize*uvmexp.swpages) >> 10;
-	SUsed = (pagesize*uvmexp.swpginuse) >> 10;
-	SFree = STotal - SUsed;
+    if (sysctl(mib, 2, &uvmexp, &ssize, NULL, 0) != -1) {
+        pagesize = uvmexp.pagesize;
+        STotal = (pagesize * uvmexp.swpages) >> 10;
+        SUsed = (pagesize * uvmexp.swpginuse) >> 10;
+        SFree = STotal - SUsed;
     }
     return SFree;
 #else
-    QRegExp rx( "SwapFree:\\s*(\\d+)" );
-    rx.indexIn( meminfo );
-    return ( rx.cap(1).toInt() );
+    QRegExp rx("SwapFree:\\s*(\\d+)");
+    rx.indexIn(meminfo);
+    return (rx.cap(1).toInt());
 #endif
 }
 
@@ -273,14 +271,13 @@ void MemSensor::readValues()
 # if (defined(Q_OS_FREEBSD) && __FreeBSD_version < 500018)
     ksp.clearArguments();
     ksp << "swapinfo";
-    ksp.start( KProcess::NotifyOnExit,KProcIO::Stdout);
+    ksp.start(KProcess::NotifyOnExit, KProcIO::Stdout);
 # endif
 #else
     QFile file("/proc/meminfo");
     QString line;
-    if ( file.open(QIODevice::ReadOnly | QIODevice::Text) )
-    {
-        QTextStream t( &file );        // use a text stream
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream t(&file);          // use a text stream
         meminfo = t.readAll();
         file.close();
     }
@@ -303,41 +300,39 @@ void MemSensor::update()
     int usedSwap = totalSwap - getSwapFree();
 
     QObject *it;
-    foreach(it, *objList)
-    {
+    foreach(it, *objList) {
         sp = qobject_cast<SensorParams*>(it);
 #if (defined(Q_OS_FREEBSD) && __FreeBSD_version < 500018)
-        if ( (!MaxSet) && (totalSwap > 0) ) {
-           setMaxValue(sp);
-           bool set = true;
+        if ((!MaxSet) && (totalSwap > 0)) {
+            setMaxValue(sp);
+            bool set = true;
         }
 #endif
         meter = sp->getMeter();
         format = sp->getParam("FORMAT");
-        if (format.length() == 0 )
-        {
+        if (format.length() == 0) {
             format = "%um";
         }
 
-        format.replace( QRegExp("%fmb", Qt::CaseInsensitive),
-            QString::number( (int)(( totalMem - usedMemNoBuffers)/1024.0+0.5)));
-        format.replace( QRegExp("%fm", Qt::CaseInsensitive), 
-            QString::number( (int)( ( totalMem - usedMem  )/1024.0+0.5) ));
+        format.replace(QRegExp("%fmb", Qt::CaseInsensitive),
+                       QString::number((int)((totalMem - usedMemNoBuffers) / 1024.0 + 0.5)));
+        format.replace(QRegExp("%fm", Qt::CaseInsensitive),
+                       QString::number((int)((totalMem - usedMem) / 1024.0 + 0.5)));
 
-        format.replace( QRegExp("%umb", Qt::CaseInsensitive), 
-            QString::number( (int)((usedMemNoBuffers)/1024.0+0.5)));
-        format.replace( QRegExp("%um", Qt::CaseInsensitive), 
-            QString::number( (int)((usedMem)/1024.0+0.5 )));
+        format.replace(QRegExp("%umb", Qt::CaseInsensitive),
+                       QString::number((int)((usedMemNoBuffers) / 1024.0 + 0.5)));
+        format.replace(QRegExp("%um", Qt::CaseInsensitive),
+                       QString::number((int)((usedMem) / 1024.0 + 0.5)));
 
-        format.replace( QRegExp("%tm", Qt::CaseInsensitive), 
-            QString::number( (int)( (totalMem)/1024.0+0.5)));
+        format.replace(QRegExp("%tm", Qt::CaseInsensitive),
+                       QString::number((int)((totalMem) / 1024.0 + 0.5)));
 
-        format.replace( QRegExp("%fs", Qt::CaseInsensitive), 
-            QString::number( (int)((totalSwap - usedSwap)/1024.0+0.5)));
-        format.replace( QRegExp("%us", Qt::CaseInsensitive), 
-            QString::number( (int)(usedSwap/1024.0+0.5)));
-        format.replace( QRegExp("%ts", Qt::CaseInsensitive), 
-            QString::number( (int)(totalSwap/1024.0+0.5)));
+        format.replace(QRegExp("%fs", Qt::CaseInsensitive),
+                       QString::number((int)((totalSwap - usedSwap) / 1024.0 + 0.5)));
+        format.replace(QRegExp("%us", Qt::CaseInsensitive),
+                       QString::number((int)(usedSwap / 1024.0 + 0.5)));
+        format.replace(QRegExp("%ts", Qt::CaseInsensitive),
+                       QString::number((int)(totalSwap / 1024.0 + 0.5)));
 
         meter->setValue(format);
     }
@@ -347,21 +342,20 @@ void MemSensor::update()
 #endif
 }
 
-void MemSensor::setMaxValue( SensorParams *sp )
+void MemSensor::setMaxValue(SensorParams *sp)
 {
     Meter *meter;
     meter = sp->getMeter();
     QString f;
     f = sp->getParam("FORMAT");
 
-    if (f.length() == 0 )
-    {
+    if (f.length() == 0) {
         f = "%um";
     }
-    if( f=="%fm" || f== "%um" || f=="%fmb" || f=="%umb" )
-        meter->setMax( getMemTotal() / 1024 );
-    if( f=="%fs" || f== "%us" )
-        meter->setMax( getSwapTotal() / 1024 );
+    if (f == "%fm" || f == "%um" || f == "%fmb" || f == "%umb")
+        meter->setMax(getMemTotal() / 1024);
+    if (f == "%fs" || f == "%us")
+        meter->setMax(getSwapTotal() / 1024);
 }
 
 #include "mem.moc"

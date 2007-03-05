@@ -14,25 +14,23 @@
 
 #include <kdebug.h>
 
-ProgramSensor::ProgramSensor(const QString &progName, int interval, QString encoding )
-        : Sensor( interval )
+ProgramSensor::ProgramSensor(const QString &progName, int interval, QString encoding)
+        : Sensor(interval)
 {
-     if( !encoding.isEmpty())
-    {
-        codec = QTextCodec::codecForName( encoding.toAscii().constData() );
-        if ( codec == 0)
+    if (!encoding.isEmpty()) {
+        codec = QTextCodec::codecForName(encoding.toAscii().constData());
+        if (codec == 0)
             codec = QTextCodec::codecForLocale();
-    }
-    else
+    } else
         codec = QTextCodec::codecForLocale();
 
 
     programName = progName;
     //update();
-    connect(&ksp, SIGNAL(receivedStdout(KProcess *, char *, int )),
-            this,SLOT(receivedStdout(KProcess *, char *, int )));
+    connect(&ksp, SIGNAL(receivedStdout(KProcess *, char *, int)),
+            this, SLOT(receivedStdout(KProcess *, char *, int)));
     connect(&ksp, SIGNAL(processExited(KProcess *)),
-            this,SLOT(processExited( KProcess * )));
+            this, SLOT(processExited(KProcess *)));
 }
 
 ProgramSensor::~ProgramSensor()
@@ -51,31 +49,25 @@ void ProgramSensor::processExited(KProcess *)
     Meter *meter;
     QVector<QString> lines;
     QStringList stringList = sensorResult.split('\n');
-    QStringList::ConstIterator end( stringList.end() );
-    for ( QStringList::ConstIterator it = stringList.begin(); it != end; ++it )
-    {
+    QStringList::ConstIterator end(stringList.end());
+    for (QStringList::ConstIterator it = stringList.begin(); it != end; ++it) {
         lines.push_back(*it);
     }
 
     int count = (int) lines.size();
     QObject *object;
-    foreach(object, *objList)
-    {
+    foreach(object, *objList) {
         sp = (SensorParams*)(object);
         meter = sp->getMeter();
-        if( meter != 0)
-        {
+        if (meter != 0) {
             lineNbr = (sp->getParam("LINE")).toInt();
-            if ( lineNbr >= 1  && lineNbr <=  (int) count )
-            {
+            if (lineNbr >= 1  && lineNbr <= (int) count) {
                 meter->setValue(lines[lineNbr-1]);
             }
-            if ( -lineNbr >= 1 && -lineNbr <= (int) count )
-            {
+            if (-lineNbr >= 1 && -lineNbr <= (int) count) {
                 meter->setValue(lines[count+lineNbr]);
             }
-            if (lineNbr == 0)
-            {
+            if (lineNbr == 0) {
                 meter->setValue(sensorResult);
             }
         }

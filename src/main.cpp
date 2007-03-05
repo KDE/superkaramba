@@ -39,54 +39,49 @@ static const char *description =
 static const char *version = "0.50";
 
 static KCmdLineOptions options[] =
-{
-  // { "+[URL]", I18N_NOOP( "Document to open" ), 0 },
-  // { "!nosystray", I18N_NOOP("Disable systray icon"), 0 },
-  { "+file", I18N_NOOP("A required argument 'file'"), 0 },
-  { 0, 0, 0 }
-};
+    {
+        // { "+[URL]", I18N_NOOP( "Document to open" ), 0 },
+        // { "!nosystray", I18N_NOOP("Disable systray icon"), 0 },
+        { "+file", I18N_NOOP("A required argument 'file'"), 0 },
+        { 0, 0, 0 }
+    };
 
 int main(int argc, char **argv)
 {
     // Taken from KRunner by A. Seigo
     Display *dpy = XOpenDisplay(0); // open default display
-    if (!dpy)
-    {
+    if (!dpy) {
         qWarning("Cannot connect to the X server");
         exit(1);
     }
 
     bool argbVisual = false ;
     bool haveCompManager = !XGetSelectionOwner(dpy, XInternAtom(dpy,
-                                                 "_NET_WM_CM_S0", false));
+                           "_NET_WM_CM_S0", false));
     haveCompManager = true;
     Colormap colormap = 0;
     Visual *visual = 0;
 
     kDebug() << "Composition Manager: " << haveCompManager << endl;
 
-    if(haveCompManager)
-    {
+    if (haveCompManager) {
         int screen = DefaultScreen(dpy);
         int eventBase, errorBase;
 
-        if(XRenderQueryExtension(dpy, &eventBase, &errorBase))
-        {
+        if (XRenderQueryExtension(dpy, &eventBase, &errorBase)) {
             int nvi;
             XVisualInfo templ;
             templ.screen  = screen;
             templ.depth   = 32;
             templ.c_class = TrueColor;
             XVisualInfo *xvi = XGetVisualInfo(dpy, VisualScreenMask |
-                                                   VisualDepthMask |
-                                                   VisualClassMask,
+                                              VisualDepthMask |
+                                              VisualClassMask,
                                               &templ, &nvi);
-            for(int i = 0; i < nvi; ++i)
-            {
+            for (int i = 0; i < nvi; ++i) {
                 XRenderPictFormat *format = XRenderFindVisualFormat(dpy,
-                                                                    xvi[i].visual);
-                if(format->type == PictTypeDirect && format->direct.alphaMask)
-                {
+                                            xvi[i].visual);
+                if (format->type == PictTypeDirect && format->direct.alphaMask) {
                     visual = xvi[i].visual;
                     colormap = XCreateColormap(dpy, RootWindow(dpy, screen),
                                                visual, AllocNone);
@@ -112,10 +107,9 @@ int main(int argc, char **argv)
     KarambaApplication::addCmdLineOptions();
     KarambaSessionManaged ksm;
 
-    if(!KarambaApplication::start())
-    {
-      fprintf(stderr, "SuperKaramba is already running!\n");
-      exit(0);
+    if (!KarambaApplication::start()) {
+        fprintf(stderr, "SuperKaramba is already running!\n");
+        exit(0);
     }
 
     KarambaApplication app(dpy, Qt::HANDLE(visual), Qt::HANDLE(colormap));

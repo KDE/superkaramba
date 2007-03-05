@@ -25,72 +25,68 @@
 
 LineParser::LineParser(const QString& line)
 {
-  set(line);
+    set(line);
 }
 
 LineParser::~LineParser()
-{
-}
+{}
 
 void LineParser::set(const QString& line)
 {
-  QRegExp rx("^\\s*(\\S+)");
-  m_line = line;
+    QRegExp rx("^\\s*(\\S+)");
+    m_line = line;
 
-  rx.indexIn(m_line);
-  m_meter = rx.cap(1).toUpper();
+    rx.indexIn(m_line);
+    m_meter = rx.cap(1).toUpper();
 }
 
 int LineParser::getInt(QString w, int def) const
 {
-  QRegExp rx( "\\W+" + w +"=([-]?\\d+)", Qt::CaseInsensitive );
-  if (rx.indexIn(m_line) != -1)
-    return rx.cap(1).toInt();
-  else
-    return def;
+    QRegExp rx("\\W+" + w + "=([-]?\\d+)", Qt::CaseInsensitive);
+    if (rx.indexIn(m_line) != -1)
+        return rx.cap(1).toInt();
+    else
+        return def;
 }
 
 QColor LineParser::getColor(QString w, QColor def) const
 {
-  QRegExp rx( "\\W+" + w + "=([-]?\\d+),([-]?\\d+),([-]?\\d+)", Qt::CaseInsensitive );
-  if (rx.indexIn(m_line) != -1)
-    return QColor(rx.cap(1).toInt(), rx.cap(2).toInt(), rx.cap(3).toInt());
-  else
-    return def;
+    QRegExp rx("\\W+" + w + "=([-]?\\d+),([-]?\\d+),([-]?\\d+)", Qt::CaseInsensitive);
+    if (rx.indexIn(m_line) != -1)
+        return QColor(rx.cap(1).toInt(), rx.cap(2).toInt(), rx.cap(3).toInt());
+    else
+        return def;
 }
 
 QString LineParser::getString(QString w, QString def) const
 {
-  QString result;
-  QRegExp rx( "\\W+" + w + "=\"([^\"]*)\"", Qt::CaseInsensitive );
+    QString result;
+    QRegExp rx("\\W+" + w + "=\"([^\"]*)\"", Qt::CaseInsensitive);
 
-  bool found = (rx.indexIn(m_line)==-1)?false:true;
-  if (rx.cap(1).isEmpty())
-  {
-    rx = QRegExp(w + "=(\\S+)", Qt::CaseInsensitive);
-    found = (rx.indexIn(m_line)==-1)?false:true;
-    result = rx.cap(1);
-  }
-  else
-  {
-    result = rx.cap(1);
-  }
-  if(found)
-    return result;
-  else
-    return def;
+    bool found = (rx.indexIn(m_line) == -1) ? false : true;
+    if (rx.cap(1).isEmpty()) {
+        rx = QRegExp(w + "=(\\S+)", Qt::CaseInsensitive);
+        found = (rx.indexIn(m_line) == -1) ? false : true;
+        result = rx.cap(1);
+    } else {
+        result = rx.cap(1);
+    }
+    if (found)
+        return result;
+    else
+        return def;
 }
 
 bool LineParser::getBoolean(QString w, bool def) const
 {
-  QString boolean = getString(w, "-").toLower();
-  if(boolean == "-")
-    return def;
-  else if (boolean == "true") // true / false
-    return true;
-  else if (boolean == "1") // 1 / 0
-    return true;
-  else if (boolean == "on") // on / off
-    return true;
-  return false;
+    QString boolean = getString(w, "-").toLower();
+    if (boolean == "-")
+        return def;
+    else if (boolean == "true") // true / false
+        return true;
+    else if (boolean == "1") // 1 / 0
+        return true;
+    else if (boolean == "on") // on / off
+        return true;
+    return false;
 }

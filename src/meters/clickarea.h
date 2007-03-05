@@ -46,24 +46,24 @@ class ClickArea : public Meter
 {
     Q_OBJECT
 public:
-    ClickArea(Karamba* k, bool preview, int x, int y, int w, int h );
+    ClickArea(Karamba* k, bool preview, int x, int y, int w, int h);
 
     ~ClickArea();
 
-    void setOnClick( QString );
-    void setServiceOnClick( QString , QString, QString);
-    void setOnMiddleClick( QString );
+    void setOnClick(QString);
+    void setServiceOnClick(QString , QString, QString);
+    void setOnMiddleClick(QString);
 
     bool mouseEvent(QGraphicsSceneMouseEvent *e);
 
     QRect getRectangle();
 
-    void mUpdate( QPainter* );
+    void mUpdate(QPainter*);
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-                            QWidget *widget = 0);
+               QWidget *widget = 0);
 
-    void setValue( int );
-    void setValue( QString );
+    void setValue(int);
+    void setValue(QString);
 
     bool m_preview;
 

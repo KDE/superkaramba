@@ -18,11 +18,11 @@
 class QPainter;
 class Karamba;
 class Meter : public QObject,
-              public QGraphicsItem
+            public QGraphicsItem
 {
-Q_OBJECT
+    Q_OBJECT
 public:
-    Meter(Karamba* k, int ix,int iy,int iw,int ih);
+    Meter(Karamba* k, int ix, int iy, int iw, int ih);
     Meter(Karamba* k);
 
     virtual ~Meter();
@@ -37,29 +37,65 @@ public:
 
     virtual void setSize(int ix, int iy, int iw, int ih);
 
-    virtual void setMax(int max) { maxValue = max; };
-    virtual void setMin(int min) { minValue = min; };
-    virtual int getMax() { return minValue; };
-    virtual int getMin() { return maxValue; };
+    virtual void setMax(int max)
+    {
+        maxValue = max;
+    };
+    virtual void setMin(int min)
+    {
+        minValue = min;
+    };
+    virtual int getMax()
+    {
+        return minValue;
+    };
+    virtual int getMin()
+    {
+        return maxValue;
+    };
 
-    void setThemePath( QString );
+    void setThemePath(QString);
 
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-                    QWidget *widget) = 0;
+                       QWidget *widget) = 0;
 
-    virtual QRectF boundingRect() const { return QRectF(boundingBox); };
+    virtual QRectF boundingRect() const
+    {
+        return QRectF(boundingBox);
+    };
 
-    virtual void setValue(int) {};
-    virtual int getValue() { return -1; };
-    virtual void setValue(QString) {};
-    virtual QString getStringValue() const { return QString::null; };
-    virtual void recalculateValue() {};
+    virtual void setValue(int)
+    {};
+    virtual int getValue()
+    {
+        return -1;
+    };
+    virtual void setValue(QString)
+    {};
+    virtual QString getStringValue() const
+    {
+        return QString::null;
+    };
+    virtual void recalculateValue()
+    {};
 
-    virtual void setColor(QColor clr) { color = clr; };
-    virtual QColor getColor() { return color; };
+    virtual void setColor(QColor clr)
+    {
+        color = clr;
+    };
+    virtual QColor getColor()
+    {
+        return color;
+    };
 
-    virtual void show() { hidden = 0; };
-    virtual void hide() { hidden = 1; };
+    virtual void show()
+    {
+        hidden = 0;
+    };
+    virtual void hide()
+    {
+        hidden = 1;
+    };
 
     void setOpacity(double value);
 
@@ -70,7 +106,7 @@ public:
     virtual bool insideActiveArea(int, int);
 
     // returns true when callback meterClicked should be called.
-    virtual bool click( QMouseEvent* );
+    virtual bool click(QMouseEvent*);
 
     void setEnabled(bool);
     bool isEnabled();

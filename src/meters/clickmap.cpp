@@ -17,28 +17,26 @@
 #include "clickmap.h"
 #include "clickmap.moc"
 
-ClickMap::ClickMap(Karamba* k, int x, int y, int w, int h )
-    :   Meter(k, x, y, w, h )
+ClickMap::ClickMap(Karamba* k, int x, int y, int w, int h)
+        :   Meter(k, x, y, w, h)
 {
-/*
-    if( h != 0 || w != 0)
-        clip = 0;
-    else
-        clip = Qt::DontClip;
-*/
+    /*
+        if( h != 0 || w != 0)
+            clip = 0;
+        else
+            clip = Qt::DontClip;
+    */
 
-    if( h == 0 || w == 0)
-    {
+    if (h == 0 || w == 0) {
         setWidth(-1);
         setHeight(-1);
     }
 }
 
 ClickMap::~ClickMap()
-{
-}
+{}
 
-void ClickMap::setTextProps( TextField *t )
+void ClickMap::setTextProps(TextField *t)
 {
     text = *t;
 }
@@ -46,8 +44,7 @@ void ClickMap::setTextProps( TextField *t )
 void ClickMap::mousePressEvent(QGraphicsSceneMouseEvent *e)
 {
     int index = (int)((e->pos().y() - getY()) / text.getLineHeight()) + 1;
-    if (index >= 1 && index <= (int)displays.count())
-    {
+    if (index >= 1 && index <= (int)displays.count()) {
         // qDebug( "You clicked item " + QString::number( index ) + ", " +
         //  displays[index - 1] + " " + links[index - 1] );
         KRun::runCommand("konqueror " + links[index - 1]);
@@ -57,7 +54,7 @@ void ClickMap::mousePressEvent(QGraphicsSceneMouseEvent *e)
 }
 
 void ClickMap::paint(QPainter *p, const QStyleOptionGraphicsItem *option,
-                QWidget *widget)
+                     QWidget *widget)
 {
     Q_UNUSED(option);
     Q_UNUSED(widget);
@@ -69,9 +66,8 @@ void ClickMap::paint(QPainter *p, const QStyleOptionGraphicsItem *option,
     p->setOpacity(m_opacity);
 
     QStringList::Iterator it = displays.begin();
-    while (it != displays.end() && (row <= getHeight() || getHeight() == -1 ))
-    {
-        p->setPen( text.getColor() );
+    while (it != displays.end() && (row <= getHeight() || getHeight() == -1)) {
+        p->setPen(text.getColor());
         // p->drawText(x,y+i,width,height,  Qt::AlignCenter | Qt::ExpandTabs, *it);
         p->drawText(getX(), getY() + i + text.getLineHeight(), *it);
         i += text.getLineHeight();
@@ -80,19 +76,18 @@ void ClickMap::paint(QPainter *p, const QStyleOptionGraphicsItem *option,
     }
 }
 
-void ClickMap::setValue( QString v )
+void ClickMap::setValue(QString v)
 {
     QRegExp rx("^http://", Qt::CaseInsensitive);
-    if ( rx.indexIn( v ) == -1 )
-        displays.append( v );
+    if (rx.indexIn(v) == -1)
+        displays.append(v);
     else
-        links.append( v );
+        links.append(v);
 }
 
-void ClickMap::setValue( int v )
+void ClickMap::setValue(int v)
 {
-    if ( v == 0 )
-    {
+    if (v == 0) {
         links.clear();
         displays.clear();
     }

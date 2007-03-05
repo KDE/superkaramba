@@ -18,10 +18,10 @@ class CPUSensor :  public Sensor
 {
     Q_OBJECT
 public:
-    CPUSensor( QString cpuNbr, int interval );
+    CPUSensor(QString cpuNbr, int interval);
     ~CPUSensor();
     void update();
-    void setMaxValue( SensorParams *sp );
+    void setMaxValue(SensorParams *sp);
 
     int getCPULoad();
 
@@ -36,7 +36,7 @@ private:
     int nice;
     int idle;
 
-    void getTicks (long &u,long &s,long &n,long &i);
+    void getTicks(long &u, long &s, long &n, long &i);
     QString cpuNbr;
 
 };

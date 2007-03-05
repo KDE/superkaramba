@@ -22,19 +22,19 @@ class TextField
 {
 public:
     TextField();
-    TextField( const TextField& );
+    TextField(const TextField&);
     ~TextField();
 
-    TextField& operator=(const TextField& );
+    TextField& operator=(const TextField&);
 
-    void setFontSize( int );
+    void setFontSize(int);
     void setColor(QColor clr);
     void setBGColor(QColor clr);
-    void setFont( const QString& );
-    void setAlignment( int );
-    void setAlignment( const QString& );
-    void setFixedPitch( bool );
-    void setShadow( int );
+    void setFont(const QString&);
+    void setAlignment(int);
+    void setAlignment(const QString&);
+    void setFixedPitch(bool);
+    void setShadow(int);
 
     int getFontSize() const;
     QColor getColor() const;

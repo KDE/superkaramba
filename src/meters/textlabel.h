@@ -22,29 +22,32 @@ class QPainter;
 class Karamba;
 class TextLabel : public Meter
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     typedef enum ScrollType { ScrollNone, ScrollNormal,
                               ScrollBackAndForth, ScrollOnePass };
 
-    TextLabel(Karamba *k, int x,int y,int w,int h);
+    TextLabel(Karamba *k, int x, int y, int w, int h);
     TextLabel(Karamba *k);
     ~TextLabel();
 
-    void setTextProps( TextField* );
-    void setValue( QString );
-    void setValue( int );
+    void setTextProps(TextField*);
+    void setValue(QString);
+    void setValue(int);
     //virtual QString getStringValue() const { return value.join("\n"); };
-    QString getStringValue() const { return value.join("\n"); };
-    void setFontSize( int );
+    QString getStringValue() const
+    {
+        return value.join("\n");
+    };
+    void setFontSize(int);
     void setBGColor(QColor clr);
-    void setFont( QString );
-    void setAlignment( QString );
-    void setFixedPitch( bool );
-    void setShadow( int );
+    void setFont(QString);
+    void setAlignment(QString);
+    void setFixedPitch(bool);
+    void setShadow(int);
 
     void paint(QPainter *p, const QStyleOptionGraphicsItem *option,
-                QWidget *widget);
+               QWidget *widget);
 
     virtual void show();
     virtual void hide();

@@ -34,105 +34,105 @@
 
 PyObject* py_createGraph(PyObject *, PyObject *args)
 {
-  long widget, x, y, w, h, points;
+    long widget, x, y, w, h, points;
 
-  if (!PyArg_ParseTuple(args, (char*)"llllll", &widget, &x, &y, &w, &h, &points))
-    return NULL;
-  if (!checkKaramba(widget))
-    return NULL;
+    if (!PyArg_ParseTuple(args, (char*)"llllll", &widget, &x, &y, &w, &h, &points))
+        return NULL;
+    if (!checkKaramba(widget))
+        return NULL;
 
-  Graph *tmp =
-      new Graph((Karamba*)widget, (int)x, (int)y, (int)w, (int)h, (int)points);
-  ((Karamba*)widget)->addToGroup(tmp);
-  return (Py_BuildValue((char*)"l", (long)tmp));
+    Graph *tmp =
+        new Graph((Karamba*)widget, (int)x, (int)y, (int)w, (int)h, (int)points);
+    ((Karamba*)widget)->addToGroup(tmp);
+    return (Py_BuildValue((char*)"l", (long)tmp));
 }
 
 PyObject* py_deleteGraph(PyObject *, PyObject *args)
 {
-  long widget, meter;
-  if (!PyArg_ParseTuple(args, (char*)"ll", &widget, &meter))
-    return NULL;
-  if (!checkKarambaAndMeter(widget, meter, "Graph"))
-    return NULL;
+    long widget, meter;
+    if (!PyArg_ParseTuple(args, (char*)"ll", &widget, &meter))
+        return NULL;
+    if (!checkKarambaAndMeter(widget, meter, "Graph"))
+        return NULL;
 
-  ((Karamba*)widget)->deleteMeterFromSensors((Meter*)meter);
-  return Py_BuildValue((char*)"l",
-      ((Karamba*)widget)->removeMeter((Meter*)meter));
+    ((Karamba*)widget)->deleteMeterFromSensors((Meter*)meter);
+    return Py_BuildValue((char*)"l",
+                         ((Karamba*)widget)->removeMeter((Meter*)meter));
 }
 
 PyObject* py_getThemeGraph(PyObject *self, PyObject *args)
 {
-  return py_getThemeMeter(self, args, "Graph");
+    return py_getThemeMeter(self, args, "Graph");
 }
 
 PyObject* py_getGraphSize(PyObject *self, PyObject *args)
 {
-  return py_getSize(self, args, "Graph");
+    return py_getSize(self, args, "Graph");
 }
 
 PyObject* py_resizeGraph(PyObject *self, PyObject *args)
 {
-  return py_resize(self, args, "Graph");
+    return py_resize(self, args, "Graph");
 }
 
 PyObject* py_getGraphPos(PyObject *self, PyObject *args)
 {
-  return py_getPos(self, args, "Graph");
+    return py_getPos(self, args, "Graph");
 }
 
 PyObject* py_moveGraph(PyObject *self, PyObject *args)
 {
-  return py_move(self, args, "Graph");
+    return py_move(self, args, "Graph");
 }
 
 PyObject* py_hideGraph(PyObject *self, PyObject *args)
 {
-  return py_hide(self, args, "Graph");
+    return py_hide(self, args, "Graph");
 }
 
 PyObject* py_showGraph(PyObject *self, PyObject *args)
 {
-  return py_show(self, args, "Graph");
+    return py_show(self, args, "Graph");
 }
 
 PyObject* py_getGraphMinMax(PyObject *self, PyObject *args)
 {
-  return py_getMinMax(self, args, "Graph");
+    return py_getMinMax(self, args, "Graph");
 }
 
 PyObject* py_setGraphMinMax(PyObject *self, PyObject *args)
 {
-  return py_setMinMax(self, args, "Graph");
+    return py_setMinMax(self, args, "Graph");
 }
 
 PyObject* py_getGraphValue(PyObject *self, PyObject *args)
 {
-  return py_getValue(self, args, "Graph");
+    return py_getValue(self, args, "Graph");
 }
 
 PyObject* py_setGraphValue(PyObject *self, PyObject *args)
 {
-  return py_setValue(self, args, "Graph");
+    return py_setValue(self, args, "Graph");
 }
 
 PyObject* py_getGraphSensor(PyObject *self, PyObject *args)
 {
-  return py_getSensor(self, args, "Graph");
+    return py_getSensor(self, args, "Graph");
 }
 
 PyObject* py_setGraphSensor(PyObject *self, PyObject *args)
 {
-  return py_setSensor(self, args, "Graph");
+    return py_setSensor(self, args, "Graph");
 }
 
 PyObject* py_getGraphColor(PyObject *self, PyObject *args)
 {
-  return py_getColor(self, args, "Graph");
+    return py_getColor(self, args, "Graph");
 }
 
 PyObject* py_setGraphColor(PyObject *self, PyObject *args)
 {
-  return py_setColor(self, args, "Graph");
+    return py_setColor(self, args, "Graph");
 }
 
 

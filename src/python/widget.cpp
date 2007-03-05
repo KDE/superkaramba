@@ -35,130 +35,131 @@
 
 PyObject* py_get_widget_position(PyObject *, PyObject *args)
 {
-  long widget;
-  if(!PyArg_ParseTuple(args, (char*)"l:getWidgetPosition", &widget))
-    return NULL;
-  if (!checkKaramba(widget))
-    return NULL;
+    long widget;
+    if (!PyArg_ParseTuple(args, (char*)"l:getWidgetPosition", &widget))
+        return NULL;
+    if (!checkKaramba(widget))
+        return NULL;
 
-  QPoint pos = ((Karamba*)widget)->getPosition();
-  return Py_BuildValue((char*)"(i,i)", pos.x(), pos.y());
+    QPoint pos = ((Karamba*)widget)->getPosition();
+    return Py_BuildValue((char*)"(i,i)", pos.x(), pos.y());
 }
 
 // Keep compatibility
 PyObject* py_create_widget_mask(PyObject *, PyObject *args)
 {
-  long widget;
-  char *text;
-  if (!PyArg_ParseTuple(args, (char*)"ls:createWidgetMask", &widget, &text))
-    return NULL;
-  if (!checkKaramba(widget))
-    return NULL;
-  return Py_BuildValue((char*)"l", 1);
+    long widget;
+    char *text;
+    if (!PyArg_ParseTuple(args, (char*)"ls:createWidgetMask", &widget, &text))
+        return NULL;
+    if (!checkKaramba(widget))
+        return NULL;
+    return Py_BuildValue((char*)"l", 1);
 }
 
 // Keep compatibility
 PyObject* py_redraw_widget_background(PyObject *, PyObject *args)
 {
-  long widget;
-  if (!PyArg_ParseTuple(args, (char*)"l:redrawWidgetBackground", &widget))
-    return NULL;
-  if (!checkKaramba(widget))
-    return NULL;
-  return Py_BuildValue((char*)"l", 1);
+    long widget;
+    if (!PyArg_ParseTuple(args, (char*)"l:redrawWidgetBackground", &widget))
+        return NULL;
+    if (!checkKaramba(widget))
+        return NULL;
+    return Py_BuildValue((char*)"l", 1);
 }
 
 /* now a method we need to expose to Python */
 long redrawWidget(long widget)
 {
-  Karamba* currTheme = (Karamba*)widget;
-  foreach(QGraphicsItem *item, ((QGraphicsItemGroup*)currTheme)->children())
-   item->update();
+    Karamba* currTheme = (Karamba*)widget;
+    foreach(QGraphicsItem *item, ((QGraphicsItemGroup*)currTheme)->children())
+    item->update();
 
-  return 1;
+    return 1;
 }
 
 PyObject* py_redraw_widget(PyObject *, PyObject *args)
 {
-  long widget;
-  if (!PyArg_ParseTuple(args, (char*)"l:redrawWidget", &widget))
-    return NULL;
-  if (!checkKaramba(widget))
-    return NULL;
+    long widget;
+    if (!PyArg_ParseTuple(args, (char*)"l:redrawWidget", &widget))
+        return NULL;
+    if (!checkKaramba(widget))
+        return NULL;
 
-  return Py_BuildValue((char*)"l", redrawWidget(widget));
+    return Py_BuildValue((char*)"l", redrawWidget(widget));
 }
 
 /* now a method we need to expose to Python */
 long resizeWidget(long widget, long x, long y)
 {
-  Karamba* currTheme = (Karamba*)widget;
-  //currTheme->test = true;
-  currTheme->resizeTo((int)x,(int)y);
-  //currTheme->test = false;
-  return 1;
+    Karamba* currTheme = (Karamba*)widget;
+    //currTheme->test = true;
+    currTheme->resizeTo((int)x, (int)y);
+    //currTheme->test = false;
+    return 1;
 }
 
 PyObject* py_resize_widget(PyObject *, PyObject *args)
 {
-  long widget, x, y;
-  if (!PyArg_ParseTuple(args, (char*)"lll:resizeWidget", &widget, &x, &y))
-    return NULL;
-  if (!checkKaramba(widget))
-    return NULL;
-  return Py_BuildValue((char*)"l", resizeWidget(widget, x, y));
+    long widget, x, y;
+    if (!PyArg_ParseTuple(args, (char*)"lll:resizeWidget", &widget, &x, &y))
+        return NULL;
+    if (!checkKaramba(widget))
+        return NULL;
+    return Py_BuildValue((char*)"l", resizeWidget(widget, x, y));
 }
 
 /* now a method we need to expose to Python */
 long moveWidget(long widget, long x, long y)
 {
-  Karamba* currTheme = (Karamba*)widget;
-  currTheme->moveToPos(QPoint((int)x, (int)y));
-  return 1;
+    Karamba* currTheme = (Karamba*)widget;
+    currTheme->moveToPos(QPoint((int)x, (int)y));
+    return 1;
 }
 
 PyObject* py_move_widget(PyObject *, PyObject *args)
 {
-  long widget, x, y;
-  if (!PyArg_ParseTuple(args, (char*)"lll:moveWidget", &widget, &x, &y))
-    return NULL;
-  if (!checkKaramba(widget))
-    return NULL;
-  return Py_BuildValue((char*)"l", moveWidget(widget, x, y));
+    long widget, x, y;
+    if (!PyArg_ParseTuple(args, (char*)"lll:moveWidget", &widget, &x, &y))
+        return NULL;
+    if (!checkKaramba(widget))
+        return NULL;
+    return Py_BuildValue((char*)"l", moveWidget(widget, x, y));
 }
 
 /* now a method we need to expose to Python */
-long widgetSetOnTop(long widget, bool b) {
-  Karamba* currTheme = (Karamba*)widget;
-  #ifdef __GNUC__
-    #warning how to handle on top?
-  #endif
-  /*
-  if (currTheme != 0)
-  {
-    currTheme->setAlwaysOnTop(b);
-  }
-  */
-  return 1;
+long widgetSetOnTop(long widget, bool b)
+{
+    Karamba* currTheme = (Karamba*)widget;
+#ifdef __GNUC__
+#warning how to handle on top?
+#endif
+    /*
+    if (currTheme != 0)
+    {
+      currTheme->setAlwaysOnTop(b);
+    }
+    */
+    return 1;
 }
 
 PyObject* py_set_widget_on_top(PyObject *, PyObject *args)
 {
-  long widget;
-  long b;
-  if (!PyArg_ParseTuple(args, (char*)"ll:setWidgetOnTop", &widget, &b ))
-    return NULL;
-  return Py_BuildValue((char*)"l", widgetSetOnTop(widget, b));
+    long widget;
+    long b;
+    if (!PyArg_ParseTuple(args, (char*)"ll:setWidgetOnTop", &widget, &b))
+        return NULL;
+    return Py_BuildValue((char*)"l", widgetSetOnTop(widget, b));
 }
 
 // Keep compatibility
 PyObject* py_toggle_widget_redraw(PyObject *, PyObject *args)
 {
-  long widget, b;
+    long widget, b;
 
-  if (!PyArg_ParseTuple(args, (char*)"ll:toggleWidgetRedraw", &widget, &b ))
-    return NULL;
-  if (!checkKaramba(widget))
-    return NULL;
-  return Py_BuildValue((char*)"l", 0);
+    if (!PyArg_ParseTuple(args, (char*)"ll:toggleWidgetRedraw", &widget, &b))
+        return NULL;
+    if (!checkKaramba(widget))
+        return NULL;
+    return Py_BuildValue((char*)"l", 0);
 }

@@ -35,7 +35,7 @@ class ThemesDlg : public QDialog, public Ui::ThemesLayout
 {
     Q_OBJECT
 
-  public:
+public:
     ThemesDlg(QWidget *parent = 0, const char *name = 0);
     ~ThemesDlg();
 
@@ -50,7 +50,7 @@ class ThemesDlg : public QDialog, public Ui::ThemesLayout
     void saveUserAddedThemes();
     QStringList runningThemes();
 
-  protected slots:
+protected slots:
     virtual void addToDesktop();
     virtual void selectionChanged(int);
     virtual void openLocalTheme();
@@ -58,13 +58,13 @@ class ThemesDlg : public QDialog, public Ui::ThemesLayout
     virtual void search(const QString& text);
     virtual void uninstall();
 
-  protected:
+protected:
     static bool filter(int index, QWidget* widget, void* data);
     void populateListbox();
     int themeIndex(QString file);
     QStringList themes();
 
-  private:
+private:
     SKNewStuff *mNewStuff;
     QStringList m_newStuffStatus;
 };

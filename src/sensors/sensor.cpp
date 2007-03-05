@@ -20,55 +20,50 @@ Sensor::Sensor(int iMsec)
 
 void Sensor::start()
 {
-    if (!timer.isActive())
-    {
-        connect (&timer,SIGNAL(timeout()),this,SLOT(update()));
-        timer.start( (msec == 0)?1000:msec);
+    if (!timer.isActive()) {
+        connect(&timer, SIGNAL(timeout()), this, SLOT(update()));
+        timer.start((msec == 0) ? 1000 : msec);
     }
 }
 
 Sensor::~Sensor()
 {
-  timer.stop();
+    timer.stop();
 
-  while(!objList->isEmpty())
-    delete objList->takeFirst();
+    while (!objList->isEmpty())
+        delete objList->takeFirst();
 
-  delete objList;
+    delete objList;
 }
 
-void Sensor::addMeter( SensorParams *sp )
+void Sensor::addMeter(SensorParams *sp)
 {
-  objList->append(sp);
+    objList->append(sp);
 }
 
-SensorParams* Sensor::hasMeter( Meter *meter )
+SensorParams* Sensor::hasMeter(Meter *meter)
 {
-  QObject *it;
-  foreach(it, *objList)
-  {
-    if ((qobject_cast<SensorParams*>(it))->getMeter() == meter)
-    {
-      return qobject_cast<SensorParams*>(it);
+    QObject *it;
+    foreach(it, *objList) {
+        if ((qobject_cast<SensorParams*>(it))->getMeter() == meter) {
+            return qobject_cast<SensorParams*>(it);
+        }
     }
-  }
-  
-  return NULL;
+
+    return NULL;
 }
 
 void Sensor::deleteMeter(Meter *meter)
 {
-  SensorParams* sp = hasMeter(meter);
+    SensorParams* sp = hasMeter(meter);
 
-  if(sp)
-  {
-    objList->removeAll(sp);
-    delete sp;
-  }
+    if (sp) {
+        objList->removeAll(sp);
+        delete sp;
+    }
 }
 
-void Sensor::setMaxValue( SensorParams* )
-{
-}
+void Sensor::setMaxValue(SensorParams*)
+{}
 
 #include "sensor.moc"

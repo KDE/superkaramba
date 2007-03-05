@@ -43,9 +43,9 @@ class TextLabel;
 
 class KarambaInterface : public QObject
 {
-  Q_OBJECT
+    Q_OBJECT
 
-  public:
+public:
     KarambaInterface(Karamba *k);
     virtual ~KarambaInterface();
 
@@ -70,7 +70,7 @@ class KarambaInterface : public QObject
     void callWidgetMouseMoved(Karamba *k, int x, int y, int button);
     void callKeyPressed(Karamba *k, Meter *meter, QString key);
 
-  Q_SIGNALS:
+Q_SIGNALS:
     void initWidget(QObject*);
     void widgetUpdated(QObject*);
     void widgetClosed(QObject*);
@@ -91,7 +91,7 @@ class KarambaInterface : public QObject
     void widgetMouseMoved(QObject*, int, int, int);
     void keyPressed(QObject*, QObject*, QString);
 
-  private:
+private:
     Karamba *m_karamba;
 
     Kross::Action *m_action;
@@ -99,7 +99,7 @@ class KarambaInterface : public QObject
     bool checkKaramba(Karamba *k);
     bool checkMeter(Karamba *k, Meter *m, QString type);
     bool checkKarambaAndMeter(Karamba *k, Meter *m, QString type);
-    
+
     QVariantList getMeterMinMax(Karamba *k, Meter *m, QString type);
     QVariantList getMeterSize(Karamba *k, Meter *m, QString type);
     QVariantList getMeterPos(Karamba *k, Meter *m, QString type);
@@ -121,11 +121,11 @@ class KarambaInterface : public QObject
 
 
 
-  public Q_SLOTS:
+public Q_SLOTS:
     // Bar
     QObject* createBar(Karamba *k, int x, int y, int w, int h, QString path = "");
     bool deleteBar(Karamba *k, Bar *bar);
-    bool setBarMinMax(Karamba *k, Bar *bar, int min, int max);  
+    bool setBarMinMax(Karamba *k, Bar *bar, int min, int max);
     QVariantList getBarMinMax(Karamba *k, Bar *bar);
     bool moveBar(Karamba *k, Bar *bar, int x, int y);
     QVariantList getBarPos(Karamba *k, Bar *bar);
@@ -143,8 +143,8 @@ class KarambaInterface : public QObject
     bool getBarVertical(Karamba *k, Bar *bar);
     bool setBarImage(Karamba *k, Bar *bar, QString image);
     QString getBarImage(Karamba *k, Bar *bar);
-    
-    
+
+
     // Config
     bool addMenuConfigOption(Karamba *k, QString key, QString name);
     QString readConfigEntry(Karamba *k, QString key);
@@ -244,46 +244,46 @@ class KarambaInterface : public QObject
 
     bool acceptDrops(Karamba *k);
     bool attachClickArea(Karamba *k, Meter *m, QString leftButton = QString(),
-            QString middleButton = QString(), QString rightButton = QString());
+                         QString middleButton = QString(), QString rightButton = QString());
 
-/*
-    long callTheme
-*/
+    /*
+        long callTheme
+    */
     bool changeInterval(Karamba *k, int interval);
-/*
-    long createClickArea
-    long createServiceClickArea
-*/
+    /*
+        long createClickArea
+        long createServiceClickArea
+    */
     int execute(QString command);
 
-/*
-    long executeInteractive
-    long getIncomingData
-    long getIp
-    long getNumberOfDesktop
-    long getPrettyThemeName
-    long getServiceGroups
-*/
+    /*
+        long executeInteractive
+        long getIncomingData
+        long getIp
+        long getNumberOfDesktop
+        long getPrettyThemeName
+        long getServiceGroups
+    */
     QString getThemePath(Karamba *k);
-/*
-    long getUpdateTime
-    long hide
-    long language
-    long managementPopup
-    long openNamedTheme
-    long openTheme
-    long readThemeFile
-    long reloadTheme
-    long removeClickArea
-    long run
-    long setIncomingData
-    long setUpdateTime
-    long show
-    long toggleShowDesktop
-    long translateAll
-    long userLanguage
-    long wantRightButton
-*/
+    /*
+        long getUpdateTime
+        long hide
+        long language
+        long managementPopup
+        long openNamedTheme
+        long openTheme
+        long readThemeFile
+        long reloadTheme
+        long removeClickArea
+        long run
+        long setIncomingData
+        long setUpdateTime
+        long show
+        long toggleShowDesktop
+        long translateAll
+        long userLanguage
+        long wantRightButton
+    */
     // RichText
     QObject* createRichText(Karamba* k, QString text, bool underline = false);
     bool deleteRichText(Karamba *k, RichTextLabel *label);
@@ -303,24 +303,24 @@ class KarambaInterface : public QObject
     int getRichTextFontSize(Karamba *k, RichTextLabel *label);
     bool setRichTextSensor(Karamba *k, RichTextLabel *label, QString sensor);
     QString getRichTextSensor(Karamba *k, RichTextLabel *label);
-    
-/*
-    // Systray
-    long createSystray
-    long getCurrentWindowCount
-    long hideSystray
-    long moveSystray
-    long showSystray
-    long updateSystrayLayout
 
-    // Task
-    long getStartupInfo
-    long getStartupList
-    long getTaskInfo
-    long getTaskList
-    long getTaskNames
-    long performTaskAction
-*/
+    /*
+        // Systray
+        long createSystray
+        long getCurrentWindowCount
+        long hideSystray
+        long moveSystray
+        long showSystray
+        long updateSystrayLayout
+
+        // Task
+        long getStartupInfo
+        long getStartupList
+        long getTaskInfo
+        long getTaskList
+        long getTaskNames
+        long performTaskAction
+    */
     // Text
     QObject* createText(Karamba* k, int x, int y, int width, int height, QString text);
     bool deleteText(Karamba *k, TextLabel *text);
@@ -346,7 +346,7 @@ class KarambaInterface : public QObject
     QString getTextAlign(Karamba *k, TextLabel *text);
     bool setTextAlign(Karamba *k, TextLabel *text, QString alignment);
     bool setTextScroll(Karamba *k, TextLabel *text, QString type, int x = 0, int y = 0, int gap = 0, int pause = 0);
-    
+
     // Widget
     bool createWidgetMask(Karamba *k, QString mask);
     QVariantList getWidgetPosition(Karamba *k);

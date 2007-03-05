@@ -26,7 +26,7 @@ class NetworkSensor :  public Sensor
 {
     Q_OBJECT
 public:
-    NetworkSensor( QString device, int interval );
+    NetworkSensor(QString device, int interval);
     ~NetworkSensor();
     void update();
 
@@ -40,7 +40,7 @@ private:
     int if_number;
     ifmibdata if_mib;
 #endif
-    void getInOutBytes (unsigned long &in,unsigned long &out) const;
+    void getInOutBytes(unsigned long &in, unsigned long &out) const;
 
 };
 #endif // NETWORKSENSOR_H

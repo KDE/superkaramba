@@ -35,155 +35,152 @@
 
 long moveSystray(long widget, long x, long y, long w, long h)
 {
-  karamba* currTheme = (karamba*)widget;
+    karamba* currTheme = (karamba*)widget;
 
-  if (currTheme->systray != 0) {
-    currTheme->systray->move((int)x,(int)y);
-    currTheme->systray->setMinimumSize((int)w,(int)h);
-    currTheme->systray->layoutSystray();
-    currTheme->systray->show();
-  }
-  return 1;
+    if (currTheme->systray != 0) {
+        currTheme->systray->move((int)x, (int)y);
+        currTheme->systray->setMinimumSize((int)w, (int)h);
+        currTheme->systray->layoutSystray();
+        currTheme->systray->show();
+    }
+    return 1;
 }
 
 PyObject* py_move_systray(PyObject *, PyObject *args)
 {
-  long widget, x, y, w, h;
-  if (!PyArg_ParseTuple(args, (char*)"lllll:moveSystray", &widget, &x, &y, &w, &h))
-    return NULL;
-  if (!checkKaramba(widget))
-    return NULL;
-  return Py_BuildValue((char*)"l", moveSystray(widget, x, y, w, h));
+    long widget, x, y, w, h;
+    if (!PyArg_ParseTuple(args, (char*)"lllll:moveSystray", &widget, &x, &y, &w, &h))
+        return NULL;
+    if (!checkKaramba(widget))
+        return NULL;
+    return Py_BuildValue((char*)"l", moveSystray(widget, x, y, w, h));
 }
 
 /* now a method we need to expose to Python */
 long showSystray(long widget)
 {
-  karamba* currTheme = (karamba*)widget;
+    karamba* currTheme = (karamba*)widget;
 
-  if (currTheme->systray != 0)
-  {
-    currTheme->systray->show();
-  }
-  return 1;
+    if (currTheme->systray != 0) {
+        currTheme->systray->show();
+    }
+    return 1;
 }
 
 PyObject* py_show_systray(PyObject *, PyObject *args)
 {
-  long widget;
-  if (!PyArg_ParseTuple(args, (char*)"l:showSystray", &widget))
-    return NULL;
-  if (!checkKaramba(widget))
-    return NULL;
-  return Py_BuildValue((char*)"l", showSystray(widget));
+    long widget;
+    if (!PyArg_ParseTuple(args, (char*)"l:showSystray", &widget))
+        return NULL;
+    if (!checkKaramba(widget))
+        return NULL;
+    return Py_BuildValue((char*)"l", showSystray(widget));
 }
 
 /* now a method we need to expose to Python */
 long hideSystray(long widget)
 {
-  karamba* currTheme = (karamba*)widget;
+    karamba* currTheme = (karamba*)widget;
 
-  if (currTheme->systray != 0)
-  {
-    currTheme->systray->hide();
-  }
-  return 1;
+    if (currTheme->systray != 0) {
+        currTheme->systray->hide();
+    }
+    return 1;
 }
 
 PyObject* py_hide_systray(PyObject *, PyObject *args)
 {
-  long widget;
-  if (!PyArg_ParseTuple(args, (char*)"l:hideSystray", &widget))
-    return NULL;
-  if (!checkKaramba(widget))
-    return NULL;
-  return Py_BuildValue((char*)"l", hideSystray(widget));
+    long widget;
+    if (!PyArg_ParseTuple(args, (char*)"l:hideSystray", &widget))
+        return NULL;
+    if (!checkKaramba(widget))
+        return NULL;
+    return Py_BuildValue((char*)"l", hideSystray(widget));
 }
 
 /* now a method we need to expose to Python */
 long createSystray(long widget, long x, long y, long w, long h)
 {
-  karamba* currTheme = (karamba*)widget;
+    karamba* currTheme = (karamba*)widget;
 
-  //Don't create more than one systray
-  if (currTheme->systray == 0) {
-    currTheme->systray = new Systemtray(currTheme);
-    currTheme->systray->move((int)x,(int)y);
-    currTheme->systray->setMinimumSize((int)w,(int)h);
-    currTheme->systray->initSystray();
-    QObject::connect(currTheme->systray,SIGNAL(updated()),
-                     currTheme,SLOT(systrayUpdated()));
-    currTheme->systray->show();
-  }
+    //Don't create more than one systray
+    if (currTheme->systray == 0) {
+        currTheme->systray = new Systemtray(currTheme);
+        currTheme->systray->move((int)x, (int)y);
+        currTheme->systray->setMinimumSize((int)w, (int)h);
+        currTheme->systray->initSystray();
+        QObject::connect(currTheme->systray, SIGNAL(updated()),
+                         currTheme, SLOT(systrayUpdated()));
+        currTheme->systray->show();
+    }
 
-  return 1;
+    return 1;
 }
 
 PyObject* py_create_systray(PyObject *, PyObject *args)
 {
-  long widget, x, y, w, h;
-  if (!PyArg_ParseTuple(args, (char*)"lllll:createSystray", &widget, &x, &y, &w, &h))
-    return NULL;
-  if (!checkKaramba(widget))
-    return NULL;
-  return Py_BuildValue((char*)"l", createSystray(widget, x, y, w, h));
+    long widget, x, y, w, h;
+    if (!PyArg_ParseTuple(args, (char*)"lllll:createSystray", &widget, &x, &y, &w, &h))
+        return NULL;
+    if (!checkKaramba(widget))
+        return NULL;
+    return Py_BuildValue((char*)"l", createSystray(widget, x, y, w, h));
 }
 
 /* now a method we need to expose to Python */
 long getCurrentWindowCount(long widget)
 {
-  karamba* currTheme = (karamba*)widget;
-  int num;
+    karamba* currTheme = (karamba*)widget;
+    int num;
 
-  num = 0;
+    num = 0;
 
-  if (currTheme->systray != 0)
-  {
-    num = currTheme->systray->getCurrentWindowCount();
-  }
-  return num;
+    if (currTheme->systray != 0) {
+        num = currTheme->systray->getCurrentWindowCount();
+    }
+    return num;
 }
 
 PyObject* py_get_current_window_count(PyObject *, PyObject *args)
 {
-  long widget;
-  if (!PyArg_ParseTuple(args, (char*)"l:getCurrentWindowCount", &widget ))
-    return NULL;
-  if (!checkKaramba(widget))
-    return NULL;
-  return Py_BuildValue((char*)"l", getCurrentWindowCount(widget));
+    long widget;
+    if (!PyArg_ParseTuple(args, (char*)"l:getCurrentWindowCount", &widget))
+        return NULL;
+    if (!checkKaramba(widget))
+        return NULL;
+    return Py_BuildValue((char*)"l", getCurrentWindowCount(widget));
 }
 
 /* now a method we need to expose to Python */
 long updateSystrayLayout(long widget)
 {
-  karamba* currTheme = (karamba*)widget;
+    karamba* currTheme = (karamba*)widget;
 
-  if (currTheme->systray != 0)
-  {
-    currTheme->systray->layoutSystray();
-  }
-  return 1;
+    if (currTheme->systray != 0) {
+        currTheme->systray->layoutSystray();
+    }
+    return 1;
 }
 
 PyObject* py_update_systray_layout(PyObject *, PyObject *args)
 {
-  long widget;
-  if (!PyArg_ParseTuple(args, (char*)"l:updateSystrayLayout", &widget ))
-    return NULL;
-  if (!checkKaramba(widget))
-    return NULL;
-  return Py_BuildValue((char*)"l", updateSystrayLayout(widget));
+    long widget;
+    if (!PyArg_ParseTuple(args, (char*)"l:updateSystrayLayout", &widget))
+        return NULL;
+    if (!checkKaramba(widget))
+        return NULL;
+    return Py_BuildValue((char*)"l", updateSystrayLayout(widget));
 }
 
 /* get the systray size from python */
-int getSystraySize(long widget) {
-	karamba* currTheme = (karamba*)widget;
-	if(currTheme->systray == 0) {
-		return 0;
-	} else {
-		return currTheme->systray->getTraySize();
-	}
+int getSystraySize(long widget)
+{
+    karamba* currTheme = (karamba*)widget;
+    if (currTheme->systray == 0) {
+        return 0;
+    } else {
+        return currTheme->systray->getTraySize();
+    }
 }
 
 // Returns the size of the systray

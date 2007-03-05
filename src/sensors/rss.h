@@ -18,7 +18,7 @@ class RssSensor : public Sensor
 {
     Q_OBJECT
 public:
-    RssSensor( const QString &source, int interval, const QString &format, const QString &encoding=QString::null );
+    RssSensor(const QString &source, int interval, const QString &format, const QString &encoding = QString::null);
 
     ~RssSensor();
 

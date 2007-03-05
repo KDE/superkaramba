@@ -29,13 +29,13 @@
 @author See README for the list of authors
 */
 
-typedef bool (*show_callback) (int index, QWidget* widget, void* data);
+typedef bool(*show_callback)(int index, QWidget* widget, void* data);
 
 class KWidgetListbox : public QTableWidget
 {
     Q_OBJECT
 
-  public:
+public:
     KWidgetListbox(QWidget *parent = 0, const char *name = 0);
     ~KWidgetListbox();
 
@@ -49,17 +49,20 @@ class KWidgetListbox : public QTableWidget
     QWidget* selectedItem() const;
     QWidget* item(int index) const;
     int index(QWidget* itm) const;
-    uint count() const { return rowCount(); };
+    uint count() const
+    {
+        return rowCount();
+    };
 
     void showItems(show_callback func = 0, void* data = 0);
 
-  protected:
+protected:
     virtual void showEvent(QShowEvent* e);
 
-  protected slots:
+protected slots:
     void selectionChanged(int row, int col);
 
-  signals:
+signals:
     void selected(int index);
 };
 

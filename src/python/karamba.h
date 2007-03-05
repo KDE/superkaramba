@@ -40,46 +40,49 @@ class ThemeFile;
 class KarambaPython
 {
 protected:
-  bool pythonThemeExtensionLoaded;
-  PyObject *pName, *pModule;
-  PyObject *pDict;
-  static PyThreadState* mainThreadState;
+    bool pythonThemeExtensionLoaded;
+    PyObject *pName, *pModule;
+    PyObject *pDict;
+    static PyThreadState* mainThreadState;
 
-  void getLock(PyThreadState** myThreadState);
-  PyObject* getFunc(const char* function);
-  void releaseLock(PyThreadState* myThreadState);
-  bool callObject(const char* func, PyObject* pArgs, bool lock=true);
+    void getLock(PyThreadState** myThreadState);
+    PyObject* getFunc(const char* function);
+    void releaseLock(PyThreadState* myThreadState);
+    bool callObject(const char* func, PyObject* pArgs, bool lock = true);
 
 public:
-  KarambaPython(const ThemeFile& theme, bool reloading);
-  ~KarambaPython();
+    KarambaPython(const ThemeFile& theme, bool reloading);
+    ~KarambaPython();
 
-  static void initPython();
-  static void shutdownPython();
+    static void initPython();
+    static void shutdownPython();
 
-  bool isExtensionLoaded() { return pythonThemeExtensionLoaded; };
-  bool initWidget(Karamba* k);
-  bool widgetUpdated(Karamba* k);
-  bool widgetClosed(Karamba* k);
-  bool menuOptionChanged(Karamba* k, QString key, bool value);
-  bool meterClicked(Karamba* k, Meter* meter, int button);
-  bool meterClicked(Karamba* k, QString anchor, int button);
-  bool widgetClicked(Karamba* k, int x, int y, int button);
-  bool keyPressed(Karamba* k, const Meter* meter, const QString& text);
-  bool widgetMouseMoved(Karamba* k, int x, int y, int button);
-  bool menuItemClicked(Karamba* k, KMenu* menu, long id);
-  bool activeTaskChanged(Karamba* k, Task* t);
-  bool taskAdded(Karamba* k, Task* t);
-  bool taskRemoved(Karamba* k, Task* t);
-  bool startupAdded(Karamba* k, Startup* t);
-  bool startupRemoved(Karamba* k, Startup* t);
-  bool commandOutput(Karamba* k, int pid, char *buffer);
-  bool commandFinished(Karamba* k, int pid);
-  bool itemDropped(Karamba* k, QString text, int x, int y);
-  bool themeNotify(Karamba* k, const char *from, const char *txt);
-  bool systrayUpdated(Karamba* k);
-  bool desktopChanged(Karamba* k, int desktop);
-  bool wallpaperChanged(Karamba* k, int desktop);
+    bool isExtensionLoaded()
+    {
+        return pythonThemeExtensionLoaded;
+    };
+    bool initWidget(Karamba* k);
+    bool widgetUpdated(Karamba* k);
+    bool widgetClosed(Karamba* k);
+    bool menuOptionChanged(Karamba* k, QString key, bool value);
+    bool meterClicked(Karamba* k, Meter* meter, int button);
+    bool meterClicked(Karamba* k, QString anchor, int button);
+    bool widgetClicked(Karamba* k, int x, int y, int button);
+    bool keyPressed(Karamba* k, const Meter* meter, const QString& text);
+    bool widgetMouseMoved(Karamba* k, int x, int y, int button);
+    bool menuItemClicked(Karamba* k, KMenu* menu, long id);
+    bool activeTaskChanged(Karamba* k, Task* t);
+    bool taskAdded(Karamba* k, Task* t);
+    bool taskRemoved(Karamba* k, Task* t);
+    bool startupAdded(Karamba* k, Startup* t);
+    bool startupRemoved(Karamba* k, Startup* t);
+    bool commandOutput(Karamba* k, int pid, char *buffer);
+    bool commandFinished(Karamba* k, int pid);
+    bool itemDropped(Karamba* k, QString text, int x, int y);
+    bool themeNotify(Karamba* k, const char *from, const char *txt);
+    bool systrayUpdated(Karamba* k);
+    bool desktopChanged(Karamba* k, int desktop);
+    bool wallpaperChanged(Karamba* k, int desktop);
 };
 
 PyObject* py_testInterface(PyObject *, PyObject *args);

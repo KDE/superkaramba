@@ -26,7 +26,7 @@
 #include "richtextlabel.moc"
 
 RichTextLabel::RichTextLabel(Karamba* k)
-    :   Meter(k, 0, 0, 0, 0),
+        :   Meter(k, 0, 0, 0, 0),
         text(0),
         source(""),
         colorGrp(QApplication::palette()),
@@ -36,7 +36,7 @@ RichTextLabel::RichTextLabel(Karamba* k)
 }
 
 RichTextLabel::RichTextLabel(Karamba* k, int x, int y, int w, int h)
-    :   Meter(k, x, y, w, h),
+        :   Meter(k, x, y, w, h),
         text(0),
         source(""),
         colorGrp(QApplication::palette()),
@@ -48,8 +48,7 @@ RichTextLabel::RichTextLabel(Karamba* k, int x, int y, int w, int h)
 
 RichTextLabel::~RichTextLabel()
 {
-    if (text != 0)
-    {
+    if (text != 0) {
         delete text;
         text = 0;
     }
@@ -58,13 +57,10 @@ RichTextLabel::~RichTextLabel()
 void RichTextLabel::setText(QString t, bool linkUnderline)
 {
     source = t;
-    if (text != 0)
-    {
+    if (text != 0) {
         delete text;
         text = 0;
-    }
-    else
-    {
+    } else {
         // set underlineLinks only when RichTextLabel is created, not
         // when text is changed.
         underlineLinks = linkUnderline;
@@ -81,8 +77,7 @@ void RichTextLabel::setText(QString t, bool linkUnderline)
     cursor.select(QTextCursor::Document);
     cursor.mergeCharFormat(format);
 
-    if (getWidth() < 1)
-    {
+    if (getWidth() < 1) {
         text->adjustSize();
         Meter::setWidth((int)text->textWidth());
         Meter::setHeight((int)text->size().height());
@@ -114,7 +109,7 @@ QString RichTextLabel::getFont() const
 void RichTextLabel::setFontSize(int size)
 {
     font.setPixelSize(size);
-    if(text != 0)
+    if (text != 0)
         text->setDefaultFont(font);
 }
 
@@ -126,7 +121,7 @@ int RichTextLabel::getFontSize() const
 void RichTextLabel::setFixedPitch(bool fp)
 {
     font.setFixedPitch(fp);
-    if(text != 0)
+    if (text != 0)
         text->setDefaultFont(font);
 }
 
@@ -137,8 +132,7 @@ bool RichTextLabel::getFixedPitch() const
 
 void RichTextLabel::setTextProps(TextField* t)
 {
-    if(t)
-    {
+    if (t) {
         setFontSize(t->getFontSize());
         setFont(t->getFont());
         colorGrp.setColor(QPalette::Text, t->getColor());
@@ -158,12 +152,12 @@ void RichTextLabel::setWidth(int width)
 }
 
 void RichTextLabel::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-                QWidget *widget)
+                          QWidget *widget)
 {
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-    if(hidden || text == 0)
+    if (hidden || text == 0)
         return;
 
     int w = getWidth();
@@ -181,14 +175,12 @@ bool RichTextLabel::mouseEvent(QGraphicsSceneMouseEvent *event)
     QString link = text->documentLayout()->anchorAt(pos);
     kDebug() << link << endl;
 
-    if (link[0] != '#')
-    {
-        if(event->button() == Qt::LeftButton)
+    if (link[0] != '#') {
+        if (event->button() == Qt::LeftButton)
             KRun::runCommand(link);
 
         return false;
-    }
-    else
+    } else
         return true;
 }
 

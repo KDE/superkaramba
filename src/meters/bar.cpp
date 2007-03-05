@@ -18,7 +18,7 @@
 #include "bar.moc"
 
 Bar::Bar(Karamba* k, int x, int y, int w, int h)
-    :   Meter(k, x, y, w, h)
+        :   Meter(k, x, y, w, h)
 {
     value = 0;
     minValue = 0;
@@ -41,35 +41,32 @@ bool Bar::setImage(QString fileName)
     QFileInfo fileInfo(fileName);
     bool res = false;
 
-    if(m_karamba->theme().isThemeFile(fileName))
-    {
+    if (m_karamba->theme().isThemeFile(fileName)) {
         QByteArray ba = m_karamba->theme().readThemeFile(fileName);
         res = pixmap.loadFromData(ba);
-    }
-    else
+    } else
         res = pixmap.load(fileName);
 
     pixmapWidth = pixmap.width();
     pixmapHeight = pixmap.height();
 
-    if(getWidth()==0 || getHeight()==0)
-    {
+    if (getWidth() == 0 || getHeight() == 0) {
         setWidth(pixmapWidth);
         setHeight(pixmapHeight);
     }
 
-    if(res)
+    if (res)
         imagePath = fileName;
 
     return res;
 }
 
-void Bar::setValue( int v )
+void Bar::setValue(int v)
 {
-    if(v > maxValue)
+    if (v > maxValue)
         v = maxValue;
 
-    if(v < minValue)
+    if (v < minValue)
         v = minValue;
 
     oldBarValue = barValue;
@@ -89,41 +86,29 @@ void Bar::valueChanged()
     int diff = maxValue - minValue;
     int size = 0;
 
-    if (diff != 0)
-    {
-        if(vertical)
+    if (diff != 0) {
+        if (vertical)
             size = getHeight();
         else
             size = getWidth();
 
-        if (oldBarValue < barValue)
-        {
-            if (value < int((barValue-minValue)*size / diff + 0.5))
-            {
+        if (oldBarValue < barValue) {
+            if (value < int((barValue - minValue)*size / diff + 0.5)) {
                 value++;
                 oldBarValue++;
-            }
-            else
+            } else
                 m_timer->stop();
-        }
-        else if (oldBarValue > barValue)
-        {
-            if (value > int((barValue-minValue)*size / diff + 0.5))
-            {
+        } else if (oldBarValue > barValue) {
+            if (value > int((barValue - minValue)*size / diff + 0.5)) {
                 value--;
                 oldBarValue--;
-            }
-            else
+            } else
                 m_timer->stop();
-        }
-        else
-        {
+        } else {
             m_timer->stop();
-            value = int((barValue-minValue)*size / diff + 0.5);
+            value = int((barValue - minValue) * size / diff + 0.5);
         }
-    }
-    else
-    {
+    } else {
         value = 0;
         m_timer->stop();
     }
@@ -159,11 +144,10 @@ void Bar::paint(QPainter *p, const QStyleOptionGraphicsItem *option,
     height = getHeight();
 
     //only draw image if not hidden
-    if(hidden == 0)
-    {
+    if (hidden == 0) {
         p->setOpacity(m_opacity);
-        if(vertical)
-            p->drawTiledPixmap(0, 0+height-value, width, value, pixmap, 0, pixmapHeight-value);
+        if (vertical)
+            p->drawTiledPixmap(0, 0 + height - value, width, value, pixmap, 0, pixmapHeight - value);
         else // horizontal
             p->drawTiledPixmap(0, 0, value, height, pixmap);
     }

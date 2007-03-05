@@ -21,29 +21,29 @@
 class DatePicker : public QWidget
 {
 public:
-	DatePicker(QWidget*);
+    DatePicker(QWidget*);
 private:
-	KDatePicker *picker;
-	void keyReleaseEvent(QKeyEvent *e);
+    KDatePicker *picker;
+    void keyReleaseEvent(QKeyEvent *e);
 };
 
 class DateSensor :  public Sensor
 {
-Q_OBJECT
+    Q_OBJECT
 public:
-  DateSensor( int interval );
-  ~DateSensor();
+    DateSensor(int interval);
+    ~DateSensor();
 
-  void toggleCalendar(QMouseEvent *ev);
-  void mousePressEvent(QMouseEvent *ev);
-  void update();
+    void toggleCalendar(QMouseEvent *ev);
+    void mousePressEvent(QMouseEvent *ev);
+    void update();
 
 protected slots:
-  void slotCalendarDeleted();
+    void slotCalendarDeleted();
 
 private:
-  bool hidden;
-  DatePicker* cal;
+    bool hidden;
+    DatePicker* cal;
 
 };
 

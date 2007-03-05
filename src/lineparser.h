@@ -6,7 +6,7 @@
 
 class LineParser
 {
-  public:
+public:
     LineParser(const QString& line = QString::null);
     ~LineParser();
 
@@ -17,9 +17,12 @@ class LineParser
     QString getString(QString w, QString def = QString()) const;
     bool getBoolean(QString w, bool def = false) const;
 
-    const QString& meter() const { return m_meter; };
+    const QString& meter() const
+    {
+        return m_meter;
+    };
 
-  private:
+private:
     QString m_line;
     QString m_meter;
 };

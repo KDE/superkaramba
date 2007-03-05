@@ -32,9 +32,9 @@ private:
     KShellProcess ksp;
     QString extraParams;
 
-    QMap<QString,QString> sensorMap;
+    QMap<QString, QString> sensorMap;
 #ifdef __FreeBSD__
-    QMap<QString,QString> sensorMapBSD;
+    QMap<QString, QString> sensorMapBSD;
 #endif
     QString sensorResult;
 

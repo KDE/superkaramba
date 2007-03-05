@@ -38,20 +38,20 @@ class Systemtray : public QWidget
 public:
     Systemtray(QWidget* parent);
     ~Systemtray();
-    
-    void updateBackgroundPixmap ( const QPixmap & );
+
+    void updateBackgroundPixmap(const QPixmap &);
 
     int getCurrentWindowCount();
 
-    virtual void initSystray( void );
+    virtual void initSystray(void);
 
 public slots:
     void updateTrayWindows();
     int getTraySize();
-    void systemTrayWindowAdded( WId w );
-    void systemTrayWindowRemoved( WId w );
+    void systemTrayWindowAdded(WId w);
+    void systemTrayWindowRemoved(WId w);
     void layoutSystray();
-    
+
 signals:
     void updated();
 

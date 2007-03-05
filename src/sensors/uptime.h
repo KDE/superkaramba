@@ -21,9 +21,9 @@ class UptimeSensor :  public Sensor
 {
 
 public:
-  UptimeSensor(int interval);
-  ~UptimeSensor();
-  void update();
+    UptimeSensor(int interval);
+    ~UptimeSensor();
+    void update();
 
 };
 

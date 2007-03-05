@@ -31,17 +31,17 @@
 class SensorParams : public QObject
 {
 public:
-    SensorParams( Meter* );
+    SensorParams(Meter*);
 
     ~SensorParams();
 
-    void addParam( const QString &name, const QString &value);
-    QString getParam( const QString& ) const;
+    void addParam(const QString &name, const QString &value);
+    QString getParam(const QString&) const;
 
     Meter* getMeter() const;
 private:
-Meter *meter;
-QMap<QString,QString> params;
+    Meter *meter;
+    QMap<QString, QString> params;
 
 };
 

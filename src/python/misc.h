@@ -3,7 +3,7 @@
 *
 *  Copyright (C) 2003 Hans Karlsson <karlsson.h@home.se>
 *  Copyright (C) 2003-2004 Adam Geitgey <adam@rootnode.org>
-*  Copyright (C) 2004 Petri Damst� <damu@iki.fi> 
+*  Copyright (C) 2004 Petri Damst� <damu@iki.fi>
 *  Copyright (C) 2004,2005 Luke Kenneth Casson Leighton <lkcl@lkcl.net>
 *
 *  This file is part of SuperKaramba.
@@ -26,7 +26,7 @@
 #ifndef MISC_PYTHON_H
 #define MISC_PYTHON_H
 
-/** @file 
+/** @file
 *
 * These are global functions that are used to interpret
 * certain Python calls.
@@ -116,7 +116,7 @@ PyObject* py_execute_command_interactive(PyObject* self, PyObject* args);
 PyObject* py_run_command(PyObject* self, PyObject* args);
 
 /** Misc/attachClickArea
-* 
+*
 *   SYNOPSIS
 *     long attachClickArea(widget, meter, lB, mB, rB)
 *   DESCRIPTION
@@ -213,7 +213,7 @@ PyObject* py_userLanguage(PyObject *self, PyObject *args);
 *   string userLanguages(widget)
 * DESCRIPTION
 *   Returns a list (array) containing the language name abbreviations for the
-*   preferred interface languages user chose for KDE session in Region & 
+*   preferred interface languages user chose for KDE session in Region &
 *   Language settings.
 *   Having the whole array of preferred languages available is important for
 *   cases when you cannot provide interface translation for the 1st preferred
@@ -357,7 +357,7 @@ PyObject* py_hide(PyObject *self, PyObject *args);
 PyObject* py_get_ip(PyObject *self, PyObject *args);
 
 /** Misc/changeInterval
-* 
+*
 *  SYNOPSIS
 *    long changeInterval(widget, interval)
 *  DESCRIPTION
@@ -511,7 +511,7 @@ PyObject* py_get_incoming_data(PyObject *self, PyObject *args);
 *  SYNOPSIS
 *    long getUpdateTime(widget)
 *  DESCRIPTION
-*    returns the last stored update time.  intended for use 
+*    returns the last stored update time.  intended for use
 *    so that the next refresh interval can work out how long ago
 *    the mouse was last moved over the widget.
 *  ARGUMENTS
@@ -560,7 +560,7 @@ PyObject* py_management_popup(PyObject *self, PyObject *args);
 *  SYNOPSIS
 *    long getUpdateTime(widget, updated_time)
 *  DESCRIPTION
-*    returns the last stored update time.  intended for use 
+*    returns the last stored update time.  intended for use
 *    so that the next refresh interval can work out how long ago
 *    the mouse was last moved over the widget.
 *  ARGUMENTS

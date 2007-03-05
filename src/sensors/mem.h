@@ -23,39 +23,39 @@
 
 class MemSensor :  public Sensor
 {
-Q_OBJECT
+    Q_OBJECT
 public:
 
-  MemSensor( int interval );
-  ~MemSensor();
+    MemSensor(int interval);
+    ~MemSensor();
 
-  int getMemTotal();
-  int getMemFree();
-  int getBuffers();
-  int getCached();
+    int getMemTotal();
+    int getMemFree();
+    int getBuffers();
+    int getCached();
 
-  int getSwapTotal();
-  int getSwapFree();
+    int getSwapTotal();
+    int getSwapFree();
 
-  void update();
-  void setMaxValue( SensorParams *sp );
-  QString getMemLine();
+    void update();
+    void setMaxValue(SensorParams *sp);
+    QString getMemLine();
 
 private:
-  QString meminfo;
-  void readValues();
+    QString meminfo;
+    void readValues();
 #if defined __FreeBSD__ || defined(Q_OS_NETBSD)
-  int pageshift;           /* log base 2 of the pagesize */
-  QString sensorResult;
-  int swapTotal;
-  int swapUsed;
+    int pageshift;           /* log base 2 of the pagesize */
+    QString sensorResult;
+    int swapTotal;
+    int swapUsed;
 # if (defined(__FreeBSD__) && __FreeBSD_version < 500018)
-  KShellProcess ksp;
-  bool MaxSet;
+    KShellProcess ksp;
+    bool MaxSet;
 
 # elif defined __FreeBSD__
-  kvm_t *kd;
-  kvm_swap swapinfo;
+    kvm_t *kd;
+    kvm_swap swapinfo;
 # endif
 #endif
 

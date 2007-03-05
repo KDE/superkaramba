@@ -38,160 +38,146 @@
 
 // Effect
 Effect::Effect(ImageLabel* img, int msec) :
-  myImage(img)
+        myImage(img)
 {
-  if (msec > 0)
-  {
-    // remove the effect after the given time
-    //QTimer::singleShot (millisec, myImage, SLOT(slotEffectExpired()));
-    //timer -> changeInterval(millisec);
-    millisec = msec;
-  }
-  else
-  {
-    millisec = msec;
-  }
+    if (msec > 0) {
+        // remove the effect after the given time
+        //QTimer::singleShot (millisec, myImage, SLOT(slotEffectExpired()));
+        //timer -> changeInterval(millisec);
+        millisec = msec;
+    } else {
+        millisec = msec;
+    }
 }
 
 Effect::~Effect()
-{
-}
+{}
 
 void Effect::startTimer()
 {
-  if (millisec > 0)
-  {
-    QTimer::singleShot (millisec, myImage, SLOT(slotEffectExpired()));
-    millisec = 0;
-  }
+    if (millisec > 0) {
+        QTimer::singleShot(millisec, myImage, SLOT(slotEffectExpired()));
+        millisec = 0;
+    }
 }
 
 // Intensity
 Intensity::Intensity(ImageLabel* img, float r, int millisec) :
-  Effect(img, millisec)
+        Effect(img, millisec)
 {
-  ratio = r;
-  ratio = (ratio > 1)  ? 1 : ratio;
-  ratio = (ratio < -1) ? -1 : ratio;
+    ratio = r;
+    ratio = (ratio > 1)  ? 1 : ratio;
+    ratio = (ratio < -1) ? -1 : ratio;
 }
 
 QPixmap Intensity::apply(QPixmap pixmap)
 {
-  return KPixmapEffect::intensity(pixmap, ratio);
+    return KPixmapEffect::intensity(pixmap, ratio);
 }
 
 // ChannelIntensity
 ChannelIntensity::ChannelIntensity(ImageLabel* img, float r, QString c,
                                    int millisec) :
-  Effect(img, millisec)
+        Effect(img, millisec)
 {
-  ratio = r;
-  ratio = (ratio > 1)  ? 1 : ratio;
-  ratio = (ratio < -1) ? -1 : ratio;
+    ratio = r;
+    ratio = (ratio > 1)  ? 1 : ratio;
+    ratio = (ratio < -1) ? -1 : ratio;
 
-  channel = 0;
-  if (c.contains("red", Qt::CaseInsensitive))
-  {
     channel = 0;
-  }
-  else if (c.contains("green", Qt::CaseInsensitive))
-  {
-    channel = 1;
-  }
-  else if (c.contains("blue", Qt::CaseInsensitive))
-  {
-    channel = 2;
-  }
+    if (c.contains("red", Qt::CaseInsensitive)) {
+        channel = 0;
+    } else if (c.contains("green", Qt::CaseInsensitive)) {
+        channel = 1;
+    } else if (c.contains("blue", Qt::CaseInsensitive)) {
+        channel = 2;
+    }
 }
 
 QPixmap ChannelIntensity::apply(QPixmap pixmap)
 {
-  return KPixmapEffect::channelIntensity(pixmap, ratio,
-    (KPixmapEffect::RGBComponent)channel);
+    return KPixmapEffect::channelIntensity(pixmap, ratio,
+                                           (KPixmapEffect::RGBComponent)channel);
 }
 
 // ToGray
 ToGray::ToGray(ImageLabel* img, int millisec) : Effect(img, millisec)
-{
-}
+{}
 
 QPixmap ToGray::apply(QPixmap pixmap)
 {
-  return KPixmapEffect::toGray(pixmap);
+    return KPixmapEffect::toGray(pixmap);
 }
 
 /***********************************************************************/
 
-ImageLabel::ImageLabel(Karamba* k, int ix,int iy,int iw,int ih) :
-  Meter(k, ix,iy,iw,ih), m_allowClick(false), zoomed(false), rollover(false)
+ImageLabel::ImageLabel(Karamba* k, int ix, int iy, int iw, int ih) :
+        Meter(k, ix, iy, iw, ih), m_allowClick(false), zoomed(false), rollover(false)
 {
-  background = 0;
-  cblend = 0;
-  //scaleMat.reset();
-  //rotMat.reset();
-  scale_w = 1;
-  scale_h = 1;
-  rot_angle = 0;
+    background = 0;
+    cblend = 0;
+    //scaleMat.reset();
+    //rotMat.reset();
+    scale_w = 1;
+    scale_h = 1;
+    rot_angle = 0;
 
-  doScale = false;
-  doRotate = false;
+    doScale = false;
+    doRotate = false;
 
-  imageEffect = 0;
+    imageEffect = 0;
 }
 
 ImageLabel::ImageLabel(Karamba* k) :
-  Meter(k), zoomed(false), rollover(false)
+        Meter(k), zoomed(false), rollover(false)
 {
-  cblend = 0;
-  background = 0;
+    cblend = 0;
+    background = 0;
 }
 
 ImageLabel::~ImageLabel()
 {
-  if (imageEffect != 0)
-  {
-    delete imageEffect;
-    imageEffect = 0;
-  }
-  if(!old_tip_rect.isNull())
-  {
-  }
+    if (imageEffect != 0) {
+        delete imageEffect;
+        imageEffect = 0;
+    }
+    if (!old_tip_rect.isNull()) {}
 }
 
 void ImageLabel::setValue(int v)
 {
- setValue( QString::number( v ) );
+    setValue(QString::number(v));
 }
 
 void ImageLabel::show()
 {
-  Meter::show();
-  setEnabled(true);
+    Meter::show();
+    setEnabled(true);
 }
 
 void ImageLabel::hide()
 {
-  Meter::hide();
-  setEnabled(false);
+    Meter::hide();
+    setEnabled(false);
 }
 
 void ImageLabel::rotate(int deg)
 {
-  doRotate = !(deg == 0);
+    doRotate = !(deg == 0);
 
-  rot_angle = deg;
+    rot_angle = deg;
 
-  applyTransformations();
+    applyTransformations();
 }
 
 void ImageLabel::scale(int w, int h)
 {
-  doScale = !(w == realpixmap.width() && h == realpixmap.height());
+    doScale = !(w == realpixmap.width() && h == realpixmap.height());
 
-  scale_w = w;
-  scale_h = h;
+    scale_w = w;
+    scale_h = h;
 
-  applyTransformations();
+    applyTransformations();
 }
 
 void ImageLabel::smoothScale(int w, int h)
@@ -229,21 +215,16 @@ void ImageLabel::applyTransformations(bool useSmoothScale)
     prepareGeometryChange();
 
     pixmap = realpixmap;
-    if (doRotate)
-    {
+    if (doRotate) {
         // KDE and QT seem to miss a high quality image rotation
         QMatrix rotMat;
         rotMat.rotate(rot_angle);
         pixmap = pixmap.transformed(rotMat);
     }
-    if (doScale)
-    {
-        if (useSmoothScale)
-        {
-          pixmap = QPixmap::fromImage(pixmap.toImage().scaled(scale_w, scale_h, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
-        }
-        else
-        {
+    if (doScale) {
+        if (useSmoothScale) {
+            pixmap = QPixmap::fromImage(pixmap.toImage().scaled(scale_w, scale_h, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+        } else {
             double widthFactor = ((double)scale_w) / ((double)pixmap.width());
             double heightFactor = ((double)scale_h) / ((double)pixmap.height());
             QMatrix scaleMat;
@@ -251,8 +232,7 @@ void ImageLabel::applyTransformations(bool useSmoothScale)
             pixmap = pixmap.transformed(scaleMat);
         }
     }
-    if (imageEffect != 0)
-    {
+    if (imageEffect != 0) {
         pixmap = imageEffect -> apply(pixmap);
     }
     setWidth(pixmap.width());
@@ -263,56 +243,47 @@ void ImageLabel::applyTransformations(bool useSmoothScale)
 
 void ImageLabel::slotCopyResult(KIO::Job* job)
 {
-  QString tempFile = ((KIO::FileCopyJob*)job)->destUrl().path();
-  if(job->error() == 0)
-  {
-    setValue(tempFile);
-    imagePath = ((KIO::FileCopyJob*)job)->srcUrl().path();
-    emit pixmapLoaded();
-  }
-  else
-  {
-    qWarning("Error downloading (%s): %s", job->errorText().toAscii().constData(),
-                                           tempFile.toAscii().constData());
-  }
-  KIO::NetAccess::removeTempFile(tempFile);
+    QString tempFile = ((KIO::FileCopyJob*)job)->destUrl().path();
+    if (job->error() == 0) {
+        setValue(tempFile);
+        imagePath = ((KIO::FileCopyJob*)job)->srcUrl().path();
+        emit pixmapLoaded();
+    } else {
+        qWarning("Error downloading (%s): %s", job->errorText().toAscii().constData(),
+                 tempFile.toAscii().constData());
+    }
+    KIO::NetAccess::removeTempFile(tempFile);
 }
 
 void ImageLabel::setValue(QString fn)
 {
-  // use the first line
-  QStringList sList = fn.split("\n");
-  QString fileName = *sList.begin();
-  KUrl url(fileName);
-  QRegExp rx("^[a-zA-Z]{1,5}:/",Qt::CaseInsensitive);
-  bool protocol = (rx.indexIn(fileName)!=-1)?true:false;
-  QPixmap pm;
+    // use the first line
+    QStringList sList = fn.split("\n");
+    QString fileName = *sList.begin();
+    KUrl url(fileName);
+    QRegExp rx("^[a-zA-Z]{1,5}:/", Qt::CaseInsensitive);
+    bool protocol = (rx.indexIn(fileName) != -1) ? true : false;
+    QPixmap pm;
 
-  if(protocol && url.isLocalFile() == false)
-  {
-    KTemporaryFile tmpFile;
-    tmpFile.setAutoRemove(false);
-    tmpFile.open();
-    KIO::FileCopyJob* copy = KIO::file_copy(fileName, tmpFile.fileName(), 0600,
-                                            true, false, false);
-    connect(copy, SIGNAL(result(KIO::Job*)),
-            this, SLOT(slotCopyResult(KIO::Job*)));
-    return;
-  }
-  else
-  {
-    if(m_karamba->theme().isThemeFile(fileName))
-    {
-      QByteArray ba = m_karamba->theme().readThemeFile(fileName);
-      pm.loadFromData(ba);
+    if (protocol && url.isLocalFile() == false) {
+        KTemporaryFile tmpFile;
+        tmpFile.setAutoRemove(false);
+        tmpFile.open();
+        KIO::FileCopyJob* copy = KIO::file_copy(fileName, tmpFile.fileName(), 0600,
+                                                true, false, false);
+        connect(copy, SIGNAL(result(KIO::Job*)),
+                this, SLOT(slotCopyResult(KIO::Job*)));
+        return;
+    } else {
+        if (m_karamba->theme().isThemeFile(fileName)) {
+            QByteArray ba = m_karamba->theme().readThemeFile(fileName);
+            pm.loadFromData(ba);
+        } else {
+            pm.load(fileName);
+        }
+        imagePath = fileName;
     }
-    else
-    {
-      pm.load(fileName);
-    }
-    imagePath = fileName;
-  }
-  setValue(pm);
+    setValue(pm);
 }
 
 //Matthew Kay: a new version of setValue to be used by createTaskIcon()
@@ -321,82 +292,70 @@ void ImageLabel::setValue(QString fn)
  */
 void ImageLabel::setValue(QPixmap& pix)
 {
-  prepareGeometryChange();
+    prepareGeometryChange();
 
-  realpixmap = QPixmap(pix);
-  pixmap = realpixmap;
-  setWidth(pixmap.width());
-  setHeight(pixmap.height());
+    realpixmap = QPixmap(pix);
+    pixmap = realpixmap;
+    setWidth(pixmap.width());
+    setHeight(pixmap.height());
 
-  pixmapWidth = pixmap.width();
-  pixmapHeight = pixmap.height();
-  rect_off = QRect(getX(),getY(),pixmapWidth,pixmapHeight);
+    pixmapWidth = pixmap.width();
+    pixmapHeight = pixmap.height();
+    rect_off = QRect(getX(), getY(), pixmapWidth, pixmapHeight);
 
-  update();
+    update();
 }
 
 void ImageLabel::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-                 QWidget *widget)
+                       QWidget *widget)
 {
 //  kDebug() << "image update: " << imagePath  << endl;
 
-  Q_UNUSED(option);
-  Q_UNUSED(widget);
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
 
-  //if (backgroundUpdate == 1)
-  {
-    //only draw image if not hidden
-    if (hidden == 0)
+    //if (backgroundUpdate == 1)
     {
-      painter->setOpacity(m_opacity);
+        //only draw image if not hidden
+        if (hidden == 0)
+        {
+            painter->setOpacity(m_opacity);
 
-      if (cblend == 0)
-      {
-        //draw the pixmap
-        painter->drawPixmap(0, 0, pixmap);
-      }
-      else
-      {
-        //Blend this image with a color
+            if (cblend == 0) {
+                //draw the pixmap
+                painter->drawPixmap(0, 0, pixmap);
+            } else {
+                //Blend this image with a color
 
-        QImage image = pixmap.toImage();
+                QImage image = pixmap.toImage();
 
-        QImage result = KImageEffect::blend(QColor(255,0,0), image, 0.5f);
-        painter->drawImage(0, 0, result);
-      }
+                QImage result = KImageEffect::blend(QColor(255, 0, 0), image, 0.5f);
+                painter->drawImage(0, 0, result);
+            }
+        }
+        // start Timer
+        if (imageEffect != 0)
+        {
+            imageEffect -> startTimer();
+        }
     }
-    // start Timer
-    if (imageEffect != 0)
-    {
-      imageEffect -> startTimer();
-    }
-  }
 }
 
 bool ImageLabel::mouseEvent(QGraphicsSceneMouseEvent *e)
 {
-    if (isEnabled())
-    {
+    if (isEnabled()) {
         QString program;
-        if (e -> button() == Qt::LeftButton)
-        {
+        if (e -> button() == Qt::LeftButton) {
             program = leftButtonAction;
-        }
-        else if (e -> button() == Qt::MidButton)
-        {
+        } else if (e -> button() == Qt::MidButton) {
             program = middleButtonAction;
-        }
-        else if (e -> button() == Qt::RightButton)
-        {
+        } else if (e -> button() == Qt::RightButton) {
             program = rightButtonAction;
         }
 
-        if( !program.isEmpty() )
-        {
+        if (!program.isEmpty()) {
             KRun::runCommand(program);
-        }
-        else
-        {
+        } else {
             return true;
         }
     }
@@ -405,212 +364,185 @@ bool ImageLabel::mouseEvent(QGraphicsSceneMouseEvent *e)
 
 void ImageLabel::allowClick(bool enable)
 {
-  m_allowClick = enable;
+    m_allowClick = enable;
 }
 
 bool ImageLabel::clickable()
 {
-  return m_allowClick;
+    return m_allowClick;
 }
 
 void ImageLabel::parseImages(QString fn, QString fn_roll, int _xoff,
                              int _yoff, int _xon, int _yon)
 {
-  //fn = filename;
-  //fn_roll = filename_roll;
+    //fn = filename;
+    //fn_roll = filename_roll;
 
-  xoff = _xoff;
-  yoff = _yoff;
-  xon = _xon;
-  yon = _yon;
+    xoff = _xoff;
+    yoff = _yoff;
+    xon = _xon;
+    yon = _yon;
 
-  // use the first line
-  QStringList sList = fn.split("\n");
-  QString fileName = *sList.begin();
-  QFileInfo fileInfo( fileName );
-  QString path;
+    // use the first line
+    QStringList sList = fn.split("\n");
+    QString fileName = *sList.begin();
+    QFileInfo fileInfo(fileName);
+    QString path;
 
-  QRegExp rx("^http://", Qt::CaseInsensitive);
-  bool fileOnNet = (rx.indexIn(fileName)!=-1)?true:false;
+    QRegExp rx("^http://", Qt::CaseInsensitive);
+    bool fileOnNet = (rx.indexIn(fileName) != -1) ? true : false;
 
 
-  if( fileInfo.isRelative() && !fileOnNet )
-  {
-    path = m_karamba->theme().path() + "/" + fileName;
-  }
-  else
-  {
-    path = fileName;
-  }
-
-  if ( fileOnNet )
-  {
-    QString tmpFile;
-    if(KIO::NetAccess::download(KUrl(path), tmpFile, 0))
-    {
-      pixmap_off = QPixmap(tmpFile);
-      KIO::NetAccess::removeTempFile(tmpFile);
-      qDebug( "Downloaded: %s to %s", path.toAscii().constData(), tmpFile.toAscii().constData() );
+    if (fileInfo.isRelative() && !fileOnNet) {
+        path = m_karamba->theme().path() + "/" + fileName;
+    } else {
+        path = fileName;
     }
-    else
-    {
-      qDebug( "Error Downloading: %s", path.toAscii().constData());
+
+    if (fileOnNet) {
+        QString tmpFile;
+        if (KIO::NetAccess::download(KUrl(path), tmpFile, 0)) {
+            pixmap_off = QPixmap(tmpFile);
+            KIO::NetAccess::removeTempFile(tmpFile);
+            qDebug("Downloaded: %s to %s", path.toAscii().constData(), tmpFile.toAscii().constData());
+        } else {
+            qDebug("Error Downloading: %s", path.toAscii().constData());
+        }
+    } else {
+        pixmap_off = QPixmap(path);
     }
-  }
-  else
-  {
-    pixmap_off = QPixmap( path );
-  }
 
-  pixmapOffWidth = pixmap.width();
-  pixmapOffHeight = pixmap.height();
+    pixmapOffWidth = pixmap.width();
+    pixmapOffHeight = pixmap.height();
 
-  rect_off = QRect(xoff,yoff,pixmapWidth,pixmapHeight);
+    rect_off = QRect(xoff, yoff, pixmapWidth, pixmapHeight);
 /////////////////////////////
-  if (fn_roll.isEmpty())
-    return;
+    if (fn_roll.isEmpty())
+        return;
 
-  rollover=true;
-  sList = fn_roll.split("\n");
-  fileName = *sList.begin();
-  fileInfo = QFileInfo( fileName );
+    rollover = true;
+    sList = fn_roll.split("\n");
+    fileName = *sList.begin();
+    fileInfo = QFileInfo(fileName);
 
-  fileOnNet = (rx.indexIn(fileName)!=-1)?true:false;
+    fileOnNet = (rx.indexIn(fileName) != -1) ? true : false;
 
 
-  if( fileInfo.isRelative() && !fileOnNet )
-  {
-    path = m_karamba->theme().path() + "/" + fileName;
-  }
-  else
-  {
-    path = fileName;
-  }
-
-  if ( fileOnNet )
-  {
-    QString tmpFile;
-    if(KIO::NetAccess::download(KUrl(path), tmpFile, 0))
-    {
-      pixmap_on = QPixmap(tmpFile);
-      KIO::NetAccess::removeTempFile(tmpFile);
-      qDebug( "Downloaded: %s to %s", path.toAscii().constData(), tmpFile.toAscii().constData());
+    if (fileInfo.isRelative() && !fileOnNet) {
+        path = m_karamba->theme().path() + "/" + fileName;
+    } else {
+        path = fileName;
     }
-    else
-    {
-      qDebug( "Error Downloading: %s", path.toAscii().constData());
-    }
-  }
-  else
-  {
-    pixmap_on = QPixmap( path );
-  }
-  pixmapOnWidth = pixmap_on.width();
-  pixmapOnHeight = pixmap_on.height();
 
-  rect_on = QRect(xon,yon,pixmapOnWidth,pixmapOnHeight);
+    if (fileOnNet) {
+        QString tmpFile;
+        if (KIO::NetAccess::download(KUrl(path), tmpFile, 0)) {
+            pixmap_on = QPixmap(tmpFile);
+            KIO::NetAccess::removeTempFile(tmpFile);
+            qDebug("Downloaded: %s to %s", path.toAscii().constData(), tmpFile.toAscii().constData());
+        } else {
+            qDebug("Error Downloading: %s", path.toAscii().constData());
+        }
+    } else {
+        pixmap_on = QPixmap(path);
+    }
+    pixmapOnWidth = pixmap_on.width();
+    pixmapOnHeight = pixmap_on.height();
+
+    rect_on = QRect(xon, yon, pixmapOnWidth, pixmapOnHeight);
 }
 
 void ImageLabel::setBackground(int b)
 {
-  background = b;
+    background = b;
 }
 
 void ImageLabel::rolloverImage(QMouseEvent *e)
 {
-  if (!rollover)
-    return;
+    if (!rollover)
+        return;
 
-  prepareGeometryChange();
+    prepareGeometryChange();
 
-  if (zoomed)
-  {
-    if (!rect_off.contains(e->pos()))
-    {
-      // rollover the image to the zoomed image
-      //setValue(fn_roll);
-      setX(xoff);
-      setY(yoff);
-      pixmap = pixmap_off;
-      pixmapWidth = pixmapOffWidth;
-      pixmapHeight = pixmapOffHeight;
-      zoomed = false;
+    if (zoomed) {
+        if (!rect_off.contains(e->pos())) {
+            // rollover the image to the zoomed image
+            //setValue(fn_roll);
+            setX(xoff);
+            setY(yoff);
+            pixmap = pixmap_off;
+            pixmapWidth = pixmapOffWidth;
+            pixmapHeight = pixmapOffHeight;
+            zoomed = false;
+        }
+    } else {
+        if (rect_off.contains(e->pos())) {
+            // rollover the image to the zoomed image
+            //setValue(fn_roll);
+            setX(xon);
+            setY(yon);
+            pixmap = pixmap_on;
+            pixmapWidth = pixmapOnWidth;
+            pixmapHeight = pixmapOnHeight;
+            zoomed = true;
+        }
     }
-  }
-  else
-  {
-    if (rect_off.contains(e->pos()))
-    {
-      // rollover the image to the zoomed image
-      //setValue(fn_roll);
-      setX(xon);
-      setY(yon);
-      pixmap = pixmap_on;
-      pixmapWidth = pixmapOnWidth;
-      pixmapHeight = pixmapOnHeight;
-      zoomed = true;
-    }
-  }
 
-  update();
+    update();
 }
 
 void ImageLabel::setTooltip(QString txt)
 {
-  toolTipText = txt;
+    toolTipText = txt;
 }
 
 
 void ImageLabel::removeEffects()
 {
-  if (imageEffect != 0)
-  {
-    delete imageEffect;
-    imageEffect = 0;
-  }
-  applyTransformations();
+    if (imageEffect != 0) {
+        delete imageEffect;
+        imageEffect = 0;
+    }
+    applyTransformations();
 }
 
 void ImageLabel::intensity(float ratio, int millisec)
 {
-  if (imageEffect != 0)
-  {
-    delete imageEffect;
-    imageEffect = 0;
-  }
-  //QPixmapEffect::intensity(pixmap, ratio);
-  imageEffect = new Intensity(this, ratio, millisec);
-  applyTransformations();
+    if (imageEffect != 0) {
+        delete imageEffect;
+        imageEffect = 0;
+    }
+    //QPixmapEffect::intensity(pixmap, ratio);
+    imageEffect = new Intensity(this, ratio, millisec);
+    applyTransformations();
 }
 
 void ImageLabel::channelIntensity(float ratio, QString channel, int millisec)
 {
-  if (imageEffect != 0)
-  {
-    delete imageEffect;
-    imageEffect = 0;
-  }
-  //QPixmapEffect::channelIntensity(pixmap, ratio, rgbChannel);
-  imageEffect = new ChannelIntensity(this, ratio, channel, millisec);
-  applyTransformations();
+    if (imageEffect != 0) {
+        delete imageEffect;
+        imageEffect = 0;
+    }
+    //QPixmapEffect::channelIntensity(pixmap, ratio, rgbChannel);
+    imageEffect = new ChannelIntensity(this, ratio, channel, millisec);
+    applyTransformations();
 }
 
 void ImageLabel::toGray(int millisec)
 {
-  if (imageEffect != 0)
-  {
-    delete imageEffect;
-    imageEffect = 0;
-  }
-  //QPixmapEffect::toGray(pixmap);
-  imageEffect = new ToGray(this, millisec);
-  applyTransformations();
+    if (imageEffect != 0) {
+        delete imageEffect;
+        imageEffect = 0;
+    }
+    //QPixmapEffect::toGray(pixmap);
+    imageEffect = new ToGray(this, millisec);
+    applyTransformations();
 }
 
 void ImageLabel::slotEffectExpired()
 {
-  removeEffects();
-  m_karamba->update();
+    removeEffects();
+    m_karamba->update();
 }
 
 void ImageLabel::attachClickArea(QString leftMouseButton,
@@ -626,10 +558,10 @@ void ImageLabel::attachClickArea(QString leftMouseButton,
 
 bool ImageLabel::event(QEvent *event)
 {
-  if(event->type() == QEvent::ToolTip)
-    QToolTip::showText(QPoint(getX(),getY()), toolTipText);
+    if (event->type() == QEvent::ToolTip)
+        QToolTip::showText(QPoint(getX(), getY()), toolTipText);
 
-  return true;
+    return true;
 }
 
 #include "imagelabel.moc"

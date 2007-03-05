@@ -10,7 +10,7 @@
 #include "lmsensor.h"
 #include <qglobal.h>
 
-SensorSensor::SensorSensor(int interval, char tempUnit) : Sensor( interval )
+SensorSensor::SensorSensor(int interval, char tempUnit) : Sensor(interval)
 {
 #if defined __FreeBSD__ || defined(Q_OS_NETBSD)
     sensorMapBSD["VCore 1"] = "VC0";
@@ -27,25 +27,24 @@ SensorSensor::SensorSensor(int interval, char tempUnit) : Sensor( interval )
     sensorMapBSD["temp2"] = "TEMP1";
     sensorMapBSD["temp3"] = "TEMP2";
 #endif
-    if(tempUnit == 'F')
-      extraParams = " -f";
-    connect(&ksp, SIGNAL(receivedStdout(KProcess *, char *, int )),
-            this,SLOT(receivedStdout(KProcess *, char *, int )));
+    if (tempUnit == 'F')
+        extraParams = " -f";
+    connect(&ksp, SIGNAL(receivedStdout(KProcess *, char *, int)),
+            this, SLOT(receivedStdout(KProcess *, char *, int)));
     connect(&ksp, SIGNAL(processExited(KProcess *)),
-            this,SLOT(processExited( KProcess * )));
+            this, SLOT(processExited(KProcess *)));
 
     // readValues();
 }
 
 
 SensorSensor::~SensorSensor()
-{
-}
+{}
 
-void SensorSensor::receivedStdout(KProcess *, char *buffer, int len )
+void SensorSensor::receivedStdout(KProcess *, char *buffer, int len)
 {
     buffer[len] = 0;
-    sensorResult += QString( buffer );
+    sensorResult += QString(buffer);
 }
 
 void SensorSensor::processExited(KProcess *)
@@ -54,16 +53,14 @@ void SensorSensor::processExited(KProcess *)
     sensorResult = "";
     QStringList::Iterator it = stringList.begin();
 #if defined __FreeBSD__ || defined(Q_OS_NETBSD)
-    QRegExp rx( "^(\\S+)\\s+:\\s+[\\+\\-]?(\\d+\\.?\\d*)");
+    QRegExp rx("^(\\S+)\\s+:\\s+[\\+\\-]?(\\d+\\.?\\d*)");
 #else
-    QRegExp rx( "^(.+):\\s+[\\+\\-]?(\\d+\\.?\\d*)");
+    QRegExp rx("^(.+):\\s+[\\+\\-]?(\\d+\\.?\\d*)");
 #endif
-    while( it != stringList.end())
-    {
-        rx.indexIn( *it );
+    while (it != stringList.end()) {
+        rx.indexIn(*it);
 
-        if ( !rx.cap(0).isEmpty())
-        {
+        if (!rx.cap(0).isEmpty()) {
             sensorMap[rx.cap(1)] = rx.cap(2);
         }
         it++;
@@ -75,8 +72,7 @@ void SensorSensor::processExited(KProcess *)
     Meter *meter;
 
     QObject *lobject;
-    foreach(lobject, *objList)
-    {
+    foreach(lobject, *objList) {
         sp = (SensorParams*)(lobject);
         meter = sp->getMeter();
         format = sp->getParam("FORMAT");
@@ -85,17 +81,16 @@ void SensorSensor::processExited(KProcess *)
         if (type.length() == 0)
             type = "temp2";
 
-        if (format.length() == 0 )
-        {
+        if (format.length() == 0) {
             format = "%v";
         }
 
 #if defined __FreeBSD__ || defined(Q_OS_NETBSD)
         format.replace(QRegExp("%v", Qt::CaseInsensitive),
-                              sensorMap[sensorMapBSD[type]]);
+                       sensorMap[sensorMapBSD[type]]);
 #else
         format.replace(QRegExp("%v", Qt::CaseInsensitive),
-                              sensorMap[type]);
+                       sensorMap[type]);
 #endif
         meter->setValue(format);
     }
@@ -109,7 +104,7 @@ void SensorSensor::update()
 #else
     ksp << "sensors" << extraParams;
 #endif
-    ksp.start( KProcess::NotifyOnExit,KProcIO::Stdout);
+    ksp.start(KProcess::NotifyOnExit, KProcIO::Stdout);
 }
 
 

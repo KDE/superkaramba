@@ -43,33 +43,75 @@ class ZipFile;
 */
 class ThemeFile
 {
-  public:
+public:
     typedef QVector<ThemeFile> List;
 
     ThemeFile(const KUrl& url = KUrl());
     ~ThemeFile();
 
-    bool isZipTheme() const { return m_zipTheme; };
-    const QString& name() const { return m_name; };
-    const QString& version() const { return m_version; };
-    const QString& license() const { return m_license; };
-    const QString& id() const { return m_id; };
-    const QString& mo() const { return m_mo; };
-    const QString& file() const { return m_file; };
-    const QString& pythonModule() const { return m_python; };
+    bool isZipTheme() const
+    {
+        return m_zipTheme;
+    };
+    const QString& name() const
+    {
+        return m_name;
+    };
+    const QString& version() const
+    {
+        return m_version;
+    };
+    const QString& license() const
+    {
+        return m_license;
+    };
+    const QString& id() const
+    {
+        return m_id;
+    };
+    const QString& mo() const
+    {
+        return m_mo;
+    };
+    const QString& file() const
+    {
+        return m_file;
+    };
+    const QString& pythonModule() const
+    {
+        return m_python;
+    };
     bool pythonModuleExists() const;
-    const QString& path() const { return m_path; };
-    const QString& description() const { return m_description; };
-    const QString& author() const { return m_author; };
-    const QString& authorEmail() const { return m_authorEmail; };
-    const QString& homepage() const { return m_homepage; };
+    const QString& path() const
+    {
+        return m_path;
+    };
+    const QString& description() const
+    {
+        return m_description;
+    };
+    const QString& author() const
+    {
+        return m_author;
+    };
+    const QString& authorEmail() const
+    {
+        return m_authorEmail;
+    };
+    const QString& homepage() const
+    {
+        return m_homepage;
+    };
     QPixmap icon() const;
     bool exists() const;
     bool isThemeFile(const QString& filename) const;
     bool isValid() const;
     QByteArray readThemeFile(const QString& filename) const;
     bool fileExists(const QString& filename) const;
-    const ThemeLocale* locale() const { return m_locale; };
+    const ThemeLocale* locale() const
+    {
+        return m_locale;
+    };
     bool canUninstall() const;
     KUrl getUrlPath();
 
@@ -81,7 +123,7 @@ class ThemeFile
     static bool isZipFile(const QString& filename);
     static QString canonicalFile(const QString& file);
 
-  private:
+private:
     void parseXml();
     void mkdir(QDir dir);
 

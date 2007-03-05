@@ -54,7 +54,7 @@ class Karamba : public QObject, public QGraphicsItemGroup
 {
     Q_OBJECT
 
-  public:
+public:
     Karamba(KUrl themeFile, QGraphicsView *view = 0,
             QGraphicsScene *scene = 0, int instance = -1);
 
@@ -63,7 +63,7 @@ class Karamba : public QObject, public QGraphicsItemGroup
     QRectF boundingRect() const;
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-                    QWidget *widget);
+               QWidget *widget);
 
     QGraphicsScene* getScene();
     QGraphicsView* getView();
@@ -86,7 +86,7 @@ class Karamba : public QObject, public QGraphicsItemGroup
     KConfig* getConfig();
     //void removePopupMenu(KMenu *menu);
     bool popupMenuExisting(KMenu *menu);
-    QString prettyName(); 
+    QString prettyName();
     int getNumberOfDesktops();
     double getUpdateTime();
     void setUpdateTime(double newTime);
@@ -96,17 +96,17 @@ class Karamba : public QObject, public QGraphicsItemGroup
     bool setMenuConfigOption(QString key, bool value);
     KMenu* addPopupMenu();
     QAction* addMenuItem(KMenu *menu, QString text,
-              QString icon);
+                         QString icon);
     void popupMenu(KMenu *menu, QPoint pos);
     void deletePopupMenu(KMenu *menu);
     void deleteMenuItem(QAction *action);
     void scaleImageLabel(Meter *meter, int width,
-              int height);
+                         int height);
     void moveMeter(Meter *meter, int x, int y);
     void popupGlobalMenu();
 
     void writeConfigData();
-    
+
     void showMenuExtension();
     void hideMenuExtension();
 
@@ -120,7 +120,7 @@ class Karamba : public QObject, public QGraphicsItemGroup
     KProcess *currProcess;
     Systemtray *systray;
 
-  public Q_SLOTS:
+public Q_SLOTS:
     void closeWidget();
     void reloadConfig();
     void processExited(KProcess *proc);
@@ -133,7 +133,7 @@ class Karamba : public QObject, public QGraphicsItemGroup
     void passMenuItemClicked(QAction* action);
     void slotFileChanged(const QString &file);
 
-  private Q_SLOTS:
+private Q_SLOTS:
     void initPythonInterface();
     void slotToggleLocked();
     void slotToggleSystemTray();
@@ -145,7 +145,7 @@ class Karamba : public QObject, public QGraphicsItemGroup
 
     void step();
 
-  protected:
+protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
     void wheelEvent(QGraphicsSceneWheelEvent *event);
@@ -156,7 +156,7 @@ class Karamba : public QObject, public QGraphicsItemGroup
     void timerEvent(QTimerEvent *event);
     void keyPressEvent(QKeyEvent *event);
 
-  private:
+private:
     ThemeFile m_theme;
     QGraphicsScene *m_scene;
     QGraphicsView *m_view;
@@ -166,7 +166,7 @@ class Karamba : public QObject, public QGraphicsItemGroup
     bool m_useKross;
     KarambaPython *m_python;
     KarambaInterface *m_interface;
-    
+
     bool m_foundKaramba;
     bool m_onTop;
     bool m_managed;

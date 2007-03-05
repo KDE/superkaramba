@@ -16,28 +16,40 @@ class QPainter;
 class QTimer;
 class Bar : public Meter
 {
-Q_OBJECT
+    Q_OBJECT
 public:
-    Bar(Karamba* k,int ix,int iy,int iw,int ih );
+    Bar(Karamba* k, int ix, int iy, int iw, int ih);
     ~Bar();
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-                    QWidget *widget);
+               QWidget *widget);
 
-    virtual void setMax( int m );
-    virtual void setMin( int m );
+    virtual void setMax(int m);
+    virtual void setMin(int m);
 
 public slots:
-    bool setImage( QString imagePath );
-    QString getImage() { return imagePath; };
+    bool setImage(QString imagePath);
+    QString getImage()
+    {
+        return imagePath;
+    };
 
-    void setValue( int );
-    int  getValue() { return barValue; };
-    void setValue( QString );
-    void recalculateValue() {setValue(barValue); };
+    void setValue(int);
+    int  getValue()
+    {
+        return barValue;
+    };
+    void setValue(QString);
+    void recalculateValue()
+    {
+        setValue(barValue);
+    };
 
-    void setVertical( bool );
-    int  getVertical() { return vertical; };
+    void setVertical(bool);
+    int  getVertical()
+    {
+        return vertical;
+    };
 
     void valueChanged();
 

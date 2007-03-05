@@ -31,7 +31,10 @@ public:
     void setText(QString text, bool linkUnderline = false);
     void setValue(QString text);
     void setValue(int v);
-    QString getStringValue() { return source; };
+    QString getStringValue()
+    {
+        return source;
+    };
 
     void setFont(QString font);
     QString getFont() const;
@@ -39,13 +42,13 @@ public:
     int getFontSize() const;
     void setFixedPitch(bool);
     bool getFixedPitch() const;
-    void setTextProps( TextField* t );
+    void setTextProps(TextField* t);
     void setColorGroup(const QPalette &colorg);
     const QPalette& getColorGroup() const;
     void setWidth(int width);
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-                    QWidget *widget = 0);
+               QWidget *widget = 0);
 
     bool mouseEvent(QGraphicsSceneMouseEvent *event);
     QString getAnchor(QPointF point);

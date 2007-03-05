@@ -27,15 +27,15 @@
 
 class MainWidget : public QGraphicsView
 {
-  public:
+public:
     MainWidget(QGraphicsScene *scene, QWidget *parent = 0);
 
     ~MainWidget();
 
-  protected:
+protected:
     void paintEvent(QPaintEvent *e);
 
-  private:
+private:
     bool m_hasCompManager;
 };
 

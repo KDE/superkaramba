@@ -18,34 +18,34 @@
 #include <kprocess.h>
 class DiskSensor :  public Sensor
 {
-Q_OBJECT
+    Q_OBJECT
 public:
-  DiskSensor(int msec );
-  ~DiskSensor();
-  void update();
-  void setMaxValue( SensorParams *sp );
+    DiskSensor(int msec);
+    ~DiskSensor();
+    void update();
+    void setMaxValue(SensorParams *sp);
 
 private:
-  int getFreeSpace(QString mntPt) const;
-  int getUsedSpace(QString mntPt) const;
-  int getTotalSpace(QString mntPt) const;
-  int getPercentUsed(QString mntPt) const;
-  int getPercentFree(QString mntPt) const;
+    int getFreeSpace(QString mntPt) const;
+    int getUsedSpace(QString mntPt) const;
+    int getTotalSpace(QString mntPt) const;
+    int getPercentUsed(QString mntPt) const;
+    int getPercentFree(QString mntPt) const;
 
-  KShellProcess ksp;
-  QString sensorResult;
+    KShellProcess ksp;
+    QString sensorResult;
 
-  QMap<QString,QString> mntMap;
-  QStringList stringList;
+    QMap<QString, QString> mntMap;
+    QStringList stringList;
 
-  int init;
+    int init;
 
 private slots:
-  void receivedStdout(KProcess *, char *buffer, int);
-  void processExited(KProcess *);
+    void receivedStdout(KProcess *, char *buffer, int);
+    void processExited(KProcess *);
 
 signals:
-  void initComplete();
+    void initComplete();
 
 };
 #endif // DISKSENSOR_H

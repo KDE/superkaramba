@@ -35,14 +35,20 @@ class ShowDesktop : public QObject
 
 public:
     static ShowDesktop* self();
-    bool desktopShowing() { return showingDesktop; }
+    bool desktopShowing()
+    {
+        return showingDesktop;
+    }
 
 public slots:
-    void showDesktop( bool show );
-    void toggle() { showDesktop( !desktopShowing() ); }
+    void showDesktop(bool show);
+    void toggle()
+    {
+        showDesktop(!desktopShowing());
+    }
 
 signals:
-    void desktopShown( bool shown );
+    void desktopShown(bool shown);
 
 private slots:
     void slotCurrentDesktopChanged(int);

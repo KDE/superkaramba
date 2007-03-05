@@ -21,30 +21,27 @@
 #include "rss.h"
 #include "rss.moc"
 
-RssSensor::RssSensor( const QString &src, int interval, const QString &form, const QString &enc)
-    : Sensor(interval),
-    source(src),
-    format(form),
-    encoding(enc)
+RssSensor::RssSensor(const QString &src, int interval, const QString &form, const QString &enc)
+        : Sensor(interval),
+        source(src),
+        format(form),
+        encoding(enc)
 
 {
     // Format:
     //  %t = title (DEFAULT)
     //  %d = desc
 
-    if( !encoding.isEmpty() )
-    {
-        codec = QTextCodec::codecForName( encoding.toAscii().constData() );
-        if ( codec == 0)
+    if (!encoding.isEmpty()) {
+        codec = QTextCodec::codecForName(encoding.toAscii().constData());
+        if (codec == 0)
             codec = QTextCodec::codecForLocale();
-    }
-    else
+    } else
         codec = QTextCodec::codecForLocale();
 }
 
 RssSensor::~RssSensor()
-{
-}
+{}
 
 void RssSensor::update()
 {
@@ -53,37 +50,27 @@ void RssSensor::update()
     QString tmpFile;
     bool OK = false;
 
-    if(KIO::NetAccess::download(KUrl(source), tmpFile, 0))
-    {
+    if (KIO::NetAccess::download(KUrl(source), tmpFile, 0)) {
         file.setFileName(tmpFile);
-        if ( file.open(QIODevice::ReadOnly | QIODevice::Text) )
-        {
-            if ( doc.setContent( &file ) )
-            {
+        if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            if (doc.setContent(&file)) {
                 OK = true;
-            }
-            else
-            {
+            } else {
                 qDebug("Error on building DOM");
             }
-        }
-        else
-        {
+        } else {
             qDebug("Error opening file");
         }
-    }
-    else {
-        qDebug( "Error Downloading: %s", source.toAscii().constData());
+    } else {
+        qDebug("Error Downloading: %s", source.toAscii().constData());
     }
 
-    if ( OK )
-    {
+    if (OK) {
         SensorParams *sp;
         Meter *meter;
 
         QObject *obj;
-        foreach(obj, *objList)
-        {
+        foreach(obj, *objList) {
             sp = (SensorParams*)(obj);
             meter = sp->getMeter();
 
@@ -93,43 +80,33 @@ void RssSensor::update()
 
             QDomElement docElem = doc.documentElement();
             QDomNode n = docElem.firstChild();
-            if (!n.isNull())
-            {
-                QDomNodeList links = docElem.elementsByTagName( "link" );
+            if (!n.isNull()) {
+                QDomNodeList links = docElem.elementsByTagName("link");
                 QDomNodeList displays;
-                if ( format.contains( "%d", Qt::CaseInsensitive ) > 0 )
-                {
-                    displays = docElem.elementsByTagName( "description" );
-                }
-                else
-                {
-                    displays = docElem.elementsByTagName( "title" );
+                if (format.contains("%d", Qt::CaseInsensitive) > 0) {
+                    displays = docElem.elementsByTagName("description");
+                } else {
+                    displays = docElem.elementsByTagName("title");
                 }
 
                 QRegExp rx("^http://", Qt::CaseInsensitive);
-                for ( int i=1; i < displays.count(); ++i )
-                {
-                    QString dispTxt = displays.item( i ).toElement().text();
-                    QString linkTxt = links.item( i ).toElement().text();
-                    if( (rx.indexIn(dispTxt) == -1) && (rx.indexIn(linkTxt) != -1) )
-                    {
-                        meter->setValue( dispTxt );
-                        meter->setValue( linkTxt );
-                    }
-                    else
-                    {
+                for (int i = 1; i < displays.count(); ++i) {
+                    QString dispTxt = displays.item(i).toElement().text();
+                    QString linkTxt = links.item(i).toElement().text();
+                    if ((rx.indexIn(dispTxt) == -1) && (rx.indexIn(linkTxt) != -1)) {
+                        meter->setValue(dispTxt);
+                        meter->setValue(linkTxt);
+                    } else {
                         qDebug("Skipping");
                     }
                 }
-            }
-            else
-            {
-                qDebug ("Document Node was null!!");
+            } else {
+                qDebug("Document Node was null!!");
             }
         }
     }
     // Cleanup
     file.close();
-    KIO::NetAccess::removeTempFile( tmpFile );
+    KIO::NetAccess::removeTempFile(tmpFile);
 }
 

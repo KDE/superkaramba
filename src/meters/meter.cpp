@@ -19,7 +19,7 @@
 #include "meter.moc"
 
 Meter::Meter(Karamba* k, int ix, int iy, int iw, int ih)
-    :   QGraphicsItem(k, k->getScene()),
+        :   QGraphicsItem(k, k->getScene()),
         boundingBox(ix, iy, iw, ih),
         leftButtonAction(""),
         middleButtonAction(""),
@@ -28,7 +28,7 @@ Meter::Meter(Karamba* k, int ix, int iy, int iw, int ih)
         hidden(0),
         minValue(0),
         maxValue(0),
-        color(0,0,0),
+        color(0, 0, 0),
         m_karamba(k),
         m_opacity(0.0)
 {
@@ -43,7 +43,7 @@ Meter::Meter(Karamba* k, int ix, int iy, int iw, int ih)
 }
 
 Meter::Meter(Karamba* k)
-    :   QGraphicsItem(k),
+        :   QGraphicsItem(k),
         boundingBox(0, 0, 0, 0),
         leftButtonAction(""),
         middleButtonAction(""),
@@ -52,11 +52,10 @@ Meter::Meter(Karamba* k)
         hidden(0),
         minValue(0),
         maxValue(0),
-        color(0,0,0),
+        color(0, 0, 0),
         m_karamba(k),
         m_opacity(1)
-{
-}
+{}
 
 Meter::~Meter()
 {
@@ -67,8 +66,7 @@ void Meter::fadeIn()
 {
     setOpacity(m_opacity + 0.05);   // m_opacity is set in function
 
-    if (m_opacity > 1.05)
-    {
+    if (m_opacity > 1.05) {
         m_opacityTimer->stop();
         delete m_opacityTimer;
         m_opacityTimer = (QTimer*)0;
@@ -119,7 +117,7 @@ void Meter::setSize(int ix, int iy, int iw, int ih)
     update();
 }
 
-void Meter::setThemePath( QString path )
+void Meter::setThemePath(QString path)
 {
     themePath = path;
 }
@@ -137,7 +135,7 @@ int Meter::getY()
 void Meter::setX(int newx)
 {
     prepareGeometryChange();
-    
+
     setPos(newx, y());
 
     update();
@@ -146,7 +144,7 @@ void Meter::setX(int newx)
 void Meter::setY(int newy)
 {
     prepareGeometryChange();
-  
+
     setPos(x(), newy);
 
     update();

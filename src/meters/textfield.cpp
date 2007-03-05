@@ -12,55 +12,54 @@
 #include <qfontmetrics.h>
 #include <kdebug.h>
 
-TextField::TextField( )
+TextField::TextField()
 {
-  setFontSize(12);
-  setColor(QColor(192, 192, 192));
-  setBGColor(QColor(0, 0, 0));
-  setFont("Helvetica");
-  setAlignment(Qt::AlignLeft);
-  setFixedPitch(false);
-  setShadow(0);
+    setFontSize(12);
+    setColor(QColor(192, 192, 192));
+    setBGColor(QColor(0, 0, 0));
+    setFont("Helvetica");
+    setAlignment(Qt::AlignLeft);
+    setFixedPitch(false);
+    setShadow(0);
 }
 
 TextField::~TextField()
-{
-}
+{}
 
-TextField::TextField( const TextField& def )
+TextField::TextField(const TextField& def)
 {
-    setFontSize( def.getFontSize() );
+    setFontSize(def.getFontSize());
 
     setColor(def.getColor());
     setBGColor(def.getBGColor());
 
-    setFont( def.getFont() );
-    setAlignment( def.getAlignment() );
-    setFixedPitch( def.getFixedPitch() );
-    setShadow( def.getShadow() );
+    setFont(def.getFont());
+    setAlignment(def.getAlignment());
+    setFixedPitch(def.getFixedPitch());
+    setShadow(def.getShadow());
 }
 
 TextField& TextField::operator=(const TextField& rhs)
 {
-    if( this == &rhs)
+    if (this == &rhs)
         return *this;
 
-    setFontSize( rhs.getFontSize() );
+    setFontSize(rhs.getFontSize());
 
     setColor(rhs.getColor());
     setBGColor(rhs.getBGColor());
 
-    setFont( rhs.getFont() );
-    setAlignment( rhs.getAlignment() );
-    setFixedPitch( rhs.getFixedPitch() );
-    setShadow( rhs.getShadow() );
+    setFont(rhs.getFont());
+    setAlignment(rhs.getAlignment());
+    setFixedPitch(rhs.getFixedPitch());
+    setShadow(rhs.getShadow());
 
     return *this;
 }
 
 void TextField::setColor(QColor clr)
 {
-  color = clr;
+    color = clr;
 }
 
 QColor TextField::getColor() const
@@ -102,18 +101,18 @@ int TextField::getFontSize() const
     return font.pointSize();
 }
 
-void TextField::setAlignment( const QString &align )
+void TextField::setAlignment(const QString &align)
 {
     QString a = align.toUpper();
-    if( a == "LEFT" || a.isEmpty() )
+    if (a == "LEFT" || a.isEmpty())
         alignment = Qt::AlignLeft;
-    if( a == "RIGHT" )
+    if (a == "RIGHT")
         alignment = Qt::AlignRight;
-    if( a == "CENTER" )
+    if (a == "CENTER")
         alignment = Qt::AlignHCenter;
 }
 
-void TextField::setAlignment( int af )
+void TextField::setAlignment(int af)
 {
     alignment = af;
 }
@@ -125,17 +124,17 @@ int TextField::getAlignment() const
 
 QString TextField::getAlignmentAsString() const
 {
-    if( alignment == Qt::AlignHCenter )
+    if (alignment == Qt::AlignHCenter)
         return "CENTER";
-    else if( alignment == Qt::AlignRight )
+    else if (alignment == Qt::AlignRight)
         return "RIGHT";
     else
         return "LEFT";
 }
 
-void TextField::setFixedPitch( bool fp)
+void TextField::setFixedPitch(bool fp)
 {
-    font.setFixedPitch( fp );
+    font.setFixedPitch(fp);
 }
 
 bool TextField::getFixedPitch() const
@@ -143,7 +142,7 @@ bool TextField::getFixedPitch() const
     return font.fixedPitch();
 }
 
-void TextField::setShadow ( int s )
+void TextField::setShadow(int s)
 {
     shadow = s;
 }

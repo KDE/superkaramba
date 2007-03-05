@@ -14,7 +14,7 @@
 
 #include <kdebug.h>
 
-#ifdef __FreeBSD__ 
+#ifdef __FreeBSD__
 #include <sys/time.h>
 #include <sys/dkstat.h>
 #include <sys/param.h>
@@ -30,61 +30,58 @@
 
 #include "cpu.h"
 
-CPUSensor::CPUSensor( QString cpu, int interval ) : 
-  Sensor(interval), userTicks(0), sysTicks(0), niceTicks(0), idleTicks(0)
+CPUSensor::CPUSensor(QString cpu, int interval) :
+        Sensor(interval), userTicks(0), sysTicks(0), niceTicks(0), idleTicks(0)
 {
     cpuNbr = cpu;
     QRegExp rx("^\\d+$");
-    if( rx.indexIn( cpu.toLower() ) == -1)
+    if (rx.indexIn(cpu.toLower()) == -1)
         cpuNbr = "";
-    cpuNbr = "cpu"+cpuNbr;
+    cpuNbr = "cpu" + cpuNbr;
     getCPULoad();
 }
 
 CPUSensor::~CPUSensor()
+{}
+
+void CPUSensor::getTicks(long &u, long &s, long &n, long &i)
 {
-}
+#ifdef __FreeBSD__
+    static long cp_time[CPUSTATES];
 
-void CPUSensor::getTicks (long &u,long &s,long &n,long &i)
-{
-#ifdef __FreeBSD__ 
-      static long cp_time[CPUSTATES];
+    size_t size = sizeof(cp_time);
 
-        size_t size = sizeof(cp_time);
-
-      /* get the cp_time array */
-      if (sysctlbyname("kern.cp_time", &cp_time, &size, NULL, 0) != -1) {
-              u = cp_time[CP_USER];
-              s = cp_time[CP_SYS] + cp_time[CP_INTR];
-              n = cp_time[CP_NICE];
-              i = cp_time[CP_IDLE];
-      }
-#else 
+    /* get the cp_time array */
+    if (sysctlbyname("kern.cp_time", &cp_time, &size, NULL, 0) != -1) {
+        u = cp_time[CP_USER];
+        s = cp_time[CP_SYS] + cp_time[CP_INTR];
+        n = cp_time[CP_NICE];
+        i = cp_time[CP_IDLE];
+    }
+#else
 #if defined(Q_OS_NETBSD)
-     static uint64_t cp_time[CPUSTATES];
+    static uint64_t cp_time[CPUSTATES];
 
-     size_t size = sizeof(cp_time);
+    size_t size = sizeof(cp_time);
 
-     /* get the cp_time array */
-     if (sysctlbyname("kern.cp_time", &cp_time, &size, NULL, 0) != -1) {
-              u = cp_time[CP_USER];
-              s = cp_time[CP_SYS] + cp_time[CP_INTR];
-              n = cp_time[CP_NICE];
-              i = cp_time[CP_IDLE];
-      }
+    /* get the cp_time array */
+    if (sysctlbyname("kern.cp_time", &cp_time, &size, NULL, 0) != -1) {
+        u = cp_time[CP_USER];
+        s = cp_time[CP_SYS] + cp_time[CP_INTR];
+        n = cp_time[CP_NICE];
+        i = cp_time[CP_IDLE];
+    }
 #else
     QFile file("/proc/stat");
     QString line;
-    if ( file.open(QIODevice::ReadOnly | QIODevice::Text) )
-    {
-        QTextStream t( &file );        // use a text stream
-        QRegExp rx( cpuNbr+"\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)");
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream t(&file);          // use a text stream
+        QRegExp rx(cpuNbr + "\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)\\s+(\\d+)");
         line = t.readLine();
-        rx.indexIn( line );
-        
-        while( (line = t.readLine()) !=0 && rx.cap(0) == "" )
-        {
-            rx.indexIn( line );
+        rx.indexIn(line);
+
+        while ((line = t.readLine()) != 0 && rx.cap(0) == "") {
+            rx.indexIn(line);
         }
         //user
         u = rx.cap(1).toLong();
@@ -98,8 +95,7 @@ void CPUSensor::getTicks (long &u,long &s,long &n,long &i)
     }
 #endif
 #endif
-    else
-    {
+    else {
         u = 0;
         s = 0;
         n = 0;
@@ -118,11 +114,11 @@ int CPUSensor::getCPULoad()
                              (nTicks - niceTicks) +
                              (iTicks - idleTicks));
 
-    int load  = (totalTicks == 0) ? 0 : (int) ( 100.0 * ( (uTicks+sTicks+nTicks) - (userTicks+sysTicks+niceTicks))/( totalTicks+0.001) + 0.5 );
-    user = (totalTicks == 0) ? 0 : (int) ( 100.0 * ( uTicks - userTicks)/( totalTicks+0.001) + 0.5 );
-    idle = (totalTicks == 0) ? 0 : (int) ( 100.0 * ( iTicks - idleTicks)/( totalTicks+0.001) + 0.5 );
-    system = (totalTicks == 0) ? 0 : (int) ( 100.0 * ( sTicks - sysTicks)/( totalTicks+0.001) + 0.5 );
-    nice = (totalTicks == 0) ? 0 : (int) ( 100.0 * ( nTicks - niceTicks)/( totalTicks+0.001) + 0.5 );
+    int load  = (totalTicks == 0) ? 0 : (int)(100.0 * ((uTicks + sTicks + nTicks) - (userTicks + sysTicks + niceTicks)) / (totalTicks + 0.001) + 0.5);
+    user = (totalTicks == 0) ? 0 : (int)(100.0 * (uTicks - userTicks) / (totalTicks + 0.001) + 0.5);
+    idle = (totalTicks == 0) ? 0 : (int)(100.0 * (iTicks - idleTicks) / (totalTicks + 0.001) + 0.5);
+    system = (totalTicks == 0) ? 0 : (int)(100.0 * (sTicks - sysTicks) / (totalTicks + 0.001) + 0.5);
+    nice = (totalTicks == 0) ? 0 : (int)(100.0 * (nTicks - niceTicks) / (totalTicks + 0.001) + 0.5);
 
     userTicks = uTicks;
     sysTicks = sTicks;
@@ -140,54 +136,52 @@ void CPUSensor::update()
     int load = getCPULoad();
 
     QObject *it;
-    foreach(it, *objList)
-    {
-      sp = qobject_cast<SensorParams*>(it);
-      meter = sp->getMeter();
-      format = sp->getParam("FORMAT");
+    foreach(it, *objList) {
+        sp = qobject_cast<SensorParams*>(it);
+        meter = sp->getMeter();
+        format = sp->getParam("FORMAT");
 
-      if(format.length() == 0)
-      {
-        format = QString::number(load);
+        if (format.length() == 0) {
+            format = QString::number(load);
+            meter->setValue(format);
+            continue;
+        }
+
+        int index = 0;
+
+        index = format.indexOf("%load", 0, Qt::CaseInsensitive);
+        if (index != -1)
+            format.replace(index, 5, QString::number(load));
+
+        index = format.indexOf("%v", 0, Qt::CaseInsensitive);
+        if (index != -1)
+            format.replace(index, 2, QString::number(load));
+
+        index = format.indexOf("%user", 0, Qt::CaseInsensitive);
+        if (index != -1)
+            format.replace(index, 5, QString::number(user));
+
+        index = format.indexOf("%nice", 0, Qt::CaseInsensitive);
+        if (index != -1)
+            format.replace(index, 5, QString::number(nice));
+
+        index = format.indexOf("%system", 0, Qt::CaseInsensitive);
+        if (index != -1)
+            format.replace(index, 7, QString::number(idle));
+
+        index = format.indexOf("%load", 0, Qt::CaseInsensitive);
+        if (index != -1)
+            format.replace(index, 5, QString::number(system));
+
         meter->setValue(format);
-        continue;
-      }
-      
-      int index = 0;
-
-      index = format.indexOf("%load", 0, Qt::CaseInsensitive);
-      if(index != -1)
-        format.replace(index, 5, QString::number(load));
-
-      index = format.indexOf("%v", 0, Qt::CaseInsensitive);
-      if(index != -1)
-        format.replace(index, 2, QString::number(load));
-
-      index = format.indexOf("%user", 0, Qt::CaseInsensitive);
-      if(index != -1)
-        format.replace(index, 5, QString::number(user));
-
-      index = format.indexOf("%nice", 0, Qt::CaseInsensitive);
-      if(index != -1)
-        format.replace(index, 5, QString::number(nice));
-
-      index = format.indexOf("%system", 0, Qt::CaseInsensitive);
-      if(index != -1)
-        format.replace(index, 7, QString::number(idle));
-
-      index = format.indexOf("%load", 0, Qt::CaseInsensitive);
-      if(index != -1)
-        format.replace(index, 5, QString::number(system));
-      
-      meter->setValue(format);
     }
 }
 
-void CPUSensor::setMaxValue( SensorParams *sp )
+void CPUSensor::setMaxValue(SensorParams *sp)
 {
     Meter *meter;
     meter = sp->getMeter();
-    meter->setMax( 100 );
+    meter->setMax(100);
 }
 
 #include "cpu.moc"

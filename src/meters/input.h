@@ -38,7 +38,7 @@ public:
     ~Input();
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-                    QWidget *widget);
+               QWidget *widget);
 
     void setValue(QString text);
     QString getStringValue() const;
