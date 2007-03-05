@@ -28,18 +28,23 @@
 #include <kross/core/action.h>
 
 #include "karamba.h"
+#include "themelocale.h"
+
 #include "meters/bar.h"
 #include "meters/graph.h"
 #include "meters/imagelabel.h"
 #include "meters/input.h"
 #include "meters/richtextlabel.h"
 #include "meters/textlabel.h"
+#include "meters/clickarea.h"
 
 class Karamba;
 class ImageLabel;
 class Input;
 class RichTextLabel;
 class TextLabel;
+class ClickArea;
+class ThemeLocale;
 
 class KarambaInterface : public QObject
 {
@@ -82,7 +87,7 @@ Q_SIGNALS:
     void startupAdded(QObject*, long long);
     void startupRemoved(QObject*, long long);
     void commandFinished(QObject*, int);
-    void commandOutput(QObject*, int, char*);
+    void commandOutput(QObject*, int, QString);
     void itemDropped(QObject*, QString, int, int);
     void meterClicked(QObject*, QObject*, int);
     void meterClicked(QObject*, QString, int);
@@ -92,13 +97,11 @@ Q_SIGNALS:
     void keyPressed(QObject*, QObject*, QString);
 
 private:
-    Karamba *m_karamba;
-
     Kross::Action *m_action;
 
-    bool checkKaramba(Karamba *k);
-    bool checkMeter(Karamba *k, Meter *m, QString type);
-    bool checkKarambaAndMeter(Karamba *k, Meter *m, QString type);
+    bool checkKaramba(const Karamba *k) const;
+    bool checkMeter(const Karamba *k, const Meter *m, const QString &type) const;
+    bool checkKarambaAndMeter(const Karamba *k, const Meter *m, const QString &type) const;
 
     QVariantList getMeterMinMax(Karamba *k, Meter *m, QString type);
     QVariantList getMeterSize(Karamba *k, Meter *m, QString type);
@@ -241,49 +244,45 @@ public Q_SLOTS:
     bool removeMenuItem(Karamba *k, KMenu *menu, QAction *action);
 
     // Misc
+    bool acceptDrops(Karamba *k) const;
+    bool attachClickArea(const Karamba *k, Meter *m, const QString &leftButton = QString(),
+                         const QString &middleButton = QString(), const QString &rightButton =
+                         QString()) const;
+    bool callTheme(const Karamba *k, const QString &theme, const QString &info) const;
+    bool changeInterval(Karamba *k, int interval) const;
+    int execute(const QString &command) const;
+    QObject* createClickArea(Karamba *k, int x, int y, int width, int height,
+            const QString &onClick) const;
+    QObject* createServiceClickArea(Karamba *k, int x, int y, int width, int height,
+        const QString &name, const QString &exec, const QString &icon) const;
+    int executeInteractive(Karamba *k, const QStringList &command);
+    QString getIP(const Karamba *k, QString interface) const;
+    int getNumberOfDesktops(const Karamba *k) const;
+    QString getPrettyThemeName(const Karamba *k) const;
+    QStringList getServiceGroups(const Karamba *k, QString path) const;
+    QString getThemePath(const Karamba *k) const;
+    double getUpdateTime(const Karamba *k) const;
+    bool setUpdateTime(Karamba *k, double updateTime) const;
+    bool hide(Karamba *k) const;
+    bool show(Karamba *k) const;
+    QString language(const Karamba *k) const;
+    bool managementPopup(const Karamba *k) const;
+    Karamba* openNamedTheme(const QString &themePath, const QString &themeName,
+        bool startAsSubTheme) const;
+    Karamba* openTheme(const QString &themePath) const;
+    QString readThemeFile(const Karamba *k, const QString &file) const;
+    bool reloadTheme(Karamba *k) const;
+    bool removeClickArea(Karamba *k, ClickArea *area) const;
+    bool run(const QString &appName, const QString &command, const QString &icon, const QStringList
+            &arguments);
+    QVariant getIncommingData(const Karamba *k) const;
+    bool setIncommingData(const Karamba *k, const QString &themePath, QVariant data) const;
+    bool toggleShowDesktop(const Karamba *k) const;
+    bool translateAll(const Karamba *k, int x, int y) const;
+    QString userLanguage(const Karamba *k) const;
+    QStringList userLanguages(const Karamba *k) const;
+    bool wantRightButton(Karamba *k, bool enable) const;
 
-    bool acceptDrops(Karamba *k);
-    bool attachClickArea(Karamba *k, Meter *m, QString leftButton = QString(),
-                         QString middleButton = QString(), QString rightButton = QString());
-
-    /*
-        long callTheme
-    */
-    bool changeInterval(Karamba *k, int interval);
-    /*
-        long createClickArea
-        long createServiceClickArea
-    */
-    int execute(QString command);
-
-    /*
-        long executeInteractive
-        long getIncomingData
-        long getIp
-        long getNumberOfDesktop
-        long getPrettyThemeName
-        long getServiceGroups
-    */
-    QString getThemePath(Karamba *k);
-    /*
-        long getUpdateTime
-        long hide
-        long language
-        long managementPopup
-        long openNamedTheme
-        long openTheme
-        long readThemeFile
-        long reloadTheme
-        long removeClickArea
-        long run
-        long setIncomingData
-        long setUpdateTime
-        long show
-        long toggleShowDesktop
-        long translateAll
-        long userLanguage
-        long wantRightButton
-    */
     // RichText
     QObject* createRichText(Karamba* k, QString text, bool underline = false);
     bool deleteRichText(Karamba *k, RichTextLabel *label);

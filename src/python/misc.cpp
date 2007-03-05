@@ -406,17 +406,13 @@ PyObject* py_create_click_area(PyObject *, PyObject *args)
     return Py_BuildValue((char*)"l", createClickArea(widget, x, y, w, h, text));
 }
 
-#ifdef __GNUC__
-#warning Wait for DBUS
-#endif
 static long callTheme(long widget, char* path, char *str)
 {
 
     Karamba* currTheme = (Karamba*) widget;
-    /*
-      if (currTheme)
-        currTheme->callTheme(QString(path), QString(str));
-    */
+    if (currTheme)
+        currTheme->sendDataToTheme(QString(path), QString(str));
+
     return (long)currTheme;
 }
 
@@ -433,16 +429,13 @@ static long setIncomingData(long widget, char* path, char *obj)
     return (long)currTheme;
 }
 
-#ifdef __GNUC__
-#warning wait for DBUS
-#endif
 static QString getIncomingData(long widget)
 {
     Karamba* currTheme = (Karamba*) widget;
-    /*
-      if (currTheme)
-        return currTheme->getIncomingData();
-    */
+
+    if (currTheme)
+        return currTheme->retrieveReceivedData().toString();
+
     return QString("");
 }
 

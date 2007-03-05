@@ -38,7 +38,7 @@ public:
     void addKaramba(Karamba *newK);
     void removeKaramba(Karamba *k);
 
-    bool hasKaramba(Karamba *k);
+    bool hasKaramba(const Karamba *k) const;
     bool themeExists(QString prettyName);
     void closeTheme(QString themeName);
 

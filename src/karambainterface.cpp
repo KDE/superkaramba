@@ -19,20 +19,23 @@
  ****************************************************************************/
 
 #include <QGraphicsScene>
+#include <QNetworkInterface>
 
 #include <kdebug.h>
 #include <kmenu.h>
 #include <krun.h>
+#include <kservice.h>
+#include <klocale.h>
 
 #include "karamba.h"
 #include "karambaapp.h"
 #include "lineparser.h"
+#include "showdesktop.h"
 #include "karambainterface.h"
 #include "karambainterface.moc"
 
 KarambaInterface::KarambaInterface(Karamba *k)
-        : QObject(),
-        m_karamba(k)
+        : QObject()
 {
     setObjectName("karamba");
 
@@ -50,7 +53,7 @@ KarambaInterface::~KarambaInterface()
 
 // Testing functions -----------------------
 
-bool KarambaInterface::checkKaramba(Karamba *k)
+bool KarambaInterface::checkKaramba(const Karamba *k) const
 {
     if (!k) {
         kWarning() << "Widget pointer was 0" << endl;
@@ -65,7 +68,7 @@ bool KarambaInterface::checkKaramba(Karamba *k)
     return true;
 }
 
-bool KarambaInterface::checkMeter(Karamba *k, Meter *m, QString type)
+bool KarambaInterface::checkMeter(const Karamba *k, const Meter *m, const QString &type) const
 {
     if (!m) {
         kWarning() << "Meter pointer was 0" << endl;
@@ -85,7 +88,8 @@ bool KarambaInterface::checkMeter(Karamba *k, Meter *m, QString type)
     return true;
 }
 
-bool KarambaInterface::checkKarambaAndMeter(Karamba *k, Meter *m, QString type)
+bool KarambaInterface::checkKarambaAndMeter(const Karamba *k, const Meter *m, const QString &type)
+    const
 {
     return checkKaramba(k) && checkMeter(k, m, type);
 }
@@ -322,7 +326,7 @@ void KarambaInterface::callCommandFinished(Karamba *k, int pid)
 
 void KarambaInterface::callCommandOutput(Karamba *k, int pid, char* buffer)
 {
-    emit commandOutput(k, pid, buffer);
+    emit commandOutput(k, pid, QString(buffer));
 }
 
 void KarambaInterface::callItemDropped(Karamba *k, QString text, int x, int y)
@@ -1194,7 +1198,10 @@ bool KarambaInterface::removeMenuItem(Karamba *k, KMenu *menu, QAction *action)
 
 
 
-bool KarambaInterface::acceptDrops(Karamba *k)
+
+
+
+bool KarambaInterface::acceptDrops(Karamba *k) const
 {
     if (!checkKaramba(k)) {
         return false;
@@ -1204,10 +1211,8 @@ bool KarambaInterface::acceptDrops(Karamba *k)
     return true;
 }
 
-
-
-bool KarambaInterface::attachClickArea(Karamba *k, Meter *m,
-                                       QString leftButton, QString middleButton, QString rightButton)
+bool KarambaInterface::attachClickArea(const Karamba *k, Meter *m,
+    const QString &leftButton, const QString &middleButton, const QString &rightButton) const
 {
     if (!checkKaramba(k)) {
         return false;
@@ -1226,7 +1231,16 @@ bool KarambaInterface::attachClickArea(Karamba *k, Meter *m,
     return true;
 }
 
-bool KarambaInterface::changeInterval(Karamba *k, int interval)
+bool KarambaInterface::callTheme(const Karamba *k, const QString &theme, const QString &info) const
+{
+    if (!checkKaramba(k)) {
+        return false;
+    }
+
+    return k->sendDataToTheme(theme, info);
+}
+
+bool KarambaInterface::changeInterval(Karamba *k, int interval) const
 {
     if (!checkKaramba(k)) {
         return false;
@@ -1236,18 +1250,313 @@ bool KarambaInterface::changeInterval(Karamba *k, int interval)
     return true;
 }
 
-int KarambaInterface::execute(QString command)
+int KarambaInterface::execute(const QString &command) const
 {
     return KRun::runCommand(command);
 }
 
+QObject* KarambaInterface::createClickArea(Karamba *k, int x, int y, int width, int height,
+        const QString &onClick) const
+{
+    if (!checkKaramba(k)) {
+        return 0;
+    }
 
+    ClickArea *tmp = new ClickArea(k, false, x, y, width, height);
+    tmp->setOnClick(onClick);
 
-QString KarambaInterface::getThemePath(Karamba *k)
+    k->addToGroup(tmp);
+
+    return tmp;
+}
+
+bool KarambaInterface::removeClickArea(Karamba *k, ClickArea *area) const
+{
+    if (!checkKarambaAndMeter(k, area, "ClickArea")) {
+        return false;
+    }
+
+    k->removeMeter(area);
+    return true;
+}
+
+QObject* KarambaInterface::createServiceClickArea(Karamba *k, int x, int y, int width, int height,
+        const QString &name, const QString &exec, const QString &icon) const
+{
+    if (!checkKaramba(k)) {
+        return 0;
+    }
+
+    ClickArea *tmp = new ClickArea(k, false, x, y, width, height);
+    tmp->setServiceOnClick(name, exec, icon);
+
+    k->addToGroup(tmp);
+
+    return tmp;
+}
+
+int KarambaInterface::executeInteractive(Karamba *k, const QStringList &command)
+{
+    if (!checkKaramba(k)) {
+        return 0;
+    }
+
+    k->currProcess = new KProcess;
+    *(k->currProcess) << command;
+
+    connect(k->currProcess,
+                          SIGNAL(processExited(KProcess *)),
+                          k,
+                          SLOT(processExited(KProcess *)));
+
+    connect(k->currProcess,
+                          SIGNAL(receivedStdout(KProcess *, char *, int)),
+                          k,
+                          SLOT(receivedStdout(KProcess *, char *, int)));
+
+    k->currProcess->start(KProcess::NotifyOnExit, KProcess::Stdout);
+
+    return k->currProcess->pid();
+}
+
+QString KarambaInterface::getIP(const Karamba *k, QString interface) const
+{
+    if (!checkKaramba(k)) {
+        return QString::null;
+    }
+
+    QNetworkInterface iface = QNetworkInterface::interfaceFromName(interface);
+    return iface.addressEntries()[0].ip().toString();
+}
+
+int KarambaInterface::getNumberOfDesktops(const Karamba *k) const
+{
+    if (!checkKaramba(k)) {
+        return 0;
+    }
+
+    return k->getNumberOfDesktops();
+}
+
+QString KarambaInterface::getPrettyThemeName(const Karamba *k) const
+{
+    if (!checkKaramba(k)) {
+        return QString::null;
+    }
+
+    return k->prettyName();
+}
+
+QStringList KarambaInterface::getServiceGroups(const Karamba *k, QString path) const
+{
+    if (!checkKaramba(k)) {
+        return QStringList();
+    }
+
+    // Use QHash/QMap for this?
+}
+
+QString KarambaInterface::getThemePath(const Karamba *k) const
 {
     if (!checkKaramba(k))
-        return QString();
+        return QString::null;
+
     return k->theme().path();
+}
+
+double KarambaInterface::getUpdateTime(const Karamba *k) const
+{
+    if (!checkKaramba(k)) {
+        return 0;
+    }
+
+    return k->getUpdateTime();
+}
+
+bool KarambaInterface::setUpdateTime(Karamba *k, double updateTime) const
+{
+    if (!checkKaramba(k)) {
+        return false;
+    }
+
+    k->setUpdateTime(updateTime);
+    return true;
+}
+
+bool KarambaInterface::hide(Karamba *k) const
+{
+    if (!checkKaramba(k)) {
+        return false;
+    }
+
+    k->hide();
+    return true;
+}
+
+bool KarambaInterface::show(Karamba *k) const
+{
+    if (!checkKaramba(k)) {
+        return false;
+    }
+
+    k->show();
+    return true;
+}
+
+QString KarambaInterface::language(const Karamba *k) const
+{
+    if (!checkKaramba(k)) {
+        return false;
+    }
+
+    return k->theme().locale()->language();
+}
+
+bool KarambaInterface::managementPopup(const Karamba *k) const
+{
+    if (!checkKaramba(k)) {
+        return false;
+    }
+
+    k->popupGlobalMenu();
+    return true;
+}
+
+Karamba* KarambaInterface::openNamedTheme(const QString &themePath, const QString &themeName,
+        bool subTheme) const
+{
+    Karamba *newTheme;
+    QFileInfo file(themePath);
+
+    if (file.exists()) {
+        QString prettyName(themeName);
+        KarambaApplication* app = (KarambaApplication*)qApp;
+        if (!app->themeExists(prettyName)) {
+            newTheme = new Karamba(KUrl(themePath));
+            newTheme->show();
+        }
+    }
+    return newTheme;
+}
+
+Karamba* KarambaInterface::openTheme(const QString &themePath) const
+{
+    Karamba *newTheme;
+    QFileInfo file(themePath);
+
+    if (file.exists()) {
+        newTheme = new Karamba(KUrl(themePath));
+        newTheme->show();
+    }
+
+    return newTheme;
+}
+
+QString KarambaInterface::readThemeFile(const Karamba *k, const QString &file) const
+{
+    if (!checkKaramba(k)) {
+        return QString::null;
+    }
+
+    return k->theme().readThemeFile(file);
+}
+
+bool KarambaInterface::reloadTheme(Karamba *k) const
+{
+    if (!checkKaramba(k)) {
+        return false;
+    }
+
+    k->reloadConfig();
+    return true;
+}
+
+bool KarambaInterface::run(const QString &appName, const QString &command, const QString &icon,
+        const QStringList &arguments)
+{
+    KService service(appName, command, icon);
+
+    KRun::run(service, arguments, 0);
+
+    return true;
+}
+
+QVariant KarambaInterface::getIncommingData(const Karamba *k) const
+{
+    if (!checkKaramba(k)) {
+        return QVariant();
+    }
+
+    return k->retrieveReceivedData();
+}
+
+
+// Is the theme path or the pretty name required?
+bool KarambaInterface::setIncommingData(const Karamba *k, const QString &themePath, QVariant data)
+    const
+{
+    if (checkKaramba(k)) {
+        return false;
+    }
+
+    return k->sendData();
+}
+
+bool KarambaInterface::toggleShowDesktop(const Karamba *k) const
+{
+    if (!checkKaramba(k)) {
+        return false;
+    }
+
+    ShowDesktop::self()->toggle();
+    return true;
+}
+
+bool KarambaInterface::translateAll(const Karamba *k, int x, int y) const
+{
+    if (!checkKaramba(k)) {
+        return false;
+    }
+
+    QList<QGraphicsItem*> items = ((QGraphicsItemGroup*)k)->children();
+
+    foreach(QGraphicsItem *item, items) {
+        Meter *meter = dynamic_cast<Meter*>(item);
+        meter->setSize(meter->getX() + x,
+                        meter->getY() + y,
+                        meter->getWidth(),
+                        meter->getHeight());
+    }
+
+    return true;
+}
+
+QString KarambaInterface::userLanguage(const Karamba *k) const
+{
+    if (!checkKaramba(k)) {
+        return QString::null;
+    }
+
+    return KGlobal::locale()->language();
+}
+
+QStringList KarambaInterface::userLanguages(const Karamba *k) const
+{
+    if (!checkKaramba(k)) {
+        return QStringList();
+    }
+
+    return KGlobal::locale()->languageList();
+}
+
+bool KarambaInterface::wantRightButton(Karamba *k, bool enable) const
+{
+    if (!checkKaramba(k)) {
+        return false;
+    }
+
+    k->setWantRightButton(enable);
+    return true;
 }
 
 
@@ -1547,6 +1856,9 @@ bool KarambaInterface::setTextScroll(Karamba *k, TextLabel *text, QString type, 
 // This is kept for compatibility only
 bool KarambaInterface::createWidgetMask(Karamba *k, QString mask)
 {
+    Q_UNUSED(k);
+    Q_UNUSED(mask);
+
     return true;
 }
 

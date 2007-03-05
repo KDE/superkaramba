@@ -294,7 +294,7 @@ void Karamba::initPythonInterface()
     m_stepTimer->start(m_interval);
 }
 
-QString Karamba::prettyName()
+QString Karamba::prettyName() const
 {
     return m_prettyName;
 }
@@ -1279,15 +1279,15 @@ void Karamba::passMenuItemClicked(QAction* action)
 
 }
 
-void Karamba::popupGlobalMenu()
+void Karamba::popupGlobalMenu() const
 {
     m_popupMenu->popup(QCursor::pos());
 }
 
-bool Karamba::hasMeter(Meter* meter)
+bool Karamba::hasMeter(const Meter* meter) const
 {
     QList<QGraphicsItem*> items = QGraphicsItemGroup::children();
-    return items.contains(meter);
+    return items.contains(const_cast<Meter*>(meter));
 }
 
 void Karamba::slotToggleSystemTray()
@@ -1574,7 +1574,7 @@ QGraphicsView* Karamba::getView()
     return m_view;
 }
 
-int Karamba::getNumberOfDesktops()
+int Karamba::getNumberOfDesktops() const
 {
     return m_KWinModule->numberOfDesktops();
 }
@@ -1585,7 +1585,7 @@ void Karamba::changeInterval(u_int newInterval)
     m_stepTimer->setInterval(m_interval);
 }
 
-double Karamba::getUpdateTime()
+double Karamba::getUpdateTime() const
 {
     return m_updateTime;
 }
@@ -1610,7 +1610,7 @@ void Karamba::setFixedSize(u_int w, u_int h)
     size.setHeight(h);
 }
 
-ThemeFile& Karamba::theme()
+const ThemeFile& Karamba::theme() const
 {
     return m_theme;
 }
@@ -1708,3 +1708,20 @@ QPoint Karamba::getPosition()
         return pos().toPoint();
 }
 
+#ifdef __GNUC__
+#warning These functions need to be implemented with D-Bus
+#endif
+bool Karamba::sendDataToTheme(const QString &prettyThemeName, const QString &data) const
+{
+    return false;
+}
+
+QVariant Karamba::retrieveReceivedData() const
+{
+    return QString();
+}
+
+bool Karamba::sendData() const
+{
+    return false;
+}

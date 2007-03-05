@@ -70,11 +70,11 @@ public:
 
     void keyPressed(const QString& s, const Meter* meter);
 
-    ThemeFile& theme();
+    const ThemeFile& theme() const;
 
     int testCallback(int value);
 
-    bool hasMeter(Meter* meter);
+    bool hasMeter(const Meter* meter) const;
     bool removeMeter(Meter *meter);
     QString getSensor(Meter* meter);
     void setSensor(const LineParser& lineParser, Meter* meter);
@@ -86,9 +86,9 @@ public:
     KConfig* getConfig();
     //void removePopupMenu(KMenu *menu);
     bool popupMenuExisting(KMenu *menu);
-    QString prettyName();
-    int getNumberOfDesktops();
-    double getUpdateTime();
+    QString prettyName() const;
+    int getNumberOfDesktops() const;
+    double getUpdateTime() const;
     void setUpdateTime(double newTime);
     void setWantRightButton(bool enable);
     void changeInterval(u_int newInterval);
@@ -103,7 +103,7 @@ public:
     void scaleImageLabel(Meter *meter, int width,
                          int height);
     void moveMeter(Meter *meter, int x, int y);
-    void popupGlobalMenu();
+    void popupGlobalMenu() const;
 
     void writeConfigData();
 
@@ -116,6 +116,9 @@ public:
     void moveToPos(QPoint pos);
     void resizeTo(int width, int height);
     QPoint getPosition();
+    bool sendDataToTheme(const QString &prettyThemeName, const QString &data) const;
+    QVariant retrieveReceivedData() const;
+    bool sendData() const;
 
     KProcess *currProcess;
     Systemtray *systray;

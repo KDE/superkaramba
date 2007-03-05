@@ -181,9 +181,9 @@ void KarambaApplication::globalQuitSuperKaramba()
     quit();
 }
 
-bool KarambaApplication::hasKaramba(Karamba *k)
+bool KarambaApplication::hasKaramba(const Karamba *k) const
 {
-    return m_karambas.contains(k);
+    return m_karambas.contains(const_cast<Karamba*>(k));
 }
 
 void KarambaApplication::buildToolTip()
