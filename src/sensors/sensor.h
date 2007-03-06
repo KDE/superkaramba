@@ -29,7 +29,7 @@ public:
     void start();
     virtual ~Sensor();
     void addMeter(SensorParams *s);
-    SensorParams* hasMeter(Meter *meter);
+    SensorParams* hasMeter(const Meter *meter) const;
     void deleteMeter(Meter *meter);
     int isEmpty()
     {

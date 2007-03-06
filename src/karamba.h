@@ -76,7 +76,7 @@ public:
 
     bool hasMeter(const Meter* meter) const;
     bool removeMeter(Meter *meter);
-    QString getSensor(Meter* meter);
+    QString getSensor(const Meter* meter) const;
     void setSensor(const LineParser& lineParser, Meter* meter);
     void deleteMeterFromSensors(Meter* meter);
     TextField* getDefaultTextProps();
@@ -102,7 +102,7 @@ public:
     void deleteMenuItem(QAction *action);
     void scaleImageLabel(Meter *meter, int width,
                          int height);
-    void moveMeter(Meter *meter, int x, int y);
+    void moveMeter(Meter *meter, int x, int y) const;
     void popupGlobalMenu() const;
 
     void writeConfigData();
@@ -220,8 +220,8 @@ private:
     bool m_globalView;
 
     bool parseConfig();
-    Sensor *findSensorFromList(Meter *meter);
-    QString findSensorFromMap(Sensor *sensor);
+    Sensor *findSensorFromList(const Meter *meter) const;
+    QString findSensorFromMap(const Sensor *sensor) const;
 
     void preparePopupMenu();
 };

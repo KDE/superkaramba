@@ -695,7 +695,7 @@ TextField* Karamba::getDefaultTextProps()
     return m_defaultTextField;
 }
 
-QString Karamba::findSensorFromMap(Sensor* sensor)
+QString Karamba::findSensorFromMap(const Sensor* sensor) const
 {
     //qDebug("karamba::findSensorFromMap");
     QMap<QString, Sensor*>::ConstIterator it;
@@ -707,7 +707,7 @@ QString Karamba::findSensorFromMap(Sensor* sensor)
     return "";
 }
 
-Sensor *Karamba::findSensorFromList(Meter* meter)
+Sensor *Karamba::findSensorFromList(const Meter* meter) const
 {
     foreach(Sensor *sensor, m_sensorList) {
         if (sensor->hasMeter(meter))
@@ -733,7 +733,7 @@ void Karamba::deleteMeterFromSensors(Meter* meter)
     }
 }
 
-QString Karamba::getSensor(Meter* meter)
+QString Karamba::getSensor(const Meter* meter) const
 {
     Sensor* sensor = findSensorFromList(meter);
 
@@ -1261,7 +1261,7 @@ void Karamba::scaleImageLabel(Meter *meter, int width,
     }
 }
 
-void Karamba::moveMeter(Meter *meter, int x, int y)
+void Karamba::moveMeter(Meter *meter, int x, int y) const
 {
     meter->setSize(x, y,
                    meter->getWidth(),

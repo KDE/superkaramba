@@ -115,19 +115,19 @@ private:
     bool checkMeter(const Karamba *k, const Meter *m, const QString &type) const;
     bool checkKarambaAndMeter(const Karamba *k, const Meter *m, const QString &type) const;
 
-    QVariantList getMeterMinMax(Karamba *k, Meter *m, QString type);
-    QVariantList getMeterSize(Karamba *k, Meter *m, QString type);
-    QVariantList getMeterPos(Karamba *k, Meter *m, QString type);
-    QString getMeterSensor(Karamba *k, Meter *m, QString type);
-    int getMeterValue(Karamba *k, Meter *m, QString type);
-    QObject* getThemeMeter(Karamba *k, QString meter, QString type);
-    bool hideMeter(Karamba *k, Meter *m, QString type);
-    bool moveMeter(Karamba *k, Meter *m, QString type, int x, int y);
-    bool resizeMeter(Karamba *k, Meter *m, QString type, int width, int height);
-    bool setMeterMinMax(Karamba *k, Meter *m, QString type, int min, int max);
-    bool setMeterSensor(Karamba *k, Meter *m, QString type, QString sensor);
-    QObject* setMeterValue(Karamba *k, Meter *m, QString type, int value);
-    bool showMeter(Karamba *k, Meter *m, QString type);
+    QVariantList getMeterMinMax(const Karamba *k, const Meter *m, const QString &type) const;
+    QVariantList getMeterSize(const Karamba *k, const Meter *m, const QString &type) const;
+    QVariantList getMeterPos(const Karamba *k, const Meter *m, const QString &type) const;
+    QString getMeterSensor(const Karamba *k, const Meter *m, const QString &type) const;
+    int getMeterValue(const Karamba *k, const Meter *m, const QString &type) const;
+    QObject* getThemeMeter(const Karamba *k, const QString &meter, const QString &type) const;
+    bool hideMeter(const Karamba *k, Meter *m, const QString &type) const;
+    bool moveMeter(const Karamba *k, Meter *m, const QString &type, int x, int y) const;
+    bool resizeMeter(const Karamba *k, Meter *m, const QString &type, int width, int height) const;
+    bool setMeterMinMax(const Karamba *k, Meter *m, const QString &type, int min, int max) const;
+    bool setMeterSensor(Karamba *k, Meter *m, const QString &type, const QString &sensor) const;
+    QObject* setMeterValue(const Karamba *k, Meter *m, const QString &type, int value) const;
+    bool showMeter(const Karamba *k, Meter *m, const QString &type) const;
     bool setMeterColor(Karamba *k, Meter *m, QString type, int red, int green, int blue);
     QVariantList getMeterColor(Karamba *k, Meter *m, QString type);
     QString getMeterStringValue(Karamba *k, Meter *m, QString type);
@@ -138,26 +138,25 @@ private:
 
 public Q_SLOTS:
     // Bar
-    QObject* createBar(Karamba *k, int x, int y, int w, int h, QString path = "");
-    bool deleteBar(Karamba *k, Bar *bar);
-    bool setBarMinMax(Karamba *k, Bar *bar, int min, int max);
-    QVariantList getBarMinMax(Karamba *k, Bar *bar);
-    bool moveBar(Karamba *k, Bar *bar, int x, int y);
-    QVariantList getBarPos(Karamba *k, Bar *bar);
-    bool setBarSensor(Karamba *k, Bar *bar, QString sensor);
-    QString getBarSensor(Karamba *k, Bar *bar);
-    bool resizeBar(Karamba *k, Bar *bar, int width, int height);
-    QVariantList getBarSize(Karamba *k, Bar *bar);
-    QObject* setBarValue(Karamba *k, Bar *bar, int value);
-    int getBarValue(Karamba *k, Bar *bar);
-    QObject* getThemeBar(Karamba *k, QString meter);
-    bool hideBar(Karamba *k, Bar *bar);
-    bool showBar(Karamba *k, Bar *bar);
-    //---------------------------------------------------------------
-    bool setBarVertical(Karamba *k, Bar *bar, bool vert);
-    bool getBarVertical(Karamba *k, Bar *bar);
-    bool setBarImage(Karamba *k, Bar *bar, QString image);
-    QString getBarImage(Karamba *k, Bar *bar);
+    QObject* createBar(Karamba *k, int x, int y, int w, int h, const QString &path = "") const;
+    bool deleteBar(Karamba *k, Bar *bar) const;
+    bool setBarMinMax(const Karamba *k, Bar *bar, int min, int max) const;
+    QVariantList getBarMinMax(const Karamba *k, const Bar *bar) const;
+    bool moveBar(const Karamba *k, Bar *bar, int x, int y) const;
+    QVariantList getBarPos(const Karamba *k, const Bar *bar) const;
+    bool setBarSensor(Karamba *k, Bar *bar, const QString &sensor) const;
+    QString getBarSensor(const Karamba *k, const Bar *bar) const;
+    bool resizeBar(const Karamba *k, Bar *bar, int width, int height) const;
+    QVariantList getBarSize(const Karamba *k, const Bar *bar) const;
+    QObject* setBarValue(const Karamba *k, Bar *bar, int value) const;
+    int getBarValue(const Karamba *k, const Bar *bar) const;
+    QObject* getThemeBar(const Karamba *k, const QString &meter) const;
+    bool hideBar(const Karamba *k, Bar *bar) const;
+    bool showBar(const Karamba *k, Bar *bar) const;
+    bool setBarVertical(const Karamba *k, Bar *bar, bool vert) const;
+    bool getBarVertical(const Karamba *k, const Bar *bar) const;
+    bool setBarImage(const Karamba *k, Bar *bar, const QString &image) const;
+    QString getBarImage(const Karamba *k, const Bar *bar) const;
 
 
     // Config

@@ -41,7 +41,7 @@ void Sensor::addMeter(SensorParams *sp)
     objList->append(sp);
 }
 
-SensorParams* Sensor::hasMeter(Meter *meter)
+SensorParams* Sensor::hasMeter(const Meter *meter) const
 {
     QObject *it;
     foreach(it, *objList) {
@@ -50,7 +50,7 @@ SensorParams* Sensor::hasMeter(Meter *meter)
         }
     }
 
-    return NULL;
+    return 0;
 }
 
 void Sensor::deleteMeter(Meter *meter)

@@ -95,7 +95,8 @@ bool KarambaInterface::checkKarambaAndMeter(const Karamba *k, const Meter *m, co
     return checkKaramba(k) && checkMeter(k, m, type);
 }
 
-QVariantList KarambaInterface::getMeterMinMax(Karamba *k, Meter *m, QString type)
+QVariantList KarambaInterface::getMeterMinMax(const Karamba *k, const Meter *m, const QString &type)
+    const
 {
     if (!checkKarambaAndMeter(k, m, type))
         return QVariantList();
@@ -106,7 +107,8 @@ QVariantList KarambaInterface::getMeterMinMax(Karamba *k, Meter *m, QString type
     return ret;
 }
 
-QVariantList KarambaInterface::getMeterSize(Karamba *k, Meter *m, QString type)
+QVariantList KarambaInterface::getMeterSize(const Karamba *k, const Meter *m, const QString &type)
+    const
 {
     if (!checkKarambaAndMeter(k, m, type))
         return QVariantList();
@@ -117,7 +119,8 @@ QVariantList KarambaInterface::getMeterSize(Karamba *k, Meter *m, QString type)
     return list;
 }
 
-QVariantList KarambaInterface::getMeterPos(Karamba *k, Meter *m, QString type)
+QVariantList KarambaInterface::getMeterPos(const Karamba *k, const Meter *m, const QString &type)
+    const
 {
     if (!checkKarambaAndMeter(k, m, type))
         return QVariantList();
@@ -128,7 +131,8 @@ QVariantList KarambaInterface::getMeterPos(Karamba *k, Meter *m, QString type)
     return ret;
 }
 
-QString KarambaInterface::getMeterSensor(Karamba *k, Meter *m, QString type)
+QString KarambaInterface::getMeterSensor(const Karamba *k, const Meter *m, const QString &type)
+    const
 {
     if (!checkKarambaAndMeter(k, m, type))
         return QString::null;
@@ -137,7 +141,7 @@ QString KarambaInterface::getMeterSensor(Karamba *k, Meter *m, QString type)
 
 }
 
-int KarambaInterface::getMeterValue(Karamba *k, Meter *m, QString type)
+int KarambaInterface::getMeterValue(const Karamba *k, const Meter *m, const QString &type) const
 {
     if (!checkKarambaAndMeter(k, m, type))
         return 0;
@@ -145,7 +149,8 @@ int KarambaInterface::getMeterValue(Karamba *k, Meter *m, QString type)
     return m->getValue();
 }
 
-QObject* KarambaInterface::getThemeMeter(Karamba *k, QString meter, QString type)
+QObject* KarambaInterface::getThemeMeter(const Karamba *k, const QString &meter, const QString
+        &type) const
 {
     if (!checkKaramba(k))
         return 0;
@@ -162,7 +167,7 @@ QObject* KarambaInterface::getThemeMeter(Karamba *k, QString meter, QString type
     return 0;
 }
 
-bool KarambaInterface::hideMeter(Karamba *k, Meter *m, QString type)
+bool KarambaInterface::hideMeter(const Karamba *k, Meter *m, const QString &type) const
 {
     if (!checkKarambaAndMeter(k, m, type))
         return false;
@@ -171,7 +176,8 @@ bool KarambaInterface::hideMeter(Karamba *k, Meter *m, QString type)
     return true;
 }
 
-bool KarambaInterface::moveMeter(Karamba *k, Meter *m, QString type, int x, int y)
+bool KarambaInterface::moveMeter(const Karamba *k, Meter *m, const QString &type, int x, int y)
+    const
 {
     if (!checkKarambaAndMeter(k, m, type))
         return false;
@@ -180,7 +186,8 @@ bool KarambaInterface::moveMeter(Karamba *k, Meter *m, QString type, int x, int 
     return true;
 }
 
-bool KarambaInterface::resizeMeter(Karamba *k, Meter *m, QString type, int width, int height)
+bool KarambaInterface::resizeMeter(const Karamba *k, Meter *m, const QString &type, int width, int
+        height) const
 {
     if (!checkKarambaAndMeter(k, m, type))
         return false;
@@ -189,7 +196,8 @@ bool KarambaInterface::resizeMeter(Karamba *k, Meter *m, QString type, int width
     return true;
 }
 
-bool KarambaInterface::setMeterMinMax(Karamba *k, Meter *m, QString type, int min, int max)
+bool KarambaInterface::setMeterMinMax(const Karamba *k, Meter *m, const QString &type, int min, int max)
+    const
 {
     if (!checkKarambaAndMeter(k, m, type))
         return false;
@@ -199,7 +207,8 @@ bool KarambaInterface::setMeterMinMax(Karamba *k, Meter *m, QString type, int mi
     return true;
 }
 
-bool KarambaInterface::setMeterSensor(Karamba *k, Meter *m, QString type, QString sensor)
+bool KarambaInterface::setMeterSensor(Karamba *k, Meter *m, const QString &type,
+        const QString &sensor) const
 {
     if (!checkKarambaAndMeter(k, m, type))
         return false;
@@ -208,7 +217,8 @@ bool KarambaInterface::setMeterSensor(Karamba *k, Meter *m, QString type, QStrin
     return true;
 }
 
-QObject* KarambaInterface::setMeterValue(Karamba *k, Meter *m, QString type, int value)
+QObject* KarambaInterface::setMeterValue(const Karamba *k, Meter *m, const QString &type, int value)
+    const
 {
     if (!checkKarambaAndMeter(k, m, type))
         return 0;
@@ -217,7 +227,7 @@ QObject* KarambaInterface::setMeterValue(Karamba *k, Meter *m, QString type, int
     return m;
 }
 
-bool KarambaInterface::showMeter(Karamba *k, Meter *m, QString type)
+bool KarambaInterface::showMeter(const Karamba *k, Meter *m, const QString &type) const
 {
     if (!checkKarambaAndMeter(k, m, type))
         return false;
@@ -367,7 +377,24 @@ void KarambaInterface::callKeyPressed(Karamba *k, Meter *meter, QString key)
 
 // Calls from scripts --------------------
 
-QObject* KarambaInterface::createBar(Karamba* k, int x, int y, int w, int h, QString path)
+/** Bar/createBar
+*
+* SYNOPSIS
+*   long createBar(widget, x, y, w, h, image)
+* DESCRIPTION
+*   This creates a bar at x, y with width and height w, h.
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long x -- x coordinate
+*   * long y -- y coordinate
+*   * long w -- width
+*   * long h -- height
+*   * string image -- Path to image
+* RETURN VALUE
+*   Pointer to new bar meter
+*/
+QObject* KarambaInterface::createBar(Karamba* k, int x, int y, int w, int h, const QString &path)
+    const
 {
     if (!checkKaramba(k))
         return NULL;
@@ -380,7 +407,19 @@ QObject* KarambaInterface::createBar(Karamba* k, int x, int y, int w, int h, QSt
     return tmp;
 }
 
-bool KarambaInterface::deleteBar(Karamba *k, Bar *bar)
+/** Bar/deleteBar
+*
+* SYNOPSIS
+*   long deleteBar(widget, bar)
+* DESCRIPTION
+*   This deletes a bar.
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long bar -- Pointer to bar
+* RETURN VALUE
+*   1 if successful
+*/
+bool KarambaInterface::deleteBar(Karamba *k, Bar *bar) const
 {
     if (!checkKarambaAndMeter(k, bar, "Bar"))
         return false;
@@ -388,72 +427,259 @@ bool KarambaInterface::deleteBar(Karamba *k, Bar *bar)
     return k->removeMeter(bar);
 }
 
-bool KarambaInterface::setBarMinMax(Karamba *k, Bar *bar, int min, int max)
+/** Bar/setBarMinMax
+*
+* SYNOPSIS
+*   long setBarMinMax(widget, bar, min, max)
+* DESCRIPTION
+*   Returns current bar value.
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long bar -- pointer to bar
+*   * long min -- min value
+*   * long max -- max value
+* RETURN VALUE
+*   1 if successful
+*/
+bool KarambaInterface::setBarMinMax(const Karamba *k, Bar *bar, int min, int max) const
 {
     return setMeterMinMax(k, bar, "Bar", min, max);
 }
 
-QVariantList KarambaInterface::getBarMinMax(Karamba *k, Bar *bar)
+/** Bar/getBarMinMax
+*
+* SYNOPSIS
+*   tuple getBarMinMax(widget, bar)
+* DESCRIPTION
+*   Returns possible min and max values of the bar.
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long bar -- pointer to bar
+* RETURN VALUE
+*   max & min
+*/
+QVariantList KarambaInterface::getBarMinMax(const Karamba *k, const Bar *bar) const
 {
     return getMeterMinMax(k, bar, "Bar");
 }
 
-bool KarambaInterface::moveBar(Karamba *k, Bar *bar, int x, int y)
+/** Bar/moveBar
+*
+* SYNOPSIS
+*   long moveBar(widget, bar, x, y)
+* DESCRIPTION
+*   This will move the bar to new x and y coordinates.
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long bar -- pointer to bar
+*   * long x -- x coordinate
+*   * long y -- y coordinate
+* RETURN VALUE
+*   1 if successful
+*/
+bool KarambaInterface::moveBar(const Karamba *k, Bar *bar, int x, int y) const
 {
     return moveMeter(k, bar, "Bar", x, y);
 }
 
-QVariantList KarambaInterface::getBarPos(Karamba *k, Bar *bar)
+/** Bar/getBarPos
+*
+* SYNOPSIS
+*   tuple getBarPos(widget, bar)
+* DESCRIPTION
+*   Given a reference to a bar object, this will return a tuple
+*   containing the x and y coordinate of a bar object.
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long bar -- pointer to bar
+* RETURN VALUE
+*   x and y coordinates
+*/
+QVariantList KarambaInterface::getBarPos(const Karamba *k, const Bar *bar) const
 {
     return getMeterPos(k, bar, "Bar");
 }
 
-bool KarambaInterface::setBarSensor(Karamba *k, Bar *bar, QString sensor)
+/** Bar/setBarSensor
+*
+* SYNOPSIS
+*   long setBarSensor(widget, bar, sensor)
+* DESCRIPTION
+*   Sets the sensor string of the bar.
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long bar -- pointer to bar
+*   * string sensor -- new sensor as in theme files
+* RETURN VALUE
+*   1 if successful
+*/
+bool KarambaInterface::setBarSensor(Karamba *k, Bar *bar, const QString &sensor) const
 {
     return setMeterSensor(k, bar, "Bar", sensor);
 }
 
-QString KarambaInterface::getBarSensor(Karamba *k, Bar *bar)
+/** Bar/getBarSensor
+*
+* SYNOPSIS
+*   string getBarSensor(widget, bar)
+* DESCRIPTION
+*   Gets the current sensor string
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long bar -- pointer to bar
+* RETURN VALUE
+*   sensor string
+*/
+QString KarambaInterface::getBarSensor(const Karamba *k, const Bar *bar) const
 {
     return getMeterSensor(k, bar, "Bar");
 }
 
-bool KarambaInterface::resizeBar(Karamba *k, Bar *bar, int width, int height)
+/** Bar/resizeBar
+*
+* SYNOPSIS
+*   long resizeBar(widget, bar, w, h)
+* DESCRIPTION
+*   This will resize bar to new height and width.
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long bar -- pointer to bar
+*   * long w -- new width
+*   * long h -- new height
+* RETURN VALUE
+*   1 if successful
+*/
+bool KarambaInterface::resizeBar(const Karamba *k, Bar *bar, int width, int height) const
 {
     return resizeMeter(k, bar, "Bar", width, height);
 }
 
-QVariantList KarambaInterface::getBarSize(Karamba *k, Bar *bar)
+/** Bar/getBarSize
+*
+* SYNOPSIS
+*   tuple getBarSize(widget, bar)
+* DESCRIPTION
+*   Given a reference to a bar object, this will return a tuple
+*   containing the height and width of a bar object.
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long bar -- pointer to bar
+* RETURN VALUE
+*   width and height
+*/
+QVariantList KarambaInterface::getBarSize(const Karamba *k, const Bar *bar) const
 {
     return getMeterSize(k, bar, "Bar");
 }
 
-QObject* KarambaInterface::setBarValue(Karamba *k, Bar *bar, int value)
+/** Bar/setBarValue
+*
+* SYNOPSIS
+*   long setBarValue(widget, bar, value)
+* DESCRIPTION
+*   Sets current bar value.
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long bar -- pointer to bar
+*   * long value -- new value
+* RETURN VALUE
+*   1 if successful
+*/
+QObject* KarambaInterface::setBarValue(const Karamba *k, Bar *bar, int value) const
 {
     return setMeterValue(k, bar, "Bar", value);
 }
 
-int KarambaInterface::getBarValue(Karamba *k, Bar *bar)
+/** Bar/getBarValue
+*
+* SYNOPSIS
+*   long getBarValue(widget, bar)
+* DESCRIPTION
+*   Returns current bar value.
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long bar -- pointer to bar
+* RETURN VALUE
+*   value
+*/
+int KarambaInterface::getBarValue(const Karamba *k, const Bar *bar) const
 {
     return getMeterValue(k, bar, "Bar");
 }
 
-QObject* KarambaInterface::getThemeBar(Karamba *k, QString meter)
+/** Bar/getThemeBar
+*
+* SYNOPSIS
+*   long getThemeBar(widget, name)
+* DESCRIPTION
+*   You can reference a bar in your python code that was created in the
+*   theme file. Basically, you just add a NAME= value to the BAR line in
+*   the .theme file. Then if you want to use that object, instead of calling
+*   createBar, you can call this function.
+*
+*   The name you pass to the function is the same one that you gave it for
+*   the NAME= parameter in the .theme file.
+* ARGUMENTS
+*   * long widget -- karamba
+*   * string name -- name of the bar to get
+* RETURN VALUE
+*   Pointer to bar
+*/
+QObject* KarambaInterface::getThemeBar(const Karamba *k, const QString &meter) const
 {
     return getThemeMeter(k, meter, "Bar");
 }
 
-bool KarambaInterface::hideBar(Karamba *k, Bar *bar)
+/** Bar/hideBar
+*
+* SYNOPSIS
+*   long hideBar(widget, bar)
+* DESCRIPTION
+*   This hides an bar. In other words, during subsequent calls to
+*   widgetUpdate(), this bar will not be drawn.
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long bar -- pointer to bar
+* RETURN VALUE
+*   1 if successful
+*/
+bool KarambaInterface::hideBar(const Karamba *k, Bar *bar) const
 {
     return hideMeter(k, bar, "Bar");
 }
 
-bool KarambaInterface::showBar(Karamba *k, Bar *bar)
+/** Bar/showBar
+*
+* SYNOPSIS
+*   long showBar(widget, bar)
+* DESCRIPTION
+*   This shows an bar. In other words, during subsequent calls to
+*   widgetUpdate(), this bar will be drawn.
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long bar -- pointer to bar
+* RETURN VALUE
+*   1 if successful
+*/
+bool KarambaInterface::showBar(const Karamba *k, Bar *bar) const
 {
     return showMeter(k, bar, "Bar");
 }
 
-bool KarambaInterface::setBarVertical(Karamba *k, Bar *bar, bool vert)
+/** Bar/setBarVertical
+*
+* SYNOPSIS
+*   long setBarVertical(widget, bar)
+* DESCRIPTION
+*   Set bar vertical
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long bar -- pointer to bar
+*   * long vertical -- 1 if vertical
+* RETURN VALUE
+*   1 if successful
+*/
+bool KarambaInterface::setBarVertical(const Karamba *k, Bar *bar, bool vert) const
 {
     if (!checkKarambaAndMeter(k, bar, "Bar"))
         return false;
@@ -462,7 +688,19 @@ bool KarambaInterface::setBarVertical(Karamba *k, Bar *bar, bool vert)
     return true;
 }
 
-bool KarambaInterface::getBarVertical(Karamba *k, Bar *bar)
+/** Bar/getBarVertical
+*
+* SYNOPSIS
+*   string getBarVertical(widget, bar)
+* DESCRIPTION
+*   Check if bar is vertical bar
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long bar -- pointer to bar
+* RETURN VALUE
+*   1 if vertical
+*/
+bool KarambaInterface::getBarVertical(const Karamba *k, const Bar *bar) const
 {
     if (!checkKarambaAndMeter(k, bar, "Bar"))
         return false;
@@ -470,7 +708,20 @@ bool KarambaInterface::getBarVertical(Karamba *k, Bar *bar)
     return bar->getVertical();
 }
 
-bool KarambaInterface::setBarImage(Karamba *k, Bar *bar, QString image)
+/** Bar/setBarImage
+*
+* SYNOPSIS
+*   long setBarImage(widget, bar, image)
+* DESCRIPTION
+*   Use the image in path for the background as the bar
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long bar -- pointer to bar
+*   * string image -- new image
+* RETURN VALUE
+*   1 if successful
+*/
+bool KarambaInterface::setBarImage(const Karamba *k, Bar *bar, const QString &image) const
 {
     if (!checkKarambaAndMeter(k, bar, "Bar"))
         return false;
@@ -478,7 +729,19 @@ bool KarambaInterface::setBarImage(Karamba *k, Bar *bar, QString image)
     return bar->setImage(image);
 }
 
-QString KarambaInterface::getBarImage(Karamba *k, Bar *bar)
+/** Bar/getBarImage
+*
+* SYNOPSIS
+*   string getBarImage(widget, bar)
+* DESCRIPTION
+*   Get bar image
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long bar -- pointer to bar
+* RETURN VALUE
+*   path to bar image
+*/
+QString KarambaInterface::getBarImage(const Karamba *k, const Bar *bar) const
 {
     if (!checkKarambaAndMeter(k, bar, "Bar"))
         return QString::null;
