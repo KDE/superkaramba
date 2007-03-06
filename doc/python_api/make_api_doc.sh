@@ -1,7 +1,7 @@
 #!/bin/bash
-#This script grabs the current *_python.h headers,
-# converts them to robodoc format, and then generates 
-# the api documentation
+# This script converts the comments in karambainterface.cpp
+# to the robodoc format and then generates
+# the api documentation.
 ##########################################################
 SRCDIR=../../src/
 TEMPDIR=".apiHeaders"
@@ -17,7 +17,7 @@ fi
 function replaceComments()
 {
         echo "Converting file $1"
-        TEMPFILE="temp.h"
+        TEMPFILE="temp.cpp"
         cat $1 | sed -e 's/^\/\*\*/\/\/\*\*\*\*p\*/' -e 's/^\*\//\/\/\*\*\*/' -e 's/^\*/\/\//' > $TEMPFILE
         if [[ -s $TEMPFILE ]] ; then
                 mv $TEMPFILE $1
@@ -25,12 +25,8 @@ function replaceComments()
 }
 
 
-FOO=`find $SRCDIR -type f -name "*_python.h"`
-
-for FILE in $FOO
-do
-        cp $FILE $TEMPDIR/
-done
+FOO=$SRCDIR"karambainterface.cpp"
+cp $FOO $TEMPDIR/
 
 BAR=`ls $TEMPDIR`
 for FILE in $BAR

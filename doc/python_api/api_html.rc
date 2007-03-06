@@ -25,7 +25,6 @@ ignore files:
     CVS
     *.bak
     *~
-    *.cpp
     Makefile*
     *.rc
 header markers:
