@@ -1355,6 +1355,7 @@ QStringList KarambaInterface::getServiceGroups(const Karamba *k, QString path) c
     }
 
     // Use QHash/QMap for this?
+    return QStringList();
 }
 
 QString KarambaInterface::getThemePath(const Karamba *k) const
