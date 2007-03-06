@@ -35,7 +35,8 @@
 #include "karambainterface.moc"
 
 KarambaInterface::KarambaInterface(Karamba *k)
-        : QObject()
+        : QObject(),
+        m_karamba(k)
 {
     setObjectName("karamba");
 
@@ -1358,6 +1359,8 @@ QStringList KarambaInterface::getServiceGroups(const Karamba *k, QString path) c
 
 QString KarambaInterface::getThemePath(const Karamba *k) const
 {
+    if (!k)
+        k = m_karamba;
     if (!checkKaramba(k))
         return QString::null;
 

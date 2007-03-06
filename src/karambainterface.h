@@ -97,6 +97,18 @@ Q_SIGNALS:
     void keyPressed(QObject*, QObject*, QString);
 
 private:
+    /**
+    * This is the in the constructor passed \a Karamba instance
+    * and used e.g. at the \a getThemePath method to be able
+    * to fetch the theme-path even outside of the functions if
+    * there is no access to the Karamba-pointer.
+    */
+    Karamba *m_karamba;
+
+    /**
+    * The \a Kross::Action instance that provides us access to
+    * the scripting backends.
+    */
     Kross::Action *m_action;
 
     bool checkKaramba(const Karamba *k) const;
@@ -260,7 +272,7 @@ public Q_SLOTS:
     int getNumberOfDesktops(const Karamba *k) const;
     QString getPrettyThemeName(const Karamba *k) const;
     QStringList getServiceGroups(const Karamba *k, QString path) const;
-    QString getThemePath(const Karamba *k) const;
+    QString getThemePath(const Karamba *k = 0) const;
     double getUpdateTime(const Karamba *k) const;
     bool setUpdateTime(Karamba *k, double updateTime) const;
     bool hide(Karamba *k) const;
