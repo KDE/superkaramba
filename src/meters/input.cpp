@@ -184,7 +184,7 @@ void Input::keyPress(QKeyEvent *event)
 }
 
 
-void Input::setValue(QString text)
+void Input::setValue(const QString &text)
 {
     m_text = text;
     m_textLayout.setText(m_text);

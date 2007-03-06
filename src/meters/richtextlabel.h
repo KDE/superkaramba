@@ -29,7 +29,7 @@ public:
     ~RichTextLabel();
 
     void setText(QString text, bool linkUnderline = false);
-    void setValue(QString text);
+    void setValue(const QString &text);
     void setValue(int v);
     QString getStringValue()
     {

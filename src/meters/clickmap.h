@@ -25,7 +25,7 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                QWidget *widget = 0);
 
-    void setValue(QString);
+    void setValue(const QString&);
     void setValue(int);
     void setTextProps(TextField *);
 

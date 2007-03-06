@@ -14,11 +14,12 @@
 
 class QPainter;
 class QTimer;
+
 class Bar : public Meter
 {
     Q_OBJECT
 public:
-    Bar(Karamba* k, int ix, int iy, int iw, int ih);
+    Bar(Karamba* k, int x, int y, int width, int height);
     ~Bar();
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
@@ -29,44 +30,33 @@ public:
 
 public slots:
     bool setImage(QString imagePath);
-    QString getImage()
-    {
-        return imagePath;
-    };
+    QString getImage() const;
 
+    void setValue(const QString&);
     void setValue(int);
-    int  getValue()
-    {
-        return barValue;
-    };
-    void setValue(QString);
-    void recalculateValue()
-    {
-        setValue(barValue);
-    };
+    int  getValue() const;
 
     void setVertical(bool);
-    int  getVertical()
-    {
-        return vertical;
-    };
+    int  getVertical() const;
+
+    void recalculateValue();
 
     void valueChanged();
 
 private:
-    int barValue;
-    int oldBarValue;
-    int value;
+    int m_barValue;
+    int m_oldBarValue;
+    int m_value;
 
     QTimer *m_timer;
 
-    int pixmapWidth;
-    int pixmapHeight;
+    int m_pixmapWidth;
+    int m_pixmapHeight;
 
-    bool vertical; // vertical bar?
+    bool m_verticalBar;
 
-    QString imagePath;
-    QPixmap pixmap;
+    QString m_imagePath;
+    QPixmap m_pixmap;
 
 };
 

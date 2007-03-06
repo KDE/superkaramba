@@ -101,8 +101,8 @@ QVariantList KarambaInterface::getMeterMinMax(Karamba *k, Meter *m, QString type
         return QVariantList();
 
     QVariantList ret;
-    ret << m->getMin();
     ret << m->getMax();
+    ret << m->getMin();
     return ret;
 }
 

@@ -17,15 +17,15 @@
 #include "bar.h"
 #include "bar.moc"
 
-Bar::Bar(Karamba* k, int x, int y, int w, int h)
-        :   Meter(k, x, y, w, h)
+Bar::Bar(Karamba* k, int x, int y, int width, int height)
+        : Meter(k, x, y, width, height)
 {
-    value = 0;
-    minValue = 0;
-    maxValue = 100;
-    barValue = 0;
-    vertical = false;
-    oldBarValue = -1;
+    m_value = 0;
+    m_minValue = 0;
+    m_maxValue = 100;
+    m_barValue = 0;
+    m_verticalBar = false;
+    m_oldBarValue = -1;
 
     m_timer = new QTimer(this);
     connect(m_timer, SIGNAL(timeout()), this, SLOT(valueChanged()));
@@ -43,73 +43,82 @@ bool Bar::setImage(QString fileName)
 
     if (m_karamba->theme().isThemeFile(fileName)) {
         QByteArray ba = m_karamba->theme().readThemeFile(fileName);
-        res = pixmap.loadFromData(ba);
+        res = m_pixmap.loadFromData(ba);
     } else
-        res = pixmap.load(fileName);
+        res = m_pixmap.load(fileName);
 
-    pixmapWidth = pixmap.width();
-    pixmapHeight = pixmap.height();
+    m_pixmapWidth = m_pixmap.width();
+    m_pixmapHeight = m_pixmap.height();
 
     if (getWidth() == 0 || getHeight() == 0) {
-        setWidth(pixmapWidth);
-        setHeight(pixmapHeight);
+        setWidth(m_pixmapWidth);
+        setHeight(m_pixmapHeight);
     }
 
     if (res)
-        imagePath = fileName;
+        m_imagePath = fileName;
 
     return res;
 }
 
+QString Bar::getImage() const
+{
+    return m_imagePath;
+}
+
 void Bar::setValue(int v)
 {
-    if (v > maxValue)
-        v = maxValue;
+    if (v > m_maxValue)
+        v = m_maxValue;
 
-    if (v < minValue)
-        v = minValue;
+    if (v < m_minValue)
+        v = m_minValue;
 
-    oldBarValue = barValue;
-    barValue = v;
+    m_oldBarValue = m_barValue;
+    m_barValue = v;
 
     m_timer->start(5);
 }
 
-void Bar::setValue(QString v)
+void Bar::setValue(const QString &v)
 {
     setValue((int)(v.toDouble() + 0.5));
 }
 
-//void Bar::timerEvent(QTimerEvent *event)
+int Bar::getValue() const
+{
+    return m_barValue;
+}
+
 void Bar::valueChanged()
 {
-    int diff = maxValue - minValue;
+    int diff = m_maxValue - m_minValue;
     int size = 0;
 
     if (diff != 0) {
-        if (vertical)
+        if (m_verticalBar)
             size = getHeight();
         else
             size = getWidth();
 
-        if (oldBarValue < barValue) {
-            if (value < int((barValue - minValue)*size / diff + 0.5)) {
-                value++;
-                oldBarValue++;
+        if (m_oldBarValue < m_barValue) {
+            if (m_value < int((m_barValue - m_minValue)*size / diff + 0.5)) {
+                m_value++;
+                m_oldBarValue++;
             } else
                 m_timer->stop();
-        } else if (oldBarValue > barValue) {
-            if (value > int((barValue - minValue)*size / diff + 0.5)) {
-                value--;
-                oldBarValue--;
+        } else if (m_oldBarValue > m_barValue) {
+            if (m_value > int((m_barValue - m_minValue)*size / diff + 0.5)) {
+                m_value--;
+                m_oldBarValue--;
             } else
                 m_timer->stop();
         } else {
             m_timer->stop();
-            value = int((barValue - minValue) * size / diff + 0.5);
+            m_value = int((m_barValue - m_minValue) * size / diff + 0.5);
         }
     } else {
-        value = 0;
+        m_value = 0;
         m_timer->stop();
     }
 
@@ -130,7 +139,17 @@ void Bar::setMin(int m)
 
 void Bar::setVertical(bool b)
 {
-    vertical = b;
+    m_verticalBar = b;
+}
+
+int Bar::getVertical() const
+{
+    return m_verticalBar;
+}
+
+void Bar::recalculateValue()
+{
+    setValue(m_barValue);
 }
 
 void Bar::paint(QPainter *p, const QStyleOptionGraphicsItem *option,
@@ -139,16 +158,18 @@ void Bar::paint(QPainter *p, const QStyleOptionGraphicsItem *option,
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-    int width, height;
-    width = getWidth();
-    height = getHeight();
+    // only draw image if not hidden
+    if (!m_hidden) {
+        int width, height;
+        width = getWidth();
+        height = getHeight();
 
-    //only draw image if not hidden
-    if (hidden == 0) {
         p->setOpacity(m_opacity);
-        if (vertical)
-            p->drawTiledPixmap(0, 0 + height - value, width, value, pixmap, 0, pixmapHeight - value);
+
+        if (m_verticalBar)
+            p->drawTiledPixmap(0, 0 + height - m_value, width, m_value, m_pixmap, 0, m_pixmapHeight
+                    - m_value);
         else // horizontal
-            p->drawTiledPixmap(0, 0, value, height, pixmap);
+            p->drawTiledPixmap(0, 0, m_value, height, m_pixmap);
     }
 }

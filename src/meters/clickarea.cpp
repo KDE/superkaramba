@@ -12,7 +12,7 @@
 #include "clickarea.h"
 
 #include <kservicegroup.h>
-//Added by qt3to4:
+
 #include <QMouseEvent>
 #include <kdebug.h>
 
@@ -71,7 +71,7 @@ void ClickArea::setOnMiddleClick(QString oc)
 
 QRect ClickArea::getRectangle()
 {
-    return boundingBox;
+    return boundingRect().toRect();
 }
 
 void ClickArea::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
@@ -81,7 +81,7 @@ void ClickArea::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     Q_UNUSED(widget);
 
     if (m_preview)
-        painter->drawRect(boundingBox);
+        painter->drawRect(boundingRect());
 }
 
 
@@ -91,7 +91,7 @@ void ClickArea::setValue(int v)
 }
 
 
-void ClickArea::setValue(QString v)
+void ClickArea::setValue(const QString &v)
 {
     value = v;
 }

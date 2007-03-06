@@ -20,19 +20,15 @@
 
 Meter::Meter(Karamba* k, int ix, int iy, int iw, int ih)
         :   QGraphicsItem(k, k->getScene()),
-        boundingBox(ix, iy, iw, ih),
-        leftButtonAction(""),
-        middleButtonAction(""),
-        rightButtonAction(""),
-        clickable(true),
-        hidden(0),
-        minValue(0),
-        maxValue(0),
-        color(0, 0, 0),
+        m_clickable(true),
+        m_hidden(false),
+        m_minValue(0),
+        m_maxValue(0),
+        m_color(0, 0, 0),
         m_karamba(k),
-        m_opacity(0.0)
+        m_opacity(0)
 {
-    boundingBox = QRect(0, 0, iw, ih);
+    m_boundingBox = QRect(0, 0, iw, ih);
 
     QPointF ps = QPointF(ix, iy);
     setPos(ps.x(), ps.y());
@@ -44,15 +40,12 @@ Meter::Meter(Karamba* k, int ix, int iy, int iw, int ih)
 
 Meter::Meter(Karamba* k)
         :   QGraphicsItem(k),
-        boundingBox(0, 0, 0, 0),
-        leftButtonAction(""),
-        middleButtonAction(""),
-        rightButtonAction(""),
-        clickable(true),
-        hidden(0),
-        minValue(0),
-        maxValue(0),
-        color(0, 0, 0),
+        m_boundingBox(0, 0, 0, 0),
+        m_clickable(true),
+        m_hidden(0),
+        m_minValue(0),
+        m_maxValue(0),
+        m_color(0, 0, 0),
         m_karamba(k),
         m_opacity(1)
 {}
@@ -60,6 +53,160 @@ Meter::Meter(Karamba* k)
 Meter::~Meter()
 {
     delete m_opacityTimer;
+}
+
+int Meter::getX() const
+{
+    return static_cast<int>(x());
+}
+
+void Meter::setX(int newx)
+{
+    prepareGeometryChange();
+
+    setPos(newx, y());
+
+    update();
+}
+
+int Meter::getY() const
+{
+    return static_cast<int>(y());
+}
+
+void Meter::setY(int newy)
+{
+    prepareGeometryChange();
+
+    setPos(x(), newy);
+
+    update();
+}
+
+int Meter::getWidth() const
+{
+    return m_boundingBox.width();
+}
+
+void Meter::setWidth(int width)
+{
+    prepareGeometryChange();
+
+    m_boundingBox.setWidth(width);
+
+    update();
+}
+
+int Meter::getHeight() const
+{
+    return m_boundingBox.height();
+}
+
+void Meter::setHeight(int height)
+{
+    prepareGeometryChange();
+
+    m_boundingBox.setHeight(height);
+
+    update();
+}
+
+int Meter::getMin() const
+{
+    return m_minValue;
+}
+
+void Meter::setMin(int min)
+{
+    m_minValue = min;
+}
+
+int Meter::getMax() const
+{
+    return m_maxValue;
+}
+
+void Meter::setMax(int max)
+{
+    m_maxValue = max;
+}
+
+int Meter::getValue() const
+{
+    return -1;
+};
+
+void Meter::setValue(int)
+{
+}
+
+QString Meter::getStringValue() const
+{
+    return QString::null;
+};
+
+void Meter::setValue(const QString&)
+{
+}
+
+QColor Meter::getColor() const
+{
+    return m_color;
+}
+
+void Meter::setColor(QColor color)
+{
+    m_color = color;
+}
+
+void Meter::setSize(int x, int y, int width, int height)
+{
+    prepareGeometryChange();
+
+    m_boundingBox.setRect(0, 0, width, height);
+    setPos(x, y);
+
+    update();
+}
+
+bool Meter::isEnabled() const
+{
+    return m_clickable;
+}
+
+void Meter::setEnabled(bool e)
+{
+    m_clickable = e;
+}
+
+double Meter::getOpacity() const
+{
+    return m_opacity;
+}
+
+void Meter::setOpacity(double value)
+{
+    m_opacity = value;
+    update();
+}
+
+void Meter::show()
+{
+    m_hidden = false;
+
+    update();
+}
+
+void Meter::hide()
+{
+    m_hidden = true;
+
+    update();
+}
+
+QRectF Meter::boundingRect() const
+{
+    return QRectF(m_boundingBox);
 }
 
 void Meter::fadeIn()
@@ -100,109 +247,10 @@ void Meter::deleteMeter()
   m_opacityTimer->start(10);
 }
 */
-
+/*
 bool Meter::click(QMouseEvent*)
 {
     return false;
 }
-
-void Meter::setSize(int ix, int iy, int iw, int ih)
-{
-    prepareGeometryChange();
-
-    boundingBox.setRect(0, 0, iw, ih);
-    setPos(ix, iy);
-    recalculateValue();
-
-    update();
-}
-
-void Meter::setThemePath(QString path)
-{
-    themePath = path;
-}
-
-int Meter::getX()
-{
-    return x();
-}
-
-int Meter::getY()
-{
-    return y();
-}
-
-void Meter::setX(int newx)
-{
-    prepareGeometryChange();
-
-    setPos(newx, y());
-
-    update();
-}
-
-void Meter::setY(int newy)
-{
-    prepareGeometryChange();
-
-    setPos(x(), newy);
-
-    update();
-}
-
-int Meter::getWidth()
-{
-    return boundingBox.width();
-}
-
-int Meter::getHeight()
-{
-    return boundingBox.height();
-}
-
-void Meter::setWidth(int width)
-{
-    prepareGeometryChange();
-
-    boundingBox.setWidth(width);
-    recalculateValue();
-
-    update();
-}
-
-void Meter::setHeight(int height)
-{
-    prepareGeometryChange();
-
-    boundingBox.setHeight(height);
-    recalculateValue();
-
-    update();
-}
-
-QRect Meter::getBoundingBox()
-{
-    return boundingBox;
-}
-
-void Meter::setEnabled(bool e)
-{
-    clickable = e;
-}
-
-bool Meter::isEnabled()
-{
-    return clickable;
-}
-
-bool Meter::insideActiveArea(int x, int y)
-{
-    return boundingBox.contains(x, y) && clickable;
-}
-
-void Meter::setOpacity(double value)
-{
-    m_opacity = value;
-    update();
-}
+*/
 

@@ -32,7 +32,7 @@ public:
     ~TextLabel();
 
     void setTextProps(TextField*);
-    void setValue(QString);
+    void setValue(const QString& text);
     void setValue(int);
     //virtual QString getStringValue() const { return value.join("\n"); };
     QString getStringValue() const
@@ -89,6 +89,10 @@ private:
     QPoint origPoint;
 
     bool m_clickable;
+
+    QString m_leftMouseButtonAction;
+    QString m_middleMouseButtonAction;
+    QString m_rightMouseButtonAction;
 
     int drawText(QPainter *p, int x, int y, int width, int height,
                  QString text);

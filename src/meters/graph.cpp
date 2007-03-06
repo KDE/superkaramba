@@ -24,8 +24,8 @@ Graph::Graph(Karamba* k, int x, int y, int w, int h, int nbrPts):
         m_points.translate(((qreal) - w - 1) / nbrPoints, 0);
     }
 
-    minValue = 0;
-    maxValue = 100;
+    m_minValue = 0;
+    m_maxValue = 100;
 }
 
 Graph::~Graph()
@@ -33,18 +33,18 @@ Graph::~Graph()
 
 void Graph::setValue(int v)
 {
-    if (v > maxValue) {
-        // maxValue = v;
-        v = maxValue;
+    if (v > m_maxValue) {
+        // m_maxValue = v;
+        v = m_maxValue;
     }
-    if (v < minValue) {
-        //minValue = v;
-        v = minValue;
+    if (v < m_minValue) {
+        //m_minValue = v;
+        v = m_minValue;
     }
     lastValue = v;
 
     QPoint newPoint(getWidth() - 1,
-                    getHeight() - v * getHeight() / maxValue);
+                    getHeight() - v * getHeight() / m_maxValue);
 
     m_points.translate(((qreal) - getWidth() - 1) / nbrPoints, 0);
 
@@ -56,7 +56,7 @@ void Graph::setValue(int v)
     update();
 }
 
-void Graph::setValue(QString v)
+void Graph::setValue(const QString &v)
 {
     setValue((int)(v.toDouble() + 0.5));
 }
@@ -67,8 +67,8 @@ void Graph::paint(QPainter *p, const QStyleOptionGraphicsItem *option,
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-    if (hidden == 0) {
-        p->setPen(color);
+    if (!m_hidden) {
+        p->setPen(m_color);
         p->setOpacity(m_opacity);
 
         p->drawPolyline(m_points);

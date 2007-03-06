@@ -108,7 +108,7 @@ public:
     ImageLabel(Karamba* k, int ix, int iy, int iw, int ih);
     ImageLabel(Karamba* k);
     ~ImageLabel();
-    void setValue(QString imagePath);
+    void setValue(const QString &imagePath);
 
     void setValue(int);
     void setValue(QPixmap&);
@@ -199,6 +199,10 @@ private:
     QString imagePath;
 
     QString toolTipText;
+
+    QString m_leftMouseButtonAction;
+    QString m_middleMouseButtonAction;
+    QString m_rightMouseButtonAction;
 
     bool event(QEvent *event);
 };

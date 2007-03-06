@@ -129,7 +129,7 @@ void TextLabel::calculateTextSize()
         Meter::setX(origPoint.x() - textSize.width() / 2);
 }
 
-void TextLabel::setValue(QString text)
+void TextLabel::setValue(const QString &text)
 {
     value = text.split('\n');
 
@@ -341,8 +341,8 @@ void TextLabel::paint(QPainter *p, const QStyleOptionGraphicsItem *option,
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-    if (hidden != 1) {
-        int i = 0; //lineHeight;
+    if (!m_hidden) {
+        int i = 0; // lineHeight;
         int row = 1;
         int width = getWidth();
         int height = getHeight();
@@ -390,11 +390,11 @@ bool TextLabel::mouseEvent(QGraphicsSceneMouseEvent* e)
     if (isEnabled()) {
         QString program;
         if (e -> button() == Qt::LeftButton)
-            program = leftButtonAction;
+            program = m_leftMouseButtonAction;
         else if (e -> button() == Qt::MidButton)
-            program = middleButtonAction;
+            program = m_middleMouseButtonAction;
         else if (e -> button() == Qt::RightButton)
-            program = rightButtonAction;
+            program = m_rightMouseButtonAction;
 
         if (!program.isEmpty())
             KRun::runCommand(program);
@@ -419,9 +419,9 @@ void TextLabel::attachClickArea(QString leftMouseButton,
                                 QString middleMouseButton,
                                 QString rightMouseButton)
 {
-    leftButtonAction = leftMouseButton;
-    middleButtonAction = middleMouseButton;
-    rightButtonAction = rightMouseButton;
+    m_leftMouseButtonAction = leftMouseButton;
+    m_middleMouseButtonAction = middleMouseButton;
+    m_rightMouseButtonAction = rightMouseButton;
 }
 
 QRectF TextLabel::boundingRect()

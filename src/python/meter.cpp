@@ -296,8 +296,8 @@ PyObject* py_getMinMax(PyObject *, PyObject *args, QString type)
         return NULL;
     if (!checkKarambaAndMeter(widget, meter, type.toAscii().constData()))
         return NULL;
-    return Py_BuildValue((char*)"(i,i)", ((Meter*)meter)->getMin(),
-                         ((Meter*)meter)->getMax());
+    return Py_BuildValue((char*)"(i,i)", ((Meter*)meter)->getMax(),
+                         ((Meter*)meter)->getMin());
 }
 
 PyObject* py_setMinMax(PyObject *, PyObject *args, QString type)

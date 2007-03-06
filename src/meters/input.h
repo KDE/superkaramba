@@ -40,7 +40,7 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                QWidget *widget);
 
-    void setValue(QString text);
+    void setValue(const QString &text);
     QString getStringValue() const;
 
     void setBGColor(QColor c);

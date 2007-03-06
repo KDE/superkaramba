@@ -24,9 +24,7 @@
 #include <qpixmap.h>
 #include <qtimer.h>
 #include <qtooltip.h>
-//Added by qt3to4:
 #include <QMouseEvent>
-//#include <QPixmapeffect.h>
 #include <kdebug.h>
 #include <kimageeffect.h>
 #include <ktemporaryfile.h>
@@ -255,7 +253,7 @@ void ImageLabel::slotCopyResult(KIO::Job* job)
     KIO::NetAccess::removeTempFile(tempFile);
 }
 
-void ImageLabel::setValue(QString fn)
+void ImageLabel::setValue(const QString &fn)
 {
     // use the first line
     QStringList sList = fn.split("\n");
@@ -314,30 +312,27 @@ void ImageLabel::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-    //if (backgroundUpdate == 1)
-    {
         //only draw image if not hidden
-        if (hidden == 0)
-        {
-            painter->setOpacity(m_opacity);
+    if (!m_hidden)
+    {
+        painter->setOpacity(m_opacity);
 
-            if (cblend == 0) {
-                //draw the pixmap
-                painter->drawPixmap(0, 0, pixmap);
-            } else {
-                //Blend this image with a color
+        if (cblend == 0) {
+            //draw the pixmap
+            painter->drawPixmap(0, 0, pixmap);
+        } else {
+            //Blend this image with a color
+            QImage image = pixmap.toImage();
 
-                QImage image = pixmap.toImage();
-
-                QImage result = KImageEffect::blend(QColor(255, 0, 0), image, 0.5f);
-                painter->drawImage(0, 0, result);
-            }
+            QImage result = KImageEffect::blend(QColor(255, 0, 0), image, 0.5f);
+            painter->drawImage(0, 0, result);
         }
-        // start Timer
-        if (imageEffect != 0)
-        {
-            imageEffect -> startTimer();
-        }
+    }
+
+    // start Timer
+    if (imageEffect != 0)
+    {
+        imageEffect -> startTimer();
     }
 }
 
@@ -346,11 +341,11 @@ bool ImageLabel::mouseEvent(QGraphicsSceneMouseEvent *e)
     if (isEnabled()) {
         QString program;
         if (e -> button() == Qt::LeftButton) {
-            program = leftButtonAction;
+            program = m_leftMouseButtonAction;
         } else if (e -> button() == Qt::MidButton) {
-            program = middleButtonAction;
+            program = m_middleMouseButtonAction;
         } else if (e -> button() == Qt::RightButton) {
-            program = rightButtonAction;
+            program = m_rightMouseButtonAction;
         }
 
         if (!program.isEmpty()) {
@@ -549,9 +544,9 @@ void ImageLabel::attachClickArea(QString leftMouseButton,
                                  QString  middleMouseButton,
                                  QString rightMouseButton)
 {
-    leftButtonAction = leftMouseButton;
-    middleButtonAction = middleMouseButton;
-    rightButtonAction = rightMouseButton;
+    m_leftMouseButtonAction = leftMouseButton;
+    m_middleMouseButtonAction = middleMouseButton;
+    m_rightMouseButtonAction = rightMouseButton;
 
     setAcceptedMouseButtons(Qt::LeftButton | Qt::MidButton | Qt::RightButton);
 }

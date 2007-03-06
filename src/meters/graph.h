@@ -29,7 +29,7 @@ public:
     {
         return lastValue;
     };
-    void setValue(QString);
+    void setValue(const QString&);
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                QWidget *widget);
 

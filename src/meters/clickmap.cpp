@@ -76,7 +76,7 @@ void ClickMap::paint(QPainter *p, const QStyleOptionGraphicsItem *option,
     }
 }
 
-void ClickMap::setValue(QString v)
+void ClickMap::setValue(const QString &v)
 {
     QRegExp rx("^http://", Qt::CaseInsensitive);
     if (rx.indexIn(v) == -1)

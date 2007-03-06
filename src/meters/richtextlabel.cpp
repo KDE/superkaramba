@@ -84,7 +84,7 @@ void RichTextLabel::setText(QString t, bool linkUnderline)
     }
 }
 
-void RichTextLabel::setValue(QString text)
+void RichTextLabel::setValue(const QString &text)
 {
     setText(text);
 }
@@ -157,7 +157,7 @@ void RichTextLabel::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-    if (hidden || text == 0)
+    if (m_hidden || text == 0)
         return;
 
     int w = getWidth();

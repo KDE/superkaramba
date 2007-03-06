@@ -26,7 +26,6 @@
 #include <qrect.h>
 #include <qevent.h>
 #include <qregexp.h>
-//Added by qt3to4:
 #include <QMouseEvent>
 #include <QGraphicsSceneMouseEvent>
 #include <QRect>
@@ -37,7 +36,7 @@
 #include <krun.h>
 
 #include <meters/meter.h>
-//#include "clickable.h"
+
 /**
  *
  * Hans Karlsson
@@ -63,7 +62,7 @@ public:
                QWidget *widget = 0);
 
     void setValue(int);
-    void setValue(QString);
+    void setValue(const QString&);
 
     bool m_preview;
 
