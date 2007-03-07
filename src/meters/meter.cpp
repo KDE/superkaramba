@@ -134,7 +134,7 @@ void Meter::setMax(int max)
 int Meter::getValue() const
 {
     return -1;
-};
+}
 
 void Meter::setValue(int)
 {
@@ -143,7 +143,7 @@ void Meter::setValue(int)
 QString Meter::getStringValue() const
 {
     return QString::null;
-};
+}
 
 void Meter::setValue(const QString&)
 {
