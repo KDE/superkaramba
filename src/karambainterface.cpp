@@ -98,8 +98,9 @@ bool KarambaInterface::checkKarambaAndMeter(const Karamba *k, const Meter *m, co
 QVariantList KarambaInterface::getMeterMinMax(const Karamba *k, const Meter *m, const QString &type)
     const
 {
-    if (!checkKarambaAndMeter(k, m, type))
+    if (!checkKarambaAndMeter(k, m, type)) {
         return QVariantList();
+    }
 
     QVariantList ret;
     ret << m->getMax();
@@ -110,8 +111,9 @@ QVariantList KarambaInterface::getMeterMinMax(const Karamba *k, const Meter *m, 
 QVariantList KarambaInterface::getMeterSize(const Karamba *k, const Meter *m, const QString &type)
     const
 {
-    if (!checkKarambaAndMeter(k, m, type))
+    if (!checkKarambaAndMeter(k, m, type)) {
         return QVariantList();
+    }
 
     QVariantList list;
     list << QVariant::fromValue(m->getWidth());
@@ -122,8 +124,9 @@ QVariantList KarambaInterface::getMeterSize(const Karamba *k, const Meter *m, co
 QVariantList KarambaInterface::getMeterPos(const Karamba *k, const Meter *m, const QString &type)
     const
 {
-    if (!checkKarambaAndMeter(k, m, type))
+    if (!checkKarambaAndMeter(k, m, type)) {
         return QVariantList();
+    }
 
     QVariantList ret;
     ret << QVariant::fromValue(m->getX());
@@ -134,8 +137,9 @@ QVariantList KarambaInterface::getMeterPos(const Karamba *k, const Meter *m, con
 QString KarambaInterface::getMeterSensor(const Karamba *k, const Meter *m, const QString &type)
     const
 {
-    if (!checkKarambaAndMeter(k, m, type))
+    if (!checkKarambaAndMeter(k, m, type)) {
         return QString::null;
+    }
 
     return k->getSensor(m);
 
@@ -143,8 +147,9 @@ QString KarambaInterface::getMeterSensor(const Karamba *k, const Meter *m, const
 
 int KarambaInterface::getMeterValue(const Karamba *k, const Meter *m, const QString &type) const
 {
-    if (!checkKarambaAndMeter(k, m, type))
+    if (!checkKarambaAndMeter(k, m, type)) {
         return 0;
+    }
 
     return m->getValue();
 }
@@ -152,8 +157,9 @@ int KarambaInterface::getMeterValue(const Karamba *k, const Meter *m, const QStr
 QObject* KarambaInterface::getThemeMeter(const Karamba *k, const QString &meter, const QString
         &type) const
 {
-    if (!checkKaramba(k))
+    if (!checkKaramba(k)) {
         return 0;
+    }
 
     QGraphicsItem *item;
     QList<QGraphicsItem*> list = ((QGraphicsItemGroup*)k)->children();
@@ -164,91 +170,111 @@ QObject* KarambaInterface::getThemeMeter(const Karamba *k, const QString &meter,
             return m;
         }
     }
+
     return 0;
 }
 
 bool KarambaInterface::hideMeter(const Karamba *k, Meter *m, const QString &type) const
 {
-    if (!checkKarambaAndMeter(k, m, type))
+    if (!checkKarambaAndMeter(k, m, type)) {
         return false;
+    }
 
     m->hide();
+
     return true;
 }
 
 bool KarambaInterface::moveMeter(const Karamba *k, Meter *m, const QString &type, int x, int y)
     const
 {
-    if (!checkKarambaAndMeter(k, m, type))
+    if (!checkKarambaAndMeter(k, m, type)) {
         return false;
+    }
 
     k->moveMeter(m, x, y);
+
     return true;
 }
 
 bool KarambaInterface::resizeMeter(const Karamba *k, Meter *m, const QString &type, int width, int
         height) const
 {
-    if (!checkKarambaAndMeter(k, m, type))
+    if (!checkKarambaAndMeter(k, m, type)) {
         return false;
+    }
 
     m->setSize(m->getX(), m->getY(), width, height);
+
     return true;
 }
 
 bool KarambaInterface::setMeterMinMax(const Karamba *k, Meter *m, const QString &type, int min, int max)
     const
 {
-    if (!checkKarambaAndMeter(k, m, type))
+    if (!checkKarambaAndMeter(k, m, type)) {
         return false;
+    }
 
     m->setMin(min);
     m->setMax(max);
+
     return true;
 }
 
 bool KarambaInterface::setMeterSensor(Karamba *k, Meter *m, const QString &type,
         const QString &sensor) const
 {
-    if (!checkKarambaAndMeter(k, m, type))
+    if (!checkKarambaAndMeter(k, m, type)) {
         return false;
+    }
 
     k->setSensor(LineParser(sensor), m);
+
     return true;
 }
 
 QObject* KarambaInterface::setMeterValue(const Karamba *k, Meter *m, const QString &type, int value)
     const
 {
-    if (!checkKarambaAndMeter(k, m, type))
+    if (!checkKarambaAndMeter(k, m, type)) {
         return 0;
+    }
 
     m->setValue(value);
+
     return m;
 }
 
 bool KarambaInterface::showMeter(const Karamba *k, Meter *m, const QString &type) const
 {
-    if (!checkKarambaAndMeter(k, m, type))
+    if (!checkKarambaAndMeter(k, m, type)) {
         return false;
+    }
 
     m->show();
+
     return true;
 }
 
-bool KarambaInterface::setMeterColor(Karamba *k, Meter *m, QString type, int red, int green, int blue)
+bool KarambaInterface::setMeterColor(const Karamba *k, Meter *m, const QString &type, int red, int
+        green, int blue) const
 {
-    if (!checkKarambaAndMeter(k, m, type))
+    if (!checkKarambaAndMeter(k, m, type)) {
         return false;
+    }
 
     m->setColor(QColor(red, green, blue));
+
     return true;
 }
 
-QVariantList KarambaInterface::getMeterColor(Karamba *k, Meter *m, QString type)
+QVariantList KarambaInterface::getMeterColor(const Karamba *k, const Meter *m, const QString &type)
+    const
 {
-    if (!checkKarambaAndMeter(k, m, type))
+    if (!checkKarambaAndMeter(k, m, type)) {
         return QVariantList();
+    }
 
     QColor color = m->getColor();
 
@@ -260,18 +286,22 @@ QVariantList KarambaInterface::getMeterColor(Karamba *k, Meter *m, QString type)
     return ret;
 }
 
-QString KarambaInterface::getMeterStringValue(Karamba *k, Meter *m, QString type)
+QString KarambaInterface::getMeterStringValue(const Karamba *k, const Meter *m, const QString &type)
+    const
 {
-    if (!checkKarambaAndMeter(k, m, type))
+    if (!checkKarambaAndMeter(k, m, type)) {
         return QString::null;
+    }
 
     return m->getStringValue();
 }
 
-QObject* KarambaInterface::setMeterStringValue(Karamba *k, Meter *m, QString type, QString value)
+QObject* KarambaInterface::setMeterStringValue(const Karamba *k, Meter *m, const QString &type,
+        const QString &value) const
 {
-    if (!checkKarambaAndMeter(k, m, type))
+    if (!checkKarambaAndMeter(k, m, type)) {
         return 0;
+    }
 
     m->setValue(value);
 
@@ -380,24 +410,25 @@ void KarambaInterface::callKeyPressed(Karamba *k, Meter *meter, QString key)
 /** Bar/createBar
 *
 * SYNOPSIS
-*   long createBar(widget, x, y, w, h, image)
+*   reference createBar(widget, x, y, w, h, image)
 * DESCRIPTION
 *   This creates a bar at x, y with width and height w, h.
 * ARGUMENTS
-*   * long widget -- karamba
-*   * long x -- x coordinate
-*   * long y -- y coordinate
-*   * long w -- width
-*   * long h -- height
+*   * reference to widget -- karamba
+*   * integer x -- x coordinate
+*   * integer y -- y coordinate
+*   * integer w -- width
+*   * integer h -- height
 *   * string image -- Path to image
 * RETURN VALUE
-*   Pointer to new bar meter
+*   Reference to new bar meter
 */
 QObject* KarambaInterface::createBar(Karamba* k, int x, int y, int w, int h, const QString &path)
     const
 {
-    if (!checkKaramba(k))
+    if (!checkKaramba(k)) {
         return NULL;
+    }
 
     Bar *tmp = new Bar(k, x, y, w, h);
     tmp->setImage(path);
@@ -410,19 +441,20 @@ QObject* KarambaInterface::createBar(Karamba* k, int x, int y, int w, int h, con
 /** Bar/deleteBar
 *
 * SYNOPSIS
-*   long deleteBar(widget, bar)
+*   boolean deleteBar(widget, bar)
 * DESCRIPTION
-*   This deletes a bar.
+*   This deletes the bar.
 * ARGUMENTS
-*   * long widget -- karamba
-*   * long bar -- Pointer to bar
+*   * reference to widget -- karamba
+*   * reference to bar -- bar
 * RETURN VALUE
-*   1 if successful
+*   true if successful
 */
 bool KarambaInterface::deleteBar(Karamba *k, Bar *bar) const
 {
-    if (!checkKarambaAndMeter(k, bar, "Bar"))
+    if (!checkKarambaAndMeter(k, bar, "Bar")) {
         return false;
+    }
 
     return k->removeMeter(bar);
 }
@@ -430,16 +462,16 @@ bool KarambaInterface::deleteBar(Karamba *k, Bar *bar) const
 /** Bar/setBarMinMax
 *
 * SYNOPSIS
-*   long setBarMinMax(widget, bar, min, max)
+*   boolean setBarMinMax(widget, bar, min, max)
 * DESCRIPTION
 *   Returns current bar value.
 * ARGUMENTS
-*   * long widget -- karamba
-*   * long bar -- pointer to bar
-*   * long min -- min value
-*   * long max -- max value
+*   * reference to widget -- karamba
+*   * reference to bar -- bar
+*   * integer min -- min value
+*   * integer max -- max value
 * RETURN VALUE
-*   1 if successful
+*   true if successful
 */
 bool KarambaInterface::setBarMinMax(const Karamba *k, Bar *bar, int min, int max) const
 {
@@ -449,14 +481,14 @@ bool KarambaInterface::setBarMinMax(const Karamba *k, Bar *bar, int min, int max
 /** Bar/getBarMinMax
 *
 * SYNOPSIS
-*   tuple getBarMinMax(widget, bar)
+*   array getBarMinMax(widget, bar)
 * DESCRIPTION
 *   Returns possible min and max values of the bar.
 * ARGUMENTS
-*   * long widget -- karamba
-*   * long bar -- pointer to bar
+*   * reference to widget -- karamba
+*   * reference bar -- bar
 * RETURN VALUE
-*   max & min
+*   array with max & min values
 */
 QVariantList KarambaInterface::getBarMinMax(const Karamba *k, const Bar *bar) const
 {
@@ -466,16 +498,16 @@ QVariantList KarambaInterface::getBarMinMax(const Karamba *k, const Bar *bar) co
 /** Bar/moveBar
 *
 * SYNOPSIS
-*   long moveBar(widget, bar, x, y)
+*   boolean moveBar(widget, bar, x, y)
 * DESCRIPTION
 *   This will move the bar to new x and y coordinates.
 * ARGUMENTS
-*   * long widget -- karamba
-*   * long bar -- pointer to bar
-*   * long x -- x coordinate
-*   * long y -- y coordinate
+*   * reference to widget -- karamba
+*   * reference to bar -- bar
+*   * integer x -- x coordinate
+*   * integer y -- y coordinate
 * RETURN VALUE
-*   1 if successful
+*   boolean (true if successful)
 */
 bool KarambaInterface::moveBar(const Karamba *k, Bar *bar, int x, int y) const
 {
@@ -485,15 +517,15 @@ bool KarambaInterface::moveBar(const Karamba *k, Bar *bar, int x, int y) const
 /** Bar/getBarPos
 *
 * SYNOPSIS
-*   tuple getBarPos(widget, bar)
+*   array getBarPos(widget, bar)
 * DESCRIPTION
-*   Given a reference to a bar object, this will return a tuple
+*   Given a reference to a bar object, this will return a array
 *   containing the x and y coordinate of a bar object.
 * ARGUMENTS
-*   * long widget -- karamba
-*   * long bar -- pointer to bar
+*   * reference to widget -- karamba
+*   * reference to bar -- bar
 * RETURN VALUE
-*   x and y coordinates
+*   array with x and y coordinates
 */
 QVariantList KarambaInterface::getBarPos(const Karamba *k, const Bar *bar) const
 {
@@ -503,15 +535,15 @@ QVariantList KarambaInterface::getBarPos(const Karamba *k, const Bar *bar) const
 /** Bar/setBarSensor
 *
 * SYNOPSIS
-*   long setBarSensor(widget, bar, sensor)
+*   boolean setBarSensor(widget, bar, sensor)
 * DESCRIPTION
 *   Sets the sensor string of the bar.
 * ARGUMENTS
-*   * long widget -- karamba
-*   * long bar -- pointer to bar
-*   * string sensor -- new sensor as in theme files
+*   * reference to widget -- karamba
+*   * reference to bar -- bar
+*   * string sensor -- new sensor string as in theme files
 * RETURN VALUE
-*   1 if successful
+*   true if successful
 */
 bool KarambaInterface::setBarSensor(Karamba *k, Bar *bar, const QString &sensor) const
 {
@@ -523,10 +555,10 @@ bool KarambaInterface::setBarSensor(Karamba *k, Bar *bar, const QString &sensor)
 * SYNOPSIS
 *   string getBarSensor(widget, bar)
 * DESCRIPTION
-*   Gets the current sensor string
+*   Gets the current sensor string.
 * ARGUMENTS
-*   * long widget -- karamba
-*   * long bar -- pointer to bar
+*   * reference to widget -- karamba
+*   * reference to bar -- bar
 * RETURN VALUE
 *   sensor string
 */
@@ -538,16 +570,16 @@ QString KarambaInterface::getBarSensor(const Karamba *k, const Bar *bar) const
 /** Bar/resizeBar
 *
 * SYNOPSIS
-*   long resizeBar(widget, bar, w, h)
+*  boolean resizeBar(widget, bar, w, h)
 * DESCRIPTION
 *   This will resize bar to new height and width.
 * ARGUMENTS
-*   * long widget -- karamba
-*   * long bar -- pointer to bar
-*   * long w -- new width
-*   * long h -- new height
+*   * reference to widget -- karamba
+*   * reference to bar -- bar
+*   * integer w -- new width
+*   * integer h -- new height
 * RETURN VALUE
-*   1 if successful
+*   true if successful
 */
 bool KarambaInterface::resizeBar(const Karamba *k, Bar *bar, int width, int height) const
 {
@@ -557,15 +589,15 @@ bool KarambaInterface::resizeBar(const Karamba *k, Bar *bar, int width, int heig
 /** Bar/getBarSize
 *
 * SYNOPSIS
-*   tuple getBarSize(widget, bar)
+*   array getBarSize(widget, bar)
 * DESCRIPTION
-*   Given a reference to a bar object, this will return a tuple
-*   containing the height and width of a bar object.
+*   Given a reference to a bar object, this will return a array
+*   containing the height and width of the bar object.
 * ARGUMENTS
-*   * long widget -- karamba
-*   * long bar -- pointer to bar
+*   * reference to widget -- karamba
+*   * reference to bar -- bar
 * RETURN VALUE
-*   width and height
+*   array with width and height
 */
 QVariantList KarambaInterface::getBarSize(const Karamba *k, const Bar *bar) const
 {
@@ -575,7 +607,7 @@ QVariantList KarambaInterface::getBarSize(const Karamba *k, const Bar *bar) cons
 /** Bar/setBarValue
 *
 * SYNOPSIS
-*   long setBarValue(widget, bar, value)
+*   reference setBarValue(widget, bar, value)
 * DESCRIPTION
 *   Sets current bar value.
 * ARGUMENTS
@@ -583,7 +615,7 @@ QVariantList KarambaInterface::getBarSize(const Karamba *k, const Bar *bar) cons
 *   * long bar -- pointer to bar
 *   * long value -- new value
 * RETURN VALUE
-*   1 if successful
+*   reference to bar
 */
 QObject* KarambaInterface::setBarValue(const Karamba *k, Bar *bar, int value) const
 {
@@ -593,12 +625,12 @@ QObject* KarambaInterface::setBarValue(const Karamba *k, Bar *bar, int value) co
 /** Bar/getBarValue
 *
 * SYNOPSIS
-*   long getBarValue(widget, bar)
+*   integer getBarValue(widget, bar)
 * DESCRIPTION
 *   Returns current bar value.
 * ARGUMENTS
-*   * long widget -- karamba
-*   * long bar -- pointer to bar
+*   * reference to widget -- karamba
+*   * reference to bar -- bar
 * RETURN VALUE
 *   value
 */
@@ -610,7 +642,7 @@ int KarambaInterface::getBarValue(const Karamba *k, const Bar *bar) const
 /** Bar/getThemeBar
 *
 * SYNOPSIS
-*   long getThemeBar(widget, name)
+*   reference getThemeBar(widget, name)
 * DESCRIPTION
 *   You can reference a bar in your python code that was created in the
 *   theme file. Basically, you just add a NAME= value to the BAR line in
@@ -620,10 +652,10 @@ int KarambaInterface::getBarValue(const Karamba *k, const Bar *bar) const
 *   The name you pass to the function is the same one that you gave it for
 *   the NAME= parameter in the .theme file.
 * ARGUMENTS
-*   * long widget -- karamba
-*   * string name -- name of the bar to get
+*   * reference to widget -- karamba
+*   * string name -- name of the bar in the theme file
 * RETURN VALUE
-*   Pointer to bar
+*   reference to bar
 */
 QObject* KarambaInterface::getThemeBar(const Karamba *k, const QString &meter) const
 {
@@ -633,15 +665,15 @@ QObject* KarambaInterface::getThemeBar(const Karamba *k, const QString &meter) c
 /** Bar/hideBar
 *
 * SYNOPSIS
-*   long hideBar(widget, bar)
+*   boolean hideBar(widget, bar)
 * DESCRIPTION
 *   This hides an bar. In other words, during subsequent calls to
 *   widgetUpdate(), this bar will not be drawn.
 * ARGUMENTS
-*   * long widget -- karamba
-*   * long bar -- pointer to bar
+*   * reference to widget -- karamba
+*   * reference to bar -- bar
 * RETURN VALUE
-*   1 if successful
+*   true if successful
 */
 bool KarambaInterface::hideBar(const Karamba *k, Bar *bar) const
 {
@@ -651,15 +683,15 @@ bool KarambaInterface::hideBar(const Karamba *k, Bar *bar) const
 /** Bar/showBar
 *
 * SYNOPSIS
-*   long showBar(widget, bar)
+*   boolean showBar(widget, bar)
 * DESCRIPTION
 *   This shows an bar. In other words, during subsequent calls to
 *   widgetUpdate(), this bar will be drawn.
 * ARGUMENTS
-*   * long widget -- karamba
-*   * long bar -- pointer to bar
+*   * reference to widget -- karamba
+*   * reference to bar -- bar
 * RETURN VALUE
-*   1 if successful
+*   true if successful
 */
 bool KarambaInterface::showBar(const Karamba *k, Bar *bar) const
 {
@@ -669,20 +701,21 @@ bool KarambaInterface::showBar(const Karamba *k, Bar *bar) const
 /** Bar/setBarVertical
 *
 * SYNOPSIS
-*   long setBarVertical(widget, bar)
+*   boolean setBarVertical(widget, bar)
 * DESCRIPTION
 *   Set bar vertical
 * ARGUMENTS
-*   * long widget -- karamba
-*   * long bar -- pointer to bar
-*   * long vertical -- 1 if vertical
+*   * reference to widget -- karamba
+*   * reference to bar -- bar
+*   * boolean vertical -- true to draw the bar vertically
 * RETURN VALUE
-*   1 if successful
+*   true if successful
 */
 bool KarambaInterface::setBarVertical(const Karamba *k, Bar *bar, bool vert) const
 {
-    if (!checkKarambaAndMeter(k, bar, "Bar"))
+    if (!checkKarambaAndMeter(k, bar, "Bar")) {
         return false;
+    }
 
     bar->setVertical(vert);
     return true;
@@ -691,19 +724,20 @@ bool KarambaInterface::setBarVertical(const Karamba *k, Bar *bar, bool vert) con
 /** Bar/getBarVertical
 *
 * SYNOPSIS
-*   string getBarVertical(widget, bar)
+*   boolean getBarVertical(widget, bar)
 * DESCRIPTION
-*   Check if bar is vertical bar
+*   Check if bar is a vertical bar.
 * ARGUMENTS
-*   * long widget -- karamba
-*   * long bar -- pointer to bar
+*   * reference to widget -- karamba
+*   * reference to bar -- bar
 * RETURN VALUE
-*   1 if vertical
+*   true if vertical
 */
 bool KarambaInterface::getBarVertical(const Karamba *k, const Bar *bar) const
 {
-    if (!checkKarambaAndMeter(k, bar, "Bar"))
+    if (!checkKarambaAndMeter(k, bar, "Bar")) {
         return false;
+    }
 
     return bar->getVertical();
 }
@@ -711,20 +745,21 @@ bool KarambaInterface::getBarVertical(const Karamba *k, const Bar *bar) const
 /** Bar/setBarImage
 *
 * SYNOPSIS
-*   long setBarImage(widget, bar, image)
+*   boolean setBarImage(widget, bar, image)
 * DESCRIPTION
 *   Use the image in path for the background as the bar
 * ARGUMENTS
-*   * long widget -- karamba
-*   * long bar -- pointer to bar
-*   * string image -- new image
+*   * reference to widget -- karamba
+*   * reference to bar -- bar
+*   * string image -- path to the new image
 * RETURN VALUE
-*   1 if successful
+*   true if successful
 */
 bool KarambaInterface::setBarImage(const Karamba *k, Bar *bar, const QString &image) const
 {
-    if (!checkKarambaAndMeter(k, bar, "Bar"))
+    if (!checkKarambaAndMeter(k, bar, "Bar")) {
         return false;
+    }
 
     return bar->setImage(image);
 }
@@ -734,17 +769,18 @@ bool KarambaInterface::setBarImage(const Karamba *k, Bar *bar, const QString &im
 * SYNOPSIS
 *   string getBarImage(widget, bar)
 * DESCRIPTION
-*   Get bar image
+*   Get the path to the bar image.
 * ARGUMENTS
-*   * long widget -- karamba
-*   * long bar -- pointer to bar
+*   * reference to widget -- karamba
+*   * reference to bar -- bar
 * RETURN VALUE
 *   path to bar image
 */
 QString KarambaInterface::getBarImage(const Karamba *k, const Bar *bar) const
 {
-    if (!checkKarambaAndMeter(k, bar, "Bar"))
+    if (!checkKarambaAndMeter(k, bar, "Bar")) {
         return QString::null;
+    }
 
     return bar->getImage();
 }
@@ -752,10 +788,27 @@ QString KarambaInterface::getBarImage(const Karamba *k, const Bar *bar) const
 
 
 
-QObject* KarambaInterface::createGraph(Karamba* k, int x, int y, int w, int h, int points)
+/** Graph/createGraph
+*
+* SYNOPSIS
+*   reference createGraph(widget, x, y, width, height, points)
+* DESCRIPTION
+*   This creates a graph at x, y with width and height.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * integer x -- x coordinate
+*   * integer y -- y coordinate
+*   * integer w -- width
+*   * integer h -- height
+*   * integer points -- Number of points in graph
+* RETURN VALUE
+*   reference to new graph meter
+*/
+QObject* KarambaInterface::createGraph(Karamba* k, int x, int y, int w, int h, int points) const
 {
-    if (!checkKaramba(k))
+    if (!checkKaramba(k)) {
         return NULL;
+    }
 
     Graph *tmp = new Graph(k, x, y, w, h, points);
     k->addToGroup(tmp);
@@ -763,95 +816,331 @@ QObject* KarambaInterface::createGraph(Karamba* k, int x, int y, int w, int h, i
     return tmp;
 }
 
-bool KarambaInterface::deleteGraph(Karamba *k, Graph *graph)
+/** Graph/deleteGraph
+*
+* SYNOPSIS
+*   boolean deleteGraph(widget, graph)
+* DESCRIPTION
+*   This deletes graph.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to graph -- graph
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::deleteGraph(Karamba *k, Graph *graph) const
 {
-    if (!checkKarambaAndMeter(k, graph, "Graph"))
+    if (!checkKarambaAndMeter(k, graph, "Graph")) {
         return false;
+    }
 
     return k->removeMeter(graph);
 }
 
-bool KarambaInterface::setGraphMinMax(Karamba *k, Graph *graph, int min, int max)
+/** Graph/setGraphMinMax
+*
+* SYNOPSIS
+*   boolean setGraphMinMax(widget, graph, min, max)
+* DESCRIPTION
+*   Sets the graphs min and max values.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to graph -- graph
+*   * integer min -- min value
+*   * integer max -- max value
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::setGraphMinMax(const Karamba *k, Graph *graph, int min, int max) const
 {
     return setMeterMinMax(k, graph, "Graph", min, max);
 }
 
-QVariantList KarambaInterface::getGraphMinMax(Karamba *k, Graph *graph)
+/** Graph/getGraphMinMax
+*
+* SYNOPSIS
+*   array getGraphMinMax(widget, graph)
+* DESCRIPTION
+*   Returns current graph minimal and maximal values.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to graph -- graph
+* RETURN VALUE
+*   max and min values
+*/
+QVariantList KarambaInterface::getGraphMinMax(const Karamba *k, const Graph *graph) const
 {
     return getMeterMinMax(k, graph, "Graph");
 }
 
-bool KarambaInterface::moveGraph(Karamba *k, Graph *graph, int x, int y)
+/** Graph/moveGraph
+*
+* SYNOPSIS
+*   boolean moveGraph(widget, graph, x, y)
+* DESCRIPTION
+*   This will move the graph to the new x and y coordinates.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to graph -- graph
+*   * integer x -- x coordinate
+*   * integer y -- y coordinate
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::moveGraph(const Karamba *k, Graph *graph, int x, int y) const
 {
     return moveMeter(k, graph, "Graph", x, y);
 }
 
-QVariantList KarambaInterface::getGraphPos(Karamba *k, Graph *graph)
+/** Graph/getGraphPos
+*
+* SYNOPSIS
+*   array getGraphPos(widget, graph)
+* DESCRIPTION
+*   Given a reference to a graph object, this will return an array
+*   containing the x and y coordinates of the graph object.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to graph -- graph
+* RETURN VALUE
+*   x and y coordinates
+*/
+QVariantList KarambaInterface::getGraphPos(const Karamba *k, const Graph *graph) const
 {
     return getMeterPos(k, graph, "Graph");
 }
 
-bool KarambaInterface::setGraphSensor(Karamba *k, Graph *graph, QString sensor)
+/** Graph/setGraphSensor
+*
+* SYNOPSIS
+*   boolean setGraphSensor(widget, graph, sensor)
+* DESCRIPTION
+*   Sets current sensor string of the graph.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to graph -- graph
+*   * string sensor -- new sensor string as in theme files
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::setGraphSensor(Karamba *k, Graph *graph, const QString &sensor) const
 {
     return setMeterSensor(k, graph, "Graph", sensor);
 }
 
-QString KarambaInterface::getGraphSensor(Karamba *k, Graph *graph)
+/** Graph/getGraphSensor
+*
+* SYNOPSIS
+*   string getGraphSensor(widget, graph)
+* DESCRIPTION
+*   Gets the current sensor string of the graph.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to graph -- graph
+* RETURN VALUE
+*   sensor string
+*/
+QString KarambaInterface::getGraphSensor(const Karamba *k, const Graph *graph) const
 {
     return getMeterSensor(k, graph, "Graph");
 }
 
-bool KarambaInterface::resizeGraph(Karamba *k, Graph *graph, int width, int height)
+/** Graph/resizeGraph
+*
+* SYNOPSIS
+*   boolean resizeGraph(widget, graph, width, height)
+* DESCRIPTION
+*   This will resize graph to new height and width.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to graph -- graph
+*   * integer  width -- new width
+*   * integer height -- new height
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::resizeGraph(const Karamba *k, Graph *graph, int width, int height) const
 {
     return resizeMeter(k, graph, "Graph", width, height);
 }
 
-QVariantList KarambaInterface::getGraphSize(Karamba *k, Graph *graph)
+/** Graph/getGraphSize
+*
+* SYNOPSIS
+*   array getGraphSize(widget, graph)
+* DESCRIPTION
+*   Given a reference to a graph object, this will return an array
+*   containing the height and width of a graph object.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to graph -- graph
+* RETURN VALUE
+*   width and height of the graph
+*/
+QVariantList KarambaInterface::getGraphSize(const Karamba *k, const Graph *graph) const
 {
     return getMeterSize(k, graph, "Graph");
 }
 
-QObject* KarambaInterface::setGraphValue(Karamba *k, Graph *graph, int value)
+/** Graph/setGraphValue
+*
+* SYNOPSIS
+*   reference setGraphValue(widget, graph, value)
+* DESCRIPTION
+*   Sets current graph value.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to graph -- graph
+*   * integer value -- new value
+* RETURN VALUE
+*   reference to graph
+*/
+QObject* KarambaInterface::setGraphValue(const Karamba *k, Graph *graph, int value) const
 {
     return setMeterValue(k, graph, "Graph", value);
 }
 
-int KarambaInterface::getGraphValue(Karamba *k, Graph *graph)
+/** Graph/getGraphValue
+*
+* SYNOPSIS
+*   integer getGraphValue(widget, graph)
+* DESCRIPTION
+*   Returns current graph value.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to graph -- graph
+* RETURN VALUE
+*   value
+*/
+int KarambaInterface::getGraphValue(const Karamba *k, const Graph *graph) const
 {
     return getMeterValue(k, graph, "Graph");
 }
 
-QObject* KarambaInterface::getThemeGraph(Karamba *k, QString meter)
+/** Graph/getThemeGraph
+*
+* SYNOPSIS
+*   reference getThemeGraph(widget, name)
+* DESCRIPTION
+*   You can reference graph in your python code that was created in the
+*   theme file. Basically, you just add a NAME= value to the GRAPH line in
+*   the .theme file. Then if you want to use that object, instead of calling
+*   createGraph, you can call this function.
+*
+*   The name you pass to the function is the same one that you gave it for
+*   the NAME= parameter in the .theme file.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * string name -- name of the graph in the theme file
+* RETURN VALUE
+*   reference to graph
+*/
+QObject* KarambaInterface::getThemeGraph(const Karamba *k, const QString &meter) const
 {
     return getThemeMeter(k, meter, "Graph");
 }
 
-bool KarambaInterface::hideGraph(Karamba *k, Graph *graph)
+/** Graph/hideGraph
+*
+* SYNOPSIS
+*   boolean hideGraph(widget, graph)
+* DESCRIPTION
+*   This hides a graph. In other words, during subsequent calls to
+*   widgetUpdate(), this graph will not be drawn.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to graph -- graph
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::hideGraph(const Karamba *k, Graph *graph) const
 {
     return hideMeter(k, graph, "Graph");
 }
 
-bool KarambaInterface::showGraph(Karamba *k, Graph *graph)
+/** Graph/showGraph
+*
+* SYNOPSIS
+*   boolean showGraph(widget, graph)
+* DESCRIPTION
+*   This shows a graph. In other words, during subsequent calls to
+*   widgetUpdate(), this graph will be drawn.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to graph -- graph
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::showGraph(const Karamba *k, Graph *graph) const
 {
     return showMeter(k, graph, "Graph");
 }
 
-bool KarambaInterface::setGraphColor(Karamba *k, Graph *graph, int red, int green, int blue)
+/** Graph/setGraphColor
+*
+* SYNOPSIS
+*   boolean setGraphColor(widget, graph, red, green, blue)
+* DESCRIPTION
+*   Sets current graph color.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to graph -- pointer to graph
+*   * integer red -- red component of color
+*   * integer green -- green component of color
+*   * integer blue -- blue component of color
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::setGraphColor(const Karamba *k, Graph *graph, int red, int green, int blue)
+    const
 {
     return setMeterColor(k, graph, "Graph", red, green, blue);
 }
 
-QVariantList KarambaInterface::getGraphColor(Karamba *k, Graph *graph)
+/** Graph/getGraphColor
+*
+* SYNOPSIS
+*   array getGraphColor(widget, graph)
+* DESCRIPTION
+*   Gets the current graph color components.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to graph -- graph
+* RETURN VALUE
+*   (red, green, blue)
+*/
+QVariantList KarambaInterface::getGraphColor(const Karamba *k, const Graph *graph) const
 {
     return getMeterColor(k, graph, "Graph");
 }
 
 
 
-QObject* KarambaInterface::createImage(Karamba* k, int x, int y, QString image)
+
+
+/** Image/createImage
+*
+* SYNOPSIS
+*   reference createImage(widget, x, y, image)
+* DESCRIPTION
+*   This creates an image on your widget at x, y. The filename should be
+*   given as the path parameter. In theory the image could be local or could
+*   be a url. It works just like adding an image in your theme file. You
+*   will need to save the return value to be able to call other functions on
+*   your image, such as moveImage()
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * integer x -- x coordinate
+*   * integer y -- y coordinate
+*   * string image -- image for the imagelabel
+* RETURN VALUE
+*   reference to new image meter
+*/
+QObject* KarambaInterface::createImage(Karamba* k, int x, int y, const QString &image) const
 {
-    if (!checkKaramba(k))
+    if (!checkKaramba(k)) {
         return NULL;
+    }
 
     ImageLabel *tmp = new ImageLabel(k, x, y, 0, 0);
     tmp->setValue(image);
@@ -863,129 +1152,380 @@ QObject* KarambaInterface::createImage(Karamba* k, int x, int y, QString image)
     return tmp;
 }
 
-bool KarambaInterface::deleteImage(Karamba *k, ImageLabel *image)
+/** Image/deleteImage
+*
+* SYNOPSIS
+*   boolean deleteImage(widget, image)
+* DESCRIPTION
+*   This removes the image from the widhet. Please do not call functions on "image"
+*   after calling deleteImage, as it does not exist anymore and that could
+*   cause crashes in some cases.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to image -- image
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::deleteImage(Karamba *k, ImageLabel *image) const
 {
-    if (!checkKarambaAndMeter(k, image, "ImageLabel"))
+    if (!checkKarambaAndMeter(k, image, "ImageLabel")) {
         return false;
+    }
 
     return k->removeMeter(image);
 }
 
-bool KarambaInterface::setImageMinMax(Karamba *k, ImageLabel *image, int min, int max)
-{
-    return setMeterMinMax(k, image, "ImageLabel", min, max);
-}
-
-QVariantList KarambaInterface::getImageMinMax(Karamba *k, ImageLabel *image)
-{
-    return getMeterMinMax(k, image, "ImageLabel");
-}
-
-bool KarambaInterface::moveImage(Karamba *k, ImageLabel *image, int x, int y)
+/** Image/moveImage
+*
+* SYNOPSIS
+*   boolean moveImage(widget, image, x, y)
+* DESCRIPTION
+*   This moves an image to a new x, y relative to your widget. In other
+*   words, (0,0) is the top corner of your widget, not the screen. The
+*   imageToMove parameter is a reference to the image to move that you saved
+*   as the return value from createImage()
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to image -- image
+*   * integer x -- x coordinate
+*   * integer y -- y coordinate
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::moveImage(Karamba *k, ImageLabel *image, int x, int y) const
 {
     return moveMeter(k, image, "ImageLabel", x, y);
 }
 
-QVariantList KarambaInterface::getImagePos(Karamba *k, ImageLabel *image)
+/** Image/getImagePos
+*
+* SYNOPSIS
+*   array getImagePos(widget, image)
+* DESCRIPTION
+*   Given a reference to a image object, this will return a tuple
+*   containing the x and y coordinate of a image object.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to image -- image
+* RETURN VALUE
+*   x and y coordinates of the image
+*/
+QVariantList KarambaInterface::getImagePos(const Karamba *k, const ImageLabel *image) const
 {
     return getMeterPos(k, image, "ImageLabel");
 }
 
-bool KarambaInterface::setImageSensor(Karamba *k, ImageLabel *image, QString sensor)
+/** Image/setImageSensor
+*
+* SYNOPSIS
+*   long setImageSensor(widget, image, sensor)
+* DESCRIPTION
+*   Sets the current sensor string.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to image -- image
+*   * string sensor -- new sensor string as in theme files
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::setImageSensor(Karamba *k, ImageLabel *image,
+        const QString &sensor) const
 {
     return setMeterSensor(k, image, "ImageLabel", sensor);
 }
 
-QString KarambaInterface::getImageSensor(Karamba *k, ImageLabel *image)
+/** Image/getImageSensor
+*
+* SYNOPSIS
+*   string getImageSensor(widget, image)
+* DESCRIPTION
+*   Gets the current sensor string.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to image -- image
+* RETURN VALUE
+*   sensor string
+*/
+QString KarambaInterface::getImageSensor(const Karamba *k, const ImageLabel *image) const
 {
     return getMeterSensor(k, image, "ImageLabel");
 }
 
-bool KarambaInterface::resizeImage(Karamba *k, ImageLabel *image, int width, int height)
+/** Image/resizeImage
+*
+* SYNOPSIS
+*   boolean resizeImage(widget, image, w, h)
+* DESCRIPTION
+*   This resizes your image to width, height. The image parameter is
+*   a reference to an image that you saved as the return value from
+*   createImage()
+* ARGUMENTS
+*   * reference widget -- karamba
+*   * reference image -- image
+*   * integer w -- width
+*   * integer h -- height
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::resizeImage(const Karamba *k, ImageLabel *image, int width, int height) const
 {
     return resizeMeter(k, image, "ImageLabel", width, height);
 }
 
-QVariantList KarambaInterface::getImageSize(Karamba *k, ImageLabel *image)
+/** Image/getImageSize
+*
+* SYNOPSIS
+*   array getImageSize(widget, image)
+* DESCRIPTION
+*   Given a reference to a image object, this will return an array
+*   containing the height and width of a image object.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to image -- image
+* RETURN VALUE
+*   height and width of the image
+*/
+QVariantList KarambaInterface::getImageSize(const Karamba *k, const ImageLabel *image) const
 {
     return getMeterSize(k, image, "ImageLabel");
 }
 
-QObject* KarambaInterface::setImagePath(Karamba *k, ImageLabel *image, QString path)
+/** Image/setImagePath
+*
+* SYNOPSIS
+*   reference setImagePath(widget, image, path)
+* DESCRIPTION
+*   This will change image of a image widget.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to image -- image
+*   * string path -- new path of the image
+* RETURN VALUE
+*   reference to the image
+*/
+QObject* KarambaInterface::setImagePath(const Karamba *k, ImageLabel *image, const QString &path)
+    const
 {
     return setMeterStringValue(k, image, "ImageLabel", path);
 }
 
-QString KarambaInterface::getImagePath(Karamba *k, ImageLabel *image)
+/** Image/getImagePath
+*
+* SYNOPSIS
+*   string getImagePath(widget, image)
+* DESCRIPTION
+*   Returns the current image path.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to image -- image
+* RETURN VALUE
+*   path
+*/
+QString KarambaInterface::getImagePath(const Karamba *k, const ImageLabel *image) const
 {
     return getMeterStringValue(k, image, "ImageLabel");
 }
 
-QObject* KarambaInterface::getThemeImage(Karamba *k, QString meter)
+/** Image/getThemeImage
+*
+* SYNOPSIS
+*   long getThemeImage(widget, name)
+* DESCRIPTION
+*   You can reference an image in your python code that was created in the
+*   .theme file. Basically, you just add a NAME= value to the IMAGE line in
+*   the .theme file. Then if you want to use that object, instead of calling
+*   createImage, you can call this function.
+*
+*   The name you pass to the function is the same one that you gave it for
+*   the NAME= parameter in the .theme file.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * string name -- name of the image in the theme files
+* RETURN VALUE
+*   reference to image
+*/
+QObject* KarambaInterface::getThemeImage(const Karamba *k, const QString &meter) const
 {
     return getThemeMeter(k, meter, "ImageLabel");
 }
 
-bool KarambaInterface::hideImage(Karamba *k, ImageLabel *image)
+/** Image/hideImage
+*
+* SYNOPSIS
+*   boolean hideImage(widget, image)
+* DESCRIPTION
+*   This hides an image. In other words, during subsequent calls to
+*   widgetUpdate(), this image will not be drawn.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to image -- image
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::hideImage(const Karamba *k, ImageLabel *image) const
 {
     return hideMeter(k, image, "ImageLabel");
 }
 
-bool KarambaInterface::showImage(Karamba *k, ImageLabel *image)
+/** Image/showImage
+*
+* SYNOPSIS
+*   boolean showImage(widget, image)
+* DESCRIPTION
+*   This shows a previously hidden image. It does not actually refresh the
+*   image on screen. That is what redrawWidget() does.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to image -- image
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::showImage(const Karamba *k, ImageLabel *image) const
 {
     return showMeter(k, image, "ImageLabel");
 }
 
-bool KarambaInterface::setImageColor(Karamba *k, ImageLabel *image, int red, int green, int blue)
+/** Image/addImageTooltip
+*
+* SYNOPSIS
+*   boolean addImageTooltip(widget, image, text)
+* DESCRIPTION
+*   This creats a tooltip for image with text.
+*
+*   Note:
+*   * If you move the image, the tooltip does not move! It stays! Do not
+*     create a tooltip if the image is off-screen because you will not be
+*     able to ever see it.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to image -- image
+*   * string text -- tooltip text
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::addImageTooltip(const Karamba *k, ImageLabel *image, const QString &text)
+    const
 {
-    return setMeterColor(k, image, "ImageLabel", red, green, blue);
-}
-
-QVariantList KarambaInterface::getImageColor(Karamba *k, ImageLabel *image)
-{
-    return getMeterColor(k, image, "ImageLabel");
-}
-
-bool KarambaInterface::addImageTooltip(Karamba *k, ImageLabel *image, QString text)
-{
-    if (!checkKarambaAndMeter(k, image, "ImageLabel"))
+    if (!checkKarambaAndMeter(k, image, "ImageLabel")) {
         return false;
+    }
 
     image->setTooltip(text);
+
     return true;
 }
 
-bool KarambaInterface::changeImageChannelIntensity(Karamba *k, ImageLabel *image, double ratio, QString channel, int ms)
+/** Image/changeImageChannelIntensity
+*
+* SYNOPSIS
+*   boolean changeImageChannelIntensity(widget, image, ratio, channel, millisec)
+* DESCRIPTION
+*   Changes the "intensity" of the image color channel, which is similar to
+*   it's brightness.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to image -- image
+*   * decimal ratio -- -1.0 to 1.0 (dark to bright)
+*   * string channel -- color channel (red|green|blue)
+*   * integer millisec -- milliseconds before the image is restored (optional)
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::changeImageChannelIntensity(const Karamba *k, ImageLabel *image, double
+        ratio, const QString &channel, int ms) const
 {
-    if (!checkKarambaAndMeter(k, image, "ImageLabel"))
+    if (!checkKarambaAndMeter(k, image, "ImageLabel")) {
         return false;
+    }
 
     image->channelIntensity(ratio, channel, ms);
+
     return true;
 }
 
-bool KarambaInterface::changeImageIntensity(Karamba *k, ImageLabel *image, double ratio, int ms)
+/** Image/changeImageIntensity
+*
+* SYNOPSIS
+*   boolean changeImageIntensity(widget, image, ratio, millisec)
+* DESCRIPTION
+*   Changes the "intensity" of the image, which is similar to it's
+*   brightness. ratio is a floating point number from -1.0 to 1.0 that
+*   determines how much to brighten or darken the image. Millisec specifies
+*   how long in milliseconds before the image is restored to it's original
+*   form. This is useful for "mouse over" type animations. Using 0 for
+*   millisec disables this feature and leaves the image permanently
+*   affected.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to image -- image
+*   * decimal ratio -- -1.0 to 1.0 (dark to bright)
+*   * integer millisec -- milliseconds before the image is restored (optional)
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::changeImageIntensity(const Karamba *k, ImageLabel *image, double ratio, int
+        ms) const
 {
-    if (!checkKarambaAndMeter(k, image, "ImageLabel"))
+    if (!checkKarambaAndMeter(k, image, "ImageLabel")) {
         return false;
+    }
 
     image->intensity(ratio, ms);
+
     return true;
 }
 
-bool KarambaInterface::changeImageToGray(Karamba *k, ImageLabel *image, int ms)
+/** Image/changeImageToGray
+*
+* SYNOPSIS
+*   boolean changeImageToGray(widget, image, millisec)
+* DESCRIPTION
+*   Turns the given image into a grayscale image. Millisec specifies how
+*   long in milliseconds before the image is restored to it's original form.
+*   This is useful for "mouse over" type animations. Using 0 for millisec
+*   disables this feature and leaves the image permanently affected.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to image -- image
+*   * integer millisec -- milliseconds before the image is restored (optional)
+* RETURN VALUE
+*   1 if successful
+*/
+bool KarambaInterface::changeImageToGray(const Karamba *k, ImageLabel *image, int ms) const
 {
-    if (!checkKarambaAndMeter(k, image, "ImageLabel"))
+    if (!checkKarambaAndMeter(k, image, "ImageLabel")) {
         return false;
+    }
 
     image->toGray(ms);
+
     return true;
 }
 
-QObject* KarambaInterface::createBackgroundImage(Karamba *k, int x, int y, QString imagePath)
+/** Image/createBackgroundImage
+*
+* SYNOPSIS
+*   reference createBackgroundImage(widget, x, y, w, h, image)
+* DESCRIPTION
+*   This creates an background image on your widget at x, y. The filename
+*   should be given as the path parameter. In theory the image could be
+*   local or could be a url. It works just like adding an image in your
+*   theme file. You will need to save the return value to be able to call
+*   other functions on your image, such as moveImage()
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * integer x -- x coordinate
+*   * integer y -- y coordinate
+*   * string image -- path to the image for the background
+* RETURN VALUE
+*   reference to new image meter
+*/
+QObject* KarambaInterface::createBackgroundImage(Karamba *k, int x, int y, const QString &imagePath)
+    const
 {
-    if (!checkKaramba(k))
+    if (!checkKaramba(k)) {
         return 0;
+    }
 
     ImageLabel *tmp = new ImageLabel(k, x, y, 0, 0);
     tmp->setValue(imagePath);
@@ -997,10 +1537,25 @@ QObject* KarambaInterface::createBackgroundImage(Karamba *k, int x, int y, QStri
     return tmp;
 }
 
-QObject* KarambaInterface::createTaskIcon(Karamba *k, int x, int y, int ctask)
+/** Image/createTaskIcon
+*
+* SYNOPSIS
+*   reference createTaskIcon(widget, x, y, ctask)
+* DESCRIPTION
+*   This creates a task image at x, y.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * integer x -- x coordinate
+*   * integer y -- y coordinate
+*   * integer task -- task
+* RETURN VALUE
+*   reference to new image meter
+*/
+QObject* KarambaInterface::createTaskIcon(Karamba *k, int x, int y, int ctask) const
 {
-    if (!checkKaramba(k))
+    if (!checkKaramba(k)) {
         return NULL;
+    }
 
     QList<Task::TaskPtr> tasks = TaskManager::self()->tasks().values();
     Task::TaskPtr task;
@@ -1024,58 +1579,157 @@ QObject* KarambaInterface::createTaskIcon(Karamba *k, int x, int y, int ctask)
     tmp->setValue(iconPixmap);
 
     k->addToGroup(tmp);
+
     return tmp;
 }
 
-int KarambaInterface::getImageHeight(Karamba *k, ImageLabel *image)
+/** Image/getImageHeight
+*
+* SYNOPSIS
+*   integer getImageHeight(widget, image)
+* DESCRIPTION
+*   This returns the height of an image. This is useful if you have rotated
+*   an image and its size changed, so you do not know how big it is anymore.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to image -- image
+* RETURN VALUE
+*   height of the image
+*/
+int KarambaInterface::getImageHeight(const Karamba *k, const ImageLabel *image) const
 {
-    if (!checkKarambaAndMeter(k, image, "ImageLabel"))
+    if (!checkKarambaAndMeter(k, image, "ImageLabel")) {
         return -1;
+    }
 
     return image->getHeight();
 }
 
-int KarambaInterface::getImageWidth(Karamba *k, ImageLabel *image)
+/** Image/getImageWidth
+*
+* SYNOPSIS
+*   integer getImageWidth(widget, image)
+* DESCRIPTION
+*   This returns the width of an image. This is useful if you have rotated
+*   an image and its size changed, so you do not know how big it is anymore.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to image -- image
+* RETURN VALUE
+*   width of the image
+*/
+int KarambaInterface::getImageWidth(const Karamba *k, const ImageLabel *image) const
 {
-    if (!checkKarambaAndMeter(k, image, "ImageLabel"))
+    if (!checkKarambaAndMeter(k, image, "ImageLabel")) {
         return -1;
+    }
 
     return image->getWidth();
 }
 
-bool KarambaInterface::removeImageEffects(Karamba *k, ImageLabel *image)
+/** Image/removeImageEffects
+*
+* SYNOPSIS
+*   boolean removeImageEffects(widget, image)
+* DESCRIPTION
+*   If you have called image effect commands on your image (ex:
+*   changeImageIntensity), you can call this to restore your image to it's
+*   original form.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to image -- image
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::removeImageEffects(const Karamba *k, ImageLabel *image) const
 {
-    if (!checkKarambaAndMeter(k, image, "ImageLabel"))
+    if (!checkKarambaAndMeter(k, image, "ImageLabel")) {
         return false;
+    }
 
     image->removeEffects();
+
     return true;
 }
 
-bool KarambaInterface::removeImageTransformations(Karamba *k, ImageLabel *image)
+/** Image/removeImageTransformations
+*
+* SYNOPSIS
+*   boolean removeImageTransformations(widget, image)
+* DESCRIPTION
+*   If you have rotated or resized your image, you can call this function to restore
+*   your image to its original form.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to image -- image
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::removeImageTransformations(const Karamba *k, ImageLabel *image) const
 {
-    if (!checkKarambaAndMeter(k, image, "ImageLabel"))
+    if (!checkKarambaAndMeter(k, image, "ImageLabel")) {
         return false;
+    }
 
     image->removeImageTransformations();
+
     return true;
 }
 
+/** Image/resizeImageSmooth
+*
+* SYNOPSIS
+*   boolean resizeImageSmooth(widget, image, w, h)
+* DESCRIPTION
+*    DEPRECATED: resizeImage now allows the user to pick whether to use fast
+*    or smooth resizing from the SuperKaramba menu - This resizes your image
+*    to width, height. The imageToResize parameter is a reference to an
+*    image that you saved as the return value from createImage()
+*
+*    In version 0.50 and later this function works exactly as resizeImage().
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to image -- image
+*   * integer w -- width
+*   * integer h -- height
+* RETURN VALUE
+*   true if successful
+*/
 bool KarambaInterface::resizeImageSmooth(Karamba *k, ImageLabel *image, int width, int height)
+    const
 {
-    if (!checkKarambaAndMeter(k, image, "ImageLabel"))
+    if (!checkKarambaAndMeter(k, image, "ImageLabel")) {
         return false;
+    }
 
     k->scaleImageLabel(image, width, height);
+
     return true;
 }
 
-bool KarambaInterface::rotateImage(Karamba *k, ImageLabel *image, int deg)
+/** Image/rotateImage
+*
+* SYNOPSIS
+*   long rotateImage(widget, image, deg)
+* DESCRIPTION
+*   This rotates your image to by the specified amount of degrees. The
+*   The image parameter is a reference to an image that you saved as the
+*   return value from createImage()
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to image -- image
+*   * integer deg -- degrees to rotate
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::rotateImage(const Karamba *k, ImageLabel *image, int deg) const
 {
-    if (!checkKarambaAndMeter(k, image, "ImageLabel"))
+    if (!checkKarambaAndMeter(k, image, "ImageLabel")) {
         return false;
+    }
 
     image->rotate(deg);
+
     return true;
 }
 
@@ -1084,41 +1738,47 @@ bool KarambaInterface::rotateImage(Karamba *k, ImageLabel *image, int deg)
 
 bool KarambaInterface::addMenuConfigOption(Karamba *k, QString key, QString name)
 {
-    if (!checkKaramba(k))
+    if (!checkKaramba(k)) {
         return false;
+    }
 
     k->addMenuConfigOption(key, name);
+
     return true;
 }
 
 QString KarambaInterface::readConfigEntry(Karamba *k, QString key)
 {
-    if (!checkKaramba(k))
+    if (!checkKaramba(k)) {
         return QString::null;
+    }
 
     return k->getConfig()->group("theme").readEntry(key, QString());
 }
 
 bool KarambaInterface::readMenuConfigOption(Karamba *k, QString key)
 {
-    if (!checkKaramba(k))
+    if (!checkKaramba(k)) {
         return false;
+    }
 
     return k->readMenuConfigOption(key);
 }
 
 bool KarambaInterface::setMenuConfigOption(Karamba *k, QString key, bool value)
 {
-    if (!checkKaramba(k))
+    if (!checkKaramba(k)) {
         return false;
+    }
 
     return k->setMenuConfigOption(key, value);
 }
 
 bool KarambaInterface::writeConfigEntry(Karamba *k, QString key, QString value)
 {
-    if (!checkKaramba(k))
+    if (!checkKaramba(k)) {
         return false;
+    }
 
     k->getConfig()->group("theme").writeEntry(key, value);
 

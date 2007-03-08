@@ -128,10 +128,12 @@ private:
     bool setMeterSensor(Karamba *k, Meter *m, const QString &type, const QString &sensor) const;
     QObject* setMeterValue(const Karamba *k, Meter *m, const QString &type, int value) const;
     bool showMeter(const Karamba *k, Meter *m, const QString &type) const;
-    bool setMeterColor(Karamba *k, Meter *m, QString type, int red, int green, int blue);
-    QVariantList getMeterColor(Karamba *k, Meter *m, QString type);
-    QString getMeterStringValue(Karamba *k, Meter *m, QString type);
-    QObject* setMeterStringValue(Karamba *k, Meter *m, QString type, QString value);
+    bool setMeterColor(const Karamba *k, Meter *m, const QString &type, int red, int green, int
+            blue) const;
+    QVariantList getMeterColor(const Karamba *k, const Meter *m, const QString &type) const;
+    QString getMeterStringValue(const Karamba *k, const Meter *m, const QString &type) const;
+    QObject* setMeterStringValue(const Karamba *k, Meter *m, const QString &type, const QString
+            &value) const;
     bool menuExists(Karamba* currTheme, KMenu* menu);
 
 
@@ -167,54 +169,51 @@ public Q_SLOTS:
     bool writeConfigEntry(Karamba *k, QString key, QString value);
 
     // Graph
-    QObject* createGraph(Karamba* k, int x, int y, int w, int h, int points);
-    bool deleteGraph(Karamba *k, Graph *graph);
-    bool setGraphMinMax(Karamba *k, Graph *bar, int min, int max);
-    QVariantList getGraphMinMax(Karamba *k, Graph *graph);
-    bool moveGraph(Karamba *k, Graph *graph, int x, int y);
-    QVariantList getGraphPos(Karamba *k, Graph *graph);
-    bool setGraphSensor(Karamba *k, Graph *graph, QString sensor);
-    QString getGraphSensor(Karamba *k, Graph *graph);
-    bool resizeGraph(Karamba *k, Graph *graph, int width, int height);
-    QVariantList getGraphSize(Karamba *k, Graph *graph);
-    QObject* setGraphValue(Karamba *k, Graph *graph, int value);
-    int getGraphValue(Karamba *k, Graph *graph);
-    QObject* getThemeGraph(Karamba *k, QString meter);
-    bool hideGraph(Karamba *k, Graph *graph);
-    bool showGraph(Karamba *k, Graph *graph);
-    bool setGraphColor(Karamba *k, Graph *graph, int red, int green, int blue);
-    QVariantList getGraphColor(Karamba *k, Graph *graph);
+    QObject* createGraph(Karamba* k, int x, int y, int w, int h, int points) const;
+    bool deleteGraph(Karamba *k, Graph *graph) const;
+    bool setGraphMinMax(const Karamba *k, Graph *bar, int min, int max) const;
+    QVariantList getGraphMinMax(const Karamba *k, const Graph *graph) const;
+    bool moveGraph(const Karamba *k, Graph *graph, int x, int y) const;
+    QVariantList getGraphPos(const Karamba *k, const Graph *graph) const;
+    bool setGraphSensor(Karamba *k, Graph *graph, const QString &sensor) const;
+    QString getGraphSensor(const Karamba *k, const Graph *graph) const;
+    bool resizeGraph(const Karamba *k, Graph *graph, int width, int height) const;
+    QVariantList getGraphSize(const Karamba *k, const Graph *graph) const;
+    QObject* setGraphValue(const Karamba *k, Graph *graph, int value) const;
+    int getGraphValue(const Karamba *k, const Graph *graph) const;
+    QObject* getThemeGraph(const Karamba *k, const QString &meter) const;
+    bool hideGraph(const Karamba *k, Graph *graph) const;
+    bool showGraph(const Karamba *k, Graph *graph) const;
+    bool setGraphColor(const Karamba *k, Graph *graph, int red, int green, int blue) const;
+    QVariantList getGraphColor(const Karamba *k, const Graph *graph) const;
 
     // ImageLabel
-    QObject* createImage(Karamba* k, int x, int y, QString image);
-    bool deleteImage(Karamba *k, ImageLabel *image);
-    bool setImageMinMax(Karamba *k, ImageLabel *image, int min, int max);
-    QVariantList getImageMinMax(Karamba *k, ImageLabel *image);
-    bool moveImage(Karamba *k, ImageLabel *image, int x, int y);
-    QVariantList getImagePos(Karamba *k, ImageLabel *image);
-    bool setImageSensor(Karamba *k, ImageLabel *image, QString sensor);
-    QString getImageSensor(Karamba *k, ImageLabel *image);
-    bool resizeImage(Karamba *k, ImageLabel *image, int width, int height);
-    QVariantList getImageSize(Karamba *k, ImageLabel *image);
-    QObject* setImagePath(Karamba *k, ImageLabel *image, QString path);
-    QString getImagePath(Karamba *k, ImageLabel *image);
-    QObject* getThemeImage(Karamba *k, QString meter);
-    bool hideImage(Karamba *k, ImageLabel *image);
-    bool showImage(Karamba *k, ImageLabel *image);
-    bool setImageColor(Karamba *k, ImageLabel *image, int red, int green, int blue);
-    QVariantList getImageColor(Karamba *k, ImageLabel *image);
-    bool addImageTooltip(Karamba *k, ImageLabel *image, QString text);
-    bool changeImageChannelIntensity(Karamba *k, ImageLabel *image, double ratio, QString channel, int ms = 0);
-    bool changeImageIntensity(Karamba *k, ImageLabel *image, double ratio, int ms = 0);
-    bool changeImageToGray(Karamba *k, ImageLabel *image, int ms);
-    QObject* createBackgroundImage(Karamba *k, int x, int y, QString imagePath);
-    QObject* createTaskIcon(Karamba *k, int x, int y, int ctask);
-    int getImageHeight(Karamba *k, ImageLabel *image);
-    int getImageWidth(Karamba *k, ImageLabel *image);
-    bool removeImageEffects(Karamba *k, ImageLabel *image);
-    bool removeImageTransformations(Karamba *k, ImageLabel *image);
-    bool resizeImageSmooth(Karamba *k, ImageLabel *image, int width, int height);
-    bool rotateImage(Karamba *k, ImageLabel *image, int deg);
+    QObject* createImage(Karamba* k, int x, int y, const QString &image) const;
+    bool deleteImage(Karamba *k, ImageLabel *image) const;
+    bool moveImage(Karamba *k, ImageLabel *image, int x, int y) const;
+    QVariantList getImagePos(const Karamba *k, const ImageLabel *image) const;
+    bool setImageSensor(Karamba *k, ImageLabel *image, const QString &sensor) const;
+    QString getImageSensor(const Karamba *k, const ImageLabel *image) const;
+    bool resizeImage(const Karamba *k, ImageLabel *image, int width, int height) const;
+    QVariantList getImageSize(const Karamba *k, const ImageLabel *image) const;
+    QObject* setImagePath(const Karamba *k, ImageLabel *image, const QString &path) const;
+    QString getImagePath(const Karamba *k, const ImageLabel *image) const;
+    QObject* getThemeImage(const Karamba *k, const QString &meter) const;
+    bool hideImage(const Karamba *k, ImageLabel *image) const;
+    bool showImage(const Karamba *k, ImageLabel *image) const;
+    bool addImageTooltip(const Karamba *k, ImageLabel *image, const QString &text) const;
+    bool changeImageChannelIntensity(const Karamba *k, ImageLabel *image, double ratio, const
+            QString &channel, int ms = 0) const;
+    bool changeImageIntensity(const Karamba *k, ImageLabel *image, double ratio, int ms = 0) const;
+    bool changeImageToGray(const Karamba *k, ImageLabel *image, int ms = 0) const;
+    QObject* createBackgroundImage(Karamba *k, int x, int y, const QString &imagePath) const;
+    QObject* createTaskIcon(Karamba *k, int x, int y, int ctask) const;
+    int getImageHeight(const Karamba *k, const ImageLabel *image) const;
+    int getImageWidth(const Karamba *k, const ImageLabel *image) const;
+    bool removeImageEffects(const Karamba *k, ImageLabel *image) const;
+    bool removeImageTransformations(const Karamba *k, ImageLabel *image) const;
+    bool resizeImageSmooth(Karamba *k, ImageLabel *image, int width, int height) const;
+    bool rotateImage(const Karamba *k, ImageLabel *image, int deg) const;
 
     // InputBox
     QObject* createInputBox(Karamba* k, int x, int y, int w, int h, QString text);
