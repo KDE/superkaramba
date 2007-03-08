@@ -121,7 +121,7 @@ void ThemesDlg::populateListbox()
 
     item = new ThemeWidget;
 
-    item->iconLabel->setPixmap(KIconLoader::global()->loadIcon("knewstuff",
+    item->iconLabel->setPixmap(KIconLoader::global()->loadIcon("get-hot-new-stuff",
                                K3Icon::NoGroup, K3Icon::SizeHuge));
     item->setHeaderText(i18n("Get New Stuff"));
     item->setDescriptionText(i18n("Download new themes."));

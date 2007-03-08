@@ -1088,13 +1088,13 @@ void Karamba::preparePopupMenu()
 {
     m_popupMenu = new KMenu();
 
-    m_popupMenu->addAction(KIcon("reload"), i18n("Update"), this,
+    m_popupMenu->addAction(KIcon("view-refresh"), i18n("Update"), this,
                            SLOT(updateSensors()), Qt::Key_F5);
 
     m_toggleLocked = new KToggleAction(KIcon("move"), i18n("Toggle &Locked Position"), this);
     m_toggleLocked->setShortcut(KShortcut(Qt::CTRL + Qt::Key_L));
     m_toggleLocked->setCheckedState(KGuiItem("Toggle &Locked Position",
-                                    KIcon("lock")));
+                                    KIcon("system-lock-screen")));
     connect(m_toggleLocked, SIGNAL(triggered()), this, SLOT(slotToggleLocked()));
     m_popupMenu->addAction(m_toggleLocked);
 
@@ -1125,7 +1125,7 @@ void Karamba::preparePopupMenu()
 
     m_popupMenu->addAction(KIcon("reload3"), i18n("&Reload Theme"), this,
                            SLOT(reloadConfig()), Qt::CTRL + Qt::Key_R);
-    m_popupMenu->addAction(KIcon("fileclose"), i18n("&Close This Theme"), this,
+    m_popupMenu->addAction(KIcon("window-close"), i18n("&Close This Theme"), this,
                            SLOT(closeWidget()), Qt::CTRL + Qt::Key_C);
 
     if (!SuperKarambaSettings::showSysTray())
@@ -1658,11 +1658,11 @@ void Karamba::showMenuExtension()
                             SLOT(slotToggleSystemTray()),
                             Qt::CTRL + Qt::Key_S);
 
-    m_globalMenu->addAction(KIcon("knewstuff"),
+    m_globalMenu->addAction(KIcon("get-hot-new-stuff"),
                             i18n("&Manage Themes..."), this,
                             SLOT(slotShowTheme()), Qt::CTRL + Qt::Key_M);
 
-    m_globalMenu->addAction(KIcon("exit"),
+    m_globalMenu->addAction(KIcon("application-exit"),
                             i18n("&Quit SuperKaramba"), this,
                             SLOT(slotQuit()), Qt::CTRL + Qt::Key_Q);
 
