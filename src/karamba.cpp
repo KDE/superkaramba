@@ -1037,7 +1037,7 @@ void Karamba::closeWidget()
     karambaApp->removeKaramba(this);
 }
 
-KConfig* Karamba::getConfig()
+KConfig* Karamba::getConfig() const
 {
     return m_config;
 }
@@ -1190,7 +1190,7 @@ bool Karamba::setMenuConfigOption(QString key, bool value)
     return false;
 }
 
-bool Karamba::readMenuConfigOption(QString key)
+bool Karamba::readMenuConfigOption(QString key) const
 {
     QList<QAction*> actions = m_themeConfMenu->actions();
     QAction *action;
@@ -1564,12 +1564,12 @@ void Karamba::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
 
 }
 
-QGraphicsScene* Karamba::getScene()
+QGraphicsScene* Karamba::getScene() const
 {
     return m_scene;
 }
 
-QGraphicsView* Karamba::getView()
+QGraphicsView* Karamba::getView() const
 {
     return m_view;
 }

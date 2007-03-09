@@ -1736,7 +1736,43 @@ bool KarambaInterface::rotateImage(const Karamba *k, ImageLabel *image, int deg)
 
 
 
-bool KarambaInterface::addMenuConfigOption(Karamba *k, QString key, QString name)
+/** Config/addMenuConfigOption
+*
+* SYNOPSIS
+*   boolean addMenuConfigOption(widget, key, name)
+* DESCRIPTION
+*   SuperKaramba supports a simplistic configuration pop-up menu. This menu
+*   appears when you right-click on a widget and choose Configure Theme.
+*   Basically, it allows you to have check-able entrys in the menu to allow
+*   the user to enable or disable features in your theme.
+*
+*   Before you use any configuration menu stuff, you NEED to add a new
+*   callback to your script:
+*
+*   def menuOptionChanged(widget, key, value):
+*
+*   This will get called whenever a config menu option is changed. Now you
+*   can add items to the config menu:
+*
+*   addMenuConfigOption(widget, String key, String name)
+*
+*   Key is the name of a key value where the value will be saved
+*   automatically into the widget's config file. Name is the actual text that
+*   will show up in the config menu.
+*
+*   For example, I could allow the user to enable or disable a clock showing
+*   up in my theme:
+*
+*   karamba.addMenuConfigOption(widget, "showclock", "Display a clock")
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * string key -- key for menu item
+*   * string name -- name of the graph to get
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::addMenuConfigOption(Karamba *k, const QString &key, const QString &name)
+    const
 {
     if (!checkKaramba(k)) {
         return false;
@@ -1747,7 +1783,19 @@ bool KarambaInterface::addMenuConfigOption(Karamba *k, QString key, QString name
     return true;
 }
 
-QString KarambaInterface::readConfigEntry(Karamba *k, QString key)
+/** Config/readConfigEntry
+*
+* SYNOPSIS
+*   string readConfigEntry(widget, key, value)
+* DESCRIPTION
+*   This function reads an entry from the config file with the given key.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * string key -- key for config item
+* RETURN VALUE
+*   config value for key
+*/
+QString KarambaInterface::readConfigEntry(const Karamba *k, const QString &key) const
 {
     if (!checkKaramba(k)) {
         return QString::null;
@@ -1756,7 +1804,22 @@ QString KarambaInterface::readConfigEntry(Karamba *k, QString key)
     return k->getConfig()->group("theme").readEntry(key, QString());
 }
 
-bool KarambaInterface::readMenuConfigOption(Karamba *k, QString key)
+/** Config/readMenuConfigOption
+*
+* SYNOPSIS
+*   boolean readMenuConfigOption(widget, key)
+* DESCRIPTION
+*   This returns whether or not the given option is checked in the theme's
+*   Configure Theme menu.
+*
+*   See addMenuConfigOption for a more detailed explanation.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * string key -- key for menu item
+* RETURN VALUE
+*   false is returned if it is not checked and true is returned if it is.
+*/
+bool KarambaInterface::readMenuConfigOption(const Karamba *k, const QString &key) const
 {
     if (!checkKaramba(k)) {
         return false;
@@ -1765,7 +1828,24 @@ bool KarambaInterface::readMenuConfigOption(Karamba *k, QString key)
     return k->readMenuConfigOption(key);
 }
 
-bool KarambaInterface::setMenuConfigOption(Karamba *k, QString key, bool value)
+/** Config/setMenuConfigOption
+*
+* SYNOPSIS
+*   boolean setMenuConfigOption(widget, key, value)
+* DESCRIPTION
+*   This sets whether or not the given option is checked in the theme's
+*   Configure Theme menu. Value should be false if key should not be checked and
+*   true if key should be checked.
+*
+*   See addMenuConfigOption for a more detailed explanation.
+* ARGUMENTS
+*   * referencce to widget -- karamba
+*   * string key -- key for menu item
+*   * boolean value -- true for checked
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::setMenuConfigOption(Karamba *k, const QString &key, bool value) const
 {
     if (!checkKaramba(k)) {
         return false;
@@ -1774,7 +1854,29 @@ bool KarambaInterface::setMenuConfigOption(Karamba *k, QString key, bool value)
     return k->setMenuConfigOption(key, value);
 }
 
-bool KarambaInterface::writeConfigEntry(Karamba *k, QString key, QString value)
+/** Config/writeConfigEntry
+*
+* SYNOPSIS
+*   boolean writeConfigEntry(widget, key, value)
+* DESCRIPTION
+*   SuperKaramba automatically supports configuration files for each theme.
+*   These files will be saved in /your/home/dir/.superkaramba/ and will be
+*   named themenamerc where themename is the name of the theme.
+*
+*   This function writes an entry into the config file with the given key and
+*   value.
+*
+*   For example, to save my favorite color, I would do
+*   karamba.writeConfigEntry(widget, "FavColor", "Red")
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * string key -- key for config item
+*   * string value -- config value
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::writeConfigEntry(const Karamba *k, const QString &key, const QString &value)
+    const
 {
     if (!checkKaramba(k)) {
         return false;
@@ -1790,10 +1892,31 @@ bool KarambaInterface::writeConfigEntry(Karamba *k, QString key, QString value)
 
 
 
-QObject* KarambaInterface::createInputBox(Karamba* k, int x, int y, int w, int h, QString text)
+/** InputBox/createInputBox
+*
+* SYNOPSIS
+*   reference createInputBox(widget, x, y, w, h, text)
+* DESCRIPTION
+*   This creates a new Input Box at x, y with width and height w, h. You need to save
+*   the return value of this function to call other functions on your Input Box
+*   field, such as changeInputBox().
+*   The karamba widget is automatically set active, to allow user interactions.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * integer x -- x coordinate
+*   * integer y -- y coordinate
+*   * integer w -- width
+*   * integer h -- height
+*   * string text -- text for the Input Box
+* RETURN VALUE
+*   reference to new Input Box
+*/
+QObject* KarambaInterface::createInputBox(Karamba* k, int x, int y, int w, int h, const QString
+        &text) const
 {
-    if (!checkKaramba(k))
+    if (!checkKaramba(k)) {
         return NULL;
+    }
 
     Input *tmp = new Input(k, x, y, w, h);
     tmp->setValue(text);
@@ -1804,89 +1927,289 @@ QObject* KarambaInterface::createInputBox(Karamba* k, int x, int y, int w, int h
     return tmp;
 }
 
-bool KarambaInterface::deleteInputBox(Karamba *k, Input *input)
+/** InputBox/deleteInputBox
+*
+* SYNOPSIS
+*   boolean deleteInputBox(widget, inputBox)
+* DESCRIPTION
+*   This removes the Input Box object from the widget. Please do not call functions of
+*   the Input Box after calling deleteInputBox, as it does not exist anymore and that
+*   could cause crashes in some cases.
+*   The karamba widget ist automatically set passive, when no more Input Boxes are on
+*   the karamba widget.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference widget -- InputBox
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::deleteInputBox(Karamba *k, Input *input) const
 {
-    if (!checkKarambaAndMeter(k, input, "Input"))
+    if (!checkKarambaAndMeter(k, input, "Input")) {
         return false;
+    }
 
     return k->removeMeter(input);
 }
 
-bool KarambaInterface::moveInputBox(Karamba *k, Input *input, int x, int y)
+/** InputBox/moveInputBox
+*
+* SYNOPSIS
+*   long moveInputBox(widget, inputBox, x, y)
+* DESCRIPTION
+*   This moves a Input Box object to a new x, y relative to your widget. In other
+*   words, (0,0) is the top corner of your widget, not the screen.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to inputBox -- Input Box
+*   * integer x -- x coordinate
+*   * integer y -- y coordinate
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::moveInputBox(Karamba *k, Input *input, int x, int y) const
 {
     return moveMeter(k, input, "Input", x, y);
 }
 
-QVariantList KarambaInterface::getInputBoxPos(Karamba *k, Input *input)
+/** InputBox/getInputBoxPos
+*
+* SYNOPSIS
+*   array getInputBoxPos(widget, inputBox)
+* DESCRIPTION
+*   Given a reference to a Input Box object, this will return an array
+*   containing the x and y coordinate of an Input Box.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to inputBox -- Input Box
+* RETURN VALUE
+*   x and y coordinates of the inputBox
+*/
+QVariantList KarambaInterface::getInputBoxPos(const Karamba *k, const Input *input) const
 {
     return getMeterPos(k, input, "Input");
 }
 
-bool KarambaInterface::resizeInputBox(Karamba *k, Input *input, int width, int height)
+/** InputBox/resizeInputBox
+*
+* SYNOPSIS
+*   boolean resizeInputBox(widget, inputBox, w, h)
+* DESCRIPTION
+*   This will resize Input Box to the new height and width.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * referenc to inputBox -- Input Box
+*   * integer w -- new width
+*   * integer h -- new height
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::resizeInputBox(const Karamba *k, Input *input, int width, int height) const
 {
     return resizeMeter(k, input, "Input", width, height);
 }
 
-QVariantList KarambaInterface::getInputBoxSize(Karamba *k, Input *input)
+/** InputBox/getInputBoxSize
+*
+* SYNOPSIS
+*   array getInputBoxSize(widget, inputBox)
+* DESCRIPTION
+*   Given a reference to a Input Box object, this will return an array
+*   containing the height and width of a Input Box object.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to inputBox -- Input Box
+* RETURN VALUE
+*   width and hight of the input box
+*/
+QVariantList KarambaInterface::getInputBoxSize(const Karamba *k, const Input *input) const
 {
     return getMeterSize(k, input, "Input");
 }
 
-QObject* KarambaInterface::changeInputBoxValue(Karamba *k, Input *input, QString text)
+/** InputBox/changeInputBox
+*
+* SYNOPSIS
+*   reference changeInputBox(widget, inputBox, value)
+* DESCRIPTION
+*   This function will change the contents of a input box widget.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to inputBox -- Input Box
+*   * string value -- new text of the input box
+* RETURN VALUE
+*   reference to input box
+*/
+QObject* KarambaInterface::changeInputBox(const Karamba *k, Input *input, const QString &text) const
 {
     return setMeterStringValue(k, input, "Input", text);
 }
 
-QString KarambaInterface::getInputBoxValue(Karamba *k, Input *input)
+/** InputBox/getInputBoxValue
+*
+* SYNOPSIS
+*   string getInputBoxValue(widget, inputBox)
+* DESCRIPTION
+*   Returns current Input Box text.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to inputBox -- Input Box
+* RETURN VALUE
+*   input box text
+*/
+QString KarambaInterface::getInputBoxValue(const Karamba *k, const Input *input) const
 {
     return getMeterStringValue(k, input, "Input");
 }
 
-QObject* KarambaInterface::getThemeInputBox(Karamba *k, QString meter)
+/** InputBox/getThemeInputBox
+*
+* SYNOPSIS
+*   reference getThemeInputBox(widget, name)
+* DESCRIPTION
+*   You can reference text in your python code that was created in the
+*   theme file. Basically, you just add a NAME= value to the INPUT line in
+*   the .theme file. Then if you want to use that object, instead of calling
+*   createInputBox, you can call this function.
+*
+*   The name you pass to the function is the same one that you gave it for
+*   the NAME= parameter in the .theme file.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * string name -- name of the Input Box in the theme file
+* RETURN VALUE
+*   reference to Input Box
+*/
+QObject* KarambaInterface::getThemeInputBox(const Karamba *k, const QString &meter) const
 {
     return getThemeMeter(k, meter, "Input");
 }
 
-bool KarambaInterface::hideInputBox(Karamba *k, Input *input)
+/** InputBox/hideInputBox
+*
+* SYNOPSIS
+*   boolean hideInputBox(widget, inputBox)
+* DESCRIPTION
+*   Hides a Input Box that is visible.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to inputBox -- Input Box
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::hideInputBox(const Karamba *k, Input *input) const
 {
     return hideMeter(k, input, "Input");
 }
 
-bool KarambaInterface::showInputBox(Karamba *k, Input *input)
+/** InputBox/showInputBox
+*
+* SYNOPSIS
+*   boolean showInputBox(widget, inputBox)
+* DESCRIPTION
+*   Shows Input Box that has been hidden with hideInputBox()
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to inputBox -- Input Box
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::showInputBox(const Karamba *k, Input *input) const
 {
     return showMeter(k, input, "Input");
 }
 
-bool KarambaInterface::changeInputBoxFont(Karamba *k, Input *input, QString font)
+/** InputBox/changeInputBoxFont
+*
+* SYNOPSIS
+*   boolean changeInputBoxFont(widget, inputBox, font)
+* DESCRIPTION
+*   This will change the font of a Input Box widget. InputBox is the reference to the
+*   Input Box object to change. Font is a string with the name of the font to use.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to inputBox -- inputBox
+*   * string font -- font name
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::changeInputBoxFont(const Karamba *k, Input *input, const QString &font) const
 {
-    if (!checkKarambaAndMeter(k, input, "Input"))
+    if (!checkKarambaAndMeter(k, input, "Input")) {
         return false;
+    }
 
     input->setFont(font);
+
     return true;
 }
 
-QString KarambaInterface::getInputBoxFont(Karamba *k, Input *input)
+/** InputBox/getInputBoxFont
+*
+* SYNOPSIS
+*   string getInputBoxFont(widget, inputBox)
+* DESCRIPTION
+*   Gets the current Input Box font name
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to inputBox -- Input Box
+* RETURN VALUE
+*   font name
+*/
+QString KarambaInterface::getInputBoxFont(const Karamba *k, const Input *input) const
 {
-    if (!checkKarambaAndMeter(k, input, "Input"))
+    if (!checkKarambaAndMeter(k, input, "Input")) {
         return QString::null;
+    }
 
     return input->getFont();
 }
 
-bool KarambaInterface::changeInputBoxFontColor(Karamba *k, Input *input, int red, int green, int blue)
+/** InputBox/changeInputBoxFontColor
+*
+* SYNOPSIS
+*   boolean changeInputBoxFontColor(widget, inputBox, r, g, b)
+* DESCRIPTION
+*   This will change the color of a text of a Input Box widget.
+*   InputBox is the reference to the text object to change
+*   r, g, b are ints from 0 to 255 that represent red, green, and blue.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to inputBox -- Input Box
+*   * integer red -- red component of color
+*   * integer green -- green component of color
+*   * integer blue -- blue component of color
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::changeInputBoxFontColor(const Karamba *k, Input *input, int red, int green,
+        int blue) const
 {
-    if (!checkKarambaAndMeter(k, input, "Input"))
+    if (!checkKarambaAndMeter(k, input, "Input")) {
         return false;
+    }
 
     input->setFontColor(QColor(red, green, blue));
     return true;
 }
 
-QVariantList KarambaInterface::getInputBoxFontColor(Karamba *k, Input *input)
+/** InputBox/getInputBoxFontColor
+*
+* SYNOPSIS
+*   array getInputBoxFontColor(widget, inputBox)
+* DESCRIPTION
+*   Gets the current text color of a Input Box
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to inputBox -- Input Box
+* RETURN VALUE
+*   (red, green, blue)
+*/
+QVariantList KarambaInterface::getInputBoxFontColor(const Karamba *k, const Input *input) const
 {
-    if (!checkKarambaAndMeter(k, input, "Input"))
+    if (!checkKarambaAndMeter(k, input, "Input")) {
         return QVariantList();
+    }
 
     QVariantList ret;
 
@@ -1898,19 +2221,51 @@ QVariantList KarambaInterface::getInputBoxFontColor(Karamba *k, Input *input)
     return ret;
 }
 
-bool KarambaInterface::changeInputBoxSelectionColor(Karamba *k, Input *input, int red, int green, int blue)
+/** InputBox/changeInputBoxSelectionColor
+*
+* SYNOPSIS
+*   boolean changeInputBoxSelectionColor(widget, inputBox, r, g, b)
+* DESCRIPTION
+*   This will change the color of the selection of a Input Box widget.
+*   InputBox is the reference to the text object to change
+*   r, g, b are ints from 0 to 255 that represent red, green, and blue.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to inputBox -- Input Box
+*   * integer red -- red component of color
+*   * integer green -- green component of color
+*   * integer blue -- blue component of color
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::changeInputBoxSelectionColor(const Karamba *k, Input *input, int red,
+        int green, int blue) const
 {
-    if (!checkKarambaAndMeter(k, input, "Input"))
+    if (!checkKarambaAndMeter(k, input, "Input")) {
         return false;
+    }
 
     input->setSelectionColor(QColor(red, green, blue));
     return true;
 }
 
-QVariantList KarambaInterface::getInputBoxSelectionColor(Karamba *k, Input *input)
+/** InputBox/getInputBoxSelectionColor
+*
+* SYNOPSIS
+*   array getInputBoxSelectionColor(widget, inputBox)
+* DESCRIPTION
+*   Gets the current selection color of a Input Box
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to inputBox -- Input Box
+* RETURN VALUE
+*   (red, green, blue)
+*/
+QVariantList KarambaInterface::getInputBoxSelectionColor(const Karamba *k, const Input *input) const
 {
-    if (!checkKarambaAndMeter(k, input, "Input"))
+    if (!checkKarambaAndMeter(k, input, "Input")) {
         return QVariantList();
+    }
 
     QVariantList ret;
 
@@ -1922,19 +2277,53 @@ QVariantList KarambaInterface::getInputBoxSelectionColor(Karamba *k, Input *inpu
     return ret;
 }
 
-bool KarambaInterface::changeInputBoxBackgroundColor(Karamba *k, Input *input, int red, int green, int blue)
+/** InputBox/changeInputBoxBackgroundColor
+*
+* SYNOPSIS
+*   reference changeInputBoxBackgroundColor(widget, inputBox, r, g, b)
+* DESCRIPTION
+*   This will change the background color of a Input Box widget.
+*   InputBox is the reference to the text object to change
+*   r, g, b are ints from 0 to 255 that represent red, green, and blue.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to inputBox -- Input Box
+*   * integer red -- red component of color
+*   * integer green -- green component of color
+*   * integer blue -- blue component of color
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::changeInputBoxBackgroundColor(const Karamba *k, Input *input, int red, int
+        green, int blue) const
 {
-    if (!checkKarambaAndMeter(k, input, "Input"))
+    if (!checkKarambaAndMeter(k, input, "Input")) {
         return false;
+    }
 
     input->setBGColor(QColor(red, green, blue));
+
     return true;
 }
 
-QVariantList KarambaInterface::getInputBoxBackgroundColor(Karamba *k, Input *input)
+/** InputBox/getInputBoxBackgroundColor
+*
+* SYNOPSIS
+*   array getInputBoxBackgroundColor(widget, inputBox)
+* DESCRIPTION
+*   Gets the current background color of a Input Box
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to inputBox -- Input Box
+* RETURN VALUE
+*   (red, green, blue)
+*/
+QVariantList KarambaInterface::getInputBoxBackgroundColor(const Karamba *k, const Input *input)
+    const
 {
-    if (!checkKarambaAndMeter(k, input, "Input"))
+    if (!checkKarambaAndMeter(k, input, "Input")) {
         return QVariantList();
+    }
 
     QVariantList ret;
 
@@ -1946,7 +2335,25 @@ QVariantList KarambaInterface::getInputBoxBackgroundColor(Karamba *k, Input *inp
     return ret;
 }
 
-bool KarambaInterface::changeInputBoxFrameColor(Karamba *k, Input *input, int red, int green, int blue)
+/** InputBox/changeInputBoxFrameColor
+*
+* SYNOPSIS
+*   boolean changeInputBoxFrameColor(widget, inputBox, r, g, b)
+* DESCRIPTION
+*   This will change the frame color of a Input Box widget.
+*   InputBox is the reference to the text object to change
+*   r, g, b are ints from 0 to 255 that represent red, green, and blue.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to inputBox -- Input Box
+*   * integer red -- red component of color
+*   * integer green -- green component of color
+*   * integer blue -- blue component of color
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::changeInputBoxFrameColor(const Karamba *k, Input *input, int red, int green,
+        int blue) const
 {
     if (!checkKarambaAndMeter(k, input, "Input"))
         return false;
@@ -1955,10 +2362,23 @@ bool KarambaInterface::changeInputBoxFrameColor(Karamba *k, Input *input, int re
     return true;
 }
 
-QVariantList KarambaInterface::getInputBoxFrameColor(Karamba *k, Input *input)
+/** InputBox/getInputBoxFrameColor
+*
+* SYNOPSIS
+*   array getInputBoxFrameColor(widget, inputBox)
+* DESCRIPTION
+*   Gets the current frame color of a Input Box
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to inputBox -- Input Box
+* RETURN VALUE
+*   (red, green, blue)
+*/
+QVariantList KarambaInterface::getInputBoxFrameColor(const Karamba *k, const Input *input) const
 {
-    if (!checkKarambaAndMeter(k, input, "Input"))
+    if (!checkKarambaAndMeter(k, input, "Input")) {
         return QVariantList();
+    }
 
     QVariantList ret;
 
@@ -1970,19 +2390,53 @@ QVariantList KarambaInterface::getInputBoxFrameColor(Karamba *k, Input *input)
     return ret;
 }
 
-bool KarambaInterface::changeInputBoxSelectedTextColor(Karamba *k, Input *input, int red, int green, int blue)
+/** InputBox/changeInputBoxSelectedTextColor
+*
+* SYNOPSIS
+*   boolean changeInputBoxSelectedTextColor(widget, inputBox, r, g, b)
+* DESCRIPTION
+*   This will change the selected text color of a Input Box widget.
+*   InputBox is the reference to the text object to change
+*   r, g, b are ints from 0 to 255 that represent red, green, and blue.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to inputBox -- Input Box
+*   * integer red -- red component of color
+*   * integer green -- green component of color
+*   * integer blue -- blue component of color
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::changeInputBoxSelectedTextColor(const Karamba *k, Input *input, int red, int
+        green, int blue) const
 {
-    if (!checkKarambaAndMeter(k, input, "Input"))
+    if (!checkKarambaAndMeter(k, input, "Input")) {
         return false;
+    }
 
     input->setSelectedTextColor(QColor(red, green, blue));
+
     return true;
 }
 
-QVariantList KarambaInterface::getInputBoxSelectedTextColor(Karamba *k, Input *input)
+/** InputBox/getInputBoxSelectedTextColor
+*
+* SYNOPSIS
+*   array getInputBoxSelectedTextColor(widget, inputBox)
+* DESCRIPTION
+*   Gets the current selected text color of a Input Box.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to inputBox -- pointer to Input Box
+* RETURN VALUE
+*   (red, green, blue)
+*/
+QVariantList KarambaInterface::getInputBoxSelectedTextColor(const Karamba *k, const Input *input)
+    const
 {
-    if (!checkKarambaAndMeter(k, input, "Input"))
+    if (!checkKarambaAndMeter(k, input, "Input")) {
         return QVariantList();
+    }
 
     QVariantList ret;
 
@@ -1994,33 +2448,87 @@ QVariantList KarambaInterface::getInputBoxSelectedTextColor(Karamba *k, Input *i
     return ret;
 }
 
-bool KarambaInterface::changeInputBoxFontSize(Karamba *k, Input *input, int size)
+/** InputBox/changeInputBoxFontSize
+*
+* SYNOPSIS
+*   boolean changeInputBoxFontSize(widget, text, size)
+* DESCRIPTION
+*   This will change the font size of a Input Box widget.
+*   InputBox is the reference to the text object to change.
+*   Size is the new font point size.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to inputBox -- Input Box
+*   * integer size -- new font size for text
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::changeInputBoxFontSize(const Karamba *k, Input *input, int size) const
 {
-    if (!checkKarambaAndMeter(k, input, "Input"))
+    if (!checkKarambaAndMeter(k, input, "Input")) {
         return false;
+    }
 
     input->setFontSize(size);
     return true;
 }
 
-int KarambaInterface::getInputBoxFontSize(Karamba *k, Input *input)
+/** InputBox/getInputBoxFontSize
+*
+* SYNOPSIS
+*   integer getInputBoxFontSize(widget, inputBox)
+* DESCRIPTION
+*   Gets the current text font size.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to inputBox -- Input Box
+* RETURN VALUE
+*   text font size
+*/
+int KarambaInterface::getInputBoxFontSize(const Karamba *k, const Input *input) const
 {
-    if (!checkKarambaAndMeter(k, input, "Input"))
+    if (!checkKarambaAndMeter(k, input, "Input")) {
         return 0;
+    }
 
     return input->getFontSize();
 }
 
-bool KarambaInterface::setInputFocus(Karamba *k, Input *input)
+/** InputBox/setInputFocus
+*
+* SYNOPSIS
+*   boolean setInputFocus(widget, inputBox)
+* DESCRIPTION
+*   Sets the input focus to the Input Box.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to inputBox -- Input Box
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::setInputFocus(const Karamba *k, Input *input) const
 {
-    if (!checkKarambaAndMeter(k, input, "Input"))
+    if (!checkKarambaAndMeter(k, input, "Input")) {
         return false;
+    }
 
     input->setInputFocus();
     return true;
 }
 
-bool KarambaInterface::clearInputFocus(Karamba *k, Input *input)
+/** InputBox/clearInputFocus
+*
+* SYNOPSIS
+*   boolean clearInputFocus(widget, inputBox)
+* DESCRIPTION
+*   Releases the input focus from the Input Box.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to inputBox -- pointer to Input Box
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::clearInputFocus(const Karamba *k, Input *input) const
 {
     if (!checkKarambaAndMeter(k, input, "Input"))
         return false;
@@ -2029,14 +2537,30 @@ bool KarambaInterface::clearInputFocus(Karamba *k, Input *input)
     return true;
 }
 
-QObject* KarambaInterface::getInputFocus(Karamba *k)
+/** InputBox/getInputFocus
+*
+* SYNOPSIS
+*   boolean  getInputFocus(widget)
+* DESCRIPTION
+*   Gets the Input Box that is currently focused.
+* ARGUMENTS
+*   * reference to widget -- karamba
+* RETURN VALUE
+*   the input box or 0
+*/
+QObject* KarambaInterface::getInputFocus(const Karamba *k) const
 {
-    if (!checkKaramba(k))
+    if (!checkKaramba(k)) {
         return 0;
+    }
 
     QGraphicsItem *focusItem = k->getScene()->focusItem();
     return dynamic_cast<Input*>(focusItem);
 }
+
+
+
+
 
 
 

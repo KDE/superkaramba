@@ -65,8 +65,8 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                QWidget *widget);
 
-    QGraphicsScene* getScene();
-    QGraphicsView* getView();
+    QGraphicsScene* getScene() const;
+    QGraphicsView* getView() const;
 
     void keyPressed(const QString& s, const Meter* meter);
 
@@ -82,8 +82,8 @@ public:
     TextField* getDefaultTextProps();
     void updateSensors();
     void setFixedSize(u_int w, u_int h);
-    bool readMenuConfigOption(QString key);
-    KConfig* getConfig();
+    bool readMenuConfigOption(QString key) const;
+    KConfig* getConfig() const;
     //void removePopupMenu(KMenu *menu);
     bool popupMenuExisting(KMenu *menu);
     QString prettyName() const;

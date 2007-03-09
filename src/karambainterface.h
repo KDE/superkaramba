@@ -162,11 +162,11 @@ public Q_SLOTS:
 
 
     // Config
-    bool addMenuConfigOption(Karamba *k, QString key, QString name);
-    QString readConfigEntry(Karamba *k, QString key);
-    bool readMenuConfigOption(Karamba *k, QString key);
-    bool setMenuConfigOption(Karamba *k, QString key, bool value);
-    bool writeConfigEntry(Karamba *k, QString key, QString value);
+    bool addMenuConfigOption(Karamba *k, const QString &key, const QString &name) const;
+    QString readConfigEntry(const Karamba *k, const QString &key) const;
+    bool readMenuConfigOption(const Karamba *k, const QString &key) const;
+    bool setMenuConfigOption(Karamba *k, const QString &key, bool value) const;
+    bool writeConfigEntry(const Karamba *k, const QString &key, const QString &value) const;
 
     // Graph
     QObject* createGraph(Karamba* k, int x, int y, int w, int h, int points) const;
@@ -216,34 +216,38 @@ public Q_SLOTS:
     bool rotateImage(const Karamba *k, ImageLabel *image, int deg) const;
 
     // InputBox
-    QObject* createInputBox(Karamba* k, int x, int y, int w, int h, QString text);
-    bool deleteInputBox(Karamba *k, Input *input);
-    bool moveInputBox(Karamba *k, Input *input, int x, int y);
-    QVariantList getInputBoxPos(Karamba *k, Input *input);
-    bool resizeInputBox(Karamba *k, Input *input, int width, int height);
-    QVariantList getInputBoxSize(Karamba *k, Input *input);
-    QObject* changeInputBoxValue(Karamba *k, Input *input, QString text);
-    QString getInputBoxValue(Karamba *k, Input *input);
-    QObject* getThemeInputBox(Karamba *k, QString meter);
-    bool hideInputBox(Karamba *k, Input *input);
-    bool showInputBox(Karamba *k, Input *input);
-    bool changeInputBoxFont(Karamba *k, Input *input, QString font);
-    bool changeInputBoxFontColor(Karamba *k, Input *input, int red, int green, int blue);
-    QString getInputBoxFont(Karamba *k, Input *input);
-    QVariantList getInputBoxFontColor(Karamba *k, Input *input);
-    bool changeInputBoxSelectionColor(Karamba *k, Input *input, int red, int green, int blue);
-    QVariantList getInputBoxSelectionColor(Karamba *k, Input *input);
-    bool changeInputBoxBackgroundColor(Karamba *k, Input *input, int red, int green, int blue);
-    QVariantList getInputBoxBackgroundColor(Karamba *k, Input *input);
-    bool changeInputBoxFrameColor(Karamba *k, Input *input, int red, int green, int blue);
-    QVariantList getInputBoxFrameColor(Karamba *k, Input *input);
-    bool changeInputBoxSelectedTextColor(Karamba *k, Input *input, int red, int green, int blue);
-    QVariantList getInputBoxSelectedTextColor(Karamba *k, Input *input);
-    bool changeInputBoxFontSize(Karamba *k, Input *input, int size);
-    int getInputBoxFontSize(Karamba *k, Input *input);
-    bool setInputFocus(Karamba *k, Input *input);
-    bool clearInputFocus(Karamba *k, Input *input);
-    QObject* getInputFocus(Karamba *k);
+    QObject* createInputBox(Karamba* k, int x, int y, int w, int h, const QString &text) const;
+    bool deleteInputBox(Karamba *k, Input *input) const;
+    bool moveInputBox(Karamba *k, Input *input, int x, int y) const;
+    QVariantList getInputBoxPos(const Karamba *k, const Input *input) const;
+    bool resizeInputBox(const Karamba *k, Input *input, int width, int height) const;
+    QVariantList getInputBoxSize(const Karamba *k, const Input *input) const;
+    QObject* changeInputBox(const Karamba *k, Input *input, const QString &text) const;
+    QString getInputBoxValue(const Karamba *k, const Input *input) const;
+    QObject* getThemeInputBox(const Karamba *k, const QString &meter) const;
+    bool hideInputBox(const Karamba *k, Input *input) const;
+    bool showInputBox(const Karamba *k, Input *input) const;
+    bool changeInputBoxFont(const Karamba *k, Input *input, const QString &font) const;
+    bool changeInputBoxFontColor(const Karamba *k, Input *input, int red, int green, int blue) const;
+    QString getInputBoxFont(const Karamba *k, const Input *input) const;
+    QVariantList getInputBoxFontColor(const Karamba *k, const Input *input) const;
+    bool changeInputBoxSelectionColor(const Karamba *k, Input *input, int red, int green, int blue)
+        const;
+    QVariantList getInputBoxSelectionColor(const Karamba *k, const Input *input) const;
+    bool changeInputBoxBackgroundColor(const Karamba *k, Input *input, int red, int green, int blue)
+        const;
+    QVariantList getInputBoxBackgroundColor(const Karamba *k, const Input *input) const;
+    bool changeInputBoxFrameColor(const Karamba *k, Input *input, int red, int green, int blue)
+        const;
+    QVariantList getInputBoxFrameColor(const Karamba *k, const Input *input) const;
+    bool changeInputBoxSelectedTextColor(const Karamba *k, Input *input, int red, int green, int
+            blue) const;
+    QVariantList getInputBoxSelectedTextColor(const Karamba *k, const Input *input) const;
+    bool changeInputBoxFontSize(const Karamba *k, Input *input, int size) const;
+    int getInputBoxFontSize(const Karamba *k, const Input *input) const;
+    bool setInputFocus(const Karamba *k, Input *input) const;
+    bool clearInputFocus(const Karamba *k, Input *input) const;
+    QObject* getInputFocus(const Karamba *k) const;
 
     // Menu
     QObject* addMenuItem(Karamba *k, KMenu *menu, QString text, QString icon);
