@@ -302,7 +302,7 @@ PyObject* py_resizeImage(PyObject *, PyObject *args)
         return NULL;
     if (!checkKarambaAndMeter(widget, meter, "ImageLabel"))
         return NULL;
-    ((Karamba*)widget)->scaleImageLabel(
+    ((const Karamba*)widget)->scaleImageLabel(
         (ImageLabel*)meter, (int)w, (int)h);
     return Py_BuildValue((char*)"l", 1);
 }

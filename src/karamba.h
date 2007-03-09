@@ -101,7 +101,7 @@ public:
     void deletePopupMenu(KMenu *menu);
     void deleteMenuItem(QAction *action);
     void scaleImageLabel(Meter *meter, int width,
-                         int height);
+                         int height) const;
     void moveMeter(Meter *meter, int x, int y) const;
     void popupGlobalMenu() const;
 

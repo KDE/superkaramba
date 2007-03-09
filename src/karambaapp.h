@@ -30,7 +30,7 @@ class KarambaApplication : public KUniqueApplication
 {
     Q_OBJECT
 public:
-    KarambaApplication(Display *display, Qt::HANDLE visual, Qt::HANDLE colormap, bool useKross);
+    KarambaApplication(Display *display, Qt::HANDLE visual, Qt::HANDLE colormap);
     ~KarambaApplication();
 
     int newInstance();
@@ -68,7 +68,6 @@ private:
     KHelpMenu *m_helpMenu;
 
     ThemesDlg *m_themesDialog;
-    bool m_useKross;
 };
 
 #endif

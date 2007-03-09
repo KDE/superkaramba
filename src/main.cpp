@@ -120,7 +120,7 @@ int main(int argc, char **argv)
         kDebug() << "Using Kross as scripting backend" << endl;
     }
 
-    KarambaApplication app(dpy, Qt::HANDLE(visual), Qt::HANDLE(colormap), useKross);
+    KarambaApplication app(dpy, Qt::HANDLE(visual), Qt::HANDLE(colormap));
 
     app.setupSysTray(&about);
     int ret = 0;

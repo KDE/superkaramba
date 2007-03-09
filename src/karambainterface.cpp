@@ -1364,7 +1364,13 @@ QString KarambaInterface::getImageSensor(const Karamba *k, const ImageLabel *ima
 */
 bool KarambaInterface::resizeImage(const Karamba *k, ImageLabel *image, int width, int height) const
 {
-    return resizeMeter(k, image, "ImageLabel", width, height);
+    if (!checkKarambaAndMeter(k, image, "ImageLabel")) {
+        return false;
+    }
+
+    k->scaleImageLabel(image, width, height);
+
+    return true;
 }
 
 /** Image/getImageSize
@@ -1625,6 +1631,8 @@ QObject* KarambaInterface::createBackgroundImage(Karamba *k, int x, int y, const
     ImageLabel *tmp = new ImageLabel(k, x, y, 0, 0);
     tmp->setValue(imagePath);
     tmp->setBackground(true);
+    tmp->setZValue(-1);
+
     k->setSensor(LineParser(imagePath), tmp);
 
     k->addToGroup(tmp);

@@ -110,7 +110,10 @@ Karamba::Karamba(KUrl themeFile, QGraphicsView *view, QGraphicsScene *scene, int
         m_wantRightButton(false),
         m_globalView(true)
 {
-    m_useKross = karambaApp->usingKross();
+    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+    if (args->isSet("usekross")) {
+        m_useKross = true;
+    }
 
     if (m_view == 0 && m_scene == 0) {
         m_scene = new QGraphicsScene;
@@ -1257,7 +1260,7 @@ bool Karamba::popupMenuExisting(KMenu *menu)
 }
 
 void Karamba::scaleImageLabel(Meter *meter, int width,
-                              int height)
+                              int height) const
 {
     if (ImageLabel *image = dynamic_cast<ImageLabel*>(meter)) {
         image->smoothScale(width, height);
