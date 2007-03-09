@@ -81,6 +81,12 @@ KarambaInterface::KarambaInterface(Karamba *k)
     else {
         kDebug() << "Python theme script file: " << scriptFile << endl;
 
+        //FIXME we should propably just let Karamba use different external
+        //scripts here that contain the code to call the actual scripting
+        //file rather then hard-coding the handling here.
+        //This would also allow us to provide different interfaces / pre-configured
+        //environments for different needings :)
+
         QFileInfo fi(scriptFile);
         d->action = new Kross::Action(this, scriptFile, fi.dir());
         d->action->setInterpreter("python");
