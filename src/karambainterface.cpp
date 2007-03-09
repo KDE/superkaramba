@@ -20,12 +20,19 @@
 
 #include <QGraphicsScene>
 #include <QNetworkInterface>
+#include <QTimer>
+#include <QDomDocument>
+#include <QFileInfo>
 
 #include <kdebug.h>
 #include <kmenu.h>
 #include <krun.h>
 #include <kservice.h>
 #include <klocale.h>
+
+#include <kross/core/manager.h>
+#include <kross/core/action.h>
+#include <kross/core/actioncollection.h>
 
 #include "karamba.h"
 #include "karambaapp.h"
@@ -34,22 +41,104 @@
 #include "karambainterface.h"
 #include "karambainterface.moc"
 
+/// \internal d-pointer class.
+class KarambaInterface::Private
+{
+    public:
+        /**
+        * This is the in the constructor passed \a Karamba instance
+        * and used e.g. at the \a getThemePath method to be able
+        * to fetch the theme-path even outside of the functions if
+        * there is no access to the Karamba-pointer.
+        */
+        Karamba *karamba;
+
+        /**
+        * The \a Kross::ActionCollection instance provides access to
+        * the scripting backends.
+        */
+        Kross::ActionCollection *actioncollection;
+
+        Private(Karamba *k) : karamba(k), actioncollection(0) {}
+};
+
 KarambaInterface::KarambaInterface(Karamba *k)
-        : QObject(),
-        m_karamba(k)
+    : QObject()
+    , d(new Private(k))
 {
     setObjectName("karamba");
 
+    // Publish this QObject. It will be available with e.g.
+    //     import Karamba
+    //     print dir(Karamba)
     Kross::Manager::self().addObject(this, "karamba");
 
+    // Get the python theme file
     QString scriptFile = k->theme().path() + "/" + k->theme().pythonModule() + ".py";
-    m_action = new Kross::Action(this, KUrl(scriptFile));
-    m_action->trigger();
+    if( ! QFileInfo(scriptFile).exists() ) {
+        kWarning() << "Python theme script file not found: " << scriptFile << endl;
+    }
+    else {
+        kDebug() << "Python theme script file: " << scriptFile << endl;
+
+        QFileInfo fi(scriptFile);
+        Kross::Action *action = new Kross::Action(this, scriptFile, fi.dir());
+        action->setInterpreter("python");
+        action->setCode( QString(
+                "import karamba\n"
+
+                "import sys\n"
+                "sys.path.insert(0,karamba.getThemePath())\n"
+                "sys.path.insert(0,'')\n"
+
+                "execfile(\"%1\", globals(), locals())\n"
+
+                "try: karamba.connect('initWidget(QObject*)',initWidget)\n"
+                "except NameError: pass\n"
+                "try: karamba.connect('widgetUpdated(QObject*)',widgetUpdated)\n"
+                "except NameError: pass\n"
+                "try: karamba.connect('widgetClosed(QObject*)',widgetClosed)\n"
+                "except NameError: pass\n"
+                "try: karamba.connect('menuItemClicked(QObject*, QObject*, QObject*)',menuItemClicked)\n"
+                "except NameError: pass\n"
+                "try: karamba.connect('menuOptionChanged(QObject*, QString, bool)',menuOptionChanged)\n"
+                "except NameError: pass\n"
+                "try: karamba.connect('activeTaskChanged(QObject*, long long)',activeTaskChanged)\n"
+                "except NameError: pass\n"
+                "try: karamba.connect('taskAdded(QObject*, long long)',taskAdded)\n"
+                "except NameError: pass\n"
+                "try: karamba.connect('taskRemoved(QObject*, long long)', taskRemoved)\n"
+                "except NameError: pass\n"
+                "try: karamba.connect('startupAdded(QObject*, long long)',startupAdded)\n"
+                "except NameError: pass\n"
+                "try: karamba.connect('startupRemoved(QObject*, long long)',startupRemoved)\n"
+                "except NameError: pass\n"
+                "try: karamba.connect('commandFinished(QObject*, int)',commandFinished)\n"
+                "except NameError: pass\n"
+                "try: karamba.connect('itemDropped(QObject*, QString, int, int)',itemDropped)\n"
+                "except NameError: pass\n"
+                "try: karamba.connect('meterClicked(QObject*, QObject*, int)',meterClicked)\n"
+                "except NameError: pass\n"
+                "try: karamba.connect('widgetClicked(QObject*, int, int, int)',widgetClicked)\n"
+                "except NameError: pass\n"
+                "try: karamba.connect('desktopChanged(QObject*, int)',desktopChanged)\n"
+                "except NameError: pass\n"
+                "try: karamba.connect('widgetMouseMoved(QObject*, int, int, int)',widgetMouseMoved)\n"
+                "except NameError: pass\n"
+                "try: karamba.connect('keyPressed(QObject*, QObject*, QString)',keyPressed)\n"
+                "except NameError: pass\n"
+            ).arg(scriptFile)
+        );
+
+        // Finally let's execute the actual python theme script file.
+        action->trigger();
+        //QTimer::singleShot(0, action, SLOT(trigger()));
+    }
 }
 
 KarambaInterface::~KarambaInterface()
 {
-    delete m_action;
+    delete d;
 }
 
 // Testing functions -----------------------
@@ -2808,7 +2897,7 @@ QStringList KarambaInterface::getServiceGroups(const Karamba *k, QString path) c
 QString KarambaInterface::getThemePath(const Karamba *k) const
 {
     if (!k) {
-         k = m_karamba;
+         k = d->karamba;
     }
 
     if (!checkKaramba(k)) {

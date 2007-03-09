@@ -23,10 +23,6 @@
 
 #include <QObject>
 
-#include <kross/core/manager.h>
-#include <kross/core/guiclient.h>
-#include <kross/core/action.h>
-
 #include "karamba.h"
 #include "themelocale.h"
 
@@ -97,19 +93,10 @@ Q_SIGNALS:
     void keyPressed(QObject*, QObject*, QString);
 
 private:
-    /**
-    * This is the in the constructor passed \a Karamba instance
-    * and used e.g. at the \a getThemePath method to be able
-    * to fetch the theme-path even outside of the functions if
-    * there is no access to the Karamba-pointer.
-    */
-    Karamba *m_karamba;
-
-    /**
-    * The \a Kross::Action instance that provides us access to
-    * the scripting backends.
-    */
-    Kross::Action *m_action;
+    /// \internal d-pointer class.
+    class Private;
+    /// \internal d-pointer instance.
+    Private* const d;
 
     bool checkKaramba(const Karamba *k) const;
     bool checkMeter(const Karamba *k, const Meter *m, const QString &type) const;
