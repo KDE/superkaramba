@@ -32,7 +32,7 @@
 
 #include <kross/core/manager.h>
 #include <kross/core/action.h>
-#include <kross/core/actioncollection.h>
+//#include <kross/core/actioncollection.h>
 
 #include "karamba.h"
 #include "karambaapp.h"
@@ -54,12 +54,12 @@ class KarambaInterface::Private
         Karamba *karamba;
 
         /**
-        * The \a Kross::ActionCollection instance provides access to
-        * the scripting backends.
+        * The \a Kross::Action instance provides access to the
+        * scripting backends.
         */
-        Kross::ActionCollection *actioncollection;
+        Kross::Action *action;
 
-        Private(Karamba *k) : karamba(k), actioncollection(0) {}
+        Private(Karamba *k) : karamba(k), action(0) {}
 };
 
 KarambaInterface::KarambaInterface(Karamba *k)
@@ -82,9 +82,9 @@ KarambaInterface::KarambaInterface(Karamba *k)
         kDebug() << "Python theme script file: " << scriptFile << endl;
 
         QFileInfo fi(scriptFile);
-        Kross::Action *action = new Kross::Action(this, scriptFile, fi.dir());
-        action->setInterpreter("python");
-        action->setCode( QString(
+        d->action = new Kross::Action(this, scriptFile, fi.dir());
+        d->action->setInterpreter("python");
+        d->action->setCode( QString(
                 "import karamba\n"
 
                 "import sys\n"
@@ -131,8 +131,8 @@ KarambaInterface::KarambaInterface(Karamba *k)
         );
 
         // Finally let's execute the actual python theme script file.
-        action->trigger();
-        //QTimer::singleShot(0, action, SLOT(trigger()));
+        d->action->trigger();
+        //QTimer::singleShot(0, d->action, SLOT(trigger()));
     }
 }
 
