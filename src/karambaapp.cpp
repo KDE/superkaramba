@@ -35,11 +35,13 @@
 #include "karambaapp.h"
 #include "karambaapp.moc"
 
-KarambaApplication::KarambaApplication(Display *display, Qt::HANDLE visual, Qt::HANDLE colormap)
+KarambaApplication::KarambaApplication(Display *display, Qt::HANDLE visual, Qt::HANDLE colormap,
+        bool useKross)
         :   KUniqueApplication(display, visual, colormap),
         m_scene(0),
         m_view(0),
-        m_themesDialog(0)
+        m_themesDialog(0),
+        m_useKross(useKross)
 {
     bool globalView = false;
 
@@ -314,4 +316,9 @@ void KarambaApplication::setupSysTray(KAboutData* about)
     connect(m_sysTrayIcon,
             SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
             this, SLOT(globalShowThemeDialog(QSystemTrayIcon::ActivationReason)));
+}
+
+bool KarambaApplication::usingKross() const
+{
+    return m_useKross;
 }

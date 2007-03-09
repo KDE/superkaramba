@@ -42,7 +42,7 @@ static KCmdLineOptions options[] =
     {
         // { "+[URL]", I18N_NOOP( "Document to open" ), 0 },
         // { "!nosystray", I18N_NOOP("Disable systray icon"), 0 },
-        { "nousekross", I18N_NOOP("Optional use the Kross scripting backend. Off by default."), 0 },
+        { "usekross", I18N_NOOP("Optional use the Kross scripting backend. Off by default."), 0 },
         { "+file", I18N_NOOP("A required argument 'file'"), 0 },
         { 0, 0, 0 }
     };
@@ -113,14 +113,26 @@ int main(int argc, char **argv)
         exit(0);
     }
 
-    KarambaApplication app(dpy, Qt::HANDLE(visual), Qt::HANDLE(colormap));
+    bool useKross = false;
+    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+    if (args->isSet("usekross")) {
+        useKross = true;
+        kDebug() << "Using Kross as scripting backend" << endl;
+    }
+
+    KarambaApplication app(dpy, Qt::HANDLE(visual), Qt::HANDLE(colormap), useKross);
 
     app.setupSysTray(&about);
-
     int ret = 0;
-    KarambaPython::initPython();
+    if (!useKross) {
+        KarambaPython::initPython();
+    }
+
     ret = app.exec();
-    KarambaPython::shutdownPython();
+
+    if (!useKross) {
+        KarambaPython::shutdownPython();
+    }
 
     return ret;
 }

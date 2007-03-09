@@ -110,13 +110,7 @@ Karamba::Karamba(KUrl themeFile, QGraphicsView *view, QGraphicsScene *scene, int
         m_wantRightButton(false),
         m_globalView(true)
 {
-    //This is a temp optional option defined in main.cpp to
-    //be able to switch easy between the original python and
-    //the Kross scripting backends.
-    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    if (args->isSet("usekross")) {
-        m_useKross = true;
-    }
+    m_useKross = karambaApp->usingKross();
 
     if (m_view == 0 && m_scene == 0) {
         m_scene = new QGraphicsScene;
