@@ -2666,17 +2666,42 @@ QObject* KarambaInterface::getInputFocus(const Karamba *k) const
 
 
 
-
-bool KarambaInterface::menuExists(Karamba* k, KMenu* menu)
+//
+// Helper function for menu API.
+// It can not be called from scripts.
+//
+bool KarambaInterface::menuExists(const Karamba* k, const KMenu* menu) const
 {
     return k->popupMenuExisting(menu);
 }
 
 
-QObject* KarambaInterface::addMenuItem(Karamba *k, KMenu *menu, QString text, QString icon)
+/** Menu/addMenuItem
+*
+* SYNOPSIS
+*   reference addMenuItem(widget, menu, text, icon)
+* DESCRIPTION
+*   This adds an entry to the given menu with label text and with given icon.
+*   Icon can be just an application name in which case the user's current
+*   icon set is used, or can be a path to a 16x16 png file.
+*
+*   The function returns the reference to the menu item, which identifies that popup
+*   menu item uniquely among popupmenu items application-wide or returns 0
+*   if the given menu doesn't exist.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to menu -- menu
+*   * string text -- text for menu item
+*   * string icon -- icon name or path
+* RETURN VALUE
+*   reference to the menu item
+*/
+QObject* KarambaInterface::addMenuItem(Karamba *k, KMenu *menu, const QString &text, const
+        QString &icon) const
 {
-    if (!checkKaramba(k))
+    if (!checkKaramba(k)) {
         return 0;
+    }
 
     QAction *action = 0;
     if (menuExists(k, menu)) {
@@ -2686,10 +2711,23 @@ QObject* KarambaInterface::addMenuItem(Karamba *k, KMenu *menu, QString text, QS
     return action;
 }
 
-QObject* KarambaInterface::addMenuSeparator(Karamba *k, KMenu *menu)
+/** Menu/addMenuSeparator
+*
+* SYNOPSIS
+*   reference addMenuSeparator(widget, menu)
+* DESCRIPTION
+*   This adds an menu separator to the given menu.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to menu -- menu
+* RETURN VALUE
+*   reference to the separator
+*/
+QObject* KarambaInterface::addMenuSeparator(Karamba *k, KMenu *menu) const
 {
-    if (!checkKaramba(k))
+    if (!checkKaramba(k)) {
         return 0;
+    }
 
     QAction *sep = 0;
     if (menuExists(k, menu)) {
@@ -2699,18 +2737,43 @@ QObject* KarambaInterface::addMenuSeparator(Karamba *k, KMenu *menu)
     return sep;
 }
 
-QObject* KarambaInterface::createMenu(Karamba *k)
+/** Menu/createMenu
+*
+* SYNOPSIS
+*   reference createMenu(widget)
+* DESCRIPTION
+*   This creates an empty popup menu and returns a reference to the menu.
+* ARGUMENTS
+*   * reference to widget -- karamba
+* RETURN VALUE
+*   reference to menu
+*/
+QObject* KarambaInterface::createMenu(Karamba *k) const
 {
-    if (!checkKaramba(k))
+    if (!checkKaramba(k)) {
         return 0;
+    }
 
     return k->addPopupMenu();
 }
 
-bool KarambaInterface::deleteMenu(Karamba *k, KMenu *menu)
+/** Menu/deleteMenu
+*
+* SYNOPSIS
+*   boolean deleteMenu(widget, menu)
+* DESCRIPTION
+*   This deletes the referenced menu if that menu exists.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to menu -- pointer to menu
+* RETURN VALUE
+*   true if menu existed and was deleted, returns false otherwise.
+*/
+bool KarambaInterface::deleteMenu(Karamba *k, KMenu *menu) const
 {
-    if (!checkKaramba(k))
+    if (!checkKaramba(k)) {
         return false;
+    }
 
     if (menuExists(k, menu)) {
         k->deletePopupMenu(menu);
@@ -2721,10 +2784,27 @@ bool KarambaInterface::deleteMenu(Karamba *k, KMenu *menu)
 }
 
 
-bool KarambaInterface::popupMenu(Karamba *k, KMenu *menu, int x, int y)
+/** Menu/popupMenu
+*
+* SYNOPSIS
+*   boolean popupMenu(widget, menu, x, y)
+* DESCRIPTION
+*   This pops up the given menu at the given co-ordinates. The co-ordinates
+*   are relative to the widget, not the screen. You can use negative
+*   co-ordinates to make a menu appear to the right of or above your theme.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to menu -- menu
+*   * integer x -- x coordinate
+*   * integer y -- y coordinate
+* RETURN VALUE
+*   true if the menu existed and was popped up, returns false otherwise.
+*/
+bool KarambaInterface::popupMenu(const Karamba *k, KMenu *menu, int x, int y) const
 {
-    if (!checkKaramba(k))
+    if (!checkKaramba(k)) {
         return false;
+    }
 
     if (menuExists(k, menu)) {
         k->popupMenu(menu, QPoint(x, y));
@@ -2734,7 +2814,20 @@ bool KarambaInterface::popupMenu(Karamba *k, KMenu *menu, int x, int y)
     return false;
 }
 
-bool KarambaInterface::removeMenuItem(Karamba *k, KMenu *menu, QAction *action)
+/** Menu/removeMenuItem
+*
+* SYNOPSIS
+*   boolean removeMenuItem(widget, menu, id)
+* DESCRIPTION
+*   This removes the menu if it exists.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to menu -- pointer to menu
+*   * reference to menu item -- menu item
+* RETURN VALUE
+*   1 if the menu item existed and was removed or returns zero otherwise.
+*/
+bool KarambaInterface::removeMenuItem(Karamba *k, KMenu *menu, QAction *action) const
 {
     if (!checkKaramba(k))
         return false;

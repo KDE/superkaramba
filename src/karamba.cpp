@@ -1229,7 +1229,7 @@ QAction* Karamba::addMenuItem(KMenu *menu, QString text, QString icon)
 #ifdef __GNUC__
 #warning how to get the pos of the Item in the View?
 #endif
-void Karamba::popupMenu(KMenu *menu, QPoint pos)
+void Karamba::popupMenu(KMenu *menu, const QPoint &pos) const
 {
 //  QPoint diff = mapToGlobal(QGraphicsItemGroup::pos().toPoint()).toPoint();
     menu->popup(m_view->pos() + pos + boundingRect().toRect().topLeft());
@@ -1254,9 +1254,9 @@ void Karamba::deleteMenuItem(QAction *action)
     }
 }
 
-bool Karamba::popupMenuExisting(KMenu *menu)
+bool Karamba::popupMenuExisting(const KMenu *menu) const
 {
-    return m_menuList.contains(menu);
+    return m_menuList.contains(const_cast<KMenu*>(menu));
 }
 
 void Karamba::scaleImageLabel(Meter *meter, int width,

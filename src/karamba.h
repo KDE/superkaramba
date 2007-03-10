@@ -85,7 +85,7 @@ public:
     bool readMenuConfigOption(QString key) const;
     KConfig* getConfig() const;
     //void removePopupMenu(KMenu *menu);
-    bool popupMenuExisting(KMenu *menu);
+    bool popupMenuExisting(const KMenu *menu) const;
     QString prettyName() const;
     int getNumberOfDesktops() const;
     double getUpdateTime() const;
@@ -97,7 +97,7 @@ public:
     KMenu* addPopupMenu();
     QAction* addMenuItem(KMenu *menu, QString text,
                          QString icon);
-    void popupMenu(KMenu *menu, QPoint pos);
+    void popupMenu(KMenu *menu, const QPoint &pos) const;
     void deletePopupMenu(KMenu *menu);
     void deleteMenuItem(QAction *action);
     void scaleImageLabel(Meter *meter, int width,

@@ -121,7 +121,7 @@ private:
     QString getMeterStringValue(const Karamba *k, const Meter *m, const QString &type) const;
     QObject* setMeterStringValue(const Karamba *k, Meter *m, const QString &type, const QString
             &value) const;
-    bool menuExists(Karamba* currTheme, KMenu* menu);
+    bool menuExists(const Karamba* currTheme, const KMenu* menu) const;
 
 
 
@@ -237,12 +237,13 @@ public Q_SLOTS:
     QObject* getInputFocus(const Karamba *k) const;
 
     // Menu
-    QObject* addMenuItem(Karamba *k, KMenu *menu, QString text, QString icon);
-    QObject* addMenuSeparator(Karamba *k, KMenu *menu);
-    QObject* createMenu(Karamba *k);
-    bool deleteMenu(Karamba *k, KMenu *menu);
-    bool popupMenu(Karamba *k, KMenu *menu, int x, int y);
-    bool removeMenuItem(Karamba *k, KMenu *menu, QAction *action);
+    QObject* addMenuItem(Karamba *k, KMenu *menu, const QString &text, const QString &icon)
+        const;
+    QObject* addMenuSeparator(Karamba *k, KMenu *menu) const;
+    QObject* createMenu(Karamba *k) const;
+    bool deleteMenu(Karamba *k, KMenu *menu) const;
+    bool popupMenu(const Karamba *k, KMenu *menu, int x, int y) const;
+    bool removeMenuItem(Karamba *k, KMenu *menu, QAction *action) const;
 
     // Misc
     bool acceptDrops(Karamba *k) const;
