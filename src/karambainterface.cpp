@@ -2829,8 +2829,9 @@ bool KarambaInterface::popupMenu(const Karamba *k, KMenu *menu, int x, int y) co
 */
 bool KarambaInterface::removeMenuItem(Karamba *k, KMenu *menu, QAction *action) const
 {
-    if (!checkKaramba(k))
+    if (!checkKaramba(k)) {
         return false;
+    }
 
     if (menuExists(k, menu)) {
         k->deleteMenuItem(action);
@@ -2845,6 +2846,22 @@ bool KarambaInterface::removeMenuItem(Karamba *k, KMenu *menu, QAction *action) 
 
 
 
+/** Misc/acceptDrops
+*
+* SYNOPSIS
+*   boolean acceptDrops(widget)
+* DESCRIPTION
+*   Calling this enables your widget to receive Drop events. In other words,
+*   the user will be able to drag icons from his/her desktop and drop them on
+*   your widget. The "itemDropped" callback is called as a result with the
+*   data about the icon that was dropped on your widget. This allows, for
+*   example, icon bars where items are added to the icon bar by Drag and
+*   Drop.
+* ARGUMENTS
+*   * reference to widget -- karamba
+* RETURN VALUE
+*   true if successful
+*/
 bool KarambaInterface::acceptDrops(Karamba *k) const
 {
     if (!checkKaramba(k)) {
@@ -2852,9 +2869,44 @@ bool KarambaInterface::acceptDrops(Karamba *k) const
     }
 
     k->setAcceptDrops(true);
+
     return true;
 }
 
+/** Misc/attachClickArea
+*
+*   SYNOPSIS
+*     boolean attachClickArea(widget, meter, lB, mB, rB)
+*   DESCRIPTION
+*     It is possible to attach a clickarea to a meter (image or text field),
+*     which is moved and resized correctly if the meter is moved or resized.
+*
+*     There is also a callback meterClicked(widget, meter, button) which is
+*     called whenever a meter is clicked (if something is attached to it).
+*     Given an Image or a TextLabel, this call makes it clickable. When a mouse
+*     click is detected, the callback meterClicked is called.
+*
+*     lB, mB, and rB are strings that specify what command is executed when
+*     this meter is clicked with the left mouse button, middle mouse button,
+*     and right mouse button respectively. If given, the appropriate command is
+*     executed when the mouse click is received.
+*
+*     The keyword arguments are all optional. If command is an empty string
+*     nothing is executed.
+*
+*     For now the command given to RightButton has obviosly no effect (because
+*     that brings up the SuperKaramba menu).
+*
+*   ARGUMENTS
+*     * reference to widget -- karamba
+*     * reference to meter -- meter
+*     * string lB -- command to left mouse button
+*     * string mB -- command to middle mouse button
+*     * string rB -- command to right mouse button
+*
+*   RETURN VALUE
+*     true if successful
+*/
 bool KarambaInterface::attachClickArea(const Karamba *k, Meter *m,
     const QString &leftButton, const QString &middleButton, const QString &rightButton) const
 {
@@ -2875,6 +2927,23 @@ bool KarambaInterface::attachClickArea(const Karamba *k, Meter *m,
     return true;
 }
 
+/** Misc/callTheme
+*
+*  SYNOPSIS
+*    boolean callTheme(widget, theme, info)
+*  DESCRIPTION
+*  Calls a theme - identified by the pretty name - and passes it a string to it.
+*  This will work, despite superkaramba being multithreaded, because it
+*  uses the DBus interface to contact the other theme.  If you need to
+*  pass complex arguments (dictionaries, lists etc.) then use the python
+*  "repr" and "eval" functions to marshall and unmarshall the data structure.
+*  ARGUMENTS
+*    * reference to widget -- karamba
+*    * string theme -- pretty theme name
+*    * string info -- a string containing the info to be passed to the theme
+*  RETURN VALUE
+*    true if successful
+*/
 bool KarambaInterface::callTheme(const Karamba *k, const QString &theme, const QString &info) const
 {
     if (!checkKaramba(k)) {
@@ -2884,6 +2953,18 @@ bool KarambaInterface::callTheme(const Karamba *k, const QString &theme, const Q
     return k->sendDataToTheme(theme, info);
 }
 
+/** Misc/changeInterval
+*
+*  SYNOPSIS
+*    boolean changeInterval(widget, interval)
+*  DESCRIPTION
+*    This function changes your widget's refresh rate (ms)
+*  ARGUMENTS
+*    * reference to widget -- karamba
+*    * integer interval -- interval, in ms
+*  RETURN VALUE
+*    true if successful
+*/
 bool KarambaInterface::changeInterval(Karamba *k, int interval) const
 {
     if (!checkKaramba(k)) {
@@ -2891,14 +2972,46 @@ bool KarambaInterface::changeInterval(Karamba *k, int interval) const
     }
 
     k->changeInterval(interval);
+
     return true;
 }
 
+/** Misc/execute
+*
+* SYNOPSIS
+*   integer execute(command)
+* DESCRIPTION
+*   This command simply executes a program or command on the system. This is
+*   just for convience (IE you could accomplish this directly through python,
+*   but sometimes threading problems crop up that way). The only option is a
+*   string containing the command to execute.
+* ARGUMENTS
+*   * string command -- command to execute
+* RETURN VALUE
+*   process id of the executed command
+*/
 int KarambaInterface::execute(const QString &command) const
 {
     return KRun::runCommand(command);
 }
 
+/** Misc/createClickArea
+*
+* SYNOPSIS
+*   reference createClickArea(widget, x, y, w, h, cmdToRun)
+* DESCRIPTION
+*    This creates a clickable area at x, y with width and height w, h. When
+*    this area is clicked, cmd_to_run will be executed. The mouse will change over this area.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * integer x -- x coordinate
+*   * integer y -- y coordinate
+*   * integer w -- width
+*   * integer h -- height
+*   * string cmdToRun -- command to be run
+* RETURN VALUE
+*   reference to the new click area
+*/
 QObject* KarambaInterface::createClickArea(Karamba *k, int x, int y, int width, int height,
         const QString &onClick) const
 {
@@ -2914,6 +3027,18 @@ QObject* KarambaInterface::createClickArea(Karamba *k, int x, int y, int width, 
     return tmp;
 }
 
+/** Misc/removeClickArea
+*
+*  SYNOPSIS
+*    boolean removeClickArea(widget, clickarea)
+*  DESCRIPTION
+*     This function deletes a clickable area.
+*  ARGUMENTS
+*    * reference to widget -- karamba
+*    * reference to clickarea -- click area
+*  RETURN VALUE
+*    true if successful
+*/
 bool KarambaInterface::removeClickArea(Karamba *k, ClickArea *area) const
 {
     if (!checkKarambaAndMeter(k, area, "ClickArea")) {
@@ -2921,9 +3046,33 @@ bool KarambaInterface::removeClickArea(Karamba *k, ClickArea *area) const
     }
 
     k->removeMeter(area);
+
     return true;
 }
 
+/** Misc/createServiceClickArea
+*
+*  SYNOPSIS
+*    reference createServiceClickArea(widget, x, y, w, h, name_of_command, cmd_to_run, icon_to_display)
+*  DESCRIPTION
+*     This creates a clickable area at x, y with width and height w, h. When
+*     this area is clicked, cmd_to_run will be executed. The mouse will change
+*     to the clickable icon when over this area.  For more information on
+*     the difference between createClickArea and createServiceClickArea,
+*     see the KDE documentation about KService, and the difference
+*     between KRun::run and KRun::runCommand.
+*  ARGUMENTS
+*    * reference to widget -- karamba
+*    * integer x -- x coordinate
+*    * integer y -- y coordinate
+*    * integer w -- width
+*    * integer h -- height
+*    * string name_of_command -- name to be displayed
+*    * string cmd_to_run -- command to be run
+*    * string icon_to_display -- name of icon to be displayed
+*  RETURN VALUE
+*    reference to the new click area
+*/
 QObject* KarambaInterface::createServiceClickArea(Karamba *k, int x, int y, int width, int height,
         const QString &name, const QString &exec, const QString &icon) const
 {
@@ -2939,6 +3088,35 @@ QObject* KarambaInterface::createServiceClickArea(Karamba *k, int x, int y, int 
     return tmp;
 }
 
+/** Misc/executeInteractive
+*
+* SYNOPSIS
+*   integer executeInteractive(widget, command)
+* DESCRIPTION
+*   This command executes a program or command on the system. Additionally it allows
+*   you to get any text that the program outputs. Futhermore, it won't freeze
+*   up your widget while the command executes.
+*
+*   To use it, call executeInteractive with the reference to your widget and
+*   a list of command options. The array is simply a list that contains the
+*   command as the first entry, and each option as a seperate list entry.
+*   Output from the command is returned via the commandOutput callback.
+*
+*   The command returns the process number of the command. This is useful if
+*   you want to run more than one program at a time. The number will allow
+*   you to figure out which program is outputting in the commandOutput
+*   callback.
+*
+*   Example: Run the command "ls -la *.zip"
+*
+*   myCommand = ["ls", "-la", "*.zip"]
+*   karamba.executeInteractive(widget, myCommand)
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * list command -- command to execute
+* RETURN VALUE
+*   process id of the executed command
+*/
 int KarambaInterface::executeInteractive(Karamba *k, const QStringList &command)
 {
     if (!checkKaramba(k)) {
@@ -2963,6 +3141,18 @@ int KarambaInterface::executeInteractive(Karamba *k, const QStringList &command)
     return k->currProcess->pid();
 }
 
+/** Misc/getIp
+*
+* SYNOPSIS
+*   string getIp(widget, interface_name)
+* DESCRIPTION
+*   Gets the current IP address of the interface_name interface.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * string interface_name -- name of the interface
+* RETURN VALUE
+*   ip address as string
+*/
 QString KarambaInterface::getIP(const Karamba *k, QString interface) const
 {
     if (!checkKaramba(k)) {
@@ -2973,6 +3163,17 @@ QString KarambaInterface::getIP(const Karamba *k, QString interface) const
     return iface.addressEntries()[0].ip().toString();
 }
 
+/** Misc/getNumberOfDesktop
+*
+* SYNOPSIS
+*   integer getNumberOfDesktop(widget)
+* DESCRIPTION
+*   Returns number of desktops
+* ARGUMENTS
+*   * reference to widget -- karamba
+* RETURN VALUE
+*   number of desktops
+*/
 int KarambaInterface::getNumberOfDesktops(const Karamba *k) const
 {
     if (!checkKaramba(k)) {
@@ -2982,6 +3183,21 @@ int KarambaInterface::getNumberOfDesktops(const Karamba *k) const
     return k->getNumberOfDesktops();
 }
 
+/** Misc/getPrettyThemeName
+*
+*  SYNOPSIS
+*    string getPrettyName(theme)
+*  DESCRIPTION
+*    When a theme is created (with openNamedTheme), there is an
+*    option to give the theme an alternative name.
+*    This is useful if you open several widgets from the same theme:
+*    you need to give them unique names in order to contact them
+*    (for example, with callTheme or with setIncomingData)
+*  ARGUMENTS
+*    * string theme -- path to new theme
+*  RETURN VALUE
+*    the pretty name of the theme
+*/
 QString KarambaInterface::getPrettyThemeName(const Karamba *k) const
 {
     if (!checkKaramba(k)) {
@@ -2991,6 +3207,33 @@ QString KarambaInterface::getPrettyThemeName(const Karamba *k) const
     return k->prettyName();
 }
 
+/** Misc/getServiceGroups
+*
+* SYNOPSIS
+*   list getServiceGroups(widget, path)
+* DESCRIPTION
+*   This function returns a list of services and service groups
+*   that are in the user's KDE Menu.  It is not a recursive
+*   function, so if there are submenus (service groups) in the
+*   returned results, you must call getServiceGroups with the
+*   path of the submenu in order to obtain the information in
+*   that submenu.
+*   The return result is complex: it's a list of tuples.
+*   The tuple contains two elements - a 1 if the second element
+*   is a service, and a 0 if it's a service group.
+*   The second element is a dictionary, with keys (if they exist)
+*   of caption, comment, icon, and relpath if it's a service group,
+*   and keys (if they exist) of exec, menuid, name, path, icon,
+*   library, comment, type and genericname.
+*   To fully understand the return results of this function,
+*   it is thoroughly recommended //  that you look up the
+*   KDE documentation on KServiceGroup and KService.
+*  ARGUMENTS
+*    * reference to widget -- karamba
+*    * string path -- path to the Service Group you wish to retrieve
+*  RETURN VALUE
+*    List of Dictionaries of services and service groups
+*/
 QStringList KarambaInterface::getServiceGroups(const Karamba *k, QString path) const
 {
     if (!checkKaramba(k)) {
@@ -3001,6 +3244,18 @@ QStringList KarambaInterface::getServiceGroups(const Karamba *k, QString path) c
     return QStringList();
 }
 
+/** Misc/getThemePath
+*
+* SYNOPSIS
+*   string getThemePath(widget)
+* DESCRIPTION
+*   Returns a string containing the directory where your theme was loaded
+*   from.
+* ARGUMENTS
+*   * reference to widget -- karamba
+* RETURN VALUE
+*   path to theme
+*/
 QString KarambaInterface::getThemePath(const Karamba *k) const
 {
     if (!k) {
@@ -3014,6 +3269,19 @@ QString KarambaInterface::getThemePath(const Karamba *k) const
     return k->theme().path();
 }
 
+/** Misc/getUpdateTime
+*
+*  SYNOPSIS
+*    decimal getUpdateTime(widget)
+*  DESCRIPTION
+*    Returns the last stored update time. Intended for use
+*    so that the next refresh interval can work out how long ago
+*    the mouse was last moved over the widget.
+*  ARGUMENTS
+*    * reference to widget -- karamba
+*  RETURN VALUE
+*    last stored update time (from setUpdateTime)
+*/
 double KarambaInterface::getUpdateTime(const Karamba *k) const
 {
     if (!checkKaramba(k)) {
@@ -3023,6 +3291,20 @@ double KarambaInterface::getUpdateTime(const Karamba *k) const
     return k->getUpdateTime();
 }
 
+/** Misc/setUpdateTime
+*
+*  SYNOPSIS
+*    boolean getUpdateTime(widget, updated_time)
+*  DESCRIPTION
+*    Sets the update time. Intended for use
+*    so that the next refresh interval can work out how long ago
+*    the mouse was last moved over the widget.
+*  ARGUMENTS
+*    * reference to widget -- karamba
+*    * integer updated_time -- the update time to be associated with the widget
+*  RETURN VALUE
+*    true if successful
+*/
 bool KarambaInterface::setUpdateTime(Karamba *k, double updateTime) const
 {
     if (!checkKaramba(k)) {
@@ -3030,9 +3312,21 @@ bool KarambaInterface::setUpdateTime(Karamba *k, double updateTime) const
     }
 
     k->setUpdateTime(updateTime);
+
     return true;
 }
 
+/** Misc/hide
+*
+* SYNOPSIS
+*   boolean hide(widget)
+* DESCRIPTION
+*   Hides the widget.
+* ARGUMENTS
+*   * reference to widget -- karamba
+* RETURN VALUE
+*   true if successful
+*/
 bool KarambaInterface::hide(Karamba *k) const
 {
     if (!checkKaramba(k)) {
@@ -3040,9 +3334,21 @@ bool KarambaInterface::hide(Karamba *k) const
     }
 
     k->hide();
+
     return true;
 }
 
+/** Misc/show
+*
+* SYNOPSIS
+*   boolean show(widget)
+* DESCRIPTION
+*   Shows the widget.
+* ARGUMENTS
+*   * reference to widget -- karamba
+* RETURN VALUE
+*   true if successful
+*/
 bool KarambaInterface::show(Karamba *k) const
 {
     if (!checkKaramba(k)) {
@@ -3050,9 +3356,21 @@ bool KarambaInterface::show(Karamba *k) const
     }
 
     k->show();
+
     return true;
 }
 
+/** Misc/language
+*
+* SYNOPSIS
+*   string language(widget)
+* DESCRIPTION
+*   Returns a string containing the default language of a translation file.
+* ARGUMENTS
+*   * reference to widget -- karamba
+* RETURN VALUE
+*   default language or empty string if no translation files found.
+*/
 QString KarambaInterface::language(const Karamba *k) const
 {
     if (!checkKaramba(k)) {
@@ -3062,6 +3380,20 @@ QString KarambaInterface::language(const Karamba *k) const
     return k->theme().locale()->language();
 }
 
+/** Misc/managementPopup
+*
+*  SYNOPSIS
+*    boolean managementPopup(widget)
+*  DESCRIPTION
+*    The right click menu of SuperKaramba allows themes
+*    to be loaded, closed, moved to other screens.
+*    If you want this popup menu to appear, call
+*    this function.
+*  ARGUMENTS
+*    * reference to widget -- karamba
+*  RETURN VALUE
+*    true if successful
+*/
 bool KarambaInterface::managementPopup(const Karamba *k) const
 {
     if (!checkKaramba(k)) {
@@ -3069,9 +3401,31 @@ bool KarambaInterface::managementPopup(const Karamba *k) const
     }
 
     k->popupGlobalMenu();
+
     return true;
 }
 
+/** Misc/openNamedTheme
+*
+*  SYNOPSIS
+*    reference openNamedTheme(theme, pretty_name, is_sub_theme)
+*  DESCRIPTION
+*    Opens a new theme, giving it a pretty (alternative and by your
+*    own choice _unique_) name.
+*    If you do not want the theme to be loaded when SuperKaramba is
+*    first started up (but instead want it to only be opened by
+*    this function call) then set is_sub_theme to 1.
+*    Themes opened with openNamedTheme will be unique.  If a theme
+*    with the same pretty name already exists, openNamedTheme will
+*    have no effect.  If you want duplicate themes (and a bit of a
+*    mess), use openTheme, instead.
+*  ARGUMENTS
+*    * string theme -- path to new theme
+*    * string pretty_name -- the name to be associated with the new widget
+*    * boolean is_sub_theme -- sets persistence (save state) of the theme
+*  RETURN VALUE
+*    reference to the new widget
+*/
 Karamba* KarambaInterface::openNamedTheme(const QString &themePath, const QString &themeName,
         bool subTheme) const
 {
@@ -3089,6 +3443,17 @@ Karamba* KarambaInterface::openNamedTheme(const QString &themePath, const QStrin
     return newTheme;
 }
 
+/** Misc/openTheme
+*
+* SYNOPSIS
+*   reference openTheme(theme)
+* DESCRIPTION
+*   Opens a new theme.
+* ARGUMENTS
+*   * string theme -- path to theme that will be opened
+* RETURN VALUE
+*   reference to the new widget
+*/
 Karamba* KarambaInterface::openTheme(const QString &themePath) const
 {
     Karamba *newTheme;
@@ -3102,6 +3467,18 @@ Karamba* KarambaInterface::openTheme(const QString &themePath) const
     return newTheme;
 }
 
+/** Misc/readThemeFile
+*
+* SYNOPSIS
+*   string readThemeFile(widget, file)
+* DESCRIPTION
+*   Returns a string with the contents of the theme file
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * string file -- name of the file to read
+* RETURN VALUE
+*   file contents
+*/
 QString KarambaInterface::readThemeFile(const Karamba *k, const QString &file) const
 {
     if (!checkKaramba(k)) {
@@ -3111,6 +3488,17 @@ QString KarambaInterface::readThemeFile(const Karamba *k, const QString &file) c
     return k->theme().readThemeFile(file);
 }
 
+/** Misc/reloadTheme
+*
+* SYNOPSIS
+*   boolean reloadTheme(theme)
+* DESCRIPTION
+*   Reloads the current theme.
+* ARGUMENTS
+*   * reference to widget -- karamba
+* RETURN VALUE
+*   true if successful
+*/
 bool KarambaInterface::reloadTheme(Karamba *k) const
 {
     if (!checkKaramba(k)) {
@@ -3118,9 +3506,26 @@ bool KarambaInterface::reloadTheme(Karamba *k) const
     }
 
     k->reloadConfig();
+
     return true;
 }
 
+/** Misc/run
+*
+*  SYNOPSIS
+*    boolean run(name, command, icon, list_of_args)
+*  DESCRIPTION
+*    This command simply executes a program or command on the system.
+*    The difference between run and execute is that run takes arguments,
+*    and the name of the icon to be displayed.
+*  ARGUMENTS
+*    * string name -- name to be displayed
+*    * string command -- command to execute
+*    * string icon -- name of icon to be displayed
+*    * string list_of_args -- arguments to be passed to the command
+*  RETURN VALUE
+*    true if successful
+*/
 bool KarambaInterface::run(const QString &appName, const QString &command, const QString &icon,
         const QStringList &arguments)
 {
@@ -3131,6 +3536,19 @@ bool KarambaInterface::run(const QString &appName, const QString &command, const
     return true;
 }
 
+/** Misc/getIncomingData
+*
+*  SYNOPSIS
+*    string getIncomingData(widget)
+*  DESCRIPTION
+*    Obtains the last data received by any other theme that set the
+*    "incoming data" of this theme. This isn't particularly sophisticated
+*    and could benefit from the data being placed in an FIFO queue instead.
+*  ARGUMENTS
+*    * reference to widget -- karamba
+*  RETURN VALUE
+*    string containing the last information received from setIncomingData
+*/
 QVariant KarambaInterface::getIncommingData(const Karamba *k) const
 {
     if (!checkKaramba(k)) {
@@ -3140,6 +3558,26 @@ QVariant KarambaInterface::getIncommingData(const Karamba *k) const
     return k->retrieveReceivedData();
 }
 
+/** Misc/setIncomingData
+*
+*  SYNOPSIS
+*    boolean setIncomingData(widget, theme, info)
+*  DESCRIPTION
+*    Contacts a theme - identified by the pretty name - and stores a string
+*    to be associated with the remote theme. The difference between
+*    setIncomingData and callTheme is that the theme is not notified
+*    by setIncomingData that the data has arrived. Previous information,
+*    if any, is overwritten. Use getIncomingData to retrieve the last
+*    stored information.
+*    setIncomingData is not very sophisticated, and could benefit from
+*    having info passed to it put into a queue, instead of being overwritten.
+*  ARGUMENTS
+*    * reference to widget -- karamba
+*    * string theme -- path to theme to have information passed to it.
+*    * string info -- a string containing the info to be passed to the theme
+*  RETURN VALUE
+*    true if successful
+*/
 
 // Is the theme path or the pretty name required?
 bool KarambaInterface::setIncommingData(const Karamba *k, const QString &themePath, QVariant data)
@@ -3152,6 +3590,19 @@ bool KarambaInterface::setIncommingData(const Karamba *k, const QString &themePa
     return k->sendData();
 }
 
+/** Misc/toggleShowDesktop
+*
+* SYNOPSIS
+*   boolean toggleShowDesktop(widget)
+* DESCRIPTION
+*   This shows/hides the current desktop just like the Show Desktop button on
+*   kicker. Basically, it minimizes all the windows on the current desktop.
+*   Call it once to show the desktop and again to hide it.
+* ARGUMENTS
+*   * reference to widget -- karamba
+* RETURN VALUE
+*   true if successful
+*/
 bool KarambaInterface::toggleShowDesktop(const Karamba *k) const
 {
     if (!checkKaramba(k)) {
@@ -3159,9 +3610,24 @@ bool KarambaInterface::toggleShowDesktop(const Karamba *k) const
     }
 
     ShowDesktop::self()->toggle();
+
     return true;
 }
 
+/** Misc/translateAll
+*
+* SYNOPSIS
+*   boolean translateAll(widget, relative_x, relative_y)
+* DESCRIPTION
+*   Moves all widgets within a theme in a particular direction relative from
+*   the previous spot without moving the parent theme widget.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * integer translate_x -- move horizontally
+*   * integer translate_y -- move vertically
+* RETURN VALUE
+*   true if successful
+*/
 bool KarambaInterface::translateAll(const Karamba *k, int x, int y) const
 {
     if (!checkKaramba(k)) {
@@ -3181,6 +3647,17 @@ bool KarambaInterface::translateAll(const Karamba *k, int x, int y) const
     return true;
 }
 
+/** Misc/userLanguage
+*
+* SYNOPSIS
+*   string userLanguage(widget)
+* DESCRIPTION
+*   Returns a string containing the global KDE user language.
+* ARGUMENTS
+*   * reference to widget -- karamba
+* RETURN VALUE
+*   user language or empty string
+*/
 QString KarambaInterface::userLanguage(const Karamba *k) const
 {
     if (!checkKaramba(k)) {
@@ -3190,6 +3667,23 @@ QString KarambaInterface::userLanguage(const Karamba *k) const
     return KGlobal::locale()->language();
 }
 
+/** Misc/userLanguages
+*
+* SYNOPSIS
+*   array userLanguages(widget)
+* DESCRIPTION
+*   Returns an array containing the language name abbreviations for the
+*   preferred interface languages user chose for KDE session in Region &
+*   Language settings.
+*   Having the whole array of preferred languages available is important for
+*   cases when you cannot provide interface translation for the 1st preferred
+*   language, but can for consecutive languages.
+*   (Implemented in version 0.42.)
+* ARGUMENTS
+*   * reference to widget -- karamba
+* RETURN VALUE
+*   list (array) with user languages in the order of preference.
+*/
 QStringList KarambaInterface::userLanguages(const Karamba *k) const
 {
     if (!checkKaramba(k)) {
@@ -3199,6 +3693,22 @@ QStringList KarambaInterface::userLanguages(const Karamba *k) const
     return KGlobal::locale()->languageList();
 }
 
+/** Misc/wantRightButton
+*
+*  SYNOPSIS
+*    boolean wantRightButton(widget, want_receive_right_button)
+*  DESCRIPTION
+*    The right click menu of SuperKaramba allows themes
+*    to be loaded, closed, moved to other screens.
+*    Not all themes will want the right click menu.
+*    Call karamba.wantRightButton(widget, 1)
+*    if you want to receive MouseUpdate button notifications.
+*  ARGUMENTS
+*    * reference to widget -- karamba
+*    * boolean want_receive_right_button -- whether the widget will receive right clicks
+*  RETURN VALUE
+*    true if successful
+*/
 bool KarambaInterface::wantRightButton(Karamba *k, bool enable) const
 {
     if (!checkKaramba(k)) {
@@ -3206,6 +3716,7 @@ bool KarambaInterface::wantRightButton(Karamba *k, bool enable) const
     }
 
     k->setWantRightButton(enable);
+
     return true;
 }
 
@@ -3215,10 +3726,40 @@ bool KarambaInterface::wantRightButton(Karamba *k, bool enable) const
 
 
 
-QObject* KarambaInterface::createRichText(Karamba* k, QString text, bool underline)
+/** RichText/createRichText
+*
+* SYNOPSIS
+*   reference createRichText(widget, text, underlineLinks)
+* DESCRIPTION
+*   This creates creates a new rich text meter. underlineLinks is a boolean that
+*   determines if html links will be automatically underlined so that the
+*   user knows that the links can be clicked on. You need to save the return
+*   value of this function to call other functions on your rich text field,
+*   such as changeRichText().
+*
+*   The differance between Rich Text and a regular text field is that rich
+*   text fields can display HTML code embedded in your text.
+*
+*   In a <a href="command"> ... </a> tag command is executed if the link is
+*   click with the left mouse button.
+*
+*   Except if command starts with an '#' (ie: href="#value" ) the callback
+*   meterClicked is called with value (without the #) as the meter argument.
+*
+*   Also inline images work. Unfortunatly currently only when using absolute
+*   paths.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * string text -- text for richtext
+*   * boolean underlineLinks -- should the links be underlined
+* RETURN VALUE
+*   reference to new richtext meter
+*/
+QObject* KarambaInterface::createRichText(Karamba* k, const QString &text, bool underline) const
 {
-    if (!checkKaramba(k))
+    if (!checkKaramba(k)) {
         return NULL;
+    }
 
     RichTextLabel *tmp = new RichTextLabel(k);
     tmp->setText(text, underline);
@@ -3229,118 +3770,661 @@ QObject* KarambaInterface::createRichText(Karamba* k, QString text, bool underli
     return tmp;
 }
 
-bool KarambaInterface::deleteRichText(Karamba *k, RichTextLabel *label)
+/** RichText/deleteRichText
+*
+* SYNOPSIS
+*   boolean deleteRichText(widget, richtext)
+* DESCRIPTION
+*   This removes the richt text from the widget. Please do not call
+*   functions on "text" after calling deleteRichText, as it does not exist
+*   anymore and that could cause crashes in some cases.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to widget -- richtext
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::deleteRichText(Karamba *k, RichTextLabel *label) const
 {
-    if (!checkKarambaAndMeter(k, label, "RichTextLabel"))
+    if (!checkKarambaAndMeter(k, label, "RichTextLabel")) {
         return false;
+    }
 
     return k->removeMeter(label);
 }
 
-bool KarambaInterface::moveRichText(Karamba *k, RichTextLabel *label, int x, int y)
+/** RichText/moveRichText
+*
+* SYNOPSIS
+*   boolean moveRichText(widget, richtext, x, y)
+* DESCRIPTION
+*   This moves the rich text to a new x, y relative to your widget. In other
+*   words, (0,0) is the top corner of your widget, not the screen.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference richtext -- richtext
+*   * integer x -- x coordinate
+*   * integer y -- y coordinate
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::moveRichText(Karamba *k, RichTextLabel *label, int x, int y) const
 {
     return moveMeter(k, label, "RichTextLabel", x, y);
 }
 
-QVariantList KarambaInterface::getRichTextPos(Karamba *k, RichTextLabel *label)
+/** RichText/getRichTextPos
+*
+* SYNOPSIS
+*   array getRichTextPos(widget, richtext)
+* DESCRIPTION
+*   Given a reference to a richtext object, this will return an array
+*   containing the x and y coordinate of a richtext object.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to richtext -- richtext
+* RETURN VALUE
+*   x and y coordinates
+*/
+QVariantList KarambaInterface::getRichTextPos(const Karamba *k, const RichTextLabel *label) const
 {
     return getMeterPos(k, label, "RichTextLabel");
 }
 
-bool KarambaInterface::resizeRichText(Karamba *k, RichTextLabel *label, int width, int height)
+/** RichText/resizeRichText
+*
+* SYNOPSIS
+*   boolean resizeRichText(widget, richtext, w, h)
+* DESCRIPTION
+*   This will resize richtext to the new height and width.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to richtext -- richtext
+*   * integer w -- new width
+*   * integer h -- new height
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::resizeRichText(const Karamba *k, RichTextLabel *label, int width, int height)
+    const
 {
     return resizeMeter(k, label, "RichTextLabel", width, height);
 }
 
-bool KarambaInterface::setRichTextWidth(Karamba *k, RichTextLabel *label, int width)
+/** RichText/setRichTextWidth
+*
+* SYNOPSIS
+*   boolean setRichTextWidth(widget, richtext, width)
+* DESCRIPTION
+*   Given a reference to a rich text object, this function changes it's width
+*   to the specified value in pixels.
+*
+*   The height adjusts automatically as the contents are changed with
+*   changeRichText.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to richtext -- richtext
+*   * integer width -- new width in pixels
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::setRichTextWidth(const Karamba *k, RichTextLabel *label, int width) const
 {
-    if (!checkKarambaAndMeter(k, label, "RichTextLabel"))
+    if (!checkKarambaAndMeter(k, label, "RichTextLabel")) {
         return false;
+    }
 
     label->setWidth(width);
+
     return true;
 }
 
-QVariantList KarambaInterface::getRichTextSize(Karamba *k, RichTextLabel *label)
+/** RichText/getRichTextSize
+*
+* SYNOPSIS
+*   array getRichTextSize(widget, richtext)
+* DESCRIPTION
+*   Given a reference to a richtext object, this will return a tuple
+*   containing the height and width of a richtext object.
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long richtext -- richtext
+* RETURN VALUE
+*   width and height of the richtext
+*/
+QVariantList KarambaInterface::getRichTextSize(const Karamba *k, const RichTextLabel *label) const
 {
     return getMeterSize(k, label, "RichTextLabel");
 }
 
-QObject* KarambaInterface::changeRichText(Karamba *k, RichTextLabel *label, QString text)
+/** RichText/changeRichText
+*
+* SYNOPSIS
+*   reference changeRichText(widget, richtext, value)
+* DESCRIPTION
+*   This will change the contents of a rich text meter. richText is the
+*   reference to the text object to change that you saved from the
+*   createRichText() call. text is a string containing the new value for the
+*   rich text object.
+*
+*   The differance between Rich Text and a regular text field is that rich
+*   text fields can display HTML code embedded in your text.
+*
+*   In a <a href="command"> ... </a> tag command is executed if the link is
+*   click with the left mouse button.
+*
+*   Except if command starts with an '#' (ie: href="#value" ) the callback
+*   meterClicked is called with value (without the #) as the meter argument.
+*
+*   Also inline images work. Unfortunatly currently only when using absolute
+*   paths.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to richtext -- richtext
+*   * string value -- new text
+* RETURN VALUE
+*   true if successful
+*/
+QObject* KarambaInterface::changeRichText(const Karamba *k, RichTextLabel *label, const QString
+        &text) const
 {
     return setMeterStringValue(k, label, "RichTextLabel", text);
 }
 
-QString KarambaInterface::getRichTextValue(Karamba *k, RichTextLabel *label)
+/** RichText/getRichTextValue
+*
+* SYNOPSIS
+*   string getRichTextValue(widget, richtext)
+* DESCRIPTION
+*   Returns the current richtext value.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to richtext -- richtext
+* RETURN VALUE
+*   text that is displayed in the rich text
+*/
+QString KarambaInterface::getRichTextValue(const Karamba *k, const RichTextLabel *label) const
 {
     return getMeterStringValue(k, label, "RichTextLabel");
 }
 
-QObject* KarambaInterface::getThemeRichText(Karamba *k, QString meter)
+/** RichText/getThemeRichText
+*
+* SYNOPSIS
+*   reference getThemeRichText(widget, name)
+* DESCRIPTION
+*   You can reference richtext in your python code that was created in the
+*   theme file. Basically, you just add a NAME= value to the GRAPH line in
+*   the .theme file. Then if you want to use that object, instead of calling
+*   createRichText, you can call this function.
+*
+*   The name you pass to the function is the same one that you gave it for
+*   the NAME= parameter in the .theme file.
+* ARGUMENTS
+*   * long widget -- karamba
+*   * string name -- name of the richtext in the theme file
+* RETURN VALUE
+*   reference to richtext
+*/
+QObject* KarambaInterface::getThemeRichText(const Karamba *k, const QString &meter) const
 {
     return getThemeMeter(k, meter, "RichTextLabel");
 }
 
-bool KarambaInterface::hideRichText(Karamba *k, RichTextLabel *label)
+/** RichText/hideRichText
+*
+* SYNOPSIS
+*   boolean hideRichText(widget, richtext)
+* DESCRIPTION
+*   This hides the richtext. In other words, during subsequent calls to
+*   widgetUpdate(), this richtext will not be drawn.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to richtext -- richtext
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::hideRichText(const Karamba *k, RichTextLabel *label) const
 {
     return hideMeter(k, label, "RichTextLabel");
 }
 
-bool KarambaInterface::showRichText(Karamba *k, RichTextLabel *label)
+/** RichText/showRichText
+*
+* SYNOPSIS
+*   boolean showRichText(widget, richtext)
+* DESCRIPTION
+*   This shows the richtext. In other words, during subsequent calls to
+*   widgetUpdate(), this richtext will be drawn.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to richtext -- richtext
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::showRichText(const Karamba *k, RichTextLabel *label) const
 {
     return showMeter(k, label, "RichTextLabel");
 }
 
-bool KarambaInterface::changeRichTextFont(Karamba *k, RichTextLabel *label, QString font)
+/** RichText/changeRichTextFont
+*
+* SYNOPSIS
+*   long changeRichTextFont(widget, richtext, font)
+* DESCRIPTION
+*   This will change the font of a richtext meter.
+* ARGUMENTS
+*   * long widget -- karamba
+*   * long richtext -- richtext
+*   * string font -- name of the new font
+* RETURN VALUE
+*   1 if successful
+*/
+bool KarambaInterface::changeRichTextFont(const Karamba *k, RichTextLabel *label, const QString
+        &font) const
 {
-    if (!checkKarambaAndMeter(k, label, "RichTextLabel"))
+    if (!checkKarambaAndMeter(k, label, "RichTextLabel")) {
         return false;
+    }
 
     label->setFont(font);
     return true;
 }
 
-QString KarambaInterface::getRichTextFont(Karamba *k, RichTextLabel *label)
+/** RichText/getRichTextFont
+*
+* SYNOPSIS
+*   string getRichTextFont(widget, richtext)
+* DESCRIPTION
+*   Gets the font name of a richtext meter.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to richtext -- richtext
+* RETURN VALUE
+*   font name
+*/
+QString KarambaInterface::getRichTextFont(const Karamba *k, const RichTextLabel *label) const
 {
-    if (!checkKarambaAndMeter(k, label, "RichTextLabel"))
+    if (!checkKarambaAndMeter(k, label, "RichTextLabel")) {
         return QString::null;
+    }
 
     return label->getFont();
 }
 
-bool KarambaInterface::changeRichTextSize(Karamba *k, RichTextLabel *label, int size)
+/** RichText/changeRichTextSize
+*
+* SYNOPSIS
+*   boolean changeRichTextSize(widget, richtext, size)
+* DESCRIPTION
+*   Sets the font size of a richtext meter.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to richtext -- richtext
+*   * long size -- new font point size
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::changeRichTextSize(const Karamba *k, RichTextLabel *label, int size) const
 {
-    if (!checkKarambaAndMeter(k, label, "RichTextLabel"))
+    if (!checkKarambaAndMeter(k, label, "RichTextLabel")) {
         return false;
+    }
 
     label->setFontSize(size);
+
     return true;
 }
 
-int KarambaInterface::getRichTextFontSize(Karamba *k, RichTextLabel *label)
+/** RichText/getRichTextFontSize
+*
+* SYNOPSIS
+*   integer getRichTextFontSize(widget, richtext)
+* DESCRIPTION
+*   Gets the font size of the richtext meter.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to richtext -- richtext
+* RETURN VALUE
+*   font point size
+*/
+int KarambaInterface::getRichTextFontSize(const Karamba *k, const RichTextLabel *label) const
 {
-    if (!checkKarambaAndMeter(k, label, "RichTextLabel"))
+    if (!checkKarambaAndMeter(k, label, "RichTextLabel")) {
         return 0;
+    }
 
     return label->getFontSize();
 }
 
-bool KarambaInterface::setRichTextSensor(Karamba *k, RichTextLabel *label, QString sensor)
+/** RichText/setRichTextSensor
+*
+* SYNOPSIS
+*   boolean setRichTextSensor(widget, richtext, sensor)
+* DESCRIPTION
+*   Sets a new sensor string
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to richtext -- richtext
+*   * string sensor -- new sensor string as in theme files
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::setRichTextSensor(Karamba *k, RichTextLabel *label, const QString &sensor)
+    const
 {
     return setMeterSensor(k, label, "RichTextLabel", sensor);
 }
 
-QString KarambaInterface::getRichTextSensor(Karamba *k, RichTextLabel *label)
+/** RichText/getRichTextSensor
+*
+* SYNOPSIS
+*   string getRichTextSensor(widget, richtext)
+* DESCRIPTION
+*   Gets the current sensor string
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to richtext -- richtext
+* RETURN VALUE
+*   current sensor string
+*/
+QString KarambaInterface::getRichTextSensor(const Karamba *k, const RichTextLabel *label) const
 {
     return getMeterSensor(k, label, "RichTextLabel");
 }
 
 
 
-QObject* KarambaInterface::createText(Karamba* k, int x, int y, int width, int height, QString text)
+
+
+/** Task/getStartupInfo
+*
+* SYNOPSIS
+*   list getStartupInfo(widget, task)
+* DESCRIPTION
+*   This returns all of the info about a certain starting task in the form of
+*   a list. Widget is a reference to the current widget. task is a
+*   reference to the window you want info about which you obtain by calling
+*   getStartupList().
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to task -- task
+* RETURN VALUE
+*   Here is the format of the returned list by index value:
+*   * 0 = Task name (The full name of the window)
+*   * 1 = Icon name
+*   * 2 = Executable name
+*   * 3 = A reference back to the task you got info on
+*/
+QVariantList KarambaInterface::getStartupInfo(const Karamba *k, const Startup::StartupPtr startup)
+    const
 {
-    if (!checkKaramba(k))
+    if (!checkKaramba(k)) {
+        return QVariantList();
+    }
+
+    QVariantList ret;
+
+    ret << startup->text();
+    ret << startup->icon();
+    ret << startup->bin();
+    ret << startup.data();
+
+    return ret;
+}
+
+/** Task/getStartupList
+*
+* SYNOPSIS
+*   list getTaskList(widget)
+* DESCRIPTION
+*   This returns a list with references to all the current
+*   windows that are in the process of loading on this system. You can then
+*   call getStartupInfo() on any of the entries in the list.
+* ARGUMENTS
+*   * reference to widget -- karamba
+* RETURN VALUE
+*   list with references to startups
+*/
+QVariantList KarambaInterface::getStartupList(const Karamba *k) const
+{
+    if (!checkKaramba(k)) {
+        return QVariantList();
+    }
+
+    QVariantList ret;
+
+    Startup::List startupList = TaskManager::self()->startups();
+    foreach (Startup::StartupPtr startup, startupList) {
+        ret << startup.data();
+    }
+
+    return ret;
+}
+
+/** Task/getTaskInfo
+*
+* SYNOPSIS
+*   list getTaskInfo(widget, task)
+* DESCRIPTION
+*   This returns all of the info about a certain task in the form of a 
+*   list. widget is a reference to the current widget. Task is a reference to
+*   the window you want info about which you obtain by calling getTaskList().
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to task -- task
+* RETURN VALUE
+*   Here is the format of the returned list by index value:
+*   * 0 = Task name (The full name of the window)
+*   * 1 = Icon name
+*   * 2 = Class name - This is for grouping tasks. All tasks with the same
+*         name can be grouped together because they are instances of the same
+*         program.
+*   * 3 = Desktop number - The desktop number this window is on
+*   * 4 = Is this window maximized? false = no, true = yes
+*   * 5 = Is this window iconified (minimized)? false = no, true = yes
+*   * 6 = Is this window shaded (rolled up)? false = no, true = yes
+*   * 7 = Is this window focused? fale = no, true = yes
+*   * 8 = A reference back to the task you got info on
+*/
+QVariantList KarambaInterface::getTaskInfo(const Karamba *k, Task::TaskPtr task) const
+{
+    if (!checkKaramba(k)) {
+        return QVariantList();
+    }
+
+    QVariantList ret;
+
+    ret << task->name();
+    ret << task->info().iconName();
+    ret << task->className();
+    ret << task->desktop();
+    ret << task->isMaximized();
+    ret << task->isIconified();
+    ret << task->isShaded();
+    ret << task->isActive();
+    ret << task.data();
+
+    return ret;
+}
+
+/** Task/getTaskList
+*
+* SYNOPSIS
+*   list getTaskList(widget)
+* DESCRIPTION
+*   This returns a list with references to all the current
+*   windows open on this system. You can then call performTaskAction() or
+*   getTaskInfo() on any of the entries in the list.
+* ARGUMENTS
+*   * reference to widget -- karamba
+* RETURN VALUE
+*   list with references to the tasks
+*/
+QVariantList KarambaInterface::getTaskList(const Karamba *k) const
+{
+    if (!checkKaramba(k)) {
+        return QVariantList();
+    }
+
+    QVariantList ret;
+
+    QList<Task::TaskPtr> taskList = TaskManager::self()->tasks().values();
+
+    Task::TaskPtr task;
+    foreach(task, taskList) {
+        ret << task.data();
+    }
+
+    return ret;
+}
+
+/** Task/getTaskNames
+*
+* SYNOPSIS
+*   list getTaskNames(widget)
+* DESCRIPTION
+*   This returns a list containing the String names of all open
+*   windows on the system. This is for convience if you want to list open
+*   windows or see if a window by a certain name exists. Anything else
+*   requires the reference to the window you would obtain from getTaskList()
+* ARGUMENTS
+*   * reference to widget -- karamba
+* RETURN VALUE
+*   list with task names
+*/
+QStringList KarambaInterface::getTaskNames(const Karamba *k) const
+{
+    if (!checkKaramba(k)) {
+        return QStringList();
+    }
+
+    QStringList ret;
+
+    QList<Task::TaskPtr> taskList = TaskManager::self()->tasks().values();
+
+    Task::TaskPtr task;
+    foreach(task, taskList) {
+        ret << task->name();
+    }
+
+    return ret;
+}
+
+/** Task/performTaskAction
+*
+* SYNOPSIS
+*   boolean performTaskAction(widget, task, action)
+* DESCRIPTION
+*   This peforms the given action on a task object. widget is a reference to
+*   the current widget. Task is a reference to a task object you got from
+*   getTaskList(). Action is a number from 1 to 10. See the list below.
+*
+*   Possible actions:
+*   * 1 = Maximize the window
+*   * 2 = Restore the window (use on iconified windows)
+*   * 3 = Iconify the window (minimize it)
+*   * 4 = Close the window
+*   * 5 = Activate (give focus to) the window
+*   * 6 = Raise the window
+*   * 7 = Lower the window
+*   * 8 = Smart Focus/Minimize - This will what the KDE taskbar does when you
+*         click on a window. If it is iconified, raise it. If it has focus,
+*         iconify it.
+*   * 9 = Toggle whether this window is always on top
+*   * 10 = Toggle wheter this window is shaded (rolled up)
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to task -- task
+*   * integer action -- action number
+* RETURN VALUE
+*   boolean if successful
+*/
+bool KarambaInterface::performTaskAction(const Karamba *k, Task::TaskPtr task, int action)
+    const
+{
+    if (!checkKaramba(k)) {
+        return false;
+    }
+
+    switch (action) {
+        case 1:
+            task->setMaximized(true);
+            break;
+
+        case 2:
+            task->restore();
+            break;
+
+        case 3:
+            task->setIconified(true);
+            break;
+
+        case 4:
+            task->close();
+            break;
+
+        case 5:
+            task->activate();
+            break;
+
+        case 6:
+            task->raise();
+            break;
+
+        case 7:
+            task->lower();
+            break;
+
+        case 8:
+            task->activateRaiseOrIconify();
+            break;
+
+        case 9:
+            task->toggleAlwaysOnTop();
+            break;
+
+        case 10:
+            task->toggleShaded();
+            break;
+
+        default:
+            kWarning() << "You are trying to perform an invalid "
+                    << "action in performTaskAction" << endl;
+            return false;
+
+    }
+
+    return true;
+}
+
+
+
+
+/** Text/createText
+*
+* SYNOPSIS
+*   reference createText(widget, x, y, w, h, text)
+* DESCRIPTION
+*   This creates a new text at x, y with width and height w, h. You need to save
+*   the return value of this function to call other functions on your text
+*   field, such as changeText()
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * integer x -- x coordinate
+*   * integer y -- y coordinate
+*   * integer w -- width
+*   * integer h -- height
+*   * string text -- text for the textlabel
+* RETURN VALUE
+*   Pointer to new text meter
+*/
+QObject* KarambaInterface::createText(Karamba* k, int x, int y, int width, int height, const QString
+        &text) const
+{
+    if (!checkKaramba(k)) {
         return NULL;
+    }
 
     TextLabel *tmp = new TextLabel(k, x, y, width, height);
     tmp->setValue(text);
@@ -3351,160 +4435,495 @@ QObject* KarambaInterface::createText(Karamba* k, int x, int y, int width, int h
     return tmp;
 }
 
-bool KarambaInterface::deleteText(Karamba *k, TextLabel *text)
+/** Text/deleteText
+*
+* SYNOPSIS
+*   boolean deleteText(widget, text)
+* DESCRIPTION
+*   This removes a text object from the widget. Please do not call functions on
+*   "text" after calling deleteText, as it does not exist anymore and that
+*   could cause crashes in some cases.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to widget -- text meter
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::deleteText(Karamba *k, TextLabel *text) const
 {
-    if (!checkKarambaAndMeter(k, text, "TextLabel"))
+    if (!checkKarambaAndMeter(k, text, "TextLabel")) {
         return false;
+    }
 
     return k->removeMeter(text);
 }
 
-bool KarambaInterface::moveText(Karamba *k, TextLabel *text, int x, int y)
+/** Text/moveText
+*
+* SYNOPSIS
+*   boolean moveText(widget, text, x, y)
+* DESCRIPTION
+*   This moves a text object to a new x, y relative to your widget. In other
+*   words, (0,0) is the top corner of your widget, not the screen.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to text -- text meter
+*   * integer x -- x coordinate
+*   * integer y -- y coordinate
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::moveText(Karamba *k, TextLabel *text, int x, int y) const
 {
     return moveMeter(k, text, "TextLabel", x, y);
 }
 
-QVariantList KarambaInterface::getTextPos(Karamba *k, TextLabel *text)
+/** Text/getTextPos
+*
+* SYNOPSIS
+*   array getTextPos(widget, text)
+* DESCRIPTION
+*   Given a reference to a text object, this will return an array
+*   containing the x and y coordinate of the text object.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to text -- text meter
+* RETURN VALUE
+*   x and y coordinate
+*/
+QVariantList KarambaInterface::getTextPos(const Karamba *k, const TextLabel *text) const
 {
     return getMeterPos(k, text, "TextLabel");
 }
 
-bool KarambaInterface::setTextSensor(Karamba *k, TextLabel *text, QString sensor)
+/** Text/setTextSensor
+*
+* SYNOPSIS
+*   boolean setTextSensor(widget, text, sensor)
+* DESCRIPTION
+*   Sets a new sensor string
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to text -- text meter
+*   * string sensor -- new sensor string as in theme files
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::setTextSensor(Karamba *k, TextLabel *text, const QString &sensor) const
 {
     return setMeterSensor(k, text, "TextLabel", sensor);
 }
 
-QString KarambaInterface::getTextSensor(Karamba *k, TextLabel *text)
+/** Text/getTextSensor
+*
+* SYNOPSIS
+*   string getTextSensor(widget, text)
+* DESCRIPTION
+*   Gets the current sensor string
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to text -- text meter
+* RETURN VALUE
+*   currently used sensor string
+*/
+QString KarambaInterface::getTextSensor(const Karamba *k, const TextLabel *text) const
 {
     return getMeterSensor(k, text, "TextLabel");
 }
 
-bool KarambaInterface::resizeText(Karamba *k, TextLabel *text, int width, int height)
+/** Text/resizeText
+*
+* SYNOPSIS
+*   boolean resizeText(widget, text, w, h)
+* DESCRIPTION
+*   This will resize text to the new height and width.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to text -- text meter
+*   * integer w -- new width
+*   * integer h -- new height
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::resizeText(const Karamba *k, TextLabel *text, int width, int height) const
 {
     return resizeMeter(k, text, "TextLabel", width, height);
 }
 
-QVariantList KarambaInterface::getTextSize(Karamba *k, TextLabel *text)
+/** Text/getTextSize
+*
+* SYNOPSIS
+*   array getTextSize(widget, text)
+* DESCRIPTION
+*   Given a reference to a text object, this will return an array
+*   containing the height and width of a text object.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to text -- text meter
+* RETURN VALUE
+*   height and width of the text
+*/
+QVariantList KarambaInterface::getTextSize(const Karamba *k, const TextLabel *text) const
 {
     return getMeterSize(k, text, "TextLabel");
 }
 
-QObject* KarambaInterface::getThemeText(Karamba *k, QString meter)
+/** Text/getThemeText
+*
+* SYNOPSIS
+*   reference getThemeText(widget, name)
+* DESCRIPTION
+*   You can reference text in your python code that was created in the
+*   theme file. Basically, you just add a NAME= value to the TEXT line in
+*   the .theme file. Then if you want to use that object, instead of calling
+*   createText, you can call this function.
+*
+*   The name you pass to the function is the same one that you gave it for
+*   the NAME= parameter in the .theme file.
+* ARGUMENTS
+*   * long widget -- karamba
+*   * string name -- name of the text in the theme file
+* RETURN VALUE
+*   reference to text
+*/
+QObject* KarambaInterface::getThemeText(const Karamba *k, const QString &meter) const
 {
     return getThemeMeter(k, meter, "TextLabel");
 }
 
-bool KarambaInterface::hideText(Karamba *k, TextLabel *text)
+/** Text/hideText
+*
+* SYNOPSIS
+*   boolean hideText(widget, text)
+* DESCRIPTION
+*   Hides text that is visible. You need to call redrawWidget() afterwords
+*   to actually hide the text on screen.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to text -- text meter
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::hideText(const Karamba *k, TextLabel *text) const
 {
     return hideMeter(k, text, "TextLabel");
 }
 
-bool KarambaInterface::showText(Karamba *k, TextLabel *text)
+/** Text/showText
+*
+* SYNOPSIS
+*   boolean showText(widget, text)
+* DESCRIPTION
+*   Shows text that has been hidden with hideText().
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to text -- text meter
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::showText(const Karamba *k, TextLabel *text) const
 {
     return showMeter(k, text, "TextLabel");
 }
 
-QObject* KarambaInterface::changeText(Karamba *k, TextLabel *label, QString text)
+/** Text/changeText
+*
+* SYNOPSIS
+*   reference changeText(widget, text, value)
+* DESCRIPTION
+*   This will change the contents of a text widget.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to text -- text meter
+*   * long value -- new text to display
+* RETURN VALUE
+*   true if successful
+*/
+QObject* KarambaInterface::changeText(const Karamba *k, TextLabel *label, const QString &text) const
 {
     return setMeterStringValue(k, label, "TextLabel", text);
 }
 
-QString KarambaInterface::getTextValue(Karamba *k, TextLabel *label)
+/** Text/getTextValue
+*
+* SYNOPSIS
+*   string getTextValue(widget, text)
+* DESCRIPTION
+*   Returns there current text value.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to text -- text meter
+* RETURN VALUE
+*   value
+*/
+QString KarambaInterface::getTextValue(const Karamba *k, const TextLabel *label) const
 {
     return getMeterStringValue(k, label, "TextLabel");
 }
 
-bool KarambaInterface::changeTextShadow(Karamba *k, TextLabel *label, int shadow)
+/** Text/changeTextShadow
+*
+* SYNOPSIS
+*   boolean changeTextShadow(widget, text, shadow)
+* DESCRIPTION
+*    This will change the shadow size of a text widget (only ones you
+*    created through python currently). textToChange is the reference to the
+*    text object to change that you saved from the createText() call. size
+*    is the offset of the shadow in pixels. 1 or 2 is a good value in most
+*    cases.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to text -- text meter
+*   * integer shadow -- shadow offset
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::changeTextShadow(const Karamba *k, TextLabel *label, int shadow) const
 {
-    if (!checkKarambaAndMeter(k, label, "TextLabel"))
+    if (!checkKarambaAndMeter(k, label, "TextLabel")) {
         return false;
+    }
 
     label->setShadow(shadow);
     return true;
 }
 
-int KarambaInterface::getTextShadow(Karamba *k, TextLabel *text)
+/** Text/getTextShadow
+*
+* SYNOPSIS
+*   integer getTextShadow(widget, text)
+* DESCRIPTION
+*   Gets the current shadow offset
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to text -- text meter
+* RETURN VALUE
+*   shadow offset
+*/
+int KarambaInterface::getTextShadow(const Karamba *k, const TextLabel *text) const
 {
-    if (!checkKarambaAndMeter(k, text, "TextLabel"))
+    if (!checkKarambaAndMeter(k, text, "TextLabel")) {
         return -1;
+    }
 
     return text->getShadow();
 }
 
-bool KarambaInterface::changeTextFont(Karamba *k, TextLabel *text, QString font)
+/** Text/changeTextFont
+*
+* SYNOPSIS
+*   boolean changeTextFont(widget, text, font)
+* DESCRIPTION
+*   This will change the font of a text widget (only ones you created
+*   through python currently). Text is the reference to the text
+*   object to change that you saved from the createText() call. Font is a
+*   string the the name of the font to use.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to text -- text meter
+*   * string font -- font name
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::changeTextFont(const Karamba *k, TextLabel *text, const QString &font) const
 {
-    if (!checkKarambaAndMeter(k, text, "TextLabel"))
+    if (!checkKarambaAndMeter(k, text, "TextLabel")) {
         return false;
+    }
 
     text->setFont(font);
+
     return true;
 }
 
-QString KarambaInterface::getTextFont(Karamba *k, TextLabel *text)
+/** Text/getTextFont
+*
+* SYNOPSIS
+*   string getTextFont(widget, text)
+* DESCRIPTION
+*   Gets the current text font name
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to text -- text meter
+* RETURN VALUE
+*   font name
+*/
+QString KarambaInterface::getTextFont(const Karamba *k, const TextLabel *text) const
 {
-    if (!checkKarambaAndMeter(k, text, "TextLabel"))
+    if (!checkKarambaAndMeter(k, text, "TextLabel")) {
         return false;
+    }
 
     return text->getFont();
 }
 
-bool KarambaInterface::changeTextColor(Karamba *k, TextLabel *text, int red, int green, int blue)
+/** Text/changeTextColor
+*
+* SYNOPSIS
+*   boolean changeTextColor(widget, text, r, g, b)
+* DESCRIPTION
+*   This will change the color of a text widget (only ones you created
+*   through python currently). textToChange is the reference to the text
+*   object to change that you saved from the createText() call. r, g, b are
+*   ints from 0 to 255 that represent red, green, and blue.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to text -- text meter
+*   * integer red -- red component of color
+*   * integer green -- green component of color
+*   * integer blue -- blue component of color
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::changeTextColor(const Karamba *k, TextLabel *text, int red, int green, int
+        blue) const
 {
     return setMeterColor(k, text, "TextLabel", red, green, blue);
 }
 
-QVariantList KarambaInterface::getTextColor(Karamba *k, TextLabel *text)
+/** Text/getTextColor
+*
+* SYNOPSIS
+*   array getTextColor(widget, text)
+* DESCRIPTION
+*   Gets the current text color
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to text -- text meter
+* RETURN VALUE
+*   (red, green, blue)
+*/
+QVariantList KarambaInterface::getTextColor(const Karamba *k, const TextLabel *text) const
 {
     return getMeterColor(k, text, "TextLabel");
 }
 
-bool KarambaInterface::changeTextSize(Karamba *k, TextLabel *text, int size)
+/** Text/changeTextSize
+*
+* SYNOPSIS
+*   boolean changeTextSize(widget, text, size)
+* DESCRIPTION
+*   This will change the font size of a text widget (only ones you created
+*   through python currently). text is the reference to the text
+*   object to change that you saved from the createText() call. size is the
+*   new font point size.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to text -- text meter
+*   * integer size -- new size for text
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::changeTextSize(const Karamba *k, TextLabel *text, int size) const
 {
-    if (!checkKarambaAndMeter(k, text, "TextLabel"))
+    if (!checkKarambaAndMeter(k, text, "TextLabel")) {
         return false;
+    }
 
     text->setFontSize(size);
+
     return true;
 }
 
-int KarambaInterface::getTextFontSize(Karamba *k, TextLabel *text)
+/** Text/getTextFontSize
+*
+* SYNOPSIS
+*   integer getTextFontSize(widget, text)
+* DESCRIPTION
+*   Gets the current text font size.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to text -- text meter
+* RETURN VALUE
+*   text font size
+*/
+int KarambaInterface::getTextFontSize(const Karamba *k, const TextLabel *text) const
 {
-    if (!checkKarambaAndMeter(k, text, "TextLabel"))
+    if (!checkKarambaAndMeter(k, text, "TextLabel")) {
         return -1;
+    }
 
     return text->getFontSize();
 }
 
-QString KarambaInterface::getTextAlign(Karamba *k, TextLabel *text)
+/** Text/getTextAlign
+*
+* SYNOPSIS
+*   string getTextAlign(widget, text)
+* DESCRIPTION
+*   Gets the current text alignment.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to text -- text meter
+* RETURN VALUE
+*   LEFT, CENTER or RIGHT as string
+*/
+QString KarambaInterface::getTextAlign(const Karamba *k, const TextLabel *text) const
 {
-    if (!checkKarambaAndMeter(k, text, "TextLabel"))
+    if (!checkKarambaAndMeter(k, text, "TextLabel")) {
         return false;
+    }
 
     return text->getAlignment();
 }
 
-bool KarambaInterface::setTextAlign(Karamba *k, TextLabel *text, QString alignment)
+/** Text/setTextAlign
+*
+* SYNOPSIS
+*   boolean setTextAlign(widget, text, align)
+* DESCRIPTION
+*   Sets the text label align.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to text -- text meter
+*   * string align -- LEFT, CENTER or RIGHT as string
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::setTextAlign(const Karamba *k, TextLabel *text, const QString &alignment)
+    const
 {
-    if (!checkKarambaAndMeter(k, text, "TextLabel"))
+    if (!checkKarambaAndMeter(k, text, "TextLabel")) {
         return false;
+    }
 
     text->setAlignment(alignment);
+
     return true;
 }
 
-bool KarambaInterface::setTextScroll(Karamba *k, TextLabel *text, QString type, int x, int y, int gap, int pause)
+bool KarambaInterface::setTextScroll(const Karamba *k, TextLabel *text, const QString &type, int x,
+        int y, int gap, int pause) const
 {
-    if (!checkKarambaAndMeter(k, text, "TextLabel"))
+    if (!checkKarambaAndMeter(k, text, "TextLabel")) {
         return false;
+    }
 
     text->setScroll(type, QPoint(x, y), gap, pause);
+
     return true;
 }
 
 
 
-// This is kept for compatibility only
-bool KarambaInterface::createWidgetMask(Karamba *k, QString mask)
+
+
+/** Widget/createWidgetMask
+*
+* SYNOPSIS
+*   long createWidgetMask(widget, mask)
+* DESCRIPTION
+*   This function doesn't work currently due to a bug in KDE. Please use
+*   MASK= in your .theme file for the time being.
+* WARNING
+*   This function does nothing in SuperKaramba 0.50 and later
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * string mask --  The path to the widget mask file.
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::createWidgetMask(const Karamba *k, const QString &mask) const
 {
     Q_UNUSED(k);
     Q_UNUSED(mask);
@@ -3512,12 +4931,26 @@ bool KarambaInterface::createWidgetMask(Karamba *k, QString mask)
     return true;
 }
 
-QVariantList KarambaInterface::getWidgetPosition(Karamba *k)
+/** Widget/getWidgetPosition
+*
+* SYNOPSIS
+*   array getWidgetPosition(widget)
+* DESCRIPTION
+*   Returns an array containing the x and y position of you widget.
+*   widget is a reference to the current widget.
+* ARGUMENTS
+*   * reference to widget -- karamba
+* RETURN VALUE
+*   position of the widget
+*/
+QVariantList KarambaInterface::getWidgetPosition(const Karamba *k) const
 {
-    if (!checkKaramba(k))
+    if (!checkKaramba(k)) {
         return QVariantList();
+    }
 
     QPoint pos = k->getPosition();
+
     QVariantList ret;
     ret << pos.x();
     ret << pos.y();
@@ -3525,16 +4958,45 @@ QVariantList KarambaInterface::getWidgetPosition(Karamba *k)
     return ret;
 }
 
-bool KarambaInterface::moveWidget(Karamba *k, int x, int y)
+/** Widget/moveWidget
+*
+* SYNOPSIS
+*   boolean moveWidget(widget, x, y)
+* DESCRIPTION
+*   Moves the widget to the new screen location.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * integer x -- x coordinate
+*   * integer y -- y coordinate
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::moveWidget(Karamba *k, int x, int y) const
 {
-    if (!checkKaramba(k))
+    if (!checkKaramba(k)) {
         return false;
+    }
 
     k->moveToPos(QPoint(x, y));
+
     return true;
 }
 
-bool KarambaInterface::redrawWidget(Karamba *k)
+/** Widget/redrawWidget
+*
+* SYNOPSIS
+*   boolean redrawWidget(widget)
+* DESCRIPTION
+*   This is THE most important function. After you do a bunch of other calls
+*   (moving images, adding images or text, etc), you call this to update the
+*   widget display area. You will not see your changes until you call this.
+*   Redraws all meters.
+* ARGUMENTS
+*   * reference to widget -- karamba
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::redrawWidget(Karamba *k) const
 {
     if (!checkKaramba(k))
         return false;
@@ -3545,25 +5007,65 @@ bool KarambaInterface::redrawWidget(Karamba *k)
     return true;
 }
 
-// This is kept for compatibility only
-bool KarambaInterface::redrawWidgetBackground(Karamba *k)
+/** Widget/redrawWidgetBackground
+*
+* SYNOPSIS
+*   boolean redrawWidgetBackground(widget)
+* DESCRIPTION
+*   Redraws the widget background.
+* WARNING
+*   This function does nothing in SuperKaramba 0.50 and later
+* ARGUMENTS
+*   * reference to widget -- karamba
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::redrawWidgetBackground(const Karamba *k) const
 {
     Q_UNUSED(k);
 
     return true;
 }
 
-bool KarambaInterface::resizeWidget(Karamba *k, int width, int height)
+/** Widget/resizeWidget
+*
+* SYNOPSIS
+*   boolean resizeWidget(widget, w, h)
+* DESCRIPTION
+*   Resizes the widget to the new width and height.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * integer w -- width
+*   * integer h -- height
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::resizeWidget(Karamba *k, int width, int height) const
 {
-    if (!checkKaramba(k))
+    if (!checkKaramba(k)) {
         return false;
+    }
 
     k->resizeTo(width, height);
+
     return true;
 }
 
-// This is kept for compatibility only
-bool KarambaInterface::toggleWidgetRedraw(Karamba *k, bool enable)
+/** Widget/toggleWidgetRedraw
+*
+* SYNOPSIS
+*   boolean toggleWidgetRedraw(widget, b)
+* DESCRIPTION
+*   Toggles widget redraw.
+** WARNING
+*   This function does nothing in SuperKaramba 0.50 and later
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * boolean b -- 1 = widget is drawn
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::toggleWidgetRedraw(const Karamba *k, bool enable) const
 {
     Q_UNUSED(k);
     Q_UNUSED(enable);

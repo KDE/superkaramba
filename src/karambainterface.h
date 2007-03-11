@@ -286,24 +286,24 @@ public Q_SLOTS:
     bool wantRightButton(Karamba *k, bool enable) const;
 
     // RichText
-    QObject* createRichText(Karamba* k, QString text, bool underline = false);
-    bool deleteRichText(Karamba *k, RichTextLabel *label);
-    bool moveRichText(Karamba *k, RichTextLabel *label, int x, int y);
-    QVariantList getRichTextPos(Karamba *k, RichTextLabel *label);
-    bool resizeRichText(Karamba *k, RichTextLabel *label, int width, int height);
-    bool setRichTextWidth(Karamba *k, RichTextLabel *label, int width);
-    QVariantList getRichTextSize(Karamba *k, RichTextLabel *label);
-    QObject* changeRichText(Karamba *k, RichTextLabel *label, QString text);
-    QString getRichTextValue(Karamba *k, RichTextLabel *label);
-    QObject* getThemeRichText(Karamba *k, QString meter);
-    bool hideRichText(Karamba *k, RichTextLabel *label);
-    bool showRichText(Karamba *k, RichTextLabel *label);
-    bool changeRichTextFont(Karamba *k, RichTextLabel *label, QString font);
-    QString getRichTextFont(Karamba *k, RichTextLabel *label);
-    bool changeRichTextSize(Karamba *k, RichTextLabel *label, int size);
-    int getRichTextFontSize(Karamba *k, RichTextLabel *label);
-    bool setRichTextSensor(Karamba *k, RichTextLabel *label, QString sensor);
-    QString getRichTextSensor(Karamba *k, RichTextLabel *label);
+    QObject* createRichText(Karamba* k, const QString &text, bool underline = false) const;
+    bool deleteRichText(Karamba *k, RichTextLabel *label) const;
+    bool moveRichText(Karamba *k, RichTextLabel *label, int x, int y) const;
+    QVariantList getRichTextPos(const Karamba *k, const RichTextLabel *label) const;
+    bool resizeRichText(const Karamba *k, RichTextLabel *label, int width, int height) const;
+    bool setRichTextWidth(const Karamba *k, RichTextLabel *label, int width) const;
+    QVariantList getRichTextSize(const Karamba *k, const RichTextLabel *label) const;
+    QObject* changeRichText(const Karamba *k, RichTextLabel *label, const QString &text) const;
+    QString getRichTextValue(const Karamba *k, const RichTextLabel *label) const;
+    QObject* getThemeRichText(const Karamba *k, const QString &meter) const;
+    bool hideRichText(const Karamba *k, RichTextLabel *label) const;
+    bool showRichText(const Karamba *k, RichTextLabel *label) const;
+    bool changeRichTextFont(const Karamba *k, RichTextLabel *label, const QString &font) const;
+    QString getRichTextFont(const Karamba *k, const RichTextLabel *label) const;
+    bool changeRichTextSize(const Karamba *k, RichTextLabel *label, int size) const;
+    int getRichTextFontSize(const Karamba *k, const RichTextLabel *label) const;
+    bool setRichTextSensor(Karamba *k, RichTextLabel *label, const QString &sensor) const;
+    QString getRichTextSensor(const Karamba *k, const RichTextLabel *label) const;
 
     /*
         // Systray
@@ -313,49 +313,52 @@ public Q_SLOTS:
         long moveSystray
         long showSystray
         long updateSystrayLayout
-
-        // Task
-        long getStartupInfo
-        long getStartupList
-        long getTaskInfo
-        long getTaskList
-        long getTaskNames
-        long performTaskAction
     */
+
+    // Task
+    QVariantList getStartupInfo(const Karamba *k, const Startup::StartupPtr startup)
+    const;
+    QVariantList getStartupList(const Karamba *k) const;
+    QVariantList getTaskInfo(const Karamba *k, Task::TaskPtr task) const;
+    QVariantList getTaskList(const Karamba *k) const;
+    QStringList getTaskNames(const Karamba *k) const;
+    bool performTaskAction(const Karamba *k, Task::TaskPtr task, int action) const;
+
     // Text
-    QObject* createText(Karamba* k, int x, int y, int width, int height, QString text);
-    bool deleteText(Karamba *k, TextLabel *text);
-    bool moveText(Karamba *k, TextLabel *text, int x, int y);
-    QVariantList getTextPos(Karamba *k, TextLabel *text);
-    bool setTextSensor(Karamba *k, TextLabel *text, QString sensor);
-    QString getTextSensor(Karamba *k, TextLabel *text);
-    bool resizeText(Karamba *k, TextLabel *text, int width, int height);
-    QVariantList getTextSize(Karamba *k, TextLabel *text);
-    QObject* getThemeText(Karamba *k, QString meter);
-    bool hideText(Karamba *k, TextLabel *text);
-    bool showText(Karamba *k, TextLabel *text);
-    QObject* changeText(Karamba *k, TextLabel *label, QString text);
-    QString getTextValue(Karamba *k, TextLabel *label);
-    bool changeTextShadow(Karamba *k, TextLabel *label, int shadow);
-    int getTextShadow(Karamba *k, TextLabel *text);
-    bool changeTextFont(Karamba *k, TextLabel *text, QString font);
-    QString getTextFont(Karamba *k, TextLabel *text);
-    bool changeTextColor(Karamba *k, TextLabel *text, int red, int green, int blue);
-    QVariantList getTextColor(Karamba *k, TextLabel *text);
-    bool changeTextSize(Karamba *k, TextLabel *text, int size);
-    int getTextFontSize(Karamba *k, TextLabel *text);
-    QString getTextAlign(Karamba *k, TextLabel *text);
-    bool setTextAlign(Karamba *k, TextLabel *text, QString alignment);
-    bool setTextScroll(Karamba *k, TextLabel *text, QString type, int x = 0, int y = 0, int gap = 0, int pause = 0);
+    QObject* createText(Karamba* k, int x, int y, int width, int height, const QString &text) const;
+    bool deleteText(Karamba *k, TextLabel *text) const;
+    bool moveText(Karamba *k, TextLabel *text, int x, int y) const;
+    QVariantList getTextPos(const Karamba *k, const TextLabel *text) const;
+    bool setTextSensor(Karamba *k, TextLabel *text, const QString &sensor) const;
+    QString getTextSensor(const Karamba *k, const TextLabel *text) const;
+    bool resizeText(const Karamba *k, TextLabel *text, int width, int height) const;
+    QVariantList getTextSize(const Karamba *k, const TextLabel *text) const;
+    QObject* getThemeText(const Karamba *k, const QString &meter) const;
+    bool hideText(const Karamba *k, TextLabel *text) const;
+    bool showText(const Karamba *k, TextLabel *text) const;
+    QObject* changeText(const Karamba *k, TextLabel *label, const QString &text) const;
+    QString getTextValue(const Karamba *k, const TextLabel *label) const;
+    bool changeTextShadow(const Karamba *k, TextLabel *label, int shadow) const;
+    int getTextShadow(const Karamba *k, const TextLabel *text) const;
+    bool changeTextFont(const Karamba *k, TextLabel *text, const QString &font) const;
+    QString getTextFont(const Karamba *k, const TextLabel *text) const;
+    bool changeTextColor(const Karamba *k, TextLabel *text, int red, int green, int blue) const;
+    QVariantList getTextColor(const Karamba *k, const TextLabel *text) const;
+    bool changeTextSize(const Karamba *k, TextLabel *text, int size) const;
+    int getTextFontSize(const Karamba *k, const TextLabel *text) const;
+    QString getTextAlign(const Karamba *k, const TextLabel *text) const;
+    bool setTextAlign(const Karamba *k, TextLabel *text, const QString &alignment) const;
+    bool setTextScroll(const Karamba *k, TextLabel *text, const QString &type, int x = 0, int y = 0,
+            int gap = 0, int pause = 0) const;
 
     // Widget
-    bool createWidgetMask(Karamba *k, QString mask);
-    QVariantList getWidgetPosition(Karamba *k);
-    bool moveWidget(Karamba *k, int x, int y);
-    bool redrawWidget(Karamba *k);
-    bool redrawWidgetBackground(Karamba *k);
-    bool resizeWidget(Karamba *k, int width, int height);
-    bool toggleWidgetRedraw(Karamba *k, bool enable);
+    bool createWidgetMask(const Karamba *k, const QString &mask) const;
+    QVariantList getWidgetPosition(const Karamba *k) const;
+    bool moveWidget(Karamba *k, int x, int y) const;
+    bool redrawWidget(Karamba *k) const;
+    bool redrawWidgetBackground(const Karamba *k) const;
+    bool resizeWidget(Karamba *k, int width, int height) const;
+    bool toggleWidgetRedraw(const Karamba *k, bool enable) const;
 };
 
 #endif

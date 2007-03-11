@@ -1706,7 +1706,7 @@ void Karamba::resizeTo(int width, int height)
     setFixedSize(width, height);
 }
 
-QPoint Karamba::getPosition()
+QPoint Karamba::getPosition() const
 {
     if (!m_globalView)
         return m_view->pos();

@@ -115,7 +115,7 @@ public:
 
     void moveToPos(QPoint pos);
     void resizeTo(int width, int height);
-    QPoint getPosition();
+    QPoint getPosition() const;
     bool sendDataToTheme(const QString &prettyThemeName, const QString &data) const;
     QVariant retrieveReceivedData() const;
     bool sendData() const;
