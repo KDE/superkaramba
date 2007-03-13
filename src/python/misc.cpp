@@ -449,7 +449,6 @@ long openNamedTheme(char* path, char *name, bool is_sub_theme)
 {
 
     QString filename;
-    Karamba* currTheme = 0;
     Karamba* newTheme = 0;
 
     filename = QString::fromAscii(path);
@@ -460,8 +459,7 @@ long openNamedTheme(char* path, char *name, bool is_sub_theme)
         QString prettyName(name);
         KarambaApplication* app = (KarambaApplication*)qApp;
         if (!app->themeExists(prettyName)) {
-            newTheme = new Karamba(KUrl(filename), currTheme->getView(),
-                                   currTheme->getScene());
+            newTheme = new Karamba(KUrl(filename));
 
             if (is_sub_theme)
                 currTheme->addToGroup(newTheme);
@@ -477,7 +475,6 @@ long openTheme(char* path)
 {
 
     QString filename;
-    Karamba* currTheme = 0;
     Karamba* newTheme = 0;
 
     filename = QString::fromAscii(path);
@@ -485,8 +482,7 @@ long openTheme(char* path)
     QFileInfo file(filename);
 
     if (file.exists()) {
-        newTheme = new Karamba(KUrl(filename), currTheme->getView(),
-                               currTheme->getScene());
+        newTheme = new Karamba(KUrl(filename));
         newTheme->show();
     }
 
