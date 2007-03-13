@@ -461,8 +461,8 @@ long openNamedTheme(char* path, char *name, bool is_sub_theme)
         if (!app->themeExists(prettyName)) {
             newTheme = new Karamba(KUrl(filename));
 
-            if (is_sub_theme)
-                currTheme->addToGroup(newTheme);
+            //if (is_sub_theme)
+            //    currTheme->addToGroup(newTheme);
 
             newTheme->show();
         }
