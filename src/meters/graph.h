@@ -25,10 +25,10 @@ public:
     ~Graph();
 
     void setValue(int);
-    int getValue()
+    int getValue() const
     {
         return lastValue;
-    };
+    }
     void setValue(const QString&);
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                QWidget *widget);
