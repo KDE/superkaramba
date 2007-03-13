@@ -3638,10 +3638,11 @@ bool KarambaInterface::translateAll(const Karamba *k, int x, int y) const
 
     foreach(QGraphicsItem *item, items) {
         Meter *meter = dynamic_cast<Meter*>(item);
-        meter->setSize(meter->getX() + x,
-                        meter->getY() + y,
-                        meter->getWidth(),
-                        meter->getHeight());
+        if (meter)
+            meter->setSize(meter->getX() + x,
+                           meter->getY() + y,
+                           meter->getWidth(),
+                           meter->getHeight());
     }
 
     return true;
