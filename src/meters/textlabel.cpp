@@ -424,7 +424,7 @@ void TextLabel::attachClickArea(QString leftMouseButton,
     m_rightMouseButtonAction = rightMouseButton;
 }
 
-QRectF TextLabel::boundingRect()
+QRectF TextLabel::boundingRect() const
 {
     return Meter::boundingRect();
 }

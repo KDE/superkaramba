@@ -38,7 +38,7 @@ public:
     QString getStringValue() const
     {
         return value.join("\n");
-    };
+    }
     void setFontSize(int);
     void setBGColor(QColor clr);
     void setFont(QString);
@@ -65,7 +65,7 @@ public:
 
     bool mouseEvent(QGraphicsSceneMouseEvent *e);
 
-    QRectF boundingRect();
+    QRectF boundingRect() const;
 
     void allowClick(bool enable);
     bool clickable();
