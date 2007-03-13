@@ -3429,7 +3429,7 @@ bool KarambaInterface::managementPopup(const Karamba *k) const
 Karamba* KarambaInterface::openNamedTheme(const QString &themePath, const QString &themeName,
         bool subTheme) const
 {
-    Karamba *newTheme;
+    Karamba *newTheme = 0;
     QFileInfo file(themePath);
 
     if (file.exists()) {
@@ -3456,7 +3456,7 @@ Karamba* KarambaInterface::openNamedTheme(const QString &themePath, const QStrin
 */
 Karamba* KarambaInterface::openTheme(const QString &themePath) const
 {
-    Karamba *newTheme;
+    Karamba *newTheme = 0;
     QFileInfo file(themePath);
 
     if (file.exists()) {
