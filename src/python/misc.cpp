@@ -339,7 +339,8 @@ long removeClickArea(long widget, long click)
     Karamba* currTheme = (Karamba*) widget;
     ClickArea* currMeter = (ClickArea*) click;
 
-    currTheme->removeMeter(currMeter);
+    if (currTheme->removeMeter(currMeter))
+	currMeter = 0; // deleted
     return (long)currMeter;
 }
 
