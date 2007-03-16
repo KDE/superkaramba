@@ -31,10 +31,10 @@ public:
     void setText(QString text, bool linkUnderline = false);
     void setValue(const QString &text);
     void setValue(int v);
-    QString getStringValue()
+    QString getStringValue() const
     {
         return source;
-    };
+    }
 
     void setFont(QString font);
     QString getFont() const;
