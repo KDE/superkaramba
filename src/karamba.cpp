@@ -639,6 +639,8 @@ bool Karamba::parseConfig()
                     //meterList->append(tmp);
                     //passive = false;
                 }
+
+                delete tmpText;
             }
 
             if (lineParser.meter() == "BAR") {
