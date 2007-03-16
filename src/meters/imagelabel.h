@@ -112,10 +112,10 @@ public:
 
     void setValue(int);
     void setValue(QPixmap&);
-    QString getStringValue()
+    QString getStringValue() const
     {
         return imagePath;
-    };
+    }
     void scale(int, int);
     void smoothScale(int, int);
 
