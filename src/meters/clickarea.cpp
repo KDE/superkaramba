@@ -11,6 +11,7 @@
  ***************************************************************************/
 #include "clickarea.h"
 
+#include <kservice.h>
 #include <kservicegroup.h>
 
 #include <QMouseEvent>
