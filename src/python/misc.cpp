@@ -417,16 +417,12 @@ static long callTheme(long widget, char* path, char *str)
     return (long)currTheme;
 }
 
-#ifdef __GNUC__
-#warning wait for DBUS
-#endif
 static long setIncomingData(long widget, char* path, char *obj)
 {
     Karamba* currTheme = (Karamba*) widget;
-    /*
-      if (currTheme)
-        currTheme->setIncomingData(QString(path), QString(obj));
-    */
+    if (currTheme)
+        currTheme->sendData(QString(path), QString(obj));
+
     return (long)currTheme;
 }
 
@@ -435,7 +431,7 @@ static QString getIncomingData(long widget)
     Karamba* currTheme = (Karamba*) widget;
 
     if (currTheme)
-        return currTheme->retrieveReceivedData().toString();
+        return currTheme->retrieveReceivedData();
 
     return QString("");
 }

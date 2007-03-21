@@ -36,6 +36,7 @@ public:
     int newInstance();
 
     bool hasKaramba(const Karamba *k) const;
+    Karamba* getKaramba(const QString &prettyName) const;
     bool themeExists(QString prettyName);
     void closeTheme(QString themeName);
 

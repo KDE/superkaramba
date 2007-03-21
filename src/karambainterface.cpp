@@ -133,6 +133,7 @@ KarambaInterface::KarambaInterface(Karamba *k)
                 "except NameError: pass\n"
                 "try: karamba.connect('keyPressed(QObject*, QObject*, QString)',keyPressed)\n"
                 "except NameError: pass\n"
+                "try: karamba.connect('themeNotify(QObject*, QString, QString)',themeNotify)\n"
             ).arg(scriptFile)
         );
 
@@ -498,6 +499,11 @@ void KarambaInterface::callWidgetMouseMoved(Karamba *k, int x, int y, int button
 void KarambaInterface::callKeyPressed(Karamba *k, Meter *meter, QString key)
 {
     emit keyPressed(k, meter, key);
+}
+
+void KarambaInterface::callThemeNotify(Karamba *k, const QString &sender, const QString &data)
+{
+    emit themeNotify(k, sender, data);
 }
 
 // Calls from scripts --------------------
@@ -3549,10 +3555,10 @@ bool KarambaInterface::run(const QString &appName, const QString &command, const
 *  RETURN VALUE
 *    string containing the last information received from setIncomingData
 */
-QVariant KarambaInterface::getIncommingData(const Karamba *k) const
+QString KarambaInterface::getIncomingData(const Karamba *k) const
 {
     if (!checkKaramba(k)) {
-        return QVariant();
+        return QString::null;
     }
 
     return k->retrieveReceivedData();
@@ -3580,14 +3586,14 @@ QVariant KarambaInterface::getIncommingData(const Karamba *k) const
 */
 
 // Is the theme path or the pretty name required?
-bool KarambaInterface::setIncommingData(const Karamba *k, const QString &themePath, QVariant data)
+bool KarambaInterface::setIncomingData(const Karamba *k, const QString &prettyThemeName, QString data)
     const
 {
     if (checkKaramba(k)) {
         return false;
     }
 
-    return k->sendData();
+    return k->sendData(prettyThemeName, data);
 }
 
 /** Misc/toggleShowDesktop

@@ -1686,20 +1686,42 @@ QPoint Karamba::getPosition() const
         return pos().toPoint();
 }
 
-#ifdef __GNUC__
-#warning These functions need to be implemented with D-Bus
-#endif
+void Karamba::setIncomingData(const QString &data)
+{
+    m_storedData = data;
+}
+
+void Karamba::notifyTheme(const QString &sender, const QString &data)
+{
+    m_interface->callThemeNotify(this, sender, data);
+}
+
 bool Karamba::sendDataToTheme(const QString &prettyThemeName, const QString &data) const
 {
-    return false;
+    Karamba *k = karambaApp->getKaramba(prettyThemeName);
+    if (k == 0) {
+        return false;
+    }
+
+    k->notifyTheme(m_prettyName, data);
+
+    return true;
 }
 
-QVariant Karamba::retrieveReceivedData() const
+QString Karamba::retrieveReceivedData() const
 {
-    return QString();
+    return m_storedData;
 }
 
-bool Karamba::sendData() const
+bool Karamba::sendData(const QString &prettyThemeName, const QString &data) const
 {
-    return false;
+    Karamba *k = karambaApp->getKaramba(prettyThemeName);
+    if (k == 0) {
+        return false;
+    }
+
+    k->setIncomingData(data);
+
+    return true;
 }
+

@@ -72,8 +72,6 @@ public:
 
     const ThemeFile& theme() const;
 
-    int testCallback(int value);
-
     bool hasMeter(const Meter* meter) const;
     bool removeMeter(Meter *meter);
     QString getSensor(const Meter* meter) const;
@@ -116,9 +114,12 @@ public:
     void moveToPos(QPoint pos);
     void resizeTo(int width, int height);
     QPoint getPosition() const;
+
+    void setIncomingData(const QString &data);
+    void notifyTheme(const QString &sender, const QString &data);
     bool sendDataToTheme(const QString &prettyThemeName, const QString &data) const;
-    QVariant retrieveReceivedData() const;
-    bool sendData() const;
+    QString retrieveReceivedData() const;
+    bool sendData(const QString &prettyThemeName, const QString &data) const;
 
     KProcess *currProcess;
     Systemtray *systray;
@@ -211,6 +212,8 @@ private:
     QList<KMenu*> m_menuList;
 
     QString m_prettyName;
+
+    QString m_storedData;
 
     double m_updateTime;
 

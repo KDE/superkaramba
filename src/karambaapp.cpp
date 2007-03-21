@@ -180,6 +180,17 @@ bool KarambaApplication::hasKaramba(const Karamba *k) const
     return m_karambas.contains(const_cast<Karamba*>(k));
 }
 
+Karamba* KarambaApplication::getKaramba(const QString &prettyName) const
+{
+    foreach (Karamba *k, m_karambas) {
+        if (prettyName == k->prettyName()) {
+            return k;
+        }
+    }
+
+    return 0;
+}
+
 void KarambaApplication::buildToolTip()
 {
     if (!m_sysTrayIcon || !m_themesDialog)

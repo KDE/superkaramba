@@ -70,6 +70,7 @@ public:
     void callDesktopChanged(Karamba *k, int desktop);
     void callWidgetMouseMoved(Karamba *k, int x, int y, int button);
     void callKeyPressed(Karamba *k, Meter *meter, QString key);
+    void callThemeNotify(Karamba *k, const QString &sender, const QString &data);
 
 Q_SIGNALS:
     void initWidget(QObject*);
@@ -91,6 +92,7 @@ Q_SIGNALS:
     void desktopChanged(QObject*, int);
     void widgetMouseMoved(QObject*, int, int, int);
     void keyPressed(QObject*, QObject*, QString);
+    void themeNotify(QObject*, QString, QString);
 
 private:
     /// \internal d-pointer class.
@@ -277,8 +279,8 @@ public Q_SLOTS:
     bool removeClickArea(Karamba *k, ClickArea *area) const;
     bool run(const QString &appName, const QString &command, const QString &icon, const QStringList
             &arguments);
-    QVariant getIncommingData(const Karamba *k) const;
-    bool setIncommingData(const Karamba *k, const QString &themePath, QVariant data) const;
+    QString getIncomingData(const Karamba *k) const;
+    bool setIncomingData(const Karamba *k, const QString &prettyThemeName, QString data) const;
     bool toggleShowDesktop(const Karamba *k) const;
     bool translateAll(const Karamba *k, int x, int y) const;
     QString userLanguage(const Karamba *k) const;
