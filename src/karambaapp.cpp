@@ -68,7 +68,7 @@ void KarambaApplication::checkCommandLine(KCmdLineArgs *args, QList<KUrl> &lst)
     }
 }
 
-void KarambaApplication::startThemes(QList<KUrl> &lst)
+void KarambaApplication::startThemes(const QList<KUrl> &lst)
 {
     foreach(KUrl url, lst) {
         Karamba *k = new Karamba(url);
@@ -111,7 +111,7 @@ void KarambaApplication::karambaClosed(Karamba *k)
     delete k;
 }
 
-void KarambaApplication::closeTheme(QString themeName)
+void KarambaApplication::closeTheme(const QString &themeName)
 {
     foreach(Karamba *k, m_karambas) {
         if (k->objectName() == themeName) {
@@ -120,7 +120,7 @@ void KarambaApplication::closeTheme(QString themeName)
     }
 }
 
-bool KarambaApplication::themeExists(QString prettyName)
+bool KarambaApplication::themeExists(const QString &prettyName) const
 {
     foreach(Karamba *k, m_karambas) {
         if (k->prettyName() == prettyName)
@@ -135,8 +135,9 @@ void KarambaApplication::checkPreviousSession(QList<KUrl> &lst)
     if (isSessionRestored()) {
         KConfig* config = sessionConfig();
         QList<QString> themePaths = config->group("General Options").readEntry("OpenThemes", QList<QString>());
-        foreach(QString path, themePaths)
-        lst.append(KUrl(path));
+        foreach(QString path, themePaths) {
+            lst.append(KUrl(path));
+        }
     }
 }
 

@@ -37,8 +37,8 @@ public:
 
     bool hasKaramba(const Karamba *k) const;
     Karamba* getKaramba(const QString &prettyName) const;
-    bool themeExists(QString prettyName);
-    void closeTheme(QString themeName);
+    bool themeExists(const QString &prettyName) const;
+    void closeTheme(const QString &themeName);
 
     void setupSysTray(KAboutData* about);
 
@@ -51,7 +51,7 @@ public Q_SLOTS:
 
 private:
     void checkCommandLine(KCmdLineArgs *args, QList<KUrl> &lst);
-    void startThemes(QList<KUrl> &lst);
+    void startThemes(const QList<KUrl> &lst);
     void checkPreviousSession(QList<KUrl> &lst);
     void setToolTip(const QString &tip = QString());
     void showKarambaMenuExtension(bool show = true);
