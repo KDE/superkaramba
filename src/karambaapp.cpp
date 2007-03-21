@@ -25,6 +25,7 @@
 #include <khelpmenu.h>
 #include <kstandardaction.h>
 #include <kactioncollection.h>
+#include <kmenu.h>
 
 #include "meters/textfield.h"
 
@@ -37,19 +38,8 @@
 
 KarambaApplication::KarambaApplication(Display *display, Qt::HANDLE visual, Qt::HANDLE colormap)
         :   KUniqueApplication(display, visual, colormap),
-        m_scene(0),
-        m_view(0),
         m_themesDialog(0)
 {
-    bool globalView = false;
-
-    if (globalView) {
-        m_scene = new QGraphicsScene;
-        m_view = new MainWidget(m_scene);
-        m_view->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
-
-        m_view->show();
-    }
 }
 
 KarambaApplication::~KarambaApplication()
@@ -57,11 +47,7 @@ KarambaApplication::~KarambaApplication()
     while (m_karambas.count()) {
         Karamba *k = m_karambas.takeFirst();
         k->closeWidget();
-        removeKaramba(k);
     }
-
-    delete m_view;
-    delete m_scene;
 
     delete m_themesDialog;
 }
@@ -85,24 +71,44 @@ void KarambaApplication::checkCommandLine(KCmdLineArgs *args, QList<KUrl> &lst)
 void KarambaApplication::startThemes(QList<KUrl> &lst)
 {
     foreach(KUrl url, lst) {
-        Karamba *k = new Karamba(url, m_view, m_scene);
-        m_karambas.append(k);
+        Karamba *k = new Karamba(url);
+        connect(k, SIGNAL(widgetStarted(Karamba*, bool)),
+                this, SLOT(karambaStarted(Karamba*, bool)));
     }
 
     buildToolTip();
 }
 
-void KarambaApplication::removeKaramba(Karamba *k)
+void KarambaApplication::karambaStarted(Karamba *k, bool success)
+{
+    if (success) {
+        if (!m_karambas.contains(k)) {
+            m_karambas.append(k);
+            int instance = m_themesDialog->addTheme(k->prettyName(), k->theme().file());
+            k->setInstance(instance);
+            connect(k, SIGNAL(widgetClosed(Karamba*)),
+                this, SLOT(karambaClosed(Karamba*)));
+
+            if (!SuperKarambaSettings::showSysTray()) {
+                showKarambaMenuExtension();
+            }
+        }
+    } else {
+        karambaClosed(k);
+    }
+
+    buildToolTip();
+}
+
+void KarambaApplication::karambaClosed(Karamba *k)
 {
     m_karambas.removeAll(k);
 
-    if (m_scene)
-        m_scene->removeItem(k);
-
     m_themesDialog->removeTheme(k->prettyName(), k->theme().file(), k->instance());
 
-    delete k;
     buildToolTip();
+
+    delete k;
 }
 
 void KarambaApplication::closeTheme(QString themeName)
@@ -110,18 +116,8 @@ void KarambaApplication::closeTheme(QString themeName)
     foreach(Karamba *k, m_karambas) {
         if (k->objectName() == themeName) {
             k->closeWidget();
-            removeKaramba(k);
         }
     }
-}
-
-void KarambaApplication::addKaramba(Karamba *newK)
-{
-    m_karambas.append(newK);
-    int instance = m_themesDialog->addTheme(newK->prettyName(), newK->theme().file());
-    newK->setInstance(instance);
-
-    buildToolTip();
 }
 
 bool KarambaApplication::themeExists(QString prettyName)
@@ -143,7 +139,6 @@ void KarambaApplication::checkPreviousSession(QList<KUrl> &lst)
         lst.append(KUrl(path));
     }
 }
-
 
 int KarambaApplication::newInstance()
 {
@@ -168,11 +163,10 @@ int KarambaApplication::newInstance()
     return 0;
 }
 
-void KarambaApplication::globalQuitSuperKaramba()
+void KarambaApplication::quitSuperKaramba()
 {
     foreach(Karamba *k, m_karambas) {
         k->closeWidget();
-        removeKaramba(k);
     }
 
     if (m_themesDialog)
@@ -221,18 +215,10 @@ void KarambaApplication::setToolTip(const QString &tip)
     m_sysTrayIcon->setToolTip(tip);
 }
 
-void KarambaApplication::globalHideSysTray(bool hide)
-{
-    SuperKarambaSettings::setShowSysTray(!hide);
-    SuperKarambaSettings::writeConfig();
-
-    hideSysTray(hide);
-}
-
-void KarambaApplication::hideSysTray(bool hide)
+void KarambaApplication::toggleSystemTray()
 {
     //kdDebug() << k_funcinfo << endl;
-    if (hide) {
+    if (m_sysTrayIcon->isVisible()) {
         if (m_sysTrayIcon) {
             KMessageBox::information(m_themesDialog, i18n("<qt>Hiding the system tray icon will keep SuperKaramba running "
                                      "in background. To show it again use the theme menu.</qt>"),
@@ -247,19 +233,38 @@ void KarambaApplication::hideSysTray(bool hide)
         if (m_sysTrayIcon)
             m_sysTrayIcon->show();
     }
+
+    SuperKarambaSettings::setShowSysTray(m_sysTrayIcon->isVisible());
+    SuperKarambaSettings::writeConfig();
 }
 
 void KarambaApplication::showKarambaMenuExtension(bool show)
 {
     foreach(Karamba *k, m_karambas) {
-        if (show)
-            k->showMenuExtension();
+        if (show) {
+            KMenu *menu = new KMenu();
+            menu->setTitle("SuperKaramba");
+
+            menu->addAction(KIcon("superkaramba"),
+                            i18n("Show System Tray Icon"), this,
+                            SLOT(toggleSystemTray()),
+                            Qt::CTRL + Qt::Key_S);
+
+            menu->addAction(KIcon("get-hot-new-stuff"),
+                            i18n("&Manage Themes..."), this,
+                            SLOT(showThemeDialog()), Qt::CTRL + Qt::Key_M);
+
+            menu->addAction(KIcon("application-exit"),
+                            i18n("&Quit SuperKaramba"), this,
+                            SLOT(quitSuperKaramba()), Qt::CTRL + Qt::Key_Q);
+            k->setMenuExtension(menu);
+        }
         else
-            k->hideMenuExtension();
+            k->removeMenuExtension();
     }
 }
 
-void KarambaApplication::globalShowThemeDialog(QSystemTrayIcon::ActivationReason reason)
+void KarambaApplication::showThemeDialog(QSystemTrayIcon::ActivationReason reason)
 {
     if (reason == QSystemTrayIcon::Context)
         m_sysTrayIcon->show();
@@ -281,7 +286,7 @@ void KarambaApplication::setupSysTray(KAboutData* about)
     QMenu *menu = m_sysTrayIcon->contextMenu();
     menu->addAction(KIcon("superkaramba"),
                     i18n("Hide System Tray Icon"), this,
-                    SLOT(globalHideSysTray()));
+                    SLOT(toggleSystemTray()));
 
     menu->addSeparator();
 
@@ -310,8 +315,9 @@ void KarambaApplication::setupSysTray(KAboutData* about)
         m_sysTrayIcon->hide();
 
     connect(m_sysTrayIcon, SIGNAL(quitSelected()),
-            this, SLOT(globalQuitSuperKaramba()));
+            this, SLOT(quitSuperKaramba()));
     connect(m_sysTrayIcon,
             SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
-            this, SLOT(globalShowThemeDialog(QSystemTrayIcon::ActivationReason)));
+            this, SLOT(showThemeDialog(QSystemTrayIcon::ActivationReason)));
 }
+

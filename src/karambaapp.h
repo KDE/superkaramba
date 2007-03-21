@@ -35,33 +35,31 @@ public:
 
     int newInstance();
 
-    void addKaramba(Karamba *newK);
-    void removeKaramba(Karamba *k);
-
     bool hasKaramba(const Karamba *k) const;
     bool themeExists(QString prettyName);
     void closeTheme(QString themeName);
 
-    void buildToolTip();
     void setupSysTray(KAboutData* about);
-    bool usingKross() const;
 
 public Q_SLOTS:
-    void globalHideSysTray(bool hide = true);
-    void globalQuitSuperKaramba();
-    void globalShowThemeDialog(QSystemTrayIcon::ActivationReason reason = QSystemTrayIcon::Unknown);
+    void quitSuperKaramba();
+    void showThemeDialog(QSystemTrayIcon::ActivationReason reason = QSystemTrayIcon::Unknown);
+
+    void karambaStarted(Karamba*, bool);
+    void karambaClosed(Karamba*);
 
 private:
     void checkCommandLine(KCmdLineArgs *args, QList<KUrl> &lst);
     void startThemes(QList<KUrl> &lst);
     void checkPreviousSession(QList<KUrl> &lst);
     void setToolTip(const QString &tip = QString());
-    void hideSysTray(bool hide = true);
     void showKarambaMenuExtension(bool show = true);
+    void buildToolTip();
 
-    QGraphicsScene *m_scene;
-    MainWidget *m_view;
+private Q_SLOTS:
+    void toggleSystemTray();
 
+private:
     QList<Karamba*> m_karambas;
 
     KSystemTrayIcon *m_sysTrayIcon;

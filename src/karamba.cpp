@@ -245,14 +245,13 @@ Karamba::Karamba(KUrl themeFile, QGraphicsView *view, QGraphicsScene *scene, int
             m_view->move(xpos, ypos);
     }
 
-    if (m_theme.pythonModuleExists()) {
-        kDebug() << "Loading python module: " << m_theme.pythonModule() << endl;
-        QTimer::singleShot(0, this, SLOT(initPythonInterface()));
-    }
+    QTimer::singleShot(0, this, SLOT(startKaramba()));
 }
 
 Karamba::~Karamba()
 {
+    m_scene->removeItem(this);
+
     delete m_config;
 
     delete m_info;
@@ -268,7 +267,6 @@ Karamba::~Karamba()
     qDeleteAll(m_sensorList);
     m_sensorList.clear();
 
-    delete m_globalMenu;
     delete m_toDesktopMenu;
     delete m_themeConfMenu,
     delete m_toggleLocked;
@@ -282,22 +280,28 @@ Karamba::~Karamba()
     }
 }
 
-void Karamba::initPythonInterface()
+void Karamba::startKaramba()
 {
-    m_stepTimer = new QTimer(this);
+    emit widgetStarted(this, true);
 
-    if (!m_useKross) {
-        m_python = new KarambaPython(m_theme, false);
-        m_python->initWidget(this);
-    } else {
-        m_interface = new KarambaInterface(this);
-        m_interface->callInitWidget(this);
+    if (m_theme.pythonModuleExists()) {
+        kDebug() << "Loading python module: " << m_theme.pythonModule() << endl;
+
+        m_stepTimer = new QTimer(this);
+
+        if (!m_useKross) {
+            m_python = new KarambaPython(m_theme, false);
+            m_python->initWidget(this);
+        } else {
+            m_interface = new KarambaInterface(this);
+            m_interface->callInitWidget(this);
+        }
+
+        update();
+
+        connect(m_stepTimer, SIGNAL(timeout()), SLOT(step()));
+        m_stepTimer->start(m_interval);
     }
-
-    update();
-
-    connect(m_stepTimer, SIGNAL(timeout()), SLOT(step()));
-    m_stepTimer->start(m_interval);
 }
 
 QString Karamba::prettyName() const
@@ -1038,9 +1042,9 @@ void Karamba::closeWidget()
     if (m_interface)
         m_interface->callWidgetClosed(this);
 
-    m_scene->removeItem(this);
-
     writeConfigData();
+
+    emit widgetClosed(this);
 }
 
 KConfig* Karamba::getConfig() const
@@ -1085,7 +1089,7 @@ void Karamba::reloadConfig()
         k = new Karamba(m_theme.getUrlPath());
 
     if (k != 0)
-        karambaApp->addKaramba(k);
+        emit widgetStarted(k, true);
 
     closeWidget();
 }
@@ -1133,9 +1137,6 @@ void Karamba::preparePopupMenu()
                            SLOT(reloadConfig()), Qt::CTRL + Qt::Key_R);
     m_popupMenu->addAction(KIcon("window-close"), i18n("&Close This Theme"), this,
                            SLOT(closeWidget()), Qt::CTRL + Qt::Key_C);
-
-    if (!SuperKarambaSettings::showSysTray())
-        showMenuExtension();
 }
 
 void Karamba::slotDesktopChanged(int desktop)
@@ -1294,21 +1295,6 @@ bool Karamba::hasMeter(const Meter* meter) const
 {
     QList<QGraphicsItem*> items = QGraphicsItemGroup::children();
     return items.contains(const_cast<Meter*>(meter));
-}
-
-void Karamba::slotToggleSystemTray()
-{
-    karambaApp->globalHideSysTray(false);
-}
-
-void Karamba::slotShowTheme()
-{
-    karambaApp->globalShowThemeDialog();
-}
-
-void Karamba::slotQuit()
-{
-    karambaApp->globalQuitSuperKaramba();
 }
 
 QRectF Karamba::boundingRect() const
@@ -1653,31 +1639,17 @@ void Karamba::slotFileChanged(const QString &file)
         reloadConfig();
 }
 
-void Karamba::showMenuExtension()
+void Karamba::setMenuExtension(KMenu *menu)
 {
     m_popupMenu->addSeparator();
 
-    m_globalMenu = new KMenu();
-    m_globalMenu->setTitle("SuperKaramba");
-    m_globalMenu->addAction(KIcon("superkaramba"),
-                            i18n("Show System Tray Icon"), this,
-                            SLOT(slotToggleSystemTray()),
-                            Qt::CTRL + Qt::Key_S);
-
-    m_globalMenu->addAction(KIcon("get-hot-new-stuff"),
-                            i18n("&Manage Themes..."), this,
-                            SLOT(slotShowTheme()), Qt::CTRL + Qt::Key_M);
-
-    m_globalMenu->addAction(KIcon("application-exit"),
-                            i18n("&Quit SuperKaramba"), this,
-                            SLOT(slotQuit()), Qt::CTRL + Qt::Key_Q);
-
-    m_popupMenu->addMenu(m_globalMenu);
+    m_globalMenu = menu;
+    m_popupMenu->addMenu(menu);
 }
 
-void Karamba::hideMenuExtension()
+void Karamba::removeMenuExtension()
 {
-//  delete m_globalMenu;
+    m_popupMenu->removeAction(m_globalMenu->menuAction());
 }
 
 int Karamba::instance()

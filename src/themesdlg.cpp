@@ -185,7 +185,8 @@ void ThemesDlg::addToDesktop()
         ThemeFile* tf = w->themeFile();
         if (tf) {
             Karamba *k = new Karamba(tf->file());
-            karambaApp->addKaramba(k);
+            connect(k, SIGNAL(widgetStarted(Karamba*, bool)),
+                karambaApp, SLOT(karambaStarted(Karamba*, bool)));
         }
     }
 }
@@ -201,7 +202,8 @@ void ThemesDlg::openLocalTheme()
         ThemeFile file(*it);
         if (file.isValid()) {
             Karamba *k = new Karamba(*it);
-            karambaApp->addKaramba(k);
+            connect(k, SIGNAL(widgetStarted(Karamba*, bool)),
+                karambaApp, SLOT(karambaStarted(Karamba*, bool)));
         }
     }
 }
@@ -347,7 +349,7 @@ int ThemesDlg::addTheme(const QString& , const QString &file)
     ThemeWidget* w = (ThemeWidget*)(tableThemes->item(i));
     if (w)
         result = w->addInstance();
-    karambaApp->buildToolTip();
+
     return result;
 }
 
@@ -356,9 +358,10 @@ void ThemesDlg::removeTheme(const QString&, const QString& file, int instance)
     int i = themeIndex(file);
 
     ThemeWidget* w = (ThemeWidget*)(tableThemes->item(i));
-    if (w)
+    if (w) {
         w->removeInstance(instance);
-    karambaApp->buildToolTip();
+    }
+
 }
 
 void ThemesDlg::search(const QString&)

@@ -107,8 +107,8 @@ public:
 
     void writeConfigData();
 
-    void showMenuExtension();
-    void hideMenuExtension();
+    void setMenuExtension(KMenu*);
+    void removeMenuExtension();
 
     int instance();
     void setInstance(int instance);
@@ -137,16 +137,17 @@ public Q_SLOTS:
     void slotFileChanged(const QString &file);
 
 private Q_SLOTS:
-    void initPythonInterface();
+    void startKaramba();
     void slotToggleLocked();
-    void slotToggleSystemTray();
-    void slotShowTheme();
-    void slotQuit();
     void currentDesktopChanged(int i);
     void slotToggleConfigOption(QObject*);
     void slotDesktopChanged(int desktop);
 
     void step();
+
+Q_SIGNALS:
+    void widgetStarted(Karamba*, bool);
+    void widgetClosed(Karamba*);
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
