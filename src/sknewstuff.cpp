@@ -54,11 +54,11 @@ bool SKNewStuff::install(const QString &fileName)
     kDebug() << "SKNewStuff::install() mimetype: " << result->name() << endl;
 
     if (result->name() == "application/x-gzip" ||
-            result->name() == "application/x-tgz" ||
+            result->name() == "application/x-compressed-tar" ||
             result->name() == "application/x-bzip" ||
-            result->name() == "application/x-bzip2" ||
-            result->name() == "application/x-tbz" ||
-            result->name() == "application/x-tbz2" ||
+            result->name() == "application/x-bzip" ||
+            result->name() == "application/x-bzip-compressed-tar" ||
+            result->name() == "application/x-bzip-compressed-tar2" ||
             result->name() == "application/x-tar" ||
             result->name() == "application/x-tarz") {
         kDebug() << "SKNewStuff::install() gzip/bzip2 mimetype encountered" <<
@@ -71,7 +71,7 @@ bool SKNewStuff::install(const QString &fileName)
         //Add the theme to the Theme Dialog
         mDlg->addThemeToDialog(archiveDir, destDir);
         archive.close();
-    } else if (result->name() == "application/x-zip" ||
+    } else if (result->name() == "application/zip" ||
                result->name() == "application/x-superkaramba") {
         kDebug() << "SKNewStuff::install() zip mimetype encountered" << endl;
         //TODO: write a routine to check if this is a valid .skz file
