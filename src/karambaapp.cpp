@@ -15,19 +15,16 @@
 #include <QGraphicsScene>
 #include <QMenu>
 
-#include <kurl.h>
-#include <kaction.h>
-#include <kmessagebox.h>
-#include <kdebug.h>
-#include <kdeversion.h>
-#include <kcmdlineargs.h>
-#include <ksystemtrayicon.h>
-#include <khelpmenu.h>
-#include <kstandardaction.h>
-#include <kactioncollection.h>
-#include <kmenu.h>
-
-#include "meters/textfield.h"
+#include <KUrl>
+#include <KAction>
+#include <KMessageBox>
+#include <KDebug>
+#include <KCmdLineArgs>
+#include <KSystemTrayIcon>
+#include <KHelpMenu>
+#include <KStandardAction>
+#include <KActionCollection>
+#include <KMenu>
 
 #include "superkarambasettings.h"
 #include "mainwidget.h"

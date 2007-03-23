@@ -31,16 +31,16 @@
 #include <QBitmap>
 #include <QSignalMapper>
 
-#include <kdebug.h>
-#include <kwin.h>
-#include <kicon.h>
-#include <klocale.h>
-#include <kdirwatch.h>
-#include <kmenu.h>
-#include <kwinmodule.h>
-#include <kconfig.h>
-#include <ktoggleaction.h>
-#include <kcmdlineargs.h>
+#include <KDebug>
+#include <KWin>
+#include <KIcon>
+#include <KLocale>
+#include <KDirWatch>
+#include <KMenu>
+#include <KWinModule>
+#include <KConfig>
+#include <KToggleAction>
+#include <KCmdLineArgs>
 
 #include "meters/textfield.h"
 #include "meters/richtextlabel.h"

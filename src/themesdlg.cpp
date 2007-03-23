@@ -18,33 +18,18 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  ****************************************************************************/
 #include "karambaapp.h"
-//#include "dcopinterface_stub.h"
-//#include "karambainterface.h"
 #include "themesdlg.h"
 #include "themewidget.h"
 #include "kwidgetlistbox.h"
 #include "karamba.h"
-
 #include "sknewstuff.h"
-
 #include "superkarambasettings.h"
-#include <karchive.h>
-#include <kdebug.h>
-#include <kfiledialog.h>
-#include <kpushbutton.h>
-#include <kstandarddirs.h>
-#include <kapplication.h>
-#include <kiconloader.h>
-#include <klocale.h>
-#include <qlineedit.h>
-#include <q3table.h>
-#include <qdir.h>
-#include <qlabel.h>
-#include <qcombobox.h>
-#include <q3ptrlist.h>
-#include <kio/copyjob.h>
-#include <kprotocolinfo.h>
-#include <kcomponentdata.h>
+
+#include <KArchive>
+#include <KFileDialog>
+#include <KStandardDirs>
+#include <KIconLoader>
+#include <KIO/CopyJob>
 
 ThemesDlg::ThemesDlg(QWidget *parent, const char *name)
         : QDialog(parent)
@@ -423,7 +408,7 @@ void ThemesDlg::uninstall()
 
         //some themes have multiple .theme files
         //find all .themes that could be listed in the dialog for the directory removed
-        Q3PtrList<ThemeWidget> list;
+        QList<ThemeWidget*> list;
         for (uint i = 2; i < tableThemes->count(); ++i) {
             ThemeWidget* tempW = (ThemeWidget*)(tableThemes->item(i));
             ThemeFile* tempTf = tempW->themeFile();
@@ -431,8 +416,7 @@ void ThemesDlg::uninstall()
                 list.append(tempW);
             }
         }
-        ThemeWidget *twPtr;
-        for (twPtr = list.first(); twPtr; twPtr = list.next()) {
+        foreach (ThemeWidget *twPtr, list) {
             karambaApp->closeTheme(twPtr->themeFile()->name());
             tableThemes->removeItem((QWidget*)twPtr);
         }

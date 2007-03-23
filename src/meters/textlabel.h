@@ -10,16 +10,12 @@
 #ifndef TEXTLABEL_H
 #define TEXTLABEL_H
 
-#include <QColor>
-#include <QFont>
-#include <QStringList>
-#include <QRectF>
-
 #include "textfield.h"
 #include "meter.h"
 
 class QPainter;
 class Karamba;
+
 class TextLabel : public Meter
 {
     Q_OBJECT

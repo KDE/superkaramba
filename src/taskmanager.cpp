@@ -29,18 +29,15 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <QDesktopWidget>
 #include <QPixmap>
 #include <QList>
-
-#include <kapplication.h>
-#include <kconfig.h>
-#include <kdebug.h>
-#include <kglobal.h>
-#include <kiconloader.h>
-#include <klocale.h>
-// #include <kpixmapio.h>
-#include <kstaticdeleter.h>
-#include <kwinmodule.h>
-#include <netwm.h>
 #include <QX11Info>
+
+#include <KGlobal>
+#include <KIconLoader>
+#include <KLocale>
+#include <KStaticDeleter>
+#include <KWinModule>
+
+#include <netwm.h>
 
 #include "taskmanager.h"
 #include "taskmanager.moc"

@@ -9,15 +9,7 @@
  ***************************************************************************/
 #include "disk.h"
 
-#include <qfile.h>
-#include <QTextStream>
-#include <qstring.h>
-#include <qregexp.h>
-//Added by qt3to4:
-#include <QString>
-#include <kprocess.h>
-#include <kprocio.h>
-#include <kdebug.h>
+#include <KProcIO>
 
 DiskSensor::DiskSensor(int msec) : Sensor(msec)
 {

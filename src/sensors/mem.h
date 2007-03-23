@@ -9,17 +9,16 @@
  ***************************************************************************/
 #ifndef MEMSENSOR_H
 #define MEMSENSOR_H
-#include "sensor.h"
-#include <qglobal.h>
-#include <qstring.h>
-#include <qregexp.h>
-#include <kprocess.h>
+
+#include <KProcess>
 
 #ifdef __FreeBSD__
 #include <kprocio.h>
 #include <kvm.h>
 #include <osreldate.h>
 #endif
+
+#include "sensor.h"
 
 class MemSensor :  public Sensor
 {

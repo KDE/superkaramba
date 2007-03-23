@@ -37,9 +37,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <QRect>
 #include <QVector>
 
-#include <ksharedptr.h>
-#include <kstartupinfo.h>
-#include <kwin.h>
+#include <KSharedPtr>
+#include <KStartupInfo>
+#include <KWin>
 
 #if defined(HAVE_XCOMPOSITE) && \
     defined(HAVE_XRENDER) && \

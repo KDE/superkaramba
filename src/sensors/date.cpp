@@ -7,13 +7,12 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
-#include "date.h"
 
 #include <QApplication>
 #include <QDesktopWidget>
-#include <QMouseEvent>
-#include <QKeyEvent>
 #include <QVBoxLayout>
+
+#include "date.h"
 
 DateSensor::DateSensor(int interval) : Sensor(interval)
 {

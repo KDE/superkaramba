@@ -8,12 +8,12 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-#include <krun.h>
-
-#include <QRegExp>
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
 
+#include <KRun>
+
+#include "karamba.h"
 #include "clickmap.h"
 #include "clickmap.moc"
 

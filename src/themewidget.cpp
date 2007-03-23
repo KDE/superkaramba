@@ -19,13 +19,6 @@
  ****************************************************************************/
 #include "themewidget.h"
 #include "themelocale.h"
-#include <kpushbutton.h>
-#include <kdebug.h>
-#include <klocale.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <QPixmap>
-#include <QPaintEvent>
 
 ThemeWidget::ThemeWidget(QWidget *parent)
         : QWidget(parent), m_themeFile(0)

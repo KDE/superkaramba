@@ -27,14 +27,11 @@
  ****************************************************************************/
 #include "themelocale.h"
 #include "themefile.h"
-#include <kdebug.h>
-#include <kconfig.h>
-#include <kglobal.h>
-#include <klocale.h>
-#include <qbuffer.h>
-#include <qglobal.h>
-#include <qiodevice.h>
-#include <stdlib.h>
+
+#include <KGlobal>
+#include <KLocale>
+
+#include <QBuffer>
 
 #ifdef HAVE_SYS_TYPES_H
 #include <sys/types.h>

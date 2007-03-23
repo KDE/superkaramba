@@ -9,13 +9,13 @@
  ***************************************************************************/
 #ifndef PROGRAMSENSOR_H
 #define PROGRAMSENSOR_H
+
 #include "sensor.h"
-#include <kprocess.h>
-#include <kprocio.h>
-#include <qstring.h>
-#include <qstringlist.h>
-#include <q3valuevector.h>
-#include <qtextcodec.h>
+
+#include <KProcess>
+#include <KProcIO>
+#include <QTextCodec>
+
 class ProgramSensor :  public Sensor
 {
     Q_OBJECT

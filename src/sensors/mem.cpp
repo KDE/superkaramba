@@ -7,13 +7,9 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
-#include "mem.h"
 
-#include <qfile.h>
-#include <qglobal.h>
+#include <QFile>
 #include <QTextStream>
-#include <qstring.h>
-#include <qregexp.h>
 
 #ifdef Q_OS_FREEBSD
 #include <sys/time.h>
@@ -33,7 +29,7 @@
 #include <sys/swap.h>
 #endif
 
-#include <kdebug.h>
+#include "mem.h"
 
 #if defined Q_OS_FREEBSD || defined(Q_OS_NETBSD)
 /* define pagetok in terms of pageshift */

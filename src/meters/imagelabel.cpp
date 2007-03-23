@@ -21,16 +21,15 @@
 *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 ****************************************************************************/
 
-#include <qpixmap.h>
-#include <qtimer.h>
-#include <qtooltip.h>
-#include <QMouseEvent>
-#include <kdebug.h>
-#include <kimageeffect.h>
-#include <ktemporaryfile.h>
+#include <QPixmap>
+#include <QToolTip>
+
+#include <KImageEffect>
+#include <KPixmapEffect>
+#include <KTemporaryFile>
 #include <kio/job.h>
-#include <krun.h>
-#include <kpixmapeffect.h>
+#include <KRun>
+
 #include "karambaapp.h"
 #include "imagelabel.h"
 

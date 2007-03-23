@@ -9,13 +9,8 @@
  ***************************************************************************/
 #ifndef UPTIMESENSOR_H
 #define UPTIMESENSOR_H
-#include "sensor.h"
 
-#include <qfile.h>
-#include <q3textstream.h>
-#include <qstring.h>
-#include <qregexp.h>
-#include <qdatetime.h>
+#include "sensor.h"
 
 class UptimeSensor :  public Sensor
 {

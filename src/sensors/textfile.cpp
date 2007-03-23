@@ -7,9 +7,11 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
+
 #include <QTextStream>
+#include <QDomDocument>
+
 #include "textfile.h"
-#include "qdom.h"
 
 TextFileSensor::TextFileSensor(const QString &fn, bool iRdf, int interval, const QString &encoding)
         : Sensor(interval)

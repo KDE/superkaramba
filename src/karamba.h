@@ -28,7 +28,7 @@
 
 #include <QGraphicsItemGroup>
 
-#include <kurl.h>
+#include <KUrl>
 #include <netwm.h>
 
 #include "themefile.h"
@@ -50,6 +50,17 @@ class Systemtray;
 class TextField;
 class KarambaInterface;
 class KarambaPython;
+
+class TextField;
+class RichTextLabel;
+class Bar;
+class Graph;
+class TextLabel;
+class Input;
+class ImageLabel;
+class ClickArea;
+class ClickMap;
+
 class Karamba : public QObject, public QGraphicsItemGroup
 {
     Q_OBJECT

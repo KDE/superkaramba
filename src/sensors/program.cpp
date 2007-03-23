@@ -7,12 +7,10 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
+
+#include <QStringList>
+
 #include "program.h"
-
-#include <qstringlist.h>
-#include <QString>
-
-#include <kdebug.h>
 
 ProgramSensor::ProgramSensor(const QString &progName, int interval, QString encoding)
         : Sensor(interval)

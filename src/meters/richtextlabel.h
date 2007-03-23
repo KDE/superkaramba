@@ -20,6 +20,7 @@
 class QTextDocument;
 class Karamba;
 class TextField;
+
 class RichTextLabel : public Meter
 {
     Q_OBJECT

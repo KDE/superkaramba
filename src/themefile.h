@@ -24,14 +24,9 @@
 #ifndef THEMEFILE_H
 #define THEMEFILE_H
 
-#include <kurl.h>
-#include <qstring.h>
-#include <string.h>
-#include <qpixmap.h>
-#include <qfile.h>
-#include <QVector>
-#include <QTextStream>
+#include <KUrl>
 
+#include <QTextStream>
 #include <QDir>
 
 class LineParser;

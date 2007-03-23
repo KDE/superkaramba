@@ -23,8 +23,6 @@
 #include <QStyleOptionGraphicsItem>
 #include <QGraphicsSceneMouseEvent>
 
-#include <kdebug.h>
-
 #include "textfield.h"
 #include "input.h"
 #include "input.moc"

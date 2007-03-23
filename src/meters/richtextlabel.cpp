@@ -8,17 +8,14 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-#include <krun.h>
-#include <kdebug.h>
-
-#include <QMouseEvent>
-#include <QColorGroup>
 #include <QApplication>
 #include <QTextCursor>
 #include <QTextCharFormat>
 #include <QAbstractTextDocumentLayout>
 #include <QGraphicsSceneMouseEvent>
 #include <QPainter>
+
+#include <KRun>
 
 #include "karamba.h"
 #include "textlabel.h"
@@ -42,7 +39,6 @@ RichTextLabel::RichTextLabel(Karamba* k, int x, int y, int w, int h)
         colorGrp(QApplication::palette()),
         underlineLinks(false)
 {
-    kDebug() << k_funcinfo << x << ", " << y << ", " << w << ", " << h << endl;
     originalSize = QSize(w, h);
 }
 
@@ -173,7 +169,6 @@ bool RichTextLabel::mouseEvent(QGraphicsSceneMouseEvent *event)
     QPointF pos = mapFromParent(event->pos());
 
     QString link = text->documentLayout()->anchorAt(pos);
-    kDebug() << link << endl;
 
     if (link[0] != '#') {
         if (event->button() == Qt::LeftButton)

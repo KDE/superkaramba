@@ -22,13 +22,10 @@
 #ifndef TEXTFILESENSOR_H
 #define TEXTFILESENSOR_H
 
+#include <QFile>
 
 #include "sensors/sensor.h"
-#include <qfile.h>
-#include <q3textstream.h>
-#include <qstring.h>
-#include <qtextcodec.h>
-#include <q3valuevector.h>
+
 /**
  *
  * Hans Karlsson

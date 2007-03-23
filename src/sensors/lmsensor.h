@@ -2,14 +2,8 @@
 #ifndef SENSORSENSOR_H
 #define SENSORSENSOR_H
 
-#include <qstring.h>
-#include <qtextcodec.h>
-#include <qmap.h>
-#include <qstringlist.h>
-#include <qregexp.h>
-#include <kprocess.h>
-#include <kprocio.h>
-
+#include <KProcess>
+#include <KProcIO>
 
 #include "sensor.h"
 

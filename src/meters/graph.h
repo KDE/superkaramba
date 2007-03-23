@@ -11,9 +11,10 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
+#include <QPainter>
+#include <QColor>
+
 #include "meter.h"
-#include <qpainter.h>
-#include <qcolor.h>
 
 class Graph : public Meter
 {

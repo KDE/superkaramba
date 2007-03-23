@@ -12,9 +12,7 @@
 #include <QTimer>
 #include <QPainter>
 
-#include <kdebug.h>
-
-#include "../karamba.h"
+#include "karamba.h"
 #include "meter.h"
 #include "meter.moc"
 

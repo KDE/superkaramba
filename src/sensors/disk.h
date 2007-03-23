@@ -9,13 +9,11 @@
  ***************************************************************************/
 #ifndef DISKSENSOR_H
 #define DISKSENSOR_H
+
+#include <KProcess>
+
 #include "sensor.h"
-#include <qmap.h>
-#include <qstring.h>
-#include <qtextcodec.h>
-#include <qregexp.h>
-#include <qstringlist.h>
-#include <kprocess.h>
+
 class DiskSensor :  public Sensor
 {
     Q_OBJECT

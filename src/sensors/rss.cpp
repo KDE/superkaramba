@@ -9,15 +9,12 @@
  ***************************************************************************/
 
 #include <QDomDocument>
-#include <QDomElement>
-#include <QDomNode>
-#include <QRegExp>
+#include <QTextCodec>
 #include <QFile>
 
-#include <kurl.h>
+#include <KUrl>
 #include <kio/netaccess.h>
 
-#include "karambaapp.h"
 #include "rss.h"
 #include "rss.moc"
 

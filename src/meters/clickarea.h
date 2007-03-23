@@ -22,20 +22,12 @@
 #ifndef CLICKAREA_H
 #define CLICKAREA_H
 
-#include <qstring.h>
-#include <qrect.h>
-#include <qevent.h>
-#include <qregexp.h>
-#include <QMouseEvent>
-#include <QGraphicsSceneMouseEvent>
-#include <QRect>
 #include <QPainter>
 
-#include <kprocess.h>
-#include <kprocio.h>
-#include <krun.h>
+#include <KProcess>
+#include <KRun>
 
-#include <meters/meter.h>
+#include "meter.h"
 
 /**
  *

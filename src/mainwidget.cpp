@@ -18,13 +18,11 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  ****************************************************************************/
 
-
 #include "mainwidget.h"
 
-#include <kmanagerselection.h>
-#include <kdebug.h>
-
 #include <QTime>
+
+#include <kmanagerselection.h>
 
 MainWidget::MainWidget(QGraphicsScene *scene, QWidget *parent)
         : QGraphicsView(scene, parent),

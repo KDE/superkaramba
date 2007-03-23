@@ -18,17 +18,15 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  ****************************************************************************/
 
-#include <kapplication.h>
-#include <kdebug.h>
-#include <kfilemetainfo.h>
-#include <kio/netaccess.h>
-#include <kmimetype.h>
-#include <krun.h>
-#include <kstandarddirs.h>
-#include <ktar.h>
-#include <kurl.h>
-#include <qdir.h>
-#include <qfileinfo.h>
+#include <KIO/NetAccess>
+#include <KMimeType>
+#include <KRun>
+#include <KStandardDirs>
+#include <KTar>
+#include <KUrl>
+
+#include <QDir>
+#include <QFileInfo>
 
 #include "karambaapp.h"
 #include "themesdlg.h"

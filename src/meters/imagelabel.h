@@ -24,21 +24,14 @@
 #ifndef IMAGELABEL_H
 #define IMAGELABEL_H
 
-#include "meter.h"
-#include <QPixmap>
-#include <qimage.h>
-#include <qpixmap.h>
-#include <qpainter.h>
-#include <qstring.h>
-#include <qstringlist.h>
+#include <QPainter>
 #include <QGraphicsSceneMouseEvent>
-#include <kurl.h>
-#include <kio/netaccess.h>
-#include <qregexp.h>
-#include <qtimer.h>
-#include "karamba.h"
 
+#include <kio/netaccess.h>
 #include <kio/copyjob.h>
+
+#include "karamba.h"
+#include "meter.h"
 
 class ImageLabel;
 class KIO::CopyJob;

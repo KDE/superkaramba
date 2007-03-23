@@ -1,5 +1,3 @@
-//Added by qt3to4:
-#include <Q3ValueList>
 /*
  * Copyright (C) 2003-2004 Adam Geitgey <adam@rootnode.org>
  * Copyright (c) 2005 Ryan Nickell <p0z3r@earthlink.net>
@@ -59,7 +57,7 @@ private:
 
     bool              showingDesktop;
     KWinModule*       kWinModule;
-    Q3ValueList<WId>   iconifiedList;
+    QList<WId>        iconifiedList;
 
 };
 

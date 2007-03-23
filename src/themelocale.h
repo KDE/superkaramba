@@ -20,8 +20,8 @@
 #ifndef THEMELOCALE_H
 #define THEMELOCALE_H
 
-#include <qstring.h>
-#include <qstringlist.h>
+#include <QString>
+#include <QStringList>
 
 class ThemeFile;
 

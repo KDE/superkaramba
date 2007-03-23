@@ -9,8 +9,8 @@
  ***************************************************************************/
 
 #include "textfield.h"
-#include <qfontmetrics.h>
-#include <kdebug.h>
+
+#include <QFontMetrics>
 
 TextField::TextField()
 {

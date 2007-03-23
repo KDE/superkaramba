@@ -18,15 +18,15 @@
  *  along with SuperKaramba; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  ****************************************************************************/
-#include <kwinmodule.h>
+
+#include <KWinModule>
+#include <KWin>
+
 #include <netwm.h>
-#include <kwin.h>
 
 #include "karambaapp.h"
 #include "showdesktop.h"
 #include "showdesktop.moc"
-//Added by qt3to4:
-#include <Q3ValueList>
 
 ShowDesktop* ShowDesktop::self()
 {

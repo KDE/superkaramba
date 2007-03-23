@@ -11,8 +11,6 @@
 #include <QPainter>
 #include <QTimer>
 
-#include <kdebug.h>
-
 #include "karamba.h"
 #include "bar.h"
 #include "bar.moc"

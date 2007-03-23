@@ -14,6 +14,7 @@
 #include "sensor.h"
 
 class QTextCodec;
+
 class RssSensor : public Sensor
 {
     Q_OBJECT

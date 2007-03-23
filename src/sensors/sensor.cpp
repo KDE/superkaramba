@@ -10,8 +10,6 @@
 
 #include "sensor.h"
 
-#include <kdebug.h>
-
 Sensor::Sensor(int iMsec)
 {
     objList = new QList<QObject*>();

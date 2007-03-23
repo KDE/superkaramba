@@ -8,10 +8,9 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-#include "graph.h"
-#include <qstring.h>
+#include <QString>
 
-#include <kdebug.h>
+#include "graph.h"
 
 Graph::Graph(Karamba* k, int x, int y, int w, int h, int nbrPts):
         Meter(k, x, y, w, h), lastValue(0)

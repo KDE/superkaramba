@@ -9,14 +9,8 @@
  ***************************************************************************/
 #ifndef SENSOR_H
 #define SENSOR_H
-#include <qstring.h>
-#include <qobject.h>
-#include <qobject.h>
-#include <qstringlist.h>
-#include <qmap.h>
-#include <qtimer.h>
 
-#include <QList>
+#include <QTimer>
 
 #include "sensorparams.h"
 

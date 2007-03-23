@@ -18,10 +18,6 @@
 *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 ****************************************************************************/
 #include "kwidgetlistbox.h"
-#include <kdebug.h>
-#include <kglobalsettings.h>
-#include <QShowEvent>
-#include <QScrollBar>
 
 KWidgetListbox::KWidgetListbox(QWidget *parent)
         : QTableWidget(parent)

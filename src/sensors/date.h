@@ -9,14 +9,11 @@
  ***************************************************************************/
 #ifndef DATESENSOR_H
 #define DATESENSOR_H
+
+#include <KDatePicker>
+
 #include "sensor.h"
 #include "sensorparams.h"
-#include <qdatetime.h>
-//Added by qt3to4:
-#include <QKeyEvent>
-#include <QMouseEvent>
-#include <kdatepicker.h>
-#include <q3vbox.h>
 
 class DatePicker : public QWidget
 {

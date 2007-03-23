@@ -8,11 +8,8 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-#include <qglobal.h>
-
 #include <QTextStream>
-
-#include <kdebug.h>
+#include <QFile>
 
 #ifdef __FreeBSD__
 #include <sys/time.h>

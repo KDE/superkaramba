@@ -24,15 +24,12 @@
 #include <QDomDocument>
 #include <QFileInfo>
 
-#include <kdebug.h>
-#include <kmenu.h>
-#include <krun.h>
-#include <kservice.h>
-#include <klocale.h>
+#include <KMenu>
+#include <KService>
+#include <KLocale>
 
 #include <kross/core/manager.h>
 #include <kross/core/action.h>
-//#include <kross/core/actioncollection.h>
 
 #include "karamba.h"
 #include "karambaapp.h"

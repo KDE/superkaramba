@@ -7,7 +7,9 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
-#include <qglobal.h>
+
+#include <QFile>
+#include <QTextStream>
 
 #if defined __FreeBSD__
 #include <sys/time.h>
@@ -19,8 +21,6 @@
 #include <sys/time.h>
 #include <sys/sysctl.h>
 #endif
-
-#include <QTextStream>
 
 #include "uptime.h"
 

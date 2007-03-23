@@ -10,9 +10,10 @@
 
 #ifndef TEXTFIELD_H
 #define TEXTFIELD_H
-#include <qstring.h>
-#include <qcolor.h>
-#include <qfont.h>
+
+#include <QString>
+#include <QColor>
+#include <QFont>
 
 /**
  *

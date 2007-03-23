@@ -21,11 +21,9 @@
 #ifndef SKNEWSTUFF_H
 #define SKNEWSTUFF_H
 
-#include <kurl.h>
-#include "karambaapp.h"
-
-#include "knewstuff/knewstuff.h"
-#include "knewstuff/entry.h"
+#include <KUrl>
+#include <KNewStuff>
+#include <KNS/Entry>
 
 class ThemesDlg;
 class KArchiveDirectory;

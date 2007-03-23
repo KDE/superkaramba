@@ -22,8 +22,6 @@
 
 #include "themefile.h"
 #include "ui_themewidget_layout.h"
-//Added by qt3to4:
-#include <Q3ValueList>
 
 /**
 @author See README for the list of authors

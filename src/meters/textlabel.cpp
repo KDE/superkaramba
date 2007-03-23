@@ -9,14 +9,11 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-//#include <stdlib.h>
-
 #include <QPainter>
 #include <QMouseEvent>
 #include <QGraphicsSceneMouseEvent>
 
-#include <krun.h>
-#include <kdebug.h>
+#include <KRun>
 
 #include "textlabel.h"
 #include "textlabel.moc"

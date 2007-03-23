@@ -7,14 +7,15 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
+
+#include <QTextStream>
+
 #ifdef __FreeBSD__
 #include <sys/param.h>
 #include <sys/sysctl.h>
 #include <sys/socket.h>
 #include <net/route.h>
 #endif
-
-#include <QTextStream>
 
 #include "network.h"
 

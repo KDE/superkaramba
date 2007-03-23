@@ -9,10 +9,8 @@
  ***************************************************************************/
 #ifndef CPUSENSOR_H
 #define CPUSENSOR_H
-#include "sensor.h"
 
-#include <qfile.h>
-#include <qregexp.h>
+#include "sensor.h"
 
 class CPUSensor :  public Sensor
 {

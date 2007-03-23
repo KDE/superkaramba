@@ -24,12 +24,11 @@
 #include "karambasessionmanaged.h"
 #include "python/karamba.h"
 
-#include <klocale.h>
-#include <kconfig.h>
-#include <kstandarddirs.h>
-#include <kdeversion.h>
-#include <kcmdlineargs.h>
-#include <kaboutdata.h>
+#include <KLocale>
+#include <KConfig>
+#include <KStandardDirs>
+#include <KCmdLineArgs>
+#include <KAboutData>
 
 #include <X11/extensions/Xrender.h>
 

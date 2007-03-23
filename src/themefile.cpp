@@ -24,20 +24,15 @@
 #include "themefile.h"
 #include "lineparser.h"
 #include "themelocale.h"
-#include <kdebug.h>
-#include <kurl.h>
-#include <kzip.h>
-#include <kapplication.h>
-#include <kmessagebox.h>
-#include <kstandarddirs.h>
-#include <klocale.h>
-#include <kio/netaccess.h>
-#include <QTextStream>
-#include <qfileinfo.h>
-#include <qdom.h>
-#include <qdir.h>
-//Added by qt3to4:
-#include <QPixmap>
+
+#include <KZip>
+#include <KApplication>
+#include <KMessageBox>
+#include <KStandardDirs>
+#include <KLocale>
+#include <KIO/NetAccess>
+
+#include <QDomNode>
 
 class ZipFile
 {

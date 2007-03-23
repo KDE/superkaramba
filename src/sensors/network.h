@@ -12,9 +12,9 @@
 
 #include "sensor.h"
 
-#include <qdatetime.h>
-#include <qfile.h>
-#include <qregexp.h>
+#include <QDateTime>
+#include <QFile>
+
 #ifdef __FreeBSD__
 #include <sys/types.h>
 #include <sys/socket.h>

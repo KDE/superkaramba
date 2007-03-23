@@ -34,14 +34,6 @@
 #include "meters/textlabel.h"
 #include "meters/clickarea.h"
 
-class Karamba;
-class ImageLabel;
-class Input;
-class RichTextLabel;
-class TextLabel;
-class ClickArea;
-class ThemeLocale;
-
 class KarambaInterface : public QObject
 {
     Q_OBJECT

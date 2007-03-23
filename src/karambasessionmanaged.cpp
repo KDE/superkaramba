@@ -20,12 +20,12 @@
 *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 ****************************************************************************/
 
-#include <kapplication.h>
-#include <kconfig.h>
-#include <ksessionmanager.h>
+#include <KApplication>
+#include <KConfig>
+#include <KSessionManager>
+
 #include "karambasessionmanaged.h"
 #include "karamba.h"
-#include "qwidget.h"
 
 bool KarambaSessionManaged::saveState(QSessionManager&)
 {

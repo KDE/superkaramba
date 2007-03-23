@@ -15,7 +15,8 @@
 
 #include <QSystemTrayIcon>
 
-#include <kuniqueapplication.h>
+#include <KUniqueApplication>
+
 #define karambaApp ((KarambaApplication*)qApp)
 
 class QGraphicsView;
@@ -26,6 +27,7 @@ class KHelpMenu;
 class ThemesDlg;
 class MainWidget;
 class Karamba;
+
 class KarambaApplication : public KUniqueApplication
 {
     Q_OBJECT
