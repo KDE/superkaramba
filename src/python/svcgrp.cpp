@@ -61,31 +61,37 @@ static PyObject *get_svc(KService::Ptr const& g)
     PyObject *tuple = PyTuple_New(2);
     PyObject *dict = PyDict_New();
 
-    if (g->exec() != NULL)
+    if (!g->exec().isNull())
         PyDict_SetItem(dict, PyString_FromString("exec"),
                        PyString_FromString(g->exec().toAscii().data()));
-    if (g->menuId() != NULL)
+
+    if (!g->menuId().isNull())
         PyDict_SetItem(dict, PyString_FromString("menuid"),
                        PyString_FromString(g->menuId().toAscii().data()));
-    if (g->name() != NULL)
+
+    if (!g->name().isNull())
         PyDict_SetItem(dict, PyString_FromString("name"),
                        PyString_FromString(g->name().toAscii().data()));
-    if (g->path() != NULL)
+
+    if (!g->path().isNull())
         PyDict_SetItem(dict, PyString_FromString("path"),
                        PyString_FromString(g->path().toAscii().data()));
-    if (g->icon() != NULL)
+
+    if (!g->icon().isNull())
         PyDict_SetItem(dict, PyString_FromString("icon"),
                        PyString_FromString(g->icon().toAscii().data()));
-    if (g->library() != NULL)
+
+    if (!g->library().isNull())
         PyDict_SetItem(dict, PyString_FromString("library"),
                        PyString_FromString(g->library().toAscii().data()));
-    if (g->comment() != NULL)
+    if (!g->comment().isNull())
         PyDict_SetItem(dict, PyString_FromString("comment"),
                        PyString_FromString(g->comment().toAscii().data()));
-    if (g->type() != NULL)
-        PyDict_SetItem(dict, PyString_FromString("type"),
-                       PyString_FromString(g->type().toAscii().data()));
-    if (g->genericName() != NULL)
+    QString type = g->isApplication() ? "Application" : "Service";
+    PyDict_SetItem(dict, PyString_FromString("type"),
+                       PyString_FromString(type.toAscii().data()));
+
+    if (!g->genericName().isNull())
         PyDict_SetItem(dict, PyString_FromString("genericname"),
                        PyString_FromString(g->genericName().toAscii().data()));
     /*

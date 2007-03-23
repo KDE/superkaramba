@@ -31,17 +31,14 @@ bool KarambaSessionManaged::saveState(QSessionManager&)
 {
     QList<QString> openThemes;
 
-#ifdef __GNUC__
-#warning check if this works in all globalView cases
-#endif
     QWidgetList list = QApplication::allWidgets();
     foreach(QWidget *w, list) {
         if (QString(w->objectName()).startsWith("karamba")) {
             Karamba* k = (Karamba*) w;
-            /* Sub theme ever used
+
             if (k->isSubTheme())
               continue;
-            */
+
             QString path = QFileInfo(k->theme().file()).absoluteFilePath();
             k->writeConfigData();
             openThemes.append(path);

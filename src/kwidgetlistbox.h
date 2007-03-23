@@ -21,7 +21,6 @@
 #define KWIDGETLISTBOX_H
 
 #include <QTableWidget>
-//Added by qt3to4:
 #include <QShowEvent>
 #include <QHeaderView>
 
@@ -36,7 +35,7 @@ class KWidgetListbox : public QTableWidget
     Q_OBJECT
 
 public:
-    KWidgetListbox(QWidget *parent = 0, const char *name = 0);
+    KWidgetListbox(QWidget *parent = 0);
     ~KWidgetListbox();
 
     int insertItem(QWidget* item, int index = -1);

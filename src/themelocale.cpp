@@ -155,7 +155,8 @@ void ThemeLocale::setLanguage(const QStringList &languages)
             QString("locale/%1/LC_MESSAGES/%2.mo").arg(*it).arg(m_theme->mo());
 
         if (m_theme->fileExists(file)) {
-            QBuffer buffer(&m_theme->readThemeFile(file));
+            QByteArray array = m_theme->readThemeFile(file);
+            QBuffer buffer(&array);
             tl_nl_load_domain(&buffer, buffer.size(), &m_domain);
             m_language = *it;
             return;

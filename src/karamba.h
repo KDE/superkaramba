@@ -55,8 +55,7 @@ class Karamba : public QObject, public QGraphicsItemGroup
     Q_OBJECT
 
 public:
-    Karamba(KUrl themeFile, QGraphicsView *view = 0,
-            QGraphicsScene *scene = 0, int instance = -1);
+    Karamba(KUrl themeFile, int instance = -1, bool subTheme = false);
 
     virtual ~Karamba();
 
@@ -120,6 +119,9 @@ public:
     bool sendDataToTheme(const QString &prettyThemeName, const QString &data) const;
     QString retrieveReceivedData() const;
     bool sendData(const QString &prettyThemeName, const QString &data) const;
+
+    void setOnTop(bool stayOnTop);
+    bool isSubTheme() const;
 
     KProcess *currProcess;
     Systemtray *systray;
@@ -222,6 +224,8 @@ private:
     QPoint m_mouseClickPos;
 
     bool m_globalView;
+
+    bool m_subTheme;
 
     bool parseConfig();
     Sensor *findSensorFromList(const Meter *meter) const;

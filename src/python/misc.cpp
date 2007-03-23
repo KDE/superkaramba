@@ -456,10 +456,7 @@ long openNamedTheme(char* path, char *name, bool is_sub_theme)
         QString prettyName(name);
         KarambaApplication* app = (KarambaApplication*)qApp;
         if (!app->themeExists(prettyName)) {
-            newTheme = new Karamba(KUrl(filename));
-
-            //if (is_sub_theme)
-            //    currTheme->addToGroup(newTheme);
+            newTheme = new Karamba(KUrl(filename), -1, is_sub_theme);
 
             newTheme->show();
         }

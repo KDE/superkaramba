@@ -78,11 +78,11 @@
 #include "karamba.h"
 #include "karamba.moc"
 
-Karamba::Karamba(KUrl themeFile, QGraphicsView *view, QGraphicsScene *scene, int instance)
+Karamba::Karamba(KUrl themeFile, int instance, bool subTheme)
         : QObject(),
-        QGraphicsItemGroup(0, scene),
-        m_scene(scene),
-        m_view(view),
+        QGraphicsItemGroup(),
+        m_scene(0),
+        m_view(0),
         m_KWinModule(0),
         m_useKross(false),
         m_python(0),
@@ -108,7 +108,8 @@ Karamba::Karamba(KUrl themeFile, QGraphicsView *view, QGraphicsScene *scene, int
         m_config(0),
         m_instance(instance),
         m_wantRightButton(false),
-        m_globalView(true)
+        m_globalView(true),
+        m_subTheme(subTheme)
 {
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     if (args->isSet("usekross")) {
@@ -373,12 +374,9 @@ bool Karamba::parseConfig()
                 else
                     m_view->move(x, y);
 
-#ifdef __GNUC__
-#warning Probably Z Level: winId()
-#endif
                 if (lineParser.getBoolean("ONTOP")) {
                     m_onTop = true;
-                    KWin::setState(m_view->winId(), NET::StaysOnTop);
+                    KWin::setState(m_view->winId(), NET::KeepAbove);
                 }
 
                 if (lineParser.getBoolean("MANAGED")) {
@@ -391,7 +389,7 @@ bool Karamba::parseConfig()
                                      | NETWinInfo::SkipPager, NETWinInfo::SkipTaskbar
                                      | NETWinInfo::SkipPager);
                     if (m_onTop) {
-                        KWin::setState(m_view->winId(), NET::StaysOnTop);
+                        KWin::setState(m_view->winId(), NET::KeepAbove);
                     }
                 }
 
@@ -483,7 +481,7 @@ bool Karamba::parseConfig()
                 if (info.isRelative())
                     path = m_theme.path() + "/" + path;
 
-                new Karamba(path, m_view, m_scene);
+                new Karamba(path/*, m_view, m_scene*/);
             }
 
             if (lineParser.meter() == "<GROUP>") {
@@ -1084,7 +1082,7 @@ void Karamba::reloadConfig()
     Karamba *k = 0;
 
     if (m_globalView)
-        k = new Karamba(m_theme.getUrlPath(), m_view, m_scene);
+        k = new Karamba(m_theme.getUrlPath()/*, m_view, m_scene*/);
     else
         k = new Karamba(m_theme.getUrlPath());
 
@@ -1092,6 +1090,17 @@ void Karamba::reloadConfig()
         emit widgetStarted(k, true);
 
     closeWidget();
+}
+
+void Karamba::setOnTop(bool stayOnTop)
+{
+    if (stayOnTop) {
+        KWin::setState(m_view->winId(), NET::KeepAbove);
+    } else {
+        KWin::setState(m_view->winId(), NET::KeepBelow);
+    }
+
+    m_onTop = stayOnTop;
 }
 
 void Karamba::preparePopupMenu()
@@ -1227,9 +1236,6 @@ QAction* Karamba::addMenuItem(KMenu *menu, QString text, QString icon)
     return action;
 }
 
-#ifdef __GNUC__
-#warning how to get the pos of the Item in the View?
-#endif
 void Karamba::popupMenu(KMenu *menu, const QPoint &pos) const
 {
 //  QPoint diff = mapToGlobal(QGraphicsItemGroup::pos().toPoint()).toPoint();
@@ -1725,3 +1731,7 @@ bool Karamba::sendData(const QString &prettyThemeName, const QString &data) cons
     return true;
 }
 
+bool Karamba::isSubTheme() const
+{
+    return m_subTheme;
+}

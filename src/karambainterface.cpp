@@ -134,6 +134,7 @@ KarambaInterface::KarambaInterface(Karamba *k)
                 "try: karamba.connect('keyPressed(QObject*, QObject*, QString)',keyPressed)\n"
                 "except NameError: pass\n"
                 "try: karamba.connect('themeNotify(QObject*, QString, QString)',themeNotify)\n"
+                "except NameError: pass\n"
             ).arg(scriptFile)
         );
 
@@ -3240,11 +3241,16 @@ QString KarambaInterface::getPrettyThemeName(const Karamba *k) const
 *  RETURN VALUE
 *    List of Dictionaries of services and service groups
 */
+#ifdef __GNUC__
+#warning Implement
+#endif
 QStringList KarambaInterface::getServiceGroups(const Karamba *k, QString path) const
 {
     if (!checkKaramba(k)) {
         return QStringList();
     }
+
+    Q_UNUSED(path);
 
     // Use QHash/QMap for this?
     return QStringList();
@@ -3442,7 +3448,7 @@ Karamba* KarambaInterface::openNamedTheme(const QString &themePath, const QStrin
         QString prettyName(themeName);
         KarambaApplication* app = (KarambaApplication*)qApp;
         if (!app->themeExists(prettyName)) {
-            newTheme = new Karamba(KUrl(themePath));
+            newTheme = new Karamba(KUrl(themePath), -1, subTheme);
             newTheme->show();
         }
     }

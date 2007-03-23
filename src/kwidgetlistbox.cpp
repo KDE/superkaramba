@@ -23,7 +23,7 @@
 #include <QShowEvent>
 #include <QScrollBar>
 
-KWidgetListbox::KWidgetListbox(QWidget *parent, const char *name)
+KWidgetListbox::KWidgetListbox(QWidget *parent)
         : QTableWidget(parent)
 {
     setRowCount(0);

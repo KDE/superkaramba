@@ -131,15 +131,12 @@ PyObject* py_move_widget(PyObject *, PyObject *args)
 long widgetSetOnTop(long widget, bool b)
 {
     Karamba* currTheme = (Karamba*)widget;
-#ifdef __GNUC__
-#warning how to handle on top?
-#endif
-    /*
+
     if (currTheme != 0)
     {
-      currTheme->setAlwaysOnTop(b);
+      currTheme->setOnTop(b);
     }
-    */
+
     return 1;
 }
 
