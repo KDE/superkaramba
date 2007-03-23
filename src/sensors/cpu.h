@@ -16,8 +16,9 @@ class CPUSensor :  public Sensor
 {
     Q_OBJECT
 public:
-    CPUSensor(QString cpuNbr, int interval);
+    CPUSensor(const QString &cpu, int interval);
     ~CPUSensor();
+
     void update();
     void setMaxValue(SensorParams *sp);
 

@@ -27,7 +27,7 @@
 
 #include "cpu.h"
 
-CPUSensor::CPUSensor(QString cpu, int interval) :
+CPUSensor::CPUSensor(const QString &cpu, int interval) :
         Sensor(interval), userTicks(0), sysTicks(0), niceTicks(0), idleTicks(0)
 {
     cpuNbr = cpu;
@@ -77,7 +77,7 @@ void CPUSensor::getTicks(long &u, long &s, long &n, long &i)
         line = t.readLine();
         rx.indexIn(line);
 
-        while ((line = t.readLine()) != 0 && rx.cap(0) == "") {
+        while ((line = t.readLine()) != 0 && rx.cap(0).isEmpty()) {
             rx.indexIn(line);
         }
         //user

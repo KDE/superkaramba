@@ -46,7 +46,7 @@ bool SKNewStuff::install(const QString &fileName)
     QFileInfo fi(fileName);
     QString base = fi.baseName();
     QString baseDestDir = myStdDir.saveLocation("data", KGlobal::mainComponent().componentName() + "/themes/", true);
-    const QString destDir = baseDestDir + base + "/";
+    const QString destDir = baseDestDir + base + '/';
     KStandardDirs::makeDir(destDir);
 
     kDebug() << "SKNewStuff::install() mimetype: " << result->name() << endl;

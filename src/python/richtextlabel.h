@@ -45,7 +45,7 @@
 *   Except if command starts with an '#' (ie: href="#value" ) the callback
 *   meterClicked is called with value (without the #) as the meter argument.
 *
-*   Also inline images work. Unfortunatly currently only when using absolute
+*   Also inline images work. Unfortunately currently only when using absolute
 *   paths.
 * ARGUMENTS
 *   * long widget -- karamba
@@ -61,7 +61,7 @@ PyObject* py_createRichText(PyObject *self, PyObject *args);
 * SYNOPSIS
 *   long deleteRichText(widget, richtext)
 * DESCRIPTION
-*   This removes a richt text object from memory. Please do not call
+*   This removes a rich text object from memory. Please do not call
 *   functions on "text" after calling deleteRichText, as it does not exist
 *   anymore and that could cause crashes in some cases.
 * ARGUMENTS
@@ -218,7 +218,7 @@ PyObject* py_getRichTextValue(PyObject *self, PyObject *args);
 *   Except if command starts with an '#' (ie: href="#value" ) the callback
 *   meterClicked is called with value (without the #) as the meter argument.
 *
-*   Also inline images work. Unfortunatly currently only when using absolute
+*   Also inline images work. Unfortunately currently only when using absolute
 *   paths.
 * ARGUMENTS
 *   * long widget -- karamba

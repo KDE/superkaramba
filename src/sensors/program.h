@@ -20,7 +20,7 @@ class ProgramSensor :  public Sensor
 {
     Q_OBJECT
 public:
-    ProgramSensor(const QString &programName, int msec = 1000, QString encoding = "");
+    explicit ProgramSensor(const QString &programName, int msec = 1000, const QString &encoding = QString());
     ~ProgramSensor();
     void update();
 

@@ -47,8 +47,8 @@ public:
     };
     void removeInstance(int instance);
 
-    void setDescriptionText(QString text);
-    void setHeaderText(QString text);
+    void setDescriptionText(const QString &text);
+    void setHeaderText(const QString &text);
     void showButton(bool show);
 
 protected:

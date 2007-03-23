@@ -71,7 +71,7 @@ KarambaInterface::KarambaInterface(Karamba *k)
     Kross::Manager::self().addObject(this, "karamba");
 
     // Get the python theme file
-    QString scriptFile = k->theme().path() + "/" + k->theme().pythonModule() + ".py";
+    QString scriptFile = k->theme().path() + '/' + k->theme().pythonModule() + ".py";
     if( ! QFileInfo(scriptFile).exists() ) {
         kWarning() << "Python theme script file not found: " << scriptFile << endl;
     }
@@ -419,7 +419,7 @@ void KarambaInterface::callWidgetClosed(Karamba *k)
     emit widgetClosed(k);
 }
 
-void KarambaInterface::callMenuOptionChanged(Karamba *k, QString key, bool value)
+void KarambaInterface::callMenuOptionChanged(Karamba *k, const QString &key, bool value)
 {
     emit menuOptionChanged(k, key, value);
 }
@@ -464,7 +464,7 @@ void KarambaInterface::callCommandOutput(Karamba *k, int pid, char* buffer)
     emit commandOutput(k, pid, QString(buffer));
 }
 
-void KarambaInterface::callItemDropped(Karamba *k, QString text, int x, int y)
+void KarambaInterface::callItemDropped(Karamba *k, const QString &text, int x, int y)
 {
     emit itemDropped(k, text, x, y);
 }
@@ -474,7 +474,7 @@ void KarambaInterface::callMeterClicked(Karamba *k, Meter *m, int button)
     emit meterClicked(k, m, button);
 }
 
-void KarambaInterface::callMeterClicked(Karamba *k, QString str, int button)
+void KarambaInterface::callMeterClicked(Karamba *k, const QString &str, int button)
 {
     emit meterClicked(k, str, button);
 }
@@ -494,7 +494,7 @@ void KarambaInterface::callWidgetMouseMoved(Karamba *k, int x, int y, int button
     emit widgetMouseMoved(k, x, y, button);
 }
 
-void KarambaInterface::callKeyPressed(Karamba *k, Meter *meter, QString key)
+void KarambaInterface::callKeyPressed(Karamba *k, Meter *meter, const QString &key)
 {
     emit keyPressed(k, meter, key);
 }
@@ -1850,7 +1850,7 @@ bool KarambaInterface::rotateImage(const Karamba *k, ImageLabel *image, int deg)
 * DESCRIPTION
 *   SuperKaramba supports a simplistic configuration pop-up menu. This menu
 *   appears when you right-click on a widget and choose Configure Theme.
-*   Basically, it allows you to have check-able entrys in the menu to allow
+*   Basically, it allows you to have check-able entries in the menu to allow
 *   the user to enable or disable features in your theme.
 *
 *   Before you use any configuration menu stuff, you NEED to add a new
@@ -3103,7 +3103,7 @@ QObject* KarambaInterface::createServiceClickArea(Karamba *k, int x, int y, int 
 *
 *   To use it, call executeInteractive with the reference to your widget and
 *   a list of command options. The array is simply a list that contains the
-*   command as the first entry, and each option as a seperate list entry.
+*   command as the first entry, and each option as a separate list entry.
 *   Output from the command is returned via the commandOutput callback.
 *
 *   The command returns the process number of the command. This is useful if
@@ -3157,7 +3157,7 @@ int KarambaInterface::executeInteractive(Karamba *k, const QStringList &command)
 * RETURN VALUE
 *   ip address as string
 */
-QString KarambaInterface::getIP(const Karamba *k, QString interface) const
+QString KarambaInterface::getIP(const Karamba *k, const QString &interface) const
 {
     if (!checkKaramba(k)) {
         return QString::null;
@@ -3241,7 +3241,7 @@ QString KarambaInterface::getPrettyThemeName(const Karamba *k) const
 #ifdef __GNUC__
 #warning Implement
 #endif
-QStringList KarambaInterface::getServiceGroups(const Karamba *k, QString path) const
+QStringList KarambaInterface::getServiceGroups(const Karamba *k, const QString &path) const
 {
     if (!checkKaramba(k)) {
         return QStringList();
@@ -3589,7 +3589,7 @@ QString KarambaInterface::getIncomingData(const Karamba *k) const
 */
 
 // Is the theme path or the pretty name required?
-bool KarambaInterface::setIncomingData(const Karamba *k, const QString &prettyThemeName, QString data)
+bool KarambaInterface::setIncomingData(const Karamba *k, const QString &prettyThemeName, const QString &data)
     const
 {
     if (checkKaramba(k)) {
@@ -3756,7 +3756,7 @@ bool KarambaInterface::wantRightButton(Karamba *k, bool enable) const
 *   Except if command starts with an '#' (ie: href="#value" ) the callback
 *   meterClicked is called with value (without the #) as the meter argument.
 *
-*   Also inline images work. Unfortunatly currently only when using absolute
+*   Also inline images work. Unfortunately currently only when using absolute
 *   paths.
 * ARGUMENTS
 *   * reference to widget -- karamba
@@ -3785,7 +3785,7 @@ QObject* KarambaInterface::createRichText(Karamba* k, const QString &text, bool 
 * SYNOPSIS
 *   boolean deleteRichText(widget, richtext)
 * DESCRIPTION
-*   This removes the richt text from the widget. Please do not call
+*   This removes the rich text from the widget. Please do not call
 *   functions on "text" after calling deleteRichText, as it does not exist
 *   anymore and that could cause crashes in some cases.
 * ARGUMENTS
@@ -3926,7 +3926,7 @@ QVariantList KarambaInterface::getRichTextSize(const Karamba *k, const RichTextL
 *   Except if command starts with an '#' (ie: href="#value" ) the callback
 *   meterClicked is called with value (without the #) as the meter argument.
 *
-*   Also inline images work. Unfortunatly currently only when using absolute
+*   Also inline images work. Unfortunately currently only when using absolute
 *   paths.
 * ARGUMENTS
 *   * reference to widget -- karamba
@@ -4342,7 +4342,7 @@ QStringList KarambaInterface::getTaskNames(const Karamba *k) const
 *         click on a window. If it is iconified, raise it. If it has focus,
 *         iconify it.
 *   * 9 = Toggle whether this window is always on top
-*   * 10 = Toggle wheter this window is shaded (rolled up)
+*   * 10 = Toggle whether this window is shaded (rolled up)
 * ARGUMENTS
 *   * reference to widget -- karamba
 *   * reference to task -- task

@@ -46,7 +46,7 @@ public:
     void callInitWidget(Karamba *k);
     void callWidgetUpdated(Karamba *k);
     void callWidgetClosed(Karamba *k);
-    void callMenuOptionChanged(Karamba *k, QString key, bool value);
+    void callMenuOptionChanged(Karamba *k, const QString &key, bool value);
     void callMenuItemClicked(Karamba* k, KMenu* menu, QAction* id);
     void callActiveTaskChanged(Karamba *k, Task* t);
     void callTaskAdded(Karamba *k, Task *t);
@@ -55,13 +55,13 @@ public:
     void callStartupRemoved(Karamba *k, Startup *t);
     void callCommandFinished(Karamba *k, int pid);
     void callCommandOutput(Karamba *k, int pid, char* buffer);
-    void callItemDropped(Karamba *k, QString text, int x, int y);
+    void callItemDropped(Karamba *k, const QString &text, int x, int y);
     void callMeterClicked(Karamba *k, Meter *m, int button);
-    void callMeterClicked(Karamba *k, QString str, int button);
+    void callMeterClicked(Karamba *k, const QString &str, int button);
     void callWidgetClicked(Karamba *k, int x, int y, int button);
     void callDesktopChanged(Karamba *k, int desktop);
     void callWidgetMouseMoved(Karamba *k, int x, int y, int button);
-    void callKeyPressed(Karamba *k, Meter *meter, QString key);
+    void callKeyPressed(Karamba *k, Meter *meter, const QString &key);
     void callThemeNotify(Karamba *k, const QString &sender, const QString &data);
 
 Q_SIGNALS:
@@ -252,10 +252,10 @@ public Q_SLOTS:
     QObject* createServiceClickArea(Karamba *k, int x, int y, int width, int height,
         const QString &name, const QString &exec, const QString &icon) const;
     int executeInteractive(Karamba *k, const QStringList &command);
-    QString getIP(const Karamba *k, QString interface) const;
+    QString getIP(const Karamba *k, const QString &interface) const;
     int getNumberOfDesktops(const Karamba *k) const;
     QString getPrettyThemeName(const Karamba *k) const;
-    QStringList getServiceGroups(const Karamba *k, QString path) const;
+    QStringList getServiceGroups(const Karamba *k, const QString &path) const;
     QString getThemePath(const Karamba *k = 0) const;
     double getUpdateTime(const Karamba *k) const;
     bool setUpdateTime(Karamba *k, double updateTime) const;
@@ -272,7 +272,7 @@ public Q_SLOTS:
     bool run(const QString &appName, const QString &command, const QString &icon, const QStringList
             &arguments);
     QString getIncomingData(const Karamba *k) const;
-    bool setIncomingData(const Karamba *k, const QString &prettyThemeName, QString data) const;
+    bool setIncomingData(const Karamba *k, const QString &prettyThemeName, const QString &data) const;
     bool toggleShowDesktop(const Karamba *k) const;
     bool translateAll(const Karamba *k, int x, int y) const;
     QString userLanguage(const Karamba *k) const;

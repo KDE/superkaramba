@@ -34,7 +34,7 @@ Bar::~Bar()
     delete m_timer;
 }
 
-bool Bar::setImage(QString fileName)
+bool Bar::setImage(const QString &fileName)
 {
     QFileInfo fileInfo(fileName);
     bool res = false;

@@ -12,7 +12,7 @@
 
 #include "program.h"
 
-ProgramSensor::ProgramSensor(const QString &progName, int interval, QString encoding)
+ProgramSensor::ProgramSensor(const QString &progName, int interval, const QString &encoding)
         : Sensor(interval)
 {
     if (!encoding.isEmpty()) {

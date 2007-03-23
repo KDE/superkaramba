@@ -35,7 +35,7 @@ class KWidgetListbox : public QTableWidget
     Q_OBJECT
 
 public:
-    KWidgetListbox(QWidget *parent = 0);
+    explicit KWidgetListbox(QWidget *parent = 0);
     ~KWidgetListbox();
 
     int insertItem(QWidget* item, int index = -1);

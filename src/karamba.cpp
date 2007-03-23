@@ -78,7 +78,7 @@
 #include "karamba.h"
 #include "karamba.moc"
 
-Karamba::Karamba(KUrl themeFile, int instance, bool subTheme)
+Karamba::Karamba(const KUrl &themeFile, int instance, bool subTheme)
         : QObject(),
         QGraphicsItemGroup(),
         m_scene(0),
@@ -138,7 +138,7 @@ Karamba::Karamba(KUrl themeFile, int instance, bool subTheme)
         dirWatch->addFile(m_theme.file());
 
     if (!m_theme.isZipTheme() && m_theme.pythonModuleExists()) {
-        QString pythonFile = m_theme.path() + "/" + m_theme.pythonModule() + ".py";
+        QString pythonFile = m_theme.path() + '/' + m_theme.pythonModule() + ".py";
         if (!dirWatch->contains(pythonFile))
             dirWatch->addFile(pythonFile);
     }
@@ -479,7 +479,7 @@ bool Karamba::parseConfig()
                 QString path = lineParser.getString("PATH");
                 QFileInfo info(path);
                 if (info.isRelative())
-                    path = m_theme.path() + "/" + path;
+                    path = m_theme.path() + '/' + path;
 
                 new Karamba(path/*, m_view, m_scene*/);
             }
@@ -1165,7 +1165,7 @@ void Karamba::slotDesktopChanged(int desktop)
         m_info->setDesktop(NETWinInfo::OnAllDesktops);
 }
 
-void Karamba::addMenuConfigOption(QString key, QString name)
+void Karamba::addMenuConfigOption(const QString &key, const QString &name)
 {
     m_themeConfMenu->menuAction()->setVisible(true);
 
@@ -1192,7 +1192,7 @@ void Karamba::slotToggleConfigOption(QObject* sender)
         m_interface->callMenuOptionChanged(this, action->objectName(), action->isChecked());
 }
 
-bool Karamba::setMenuConfigOption(QString key, bool value)
+bool Karamba::setMenuConfigOption(const QString &key, bool value)
 {
     QList<QAction*> actions = m_themeConfMenu->actions();
     QAction *action;
@@ -1206,7 +1206,7 @@ bool Karamba::setMenuConfigOption(QString key, bool value)
     return false;
 }
 
-bool Karamba::readMenuConfigOption(QString key) const
+bool Karamba::readMenuConfigOption(const QString &key) const
 {
     QList<QAction*> actions = m_themeConfMenu->actions();
     QAction *action;
@@ -1230,7 +1230,7 @@ KMenu *Karamba::addPopupMenu()
     return tmp;
 }
 
-QAction* Karamba::addMenuItem(KMenu *menu, QString text, QString icon)
+QAction* Karamba::addMenuItem(KMenu *menu, const QString &text, const QString &icon)
 {
     QAction *action = menu->addAction(KIcon(icon), text);
     return action;
@@ -1629,7 +1629,7 @@ void Karamba::keyPressEvent(QKeyEvent *event)
     QGraphicsItem *item = m_scene->focusItem();
 
     if (Input* input = dynamic_cast<Input*>(item)) {
-        if (input->hasFocus()) {
+        if (input && input->hasFocus()) {
             input->keyPress(event);
         }
     }
@@ -1639,7 +1639,7 @@ void Karamba::keyPressEvent(QKeyEvent *event)
 
 void Karamba::slotFileChanged(const QString &file)
 {
-    QString pythonFile = m_theme.path() + "/" + m_theme.pythonModule() + ".py";
+    QString pythonFile = m_theme.path() + '/' + m_theme.pythonModule() + ".py";
 
     if (file == m_theme.file() || file == pythonFile)
         reloadConfig();

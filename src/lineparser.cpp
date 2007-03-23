@@ -41,7 +41,7 @@ void LineParser::set(const QString& line)
     m_meter = rx.cap(1).toUpper();
 }
 
-int LineParser::getInt(QString w, int def) const
+int LineParser::getInt(const QString &w, int def) const
 {
     QRegExp rx("\\W+" + w + "=([-]?\\d+)", Qt::CaseInsensitive);
     if (rx.indexIn(m_line) != -1)
@@ -50,7 +50,7 @@ int LineParser::getInt(QString w, int def) const
         return def;
 }
 
-QColor LineParser::getColor(QString w, QColor def) const
+QColor LineParser::getColor(const QString &w, const QColor &def) const
 {
     QRegExp rx("\\W+" + w + "=([-]?\\d+),([-]?\\d+),([-]?\\d+)", Qt::CaseInsensitive);
     if (rx.indexIn(m_line) != -1)
@@ -59,7 +59,7 @@ QColor LineParser::getColor(QString w, QColor def) const
         return def;
 }
 
-QString LineParser::getString(QString w, QString def) const
+QString LineParser::getString(const QString &w, const QString &def) const
 {
     QString result;
     QRegExp rx("\\W+" + w + "=\"([^\"]*)\"", Qt::CaseInsensitive);
@@ -78,7 +78,7 @@ QString LineParser::getString(QString w, QString def) const
         return def;
 }
 
-bool LineParser::getBoolean(QString w, bool def) const
+bool LineParser::getBoolean(const QString &w, bool def) const
 {
     QString boolean = getString(w, "-").toLower();
     if (boolean == "-")

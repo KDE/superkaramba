@@ -37,8 +37,8 @@ public:
     }
     void setFontSize(int);
     void setBGColor(QColor clr);
-    void setFont(QString);
-    void setAlignment(QString);
+    void setFont(const QString&);
+    void setAlignment(const QString&);
     void setFixedPitch(bool);
     void setShadow(int);
 
@@ -54,10 +54,10 @@ public:
     bool getFixedPitch() const;
     int getShadow() const;
     void setScroll(ScrollType type, QPoint speed, int gap, int pause);
-    void setScroll(QString type, QPoint speed, int gap, int pause);
+    void setScroll(const QString &type, const QPoint &speed, int gap, int pause);
 
-    void attachClickArea(QString leftMouseButton, QString middleMouseButton,
-                         QString rightMouseButton);
+    void attachClickArea(const QString &leftMouseButton, const QString &middleMouseButton,
+                         const QString &rightMouseButton);
 
     bool mouseEvent(QGraphicsSceneMouseEvent *e);
 
@@ -91,8 +91,9 @@ private:
     QString m_rightMouseButtonAction;
 
     int drawText(QPainter *p, int x, int y, int width, int height,
-                 QString text);
-    bool calculateScrollCoords(QRect meterRect, QRect &textRect,
+                 const QString &text);
+
+    bool calculateScrollCoords(const QRect &meterRect, QRect &textRect,
                                QPoint &next, int x, int y);
     void calculateTextSize();
 };

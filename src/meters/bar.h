@@ -29,7 +29,7 @@ public:
     virtual void setMin(int m);
 
 public slots:
-    bool setImage(QString imagePath);
+    bool setImage(const QString &imagePath);
     QString getImage() const;
 
     void setValue(const QString&);

@@ -36,7 +36,7 @@ class ThemesDlg : public QDialog, public Ui::ThemesLayout
     Q_OBJECT
 
 public:
-    ThemesDlg(QWidget *parent = 0, const char *name = 0);
+    explicit ThemesDlg(QWidget *parent = 0, const char *name = 0);
     ~ThemesDlg();
 
     int addTheme(const QString &appId, const QString &file);

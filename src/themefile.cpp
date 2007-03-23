@@ -246,7 +246,7 @@ bool ThemeFile::set(const KUrl &url)
         m_zip = new ZipFile();
         m_zip->setZip(m_file);
     } else {
-        m_path = fi.absoluteDir().absolutePath() + "/";
+        m_path = fi.absoluteDir().absolutePath() + '/';
         m_zipTheme = false;
     }
     parseXml();
@@ -331,7 +331,7 @@ bool ThemeFile::fileExists(const QString& filename) const
             m_zip->setFile(filename);
             return m_zip->exists();
         } else
-            return QFileInfo(path() + "/" + filename).exists();
+            return QFileInfo(path() + '/' + filename).exists();
     } else
         return QFileInfo(filename).exists();
 }
@@ -346,7 +346,7 @@ QByteArray ThemeFile::readThemeFile(const QString& filename) const
         m_zip->setFile(filename);
         ba = m_zip->data();
     } else {
-        QFile file(path() + "/" + filename);
+        QFile file(path() + '/' + filename);
 
         if (file.open(QIODevice::ReadOnly)) {
             ba = file.readAll();

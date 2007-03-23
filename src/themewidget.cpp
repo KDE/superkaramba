@@ -80,12 +80,12 @@ void ThemeWidget::updateRunning()
         running->setText("");
 }
 
-void ThemeWidget::setDescriptionText(QString text)
+void ThemeWidget::setDescriptionText(const QString &text)
 {
     description->setText(text);
 }
 
-void ThemeWidget::setHeaderText(QString text)
+void ThemeWidget::setHeaderText(const QString &text)
 {
     themeName->setText(text);
 }

@@ -64,7 +64,7 @@ public:
     void setWidth(int iw);
     void setHeight(int ih);
 
-    void setFont(QString f);
+    void setFont(const QString &f);
     QString getFont() const;
     void setFontSize(int size);
     int getFontSize() const;

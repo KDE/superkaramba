@@ -29,7 +29,7 @@ public:
     RichTextLabel(Karamba* k, int x, int y, int w, int h);
     ~RichTextLabel();
 
-    void setText(QString text, bool linkUnderline = false);
+    void setText(const QString &text, bool linkUnderline = false);
     void setValue(const QString &text);
     void setValue(int v);
     QString getStringValue() const
@@ -37,7 +37,7 @@ public:
         return source;
     }
 
-    void setFont(QString font);
+    void setFont(const QString &font);
     QString getFont() const;
     void setFontSize(int);
     int getFontSize() const;

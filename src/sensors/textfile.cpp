@@ -86,7 +86,7 @@ void TextFileSensor::update()
         if (lineNbr == 0) {
             QString text;
             for (int i = 0; i < count; i++) {
-                text += lines[i] + "\n";
+                text += lines[i] + '\n';
             }
             meter->setValue(text);
         }

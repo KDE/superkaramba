@@ -51,22 +51,12 @@ class TextField;
 class KarambaInterface;
 class KarambaPython;
 
-class TextField;
-class RichTextLabel;
-class Bar;
-class Graph;
-class TextLabel;
-class Input;
-class ImageLabel;
-class ClickArea;
-class ClickMap;
-
 class Karamba : public QObject, public QGraphicsItemGroup
 {
     Q_OBJECT
 
 public:
-    Karamba(KUrl themeFile, int instance = -1, bool subTheme = false);
+    explicit Karamba(const KUrl &themeFile, int instance = -1, bool subTheme = false);
 
     virtual ~Karamba();
 
@@ -90,7 +80,7 @@ public:
     TextField* getDefaultTextProps();
     void updateSensors();
     void setFixedSize(u_int w, u_int h);
-    bool readMenuConfigOption(QString key) const;
+    bool readMenuConfigOption(const QString &key) const;
     KConfig* getConfig() const;
     //void removePopupMenu(KMenu *menu);
     bool popupMenuExisting(const KMenu *menu) const;
@@ -100,11 +90,11 @@ public:
     void setUpdateTime(double newTime);
     void setWantRightButton(bool enable);
     void changeInterval(u_int newInterval);
-    void addMenuConfigOption(QString key, QString name);
-    bool setMenuConfigOption(QString key, bool value);
+    void addMenuConfigOption(const QString &key, const QString &name);
+    bool setMenuConfigOption(const QString &key, bool value);
     KMenu* addPopupMenu();
-    QAction* addMenuItem(KMenu *menu, QString text,
-                         QString icon);
+    QAction* addMenuItem(KMenu *menu, const QString &text,
+                         const QString &icon);
     void popupMenu(KMenu *menu, const QPoint &pos) const;
     void deletePopupMenu(KMenu *menu);
     void deleteMenuItem(QAction *action);

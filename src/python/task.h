@@ -46,7 +46,7 @@
 *         click on a window. If it is iconified, raise it. If it has focus,
 *         iconify it.
 *   * 9 = Toggle whether this window is always on top
-*   * 10 = Toggle wheter this window is shaded (rolled up)
+*   * 10 = Toggle whether this window is shaded (rolled up)
 * ARGUMENTS
 *   * long widget -- karamba
 *   * long task -- pointer to task

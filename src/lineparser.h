@@ -7,15 +7,15 @@
 class LineParser
 {
 public:
-    LineParser(const QString& line = QString::null);
+    LineParser(const QString& line = QString());
     ~LineParser();
 
     void set(const QString& line);
 
-    int getInt(QString w, int def = 0) const;
-    QColor getColor(QString w, QColor def = QColor()) const;
-    QString getString(QString w, QString def = QString()) const;
-    bool getBoolean(QString w, bool def = false) const;
+    int getInt(const QString &w, int def = 0) const;
+    QColor getColor(const QString &w, const QColor &def = QColor()) const;
+    QString getString(const QString &w, const QString &def = QString()) const;
+    bool getBoolean(const QString &w, bool def = false) const;
 
     const QString& meter() const
     {

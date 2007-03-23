@@ -152,7 +152,7 @@ QColor TextLabel::getBGColor() const
     return bgColor;
 }
 
-void TextLabel::setFont(QString f)
+void TextLabel::setFont(const QString &f)
 {
     font.setFamily(f);
     calculateTextSize();
@@ -174,7 +174,7 @@ int TextLabel::getFontSize() const
     return font.pixelSize();
 }
 
-void TextLabel::setAlignment(QString align)
+void TextLabel::setAlignment(const QString &align)
 {
     QString a = align.toUpper();
     if (a == "LEFT" || a.isEmpty())
@@ -217,19 +217,19 @@ int TextLabel::getShadow() const
     return shadow;
 }
 
-void TextLabel::setScroll(QString a, QPoint speed, int gap, int pause)
+void TextLabel::setScroll(const QString &a, const QPoint &speed, int gap, int pause)
 {
     ScrollType t = TextLabel::ScrollNone;
-    a = a.toUpper();
+    QString scroll = a.toUpper();
 
-    if (a == "NONE")
-        t = TextLabel::ScrollNone;
+    if (scroll == "NONE")
+        scroll = TextLabel::ScrollNone;
     else if (a == "NORMAL")
-        t = TextLabel::ScrollNormal;
+        scroll = TextLabel::ScrollNormal;
     else if (a == "BACKANDFORTH")
-        t = TextLabel::ScrollBackAndForth;
+        scroll = TextLabel::ScrollBackAndForth;
     else if (a == "ONEPASS")
-        t = TextLabel::ScrollOnePass;
+        scroll = TextLabel::ScrollOnePass;
 
     setScroll(t, speed, gap, pause);
 }
@@ -271,7 +271,7 @@ void TextLabel::setScroll(ScrollType type, QPoint speed, int gap, int pause)
 }
 
 int TextLabel::drawText(QPainter *p, int x, int y, int width, int height,
-                        QString text)
+                        const QString &text)
 {
     if (shadow != 0) {
         p->setPen(getBGColor());
@@ -286,7 +286,7 @@ int TextLabel::drawText(QPainter *p, int x, int y, int width, int height,
     return 0;
 }
 
-bool TextLabel::calculateScrollCoords(QRect meterRect, QRect &textRect,
+bool TextLabel::calculateScrollCoords(const QRect &meterRect, QRect &textRect,
                                       QPoint &next, int x, int y)
 {
     if (scrollType == ScrollBackAndForth &&
@@ -412,9 +412,9 @@ bool TextLabel::clickable()
     return m_clickable;
 }
 
-void TextLabel::attachClickArea(QString leftMouseButton,
-                                QString middleMouseButton,
-                                QString rightMouseButton)
+void TextLabel::attachClickArea(const QString &leftMouseButton,
+                                const QString &middleMouseButton,
+                                const QString &rightMouseButton)
 {
     m_leftMouseButtonAction = leftMouseButton;
     m_middleMouseButtonAction = middleMouseButton;

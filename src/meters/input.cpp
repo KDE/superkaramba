@@ -259,7 +259,7 @@ void Input::setHeight(int ih)
     Meter::setHeight(ih);
 }
 
-void Input::setFont(QString f)
+void Input::setFont(const QString &f)
 {
     m_font.setFamily(f);
 

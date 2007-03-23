@@ -19,7 +19,7 @@
 
 #include "network.h"
 
-NetworkSensor::NetworkSensor(QString dev, int interval): Sensor(interval)
+NetworkSensor::NetworkSensor(const QString &dev, int interval): Sensor(interval)
 {
     device = dev.toLower();
 

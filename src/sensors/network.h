@@ -26,7 +26,7 @@ class NetworkSensor :  public Sensor
 {
     Q_OBJECT
 public:
-    NetworkSensor(QString device, int interval);
+    NetworkSensor(const QString &device, int interval);
     ~NetworkSensor();
     void update();
 

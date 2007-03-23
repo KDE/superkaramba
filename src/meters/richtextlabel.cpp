@@ -50,7 +50,7 @@ RichTextLabel::~RichTextLabel()
     }
 }
 
-void RichTextLabel::setText(QString t, bool linkUnderline)
+void RichTextLabel::setText(const QString &t, bool linkUnderline)
 {
     source = t;
     if (text != 0) {
@@ -90,7 +90,7 @@ void RichTextLabel::setValue(int v)
     setText(QString::number(v));
 }
 
-void RichTextLabel::setFont(QString f)
+void RichTextLabel::setFont(const QString &f)
 {
     font.setFamily(f);
     if (text != 0)

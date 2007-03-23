@@ -28,7 +28,7 @@
 class MainWidget : public QGraphicsView
 {
 public:
-    MainWidget(QGraphicsScene *scene, QWidget *parent = 0);
+    explicit MainWidget(QGraphicsScene *scene, QWidget *parent = 0);
 
     ~MainWidget();
 

@@ -49,19 +49,19 @@ bool ClickArea::mouseEvent(QGraphicsSceneMouseEvent *e)
     return false;
 }
 
-void ClickArea::setOnClick(QString oc)
+void ClickArea::setOnClick(const QString &oc)
 {
     onClick = oc;
 }
 
-void ClickArea::setServiceOnClick(QString name , QString exec, QString icon)
+void ClickArea::setServiceOnClick(const QString &name, const QString &exec, const QString &icon)
 {
     svc_name = name;
     svc_onClick = exec;
     svc_icon = icon;
 }
 
-void ClickArea::setOnMiddleClick(QString oc)
+void ClickArea::setOnMiddleClick(const QString &oc)
 {
     onMiddleClick = oc;
 }

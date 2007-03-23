@@ -41,9 +41,9 @@ public:
 
     ~ClickArea();
 
-    void setOnClick(QString);
-    void setServiceOnClick(QString , QString, QString);
-    void setOnMiddleClick(QString);
+    void setOnClick(const QString&);
+    void setServiceOnClick(const QString& , const QString&, const QString&);
+    void setOnMiddleClick(const QString&);
 
     bool mouseEvent(QGraphicsSceneMouseEvent *e);
 
