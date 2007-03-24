@@ -274,6 +274,8 @@ Karamba::~Karamba()
 
     delete m_stepTimer;
 
+    delete m_backgroundInterface;
+
     if (!m_globalView) {
         delete m_view;
         delete m_scene;
