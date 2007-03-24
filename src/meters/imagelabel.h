@@ -74,7 +74,7 @@ private:
 class ChannelIntensity : public Effect
 {
 public:
-    ChannelIntensity(ImageLabel*, float r, QString c, int millisec);
+    ChannelIntensity(ImageLabel*, float r, const QString &c, int millisec);
 
     QPixmap apply(QPixmap pixmap);
 
@@ -118,7 +118,7 @@ public:
                QWidget *widget);
 
     void rolloverImage(QMouseEvent *e);
-    void parseImages(QString fn, QString fn_roll, int, int, int, int);
+    void parseImages(const QString &fn, const QString &fn_roll, int, int, int, int);
     virtual void show();
     virtual void hide();
 

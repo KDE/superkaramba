@@ -73,7 +73,7 @@ QPixmap Intensity::apply(QPixmap pixmap)
 }
 
 // ChannelIntensity
-ChannelIntensity::ChannelIntensity(ImageLabel* img, float r, QString c,
+ChannelIntensity::ChannelIntensity(ImageLabel* img, float r, const QString &c,
                                    int millisec) :
         Effect(img, millisec)
 {
@@ -366,7 +366,7 @@ bool ImageLabel::clickable()
     return m_allowClick;
 }
 
-void ImageLabel::parseImages(QString fn, QString fn_roll, int _xoff,
+void ImageLabel::parseImages(const QString &fn, const QString &fn_roll, int _xoff,
                              int _yoff, int _xon, int _yon)
 {
     //fn = filename;
@@ -388,7 +388,7 @@ void ImageLabel::parseImages(QString fn, QString fn_roll, int _xoff,
 
 
     if (fileInfo.isRelative() && !fileOnNet) {
-        path = m_karamba->theme().path() + "/" + fileName;
+        path = m_karamba->theme().path() + '/' + fileName;
     } else {
         path = fileName;
     }
@@ -423,7 +423,7 @@ void ImageLabel::parseImages(QString fn, QString fn_roll, int _xoff,
 
 
     if (fileInfo.isRelative() && !fileOnNet) {
-        path = m_karamba->theme().path() + "/" + fileName;
+        path = m_karamba->theme().path() + '/' + fileName;
     } else {
         path = fileName;
     }

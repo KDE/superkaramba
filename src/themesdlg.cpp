@@ -67,7 +67,7 @@ void ThemesDlg::saveUserAddedThemes()
         remove = false;
         QStringList::Iterator jtend(dirs.end());
         for (QStringList::Iterator jt = dirs.begin(); jt != jtend; ++jt) {
-            if (QFileInfo(*it).dir().path() + "/" == *jt) {
+            if (QFileInfo(*it).dir().path() + '/' == *jt) {
                 remove = true;
                 break;
             }
@@ -257,7 +257,7 @@ void ThemesDlg::addThemeToDialog(const KArchiveDirectory *archiveDir,
     for (QStringList::Iterator it = entries.begin(); it != end; ++it) {
         if (archiveDir->entry(*it)->isDirectory()) {
             addThemeToDialog(static_cast<const KArchiveDirectory*>(archiveDir->entry(*it)),
-                             destDir + *it + "/");
+                             destDir + *it + '/');
         } else {
             QFileInfo fi(*it);
             if (fi.suffix() == "theme") {
