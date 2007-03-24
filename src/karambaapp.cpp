@@ -14,6 +14,7 @@
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QMenu>
+#include <QDBusConnection>
 
 #include <KUrl>
 #include <KAction>
@@ -31,12 +32,16 @@
 #include "themesdlg.h"
 #include "karamba.h"
 #include "karambaapp.h"
+#include "superkarambaadaptor.h"
 #include "karambaapp.moc"
 
 KarambaApplication::KarambaApplication(Display *display, Qt::HANDLE visual, Qt::HANDLE colormap)
         :   KUniqueApplication(display, visual, colormap),
         m_themesDialog(0)
 {
+    new SuperKarambaAdaptor(this);
+    QDBusConnection dbus = QDBusConnection::sessionBus();
+    dbus.registerObject("/SuperKaramba", this);
 }
 
 KarambaApplication::~KarambaApplication()
@@ -72,8 +77,6 @@ void KarambaApplication::startThemes(const QList<KUrl> &lst)
         connect(k, SIGNAL(widgetStarted(Karamba*, bool)),
                 this, SLOT(karambaStarted(Karamba*, bool)));
     }
-
-    buildToolTip();
 }
 
 void KarambaApplication::karambaStarted(Karamba *k, bool success)
@@ -106,15 +109,6 @@ void KarambaApplication::karambaClosed(Karamba *k)
     buildToolTip();
 
     delete k;
-}
-
-void KarambaApplication::closeTheme(const QString &themeName)
-{
-    foreach(Karamba *k, m_karambas) {
-        if (k->objectName() == themeName) {
-            k->closeWidget();
-        }
-    }
 }
 
 bool KarambaApplication::themeExists(const QString &prettyName) const
@@ -159,18 +153,6 @@ int KarambaApplication::newInstance()
     }
 
     return 0;
-}
-
-void KarambaApplication::quitSuperKaramba()
-{
-    foreach(Karamba *k, m_karambas) {
-        k->closeWidget();
-    }
-
-    if (m_themesDialog)
-        m_themesDialog->saveUserAddedThemes();
-
-    quit();
 }
 
 bool KarambaApplication::hasKaramba(const Karamba *k) const
@@ -261,7 +243,7 @@ void KarambaApplication::showKarambaMenuExtension(bool show)
 
             menu->addAction(KIcon("get-hot-new-stuff"),
                             i18n("&Manage Themes..."), this,
-                            SLOT(showThemeDialog()), Qt::CTRL + Qt::Key_M);
+                            SLOT(showThemesDialog()), Qt::CTRL + Qt::Key_M);
 
             menu->addAction(KIcon("application-exit"),
                             i18n("&Quit SuperKaramba"), this,
@@ -273,7 +255,7 @@ void KarambaApplication::showKarambaMenuExtension(bool show)
     }
 }
 
-void KarambaApplication::showThemeDialog(QSystemTrayIcon::ActivationReason reason)
+void KarambaApplication::showThemesDialog(QSystemTrayIcon::ActivationReason reason)
 {
     if (reason == QSystemTrayIcon::Context)
         m_sysTrayIcon->show();
@@ -327,6 +309,87 @@ void KarambaApplication::setupSysTray(KAboutData* about)
             this, SLOT(quitSuperKaramba()));
     connect(m_sysTrayIcon,
             SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
-            this, SLOT(showThemeDialog(QSystemTrayIcon::ActivationReason)));
+            this, SLOT(showThemesDialog(QSystemTrayIcon::ActivationReason)));
+}
+
+//
+// D-Bus methods
+//
+bool KarambaApplication::closeTheme(const QString &themeName)
+{
+    foreach(Karamba *k, m_karambas) {
+        if (k->prettyName() == themeName) {
+            k->closeWidget();
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
+void KarambaApplication::hideSystemTray(bool hide)
+{
+    if (hide && m_sysTrayIcon->isVisible()) {
+        toggleSystemTray();
+    } else if (!hide && !m_sysTrayIcon->isVisible()) {
+        toggleSystemTray();
+    }
+}
+
+void KarambaApplication::openNamedTheme(const QString &file, const QString &themeName, bool subTheme)
+{
+    Karamba *k = new Karamba(KUrl(file), -1, subTheme);
+    k->setPrettyName(themeName);
+    connect(k, SIGNAL(widgetStarted(Karamba*, bool)),
+        this, SLOT(karambaStarted(Karamba*, bool)));
+}
+
+void KarambaApplication::openTheme(const QString &file)
+{
+    Karamba *k = new Karamba(KUrl(file));
+    connect(k, SIGNAL(widgetStarted(Karamba*, bool)),
+        this, SLOT(karambaStarted(Karamba*, bool)));
+}
+
+void KarambaApplication::quitSuperKaramba()
+{
+    foreach(Karamba *k, m_karambas) {
+        k->closeWidget();
+    }
+
+    if (m_themesDialog)
+        m_themesDialog->saveUserAddedThemes();
+
+    quit();
+}
+
+bool KarambaApplication::setIncomingData(const QString &prettyThemeName, const QString &data)
+{
+    Karamba *k = getKaramba(prettyThemeName);
+    if (k == 0) {
+        return false;
+    }
+
+    k->setIncomingData(data);
+
+    return true;
+}
+
+void KarambaApplication::showThemeDialog()
+{
+    showThemesDialog();
+}
+
+bool KarambaApplication::themeNotify(const QString &prettyThemeName, const QString &data)
+{
+    Karamba *k = getKaramba(prettyThemeName);
+    if (k == 0) {
+        return false;
+    }
+
+    k->notifyTheme(prettyThemeName, data);
+
+    return true;
 }
 

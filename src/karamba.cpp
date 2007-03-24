@@ -109,7 +109,8 @@ Karamba::Karamba(const KUrl &themeFile, int instance, bool subTheme)
         m_instance(instance),
         m_wantRightButton(false),
         m_globalView(true),
-        m_subTheme(subTheme)
+        m_subTheme(subTheme),
+        m_backgroundInterface(0)
 {
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     if (args->isSet("usekross")) {
@@ -157,10 +158,8 @@ Karamba::Karamba(const KUrl &themeFile, int instance, bool subTheme)
     connect(m_KWinModule, SIGNAL(currentDesktopChanged(int)), this,
             SLOT(currentDesktopChanged(int)));
 
-#ifdef __GNUC__
-#warning Implement with DBUS
-#endif
-    connect(kapp, SIGNAL(backgroundChanged(int)), this,
+    m_backgroundInterface = new org::kde::kdesktop::Background("org.kde.kdesktop", "/Background", QDBusConnection::sessionBus());
+    connect(m_backgroundInterface, SIGNAL(backgroundChanged(int)), this,
             SLOT(currentWallpaperChanged(int)));
 
     setAcceptsHoverEvents(true);
@@ -308,6 +307,11 @@ void Karamba::startKaramba()
 QString Karamba::prettyName() const
 {
     return m_prettyName;
+}
+
+void Karamba::setPrettyName(const QString &prettyThemeName)
+{
+    m_prettyName = prettyThemeName;
 }
 
 void Karamba::step()
@@ -1163,6 +1167,17 @@ void Karamba::slotDesktopChanged(int desktop)
         m_info->setDesktop(desktop);
     else
         m_info->setDesktop(NETWinInfo::OnAllDesktops);
+}
+
+void Karamba::currentWallpaperChanged(int desktop)
+{
+    if (m_python) {
+        m_python->wallpaperChanged(this, desktop);
+    }
+
+    if (m_interface) {
+        m_interface->callWallpaperChanged(this, desktop);
+    }
 }
 
 void Karamba::addMenuConfigOption(const QString &key, const QString &name)

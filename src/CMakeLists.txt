@@ -70,6 +70,11 @@ KDE4_ADD_KCFG_FILES(superkaramba_SRCS
 superkarambasettings.kcfgc
 )
 
+QT4_ADD_DBUS_ADAPTOR(superkaramba_SRCS org.kde.superkaramba.xml karambaapp.h KarambaApplication)
+
+set(kdesktop_xml ${DBUS_INTERFACES_DIR}/org.kde.kdesktop.Background.xml)
+QT4_ADD_DBUS_INTERFACE(superkaramba_SRCS ${kdesktop_xml} kdesktop_background_interface)
+
 KDE4_AUTOMOC(${superkaramba_SRCS})
 
 KDE4_ADD_EXECUTABLE(superkaramba ${superkaramba_SRCS})
@@ -91,3 +96,4 @@ install(TARGETS superkaramba DESTINATION ${BIN_INSTALL_DIR})
 
 install(FILES superkarambaui.rc DESTINATION ${DATA_INSTALL_DIR}/superkaramba)
 install(FILES superkaramba.desktop  DESTINATION ${XDG_APPS_DIR})
+install(FILES org.kde.superkaramba.xml DESTINATION ${DBUS_INTERFACES_DIR})

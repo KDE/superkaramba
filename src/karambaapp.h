@@ -31,6 +31,7 @@ class Karamba;
 class KarambaApplication : public KUniqueApplication
 {
     Q_OBJECT
+    Q_CLASSINFO("D-Bus Interface", "org.kde.SuperKaramba")
 public:
     KarambaApplication(Display *display, Qt::HANDLE visual, Qt::HANDLE colormap);
     ~KarambaApplication();
@@ -40,16 +41,23 @@ public:
     bool hasKaramba(const Karamba *k) const;
     Karamba* getKaramba(const QString &prettyName) const;
     bool themeExists(const QString &prettyName) const;
-    void closeTheme(const QString &themeName);
 
     void setupSysTray(KAboutData* about);
 
 public Q_SLOTS:
-    void quitSuperKaramba();
-    void showThemeDialog(QSystemTrayIcon::ActivationReason reason = QSystemTrayIcon::Unknown);
+    void showThemesDialog(QSystemTrayIcon::ActivationReason reason = QSystemTrayIcon::Unknown);
 
     void karambaStarted(Karamba*, bool);
     void karambaClosed(Karamba*);
+
+    Q_SCRIPTABLE bool closeTheme(const QString &prettyThemeName);
+    Q_SCRIPTABLE void hideSystemTray(bool hide);
+    Q_SCRIPTABLE void openNamedTheme(const QString &file, const QString &themeName, bool subTheme);
+    Q_SCRIPTABLE void openTheme(const QString &file);
+    Q_SCRIPTABLE void quitSuperKaramba();
+    Q_SCRIPTABLE bool setIncomingData(const QString &prettyThemeName, const QString &data);
+    Q_SCRIPTABLE void showThemeDialog();
+    Q_SCRIPTABLE bool themeNotify(const QString &prettyThemeName, const QString &data);
 
 private:
     void checkCommandLine(KCmdLineArgs *args, QList<KUrl> &lst);

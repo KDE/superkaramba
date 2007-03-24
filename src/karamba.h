@@ -29,6 +29,7 @@
 #include <QGraphicsItemGroup>
 
 #include <KUrl>
+#include <kdesktop_background_interface.h>
 #include <netwm.h>
 
 #include "themefile.h"
@@ -84,6 +85,7 @@ public:
     KConfig* getConfig() const;
     //void removePopupMenu(KMenu *menu);
     bool popupMenuExisting(const KMenu *menu) const;
+    void setPrettyName(const QString &prettyThemeName);
     QString prettyName() const;
     int getNumberOfDesktops() const;
     double getUpdateTime() const;
@@ -146,6 +148,7 @@ private Q_SLOTS:
     void currentDesktopChanged(int i);
     void slotToggleConfigOption(QObject*);
     void slotDesktopChanged(int desktop);
+    void currentWallpaperChanged(int desktop);
 
     void step();
 
@@ -227,6 +230,8 @@ private:
     bool m_globalView;
 
     bool m_subTheme;
+
+    OrgKdeKdesktopBackgroundInterface* m_backgroundInterface;
 
     bool parseConfig();
     Sensor *findSensorFromList(const Meter *meter) const;

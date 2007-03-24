@@ -63,6 +63,7 @@ public:
     void callWidgetMouseMoved(Karamba *k, int x, int y, int button);
     void callKeyPressed(Karamba *k, Meter *meter, const QString &key);
     void callThemeNotify(Karamba *k, const QString &sender, const QString &data);
+    void callWallpaperChanged(Karamba *k, int desktop);
 
 Q_SIGNALS:
     void initWidget(QObject*);
@@ -85,6 +86,7 @@ Q_SIGNALS:
     void widgetMouseMoved(QObject*, int, int, int);
     void keyPressed(QObject*, QObject*, QString);
     void themeNotify(QObject*, QString, QString);
+    void wallpaperChanged(QObject*, int);
 
 private:
     /// \internal d-pointer class.

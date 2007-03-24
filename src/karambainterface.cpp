@@ -132,6 +132,8 @@ KarambaInterface::KarambaInterface(Karamba *k)
                 "except NameError: pass\n"
                 "try: karamba.connect('themeNotify(QObject*, QString, QString)',themeNotify)\n"
                 "except NameError: pass\n"
+                "try: karamba.connect('wallpaperChanged(QObject*, int)', wallpaperChanged)\n"
+                "except NameError: pass\n"
             ).arg(scriptFile)
         );
 
@@ -503,6 +505,12 @@ void KarambaInterface::callThemeNotify(Karamba *k, const QString &sender, const 
 {
     emit themeNotify(k, sender, data);
 }
+
+void KarambaInterface::callWallpaperChanged(Karamba *k, int desktop)
+{
+    emit wallpaperChanged(k, desktop);
+}
+
 
 // Calls from scripts --------------------
 
