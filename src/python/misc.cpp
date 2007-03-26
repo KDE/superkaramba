@@ -135,7 +135,7 @@ PyObject* py_execute_command_interactive(PyObject *, PyObject* args)
 
     Karamba* currTheme = (Karamba*)widget;
 
-    currTheme->currProcess = new KProcess;
+    currTheme->currProcess = new K3Process;
 
     /* get the number of lines passed to us */
     numLines = PyList_Size(listObj);
@@ -158,14 +158,14 @@ PyObject* py_execute_command_interactive(PyObject *, PyObject* args)
 
     }
     QApplication::connect(currTheme->currProcess,
-                          SIGNAL(processExited(KProcess *)),
+                          SIGNAL(processExited(K3Process *)),
                           currTheme,
-                          SLOT(processExited(KProcess *)));
+                          SLOT(processExited(K3Process *)));
     QApplication::connect(currTheme->currProcess,
-                          SIGNAL(receivedStdout(KProcess *, char *, int)),
+                          SIGNAL(receivedStdout(K3Process *, char *, int)),
                           currTheme,
-                          SLOT(receivedStdout(KProcess *, char *, int)));
-    currTheme->currProcess->start(KProcess::NotifyOnExit, KProcess::Stdout);
+                          SLOT(receivedStdout(K3Process *, char *, int)));
+    currTheme->currProcess->start(K3Process::NotifyOnExit, K3Process::Stdout);
 
     return Py_BuildValue((char*)"l", (int)(currTheme->currProcess->pid()));
 }

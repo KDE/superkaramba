@@ -2,8 +2,8 @@
 #ifndef SENSORSENSOR_H
 #define SENSORSENSOR_H
 
-#include <KProcess>
-#include <KProcIO>
+#include <K3Process>
+#include <K3ProcIO>
 
 #include "sensor.h"
 
@@ -23,7 +23,7 @@ public:
 
 
 private:
-    KShellProcess ksp;
+    K3ShellProcess ksp;
     QString extraParams;
 
     QMap<QString, QString> sensorMap;
@@ -33,8 +33,8 @@ private:
     QString sensorResult;
 
 private slots:
-    void receivedStdout(KProcess *, char *buffer, int);
-    void processExited(KProcess *);
+    void receivedStdout(K3Process *, char *buffer, int);
+    void processExited(K3Process *);
 
 
 

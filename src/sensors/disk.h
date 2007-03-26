@@ -10,7 +10,7 @@
 #ifndef DISKSENSOR_H
 #define DISKSENSOR_H
 
-#include <KProcess>
+#include <K3Process>
 
 #include "sensor.h"
 
@@ -30,7 +30,7 @@ private:
     int getPercentUsed(const QString &mntPt) const;
     int getPercentFree(const QString &mntPt) const;
 
-    KShellProcess ksp;
+    K3ShellProcess ksp;
     QString sensorResult;
 
     QMap<QString, QString> mntMap;
@@ -39,8 +39,8 @@ private:
     int init;
 
 private slots:
-    void receivedStdout(KProcess *, char *buffer, int);
-    void processExited(KProcess *);
+    void receivedStdout(K3Process *, char *buffer, int);
+    void processExited(K3Process *);
 
 signals:
     void initComplete();

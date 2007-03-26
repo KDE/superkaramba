@@ -25,22 +25,22 @@ ProgramSensor::ProgramSensor(const QString &progName, int interval, const QStrin
 
     programName = progName;
     //update();
-    connect(&ksp, SIGNAL(receivedStdout(KProcess *, char *, int)),
-            this, SLOT(receivedStdout(KProcess *, char *, int)));
-    connect(&ksp, SIGNAL(processExited(KProcess *)),
-            this, SLOT(processExited(KProcess *)));
+    connect(&ksp, SIGNAL(receivedStdout(K3Process *, char *, int)),
+            this, SLOT(receivedStdout(K3Process *, char *, int)));
+    connect(&ksp, SIGNAL(processExited(K3Process *)),
+            this, SLOT(processExited(K3Process *)));
 }
 
 ProgramSensor::~ProgramSensor()
 {}
 
-void ProgramSensor::receivedStdout(KProcess *, char *buffer, int len)
+void ProgramSensor::receivedStdout(K3Process *, char *buffer, int len)
 {
     buffer[len] = 0;
     sensorResult += codec->toUnicode(buffer);
 }
 
-void ProgramSensor::processExited(KProcess *)
+void ProgramSensor::processExited(K3Process *)
 {
     int lineNbr;
     SensorParams *sp;
@@ -79,7 +79,7 @@ void ProgramSensor::update()
     ksp.clearArguments();
     ksp << programName;
 
-    ksp.start(KProcIO::NotifyOnExit, KProcIO::Stdout);
+    ksp.start(K3ProcIO::NotifyOnExit, K3ProcIO::Stdout);
 }
 
 #include "program.moc"

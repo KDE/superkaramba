@@ -1421,7 +1421,7 @@ void Karamba::startupRemoved(Startup::StartupPtr t)
         m_interface->callStartupRemoved(this, t.data());
 }
 
-void Karamba::processExited(KProcess* proc)
+void Karamba::processExited(K3Process* proc)
 {
     if (m_python)
         m_python->commandFinished(this, (int)proc->pid());
@@ -1430,7 +1430,7 @@ void Karamba::processExited(KProcess* proc)
         m_interface->callCommandFinished(this, (int)proc->pid());
 }
 
-void Karamba::receivedStdout(KProcess *proc, char *buffer, int)
+void Karamba::receivedStdout(K3Process *proc, char *buffer, int)
 {
     if (m_python)
         m_python->commandOutput(this, (int)proc->pid(), buffer);

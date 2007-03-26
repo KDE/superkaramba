@@ -29,10 +29,10 @@ SensorSensor::SensorSensor(int interval, char tempUnit) : Sensor(interval)
 #endif
     if (tempUnit == 'F')
         extraParams = " -f";
-    connect(&ksp, SIGNAL(receivedStdout(KProcess *, char *, int)),
-            this, SLOT(receivedStdout(KProcess *, char *, int)));
-    connect(&ksp, SIGNAL(processExited(KProcess *)),
-            this, SLOT(processExited(KProcess *)));
+    connect(&ksp, SIGNAL(receivedStdout(K3Process *, char *, int)),
+            this, SLOT(receivedStdout(K3Process *, char *, int)));
+    connect(&ksp, SIGNAL(processExited(K3Process *)),
+            this, SLOT(processExited(K3Process *)));
 
     // readValues();
 }
@@ -41,13 +41,13 @@ SensorSensor::SensorSensor(int interval, char tempUnit) : Sensor(interval)
 SensorSensor::~SensorSensor()
 {}
 
-void SensorSensor::receivedStdout(KProcess *, char *buffer, int len)
+void SensorSensor::receivedStdout(K3Process *, char *buffer, int len)
 {
     buffer[len] = 0;
     sensorResult += QString(buffer);
 }
 
-void SensorSensor::processExited(KProcess *)
+void SensorSensor::processExited(K3Process *)
 {
     QStringList stringList = sensorResult.split('\n');
     sensorResult = "";
@@ -104,7 +104,7 @@ void SensorSensor::update()
 #else
     ksp << "sensors" << extraParams;
 #endif
-    ksp.start(KProcess::NotifyOnExit, KProcIO::Stdout);
+    ksp.start(K3Process::NotifyOnExit, K3ProcIO::Stdout);
 }
 
 

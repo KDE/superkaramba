@@ -12,8 +12,8 @@
 
 #include "sensor.h"
 
-#include <KProcess>
-#include <KProcIO>
+#include <K3Process>
+#include <K3ProcIO>
 #include <QTextCodec>
 
 class ProgramSensor :  public Sensor
@@ -26,13 +26,13 @@ public:
 
 private:
     QTextCodec *codec;
-    KShellProcess ksp;
+    K3ShellProcess ksp;
     QString programName;
     QString sensorResult;
 
 public slots:
-    void receivedStdout(KProcess *proc, char *buffer, int buflen);
-    void processExited(KProcess *proc);
+    void receivedStdout(K3Process *proc, char *buffer, int buflen);
+    void processExited(K3Process *proc);
 };
 
 #endif // PROGRAMSENSOR_H

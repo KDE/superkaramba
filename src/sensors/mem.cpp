@@ -50,10 +50,10 @@ MemSensor::MemSensor(int msec) : Sensor(msec)
     /* we only need the amount of log(2)1024 for our conversion */
     pageshift -= 10;
 # if (defined(Q_OS_FREEBSD) && __FreeBSD_version < 500018)
-    connect(&ksp, SIGNAL(receivedStdout(KProcess *, char *, int)),
-            this, SLOT(receivedStdout(KProcess *, char *, int)));
-    connect(&ksp, SIGNAL(processExited(KProcess *)),
-            this, SLOT(processExited(KProcess *)));
+    connect(&ksp, SIGNAL(receivedStdout(K3Process *, char *, int)),
+            this, SLOT(receivedStdout(K3Process *, char *, int)));
+    connect(&ksp, SIGNAL(processExited(K3Process *)),
+            this, SLOT(processExited(K3Process *)));
 
     swapTotal = swapUsed = 0;
 
@@ -72,17 +72,17 @@ MemSensor::~MemSensor()
 {}
 
 #ifdef Q_OS_FREEBSD
-void MemSensor::receivedStdout(KProcess *, char *buffer, int len)
+void MemSensor::receivedStdout(K3Process *, char *buffer, int len)
 {
     buffer[len] = 0;
     sensorResult += QString(buffer);
 }
 #else
-void MemSensor::receivedStdout(KProcess *, char *, int)
+void MemSensor::receivedStdout(K3Process *, char *, int)
 {}
 #endif
 
-void MemSensor::processExited(KProcess *)
+void MemSensor::processExited(K3Process *)
 {
 #ifdef Q_OS_FREEBSD
     QStringList stringList = QStringList::split('\n', sensorResult);
@@ -267,7 +267,7 @@ void MemSensor::readValues()
 # if (defined(Q_OS_FREEBSD) && __FreeBSD_version < 500018)
     ksp.clearArguments();
     ksp << "swapinfo";
-    ksp.start(KProcess::NotifyOnExit, KProcIO::Stdout);
+    ksp.start(K3Process::NotifyOnExit, K3ProcIO::Stdout);
 # endif
 #else
     QFile file("/proc/meminfo");

@@ -43,7 +43,7 @@ class KMenu;
 class KToggleAction;
 class KWinModule;
 class KConfig;
-class KProcess;
+class K3Process;
 
 class Meter;
 class Sensor;
@@ -126,14 +126,14 @@ public:
     void setOnTop(bool stayOnTop);
     bool isSubTheme() const;
 
-    KProcess *currProcess;
+    K3Process *currProcess;
     Systemtray *systray;
 
 public Q_SLOTS:
     void closeWidget();
     void reloadConfig();
-    void processExited(KProcess *proc);
-    void receivedStdout(KProcess *proc, char *buffer, int buflen);
+    void processExited(K3Process *proc);
+    void receivedStdout(K3Process *proc, char *buffer, int buflen);
     void startupAdded(Startup::StartupPtr);
     void startupRemoved(Startup::StartupPtr);
     void taskAdded(Task::TaskPtr);

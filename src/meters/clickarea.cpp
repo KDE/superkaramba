@@ -27,7 +27,7 @@ ClickArea::~ClickArea()
 
 bool ClickArea::mouseEvent(QGraphicsSceneMouseEvent *e)
 {
-    //KShellProcess ksp;
+    //K3ShellProcess ksp;
     Q_UNUSED(e);
 
     if (!svc_name.isEmpty()) {

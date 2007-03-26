@@ -3135,20 +3135,20 @@ int KarambaInterface::executeInteractive(Karamba *k, const QStringList &command)
         return 0;
     }
 
-    k->currProcess = new KProcess;
+    k->currProcess = new K3Process;
     *(k->currProcess) << command;
 
     connect(k->currProcess,
-                          SIGNAL(processExited(KProcess *)),
+                          SIGNAL(processExited(K3Process *)),
                           k,
-                          SLOT(processExited(KProcess *)));
+                          SLOT(processExited(K3Process *)));
 
     connect(k->currProcess,
-                          SIGNAL(receivedStdout(KProcess *, char *, int)),
+                          SIGNAL(receivedStdout(K3Process *, char *, int)),
                           k,
-                          SLOT(receivedStdout(KProcess *, char *, int)));
+                          SLOT(receivedStdout(K3Process *, char *, int)));
 
-    k->currProcess->start(KProcess::NotifyOnExit, KProcess::Stdout);
+    k->currProcess->start(K3Process::NotifyOnExit, K3Process::Stdout);
 
     return k->currProcess->pid();
 }

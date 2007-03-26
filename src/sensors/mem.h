@@ -10,10 +10,10 @@
 #ifndef MEMSENSOR_H
 #define MEMSENSOR_H
 
-#include <KProcess>
+#include <K3Process>
 
 #ifdef __FreeBSD__
-#include <kprocio.h>
+#include <k3procio.h>
 #include <kvm.h>
 #include <osreldate.h>
 #endif
@@ -49,7 +49,7 @@ private:
     int swapTotal;
     int swapUsed;
 # if (defined(__FreeBSD__) && __FreeBSD_version < 500018)
-    KShellProcess ksp;
+    K3ShellProcess ksp;
     bool MaxSet;
 
 # elif defined __FreeBSD__
@@ -59,8 +59,8 @@ private:
 #endif
 
 private slots:
-    void receivedStdout(KProcess *, char *buffer, int);
-    void processExited(KProcess *);
+    void receivedStdout(K3Process *, char *buffer, int);
+    void processExited(K3Process *);
 
 };
 

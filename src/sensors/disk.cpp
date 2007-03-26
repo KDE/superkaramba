@@ -9,19 +9,19 @@
  ***************************************************************************/
 #include "disk.h"
 
-#include <KProcIO>
+#include <K3ProcIO>
 
 DiskSensor::DiskSensor(int msec) : Sensor(msec)
 {
-    connect(&ksp, SIGNAL(receivedStdout(KProcess *, char *, int)),
-            this, SLOT(receivedStdout(KProcess *, char *, int)));
-    connect(&ksp, SIGNAL(processExited(KProcess *)),
-            this, SLOT(processExited(KProcess *)));
+    connect(&ksp, SIGNAL(receivedStdout(K3Process *, char *, int)),
+            this, SLOT(receivedStdout(K3Process *, char *, int)));
+    connect(&ksp, SIGNAL(processExited(K3Process *)),
+            this, SLOT(processExited(K3Process *)));
 
     // update values on startup
     ksp.clearArguments();
     ksp << "df";
-    ksp.start(KProcIO::Block, KProcIO::Stdout);
+    ksp.start(K3ProcIO::Block, K3ProcIO::Stdout);
 
     init = 1;
 }
@@ -64,7 +64,7 @@ int DiskSensor::getPercentFree(const QString &mntPt) const
     return (100 - getPercentUsed(mntPt));
 }
 
-void DiskSensor::receivedStdout(KProcess *, char *buffer, int len)
+void DiskSensor::receivedStdout(K3Process *, char *buffer, int len)
 {
 
     buffer[len] = 0;
@@ -72,7 +72,7 @@ void DiskSensor::receivedStdout(KProcess *, char *buffer, int len)
 
 }
 
-void DiskSensor::processExited(KProcess *)
+void DiskSensor::processExited(K3Process *)
 {
     QStringList stringList = sensorResult.split('\n');
     sensorResult = "";
@@ -148,7 +148,7 @@ void DiskSensor::update()
 
     ksp.clearArguments();
     ksp << "df";
-    ksp.start(KProcIO::NotifyOnExit, KProcIO::Stdout);
+    ksp.start(K3ProcIO::NotifyOnExit, K3ProcIO::Stdout);
 }
 
 void DiskSensor::setMaxValue(SensorParams *sp)

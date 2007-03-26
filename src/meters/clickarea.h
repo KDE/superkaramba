@@ -24,7 +24,7 @@
 
 #include <QPainter>
 
-#include <KProcess>
+#include <K3Process>
 #include <KRun>
 
 #include "meter.h"
