@@ -1,5 +1,3 @@
-INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}  )
-
 ########### next target ###############
 
 SET(superkaramba_SRCS
@@ -80,8 +78,6 @@ KDE4_AUTOMOC(${superkaramba_SRCS})
 KDE4_ADD_EXECUTABLE(superkaramba ${superkaramba_SRCS})
 
 TARGET_LINK_LIBRARIES(superkaramba 
-${QT_AND_KDECORE_LIBS} 
-${KDE4_KDEUI_LIBRARY}
 ${KDE4_KNEWSTUFF_LIBS}
 ${KDE4_KIO_LIBS}
 ${KDE4_KROSSCORE_LIBS}

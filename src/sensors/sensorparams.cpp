@@ -32,3 +32,5 @@ Meter* SensorParams::getMeter() const
 {
     return meter;
 }
+
+#include "sensorparams.moc"

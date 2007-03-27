@@ -29,6 +29,7 @@
  **/
 class SensorParams : public QObject
 {
+    Q_OBJECT
 public:
     SensorParams(Meter*);
 
