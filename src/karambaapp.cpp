@@ -208,7 +208,7 @@ void KarambaApplication::setToolTip(const QString &tip)
 
 void KarambaApplication::toggleSystemTray()
 {
-    //kdDebug() << k_funcinfo << endl;
+    //kDebug() << k_funcinfo << endl;
     if (m_sysTrayIcon->isVisible()) {
         if (m_sysTrayIcon) {
             KMessageBox::information(m_themesDialog, i18n("<qt>Hiding the system tray icon will keep SuperKaramba running "

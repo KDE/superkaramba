@@ -39,7 +39,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <KSharedPtr>
 #include <KStartupInfo>
-#include <KWin>
+#include <KWM>
 
 #if defined(HAVE_XCOMPOSITE) && \
     defined(HAVE_XRENDER) && \
@@ -56,7 +56,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endif
 #endif
 
-class KWinModule;
+class KWM;
 class TaskManager;
 
 typedef QList<WId> WindowList;
@@ -102,7 +102,7 @@ public:
     {
         return _win;
     }
-    KWin::WindowInfo info() const
+    KWM::WindowInfo info() const
     {
         return _info;
     }
@@ -443,7 +443,7 @@ public Q_SLOTS:
     /**
      * This method informs the window manager of the location at which this
      * task will be displayed when iconised. It is used, for example by the
-     * KWin inconify animation.
+     * KWM inconify animation.
      */
     void publishIconGeometry(QRect);
 
@@ -491,7 +491,7 @@ private:
     WId                 _win;
     WId                 m_frameId;
     QPixmap             _pixmap;
-    KWin::WindowInfo    _info;
+    KWM::WindowInfo    _info;
     WindowList          _transients;
     WindowList          _transients_demanding_attention;
 
@@ -679,7 +679,7 @@ public:
     */
     static bool isOnScreen(int screen, const WId wid);
 
-    KWinModule* winModule() const
+    KWM* winModule() const
     {
         return m_winModule;
     }
@@ -758,7 +758,7 @@ private:
     WindowList _skiptaskbar_windows;
     Startup::List _startups;
     KStartupInfo* _startup_info;
-    KWinModule* m_winModule;
+    KWM* m_winModule;
     bool m_trackGeometry;
 
     static TaskManager* m_self;

@@ -22,7 +22,7 @@
 #ifndef __showdesktop_h__
 #define __showdesktop_h__
 
-class KWinModule;
+class KWM;
 
 /**
  * Singleton class that handles desktop access (minimizing all windows)
@@ -56,7 +56,7 @@ private:
     ShowDesktop();
 
     bool              showingDesktop;
-    KWinModule*       kWinModule;
+    KWM*       kWinModule;
     QList<WId>        iconifiedList;
 
 };

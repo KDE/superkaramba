@@ -22,7 +22,7 @@
 #include "themewidget.h"
 #include "kwidgetlistbox.h"
 #include "karamba.h"
-#include "sknewstuff.h"
+//#include "sknewstuff.h"
 #include "superkarambasettings.h"
 
 #include <KArchive>
@@ -38,7 +38,9 @@ ThemesDlg::ThemesDlg(QWidget *parent, const char *name)
     setObjectName(name);
 
     populateListbox();
+#if 0 // TODO port to knewstuff2
     mNewStuff = 0;
+#endif
 
     connect(buttonAddToDesktop, SIGNAL(clicked()), this, SLOT(addToDesktop()));
     connect(tableThemes, SIGNAL(selected(int)), this, SLOT(selectionChanged(int)));
@@ -50,9 +52,9 @@ ThemesDlg::~ThemesDlg()
 {
     //kDebug() << k_funcinfo << endl;
     saveUserAddedThemes();
-    if (mNewStuff) {
-        delete mNewStuff;
-    }
+#if 0 // TODO port to knewstuff2
+     delete mNewStuff;
+#endif
 }
 
 void ThemesDlg::saveUserAddedThemes()
@@ -206,10 +208,12 @@ void ThemesDlg::getNewStuff()
     //and still have the entry in the config that it was successful
     configSanityCheck();
 
+#if 0 // TODO port to knewstuff2
     if (!mNewStuff) {
         mNewStuff = new SKNewStuff(this);
     }
     mNewStuff->download();
+#endif
 }
 
 void ThemesDlg::selectionChanged(int index)

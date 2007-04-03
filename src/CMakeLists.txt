@@ -14,7 +14,7 @@ kwidgetlistbox.cpp
 taskmanager.cpp
 #systemtray.cpp
 showdesktop.cpp
-sknewstuff.cpp
+#sknewstuff.cpp
 karambasessionmanaged.cpp
 karambainterface.cpp
 

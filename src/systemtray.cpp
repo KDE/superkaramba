@@ -25,10 +25,10 @@
 #include <QList>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kwinmodule.h>
+#include <kwm.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
-#include <kwin.h>
+#include <kwm.h>
 
 #include <q3popupmenu.h>
 #include <q3dragobject.h>

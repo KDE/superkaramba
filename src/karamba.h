@@ -41,7 +41,7 @@ class QSignalMapper;
 
 class KMenu;
 class KToggleAction;
-class KWinModule;
+class KWM;
 class KConfig;
 class K3Process;
 
@@ -172,7 +172,7 @@ private:
     QGraphicsScene *m_scene;
     QGraphicsView *m_view;
 
-    KWinModule *m_KWinModule;
+    KWM *m_KWinModule;
 
     bool m_useKross;
     KarambaPython *m_python;

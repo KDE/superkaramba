@@ -1688,7 +1688,7 @@ QObject* KarambaInterface::createTaskIcon(Karamba *k, int x, int y, int ctask) c
     }
 
     //retrieve the QPixmap that represents this image
-    QPixmap iconPixmap = KWin::icon(currTask->window());
+    QPixmap iconPixmap = KWM::icon(currTask->window());
 
     ImageLabel *tmp = new ImageLabel(k, x, y, 0, 0);
     tmp->setValue(iconPixmap);

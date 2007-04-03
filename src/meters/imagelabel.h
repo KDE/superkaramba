@@ -169,11 +169,11 @@ private:
     Effect* imageEffect;
 
     // Scale Matrix
-    //QWMatrix scaleMat;
+    //QMatrix scaleMat;
     int scale_w;
     int scale_h;
     // Rotation Matrix
-    //QWMatrix rotMat;
+    //QMatrix rotMat;
     int rot_angle;
 
     QPixmap pixmap;

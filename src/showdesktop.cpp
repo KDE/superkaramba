@@ -19,8 +19,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  ****************************************************************************/
 
-#include <KWinModule>
-#include <KWin>
+#include <KWM>
 
 #include <netwm.h>
 
@@ -39,7 +38,7 @@ ShowDesktop::ShowDesktop()
         , showingDesktop(false)
         , kWinModule(0)
 {
-    kWinModule = new KWinModule(this);
+    kWinModule = new KWM(); // TODO MEMLEAK: DELETE
 
     // on desktop changes or when a window is deiconified, we abort the show desktop mode
     connect(kWinModule, SIGNAL(currentDesktopChanged(int)),
@@ -86,7 +85,7 @@ void ShowDesktop::showDesktop(bool b)
     showingDesktop = b;
 
     if (b) {
-        // this code should move to KWin after supporting NETWM1.2
+        // this code should move to KWM after supporting NETWM1.2
         iconifiedList.clear();
         const QList<WId> windows = kWinModule->windows();
         foreach(WId w, windows) {
@@ -102,11 +101,11 @@ void ShowDesktop::showDesktop(bool b)
         // find first, hide later, otherwise transients may get minimized
         // with the window they're transient for
         foreach(WId w, iconifiedList) {
-            KWin::iconifyWindow(w, false);
+            KWM::minimizeWindow(w, false);
         }
     } else {
         foreach(WId w, iconifiedList) {
-            KWin::deIconifyWindow(w, false);
+            KWM::unminimizeWindow(w, false);
         }
     }
 

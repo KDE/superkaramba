@@ -21,6 +21,7 @@
 #ifndef SKNEWSTUFF_H
 #define SKNEWSTUFF_H
 
+#if 0 // TODO port to KNewStuff2
 #include <KUrl>
 #include <KNewStuff>
 #include <KNS/Entry>
@@ -41,5 +42,6 @@ private:
     ThemesDlg *mDlg;
     KUrl m_sourceLink;
 };
+#endif
 
 #endif //SKNEWSTUFF_H

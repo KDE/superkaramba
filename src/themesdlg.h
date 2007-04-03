@@ -65,7 +65,7 @@ protected:
     QStringList themes();
 
 private:
-    SKNewStuff *mNewStuff;
+    //SKNewStuff *mNewStuff;
     QStringList m_newStuffStatus;
 };
 
