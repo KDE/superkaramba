@@ -1672,6 +1672,12 @@ void Karamba::setMenuExtension(KMenu *menu)
 void Karamba::removeMenuExtension()
 {
     m_popupMenu->removeAction(m_globalMenu->menuAction());
+    m_globalMenu = 0;       // m_globalMenu is deleted in removeAction
+}
+
+bool Karamba::hasMenuExtension() const
+{
+    return m_globalMenu != 0;
 }
 
 int Karamba::instance()

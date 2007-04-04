@@ -232,7 +232,7 @@ void KarambaApplication::toggleSystemTray()
 void KarambaApplication::showKarambaMenuExtension(bool show)
 {
     foreach(Karamba *k, m_karambas) {
-        if (show) {
+        if (show && !k->hasMenuExtension()) {
             KMenu *menu = new KMenu();
             menu->setTitle("SuperKaramba");
 
@@ -249,9 +249,9 @@ void KarambaApplication::showKarambaMenuExtension(bool show)
                             i18n("&Quit SuperKaramba"), this,
                             SLOT(quitSuperKaramba()), Qt::CTRL + Qt::Key_Q);
             k->setMenuExtension(menu);
-        }
-        else
+        } else if (!show) {
             k->removeMenuExtension();
+        }
     }
 }
 

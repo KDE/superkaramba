@@ -109,6 +109,7 @@ public:
 
     void setMenuExtension(KMenu*);
     void removeMenuExtension();
+    bool hasMenuExtension() const;
 
     int instance();
     void setInstance(int instance);
