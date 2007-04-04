@@ -8,6 +8,7 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
+#include <QTextCodec>
 #include <QTextStream>
 #include <QDomDocument>
 
