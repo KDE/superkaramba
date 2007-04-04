@@ -59,7 +59,7 @@ TaskManager::TaskManager()
         : QObject(),
         _active(0),
         _startup_info(0),
-        m_winModule(new KWM()),
+        m_winModule(KWM::self()),
         m_trackGeometry(false)
 {
     KGlobal::locale()->insertCatalog("libtaskmanager");

@@ -153,7 +153,7 @@ Karamba::Karamba(const KUrl &themeFile, int instance, bool subTheme)
 
     m_defaultTextField = new TextField();
 
-    m_KWinModule = new KWM();
+    m_KWinModule = KWM::self();
     connect(m_KWinModule, SIGNAL(currentDesktopChanged(int)), this,
             SLOT(currentDesktopChanged(int)));
 

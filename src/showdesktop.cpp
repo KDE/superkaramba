@@ -38,7 +38,7 @@ ShowDesktop::ShowDesktop()
         , showingDesktop(false)
         , kWinModule(0)
 {
-    kWinModule = new KWM(); // TODO MEMLEAK: DELETE
+    kWinModule = KWM::self();
 
     // on desktop changes or when a window is deiconified, we abort the show desktop mode
     connect(kWinModule, SIGNAL(currentDesktopChanged(int)),
