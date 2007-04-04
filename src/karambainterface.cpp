@@ -71,7 +71,14 @@ KarambaInterface::KarambaInterface(Karamba *k)
     Kross::Manager::self().addObject(this, "karamba");
 
     // Get the python theme file
-    QString scriptFile = k->theme().path() + '/' + k->theme().pythonModule() + ".py";
+    QString scriptFile;
+    if (k->theme().isZipTheme()) {
+        scriptFile = k->theme().extractArchive();
+    } else {
+        scriptFile = k->theme().path();
+    }
+    scriptFile += '/' + k->theme().pythonModule() + ".py";
+
     if( ! QFileInfo(scriptFile).exists() ) {
         kWarning() << "Python theme script file not found: " << scriptFile << endl;
     }

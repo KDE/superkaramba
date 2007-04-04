@@ -26,6 +26,7 @@
 #include "themelocale.h"
 
 #include <KZip>
+#include <KTempDir>
 #include <KApplication>
 #include <KMessageBox>
 #include <KStandardDirs>
@@ -38,7 +39,7 @@ class ZipFile
 {
 public:
     ZipFile() :
-            m_zip(0), m_file(0)
+            m_zip(0), m_file(0), m_tempDir(0)
     {}
     void setFile(const QString& filename)
     {
@@ -81,7 +82,8 @@ public:
     {
         if (m_zip) {
             m_zip->close();
-            delete  m_zip;
+            delete m_zip;
+            delete m_tempDir;
         }
     }
 
@@ -101,11 +103,25 @@ public:
         return (m_file != 0);
     }
 
+    QString extractArchive(const QString &themeDir)
+    {
+        QString tmpPath = KStandardDirs::locateLocal("tmp",
+                "runningThemes/" + themeDir);
+
+        m_tempDir = new KTempDir(tmpPath);
+        m_tempDir->setAutoRemove(true);
+
+        m_dir->copyTo(tmpPath);
+
+        return tmpPath;
+    }
+
 private:
     KZip* m_zip;
     const KArchiveFile* m_file;
     QString m_filename;
     const KArchiveDirectory* m_dir;
+    KTempDir* m_tempDir;
 };
 
 ThemeFile::ThemeFile(const KUrl& url)
@@ -383,4 +399,13 @@ QString ThemeFile::canonicalFile(const QString& file)
     // Get absolute path with NO symlinks
     QFileInfo fi(file);
     return QDir(fi.dir().canonicalPath()).filePath(fi.fileName());
+}
+
+QString ThemeFile::extractArchive() const
+{
+    if (isZipTheme()) {
+        return m_zip->extractArchive(pythonModule());
+    }
+
+    return QString();
 }

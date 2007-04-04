@@ -115,6 +115,8 @@ public:
     bool nextLine(LineParser& parser);
     bool close();
 
+    QString extractArchive() const;
+
     static bool isZipFile(const QString& filename);
     static QString canonicalFile(const QString& file);
 
