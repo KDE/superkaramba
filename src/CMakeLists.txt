@@ -82,6 +82,7 @@ ${KDE4_KNEWSTUFF_LIBS}
 ${KDE4_KIO_LIBS}
 ${KDE4_KROSSCORE_LIBS}
 ${PYTHON_LIBRARIES}
+${KDE4_KNEWSTUFF2_LIBS}
 #${QT_QTOPENGL_LIBRARY}
 )
 
@@ -93,3 +94,4 @@ install(TARGETS superkaramba DESTINATION ${BIN_INSTALL_DIR})
 install(FILES superkarambaui.rc DESTINATION ${DATA_INSTALL_DIR}/superkaramba)
 install(FILES superkaramba.desktop  DESTINATION ${XDG_APPS_DIR})
 install(FILES org.kde.superkaramba.xml DESTINATION ${DBUS_INTERFACES_DIR})
+install(FILES superkaramba.knsrc DESTINATION ${CONFIG_INSTALL_DIR})

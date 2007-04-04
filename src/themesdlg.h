@@ -21,6 +21,9 @@
 #ifndef THEMESDLG_H
 #define THEMESDLG_H
 
+//#include <KNS/Engine>
+#include <knewstuff2/engine.h>
+
 #include "ui_themes_layout.h"
 #include "karambaapp.h"
 #include "sknewstuff.h"
@@ -65,7 +68,7 @@ protected:
     QStringList themes();
 
 private:
-    //SKNewStuff *mNewStuff;
+    KNS::Engine *m_newStuff;
     QStringList m_newStuffStatus;
 };
 

@@ -22,7 +22,6 @@
 #include "themewidget.h"
 #include "kwidgetlistbox.h"
 #include "karamba.h"
-//#include "sknewstuff.h"
 #include "superkarambasettings.h"
 
 #include <KArchive>
@@ -32,15 +31,13 @@
 #include <KIO/CopyJob>
 
 ThemesDlg::ThemesDlg(QWidget *parent, const char *name)
-        : QDialog(parent)
+        : QDialog(parent),
+        m_newStuff(0)
 {
     setupUi(this);
     setObjectName(name);
 
     populateListbox();
-#if 0 // TODO port to knewstuff2
-    mNewStuff = 0;
-#endif
 
     connect(buttonAddToDesktop, SIGNAL(clicked()), this, SLOT(addToDesktop()));
     connect(tableThemes, SIGNAL(selected(int)), this, SLOT(selectionChanged(int)));
@@ -52,9 +49,8 @@ ThemesDlg::~ThemesDlg()
 {
     //kDebug() << k_funcinfo << endl;
     saveUserAddedThemes();
-#if 0 // TODO port to knewstuff2
-     delete mNewStuff;
-#endif
+
+    delete m_newStuff;
 }
 
 void ThemesDlg::saveUserAddedThemes()
@@ -197,6 +193,7 @@ void ThemesDlg::openLocalTheme()
 
 void ThemesDlg::getNewStuff()
 {
+/*
     KSharedConfigPtr cfg = KGlobal::config();
     KConfigGroup config(cfg, "KNewStuff");
     config.writePathEntry("ProvidersUrl",
@@ -207,13 +204,13 @@ void ThemesDlg::getNewStuff()
     //This check is b/c KNewStuff will download, throw an error,
     //and still have the entry in the config that it was successful
     configSanityCheck();
-
-#if 0 // TODO port to knewstuff2
-    if (!mNewStuff) {
-        mNewStuff = new SKNewStuff(this);
+*/
+    if (!m_newStuff) {
+        m_newStuff = new KNS::Engine;
+        m_newStuff->init("superkaramba.knsrc");
     }
-    mNewStuff->download();
-#endif
+
+    m_newStuff->downloadDialog();
 }
 
 void ThemesDlg::selectionChanged(int index)
