@@ -17,12 +17,6 @@ Graph::Graph(Karamba* k, int x, int y, int w, int h, int nbrPts):
 {
     nbrPoints = (nbrPts == 0) ? 50 : nbrPts;
 
-    for (int i = 0; i < nbrPoints; i++) {
-        m_points << QPoint(w + 2, h);
-
-        m_points.translate(((qreal) - w - 1) / nbrPoints, 0);
-    }
-
     m_minValue = 0;
     m_maxValue = 100;
 }
@@ -42,15 +36,11 @@ void Graph::setValue(int v)
     }
     lastValue = v;
 
-    QPoint newPoint(getWidth() - 1,
-                    getHeight() - v * getHeight() / m_maxValue);
+    m_values << v;
 
-    m_points.translate(((qreal) - getWidth() - 1) / nbrPoints, 0);
-
-    m_points << newPoint;
-
-    if (m_points.count() > nbrPoints)
-        m_points.remove(0);
+    if (m_values.count() > nbrPoints) {
+        m_values.remove(0);
+    }
 
     update();
 }
@@ -70,7 +60,24 @@ void Graph::paint(QPainter *p, const QStyleOptionGraphicsItem *option,
         p->setPen(m_color);
         p->setOpacity(m_opacity);
 
-        p->drawPolyline(m_points);
+        QPolygonF line;
+
+        for (int i = 0; i < nbrPoints - m_values.count() - 1; i++) {
+            line << QPoint(getWidth() + 2, getHeight());
+
+            line.translate(((qreal) - getWidth() - 1) / nbrPoints, 0);
+        }
+
+        foreach (int v, m_values) {
+            QPoint point(getWidth() - 1,
+                    getHeight() - v * getHeight() / m_maxValue);
+
+            line.translate(((qreal) - getWidth() - 1) / nbrPoints, 0);
+
+            line << point;
+        }
+
+        p->drawPolyline(line);
     }
 }
 

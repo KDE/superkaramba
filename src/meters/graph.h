@@ -38,7 +38,7 @@ private:
     int nbrPoints;
     int lastValue;
 
-    QPolygonF m_points;
+    QVector<int> m_values;
 };
 
 #endif // GRAPH_H
