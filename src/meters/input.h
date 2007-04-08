@@ -72,7 +72,7 @@ public:
     void setInputFocus();
     void clearInputFocus();
     void keyPress(QKeyEvent *event);
-    void mouseEvent(QGraphicsSceneMouseEvent *event);
+    void mouseEvent(QEvent *e);
 
 protected:
     void focusOutEvent(QFocusEvent *event);

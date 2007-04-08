@@ -89,12 +89,19 @@ void Input::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
         m_textLayout.drawCursor(painter, topLeft, m_cursorPos);
 }
 
-void Input::mouseEvent(QGraphicsSceneMouseEvent *event)
+void Input::mouseEvent(QEvent *e)
 {
+    QPointF pos;
+    if (QGraphicsSceneMouseEvent *event = dynamic_cast<QGraphicsSceneMouseEvent*>(e)) {
+        pos = event->pos();
+    } else if (QGraphicsSceneWheelEvent *event = dynamic_cast<QGraphicsSceneWheelEvent*>(e)) {
+        pos = event->pos();
+    }
+
     QTextLine line = m_textLayout.lineAt(0);
 
-    QPoint pos = mapFromParent(event->pos()).toPoint();
-    m_cursorPos = line.xToCursor(pos.x() - 5 + m_hscroll);
+    QPoint mappedPos = mapFromParent(pos).toPoint();
+    m_cursorPos = line.xToCursor(mappedPos.x() - 5 + m_hscroll);
     m_cursorVisible = true;
 
     update();

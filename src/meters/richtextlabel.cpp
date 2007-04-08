@@ -164,14 +164,22 @@ void RichTextLabel::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
     text->drawContents(painter, QRect(0, 0, w, h));
 }
 
-bool RichTextLabel::mouseEvent(QGraphicsSceneMouseEvent *event)
+bool RichTextLabel::mouseEvent(QEvent *e)
 {
-    QPointF pos = mapFromParent(event->pos());
+    Qt::MouseButtons button;
+    QPointF pos;
+    if (QGraphicsSceneMouseEvent *event = dynamic_cast<QGraphicsSceneMouseEvent*>(e)) {
+        button = event->button();
+        pos = mapFromParent(event->pos());
+    } else if (QGraphicsSceneWheelEvent *event = dynamic_cast<QGraphicsSceneWheelEvent*>(e)) {
+        button = event->buttons();
+        pos = mapFromParent(event->pos());
+    }
 
     QString link = text->documentLayout()->anchorAt(pos);
 
     if (link[0] != '#') {
-        if (event->button() == Qt::LeftButton)
+        if (button == Qt::LeftButton)
             KRun::runCommand(link);
 
         return false;

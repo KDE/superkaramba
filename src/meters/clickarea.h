@@ -45,11 +45,10 @@ public:
     void setServiceOnClick(const QString& , const QString&, const QString&);
     void setOnMiddleClick(const QString&);
 
-    bool mouseEvent(QGraphicsSceneMouseEvent *e);
+    bool mouseEvent(QEvent *e);
 
     QRect getRectangle();
 
-    void mUpdate(QPainter*);
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                QWidget *widget = 0);
 

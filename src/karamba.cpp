@@ -1372,7 +1372,9 @@ void Karamba::timerEvent(QTimerEvent *event)
 
 void Karamba::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
-    m_popupMenu->exec(event->screenPos());
+    if (!m_wantRightButton) {
+        m_popupMenu->exec(event->screenPos());
+    }
 }
 
 void Karamba::activeTaskChanged(Task::TaskPtr t)
@@ -1461,23 +1463,66 @@ void Karamba::dropEvent(QGraphicsSceneDragDropEvent *event)
 
 void Karamba::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    //event->accept();
-    //QGraphicsItem::mousePressEvent(event);
-
-    m_mouseClickPos = event->pos().toPoint();
-
     if (!m_toggleLocked->isChecked())
         return;
 
-    int button = 0;
-    if (event->button() == Qt::LeftButton)
-        button = 1;
-    else if (event->button() == Qt::MidButton)
-        button = 2;
-    else if (event->button() == Qt::RightButton)
-        button = 3;
+    int button = passEvent(event);
 
-    QList<QGraphicsItem*> items = m_scene->items(mapToScene(event->pos()));
+    m_mouseClickPos = event->pos().toPoint();
+
+    if (m_python)
+        m_python->widgetClicked(this, (int)event->pos().x(),
+                                (int)event->pos().y(), button);
+
+    if (m_interface)
+        m_interface->callWidgetClicked(this, (int)event->pos().x(),
+                                       (int)event->pos().y(), button);
+}
+
+void Karamba::setWantRightButton(bool enable)
+{
+    m_wantRightButton = enable;
+}
+
+void Karamba::currentDesktopChanged(int i)
+{
+    if (m_python)
+        m_python->desktopChanged(this, i);
+
+    if (m_interface)
+        m_interface->callDesktopChanged(this, i);
+}
+
+int Karamba::passEvent(QEvent *e)
+{
+    QList<QGraphicsItem*> items;
+    QPointF pos;
+    int button = 0;
+
+    if (QGraphicsSceneMouseEvent *event = dynamic_cast<QGraphicsSceneMouseEvent*>(e)) {
+        items = m_scene->items(mapToScene(event->pos()));
+        pos = event->pos();
+
+        if (event->button() == Qt::LeftButton)
+            button = 1;
+        else if (event->button() == Qt::MidButton)
+            button = 2;
+        else if (event->button() == Qt::RightButton)
+            button = 3;
+    } else if (QGraphicsSceneWheelEvent *event = dynamic_cast<QGraphicsSceneWheelEvent*>(e)) {
+        items = m_scene->items(mapToScene(event->pos()));
+        pos = event->pos();
+
+        if (event->delta() > 0)
+            button = 4;
+        else
+            button = 5;
+    }
+
+    if (button == 3 && !m_wantRightButton) {
+        return 0;
+    }
+
     foreach(QGraphicsItem *item, items) {
         bool pass = false;
         bool allowClick = false;
@@ -1487,17 +1532,17 @@ void Karamba::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
         else if (ImageLabel* image = dynamic_cast<ImageLabel*>(item)) {
             allowClick = image->clickable();
-            pass = image->mouseEvent(event);
+            pass = image->mouseEvent(e);
         } else if (TextLabel* text = dynamic_cast<TextLabel*>(item)) {
             allowClick = text->clickable();
-            pass = text->mouseEvent(event);
+            pass = text->mouseEvent(e);
         } else if (ClickArea* area = dynamic_cast<ClickArea*>(item)) {
-            pass = area->mouseEvent(event);
+            pass = area->mouseEvent(e);
         } else if (RichTextLabel* rich = dynamic_cast<RichTextLabel*>(item)) {
             allowClick = false;
-            pass = rich->mouseEvent(event);
+            pass = rich->mouseEvent(e);
             if (pass) {
-                QString anchor = rich->getAnchor(event->pos());
+                QString anchor = rich->getAnchor(pos);
                 if (m_python)
                     m_python->meterClicked(this, anchor.toAscii().data(), button);
                 if (m_interface)
@@ -1515,57 +1560,22 @@ void Karamba::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
         if (Input *input = dynamic_cast<Input*>(item)) {
             input->setFocus();
-            input->mouseEvent(event);
+            input->mouseEvent(e);
         }
     }
 
-    if (event->buttons() & Qt::RightButton && !m_wantRightButton) {
-        m_showMenu = !m_showMenu;
-        //startTimer(4);
-
-        //m_popupMenu->exec(mapToScene(event->pos()).toPoint());
-    }
-
-    if (m_python)
-        m_python->widgetClicked(this, (int)event->pos().x(),
-                                (int)event->pos().y(), button);
-
-    if (m_interface)
-        m_interface->callWidgetClicked(this, (int)event->pos().x(),
-                                       (int)event->pos().y(), button);
-
-//  QGraphicsItemGroup::mousePressEvent(event);
-}
-
-void Karamba::setWantRightButton(bool enable)
-{
-    m_wantRightButton = enable;
-}
-
-void Karamba::currentDesktopChanged(int i)
-{
-    if (m_python)
-        m_python->desktopChanged(this, i);
-
-    if (m_interface)
-        m_interface->callDesktopChanged(this, i);
+    return button;
 }
 
 void Karamba::wheelEvent(QGraphicsSceneWheelEvent *event)
 {
-    int button = 0;
-
-    if (event->delta() > 0)
-        button = 4;
-    else
-        button = 5;
+    int button = passEvent(event);
 
     if (m_python)
         m_python->widgetClicked(this, (int)event->pos().x(), (int)event->pos().y(), button);
 
     if (m_interface)
         m_interface->callWidgetClicked(this, (int)event->pos().x(), (int)event->pos().y(), button);
-
 }
 
 void Karamba::hoverMoveEvent(QGraphicsSceneHoverEvent *event)

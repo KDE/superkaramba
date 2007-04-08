@@ -51,7 +51,7 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                QWidget *widget = 0);
 
-    bool mouseEvent(QGraphicsSceneMouseEvent *event);
+    bool mouseEvent(QEvent *event);
     QString getAnchor(QPointF point);
 
 private:

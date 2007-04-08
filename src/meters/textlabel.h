@@ -59,7 +59,7 @@ public:
     void attachClickArea(const QString &leftMouseButton, const QString &middleMouseButton,
                          const QString &rightMouseButton);
 
-    bool mouseEvent(QGraphicsSceneMouseEvent *e);
+    bool mouseEvent(QEvent *e);
 
     QRectF boundingRect() const;
 

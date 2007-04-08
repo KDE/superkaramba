@@ -135,7 +135,7 @@ public:
     void attachClickArea(QString leftMouseButton, QString middleMouseButton,
                          QString rightMouseButton);
 
-    bool mouseEvent(QGraphicsSceneMouseEvent *e);
+    bool mouseEvent(QEvent *e);
 
     void allowClick(bool);
     bool clickable();

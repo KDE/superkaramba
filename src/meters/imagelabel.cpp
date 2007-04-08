@@ -335,15 +335,22 @@ void ImageLabel::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     }
 }
 
-bool ImageLabel::mouseEvent(QGraphicsSceneMouseEvent *e)
+bool ImageLabel::mouseEvent(QEvent *e)
 {
     if (isEnabled()) {
+        Qt::MouseButtons button;
+        if (QGraphicsSceneMouseEvent *event = dynamic_cast<QGraphicsSceneMouseEvent*>(e)) {
+            button = event->button();
+        } else if (QGraphicsSceneWheelEvent *event = dynamic_cast<QGraphicsSceneWheelEvent*>(e)) {
+            button = event->buttons();
+        }
+
         QString program;
-        if (e -> button() == Qt::LeftButton) {
+        if (button == Qt::LeftButton) {
             program = m_leftMouseButtonAction;
-        } else if (e -> button() == Qt::MidButton) {
+        } else if (button == Qt::MidButton) {
             program = m_middleMouseButtonAction;
-        } else if (e -> button() == Qt::RightButton) {
+        } else if (button == Qt::RightButton) {
             program = m_rightMouseButtonAction;
         }
 

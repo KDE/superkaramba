@@ -25,7 +25,7 @@ ClickArea::ClickArea(Karamba* k, bool preview, int x, int y, int w, int h)
 ClickArea::~ClickArea()
 {}
 
-bool ClickArea::mouseEvent(QGraphicsSceneMouseEvent *e)
+bool ClickArea::mouseEvent(QEvent *e)
 {
     //K3ShellProcess ksp;
     Q_UNUSED(e);

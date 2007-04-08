@@ -239,6 +239,7 @@ private:
     QString findSensorFromMap(const Sensor *sensor) const;
 
     void preparePopupMenu();
+    int passEvent(QEvent *event);
 };
 
 #endif // KARAMBA_H
