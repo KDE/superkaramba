@@ -30,7 +30,6 @@
 #include <kdebug.h>
 #include <kwm.h>
 
-#include <q3popupmenu.h>
 #include <q3dragobject.h>
 #include <qlayout.h>
 #include <qstringlist.h>
