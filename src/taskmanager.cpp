@@ -534,7 +534,7 @@ bool TaskManager::isOnScreen(int screen, const WId wid)
         return true;
     }
 
-    KWM::WindowInfo wi = KWM::windowInfo(wid, NET::WMKDEFrameStrut);
+    KWindowInfo wi = KWM::windowInfo(wid, NET::WMKDEFrameStrut);
 
     // for window decos that fudge a bit and claim to extend beyond the
     // edge of the screen, we just contract a bit.
@@ -957,7 +957,7 @@ void Task::resize()
 
 void Task::setMaximized(bool maximize)
 {
-    KWM::WindowInfo info = KWM::windowInfo(_win, NET::WMState | NET::XAWMState | NET::WMDesktop);
+    KWindowInfo info = KWM::windowInfo(_win, NET::WMState | NET::XAWMState | NET::WMDesktop);
     bool on_current = info.isOnCurrentDesktop();
 
     if (!on_current) {
@@ -988,7 +988,7 @@ void Task::toggleMaximized()
 
 void Task::restore()
 {
-    KWM::WindowInfo info = KWM::windowInfo(_win, NET::WMState | NET::XAWMState | NET::WMDesktop);
+    KWindowInfo info = KWM::windowInfo(_win, NET::WMState | NET::XAWMState | NET::WMDesktop);
     bool on_current = info.isOnCurrentDesktop();
 
     if (!on_current) {
@@ -1012,7 +1012,7 @@ void Task::setIconified(bool iconify)
     if (iconify) {
         KWM::minimizeWindow(_win);
     } else {
-        KWM::WindowInfo info = KWM::windowInfo(_win, NET::WMState | NET::XAWMState | NET::WMDesktop);
+        KWindowInfo info = KWM::windowInfo(_win, NET::WMState | NET::XAWMState | NET::WMDesktop);
         bool on_current = info.isOnCurrentDesktop();
 
         if (!on_current) {

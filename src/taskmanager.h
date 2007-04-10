@@ -102,7 +102,7 @@ public:
     {
         return _win;
     }
-    KWM::WindowInfo info() const
+    KWindowInfo info() const
     {
         return _info;
     }
@@ -491,7 +491,7 @@ private:
     WId                 _win;
     WId                 m_frameId;
     QPixmap             _pixmap;
-    KWM::WindowInfo    _info;
+    KWindowInfo    _info;
     WindowList          _transients;
     WindowList          _transients_demanding_attention;
 
