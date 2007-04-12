@@ -19,9 +19,9 @@ themes=(
 for theme in "${themes[@]}"
 do
 	echo $theme
-	dcop `dcop superkaramba* | head -n 1` default openTheme $PWD/$theme
+	qdbus org.kde.superkaramba /SuperKaramba openTheme $PWD/$theme
 	read a
-	dcop `dcop superkaramba* | head -n 1` default closeTheme `expr $theme : '.*/\(.*\)\.'`
+	qdbus org.kde.superkaramba /SuperKaramba closeTheme `expr $theme : '.*/\(.*\)\.'`
 done
 
 #dcop `dcop superkaramba* | head -n 1` default quit
