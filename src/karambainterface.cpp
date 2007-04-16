@@ -28,6 +28,7 @@
 #include <KService>
 #include <KLocale>
 
+#include <kross/core/krossconfig.h>
 #include <kross/core/manager.h>
 #include <kross/core/action.h>
 
@@ -81,15 +82,32 @@ KarambaInterface::KarambaInterface(Karamba *k)
 
     if( ! QFileInfo(scriptFile).exists() ) {
         kWarning() << "Python theme script file not found: " << scriptFile << endl;
-    }
-    else {
+    } else {
         kDebug() << "Python theme script file: " << scriptFile << endl;
 
-        //FIXME we should propably just let Karamba use different external
-        //scripts here that contain the code to call the actual scripting
-        //file rather then hard-coding the handling here.
-        //This would also allow us to provide different interfaces / pre-configured
-        //environments for different needings :)
+#if (KROSS_VERSION >= 6)
+
+        QFileInfo fi(scriptFile);
+        d->action = new Kross::Action(this, scriptFile, fi.dir());
+        d->action->addObject(this, "karamba", Kross::ChildrenInterface::AutoConnectSignals);
+        d->action->setInterpreter("python");
+        d->action->setCode( QString(
+                // this is for backward-compatibility and needed cause the prev python
+                // implementation does provide the current path within the sys.path and
+                // some scripts are using it to do custom stuff. So, while the prefered
+                // way is now to use karamba.getThemePath() we still maintain support to
+                // the old behaviour.
+                "import karamba, sys\n"
+                "sys.path.insert(0,karamba.getThemePath())\n"
+                "sys.path.insert(0,'')\n"
+                "execfile(\"%1\", globals(), locals())\n"
+            ).arg(scriptFile)
+        );
+
+#else
+        //Following code was used before as hardcoded workaround. The preffered way
+        //is now to use Kross::ChildrenInterface::AutoConnectSignals to let the
+        //Kross backend handle it.
 
         QFileInfo fi(scriptFile);
         d->action = new Kross::Action(this, scriptFile, fi.dir());
@@ -143,6 +161,7 @@ KarambaInterface::KarambaInterface(Karamba *k)
                 "except NameError: pass\n"
             ).arg(scriptFile)
         );
+#endif
 
         // Finally let's execute the actual python theme script file.
         d->action->trigger();
