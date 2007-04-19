@@ -807,7 +807,7 @@ static void set_want_right_button(long widget, long yesno)
 PyObject* py_want_right_button(PyObject *, PyObject *args)
 {
   long widget, i;
-  if (!PyArg_ParseTuple(args, (char*)"ll:wantRightButton", &widget, &i))
+  if (!PyArg_ParseTuple(args, (char*)"ll:setWantRightButton", &widget, &i))
     return NULL;
   if (!checkKaramba(widget))
     return NULL;
@@ -815,6 +815,22 @@ PyObject* py_want_right_button(PyObject *, PyObject *args)
   return Py_BuildValue((char*)"l", 1);
 }
 
+static void set_want_wheel_event(long widget, long yesno)
+{
+  karamba* currTheme = (karamba*)widget;
+  currTheme->setWantMeterWheelEvent(yesno);
+}
+
+PyObject* py_want_wheel_event(PyObject *, PyObject *args)
+{
+  long widget, i;
+  if (!PyArg_ParseTuple(args, (char*)"ll:setWantMeterWheelEvent", &widget, &i))
+    return NULL;
+  if (!checkKaramba(widget))
+    return NULL;
+  set_want_wheel_event(widget, i);
+  return Py_BuildValue((char*)"l", 1);
+}
 
 static void changeInterval(long widget, long interval)
 {

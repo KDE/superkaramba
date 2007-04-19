@@ -199,6 +199,7 @@ private:
     bool repaintInProgress;
     //bool reloading;
     bool want_right_button;
+    bool want_meter_wheel_event;
 
     NETWinInfo* info;
     bool onTop;
@@ -289,6 +290,8 @@ public slots:
      * the theme's python widgetMouseMoved function is called.
      */
     void setWantRightButton(bool yesno) { want_right_button = yesno; }
+
+    void setWantMeterWheelEvent(bool yesno) { want_meter_wheel_event = yesno; }
 
     /**
      * can be used to fire up the karamba management popup menu

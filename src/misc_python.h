@@ -534,10 +534,10 @@ PyObject* py_get_incoming_data(PyObject *self, PyObject *args);
 */
 PyObject* py_get_update_time(PyObject *self, PyObject *args);
 
-/** Misc/wantRightButton
+/** Misc/setWantRightButton
 *
 *  SYNOPSIS
-*    long wantRightButton(widget, want_receive_right_button)
+*    long setWantRightButton(widget, want_receive_right_button)
 *  DESCRIPTION
 *    There's a management menu for SuperKaramba themes which
 *    allows themes to be loaded, closed, moved to other
@@ -551,6 +551,24 @@ PyObject* py_get_update_time(PyObject *self, PyObject *args);
 *    1 if successful
 */
 PyObject* py_want_right_button(PyObject *self, PyObject *args);
+
+/** Misc/setWantMeterWheelEvent
+*
+*  SYNOPSIS
+*    long setWantMeterWheelEvent(widget, want_receive_wheel_event)
+*  DESCRIPTION
+*    Enabling this allows themes to receive a wheel event when
+*    the wheel is turned over a meter.
+*    This function is available after version 0.42.
+*    This behaviour is default in SuperKaramba 0.50 and later,
+*    so this function will be not available after the 0.50 version.
+*  ARGUMENTS
+*    * long widget -- karamba
+*    * long want_receive_wheel_event -- whether the theme will receive mouse wheel events
+*  RETURN VALUE
+*    1 if successful
+*/
+PyObject* py_want_wheel_event(PyObject *, PyObject *args);
 
 /** Misc/managementPopup
 *

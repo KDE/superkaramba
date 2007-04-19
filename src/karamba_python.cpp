@@ -326,6 +326,8 @@ static PyMethodDef karamba_methods[] = {
       (char*)"Get last updated time"},
     {(char*)"setWantRightButton", py_want_right_button, METH_VARARGS, 
       (char*)"Set to 1 to deactivate management popups"},
+    {(char*)"setWantMeterWheelEvent", py_want_wheel_event, METH_VARARGS, 
+      (char*)"Enables wheel events over meters."},
     {(char*)"managementPopup", py_management_popup, METH_VARARGS, 
       (char*)"Activates the Management Popup menu"},
 

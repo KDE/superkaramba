@@ -64,6 +64,7 @@ karamba::karamba(QString fn, QString name, bool reloading, int instance,
 {
   themeStarted = false;
   want_right_button = false;
+  want_meter_wheel_event = false;
   prettyName = name;
   m_sub_theme = sub_theme;
 
@@ -1373,6 +1374,35 @@ void karamba::passWheelClick( QWheelEvent *e )
       button = 4;
     else
       button = 5;
+
+    // We create a temporary click list here because original
+    // can change during the loop (infinite loop Bug 994359)
+    if (want_meter_wheel_event)
+    {
+      QObjectList clickListTmp(*clickList);
+      QObjectListIt it(clickListTmp);
+
+      QMouseEvent fakeEvent(QEvent::MouseButtonPress, e->pos(), e->globalPos(), button, e->state());
+
+      while (it != 0)
+      {
+        Meter* meter = (Meter*)(*it);
+        // Check if meter is still in list
+        if (clickList->containsRef(meter) && meter->click(&fakeEvent))
+        {
+          if (RichTextLabel* richText = dynamic_cast<RichTextLabel*>(meter))
+          {
+            pythonIface->meterClicked(this, richText->anchorAt(fakeEvent.x(), fakeEvent.y()),
+                                    button);
+          }
+          else
+          {
+            pythonIface->meterClicked(this, meter, button);
+          }
+        }
+        ++it;
+      }
+    }
 
     pythonIface->widgetClicked(this, e->x(), e->y(), button);
   }
