@@ -66,106 +66,56 @@ KarambaInterface::KarambaInterface(Karamba *k)
 {
     setObjectName("karamba");
 
-    // Publish this QObject. It will be available with e.g.
-    //     import Karamba
-    //     print dir(Karamba)
-    Kross::Manager::self().addObject(this, "karamba");
+    Kross::Manager::self().addObject(this, "karamba", Kross::ChildrenInterface::AutoConnectSignals);
 
-    // Get the python theme file
-    QString scriptFile;
+    // Get the theme path
+    QDir scriptDir;
     if (k->theme().isZipTheme()) {
-        scriptFile = k->theme().extractArchive();
+        scriptDir = k->theme().extractArchive();
     } else {
-        scriptFile = k->theme().path();
+        scriptDir = k->theme().path();
     }
-    scriptFile += '/' + k->theme().pythonModule() + ".py";
 
-    if( ! QFileInfo(scriptFile).exists() ) {
-        kWarning() << "Python theme script file not found: " << scriptFile << endl;
-    } else {
+    // Get the script file
+    QFileInfo fi(scriptDir, k->theme().pythonModule() + ".py");
+    if( fi.exists() ) {
+        // if there exist such a script file, we have an old-style SK/KDE3.x package
+        // and need to keep compatibility.
+        QString scriptFile = fi.absoluteFilePath();
         kDebug() << "Python theme script file: " << scriptFile << endl;
-
-#if (KROSS_VERSION >= 6)
-
-        QFileInfo fi(scriptFile);
-        d->action = new Kross::Action(this, scriptFile, fi.dir());
-        d->action->addObject(this, "karamba", Kross::ChildrenInterface::AutoConnectSignals);
-        d->action->setInterpreter("python");
-        d->action->setCode( QString(
-                // this is for backward-compatibility and needed cause the prev python
-                // implementation does provide the current path within the sys.path and
-                // some scripts are using it to do custom stuff. So, while the prefered
-                // way is now to use karamba.getThemePath() we still maintain support to
-                // the old behaviour.
-                "import karamba, sys\n"
-                "sys.path.insert(0,karamba.getThemePath())\n"
-                "sys.path.insert(0,'')\n"
-                "execfile(\"%1\", globals(), locals())\n"
-            ).arg(scriptFile)
-        );
-
-#else
-        //Following code was used before as hardcoded workaround. The preffered way
-        //is now to use Kross::ChildrenInterface::AutoConnectSignals to let the
-        //Kross backend handle it.
-
-        QFileInfo fi(scriptFile);
         d->action = new Kross::Action(this, scriptFile, fi.dir());
         d->action->setInterpreter("python");
         d->action->setCode( QString(
-                "import karamba\n"
-
-                "import sys\n"
-                "sys.path.insert(0,karamba.getThemePath())\n"
-                "sys.path.insert(0,'')\n"
-
-                "execfile(\"%1\", globals(), locals())\n"
-
-                "try: karamba.connect('initWidget(QObject*)',initWidget)\n"
-                "except NameError: pass\n"
-                "try: karamba.connect('widgetUpdated(QObject*)',widgetUpdated)\n"
-                "except NameError: pass\n"
-                "try: karamba.connect('widgetClosed(QObject*)',widgetClosed)\n"
-                "except NameError: pass\n"
-                "try: karamba.connect('menuItemClicked(QObject*, QObject*, QObject*)',menuItemClicked)\n"
-                "except NameError: pass\n"
-                "try: karamba.connect('menuOptionChanged(QObject*, QString, bool)',menuOptionChanged)\n"
-                "except NameError: pass\n"
-                "try: karamba.connect('activeTaskChanged(QObject*, long long)',activeTaskChanged)\n"
-                "except NameError: pass\n"
-                "try: karamba.connect('taskAdded(QObject*, long long)',taskAdded)\n"
-                "except NameError: pass\n"
-                "try: karamba.connect('taskRemoved(QObject*, long long)', taskRemoved)\n"
-                "except NameError: pass\n"
-                "try: karamba.connect('startupAdded(QObject*, long long)',startupAdded)\n"
-                "except NameError: pass\n"
-                "try: karamba.connect('startupRemoved(QObject*, long long)',startupRemoved)\n"
-                "except NameError: pass\n"
-                "try: karamba.connect('commandFinished(QObject*, int)',commandFinished)\n"
-                "except NameError: pass\n"
-                "try: karamba.connect('itemDropped(QObject*, QString, int, int)',itemDropped)\n"
-                "except NameError: pass\n"
-                "try: karamba.connect('meterClicked(QObject*, QObject*, int)',meterClicked)\n"
-                "except NameError: pass\n"
-                "try: karamba.connect('widgetClicked(QObject*, int, int, int)',widgetClicked)\n"
-                "except NameError: pass\n"
-                "try: karamba.connect('desktopChanged(QObject*, int)',desktopChanged)\n"
-                "except NameError: pass\n"
-                "try: karamba.connect('widgetMouseMoved(QObject*, int, int, int)',widgetMouseMoved)\n"
-                "except NameError: pass\n"
-                "try: karamba.connect('keyPressed(QObject*, QObject*, QString)',keyPressed)\n"
-                "except NameError: pass\n"
-                "try: karamba.connect('themeNotify(QObject*, QString, QString)',themeNotify)\n"
-                "except NameError: pass\n"
-                "try: karamba.connect('wallpaperChanged(QObject*, int)', wallpaperChanged)\n"
-                "except NameError: pass\n"
-            ).arg(scriptFile)
-        );
-#endif
-
-        // Finally let's execute the actual python theme script file.
+            // this is for backward-compatibility and needed cause the prev python
+            // implementation does provide the current path within the sys.path and
+            // some scripts are using it to do custom stuff. So, while the prefered
+            // way is now to use karamba.getThemePath() we still maintain support to
+            // the old behaviour.
+            "import karamba, sys\n"
+            "sys.path.insert(0,karamba.getThemePath())\n"
+            "sys.path.insert(0,'')\n"
+            "execfile(\"%1\", globals(), locals())\n"
+        ).arg(scriptFile) );
         d->action->trigger();
-        //QTimer::singleShot(0, d->action, SLOT(trigger()));
+    }
+    else {
+        // else we may like to check for other interpreters like ruby...
+        fi = QFileInfo(scriptDir, k->theme().pythonModule() + ".rb");
+        if( fi.exists() ) {
+            // there exist such a script file, so let's use it :)
+            QString scriptFile = fi.absoluteFilePath();
+            kDebug() << "Ruby theme script file: " << scriptFile << endl;
+            d->action = new Kross::Action(this, scriptFile);
+//FIXME why is it needed to publish it here again?
+d->action->addObject(this, "karamba", Kross::ChildrenInterface::AutoConnectSignals);
+            d->action->setInterpreter("ruby");
+            d->action->setFile(scriptFile);
+            d->action->trigger();
+            //QTimer::singleShot(0, d->action, SLOT(trigger()));
+        }
+        else {
+            kWarning() << "Theme script file not found: " << k->theme().pythonModule() << ".py or .rb" << endl;
+        }
     }
 }
 

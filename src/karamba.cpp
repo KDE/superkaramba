@@ -138,7 +138,9 @@ Karamba::Karamba(const KUrl &themeFile, int instance, bool subTheme)
         dirWatch->addFile(m_theme.file());
 
     if (!m_theme.isZipTheme() && m_theme.pythonModuleExists()) {
+        //TODO remove interpreter dependend code
         QString pythonFile = m_theme.path() + '/' + m_theme.pythonModule() + ".py";
+        if(! QFileInfo(pythonFile).exists()) pythonFile = m_theme.path() + '/' + m_theme.pythonModule() + ".rb";
         if (!dirWatch->contains(pythonFile))
             dirWatch->addFile(pythonFile);
     }
@@ -1665,7 +1667,9 @@ void Karamba::keyPressEvent(QKeyEvent *event)
 
 void Karamba::slotFileChanged(const QString &file)
 {
+    //TODO remove interpreter dependend code
     QString pythonFile = m_theme.path() + '/' + m_theme.pythonModule() + ".py";
+    if(! QFileInfo(pythonFile).exists()) pythonFile = m_theme.path() + '/' + m_theme.pythonModule() + ".rb";
 
     if (file == m_theme.file() || file == pythonFile)
         reloadConfig();

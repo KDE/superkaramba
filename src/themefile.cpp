@@ -302,7 +302,10 @@ void ThemeFile::parseXml()
                 m_theme = e.text();
             else if (e.tagName() == "python_module") {
                 m_python = e.text();
+                //TODO remove interpreter dependend code
                 if (m_python.right(3).toLower() == ".py")
+                    m_python.remove(m_python.length() - 3, 3);
+                if (m_python.right(3).toLower() == ".rb")
                     m_python.remove(m_python.length() - 3, 3);
             } else if (e.tagName() == "description")
                 m_description = e.text();
@@ -391,7 +394,8 @@ bool ThemeFile::isZipFile(const QString& filename)
 
 bool ThemeFile::pythonModuleExists() const
 {
-    return (!m_python.isEmpty() && fileExists(m_python + ".py"));
+    //TODO remove interpreter dependend code
+    return (!m_python.isEmpty() && (fileExists(m_python + ".py") || fileExists(m_python + ".rb")));
 }
 
 QString ThemeFile::canonicalFile(const QString& file)
