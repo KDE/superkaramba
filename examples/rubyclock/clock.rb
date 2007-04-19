@@ -1,5 +1,7 @@
 require 'karamba'
 
+@richtext = nil
+
 # this is called when you widget is initialized
 def initWidget(widget)
     puts ">>> initWidget 1"
