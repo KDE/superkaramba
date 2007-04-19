@@ -1,17 +1,15 @@
 require 'karamba'
 
-@richtext = nil
-
 # this is called when you widget is initialized
 def initWidget(widget)
     puts ">>> initWidget 1"
     puts Karamba.getThemePath()
     Karamba.resizeWidget(widget, 300, 120)
     @richtext = Karamba.createRichText(widget, Time.now.to_s)
-    Karamba.moveRichText(widget, richtext, 10, 10)
-    print "richText Size = ", Karamba.getRichTextSize(widget, richtext)
-    Karamba.setRichTextWidth(widget, richtext, 280)
-    #Karamba.deleteRichText(widget, richtext)
+    Karamba.moveRichText(widget, @richtext, 10, 10)
+    print "richText Size = ", Karamba.getRichTextSize(widget, @richtext)
+    Karamba.setRichTextWidth(widget, @richtext, 280)
+    #Karamba.deleteRichText(widget, @richtext)
     Karamba.redrawWidget(widget)
 end
 
