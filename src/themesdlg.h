@@ -21,8 +21,7 @@
 #ifndef THEMESDLG_H
 #define THEMESDLG_H
 
-//#include <KNS/Engine>
-#include <knewstuff2/engine.h>
+#include <KNS/Engine>
 
 #include "ui_themes_layout.h"
 #include "karambaapp.h"

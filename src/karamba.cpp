@@ -1465,12 +1465,12 @@ void Karamba::dropEvent(QGraphicsSceneDragDropEvent *event)
 
 void Karamba::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+    m_mouseClickPos = event->pos().toPoint();
+
     if (!m_toggleLocked->isChecked())
         return;
 
     int button = passEvent(event);
-
-    m_mouseClickPos = event->pos().toPoint();
 
     if (m_python)
         m_python->widgetClicked(this, (int)event->pos().x(),
