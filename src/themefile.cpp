@@ -32,6 +32,8 @@
 #include <KStandardDirs>
 #include <KLocale>
 #include <KIO/NetAccess>
+#include <kross/core/manager.h>
+#include <kross/core/interpreter.h>
 
 #include <QDomNode>
 
@@ -103,10 +105,9 @@ public:
         return (m_file != 0);
     }
 
-    QString extractArchive(const QString &themeDir)
+    QString extractArchive()
     {
-        QString tmpPath = KStandardDirs::locateLocal("tmp",
-                "runningThemes/" + themeDir);
+        QString tmpPath = KStandardDirs::locateLocal("tmp", "runningThemes/");
 
         m_tempDir = new KTempDir(tmpPath);
         m_tempDir->setAutoRemove(true);
@@ -125,7 +126,7 @@ private:
 };
 
 ThemeFile::ThemeFile(const KUrl& url)
-        : m_stream(0), m_locale(0), m_zip(0)
+        : m_zipTheme(false), m_stream(0), m_locale(0), m_zip(0)
 {
     if (url.isValid())
         set(url);
@@ -254,6 +255,18 @@ bool ThemeFile::set(const KUrl &url)
     m_name = fi.completeBaseName();
     m_theme = m_name + ".theme";
     m_script = m_name;
+
+    QStringList availInterp = Kross::Manager::self().interpreters();
+    foreach (QString interpreter, availInterp) {
+        QString fileExtension = Kross::Manager::self().interpreterInfo(interpreter)->wildcard();
+        fileExtension.remove(0, 1);
+
+        if (fileExists(fi.path() + '/' + m_script + fileExtension)) {
+            m_script += fileExtension;
+            break;
+        }
+    }
+
     m_id = m_name;
 
     if (isZipFile(m_file)) {
@@ -300,23 +313,10 @@ void ThemeFile::parseXml()
                 m_name = e.text();
             } else if (e.tagName() == "themefile") {
                 m_theme = e.text();
-            }
-            else if (e.tagName() == "python_module") {
+            } else if (e.tagName() == "python_module") {
                 m_script = e.text();
-
-                if (m_script.right(3).toLower() == ".py") {
-                    m_script.remove(m_script.length() - 3, 3);
-                }
             } else if (e.tagName() == "script_module") {
                 m_script = e.text();
-                //TODO remove interpreter dependend code
-                if (m_script.right(3).toLower() == ".py") {
-                    m_script.remove(m_script.length() - 3, 3);
-                }
-
-                if (m_script.right(3).toLower() == ".rb") {
-                    m_script.remove(m_script.length() - 3, 3);
-                }
             } else if (e.tagName() == "description") {
                 m_description = e.text();
             } else if (e.tagName() == "author") {
@@ -405,8 +405,21 @@ bool ThemeFile::isZipFile(const QString& filename)
 
 bool ThemeFile::scriptModuleExists() const
 {
-    //TODO remove interpreter dependend code
-    return (!m_script.isEmpty() && (fileExists(m_script + ".py") || fileExists(m_script + ".rb")));
+    if (m_script.isEmpty()) {
+        return false;
+    }
+
+    QStringList availInterp = Kross::Manager::self().interpreters();
+    foreach (QString interpreter, availInterp) {
+        QString fileExtension = Kross::Manager::self().interpreterInfo(interpreter)->wildcard();
+        fileExtension.remove(0, 1);
+
+        if (fileExists(m_script)) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 QString ThemeFile::canonicalFile(const QString& file)
@@ -419,7 +432,7 @@ QString ThemeFile::canonicalFile(const QString& file)
 QString ThemeFile::extractArchive() const
 {
     if (isZipTheme()) {
-        return m_zip->extractArchive(scriptModule());
+        return m_zip->extractArchive();
     }
 
     return QString();

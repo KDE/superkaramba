@@ -27,6 +27,7 @@
 #include <KMenu>
 #include <KService>
 #include <KLocale>
+#include <KMessageBox>
 
 #include <kross/core/krossconfig.h>
 #include <kross/core/manager.h>
@@ -73,7 +74,7 @@ KarambaInterface::KarambaInterface(Karamba *k)
     if (initOK) {
         d->action->trigger();
     } else {
-        kWarning() << "No Script file was found: " << k->theme().scriptModule() << ".py or .rb" << endl;
+        kWarning() << "No Script file was found: " << k->theme().scriptModule() << endl;
     }
 }
 
@@ -92,40 +93,33 @@ bool KarambaInterface::initInterpreter(const ThemeFile &theme)
         scriptDir = theme.path();
     }
 
-    // Set up Interpreter for Python
-    QFileInfo fi(scriptDir, theme.scriptModule() + ".py");
-    if (fi.exists()) {
+    QString interpreter = Kross::Manager::self().interpreternameForFile(theme.scriptModule());
+
+    // Set up Interpreter
+    QFileInfo fi(scriptDir, theme.scriptModule());
+    if (fi.exists() && !interpreter.isEmpty()) {
         QString scriptFile = fi.absoluteFilePath();
 
         d->action = new Kross::Action(this, scriptFile, fi.dir());
-        d->action->setInterpreter("python");
-        d->action->setCode(QString(
-            // this is for backward-compatibility and needed cause the prev python
-            // implementation does provide the current path within the sys.path and
-            // some scripts are using it to do custom stuff. So, while the prefered
-            // way is now to use karamba.getThemePath() we still maintain support to
-            // the old behaviour.
-            "import karamba, sys\n"
-            "sys.path.insert(0, karamba.getThemePath())\n"
-            "sys.path.insert(0, '')\n"
-            "execfile(\"%1\", globals(), locals())\n"
-        ).arg(scriptFile));
+        d->action->setInterpreter(interpreter);
 
-        kDebug() << "Using Python script: " << scriptFile << endl;
+        // this is for backward-compatibility and needed cause the prev python
+        // implementation does provide the current path within the sys.path and
+        // some scripts are using it to do custom stuff. So, while the prefered
+        // way is now to use karamba.getThemePath() we still maintain support to
+        // the old behaviour.
+        if (interpreter == "python") {
+            d->action->setCode(QString(
+                "import karamba, sys\n"
+                "sys.path.insert(0, karamba.getThemePath())\n"
+                "sys.path.insert(0, '')\n"
+                "execfile(\"%1\", globals(), locals())\n"
+            ).arg(scriptFile));
+        } else {
+            d->action->setFile(scriptFile);
+        }
 
-        return true;
-    }
-
-    // Set up Interpreter for Ruby
-    fi = QFileInfo(scriptDir, theme.scriptModule() + ".rb");
-    if (fi.exists()) {
-        QString scriptFile = fi.absoluteFilePath();
-
-        d->action = new Kross::Action(this, scriptFile, fi.dir());
-        d->action->setInterpreter("ruby");
-        d->action->setFile(scriptFile);
-
-        kDebug() << "Using Ruby script: " << scriptFile << endl;
+        kDebug() << "Using " << interpreter << " script: " << scriptFile << endl;
 
         return true;
     }
