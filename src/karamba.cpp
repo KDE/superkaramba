@@ -83,7 +83,7 @@ Karamba::Karamba(const KUrl &themeFile, int instance, bool subTheme)
         m_scene(0),
         m_view(0),
         m_KWinModule(0),
-        m_useKross(false),
+        m_useKross(true),
         m_python(0),
         m_interface(0),
         m_foundKaramba(false),
@@ -112,8 +112,8 @@ Karamba::Karamba(const KUrl &themeFile, int instance, bool subTheme)
         m_backgroundInterface(0)
 {
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    if (args->isSet("usekross")) {
-        m_useKross = true;
+    if (args->isSet("usefallback")) {
+        m_useKross = false;
     }
 
     if (m_view == 0 && m_scene == 0) {
