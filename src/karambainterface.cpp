@@ -68,60 +68,69 @@ KarambaInterface::KarambaInterface(Karamba *k)
 
     Kross::Manager::self().addObject(this, "karamba", Kross::ChildrenInterface::AutoConnectSignals);
 
-    // Get the theme path
-    QDir scriptDir;
-    if (k->theme().isZipTheme()) {
-        scriptDir = k->theme().extractArchive();
-    } else {
-        scriptDir = k->theme().path();
-    }
+    bool initOK = initInterpreter(k->theme());
 
-    // Get the script file
-    QFileInfo fi(scriptDir, k->theme().scriptModule() + ".py");
-    if( fi.exists() ) {
-        // if there exist such a script file, we have an old-style SK/KDE3.x package
-        // and need to keep compatibility.
-        QString scriptFile = fi.absoluteFilePath();
-        kDebug() << "Python theme script file: " << scriptFile << endl;
-        d->action = new Kross::Action(this, scriptFile, fi.dir());
-        d->action->setInterpreter("python");
-        d->action->setCode( QString(
-            // this is for backward-compatibility and needed cause the prev python
-            // implementation does provide the current path within the sys.path and
-            // some scripts are using it to do custom stuff. So, while the prefered
-            // way is now to use karamba.getThemePath() we still maintain support to
-            // the old behaviour.
-            "import karamba, sys\n"
-            "sys.path.insert(0,karamba.getThemePath())\n"
-            "sys.path.insert(0,'')\n"
-            "execfile(\"%1\", globals(), locals())\n"
-        ).arg(scriptFile) );
+    if (initOK) {
         d->action->trigger();
-    }
-    else {
-        // else we may like to check for other interpreters like ruby...
-        fi = QFileInfo(scriptDir, k->theme().scriptModule() + ".rb");
-        if( fi.exists() ) {
-            // there exist such a script file, so let's use it :)
-            QString scriptFile = fi.absoluteFilePath();
-            kDebug() << "Ruby theme script file: " << scriptFile << endl;
-            d->action = new Kross::Action(this, scriptFile);
-//FIXME why is it needed to publish it here again?
-d->action->addObject(this, "karamba", Kross::ChildrenInterface::AutoConnectSignals);
-            d->action->setInterpreter("ruby");
-            d->action->setFile(scriptFile);
-            d->action->trigger();
-            //QTimer::singleShot(0, d->action, SLOT(trigger()));
-        }
-        else {
-            kWarning() << "Theme script file not found: " << k->theme().scriptModule() << ".py or .rb" << endl;
-        }
+    } else {
+        kWarning() << "No Script file was found: " << k->theme().scriptModule() << ".py or .rb" << endl;
     }
 }
 
 KarambaInterface::~KarambaInterface()
 {
     delete d;
+}
+
+bool KarambaInterface::initInterpreter(const ThemeFile &theme)
+{
+    // Get the theme path
+    QDir scriptDir;
+    if (theme.isZipTheme()) {
+        scriptDir = theme.extractArchive();
+    } else {
+        scriptDir = theme.path();
+    }
+
+    // Set up Interpreter for Python
+    QFileInfo fi(scriptDir, theme.scriptModule() + ".py");
+    if (fi.exists()) {
+        QString scriptFile = fi.absoluteFilePath();
+
+        d->action = new Kross::Action(this, scriptFile, fi.dir());
+        d->action->setInterpreter("python");
+        d->action->setCode(QString(
+            // this is for backward-compatibility and needed cause the prev python
+            // implementation does provide the current path within the sys.path and
+            // some scripts are using it to do custom stuff. So, while the prefered
+            // way is now to use karamba.getThemePath() we still maintain support to
+            // the old behaviour.
+            "import karamba, sys\n"
+            "sys.path.insert(0, karamba.getThemePath())\n"
+            "sys.path.insert(0, '')\n"
+            "execfile(\"%1\", globals(), locals())\n"
+        ).arg(scriptFile));
+
+        kDebug() << "Using Python script: " << scriptFile << endl;
+
+        return true;
+    }
+
+    // Set up Interpreter for Ruby
+    fi = QFileInfo(scriptDir, theme.scriptModule() + ".rb");
+    if (fi.exists()) {
+        QString scriptFile = fi.absoluteFilePath();
+
+        d->action = new Kross::Action(this, scriptFile, fi.dir());
+        d->action->setInterpreter("ruby");
+        d->action->setFile(scriptFile);
+
+        kDebug() << "Using Ruby script: " << scriptFile << endl;
+
+        return true;
+    }
+
+    return false;
 }
 
 // Testing functions -----------------------

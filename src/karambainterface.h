@@ -94,6 +94,8 @@ private:
     /// \internal d-pointer instance.
     Private* const d;
 
+    bool initInterpreter(const ThemeFile &theme);
+
     bool checkKaramba(const Karamba *k) const;
     bool checkMeter(const Karamba *k, const Meter *m, const QString &type) const;
     bool checkKarambaAndMeter(const Karamba *k, const Meter *m, const QString &type) const;
