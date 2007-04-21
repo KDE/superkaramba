@@ -77,7 +77,7 @@ KarambaInterface::KarambaInterface(Karamba *k)
     }
 
     // Get the script file
-    QFileInfo fi(scriptDir, k->theme().pythonModule() + ".py");
+    QFileInfo fi(scriptDir, k->theme().scriptModule() + ".py");
     if( fi.exists() ) {
         // if there exist such a script file, we have an old-style SK/KDE3.x package
         // and need to keep compatibility.
@@ -100,7 +100,7 @@ KarambaInterface::KarambaInterface(Karamba *k)
     }
     else {
         // else we may like to check for other interpreters like ruby...
-        fi = QFileInfo(scriptDir, k->theme().pythonModule() + ".rb");
+        fi = QFileInfo(scriptDir, k->theme().scriptModule() + ".rb");
         if( fi.exists() ) {
             // there exist such a script file, so let's use it :)
             QString scriptFile = fi.absoluteFilePath();
@@ -114,7 +114,7 @@ d->action->addObject(this, "karamba", Kross::ChildrenInterface::AutoConnectSigna
             //QTimer::singleShot(0, d->action, SLOT(trigger()));
         }
         else {
-            kWarning() << "Theme script file not found: " << k->theme().pythonModule() << ".py or .rb" << endl;
+            kWarning() << "Theme script file not found: " << k->theme().scriptModule() << ".py or .rb" << endl;
         }
     }
 }

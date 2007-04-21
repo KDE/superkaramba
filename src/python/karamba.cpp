@@ -364,7 +364,7 @@ KarambaPython::KarambaPython(const ThemeFile& theme, bool reloading):
     PyImport_AddModule((char*)"karamba");
     Py_InitModule((char*)"karamba", karamba_methods);
 
-    pName = PyString_FromString(theme.pythonModule().toAscii().constData());
+    pName = PyString_FromString(theme.scriptModule().toAscii().constData());
     pModule = PyImport_Import(pName);
 
     fprintf(stderr, "%s\n", pypath);
@@ -386,7 +386,7 @@ KarambaPython::KarambaPython(const ThemeFile& theme, bool reloading):
         fprintf(stderr, "\n");
         fprintf(stderr,
                 "It means that I couldn't load a python add-on %s.py\n",
-                theme.pythonModule().toAscii().constData());
+                theme.scriptModule().toAscii().constData());
         fprintf(stderr, "If this is a regular theme and doesn't use python\n");
         fprintf(stderr, "extensions, then nothing is wrong.\n");
         fprintf(stderr,

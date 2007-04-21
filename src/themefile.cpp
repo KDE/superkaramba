@@ -253,7 +253,7 @@ bool ThemeFile::set(const KUrl &url)
 
     m_name = fi.completeBaseName();
     m_theme = m_name + ".theme";
-    m_python = m_name;
+    m_script = m_name;
     m_id = m_name;
 
     if (isZipFile(m_file)) {
@@ -267,11 +267,11 @@ bool ThemeFile::set(const KUrl &url)
     }
     parseXml();
 
-    QFileInfo fimo(m_python);
-    if (m_python.isEmpty())
+    QFileInfo fimo(m_script);
+    if (m_script.isEmpty())
         fimo.setFile(m_theme);
     else
-        fimo.setFile(m_python);
+        fimo.setFile(m_script);
     m_mo = fimo.completeBaseName();
 
     m_locale = new ThemeLocale(this);
@@ -296,31 +296,42 @@ void ThemeFile::parseXml()
     while (!n.isNull()) {
         QDomElement e = n.toElement();
         if (!e.isNull()) {
-            if (e.tagName() == "name")
+            if (e.tagName() == "name") {
                 m_name = e.text();
-            else if (e.tagName() == "themefile")
+            } else if (e.tagName() == "themefile") {
                 m_theme = e.text();
+            }
             else if (e.tagName() == "python_module") {
-                m_python = e.text();
+                m_script = e.text();
+
+                if (m_script.right(3).toLower() == ".py") {
+                    m_script.remove(m_script.length() - 3, 3);
+                }
+            } else if (e.tagName() == "script_module") {
+                m_script = e.text();
                 //TODO remove interpreter dependend code
-                if (m_python.right(3).toLower() == ".py")
-                    m_python.remove(m_python.length() - 3, 3);
-                if (m_python.right(3).toLower() == ".rb")
-                    m_python.remove(m_python.length() - 3, 3);
-            } else if (e.tagName() == "description")
+                if (m_script.right(3).toLower() == ".py") {
+                    m_script.remove(m_script.length() - 3, 3);
+                }
+
+                if (m_script.right(3).toLower() == ".rb") {
+                    m_script.remove(m_script.length() - 3, 3);
+                }
+            } else if (e.tagName() == "description") {
                 m_description = e.text();
-            else if (e.tagName() == "author")
+            } else if (e.tagName() == "author") {
                 m_author = e.text();
-            else if (e.tagName() == "author_email")
+            } else if (e.tagName() == "author_email") {
                 m_authorEmail = e.text();
-            else if (e.tagName() == "homepage")
-                m_homepage = e.text();
-            else if (e.tagName() == "icon")
+            } else if (e.tagName() == "homepage") {
+                 m_homepage = e.text();
+            } else if (e.tagName() == "icon") {
                 m_icon = e.text();
-            else if (e.tagName() == "version")
+            } else if (e.tagName() == "version") {
                 m_version = e.text();
-            else if (e.tagName() == "license")
+            } else if (e.tagName() == "license") {
                 m_license = e.text();
+            }
         }
         n = n.nextSibling();
     }
@@ -392,10 +403,10 @@ bool ThemeFile::isZipFile(const QString& filename)
     return false;
 }
 
-bool ThemeFile::pythonModuleExists() const
+bool ThemeFile::scriptModuleExists() const
 {
     //TODO remove interpreter dependend code
-    return (!m_python.isEmpty() && (fileExists(m_python + ".py") || fileExists(m_python + ".rb")));
+    return (!m_script.isEmpty() && (fileExists(m_script + ".py") || fileExists(m_script + ".rb")));
 }
 
 QString ThemeFile::canonicalFile(const QString& file)
@@ -408,7 +419,7 @@ QString ThemeFile::canonicalFile(const QString& file)
 QString ThemeFile::extractArchive() const
 {
     if (isZipTheme()) {
-        return m_zip->extractArchive(pythonModule());
+        return m_zip->extractArchive(scriptModule());
     }
 
     return QString();

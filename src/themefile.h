@@ -72,11 +72,11 @@ public:
     {
         return m_file;
     };
-    const QString& pythonModule() const
+    const QString& scriptModule() const
     {
-        return m_python;
+        return m_script;
     };
-    bool pythonModuleExists() const;
+    bool scriptModuleExists() const;
     const QString& path() const
     {
         return m_path;
@@ -131,7 +131,7 @@ private:
     QString m_mo;
     QString m_name;
     QString m_theme;
-    QString m_python;
+    QString m_script;
     QString m_icon;
     QString m_version;
     QString m_license;
