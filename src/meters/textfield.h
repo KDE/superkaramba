@@ -11,7 +11,7 @@
 #ifndef TEXTFIELD_H
 #define TEXTFIELD_H
 
-#include <QString>
+
 #include <QColor>
 #include <QFont>
 

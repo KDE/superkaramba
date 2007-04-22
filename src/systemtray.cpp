@@ -21,7 +21,7 @@
 
 #include <qobject.h>
 //Added by qt3to4:
-#include <QString>
+
 #include <QList>
 #include <kiconloader.h>
 #include <klocale.h>

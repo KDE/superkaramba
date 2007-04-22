@@ -1,7 +1,7 @@
 #ifndef LINEPARSER_H
 #define LINEPARSER_H
 
-#include <QString>
+
 #include <QColor>
 
 class LineParser
