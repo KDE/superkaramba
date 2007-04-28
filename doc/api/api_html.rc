@@ -1,4 +1,4 @@
-# Superkaramba python api html documentation config for ROBODOc
+# SuperKaramba api html documentation config for ROBODOc
 #
 items:
     SYNOPSIS
@@ -9,7 +9,7 @@ ignore items:
 options:
     --singledoc
     --src .apiHeaders
-    --doc python_api
+    --doc superkaramba_api
     --html
     #--tell
     --nopre
@@ -19,7 +19,7 @@ options:
     --nodesc
     --css api.css
 headertypes:
-    p "Python API"        karamba_python_api
+    p "SuperKaramba API"        karamba_python_api
 ignore files:
     README
     CVS

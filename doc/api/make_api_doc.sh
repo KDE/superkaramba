@@ -34,5 +34,12 @@ do
         replaceComments $TEMPDIR/$FILE
 done
 
-echo "Creating api documentation in output file: python_api.html"
-robodoc --rc api_html.rc
+echo "Creating api documentation in output file: superkaramba_api."$1
+
+case "$1" in
+        html) robodoc --rc api_html.rc;;
+        rtf) robodoc --rc api_rtf.rc;;
+        *) echo "Usage: make_api_doc {html | rtf}"
+        exit 1
+
+esac
