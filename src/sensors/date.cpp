@@ -8,11 +8,11 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
+#include "date.h"
+
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QVBoxLayout>
-
-#include "date.h"
 
 DateSensor::DateSensor(int interval) : Sensor(interval)
 {

@@ -8,6 +8,8 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
+#include "network.h"
+
 #include <QTextStream>
 
 #ifdef __FreeBSD__
@@ -16,8 +18,6 @@
 #include <sys/socket.h>
 #include <net/route.h>
 #endif
-
-#include "network.h"
 
 NetworkSensor::NetworkSensor(const QString &dev, int interval): Sensor(interval)
 {

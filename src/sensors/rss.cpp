@@ -7,6 +7,8 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
+#include "rss.h"
+#include "rss.moc"
 
 #include <QDomDocument>
 #include <QTextCodec>
@@ -14,9 +16,6 @@
 
 #include <KUrl>
 #include <kio/netaccess.h>
-
-#include "rss.h"
-#include "rss.moc"
 
 RssSensor::RssSensor(const QString &src, int interval, const QString &form, const QString &enc)
         : Sensor(interval),

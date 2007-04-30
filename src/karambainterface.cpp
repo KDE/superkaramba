@@ -18,6 +18,14 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  ****************************************************************************/
 
+#include "karambainterface.h"
+#include "karambainterface.moc"
+
+#include "karamba.h"
+#include "karambaapp.h"
+#include "lineparser.h"
+#include "showdesktop.h"
+
 #include <QGraphicsScene>
 #include <QNetworkInterface>
 #include <QTimer>
@@ -32,13 +40,6 @@
 #include <kross/core/krossconfig.h>
 #include <kross/core/manager.h>
 #include <kross/core/action.h>
-
-#include "karamba.h"
-#include "karambaapp.h"
-#include "lineparser.h"
-#include "showdesktop.h"
-#include "karambainterface.h"
-#include "karambainterface.moc"
 
 /// \internal d-pointer class.
 class KarambaInterface::Private
@@ -105,7 +106,7 @@ bool KarambaInterface::initInterpreter(const ThemeFile &theme)
 
         // this is for backward-compatibility and needed cause the prev python
         // implementation does provide the current path within the sys.path and
-        // some scripts are using it to do custom stuff. So, while the prefered
+        // some scripts are using it to do custom stuff. So, while the preferred
         // way is now to use karamba.getThemePath() we still maintain support to
         // the old behaviour.
         if (interpreter == "python") {

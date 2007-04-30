@@ -21,6 +21,9 @@
 *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 ****************************************************************************/
 
+#include "imagelabel.h"
+#include "karambaapp.h"
+
 #include <QPixmap>
 #include <QToolTip>
 
@@ -29,9 +32,6 @@
 #include <KTemporaryFile>
 #include <kio/job.h>
 #include <KRun>
-
-#include "karambaapp.h"
-#include "imagelabel.h"
 
 // Effect
 Effect::Effect(ImageLabel* img, int msec) :

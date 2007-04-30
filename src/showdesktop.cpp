@@ -18,14 +18,12 @@
  *  along with SuperKaramba; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  ****************************************************************************/
-
-#include <KWM>
-
-#include <netwm.h>
-
-#include "karambaapp.h"
 #include "showdesktop.h"
 #include "showdesktop.moc"
+
+#include "karambaapp.h"
+
+#include <KWM>
 
 ShowDesktop* ShowDesktop::self()
 {

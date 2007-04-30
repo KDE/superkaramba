@@ -17,8 +17,9 @@
  *  along with SuperKaramba; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  ****************************************************************************/
-#include "karambaapp.h"
 #include "themesdlg.h"
+
+#include "karambaapp.h"
 #include "themewidget.h"
 #include "kwidgetlistbox.h"
 #include "karamba.h"
@@ -227,15 +228,15 @@ void ThemesDlg::selectionChanged(int index)
         w->showButton(true);
 }
 
-int ThemesDlg::themeIndex(QString file)
+int ThemesDlg::themeIndex(const QString &file)
 {
     ThemeWidget* w;
-    file = ThemeFile::canonicalFile(file);
+    QString canonicalFile = ThemeFile::canonicalFile(file);
 
     for (uint i = 2; i < tableThemes->count(); ++i) {
         w = (ThemeWidget*)(tableThemes->item(i));
 
-        if (w->themeFile()->file() == file)
+        if (w->themeFile()->file() == canonicalFile)
             return i;
     }
     return -1;

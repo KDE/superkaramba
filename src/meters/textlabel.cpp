@@ -9,14 +9,14 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
+#include "textlabel.h"
+#include "textlabel.moc"
+
 #include <QPainter>
 #include <QMouseEvent>
 #include <QGraphicsSceneMouseEvent>
 
 #include <KRun>
-
-#include "textlabel.h"
-#include "textlabel.moc"
 
 TextLabel::TextLabel(Karamba *k, int x, int y, int w, int h)
         :   Meter(k, x, y, w, h),

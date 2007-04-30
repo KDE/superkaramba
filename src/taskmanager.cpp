@@ -21,6 +21,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ******************************************************************/
 
+#include "taskmanager.h"
+#include "taskmanager.moc"
+
 #include <QApplication>
 #include <QCursor>
 #include <QImage>
@@ -37,11 +40,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <KStaticDeleter>
 #include <KWM>
 
-#include <netwm.h>
 #include <kiconloader.h>
-
-#include "taskmanager.h"
-#include "taskmanager.moc"
 
 TaskManager* TaskManager::m_self = 0;
 static KStaticDeleter<TaskManager> staticTaskManagerDeleter;

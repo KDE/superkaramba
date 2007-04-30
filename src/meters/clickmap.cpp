@@ -8,14 +8,15 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
+#include "clickmap.h"
+#include "clickmap.moc"
+
+#include "karamba.h"
+
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
 
 #include <KRun>
-
-#include "karamba.h"
-#include "clickmap.h"
-#include "clickmap.moc"
 
 ClickMap::ClickMap(Karamba* k, int x, int y, int w, int h)
         :   Meter(k, x, y, w, h)

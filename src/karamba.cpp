@@ -22,6 +22,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  ****************************************************************************/
 
+#include "karamba.h"
+#include "karamba.moc"
+
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QStack>
@@ -73,9 +76,6 @@
 #include "lineparser.h"
 #include "themelocale.h"
 #include "superkarambasettings.h"
-
-#include "karamba.h"
-#include "karamba.moc"
 
 Karamba::Karamba(const KUrl &themeFile, int instance, bool subTheme)
         : QObject(),

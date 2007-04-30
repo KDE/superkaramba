@@ -8,6 +8,8 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
+#include "cpu.h"
+
 #include <QTextStream>
 #include <QFile>
 
@@ -24,8 +26,6 @@
 #include <sys/sysctl.h>
 #include <sys/sched.h>
 #endif
-
-#include "cpu.h"
 
 CPUSensor::CPUSensor(const QString &cpu, int interval) :
         Sensor(interval), userTicks(0), sysTicks(0), niceTicks(0), idleTicks(0)

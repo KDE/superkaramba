@@ -8,6 +8,8 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
+#include "uptime.h"
+
 #include <QFile>
 #include <QTextStream>
 
@@ -21,8 +23,6 @@
 #include <sys/time.h>
 #include <sys/sysctl.h>
 #endif
-
-#include "uptime.h"
 
 UptimeSensor::UptimeSensor(int interval) : Sensor(interval)
 {}

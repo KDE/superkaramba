@@ -19,13 +19,14 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  ****************************************************************************/
 
+#include "input.h"
+#include "input.moc"
+
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
 #include <QGraphicsSceneMouseEvent>
 
 #include "textfield.h"
-#include "input.h"
-#include "input.moc"
 
 Input::Input(Karamba* k, int x, int y, int w, int h)
         :   Meter(k, x, y, w, h),

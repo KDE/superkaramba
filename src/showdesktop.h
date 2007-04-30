@@ -22,6 +22,10 @@
 #ifndef __showdesktop_h__
 #define __showdesktop_h__
 
+#include <QObject>
+
+#include <netwm.h>
+
 class KWM;
 
 /**

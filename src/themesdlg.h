@@ -63,7 +63,7 @@ protected slots:
 protected:
     static bool filter(int index, QWidget* widget, void* data);
     void populateListbox();
-    int themeIndex(QString file);
+    int themeIndex(const QString &file);
     QStringList themes();
 
 private:

@@ -19,13 +19,13 @@
 *  along with SuperKaramba; if not, write to the Free Software
 *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 ****************************************************************************/
+#include "karambasessionmanaged.h"
+
+#include "karamba.h"
 
 #include <KApplication>
 #include <KConfig>
 #include <KSessionManager>
-
-#include "karambasessionmanaged.h"
-#include "karamba.h"
 
 bool KarambaSessionManaged::saveState(QSessionManager&)
 {

@@ -8,13 +8,14 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
+#include "meter.h"
+#include "meter.moc"
+
+#include "karamba.h"
+
 #include <QMouseEvent>
 #include <QTimer>
 #include <QPainter>
-
-#include "karamba.h"
-#include "meter.h"
-#include "meter.moc"
 
 Meter::Meter(Karamba* k, int ix, int iy, int iw, int ih)
         :   QGraphicsItem(k, k->getScene()),

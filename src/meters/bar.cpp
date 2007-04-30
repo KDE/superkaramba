@@ -7,13 +7,14 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
+#include "bar.h"
+#include "bar.moc"
+
+#include "karamba.h"
 
 #include <QPainter>
 #include <QTimer>
 
-#include "karamba.h"
-#include "bar.h"
-#include "bar.moc"
 
 Bar::Bar(Karamba* k, int x, int y, int width, int height)
         : Meter(k, x, y, width, height)

@@ -8,11 +8,11 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
+#include "textfile.h"
+
 #include <QTextCodec>
 #include <QTextStream>
 #include <QDomDocument>
-
-#include "textfile.h"
 
 TextFileSensor::TextFileSensor(const QString &fn, bool iRdf, int interval, const QString &encoding)
         : Sensor(interval)

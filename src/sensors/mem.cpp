@@ -8,6 +8,8 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
+#include "mem.h"
+
 #include <QFile>
 #include <QTextStream>
 
@@ -28,8 +30,6 @@
 #include <sys/sched.h>
 #include <sys/swap.h>
 #endif
-
-#include "mem.h"
 
 #if defined Q_OS_FREEBSD || defined(Q_OS_NETBSD)
 /* define pagetok in terms of pageshift */

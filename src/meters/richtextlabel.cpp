@@ -8,6 +8,12 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
+#include "richtextlabel.h"
+#include "richtextlabel.moc"
+
+#include "karamba.h"
+#include "textlabel.h"
+
 #include <QApplication>
 #include <QTextCursor>
 #include <QTextCharFormat>
@@ -16,11 +22,6 @@
 #include <QPainter>
 
 #include <KRun>
-
-#include "karamba.h"
-#include "textlabel.h"
-#include "richtextlabel.h"
-#include "richtextlabel.moc"
 
 RichTextLabel::RichTextLabel(Karamba* k)
         :   Meter(k, 0, 0, 0, 0),

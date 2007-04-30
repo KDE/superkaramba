@@ -9,11 +9,13 @@
  *   the Free Software Foundation; either version 2 of the License, or     *
  *   (at your option) any later version.                                   *
  ***************************************************************************/
+
+#include "clickarea.h"
+
 #include <QMouseEvent>
 
 #include <KService>
 
-#include "clickarea.h"
 
 ClickArea::ClickArea(Karamba* k, bool preview, int x, int y, int w, int h)
         : Meter(k, x, y, w, h), m_preview(preview)

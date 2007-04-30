@@ -9,6 +9,14 @@
 *   the Free Software Foundation; either version 2 of the License, or     *
 *   (at your option) any later version.                                   *
 ***************************************************************************/
+#include "karambaapp.h"
+#include "karambaapp.moc"
+
+#include "superkarambasettings.h"
+#include "mainwidget.h"
+#include "themesdlg.h"
+#include "karamba.h"
+#include "superkarambaadaptor.h"
 
 #include <QDesktopWidget>
 #include <QGraphicsView>
@@ -26,14 +34,6 @@
 #include <KStandardAction>
 #include <KActionCollection>
 #include <KMenu>
-
-#include "superkarambasettings.h"
-#include "mainwidget.h"
-#include "themesdlg.h"
-#include "karamba.h"
-#include "karambaapp.h"
-#include "superkarambaadaptor.h"
-#include "karambaapp.moc"
 
 KarambaApplication::KarambaApplication(Display *display, Qt::HANDLE visual, Qt::HANDLE colormap)
         :   KUniqueApplication(display, visual, colormap),
