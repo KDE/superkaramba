@@ -25,10 +25,9 @@
 #include <QList>
 #include <kiconloader.h>
 #include <klocale.h>
-#include <kwm.h>
+#include <kwindowsystem.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
-#include <kwm.h>
 
 #include <q3dragobject.h>
 #include <qlayout.h>
