@@ -26,7 +26,7 @@
 
 #include <netwm.h>
 
-class KWM;
+class KWindowSystem;
 
 /**
  * Singleton class that handles desktop access (minimizing all windows)
@@ -60,7 +60,7 @@ private:
     ShowDesktop();
 
     bool              showingDesktop;
-    KWM*       kWinModule;
+    KWindowSystem*       kWinModule;
     QList<WId>        iconifiedList;
 
 };

@@ -38,7 +38,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <KIconLoader>
 #include <KLocale>
 #include <KStaticDeleter>
-#include <KWM>
+#include <KWindowSystem>
 
 #include <kiconloader.h>
 
@@ -58,7 +58,7 @@ TaskManager::TaskManager()
         : QObject(),
         _active(0),
         _startup_info(0),
-        m_winModule(KWM::self()),
+        m_winModule(KWindowSystem::self()),
         m_trackGeometry(false)
 {
     KGlobal::locale()->insertCatalog("libtaskmanager");
@@ -533,7 +533,7 @@ bool TaskManager::isOnScreen(int screen, const WId wid)
         return true;
     }
 
-    KWindowInfo wi = KWM::windowInfo(wid, NET::WMKDEFrameStrut);
+    KWindowInfo wi = KWindowSystem::windowInfo(wid, NET::WMKDEFrameStrut);
 
     // for window decos that fudge a bit and claim to extend beyond the
     // edge of the screen, we just contract a bit.
@@ -548,7 +548,7 @@ Task::Task(WId win, QObject *parent, const char *name)
         _active(false),
         _win(win),
         m_frameId(win),
-        _info(KWM::windowInfo(_win,
+        _info(KWindowSystem::windowInfo(_win,
                                NET::WMState | NET::XAWMState | NET::WMDesktop | NET::WMVisibleName | NET::WMGeometry,
                                NET::WM2AllowedActions)),
         _lastWidth(0),
@@ -562,7 +562,7 @@ Task::Task(WId win, QObject *parent, const char *name)
     setObjectName(name);
 
     // try to load icon via net_wm
-    _pixmap = KWM::icon(_win, 16, 16, true);
+    _pixmap = KWindowSystem::icon(_win, 16, 16, true);
 
     // try to guess the icon from the classhint
     if (_pixmap.isNull()) {
@@ -633,7 +633,7 @@ void Task::findWindowFrameId()
 void Task::refreshIcon()
 {
     // try to load icon via net_wm
-    _pixmap = KWM::icon(_win, 16, 16, true);
+    _pixmap = KWindowSystem::icon(_win, 16, 16, true);
 
     // try to guess the icon from the classhint
     if (_pixmap.isNull()) {
@@ -656,7 +656,7 @@ void Task::refreshIcon()
 void Task::refresh(unsigned int dirty)
 {
     QString name = visibleName();
-    _info = KWM::windowInfo(_win,
+    _info = KWindowSystem::windowInfo(_win,
                              NET::WMState | NET::XAWMState | NET::WMDesktop | NET::WMVisibleName | NET::WMGeometry,
                              NET::WM2AllowedActions);
 
@@ -813,7 +813,7 @@ QPixmap Task::icon(int width, int height, bool allowResize)
             && (!_lastIcon.isNull()))
         return _lastIcon;
 
-    QPixmap newIcon = KWM::icon(_win, width, height, allowResize);
+    QPixmap newIcon = KWindowSystem::icon(_win, width, height, allowResize);
     if (!newIcon.isNull()) {
         _lastIcon = newIcon;
         _lastWidth = width;
@@ -917,12 +917,12 @@ void Task::move()
     bool on_current = _info.isOnCurrentDesktop();
 
     if (!on_current) {
-        KWM::setCurrentDesktop(_info.desktop());
-        KWM::forceActiveWindow(_win);
+        KWindowSystem::setCurrentDesktop(_info.desktop());
+        KWindowSystem::forceActiveWindow(_win);
     }
 
     if (_info.isMinimized()) {
-        KWM::unminimizeWindow(_win);
+        KWindowSystem::unminimizeWindow(_win);
     }
 
     QRect geom = _info.geometry();
@@ -938,12 +938,12 @@ void Task::resize()
     bool on_current = _info.isOnCurrentDesktop();
 
     if (!on_current) {
-        KWM::setCurrentDesktop(_info.desktop());
-        KWM::forceActiveWindow(_win);
+        KWindowSystem::setCurrentDesktop(_info.desktop());
+        KWindowSystem::forceActiveWindow(_win);
     }
 
     if (_info.isMinimized()) {
-        KWM::unminimizeWindow(_win);
+        KWindowSystem::unminimizeWindow(_win);
     }
 
     QRect geom = _info.geometry();
@@ -956,15 +956,15 @@ void Task::resize()
 
 void Task::setMaximized(bool maximize)
 {
-    KWindowInfo info = KWM::windowInfo(_win, NET::WMState | NET::XAWMState | NET::WMDesktop);
+    KWindowInfo info = KWindowSystem::windowInfo(_win, NET::WMState | NET::XAWMState | NET::WMDesktop);
     bool on_current = info.isOnCurrentDesktop();
 
     if (!on_current) {
-        KWM::setCurrentDesktop(info.desktop());
+        KWindowSystem::setCurrentDesktop(info.desktop());
     }
 
     if (info.isMinimized()) {
-        KWM::unminimizeWindow(_win);
+        KWindowSystem::unminimizeWindow(_win);
     }
 
     NETWinInfo ni(QX11Info::display(), _win, QX11Info::appRootWindow(), NET::WMState);
@@ -976,7 +976,7 @@ void Task::setMaximized(bool maximize)
     }
 
     if (!on_current) {
-        KWM::forceActiveWindow(_win);
+        KWindowSystem::forceActiveWindow(_win);
     }
 }
 
@@ -987,41 +987,41 @@ void Task::toggleMaximized()
 
 void Task::restore()
 {
-    KWindowInfo info = KWM::windowInfo(_win, NET::WMState | NET::XAWMState | NET::WMDesktop);
+    KWindowInfo info = KWindowSystem::windowInfo(_win, NET::WMState | NET::XAWMState | NET::WMDesktop);
     bool on_current = info.isOnCurrentDesktop();
 
     if (!on_current) {
-        KWM::setCurrentDesktop(info.desktop());
+        KWindowSystem::setCurrentDesktop(info.desktop());
     }
 
     if (info.isMinimized()) {
-        KWM::unminimizeWindow(_win);
+        KWindowSystem::unminimizeWindow(_win);
     }
 
     NETWinInfo ni(QX11Info::display(), _win, QX11Info::appRootWindow(), NET::WMState);
     ni.setState(0, NET::Max);
 
     if (!on_current) {
-        KWM::forceActiveWindow(_win);
+        KWindowSystem::forceActiveWindow(_win);
     }
 }
 
 void Task::setIconified(bool iconify)
 {
     if (iconify) {
-        KWM::minimizeWindow(_win);
+        KWindowSystem::minimizeWindow(_win);
     } else {
-        KWindowInfo info = KWM::windowInfo(_win, NET::WMState | NET::XAWMState | NET::WMDesktop);
+        KWindowInfo info = KWindowSystem::windowInfo(_win, NET::WMState | NET::XAWMState | NET::WMDesktop);
         bool on_current = info.isOnCurrentDesktop();
 
         if (!on_current) {
-            KWM::setCurrentDesktop(info.desktop());
+            KWindowSystem::setCurrentDesktop(info.desktop());
         }
 
-        KWM::unminimizeWindow(_win);
+        KWindowSystem::unminimizeWindow(_win);
 
         if (!on_current) {
-            KWM::forceActiveWindow(_win);
+            KWindowSystem::forceActiveWindow(_win);
         }
     }
 }
@@ -1040,13 +1040,13 @@ void Task::close()
 void Task::raise()
 {
 //    kDebug(1210) << "Task::raise(): " << name() << endl;
-    KWM::raiseWindow(_win);
+    KWindowSystem::raiseWindow(_win);
 }
 
 void Task::lower()
 {
 //    kDebug(1210) << "Task::lower(): " << name() << endl;
-    KWM::lowerWindow(_win);
+    KWindowSystem::lowerWindow(_win);
 }
 
 void Task::activate()
@@ -1056,7 +1056,7 @@ void Task::activate()
     if (_transients_demanding_attention.count() > 0) {
         w = _transients_demanding_attention.last();
     }
-    KWM::forceActiveWindow(w);
+    KWindowSystem::forceActiveWindow(w);
 }
 
 void Task::activateRaiseOrIconify()
@@ -1076,7 +1076,7 @@ void Task::toDesktop(int desk)
     if (desk == 0) {
         if (_info.valid() && _info.onAllDesktops()) {
             ni.setDesktop(TaskManager::self()->winModule()->currentDesktop());
-            KWM::forceActiveWindow(_win);
+            KWindowSystem::forceActiveWindow(_win);
         } else {
             ni.setDesktop(NETWinInfo::OnAllDesktops);
         }
@@ -1085,7 +1085,7 @@ void Task::toDesktop(int desk)
     }
     ni.setDesktop(desk);
     if (desk == TaskManager::self()->winModule()->currentDesktop())
-        KWM::forceActiveWindow(_win);
+        KWindowSystem::forceActiveWindow(_win);
 }
 
 void Task::toCurrentDesktop()

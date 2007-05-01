@@ -23,7 +23,7 @@
 
 #include "karambaapp.h"
 
-#include <KWM>
+#include <KWindowSystem>
 
 ShowDesktop* ShowDesktop::self()
 {
@@ -36,7 +36,7 @@ ShowDesktop::ShowDesktop()
         , showingDesktop(false)
         , kWinModule(0)
 {
-    kWinModule = KWM::self();
+    kWinModule = KWindowSystem::self();
 
     // on desktop changes or when a window is deiconified, we abort the show desktop mode
     connect(kWinModule, SIGNAL(currentDesktopChanged(int)),
@@ -83,7 +83,7 @@ void ShowDesktop::showDesktop(bool b)
     showingDesktop = b;
 
     if (b) {
-        // this code should move to KWM after supporting NETWM1.2
+        // this code should move to KWindowSystem after supporting NETWM1.2
         iconifiedList.clear();
         const QList<WId> windows = kWinModule->windows();
         foreach(WId w, windows) {
@@ -99,11 +99,11 @@ void ShowDesktop::showDesktop(bool b)
         // find first, hide later, otherwise transients may get minimized
         // with the window they're transient for
         foreach(WId w, iconifiedList) {
-            KWM::minimizeWindow(w, false);
+            KWindowSystem::minimizeWindow(w, false);
         }
     } else {
         foreach(WId w, iconifiedList) {
-            KWM::unminimizeWindow(w, false);
+            KWindowSystem::unminimizeWindow(w, false);
         }
     }
 

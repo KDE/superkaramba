@@ -35,7 +35,7 @@
 #include <QSignalMapper>
 
 #include <KDebug>
-#include <KWM>
+#include <KWindowSystem>
 #include <KIcon>
 #include <KLocale>
 #include <KDirWatch>
@@ -153,7 +153,7 @@ Karamba::Karamba(const KUrl &themeFile, int instance, bool subTheme)
 
     m_defaultTextField = new TextField();
 
-    m_KWinModule = KWM::self();
+    m_KWinModule = KWindowSystem::self();
     connect(m_KWinModule, SIGNAL(currentDesktopChanged(int)), this,
             SLOT(currentDesktopChanged(int)));
 
@@ -189,12 +189,12 @@ Karamba::Karamba(const KUrl &themeFile, int instance, bool subTheme)
     parseConfig();
 
     if (!(m_onTop || m_managed))
-        KWM::lowerWindow(m_view->winId());
+        KWindowSystem::lowerWindow(m_view->winId());
     /*
       m_view->setFocusPolicy(Qt::StrongFocus);
-      KWM::setType(m_view->winId(), NET::Dock);
-      KWM::setState(m_view->winId(), NET::KeepBelow);
-      KWM::lowerWindow(m_view->winId());
+      KWindowSystem::setType(m_view->winId(), NET::Dock);
+      KWindowSystem::setState(m_view->winId(), NET::KeepBelow);
+      KWindowSystem::lowerWindow(m_view->winId());
     */
     QString instanceString;
     if (m_instance > 1)
@@ -381,7 +381,7 @@ bool Karamba::parseConfig()
 
                 if (lineParser.getBoolean("ONTOP")) {
                     m_onTop = true;
-                    KWM::setState(m_view->winId(), NET::KeepAbove);
+                    KWindowSystem::setState(m_view->winId(), NET::KeepAbove);
                 }
 
                 if (lineParser.getBoolean("MANAGED")) {
@@ -394,7 +394,7 @@ bool Karamba::parseConfig()
                                      | NETWinInfo::SkipPager, NETWinInfo::SkipTaskbar
                                      | NETWinInfo::SkipPager);
                     if (m_onTop) {
-                        KWM::setState(m_view->winId(), NET::KeepAbove);
+                        KWindowSystem::setState(m_view->winId(), NET::KeepAbove);
                     }
                 }
 
@@ -410,7 +410,7 @@ bool Karamba::parseConfig()
 
                 if (lineParser.getBoolean("TOPBAR")) {
                     setPos(x, 0);
-                    KWM::setStrut(m_view->winId(), 0, 0, h, 0);
+                    KWindowSystem::setStrut(m_view->winId(), 0, 0, h, 0);
                     //toggleLocked->setChecked(true);
                     //toggleLocked->setEnabled(false);
                 }
@@ -418,7 +418,7 @@ bool Karamba::parseConfig()
                 if (lineParser.getBoolean("BOTTOMBAR")) {
                     int dh = QApplication::desktop()->height();
                     setPos(x, dh - h);
-                    KWM::setStrut(m_view->winId(), 0, 0, 0, h);
+                    KWindowSystem::setStrut(m_view->winId(), 0, 0, 0, h);
                     //toggleLocked->setChecked(true);
                     //toggleLocked->setEnabled(false);
                 }
@@ -426,14 +426,14 @@ bool Karamba::parseConfig()
                 if (lineParser.getBoolean("RIGHTBAR")) {
                     int dw = QApplication::desktop()->width();
                     setPos(dw - w, y);
-                    KWM::setStrut(m_view->winId(), 0, w, 0, 0);
+                    KWindowSystem::setStrut(m_view->winId(), 0, w, 0, 0);
                     //toggleLocked->setChecked(true);
                     //toggleLocked->setEnabled(false);
                 }
 
                 if (lineParser.getBoolean("LEFTBAR")) {
                     setPos(0, y);
-                    KWM::setStrut(m_view->winId(), w, 0, 0, 0);
+                    KWindowSystem::setStrut(m_view->winId(), w, 0, 0, 0);
                     //toggleLocked->setChecked( true );
                     //toggleLocked->setEnabled(false);
                 }
@@ -687,9 +687,9 @@ bool Karamba::parseConfig()
         if (passive && !m_managed) {
             // Matthew Kay: set window type to "dock"
             // (plays better with taskbar themes this way)
-            //KWM::setType(m_view->winId(), NET::Dock);
+            //KWindowSystem::setType(m_view->winId(), NET::Dock);
             //KDE 3.2 addition for the always on top issues
-            //KWM::setState(m_view->winId(), NET::KeepBelow);
+            //KWindowSystem::setState(m_view->winId(), NET::KeepBelow);
         }
 
         m_theme.close();
@@ -1100,9 +1100,9 @@ void Karamba::reloadConfig()
 void Karamba::setOnTop(bool stayOnTop)
 {
     if (stayOnTop) {
-        KWM::setState(m_view->winId(), NET::KeepAbove);
+        KWindowSystem::setState(m_view->winId(), NET::KeepAbove);
     } else {
-        KWM::setState(m_view->winId(), NET::KeepBelow);
+        KWindowSystem::setState(m_view->winId(), NET::KeepBelow);
     }
 
     m_onTop = stayOnTop;

@@ -112,7 +112,7 @@ PyObject* py_createTaskIcon(PyObject *, PyObject *args)
     }
 
     //retrieve the QPixmap that represents this image
-    QPixmap iconPixmap = KWM::icon(currTask->window());
+    QPixmap iconPixmap = KWindowSystem::icon(currTask->window());
 
     ImageLabel *tmp = createImageLabel((Karamba*)widget, x, y, 0, 0);
     tmp->setValue(iconPixmap);
