@@ -34,6 +34,7 @@
 
 #include <KMenu>
 #include <KService>
+#include <KServiceGroup>
 #include <KLocale>
 #include <KMessageBox>
 
@@ -3202,7 +3203,7 @@ QString KarambaInterface::getPrettyThemeName(const Karamba *k) const
 /** Misc/getServiceGroups
 *
 * SYNOPSIS
-*   list getServiceGroups(widget, path)
+*   list getServiceGroups(path)
 * DESCRIPTION
 *   This function returns a list of services and service groups
 *   that are in the user's KDE Menu.  It is not a recursive
@@ -3226,19 +3227,70 @@ QString KarambaInterface::getPrettyThemeName(const Karamba *k) const
 *  RETURN VALUE
 *    List of Dictionaries of services and service groups
 */
-#ifdef __GNUC__
-#warning Implement
-#endif
-QStringList KarambaInterface::getServiceGroups(const Karamba *k, const QString &path) const
+QVariantList KarambaInterface::getServiceGroups(const QString &path) const
 {
-    if (!checkKaramba(k)) {
-        return QStringList();
+    QVariantList ret;
+
+    KServiceGroup::Ptr root = KServiceGroup::group(path);
+
+    if (!root || !root->isValid())
+        return ret;
+
+    KServiceGroup::List sl = root->entries(true, true, true, false);
+    QStringList suppressGenericNames = root->suppressGenericNames();
+
+    KServiceGroup::List::ConstIterator it = sl.begin();
+    for (; it != sl.end(); ++it) {
+        KSycocaEntry *e = (KSycocaEntry*)(*it).data();
+
+        QVariant subItem;
+        if (e->isType(KST_KServiceGroup)) {
+            KServiceGroup::Ptr g(static_cast<KServiceGroup *>(e));
+            KServiceGroup::Ptr subMenuRoot = KServiceGroup::group(g->relPath());
+            if (subMenuRoot->childCount() == 0 || g->name().at(0) == '.') {
+                continue;
+            }
+
+            QVariantList typeMap;
+
+            QMap<QString, QVariant> map;
+            map["caption"] = g->caption();
+            map["comment"] = g->comment();
+            map["icon"] = g->icon();
+            map["relpath"] = g->relPath();
+
+            typeMap << 0;
+            typeMap << QVariant(map);
+
+            subItem = QVariant(typeMap);
+        } else if (e->isType(KST_KService)) {
+            KService::Ptr g(static_cast<KService *>(e));
+
+            QVariantList typeMap;
+
+            QMap<QString, QVariant> map;
+            map["exec"] = g->exec();
+            map["menuid"] = g->menuId();
+            map["name"] = g->name();
+            map["path"] = g->path();
+            map["icon"] = g->icon();
+            map["library"] = g->library();
+            map["comment"] = g->comment();
+            map["type"] = g->isApplication() ? "Application" : "Service";
+            map["genericname"] = g->genericName();
+
+            typeMap << 1;
+            typeMap << QVariant(map);
+
+            subItem = QVariant(typeMap);
+        }
+
+        if (subItem.isValid()) {
+            ret << subItem;
+        }
     }
 
-    Q_UNUSED(path);
-
-    // Use QHash/QMap for this?
-    return QStringList();
+    return ret;
 }
 
 /** Misc/getThemePath

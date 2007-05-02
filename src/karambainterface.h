@@ -259,7 +259,7 @@ public Q_SLOTS:
     QString getIP(const Karamba *k, const QString &interface) const;
     int getNumberOfDesktops(const Karamba *k) const;
     QString getPrettyThemeName(const Karamba *k) const;
-    QStringList getServiceGroups(const Karamba *k, const QString &path) const;
+    QVariantList getServiceGroups(const QString &path) const;
     QString getThemePath(const Karamba *k = 0) const;
     double getUpdateTime(const Karamba *k) const;
     bool setUpdateTime(Karamba *k, double updateTime) const;
