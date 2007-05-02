@@ -17,6 +17,8 @@
 #include <QTimer>
 #include <QPainter>
 
+static int zLevel = 0;
+
 Meter::Meter(Karamba* k, int ix, int iy, int iw, int ih)
         :   QGraphicsItem(k, k->getScene()),
         m_clickable(true),
@@ -35,6 +37,8 @@ Meter::Meter(Karamba* k, int ix, int iy, int iw, int ih)
     m_opacityTimer = new QTimer(this);
     connect(m_opacityTimer, SIGNAL(timeout()), this, SLOT(fadeIn()));
     m_opacityTimer->start(10);
+
+    setZValue(zLevel++);
 }
 
 Meter::Meter(Karamba* k)
@@ -51,6 +55,7 @@ Meter::Meter(Karamba* k)
 
 Meter::~Meter()
 {
+    zLevel--;
     delete m_opacityTimer;
 }
 
