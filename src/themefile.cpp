@@ -203,7 +203,9 @@ bool ThemeFile::exists() const
 
 QPixmap ThemeFile::icon() const
 {
-    return QPixmap(readThemeFile(m_icon));
+    QPixmap icon;
+    icon.loadFromData(readThemeFile(m_icon));
+    return icon;
 }
 
 bool ThemeFile::set(const KUrl &url)
