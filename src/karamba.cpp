@@ -253,8 +253,9 @@ Karamba::Karamba(const KUrl &themeFile, int instance, bool subTheme, const QPoin
         } else {
             m_view->move(startPos - m_themeCenter);
         }
-    }
 
+        m_toggleLocked->setChecked(false);
+    }
 
     QTimer::singleShot(0, this, SLOT(startKaramba()));
 }
