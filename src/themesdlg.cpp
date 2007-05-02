@@ -42,6 +42,7 @@ ThemesDlg::ThemesDlg(QWidget *parent, const char *name)
 
     connect(buttonAddToDesktop, SIGNAL(clicked()), this, SLOT(addToDesktop()));
     connect(tableThemes, SIGNAL(selected(int)), this, SLOT(selectionChanged(int)));
+    connect(tableThemes, SIGNAL(itemDropped(QPoint, ThemeWidget*)), this, SLOT(addToDesktop(QPoint, ThemeWidget*)));
     connect(editSearch, SIGNAL(textChanged(QString)), this, SLOT(search(QString)));
     connect(comboShow, SIGNAL(activated(QString)), this, SLOT(search(QString)));
 }
@@ -169,6 +170,18 @@ void ThemesDlg::addToDesktop()
         ThemeFile* tf = w->themeFile();
         if (tf) {
             Karamba *k = new Karamba(tf->file());
+            connect(k, SIGNAL(widgetStarted(Karamba*, bool)),
+                karambaApp, SLOT(karambaStarted(Karamba*, bool)));
+        }
+    }
+}
+
+void ThemesDlg::addToDesktop(QPoint pos, ThemeWidget* w)
+{
+    if (w) {
+        ThemeFile* tf = w->themeFile();
+        if (tf) {
+            Karamba *k = new Karamba(tf->file(), -1, false, pos);
             connect(k, SIGNAL(widgetStarted(Karamba*, bool)),
                 karambaApp, SLOT(karambaStarted(Karamba*, bool)));
         }

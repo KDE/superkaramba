@@ -26,6 +26,7 @@
 #include "ui_themes_layout.h"
 #include "karambaapp.h"
 #include "sknewstuff.h"
+#include "themewidget.h"
 
 /**
 @author See README for the list of authors
@@ -54,6 +55,7 @@ public:
 
 protected slots:
     virtual void addToDesktop();
+    virtual void addToDesktop(QPoint, ThemeWidget*);
     virtual void selectionChanged(int);
     virtual void openLocalTheme();
     virtual void getNewStuff();

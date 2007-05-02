@@ -57,7 +57,7 @@ class Karamba : public QObject, public QGraphicsItemGroup
     Q_OBJECT
 
 public:
-    explicit Karamba(const KUrl &themeFile, int instance = -1, bool subTheme = false);
+    explicit Karamba(const KUrl &themeFile, int instance = -1, bool subTheme = false, const QPoint &startPos = QPoint());
 
     virtual ~Karamba();
 
@@ -231,6 +231,8 @@ private:
     bool m_globalView;
 
     bool m_subTheme;
+
+    QPoint m_themeCenter;
 
     OrgKdeKdesktopBackgroundInterface* m_backgroundInterface;
 

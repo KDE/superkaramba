@@ -51,6 +51,9 @@ public:
     void setHeaderText(const QString &text);
     void showButton(bool show);
 
+    QPixmap icon();
+    QString path();
+
 protected:
     void updateRunning();
     void setDescriptionMaxHeight();

@@ -77,7 +77,7 @@
 #include "themelocale.h"
 #include "superkarambasettings.h"
 
-Karamba::Karamba(const KUrl &themeFile, int instance, bool subTheme)
+Karamba::Karamba(const KUrl &themeFile, int instance, bool subTheme, const QPoint &startPos)
         : QObject(),
         QGraphicsItemGroup(),
         m_scene(0),
@@ -238,11 +238,23 @@ Karamba::Karamba(const KUrl &themeFile, int instance, bool subTheme)
         if (ypos < 0)
             ypos = 0;
 
-        if (m_globalView)
-            setPos(xpos, ypos);
-        else
-            m_view->move(xpos, ypos);
+        if (startPos.isNull()) {
+            if (m_globalView) {
+                    setPos(xpos, ypos);
+            } else {
+                    m_view->move(xpos, ypos);
+            }
+        }
     }
+
+    if (!startPos.isNull()) {
+        if (m_globalView) {
+            setPos(startPos - m_themeCenter);
+        } else {
+            m_view->move(startPos - m_themeCenter);
+        }
+    }
+
 
     QTimer::singleShot(0, this, SLOT(startKaramba()));
 }
@@ -355,6 +367,11 @@ bool Karamba::parseConfig()
                     w = 300;
                     h = 300;
                 }
+
+                // Store the center of the theme,
+                // so it can be centered when a user
+                // drags it from the theme dialog.
+                m_themeCenter = QPoint(w/2, h/2);
 
                 setFixedSize(w, h);
                 if (!m_globalView)

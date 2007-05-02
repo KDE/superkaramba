@@ -110,4 +110,14 @@ void ThemeWidget::setDescriptionMaxHeight()
     description->setMaximumHeight(h);
 }
 
+QPixmap ThemeWidget::icon()
+{
+    return *iconLabel->pixmap();
+}
+
+QString ThemeWidget::path()
+{
+    return m_themeFile->getUrlPath().path();
+}
+
 #include "themewidget.moc"

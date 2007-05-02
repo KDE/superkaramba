@@ -19,6 +19,8 @@
 ****************************************************************************/
 #include "kwidgetlistbox.h"
 
+#include <QApplication>
+
 KWidgetListbox::KWidgetListbox(QWidget *parent)
         : QTableWidget(parent)
 {
@@ -130,6 +132,42 @@ void KWidgetListbox::showItems(show_callback func, void* data)
 void KWidgetListbox::showEvent(QShowEvent*)
 {
     repaint();
+}
+
+void KWidgetListbox::mousePressEvent(QMouseEvent *event)
+{
+    if(event->button() == Qt::LeftButton) {
+        m_dragStartPosition = event->pos();
+    }
+
+    QTableWidget::mousePressEvent(event);
+}
+
+void KWidgetListbox::mouseMoveEvent(QMouseEvent *event)
+{
+    if(!(event->buttons() & Qt::LeftButton)) {
+        return;
+    }
+
+    if ((event->pos() - m_dragStartPosition).manhattanLength() < QApplication::startDragDistance()) {
+        return;
+    }
+
+    if (selected() <= 1) {
+        return;
+    }
+
+    ThemeWidget *theme = qobject_cast<ThemeWidget*>(selectedItem());
+    QDrag *drag = new QDrag(this);
+    QMimeData *mimeData = new QMimeData;
+
+//    mimeData->setData("superkaramba/theme", theme->path().toAscii());
+    drag->setMimeData(mimeData);
+    drag->setPixmap(theme->icon());
+
+    drag->start(Qt::IgnoreAction);
+
+    emit itemDropped(QCursor::pos(), theme);
 }
 
 #include "kwidgetlistbox.moc"

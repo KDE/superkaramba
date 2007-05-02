@@ -20,9 +20,12 @@
 #ifndef KWIDGETLISTBOX_H
 #define KWIDGETLISTBOX_H
 
+#include "themewidget.h"
+
 #include <QTableWidget>
 #include <QShowEvent>
 #include <QHeaderView>
+#include <QPoint>
 
 /**
 @author See README for the list of authors
@@ -57,12 +60,18 @@ public:
 
 protected:
     virtual void showEvent(QShowEvent* e);
+    virtual void mousePressEvent(QMouseEvent *event);
+    virtual void mouseMoveEvent(QMouseEvent *event);
 
 protected slots:
     void selectionChanged(int row, int col);
 
 signals:
     void selected(int index);
+    void itemDropped(QPoint, ThemeWidget*);
+
+private:
+    QPoint m_dragStartPosition;
 };
 
 #endif
