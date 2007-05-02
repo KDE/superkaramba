@@ -4999,8 +4999,7 @@ bool KarambaInterface::redrawWidget(Karamba *k) const
     if (!checkKaramba(k))
         return false;
 
-    foreach(QGraphicsItem *item, ((QGraphicsItemGroup*)k)->children())
-    item->update();
+    k->redrawWidget();
 
     return true;
 }

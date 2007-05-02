@@ -127,6 +127,8 @@ public:
     void setOnTop(bool stayOnTop);
     bool isSubTheme() const;
 
+    void redrawWidget();
+
     K3Process *currProcess;
     Systemtray *systray;
 

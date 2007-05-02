@@ -126,6 +126,8 @@ Karamba::Karamba(const KUrl &themeFile, int instance, bool subTheme, const QPoin
         m_globalView = false;
     }
 
+    m_view->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
+
     if (!m_theme.set(themeFile)) {
         return;
     }
@@ -335,6 +337,12 @@ void Karamba::step()
 
     if (m_interface)
         m_interface->callWidgetUpdated(this);
+}
+
+void Karamba::redrawWidget()
+{
+    // Force the event loop to process the update() calls
+    QCoreApplication::processEvents();
 }
 
 bool Karamba::parseConfig()
