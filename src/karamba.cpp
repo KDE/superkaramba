@@ -122,7 +122,6 @@ Karamba::Karamba(const KUrl &themeFile, int instance, bool subTheme, const QPoin
         m_view = new MainWidget(m_scene);
         m_view->setRenderHints(QPainter::Antialiasing |
                                QPainter::SmoothPixmapTransform);
-        m_view->show();
         m_globalView = false;
     }
 
@@ -259,6 +258,25 @@ Karamba::Karamba(const KUrl &themeFile, int instance, bool subTheme, const QPoin
         m_toggleLocked->setChecked(false);
     }
 
+    m_timer = new QTimeLine(1000);
+    m_timer->setFrameRange(0, 1000);
+
+    m_animation = new QGraphicsItemAnimation;
+    m_animation->setItem(this);
+    m_animation->setTimeLine(m_timer);
+
+    // Use 201 here because 200.0/200.0 < 1 => theme is still scaled
+    for (int i = 0; i < 201; i++) {
+        m_animation->setScaleAt(i / 200.0, 1 / 200.0 * i, 1 / 200.0 * i);
+        QPointF animPos(
+            boundingRect().width()/2*(1-m_animation->verticalScaleAt(i / 200.0)),
+            boundingRect().height()/2*(1-m_animation->horizontalScaleAt(i / 200.0))
+        );
+            m_animation->setPosAt(i / 200.0, animPos);
+    }
+
+    m_timer->start();
+
     QTimer::singleShot(0, this, SLOT(startKaramba()));
 }
 
@@ -287,6 +305,9 @@ Karamba::~Karamba()
     delete m_popupMenu;
 
     delete m_stepTimer;
+
+    delete m_animation;
+    delete m_timer;
 
     delete m_backgroundInterface;
 
@@ -318,6 +339,8 @@ void Karamba::startKaramba()
         connect(m_stepTimer, SIGNAL(timeout()), SLOT(step()));
         m_stepTimer->start(m_interval);
     }
+
+    m_view->show();
 }
 
 QString Karamba::prettyName() const

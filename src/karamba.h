@@ -27,6 +27,8 @@
 #define KARAMBA_H
 
 #include <QGraphicsItemGroup>
+#include <QTimeLine>
+#include <QGraphicsItemAnimation>
 
 #include <KUrl>
 #include <kdesktop_background_interface.h>
@@ -235,6 +237,9 @@ private:
     bool m_subTheme;
 
     QPoint m_themeCenter;
+
+    QGraphicsItemAnimation *m_animation;
+    QTimeLine *m_timer;
 
     OrgKdeKdesktopBackgroundInterface* m_backgroundInterface;
 
