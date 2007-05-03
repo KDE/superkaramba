@@ -1599,17 +1599,17 @@ int Karamba::passEvent(QEvent *e)
             }
         }
 
+        if (Input *input = dynamic_cast<Input*>(item)) {
+            input->setFocus();
+            input->mouseEvent(e);
+        }
+
         if (pass && allowClick) {
             if (m_python)
                 m_python->meterClicked(this, (Meter*)item, button);
 
             if (m_interface)
                 m_interface->callMeterClicked(this, (Meter*)item, button);
-        }
-
-        if (Input *input = dynamic_cast<Input*>(item)) {
-            input->setFocus();
-            input->mouseEvent(e);
         }
     }
 
