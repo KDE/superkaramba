@@ -326,6 +326,7 @@ void Karamba::startKaramba()
         kDebug() << "Loading script module: " << m_theme.scriptModule() << endl;
 
         m_stepTimer = new QTimer(this);
+        m_stepTimer->setSingleShot(true);
 
         if (!m_useKross) {
             m_python = new KarambaPython(m_theme, false);
@@ -354,11 +355,15 @@ void Karamba::setPrettyName(const QString &prettyThemeName)
 
 void Karamba::step()
 {
+    m_stepTimer->start(m_interval);
+
     if (m_python)
         m_python->widgetUpdated(this);
 
     if (m_interface)
         m_interface->callWidgetUpdated(this);
+
+    update();
 }
 
 void Karamba::redrawWidget()
@@ -1654,7 +1659,6 @@ int Karamba::getNumberOfDesktops() const
 void Karamba::changeInterval(u_int newInterval)
 {
     m_interval = newInterval;
-    m_stepTimer->setInterval(m_interval);
 }
 
 double Karamba::getUpdateTime() const
