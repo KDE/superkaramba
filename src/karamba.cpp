@@ -123,6 +123,7 @@ Karamba::Karamba(const KUrl &themeFile, int instance, bool subTheme, const QPoin
         m_view->setRenderHints(QPainter::Antialiasing |
                                QPainter::SmoothPixmapTransform);
         m_globalView = false;
+        m_view->show();
     }
 
     m_view->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
@@ -339,8 +340,6 @@ void Karamba::startKaramba()
         connect(m_stepTimer, SIGNAL(timeout()), SLOT(step()));
         m_stepTimer->start(m_interval);
     }
-
-    m_view->show();
 }
 
 QString Karamba::prettyName() const
