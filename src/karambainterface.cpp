@@ -69,8 +69,6 @@ KarambaInterface::KarambaInterface(Karamba *k)
 {
     setObjectName("karamba");
 
-    Kross::Manager::self().addObject(this, "karamba", Kross::ChildrenInterface::AutoConnectSignals);
-
     bool initOK = initInterpreter(k->theme());
 
     if (initOK) {
@@ -102,8 +100,17 @@ bool KarambaInterface::initInterpreter(const ThemeFile &theme)
     if (fi.exists() && !interpreter.isEmpty()) {
         QString scriptFile = fi.absoluteFilePath();
 
+        // the Kross::Action is our script container.
         d->action = new Kross::Action(this, scriptFile, fi.dir());
+
+        // set the name of the interpreter that should be used for the
+        // scripting code. This could be e.g. 'python' or 'ruby'.
         d->action->setInterpreter(interpreter);
+
+        // publish this instance, so that scripts are able to access it with e.g.
+        // import karamba or require 'karamba' depending on the choosed scripting
+        // language.
+        d->action->addObject(this, "karamba", Kross::ChildrenInterface::AutoConnectSignals);
 
         // this is for backward-compatibility and needed cause the prev python
         // implementation does provide the current path within the sys.path and
