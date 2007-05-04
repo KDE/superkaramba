@@ -74,18 +74,24 @@ void KarambaApplication::startThemes(const QList<KUrl> &lst)
 {
     foreach(KUrl url, lst) {
         Karamba *k = new Karamba(url);
-        connect(k, SIGNAL(widgetStarted(Karamba*, bool)),
-                this, SLOT(karambaStarted(Karamba*, bool)));
+        connect(k, SIGNAL(widgetStarted(Karamba*, bool, bool)),
+                this, SLOT(karambaStarted(Karamba*, bool, bool)));
     }
 }
 
-void KarambaApplication::karambaStarted(Karamba *k, bool success)
+void KarambaApplication::karambaStarted(Karamba *k, bool success, bool reload)
 {
     if (success) {
         if (!m_karambas.contains(k)) {
             m_karambas.append(k);
             int instance = m_themesDialog->addTheme(k->prettyName(), k->theme().file());
             k->setInstance(instance);
+
+            if (reload) {
+                connect(k, SIGNAL(widgetStarted(Karamba*, bool, bool)),
+                    this, SLOT(karambaStarted(Karamba*, bool, bool)));
+            }
+
             connect(k, SIGNAL(widgetClosed(Karamba*)),
                 this, SLOT(karambaClosed(Karamba*)));
 
@@ -341,15 +347,15 @@ void KarambaApplication::openNamedTheme(const QString &file, const QString &them
 {
     Karamba *k = new Karamba(KUrl(file), -1, subTheme);
     k->setPrettyName(themeName);
-    connect(k, SIGNAL(widgetStarted(Karamba*, bool)),
-        this, SLOT(karambaStarted(Karamba*, bool)));
+    connect(k, SIGNAL(widgetStarted(Karamba*, bool, bool)),
+        this, SLOT(karambaStarted(Karamba*, bool, bool)));
 }
 
 void KarambaApplication::openTheme(const QString &file)
 {
     Karamba *k = new Karamba(KUrl(file));
-    connect(k, SIGNAL(widgetStarted(Karamba*, bool)),
-        this, SLOT(karambaStarted(Karamba*, bool)));
+    connect(k, SIGNAL(widgetStarted(Karamba*, bool, bool)),
+        this, SLOT(karambaStarted(Karamba*, bool, bool)));
 }
 
 void KarambaApplication::quitSuperKaramba()

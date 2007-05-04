@@ -59,7 +59,7 @@ class Karamba : public QObject, public QGraphicsItemGroup
     Q_OBJECT
 
 public:
-    explicit Karamba(const KUrl &themeFile, int instance = -1, bool subTheme = false, const QPoint &startPos = QPoint());
+    explicit Karamba(const KUrl &themeFile, int instance = -1, bool subTheme = false, const QPoint &startPos = QPoint(), bool reload = false);
 
     virtual ~Karamba();
 
@@ -158,7 +158,7 @@ private Q_SLOTS:
     void step();
 
 Q_SIGNALS:
-    void widgetStarted(Karamba*, bool);
+    void widgetStarted(Karamba*, bool, bool);
     void widgetClosed(Karamba*);
 
 protected:

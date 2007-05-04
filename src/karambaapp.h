@@ -47,7 +47,7 @@ public:
 public Q_SLOTS:
     void showThemesDialog(QSystemTrayIcon::ActivationReason reason = QSystemTrayIcon::Unknown);
 
-    void karambaStarted(Karamba*, bool);
+    void karambaStarted(Karamba*, bool, bool);
     void karambaClosed(Karamba*);
 
     Q_SCRIPTABLE bool closeTheme(const QString &prettyThemeName);

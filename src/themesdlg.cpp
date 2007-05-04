@@ -170,8 +170,8 @@ void ThemesDlg::addToDesktop()
         ThemeFile* tf = w->themeFile();
         if (tf) {
             Karamba *k = new Karamba(tf->file());
-            connect(k, SIGNAL(widgetStarted(Karamba*, bool)),
-                karambaApp, SLOT(karambaStarted(Karamba*, bool)));
+            connect(k, SIGNAL(widgetStarted(Karamba*, bool, bool)),
+                karambaApp, SLOT(karambaStarted(Karamba*, bool, bool)));
         }
     }
 }
@@ -182,8 +182,8 @@ void ThemesDlg::addToDesktop(QPoint pos, ThemeWidget* w)
         ThemeFile* tf = w->themeFile();
         if (tf) {
             Karamba *k = new Karamba(tf->file(), -1, false, pos);
-            connect(k, SIGNAL(widgetStarted(Karamba*, bool)),
-                karambaApp, SLOT(karambaStarted(Karamba*, bool)));
+            connect(k, SIGNAL(widgetStarted(Karamba*, bool, bool)),
+                karambaApp, SLOT(karambaStarted(Karamba*, bool, bool)));
         }
     }
 }
@@ -199,8 +199,8 @@ void ThemesDlg::openLocalTheme()
         ThemeFile file(*it);
         if (file.isValid()) {
             Karamba *k = new Karamba(*it);
-            connect(k, SIGNAL(widgetStarted(Karamba*, bool)),
-                karambaApp, SLOT(karambaStarted(Karamba*, bool)));
+            connect(k, SIGNAL(widgetStarted(Karamba*, bool, bool)),
+                karambaApp, SLOT(karambaStarted(Karamba*, bool, bool)));
         }
     }
 }

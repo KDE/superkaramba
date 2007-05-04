@@ -77,7 +77,7 @@
 #include "themelocale.h"
 #include "superkarambasettings.h"
 
-Karamba::Karamba(const KUrl &themeFile, int instance, bool subTheme, const QPoint &startPos)
+Karamba::Karamba(const KUrl &themeFile, int instance, bool subTheme, const QPoint &startPos, bool reload)
         : QObject(),
         QGraphicsItemGroup(),
         m_scene(0),
@@ -109,6 +109,8 @@ Karamba::Karamba(const KUrl &themeFile, int instance, bool subTheme, const QPoin
         m_wantRightButton(false),
         m_globalView(true),
         m_subTheme(subTheme),
+        m_animation(0),
+        m_timer(0),
         m_backgroundInterface(0)
 {
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
@@ -259,24 +261,26 @@ Karamba::Karamba(const KUrl &themeFile, int instance, bool subTheme, const QPoin
         m_toggleLocked->setChecked(false);
     }
 
-    m_timer = new QTimeLine(1000);
-    m_timer->setFrameRange(0, 1000);
+    if (!reload) {
+        m_timer = new QTimeLine(1000);
+        m_timer->setFrameRange(0, 1000);
 
-    m_animation = new QGraphicsItemAnimation;
-    m_animation->setItem(this);
-    m_animation->setTimeLine(m_timer);
+        m_animation = new QGraphicsItemAnimation;
+        m_animation->setItem(this);
+        m_animation->setTimeLine(m_timer);
 
-    // Use 201 here because 200.0/200.0 < 1 => theme is still scaled
-    for (int i = 0; i < 201; i++) {
-        m_animation->setScaleAt(i / 200.0, 1 / 200.0 * i, 1 / 200.0 * i);
-        QPointF animPos(
-            boundingRect().width()/2*(1-m_animation->verticalScaleAt(i / 200.0)),
-            boundingRect().height()/2*(1-m_animation->horizontalScaleAt(i / 200.0))
-        );
-            m_animation->setPosAt(i / 200.0, animPos);
+        // Use 201 here because 200.0/200.0 < 1 => theme is still scaled
+        for (int i = 0; i < 201; i++) {
+            m_animation->setScaleAt(i / 200.0, 1 / 200.0 * i, 1 / 200.0 * i);
+            QPointF animPos(
+                boundingRect().width()/2*(1-m_animation->verticalScaleAt(i / 200.0)),
+                boundingRect().height()/2*(1-m_animation->horizontalScaleAt(i / 200.0))
+            );
+                m_animation->setPosAt(i / 200.0, animPos);
+        }
+
+        m_timer->start();
     }
-
-    m_timer->start();
 
     QTimer::singleShot(0, this, SLOT(startKaramba()));
 }
@@ -320,7 +324,7 @@ Karamba::~Karamba()
 
 void Karamba::startKaramba()
 {
-    emit widgetStarted(this, true);
+    emit widgetStarted(this, true, false);
 
     if (m_theme.scriptModuleExists()) {
         kDebug() << "Loading script module: " << m_theme.scriptModule() << endl;
@@ -1140,12 +1144,13 @@ void Karamba::reloadConfig()
     Karamba *k = 0;
 
     if (m_globalView)
-        k = new Karamba(m_theme.getUrlPath()/*, m_view, m_scene*/);
+        k = new Karamba(m_theme.getUrlPath(), -1, false, QPoint(), true);
     else
-        k = new Karamba(m_theme.getUrlPath());
+        k = new Karamba(m_theme.getUrlPath(), -1, false, QPoint(), true);
 
-    if (k != 0)
-        emit widgetStarted(k, true);
+    if (k != 0) {
+        emit widgetStarted(k, true, true);
+    }
 
     closeWidget();
 }
