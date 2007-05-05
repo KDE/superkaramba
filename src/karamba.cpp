@@ -166,7 +166,6 @@ Karamba::Karamba(const KUrl &themeFile, int instance, bool subTheme, const QPoin
             SLOT(currentWallpaperChanged(int)));
 
     setAcceptsHoverEvents(true);
-    setAcceptDrops(true);
 
     // Setup of the Task Manager Callbacks
     connect(TaskManager::self(), SIGNAL(activeTaskChanged(Task::TaskPtr)), this,
