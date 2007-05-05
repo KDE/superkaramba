@@ -63,24 +63,27 @@ void Input::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 
     QTextLine line = m_textLayout.lineAt(0);
 
-    int widthUsed = qRound(line.naturalTextWidth()) + 1 + 5;
+    int widthUsed = qRound(line.naturalTextWidth()) + 1 + 4;
 
-    QRectF innerRect(boundingRect().x() + 5, boundingRect().y() + 2,
-                     boundingRect().width() - 10, boundingRect().height() - 4);
+    QFontMetrics fm(m_font);
+    QRectF innerRect(boundingRect().x() + 2, boundingRect().y(),
+                     boundingRect().width() - 4, fm.height());
     painter->setClipRect(innerRect);
 
     QPointF topLeft = innerRect.topLeft();
 
     double curPos = line.cursorToX(m_cursorPos);
-    if (5 + widthUsed <= innerRect.width())
+    if (4 + widthUsed <= innerRect.width()) {
         m_hscroll = 0;
-    else if (curPos - m_hscroll >= innerRect.width())
+    } else if (curPos - m_hscroll >= innerRect.width()) {
         m_hscroll = curPos - innerRect.width() + 1;
-    else if (curPos - m_hscroll < 0)
+    } else if (curPos - m_hscroll < 0) {
         m_hscroll = curPos;
-    else if (widthUsed - m_hscroll < innerRect.width())
-        m_hscroll = 0;//widthUsed - innerRect.width();
+    } else if (widthUsed - m_hscroll < innerRect.width()) {
+        m_hscroll = widthUsed - innerRect.width() + 1;
+    }
     topLeft.rx() -= m_hscroll;
+    topLeft.ry() += (boundingRect().height() - line.height()) / 2;
 
     painter->setPen(m_fontColor);
     m_textLayout.draw(painter, topLeft, QVector<QTextLayout::FormatRange>(),
@@ -106,6 +109,12 @@ void Input::mouseEvent(QEvent *e)
     m_cursorVisible = true;
 
     update();
+}
+
+void Input::mouseDropEvent(QGraphicsSceneDragDropEvent *event)
+{
+    Q_UNUSED(event);
+    //kDebug() << "Input::mouseDropEvent()" << endl;
 }
 
 void Input::focusOutEvent(QFocusEvent *event)
@@ -176,33 +185,17 @@ void Input::keyPress(QKeyEvent *event)
     if (m_cursorPos > m_text.length())
         m_cursorPos = m_text.length();
 
-    m_textLayout.setText(m_text);
-    m_textLayout.setFont(m_font);
-
-    m_textLayout.beginLayout();
-    QTextLine line = m_textLayout.createLine();
-    line.setLineWidth(getWidth());
-    line.setPosition(QPointF(0, 0));
-    m_textLayout.endLayout();
-
     m_cursorVisible = true;
-    update();
+
+    layoutText();
 }
 
 
 void Input::setValue(const QString &text)
 {
     m_text = text;
-    m_textLayout.setText(m_text);
-    m_textLayout.setFont(m_font);
 
-    m_textLayout.beginLayout();
-    QTextLine line = m_textLayout.createLine();
-    line.setLineWidth(getWidth());
-    line.setPosition(QPointF(0, 0));
-    m_textLayout.endLayout();
-
-    update();
+    layoutText();
 }
 
 QString Input::getStringValue() const
@@ -271,16 +264,7 @@ void Input::setFont(const QString &f)
 {
     m_font.setFamily(f);
 
-    m_textLayout.setText(m_text);
-    m_textLayout.setFont(m_font);
-
-    m_textLayout.beginLayout();
-    QTextLine line = m_textLayout.createLine();
-    line.setLineWidth(getWidth());
-    line.setPosition(QPointF(0, 0));
-    m_textLayout.endLayout();
-
-    update();
+    layoutText();
 }
 
 QString Input::getFont() const
@@ -313,7 +297,6 @@ QColor Input::getSelectionColor() const
 void Input::setSelectedTextColor(QColor selectedTextColor)
 {
     m_selectedTextColor = selectedTextColor;
-    update();
 }
 
 QColor Input::getSelectedTextColor() const
@@ -324,7 +307,8 @@ QColor Input::getSelectedTextColor() const
 void Input::setFontSize(int size)
 {
     m_font.setPixelSize(size);
-    update();
+
+    layoutText();
 }
 
 int Input::getFontSize() const
@@ -341,7 +325,7 @@ void Input::setTextProps(TextField* t)
         setBGColor(t->getBGColor());
     }
 
-    update();
+    layoutText();
 }
 
 void Input::setInputFocus()
@@ -356,3 +340,15 @@ void Input::clearInputFocus()
     update();
 }
 
+void Input::layoutText()
+{
+    m_textLayout.setText(m_text);
+    m_textLayout.setFont(m_font);
+
+    m_textLayout.beginLayout();
+    QTextLine line = m_textLayout.createLine();
+    line.setPosition(QPointF(0, 0));
+    m_textLayout.endLayout();
+
+    update();
+}

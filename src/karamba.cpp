@@ -1678,11 +1678,17 @@ void Karamba::setUpdateTime(double newTime)
 
 void Karamba::keyPressed(const QString& s, const Meter* meter)
 {
-    if (m_python)
-        m_python->keyPressed(this, meter, s);
+    if (s.isEmpty()) {
+      return;
+    }
 
-    if (m_interface)
+    if (m_python) {
+        m_python->keyPressed(this, meter, s);
+    }
+
+    if (m_interface) {
         m_interface->callKeyPressed(this, (Meter*)meter, s);
+    }
 }
 
 void Karamba::setFixedSize(u_int w, u_int h)

@@ -73,6 +73,7 @@ public:
     void clearInputFocus();
     void keyPress(QKeyEvent *event);
     void mouseEvent(QEvent *e);
+    void mouseDropEvent(QGraphicsSceneDragDropEvent *event);
 
 protected:
     void focusOutEvent(QFocusEvent *event);
@@ -99,6 +100,7 @@ private:
 
     QTimer m_cursorTimer;
 
+    void layoutText();
 };
 
 #endif
