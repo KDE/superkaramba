@@ -26,6 +26,7 @@
 
 #include <QPixmap>
 #include <QToolTip>
+#include <QCursor>
 
 #include <KImageEffect>
 #include <KPixmapEffect>
@@ -547,7 +548,7 @@ void ImageLabel::slotEffectExpired()
 }
 
 void ImageLabel::attachClickArea(QString leftMouseButton,
-                                 QString  middleMouseButton,
+                                 QString middleMouseButton,
                                  QString rightMouseButton)
 {
     m_leftMouseButtonAction = leftMouseButton;
@@ -555,6 +556,7 @@ void ImageLabel::attachClickArea(QString leftMouseButton,
     m_rightMouseButtonAction = rightMouseButton;
 
     setAcceptedMouseButtons(Qt::LeftButton | Qt::MidButton | Qt::RightButton);
+    setCursor(QCursor(Qt::PointingHandCursor));
 }
 
 bool ImageLabel::event(QEvent *event)

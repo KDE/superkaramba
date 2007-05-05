@@ -25,6 +25,7 @@
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
 #include <QGraphicsSceneMouseEvent>
+#include <QCursor>
 
 #include "textfield.h"
 
@@ -35,6 +36,8 @@ Input::Input(Karamba* k, int x, int y, int w, int h)
         m_cursorVisible(true)
 {
     setFlags(QGraphicsItem::ItemIsFocusable);
+
+    setCursor(QCursor(Qt::IBeamCursor));
 
     connect(&m_cursorTimer, SIGNAL(timeout()), (QObject*)this, SLOT(blinkCursor()));
     m_cursorTimer.start(1000);
@@ -105,7 +108,7 @@ void Input::mouseEvent(QEvent *e)
     QTextLine line = m_textLayout.lineAt(0);
 
     QPoint mappedPos = mapFromParent(pos).toPoint();
-    m_cursorPos = line.xToCursor(mappedPos.x() - 5 + m_hscroll);
+    m_cursorPos = line.xToCursor(mappedPos.x() - 2 + m_hscroll);
     m_cursorVisible = true;
 
     update();

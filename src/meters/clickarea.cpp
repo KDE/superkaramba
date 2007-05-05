@@ -13,6 +13,7 @@
 #include "clickarea.h"
 
 #include <QMouseEvent>
+#include <QCursor>
 
 #include <KService>
 
@@ -22,6 +23,7 @@ ClickArea::ClickArea(Karamba* k, bool preview, int x, int y, int w, int h)
 {
     value = "";
     setAcceptedMouseButtons(Qt::LeftButton);
+    setCursor(QCursor(Qt::PointingHandCursor));
 }
 
 ClickArea::~ClickArea()

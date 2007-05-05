@@ -15,6 +15,7 @@
 #include <QPainter>
 #include <QMouseEvent>
 #include <QGraphicsSceneMouseEvent>
+#include <QCursor>
 
 #include <KRun>
 
@@ -426,6 +427,8 @@ void TextLabel::attachClickArea(const QString &leftMouseButton,
     m_leftMouseButtonAction = leftMouseButton;
     m_middleMouseButtonAction = middleMouseButton;
     m_rightMouseButtonAction = rightMouseButton;
+
+    QGraphicsItem::setCursor(QCursor(Qt::PointingHandCursor));
 }
 
 QRectF TextLabel::boundingRect() const
