@@ -112,9 +112,9 @@ public:
         m_tempDir = new KTempDir(tmpPath);
         m_tempDir->setAutoRemove(true);
 
-        m_dir->copyTo(tmpPath);
+        m_dir->copyTo(m_tempDir->name());
 
-        return tmpPath;
+        return m_tempDir->name();
     }
 
 private:
