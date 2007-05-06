@@ -342,13 +342,13 @@ bool KarambaInterface::showMeter(const Karamba *k, Meter *m, const QString &type
 }
 
 bool KarambaInterface::setMeterColor(const Karamba *k, Meter *m, const QString &type, int red, int
-        green, int blue) const
+        green, int blue, int alpha) const
 {
     if (!checkKarambaAndMeter(k, m, type)) {
         return false;
     }
 
-    m->setColor(QColor(red, green, blue));
+    m->setColor(QColor(red, green, blue, alpha));
 
     return true;
 }
@@ -366,6 +366,7 @@ QVariantList KarambaInterface::getMeterColor(const Karamba *k, const Meter *m, c
     ret << color.red();
     ret << color.green();
     ret << color.blue();
+    ret << color.alpha();
 
     return ret;
 }
@@ -1174,7 +1175,7 @@ bool KarambaInterface::showGraph(const Karamba *k, Graph *graph) const
 /** Graph/setGraphColor
 *
 * SYNOPSIS
-*   boolean setGraphColor(widget, graph, red, green, blue)
+*   boolean setGraphColor(widget, graph, red, green, blue, alpha=255)
 * DESCRIPTION
 *   Sets current graph color.
 * ARGUMENTS
@@ -1183,13 +1184,14 @@ bool KarambaInterface::showGraph(const Karamba *k, Graph *graph) const
 *   * integer red -- red component of color
 *   * integer green -- green component of color
 *   * integer blue -- blue component of color
+*   * integer alpha -- alpha component of color (optional)
 * RETURN VALUE
 *   true if successful
 */
-bool KarambaInterface::setGraphColor(const Karamba *k, Graph *graph, int red, int green, int blue)
+bool KarambaInterface::setGraphColor(const Karamba *k, Graph *graph, int red, int green, int blue, int alpha)
     const
 {
-    return setMeterColor(k, graph, "Graph", red, green, blue);
+    return setMeterColor(k, graph, "Graph", red, green, blue, alpha);
 }
 
 /** Graph/getGraphColor
@@ -1202,7 +1204,7 @@ bool KarambaInterface::setGraphColor(const Karamba *k, Graph *graph, int red, in
 *   * reference to widget -- karamba
 *   * reference to graph -- graph
 * RETURN VALUE
-*   (red, green, blue)
+*   (red, green, blue, alpha)
 */
 QVariantList KarambaInterface::getGraphColor(const Karamba *k, const Graph *graph) const
 {
@@ -2271,28 +2273,29 @@ QString KarambaInterface::getInputBoxFont(const Karamba *k, const Input *input) 
 /** InputBox/changeInputBoxFontColor
 *
 * SYNOPSIS
-*   boolean changeInputBoxFontColor(widget, inputBox, r, g, b)
+*   boolean changeInputBoxFontColor(widget, inputBox, r, g, b, a=255)
 * DESCRIPTION
 *   This will change the color of a text of a Input Box widget.
 *   InputBox is the reference to the text object to change
-*   r, g, b are ints from 0 to 255 that represent red, green, and blue.
+*   r, g, b, a are ints from 0 to 255 that represent red, green, blue and the alpha channel.
 * ARGUMENTS
 *   * reference to widget -- karamba
 *   * reference to inputBox -- Input Box
 *   * integer red -- red component of color
 *   * integer green -- green component of color
 *   * integer blue -- blue component of color
+*   * integer alpha -- alpha component of color (optional)
 * RETURN VALUE
 *   true if successful
 */
 bool KarambaInterface::changeInputBoxFontColor(const Karamba *k, Input *input, int red, int green,
-        int blue) const
+        int blue, int alpha) const
 {
     if (!checkKarambaAndMeter(k, input, "Input")) {
         return false;
     }
 
-    input->setFontColor(QColor(red, green, blue));
+    input->setFontColor(QColor(red, green, blue, alpha));
     return true;
 }
 
@@ -2306,7 +2309,7 @@ bool KarambaInterface::changeInputBoxFontColor(const Karamba *k, Input *input, i
 *   * reference to widget -- karamba
 *   * reference to inputBox -- Input Box
 * RETURN VALUE
-*   (red, green, blue)
+*   (red, green, blue, alpha)
 */
 QVariantList KarambaInterface::getInputBoxFontColor(const Karamba *k, const Input *input) const
 {
@@ -2320,6 +2323,7 @@ QVariantList KarambaInterface::getInputBoxFontColor(const Karamba *k, const Inpu
     ret << color.red();
     ret << color.green();
     ret << color.blue();
+    ret << color.alpha();
 
     return ret;
 }
@@ -2327,28 +2331,29 @@ QVariantList KarambaInterface::getInputBoxFontColor(const Karamba *k, const Inpu
 /** InputBox/changeInputBoxSelectionColor
 *
 * SYNOPSIS
-*   boolean changeInputBoxSelectionColor(widget, inputBox, r, g, b)
+*   boolean changeInputBoxSelectionColor(widget, inputBox, r, g, b, a=255)
 * DESCRIPTION
 *   This will change the color of the selection of a Input Box widget.
 *   InputBox is the reference to the text object to change
-*   r, g, b are ints from 0 to 255 that represent red, green, and blue.
+*   r, g, b, a are ints from 0 to 255 that represent red, green, blue and the alpha channel.
 * ARGUMENTS
 *   * reference to widget -- karamba
 *   * reference to inputBox -- Input Box
 *   * integer red -- red component of color
 *   * integer green -- green component of color
 *   * integer blue -- blue component of color
+*   * integer alpha -- alpha component of color (optional)
 * RETURN VALUE
 *   true if successful
 */
 bool KarambaInterface::changeInputBoxSelectionColor(const Karamba *k, Input *input, int red,
-        int green, int blue) const
+        int green, int blue, int alpha) const
 {
     if (!checkKarambaAndMeter(k, input, "Input")) {
         return false;
     }
 
-    input->setSelectionColor(QColor(red, green, blue));
+    input->setSelectionColor(QColor(red, green, blue, alpha));
     return true;
 }
 
@@ -2362,7 +2367,7 @@ bool KarambaInterface::changeInputBoxSelectionColor(const Karamba *k, Input *inp
 *   * reference to widget -- karamba
 *   * reference to inputBox -- Input Box
 * RETURN VALUE
-*   (red, green, blue)
+*   (red, green, blue, alpha)
 */
 QVariantList KarambaInterface::getInputBoxSelectionColor(const Karamba *k, const Input *input) const
 {
@@ -2376,6 +2381,7 @@ QVariantList KarambaInterface::getInputBoxSelectionColor(const Karamba *k, const
     ret << color.red();
     ret << color.green();
     ret << color.blue();
+    ret << color.alpha();
 
     return ret;
 }
@@ -2383,28 +2389,29 @@ QVariantList KarambaInterface::getInputBoxSelectionColor(const Karamba *k, const
 /** InputBox/changeInputBoxBackgroundColor
 *
 * SYNOPSIS
-*   reference changeInputBoxBackgroundColor(widget, inputBox, r, g, b)
+*   reference changeInputBoxBackgroundColor(widget, inputBox, r, g, b, a=255)
 * DESCRIPTION
 *   This will change the background color of a Input Box widget.
 *   InputBox is the reference to the text object to change
-*   r, g, b are ints from 0 to 255 that represent red, green, and blue.
+*   r, g, b are ints from 0 to 255 that represent red, green, blue and the alpha channel.
 * ARGUMENTS
 *   * reference to widget -- karamba
 *   * reference to inputBox -- Input Box
 *   * integer red -- red component of color
 *   * integer green -- green component of color
 *   * integer blue -- blue component of color
+*   * integer alpha -- alpha component of color
 * RETURN VALUE
 *   true if successful
 */
 bool KarambaInterface::changeInputBoxBackgroundColor(const Karamba *k, Input *input, int red, int
-        green, int blue) const
+        green, int blue, int alpha) const
 {
     if (!checkKarambaAndMeter(k, input, "Input")) {
         return false;
     }
 
-    input->setBGColor(QColor(red, green, blue));
+    input->setBGColor(QColor(red, green, blue, alpha));
 
     return true;
 }
@@ -2419,7 +2426,7 @@ bool KarambaInterface::changeInputBoxBackgroundColor(const Karamba *k, Input *in
 *   * reference to widget -- karamba
 *   * reference to inputBox -- Input Box
 * RETURN VALUE
-*   (red, green, blue)
+*   (red, green, blue, alpha)
 */
 QVariantList KarambaInterface::getInputBoxBackgroundColor(const Karamba *k, const Input *input)
     const
@@ -2434,6 +2441,7 @@ QVariantList KarambaInterface::getInputBoxBackgroundColor(const Karamba *k, cons
     ret << color.red();
     ret << color.green();
     ret << color.blue();
+    ret << color.alpha();
 
     return ret;
 }
@@ -2441,27 +2449,28 @@ QVariantList KarambaInterface::getInputBoxBackgroundColor(const Karamba *k, cons
 /** InputBox/changeInputBoxFrameColor
 *
 * SYNOPSIS
-*   boolean changeInputBoxFrameColor(widget, inputBox, r, g, b)
+*   boolean changeInputBoxFrameColor(widget, inputBox, r, g, b, a=255)
 * DESCRIPTION
 *   This will change the frame color of a Input Box widget.
 *   InputBox is the reference to the text object to change
-*   r, g, b are ints from 0 to 255 that represent red, green, and blue.
+*   r, g, b are ints from 0 to 255 that represent red, green, blue and the alpha channel.
 * ARGUMENTS
 *   * reference to widget -- karamba
 *   * reference to inputBox -- Input Box
 *   * integer red -- red component of color
 *   * integer green -- green component of color
 *   * integer blue -- blue component of color
+*   * integer alpha -- alpha component of color (optional)
 * RETURN VALUE
 *   true if successful
 */
 bool KarambaInterface::changeInputBoxFrameColor(const Karamba *k, Input *input, int red, int green,
-        int blue) const
+        int blue, int alpha) const
 {
     if (!checkKarambaAndMeter(k, input, "Input"))
         return false;
 
-    input->setColor(QColor(red, green, blue));
+    input->setColor(QColor(red, green, blue, alpha));
     return true;
 }
 
@@ -2475,7 +2484,7 @@ bool KarambaInterface::changeInputBoxFrameColor(const Karamba *k, Input *input, 
 *   * reference to widget -- karamba
 *   * reference to inputBox -- Input Box
 * RETURN VALUE
-*   (red, green, blue)
+*   (red, green, blue, alpha)
 */
 QVariantList KarambaInterface::getInputBoxFrameColor(const Karamba *k, const Input *input) const
 {
@@ -2489,6 +2498,7 @@ QVariantList KarambaInterface::getInputBoxFrameColor(const Karamba *k, const Inp
     ret << color.red();
     ret << color.green();
     ret << color.blue();
+    ret << color.alpha();
 
     return ret;
 }
@@ -2496,28 +2506,29 @@ QVariantList KarambaInterface::getInputBoxFrameColor(const Karamba *k, const Inp
 /** InputBox/changeInputBoxSelectedTextColor
 *
 * SYNOPSIS
-*   boolean changeInputBoxSelectedTextColor(widget, inputBox, r, g, b)
+*   boolean changeInputBoxSelectedTextColor(widget, inputBox, r, g, b, a=255)
 * DESCRIPTION
 *   This will change the selected text color of a Input Box widget.
 *   InputBox is the reference to the text object to change
-*   r, g, b are ints from 0 to 255 that represent red, green, and blue.
+*   r, g, b are ints from 0 to 255 that represent red, green, blue and alpha channel.
 * ARGUMENTS
 *   * reference to widget -- karamba
 *   * reference to inputBox -- Input Box
 *   * integer red -- red component of color
 *   * integer green -- green component of color
 *   * integer blue -- blue component of color
+*   * integer alpha -- alpha component of color (optional)
 * RETURN VALUE
 *   true if successful
 */
 bool KarambaInterface::changeInputBoxSelectedTextColor(const Karamba *k, Input *input, int red, int
-        green, int blue) const
+        green, int blue, int alpha) const
 {
     if (!checkKarambaAndMeter(k, input, "Input")) {
         return false;
     }
 
-    input->setSelectedTextColor(QColor(red, green, blue));
+    input->setSelectedTextColor(QColor(red, green, blue, alpha));
 
     return true;
 }
@@ -2532,7 +2543,7 @@ bool KarambaInterface::changeInputBoxSelectedTextColor(const Karamba *k, Input *
 *   * reference to widget -- karamba
 *   * reference to inputBox -- pointer to Input Box
 * RETURN VALUE
-*   (red, green, blue)
+*   (red, green, blue, alpha)
 */
 QVariantList KarambaInterface::getInputBoxSelectedTextColor(const Karamba *k, const Input *input)
     const
@@ -2547,6 +2558,7 @@ QVariantList KarambaInterface::getInputBoxSelectedTextColor(const Karamba *k, co
     ret << color.red();
     ret << color.green();
     ret << color.blue();
+    ret << color.alpha();
 
     return ret;
 }
@@ -4817,25 +4829,26 @@ QString KarambaInterface::getTextFont(const Karamba *k, const TextLabel *text) c
 /** Text/changeTextColor
 *
 * SYNOPSIS
-*   boolean changeTextColor(widget, text, r, g, b)
+*   boolean changeTextColor(widget, text, r, g, b, a=255)
 * DESCRIPTION
 *   This will change the color of a text widget (only ones you created
 *   through python currently). textToChange is the reference to the text
 *   object to change that you saved from the createText() call. r, g, b are
-*   ints from 0 to 255 that represent red, green, and blue.
+*   ints from 0 to 255 that represent red, green, blue and the alpha channel.
 * ARGUMENTS
 *   * reference to widget -- karamba
 *   * reference to text -- text meter
 *   * integer red -- red component of color
 *   * integer green -- green component of color
 *   * integer blue -- blue component of color
+*   * integer alpha -- alpha component of color (optional)
 * RETURN VALUE
 *   true if successful
 */
 bool KarambaInterface::changeTextColor(const Karamba *k, TextLabel *text, int red, int green, int
-        blue) const
+        blue, int alpha) const
 {
-    return setMeterColor(k, text, "TextLabel", red, green, blue);
+    return setMeterColor(k, text, "TextLabel", red, green, blue, alpha);
 }
 
 /** Text/getTextColor
@@ -4848,7 +4861,7 @@ bool KarambaInterface::changeTextColor(const Karamba *k, TextLabel *text, int re
 *   * reference to widget -- karamba
 *   * reference to text -- text meter
 * RETURN VALUE
-*   (red, green, blue)
+*   (red, green, blue, alpha)
 */
 QVariantList KarambaInterface::getTextColor(const Karamba *k, const TextLabel *text) const
 {

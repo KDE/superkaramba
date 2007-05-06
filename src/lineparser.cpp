@@ -52,11 +52,17 @@ int LineParser::getInt(const QString &w, int def) const
 
 QColor LineParser::getColor(const QString &w, const QColor &def) const
 {
-    QRegExp rx("\\W+" + w + "=([-]?\\d+),([-]?\\d+),([-]?\\d+)", Qt::CaseInsensitive);
-    if (rx.indexIn(m_line) != -1)
-        return QColor(rx.cap(1).toInt(), rx.cap(2).toInt(), rx.cap(3).toInt());
-    else
+    QRegExp rx("\\W+" + w + "=([-]?\\d+),([-]?\\d+),([-]?\\d+)(,([-]?\\d+))?", Qt::CaseInsensitive);
+    if (rx.indexIn(m_line) != -1) {
+        int alpha = 255;
+        QString alphaString = rx.cap(4).remove(0, 1);
+        if (!alphaString.isEmpty()) {
+            alpha = alphaString.toInt();
+        }
+        return QColor(rx.cap(1).toInt(), rx.cap(2).toInt(), rx.cap(3).toInt(), alpha);
+    } else {
         return def;
+    }
 }
 
 QString LineParser::getString(const QString &w, const QString &def) const

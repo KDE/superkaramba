@@ -114,7 +114,7 @@ private:
     QObject* setMeterValue(const Karamba *k, Meter *m, const QString &type, int value) const;
     bool showMeter(const Karamba *k, Meter *m, const QString &type) const;
     bool setMeterColor(const Karamba *k, Meter *m, const QString &type, int red, int green, int
-            blue) const;
+            blue, int alpha = 255) const;
     QVariantList getMeterColor(const Karamba *k, const Meter *m, const QString &type) const;
     QString getMeterStringValue(const Karamba *k, const Meter *m, const QString &type) const;
     QObject* setMeterStringValue(const Karamba *k, Meter *m, const QString &type, const QString
@@ -169,7 +169,7 @@ public Q_SLOTS:
     QObject* getThemeGraph(const Karamba *k, const QString &meter) const;
     bool hideGraph(const Karamba *k, Graph *graph) const;
     bool showGraph(const Karamba *k, Graph *graph) const;
-    bool setGraphColor(const Karamba *k, Graph *graph, int red, int green, int blue) const;
+    bool setGraphColor(const Karamba *k, Graph *graph, int red, int green, int blue, int alpha=255) const;
     QVariantList getGraphColor(const Karamba *k, const Graph *graph) const;
 
     // ImageLabel
@@ -213,20 +213,20 @@ public Q_SLOTS:
     bool hideInputBox(const Karamba *k, Input *input) const;
     bool showInputBox(const Karamba *k, Input *input) const;
     bool changeInputBoxFont(const Karamba *k, Input *input, const QString &font) const;
-    bool changeInputBoxFontColor(const Karamba *k, Input *input, int red, int green, int blue) const;
+    bool changeInputBoxFontColor(const Karamba *k, Input *input, int red, int green, int blue, int alpha=255) const;
     QString getInputBoxFont(const Karamba *k, const Input *input) const;
     QVariantList getInputBoxFontColor(const Karamba *k, const Input *input) const;
-    bool changeInputBoxSelectionColor(const Karamba *k, Input *input, int red, int green, int blue)
+    bool changeInputBoxSelectionColor(const Karamba *k, Input *input, int red, int green, int blue, int alpha=255)
         const;
     QVariantList getInputBoxSelectionColor(const Karamba *k, const Input *input) const;
-    bool changeInputBoxBackgroundColor(const Karamba *k, Input *input, int red, int green, int blue)
+    bool changeInputBoxBackgroundColor(const Karamba *k, Input *input, int red, int green, int blue, int alpha=255)
         const;
     QVariantList getInputBoxBackgroundColor(const Karamba *k, const Input *input) const;
-    bool changeInputBoxFrameColor(const Karamba *k, Input *input, int red, int green, int blue)
+    bool changeInputBoxFrameColor(const Karamba *k, Input *input, int red, int green, int blue, int alpha=255)
         const;
     QVariantList getInputBoxFrameColor(const Karamba *k, const Input *input) const;
     bool changeInputBoxSelectedTextColor(const Karamba *k, Input *input, int red, int green, int
-            blue) const;
+            blue, int alpha=255) const;
     QVariantList getInputBoxSelectedTextColor(const Karamba *k, const Input *input) const;
     bool changeInputBoxFontSize(const Karamba *k, Input *input, int size) const;
     int getInputBoxFontSize(const Karamba *k, const Input *input) const;
@@ -340,7 +340,7 @@ public Q_SLOTS:
     int getTextShadow(const Karamba *k, const TextLabel *text) const;
     bool changeTextFont(const Karamba *k, TextLabel *text, const QString &font) const;
     QString getTextFont(const Karamba *k, const TextLabel *text) const;
-    bool changeTextColor(const Karamba *k, TextLabel *text, int red, int green, int blue) const;
+    bool changeTextColor(const Karamba *k, TextLabel *text, int red, int green, int blue, int alpha = 255) const;
     QVariantList getTextColor(const Karamba *k, const TextLabel *text) const;
     bool changeTextSize(const Karamba *k, TextLabel *text, int size) const;
     int getTextFontSize(const Karamba *k, const TextLabel *text) const;

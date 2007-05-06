@@ -8,8 +8,6 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-
-
 #include "graph.h"
 
 Graph::Graph(Karamba* k, int x, int y, int w, int h, int nbrPts):
