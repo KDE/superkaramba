@@ -31,12 +31,15 @@
 #include <QTimer>
 #include <QDomDocument>
 #include <QFileInfo>
+#include <QDesktopWidget>
 
 #include <KMenu>
 #include <KService>
 #include <KServiceGroup>
 #include <KLocale>
 #include <KMessageBox>
+#include <KCmdLineArgs>
+#include <KAboutData>
 
 #include <kross/core/krossconfig.h>
 #include <kross/core/manager.h>
@@ -2655,7 +2658,7 @@ bool KarambaInterface::clearInputFocus(const Karamba *k, Input *input) const
 /** InputBox/getInputFocus
 *
 * SYNOPSIS
-*   boolean  getInputFocus(widget)
+*   boolean getInputFocus(widget)
 * DESCRIPTION
 *   Gets the Input Box that is currently focused.
 * ARGUMENTS
@@ -2676,7 +2679,7 @@ QObject* KarambaInterface::getInputFocus(const Karamba *k) const
 /** InputBox/getInputBoxTextWidth
 *
 * SYNOPSIS
-*   boolean  getInputBoxTextWidth(widget, input)
+*   integer getInputBoxTextWidth(widget, input)
 * DESCRIPTION
 *   Gets the width of the complete text of the Input Box.
 * ARGUMENTS
@@ -2724,7 +2727,7 @@ bool KarambaInterface::changeInputBoxSelection(const Karamba *k, Input *input, i
 /** InputBox/getInputBoxSelection
 *
 * SYNOPSIS
-*   boolean getInputBoxSelection(widget, inputBox)
+*   array getInputBoxSelection(widget, inputBox)
 * DESCRIPTION
 *   This will return the selection of the input box. If no selection
 *   was made in the input box (-1, 0) will be returned for the start
@@ -3885,6 +3888,47 @@ bool KarambaInterface::wantRightButton(Karamba *k, bool enable) const
     k->setWantRightButton(enable);
 
     return true;
+}
+
+/** Misc/version
+*
+* SYNOPSIS
+*   array version()
+* DESCRIPTION
+*   Returns the (API) version of the running SuperKaramba.
+*   This allows theme writers to use new functionality with keeping
+*   backward compatibility.
+* RETURN VALUE
+*   array with SuperKaramba version and API version
+*/
+QStringList KarambaInterface::version() const
+{
+    QStringList version;
+
+    version << KCmdLineArgs::aboutData()->version();
+    version << "0.1";
+
+    return version;
+}
+
+/** Misc/desktopSize
+*
+* SYNOPSIS
+*   array desktopSize()
+* DESCRIPTION
+*   Returns the screen size of the display.
+* RETURN VALUE
+*   array with width and height of the screen
+*/
+QVariantList KarambaInterface::desktopSize() const
+{
+    QVariantList ret;
+
+    QRect screenSize = QApplication::desktop()->screenGeometry();
+    ret << screenSize.width();
+    ret << screenSize.height();
+
+    return ret;
 }
 
 
@@ -5070,6 +5114,27 @@ bool KarambaInterface::setTextScroll(const Karamba *k, TextLabel *text, const QS
     text->setScroll(type, QPoint(x, y), gap, pause);
 
     return true;
+}
+
+/** Text/getTextTextWidth
+*
+* SYNOPSIS
+*   integer getTextTextWidth(widget, text)
+* DESCRIPTION
+*   Gets the current text width.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to text -- text meter
+* RETURN VALUE
+*   text width
+*/
+int KarambaInterface::getTextTextWidth(const Karamba *k, const TextLabel *text) const
+{
+    if (!checkKarambaAndMeter(k, text, "TextLabel")) {
+        return -1;
+    }
+
+    return text->getTextWidth();
 }
 
 

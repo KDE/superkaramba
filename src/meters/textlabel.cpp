@@ -116,8 +116,13 @@ void TextLabel::calculateTextSize()
         ++it;
     }
 
-    Meter::setWidth(textSize.width());
-    Meter::setHeight(textSize.height());
+    if (getWidth() <= 0) {
+        Meter::setWidth(textSize.width());
+    }
+
+    if (getHeight() <= 0) {
+       Meter::setHeight(textSize.height());
+    }
 
     if (alignment == Qt::AlignLeft)
         Meter::setX(origPoint.x());
@@ -436,3 +441,8 @@ QRectF TextLabel::boundingRect() const
     return Meter::boundingRect();
 }
 
+int TextLabel::getTextWidth() const
+{
+    QFontMetrics fm(font);
+    return fm.width(value[0]);
+}

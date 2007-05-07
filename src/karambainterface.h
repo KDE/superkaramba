@@ -287,6 +287,8 @@ public Q_SLOTS:
     QString userLanguage(const Karamba *k) const;
     QStringList userLanguages(const Karamba *k) const;
     bool wantRightButton(Karamba *k, bool enable) const;
+    QStringList version() const;
+    QVariantList desktopSize() const;
 
     // RichText
     QObject* createRichText(Karamba* k, const QString &text, bool underline = false) const;
@@ -353,6 +355,7 @@ public Q_SLOTS:
     bool setTextAlign(const Karamba *k, TextLabel *text, const QString &alignment) const;
     bool setTextScroll(const Karamba *k, TextLabel *text, const QString &type, int x = 0, int y = 0,
             int gap = 0, int pause = 0) const;
+    int getTextTextWidth(const Karamba *k, const TextLabel *text) const;
 
     // Widget
     bool createWidgetMask(const Karamba *k, const QString &mask) const;

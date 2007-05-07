@@ -66,6 +66,8 @@ public:
     void allowClick(bool enable);
     bool clickable();
 
+    int getTextWidth() const;
+
 private:
     int alignment;
     int clip;
