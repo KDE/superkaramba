@@ -1538,6 +1538,9 @@ void Karamba::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void Karamba::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
+    if (!m_toggleLocked->isChecked())
+        return;
+
     QList<QGraphicsItem*>items = m_scene->items(mapToScene(event->pos()));
     foreach (QGraphicsItem *item, items) {
         if (Input *input = dynamic_cast<Input*>(item)) {
