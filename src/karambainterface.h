@@ -233,6 +233,7 @@ public Q_SLOTS:
     bool setInputFocus(const Karamba *k, Input *input) const;
     bool clearInputFocus(const Karamba *k, Input *input) const;
     QObject* getInputFocus(const Karamba *k) const;
+    int getInputBoxTextWidth(const Karamba *k, Input *input) const;
 
     // Menu
     QObject* addMenuItem(Karamba *k, KMenu *menu, const QString &text, const QString &icon)

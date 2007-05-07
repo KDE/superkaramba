@@ -2673,8 +2673,26 @@ QObject* KarambaInterface::getInputFocus(const Karamba *k) const
     return dynamic_cast<Input*>(focusItem);
 }
 
+/** InputBox/getInputBoxTextWidth
+*
+* SYNOPSIS
+*   boolean  getInputBoxTextWidth(widget, input)
+* DESCRIPTION
+*   Gets the width of the complete text of the Input Box.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to inputBox -- pointer to InputBox
+* RETURN VALUE
+*   the width or -1
+*/
+int KarambaInterface::getInputBoxTextWidth(const Karamba *k, Input *input) const
+{
+    if (!checkKarambaAndMeter(k, input, "Input")) {
+        return 0;
+    }
 
-
+    return input->getTextWidth();
+}
 
 
 

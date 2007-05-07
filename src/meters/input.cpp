@@ -70,7 +70,7 @@ void Input::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 
     QFontMetrics fm(m_font);
     QRectF innerRect(boundingRect().x() + 2, boundingRect().y(),
-                     boundingRect().width() - 4, fm.height());
+                     boundingRect().width() - 4, boundingRect().height());
     painter->setClipRect(innerRect);
 
     QPointF topLeft = innerRect.topLeft();
@@ -354,4 +354,13 @@ void Input::layoutText()
     m_textLayout.endLayout();
 
     update();
+}
+
+int Input::getTextWidth() const
+{
+    QTextLine line = m_textLayout.lineAt(0);
+    if (line.isValid()) {
+        return static_cast<int>(line.naturalTextWidth());
+    }
+    return -1;
 }

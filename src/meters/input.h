@@ -75,6 +75,8 @@ public:
     void mouseEvent(QEvent *e);
     void mouseDropEvent(QGraphicsSceneDragDropEvent *event);
 
+    int getTextWidth() const;
+
 protected:
     void focusOutEvent(QFocusEvent *event);
 
