@@ -2694,6 +2694,86 @@ int KarambaInterface::getInputBoxTextWidth(const Karamba *k, Input *input) const
     return input->getTextWidth();
 }
 
+/** InputBox/changeInputBoxSelection
+*
+* SYNOPSIS
+*   boolean changeInputBoxSelection(widget, inputBox, start, length)
+* DESCRIPTION
+*   This will set the selection of the input box. The range can be set
+*   by the start cursor position and the length of the selection.
+*   Both arguments are counted in characters and not pixel.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to inputBox -- inputBox
+*   * integer start -- start of the selection
+*   * integer length -- length of the selection
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::changeInputBoxSelection(const Karamba *k, Input *input, int start, int length) const
+{
+    if (!checkKarambaAndMeter(k, input, "Input")) {
+        return false;
+    }
+
+    input->setSelection(start, length);
+
+    return true;
+}
+
+/** InputBox/getInputBoxSelection
+*
+* SYNOPSIS
+*   boolean getInputBoxSelection(widget, inputBox)
+* DESCRIPTION
+*   This will return the selection of the input box. If no selection
+*   was made in the input box (-1, 0) will be returned for the start
+*   and length of the selection.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to inputBox -- inputBox
+* RETURN VALUE
+*   array with the selection start and length in characters
+*/
+QVariantList KarambaInterface::getInputBoxSelection(const Karamba *k, Input *input) const
+{
+    if (!checkKarambaAndMeter(k, input, "Input")) {
+        return QVariantList();
+    }
+
+    QVariantList ret;
+
+    QTextLayout::FormatRange selection = input->getSelection();
+    ret << selection.start;
+    ret << selection.length;
+
+    return ret;
+}
+
+/** InputBox/clearInputBoxSelection
+*
+* SYNOPSIS
+*   boolean clearInputBoxSelection(widget, inputBox)
+* DESCRIPTION
+*   This will clear the selection of the input box.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to inputBox -- inputBox
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::clearInputBoxSelection(const Karamba *k, Input *input) const
+{
+    if (!checkKarambaAndMeter(k, input, "Input")) {
+        return false;
+    }
+
+    input->clearSelection();
+
+    return true;
+}
+
+
 
 
 //

@@ -163,6 +163,7 @@ Q_SIGNALS:
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
     void wheelEvent(QGraphicsSceneWheelEvent *event);
     void hoverMoveEvent(QGraphicsSceneHoverEvent *event);

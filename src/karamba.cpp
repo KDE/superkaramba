@@ -1536,6 +1536,16 @@ void Karamba::mousePressEvent(QGraphicsSceneMouseEvent *event)
                                        (int)event->pos().y(), button);
 }
 
+void Karamba::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    QList<QGraphicsItem*>items = m_scene->items(mapToScene(event->pos()));
+    foreach (QGraphicsItem *item, items) {
+        if (Input *input = dynamic_cast<Input*>(item)) {
+            input->mouseEventRelease(event);
+        }
+    }
+}
+
 void Karamba::setWantRightButton(bool enable)
 {
     m_wantRightButton = enable;
@@ -1637,6 +1647,13 @@ void Karamba::wheelEvent(QGraphicsSceneWheelEvent *event)
 
 void Karamba::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
 {
+    QList<QGraphicsItem*>items = m_scene->items(mapToScene(event->pos()));
+    foreach (QGraphicsItem *item, items) {
+        if (Input *input = dynamic_cast<Input*>(item)) {
+            input->mouseEventMove(event);
+        }
+    }
+
     if (m_python)
         m_python->widgetMouseMoved(this, (int)event->pos().x(), (int)event->pos().y(), 0/*button*/);
 

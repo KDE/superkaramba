@@ -30,10 +30,14 @@
 #include "textfield.h"
 
 Input::Input(Karamba* k, int x, int y, int w, int h)
-        :   Meter(k, x, y, w, h),
+        : Meter(k, x, y, w, h),
+        m_selectionColor(128, 128, 128),
         m_hscroll(0),
         m_cursorPos(0),
-        m_cursorVisible(true)
+        m_cursorVisible(true),
+        m_mouseMoved(false),
+        m_selStart(-1),
+        m_selLength(0)
 {
     setFlags(QGraphicsItem::ItemIsFocusable);
 
@@ -89,8 +93,7 @@ void Input::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     topLeft.ry() += (boundingRect().height() - line.height()) / 2;
 
     painter->setPen(m_fontColor);
-    m_textLayout.draw(painter, topLeft, QVector<QTextLayout::FormatRange>(),
-                      innerRect);
+    m_textLayout.draw(painter, topLeft, m_selection, innerRect);
 
     if (hasFocus() && m_cursorVisible)
         m_textLayout.drawCursor(painter, topLeft, m_cursorPos);
@@ -111,13 +114,46 @@ void Input::mouseEvent(QEvent *e)
     m_cursorPos = line.xToCursor(mappedPos.x() - 2 + m_hscroll);
     m_cursorVisible = true;
 
+    m_selStart = m_cursorPos;
+
     update();
 }
 
-void Input::mouseDropEvent(QGraphicsSceneDragDropEvent *event)
+void Input::mouseEventRelease(QGraphicsSceneMouseEvent *e)
 {
-    Q_UNUSED(event);
-    //kDebug() << "Input::mouseDropEvent()" << endl;
+    if (m_mouseMoved) {
+        QTextLine line = m_textLayout.lineAt(0);
+        QPoint mappedPos = mapFromParent(e->pos()).toPoint();
+        int selEnd = line.xToCursor(mappedPos.x() - 2 + m_hscroll);
+        if (m_selStart > selEnd) {
+            m_selLength = m_selStart - selEnd;
+            m_selStart = selEnd;
+            m_cursorPos = selEnd;
+        } else {
+            m_selLength = selEnd - m_selStart;
+            m_cursorPos = m_selStart + m_selLength;
+        }
+        m_mouseMoved = false;
+
+        m_selection.clear();
+        QTextLayout::FormatRange selection;
+        selection.format.setBackground(m_selectionColor);
+        selection.format.setForeground(m_selectedTextColor);
+        selection.start = m_selStart;
+        selection.length = m_selLength;
+        m_selection << selection;
+
+        update();
+    } else {
+        m_selStart = -1;
+        m_selLength = 0;
+    }
+}
+
+void Input::mouseEventMove(QGraphicsSceneHoverEvent *e)
+{
+    Q_UNUSED(e);
+    m_mouseMoved = true;
 }
 
 void Input::focusOutEvent(QFocusEvent *event)
@@ -137,50 +173,148 @@ void Input::blinkCursor()
 void Input::keyPress(QKeyEvent *event)
 {
     bool append = true;
+    bool newSelection = false;
+    bool clearSelection = false;
 
     switch (event->key()) {
     case Qt::Key_Backspace:
-        if (m_cursorPos > 0) {
-            m_text.remove(m_cursorPos - 1, 1);
-            m_cursorPos--;
+        if (m_selLength == 0) {
+            if (m_cursorPos > 0) {
+                m_text.remove(m_cursorPos - 1, 1);
+                m_cursorPos--;
+            }
+        } else {
+            m_text.remove(m_selStart, m_selLength);
+            m_cursorPos = m_selStart;
+            m_selStart = -1;
+            m_selLength = 0;
+            m_selection.clear();
         }
         append = false;
         break;
 
     case Qt::Key_Delete:
-        m_text.remove(m_cursorPos, 1);
+        if (m_selLength == 0) {
+            if (m_cursorPos >= 0) {
+                m_text.remove(m_cursorPos, 1);
+            }
+        } else {
+            m_text.remove(m_selStart, m_selLength);
+            m_cursorPos = m_selStart;
+            m_selStart = -1;
+            m_selLength = 0;
+            m_selection.clear();
+        }
         append = false;
         break;
 
     case Qt::Key_Left:
         m_cursorPos--;
+        if (event->modifiers() == Qt::ShiftModifier) {
+            if (m_cursorPos != -1) {
+                if (m_selLength > 0) {
+                    if (m_cursorPos + 1 == m_selStart) {
+                        m_selStart--;
+                        m_selLength += 1;
+                    } else {
+                        m_selLength -= 1;
+                    }
+                } else {
+                    m_selStart = m_cursorPos;
+                    m_selLength += 1;
+                }
+                newSelection = true;
+            }
+        } else {
+            clearSelection = true;
+        }
         append = false;
         break;
 
     case Qt::Key_Right:
         m_cursorPos++;
+        if (event->modifiers() == Qt::ShiftModifier) {
+            if (m_cursorPos != m_text.length()+1) {
+                if (m_selLength > 0) {
+                    if (m_cursorPos - 1 == m_selStart) {
+                        m_selStart++;
+                        m_selLength -= 1;
+                    } else {
+                        m_selLength += 1;
+                    }
+                } else {
+                    m_selStart = m_cursorPos-1;
+                    m_selLength += 1;
+                }
+                newSelection = true;
+            }
+        } else {
+            clearSelection = true;
+        }
         append = false;
         break;
 
     case Qt::Key_Home:
+        {
+        int oldCursorPos = m_cursorPos;
         m_cursorPos = 0;
+        if (event->modifiers() == Qt::ShiftModifier) {
+            m_selStart = 0;
+            m_selLength = oldCursorPos;
+            newSelection = true;
+        }
         append = false;
+        }
         break;
 
     case Qt::Key_End:
+        {
+        int oldCursorPos = m_cursorPos;
         m_cursorPos = m_text.length();
+        if (event->modifiers() == Qt::ShiftModifier) {
+            m_selStart = oldCursorPos;
+            m_selLength = m_cursorPos - oldCursorPos;
+            newSelection = true;
+        }
         append = false;
+        }
         break;
 
     case Qt::Key_Enter:
     case Qt::Key_Return:
+        clearSelection = true;
         append = false;
         break;
     }
 
     if (append) {
-        m_text.insert(m_cursorPos, event->text());
-        m_cursorPos += event->text().length();
+        if (m_selLength == 0) {
+            m_text.insert(m_cursorPos, event->text());
+            m_cursorPos += event->text().length();
+        } else {
+            if (event->text().length() > 0) {
+                m_text.remove(m_selStart, m_selLength);
+                m_text.insert(m_selStart, event->text());
+                m_cursorPos = m_selStart + event->text().length();
+                clearSelection = true;
+            }
+        }
+    }
+
+    if (clearSelection) {
+        m_selection.clear();
+        m_selStart = -1;
+        m_selLength = 0;
+    }
+
+    if (newSelection) {
+        m_selection.clear();
+        QTextLayout::FormatRange selection;
+        selection.format.setBackground(m_selectionColor);
+        selection.format.setForeground(m_selectedTextColor);
+        selection.start = m_selStart;
+        selection.length = m_selLength;
+        m_selection << selection;
     }
 
     if (m_cursorPos < 0)
@@ -363,4 +497,34 @@ int Input::getTextWidth() const
         return static_cast<int>(line.naturalTextWidth());
     }
     return -1;
+}
+
+void Input::setSelection(int start, int length)
+{
+    m_selStart = start;
+    m_selLength = length;
+
+    m_selection.clear();
+    QTextLayout::FormatRange selection;
+    selection.format.setBackground(m_selectionColor);
+    selection.format.setForeground(m_selectedTextColor);
+    selection.start = m_selStart;
+    selection.length = m_selLength;
+    m_selection << selection;
+
+    update();
+}
+
+void Input::clearSelection()
+{
+    setSelection(-1, 0);
+}
+
+QTextLayout::FormatRange Input::getSelection() const
+{
+    QTextLayout::FormatRange selection;
+    selection.start = m_selStart;
+    selection.length = m_selLength;
+
+    return selection;
 }

@@ -73,9 +73,14 @@ public:
     void clearInputFocus();
     void keyPress(QKeyEvent *event);
     void mouseEvent(QEvent *e);
-    void mouseDropEvent(QGraphicsSceneDragDropEvent *event);
+    void mouseEventRelease(QGraphicsSceneMouseEvent *e);
+    void mouseEventMove(QGraphicsSceneHoverEvent *e);
 
     int getTextWidth() const;
+
+    void setSelection(int start, int length);
+    void clearSelection();
+    QTextLayout::FormatRange getSelection() const;
 
 protected:
     void focusOutEvent(QFocusEvent *event);
@@ -101,6 +106,12 @@ private:
     bool m_cursorVisible;
 
     QTimer m_cursorTimer;
+
+    bool m_mouseMoved;
+    int m_selStart;
+    int m_selLength;
+
+    QVector<QTextLayout::FormatRange> m_selection;
 
     void layoutText();
 };
