@@ -1,15 +1,23 @@
+var textWidget = 0;
+
+// this returns the current time as string
+function currentTime()
+{
+    var now = new Date();
+    var hours = now.getHours();
+    hours = hours < 10 ? '0' + hours : hours;
+    var mins = now.getMinutes();
+    mins = mins < 10 ? '0' + mins : mins;
+    var secs = now.getSeconds();
+    secs = secs < 10 ? '0' + secs : secs;
+    return hours + ':' + mins + '.' + secs;
+}
+
 // this is called when your widget is initialized
 function initWidget(widget)
 {
     println(">>> initWidget");
-    println( Karamba.getThemePath() );
-//     Karamba.resizeWidget(widget, 300, 120)
-//     @richtext = Karamba.createRichText(widget, Time.now.to_s)
-//     Karamba.moveRichText(widget, @richtext, 10, 10)
-//     print "richText Size = ", Karamba.getRichTextSize(widget, @richtext)
-//     Karamba.setRichTextWidth(widget, @richtext, 280)
-//     #Karamba.deleteRichText(widget, @richtext)
-//     Karamba.redrawWidget(widget)
+    textWidget = karamba.createText(widget, 0, 20, 200, 20, currentTime());
 }
 
 // this is called everytime your widget is updated
@@ -17,6 +25,6 @@ function initWidget(widget)
 function widgetUpdated(widget)
 {
     println(">>> widgetUpdated");
-//     Karamba.changeRichText(widget, @richtext, Time.now.to_s)
-//     Karamba.redrawWidget(widget)
+    karamba.changeText(widget, textWidget, currentTime());
+    karamba.redrawWidget(widget)
 }
