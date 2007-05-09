@@ -191,6 +191,7 @@ public Q_SLOTS:
             QString &channel, int ms = 0) const;
     bool changeImageIntensity(const Karamba *k, ImageLabel *image, double ratio, int ms = 0) const;
     bool changeImageToGray(const Karamba *k, ImageLabel *image, int ms = 0) const;
+    bool changeImageToAlpha(const Karamba *k, ImageLabel *image, int a, int r=-1, int g=-1, int b=-1, int ms = 0) const;
     QObject* createBackgroundImage(Karamba *k, int x, int y, const QString &imagePath) const;
     QObject* createTaskIcon(Karamba *k, int x, int y, int ctask) const;
     int getImageHeight(const Karamba *k, const ImageLabel *image) const;

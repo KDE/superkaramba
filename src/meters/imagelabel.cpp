@@ -27,6 +27,7 @@
 #include <QPixmap>
 #include <QToolTip>
 #include <QCursor>
+#include <QBitmap>
 
 #include <KImageEffect>
 #include <KPixmapEffect>
@@ -105,6 +106,25 @@ ToGray::ToGray(ImageLabel* img, int millisec) : Effect(img, millisec)
 QPixmap ToGray::apply(QPixmap pixmap)
 {
     return KPixmapEffect::toGray(pixmap);
+}
+
+// Alpha
+ToAlpha::ToAlpha(ImageLabel *img, const QColor &alphaColor, int alpha, int millisec) : Effect(img, millisec), m_alphaColor(alphaColor), m_alpha(alpha)
+{}
+
+QPixmap ToAlpha::apply(QPixmap pixmap)
+{
+    QPixmap alpha(pixmap.width(), pixmap.height());
+    alpha.fill(QColor(m_alpha, m_alpha, m_alpha));
+
+    if (m_alphaColor.isValid()) {
+        QBitmap mask = pixmap.createMaskFromColor(m_alphaColor, Qt::MaskOutColor);
+        QPainter painter(&alpha);
+        painter.drawPixmap(0, 0, mask);
+    }
+
+    pixmap.setAlphaChannel(alpha);
+    return pixmap;
 }
 
 /***********************************************************************/
@@ -313,8 +333,7 @@ void ImageLabel::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     Q_UNUSED(widget);
 
         //only draw image if not hidden
-    if (!m_hidden)
-    {
+    if (!m_hidden) {
         painter->setOpacity(m_opacity);
 
         if (cblend == 0) {
@@ -538,6 +557,17 @@ void ImageLabel::toGray(int millisec)
     }
     //QPixmapEffect::toGray(pixmap);
     imageEffect = new ToGray(this, millisec);
+    applyTransformations();
+}
+
+void ImageLabel::toAlpha(const QColor &alphaColor, int alpha, int millisec)
+{
+    if (imageEffect != 0) {
+        delete imageEffect;
+        imageEffect = 0;
+    }
+
+    imageEffect = new ToAlpha(this, alphaColor, alpha, millisec);
     applyTransformations();
 }
 

@@ -92,6 +92,19 @@ public:
     QPixmap apply(QPixmap pixmap);
 };
 
+// ToAlpha
+class ToAlpha : public Effect
+{
+public:
+    ToAlpha(ImageLabel*, const QColor &alphaColor, int alpha, int millisec);
+
+    QPixmap apply(QPixmap pixmap);
+
+private:
+    QColor m_alphaColor;
+    int m_alpha;
+};
+
 class ImageLabel : public Meter
 {
 
@@ -130,6 +143,7 @@ public:
     void intensity(float ratio, int millisec);
     void channelIntensity(float ratio, QString channel, int millisec);
     void toGray(int millisec);
+    void toAlpha(const QColor &alphaColor, int alpha, int millisec);
     void setBackground(int b);
 
     void attachClickArea(QString leftMouseButton, QString middleMouseButton,

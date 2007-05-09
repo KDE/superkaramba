@@ -1595,7 +1595,7 @@ bool KarambaInterface::changeImageIntensity(const Karamba *k, ImageLabel *image,
 *   * reference to image -- image
 *   * integer millisec -- milliseconds before the image is restored (optional)
 * RETURN VALUE
-*   1 if successful
+*   true if successful
 */
 bool KarambaInterface::changeImageToGray(const Karamba *k, ImageLabel *image, int ms) const
 {
@@ -1604,6 +1604,37 @@ bool KarambaInterface::changeImageToGray(const Karamba *k, ImageLabel *image, in
     }
 
     image->toGray(ms);
+
+    return true;
+}
+
+/** Image/changeImageToAlpha
+*
+* SYNOPSIS
+*   boolean changeImageToAlpha(widget, image, alpha, red=-1, green=-1, blue=-1, millisec=-1)
+* DESCRIPTION
+*   This will make the image transparent with the given alpha value.
+*   Additionally a color (red, green, blue) can be made completely
+*   transparent. This function also allows a combination of both
+*   effects.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to image -- image
+*   * integer alpha -- alpha value to use
+*   * integer red -- red component of color
+*   * integer green -- green component of color
+*   * integer blue -- blue component of color
+*   * integer millisec -- milliseconds before the image is restored (optional)
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::changeImageToAlpha(const Karamba *k, ImageLabel *image, int a, int r, int g, int b, int ms) const
+{
+    if (!checkKarambaAndMeter(k, image, "ImageLabel")) {
+        return false;
+    }
+
+    image->toAlpha(QColor(r, g, b), a, ms);
 
     return true;
 }
