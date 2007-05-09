@@ -354,7 +354,6 @@ void TextLabel::paint(QPainter *p, const QStyleOptionGraphicsItem *option,
         QPoint next;
 
         p->setFont(font);
-        p->setOpacity(m_opacity);
         if (scrollType != ScrollNone) {
             p->setClipRect(0, 0, width, height);
             if (!calculateScrollCoords(meterRect, textRect, next, 0, 0)) {

@@ -128,6 +128,8 @@ Karamba::Karamba(const KUrl &themeFile, int instance, bool subTheme, const QPoin
         m_view->show();
     }
 
+    hide();
+
     m_view->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
 
     if (!m_theme.set(themeFile)) {
@@ -344,6 +346,8 @@ void Karamba::startKaramba()
         connect(m_stepTimer, SIGNAL(timeout()), SLOT(step()));
         m_stepTimer->start(m_interval);
     }
+
+    show();
 }
 
 QString Karamba::prettyName() const

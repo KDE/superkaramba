@@ -160,8 +160,6 @@ void RichTextLabel::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
     int w = getWidth();
     int h = getHeight();
 
-    painter->setOpacity(m_opacity);
-
     text->drawContents(painter, QRect(0, 0, w, h));
 }
 

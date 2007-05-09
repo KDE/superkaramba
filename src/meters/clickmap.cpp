@@ -64,7 +64,6 @@ void ClickMap::paint(QPainter *p, const QStyleOptionGraphicsItem *option,
     int row = 1;
 
     p->setFont(text.getFont());
-    p->setOpacity(m_opacity);
 
     QStringList::Iterator it = displays.begin();
     while (it != displays.end() && (row <= getHeight() || getHeight() == -1)) {

@@ -334,8 +334,6 @@ void ImageLabel::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 
         //only draw image if not hidden
     if (!m_hidden) {
-        painter->setOpacity(m_opacity);
-
         if (cblend == 0) {
             //draw the pixmap
             painter->drawPixmap(0, 0, pixmap);

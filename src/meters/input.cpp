@@ -60,8 +60,6 @@ void Input::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-    painter->setOpacity(m_opacity);
-
     painter->setPen(m_fgColor);
     QBrush oldBrush = painter->brush();
     painter->setBrush(m_bgColor);

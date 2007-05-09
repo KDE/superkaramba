@@ -56,9 +56,6 @@ public:
     bool isEnabled() const;
     void setEnabled(bool enable);
 
-    virtual double getOpacity() const;
-    virtual void setOpacity(double value);
-
     virtual void setSize(int x, int y, int width, int height);
 
     virtual void show();
@@ -70,7 +67,7 @@ public:
     virtual QRectF boundingRect() const;
 
 protected:
-    QRect m_boundingBox;
+    QRectF m_boundingBox;
 
     bool m_clickable;
     bool m_hidden;
@@ -80,13 +77,6 @@ protected:
     QColor m_color;
 
     Karamba* m_karamba;
-
-    QTimer *m_opacityTimer;
-    double m_opacity;
-
-private Q_SLOTS:
-    void fadeIn();
-    //void fadeOut(bool del = true);
 };
 
 #endif // METER_H

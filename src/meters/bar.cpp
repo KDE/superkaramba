@@ -163,8 +163,6 @@ void Bar::paint(QPainter *p, const QStyleOptionGraphicsItem *option,
         width = getWidth();
         height = getHeight();
 
-        p->setOpacity(m_opacity);
-
         if (m_verticalBar)
             p->drawTiledPixmap(0, 0 + height - m_value, width, m_value, m_pixmap, 0, m_pixmapHeight
                     - m_value);

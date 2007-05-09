@@ -56,7 +56,6 @@ void Graph::paint(QPainter *p, const QStyleOptionGraphicsItem *option,
 
     if (!m_hidden) {
         p->setPen(m_color);
-        p->setOpacity(m_opacity);
 
         QPolygonF line;
 

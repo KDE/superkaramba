@@ -26,17 +26,12 @@ Meter::Meter(Karamba* k, int ix, int iy, int iw, int ih)
         m_minValue(0),
         m_maxValue(0),
         m_color(0, 0, 0),
-        m_karamba(k),
-        m_opacity(0)
+        m_karamba(k)
 {
-    m_boundingBox = QRect(0, 0, iw, ih);
+    m_boundingBox = QRectF(0.0, 0.0, static_cast<double>(iw), static_cast<double>(ih));
 
     QPointF ps = QPointF(ix, iy);
     setPos(ps.x(), ps.y());
-
-    m_opacityTimer = new QTimer(this);
-    connect(m_opacityTimer, SIGNAL(timeout()), this, SLOT(fadeIn()));
-    m_opacityTimer->start(10);
 
     setZValue(zLevel++);
 }
@@ -49,14 +44,12 @@ Meter::Meter(Karamba* k)
         m_minValue(0),
         m_maxValue(0),
         m_color(0, 0, 0),
-        m_karamba(k),
-        m_opacity(1)
+        m_karamba(k)
 {}
 
 Meter::~Meter()
 {
     zLevel--;
-    delete m_opacityTimer;
 }
 
 int Meter::getX() const
@@ -89,7 +82,7 @@ void Meter::setY(int newy)
 
 int Meter::getWidth() const
 {
-    return m_boundingBox.width();
+    return static_cast<int>(m_boundingBox.width());
 }
 
 void Meter::setWidth(int width)
@@ -103,7 +96,7 @@ void Meter::setWidth(int width)
 
 int Meter::getHeight() const
 {
-    return m_boundingBox.height();
+    return static_cast<int>(m_boundingBox.height());
 }
 
 void Meter::setHeight(int height)
@@ -183,17 +176,6 @@ void Meter::setEnabled(bool e)
     m_clickable = e;
 }
 
-double Meter::getOpacity() const
-{
-    return m_opacity;
-}
-
-void Meter::setOpacity(double value)
-{
-    m_opacity = value;
-    update();
-}
-
 void Meter::show()
 {
     m_hidden = false;
@@ -210,51 +192,6 @@ void Meter::hide()
 
 QRectF Meter::boundingRect() const
 {
-    return QRectF(m_boundingBox);
+    return m_boundingBox;
 }
-
-void Meter::fadeIn()
-{
-    setOpacity(m_opacity + 0.05);   // m_opacity is set in function
-
-    if (m_opacity > 1.05) {
-        m_opacityTimer->stop();
-        delete m_opacityTimer;
-        m_opacityTimer = (QTimer*)0;
-    }
-}
-
-/*
-void Meter::fadeOut(bool del)
-{
-  setOpacity(m_opacity - 0.05);   // m_opacity is set in function
-
-  if(m_opacity < 0.0)
-  {
-    m_opacityTimer->stop();
-    if(del)
-    {
-     // delete this;
-    }
-    else
-    {
-      //delete m_opacityTimer;
-      //m_opacityTimer = (QTimer*)0;
-    }
-  }
-}
-
-void Meter::deleteMeter()
-{
-  m_opacityTimer = new QTimer(this);
-  connect(m_opacityTimer, SIGNAL(timeout()), this, SLOT(fadeOut()));
-  m_opacityTimer->start(10);
-}
-*/
-/*
-bool Meter::click(QMouseEvent*)
-{
-    return false;
-}
-*/
 
