@@ -153,6 +153,7 @@ public:
 
     void allowClick(bool);
     bool clickable();
+    void setPixel(const QPoint &point, const QColor &pixel);
 
 private slots:
 

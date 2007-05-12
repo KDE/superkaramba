@@ -132,6 +132,9 @@ QPixmap ToAlpha::apply(QPixmap pixmap)
 ImageLabel::ImageLabel(Karamba* k, int ix, int iy, int iw, int ih) :
         Meter(k, ix, iy, iw, ih), m_allowClick(false), zoomed(false), rollover(false)
 {
+    pixmap = QPixmap(iw, ih);
+    pixmap.fill(Qt::transparent);
+
     background = 0;
     cblend = 0;
     //scaleMat.reset();
@@ -593,6 +596,13 @@ bool ImageLabel::event(QEvent *event)
         QToolTip::showText(QPoint(getX(), getY()), toolTipText);
 
     return true;
+}
+
+void ImageLabel::setPixel(const QPoint &point, const QColor &pixel)
+{
+    QPainter painter(&pixmap);
+    painter.setPen(pixel);
+    painter.drawPoint(point);
 }
 
 #include "imagelabel.moc"

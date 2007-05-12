@@ -174,6 +174,7 @@ public Q_SLOTS:
 
     // ImageLabel
     QObject* createImage(Karamba* k, int x, int y, const QString &image) const;
+    QObject* createEmptyImage(Karamba* k, int x, int y, int w, int h) const;
     bool deleteImage(Karamba *k, ImageLabel *image) const;
     bool moveImage(Karamba *k, ImageLabel *image, int x, int y) const;
     QVariantList getImagePos(const Karamba *k, const ImageLabel *image) const;
@@ -200,6 +201,7 @@ public Q_SLOTS:
     bool removeImageTransformations(const Karamba *k, ImageLabel *image) const;
     bool resizeImageSmooth(Karamba *k, ImageLabel *image, int width, int height) const;
     bool rotateImage(const Karamba *k, ImageLabel *image, int deg) const;
+    bool setPixel(Karamba *k, ImageLabel *image, int x, int y, int r, int g, int b, int a = 255);
 
     // InputBox
     QObject* createInputBox(Karamba* k, int x, int y, int w, int h, const QString &text) const;

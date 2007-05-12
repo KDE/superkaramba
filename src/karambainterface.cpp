@@ -1252,6 +1252,36 @@ QObject* KarambaInterface::createImage(Karamba* k, int x, int y, const QString &
     return tmp;
 }
 
+/** Image/createEmptyImage
+*
+* SYNOPSIS
+*   reference createEmptyImage(widget, x, y, w, h)
+* DESCRIPTION
+*   This creates an empty image on your widget at x, y. The empy image
+*   allows you to draw the contents with the setPixel() function
+*   without loading an image first.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * integer x -- x coordinate
+*   * integer y -- y coordinate
+*   * integer w -- width of the image
+*   * integer h -- height of the image
+* RETURN VALUE
+*   reference to new image meter
+*/
+QObject* KarambaInterface::createEmptyImage(Karamba* k, int x, int y, int w, int h) const
+{
+    if (!checkKaramba(k)) {
+        return NULL;
+    }
+
+    ImageLabel *tmp = new ImageLabel(k, x, y, w, h);
+
+    k->addToGroup(tmp);
+
+    return tmp;
+}
+
 /** Image/deleteImage
 *
 * SYNOPSIS
@@ -1849,7 +1879,7 @@ bool KarambaInterface::resizeImageSmooth(Karamba *k, ImageLabel *image, int widt
 /** Image/rotateImage
 *
 * SYNOPSIS
-*   long rotateImage(widget, image, deg)
+*   boolean rotateImage(widget, image, deg)
 * DESCRIPTION
 *   This rotates your image to by the specified amount of degrees. The
 *   The image parameter is a reference to an image that you saved as the
@@ -1872,6 +1902,37 @@ bool KarambaInterface::rotateImage(const Karamba *k, ImageLabel *image, int deg)
     return true;
 }
 
+/** Image/setPixel
+*
+* SYNOPSIS
+*   boolean setPixel(widget, image, x, y, r, g, b, a=255)
+* DESCRIPTION
+*   This sets the pixel in the image at the positon x, y to
+*   the color r, g, b with the alpha channel a.
+*   You can use this function to draw your own images with
+*   your theme script.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to image -- image
+*   * integer x -- x coordinate of the pixel
+*   * integer y -- y coordinate of the pixel
+*   * integer r -- red component of color
+*   * integer g -- green component of color
+*   * integer b -- blue component of color
+*   * integer a -- alpha component of color (optional)
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::setPixel(Karamba *k, ImageLabel *image, int x, int y, int r, int g, int b, int a)
+{
+    if (!checkKarambaAndMeter(k, image, "ImageLabel")) {
+        return false;
+    }
+
+    image->setPixel(QPoint(x, y), QColor(r,g,b,a));
+
+    return true;
+}
 
 
 
