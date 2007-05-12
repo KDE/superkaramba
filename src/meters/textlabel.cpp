@@ -124,12 +124,15 @@ void TextLabel::calculateTextSize()
        Meter::setHeight(textSize.height());
     }
 
-    if (alignment == Qt::AlignLeft)
+    if (alignment == Qt::AlignLeft) {
         Meter::setX(origPoint.x());
-    else if (alignment == Qt::AlignRight)
+    }
+    else if (alignment == Qt::AlignRight) {
         Meter::setX(origPoint.x() - textSize.width());
-    else if (alignment == Qt::AlignCenter)
+    }
+    else if (alignment == Qt::AlignHCenter) {
         Meter::setX(origPoint.x() - textSize.width() / 2);
+    }
 }
 
 void TextLabel::setValue(const QString &text)
