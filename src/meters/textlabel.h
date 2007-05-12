@@ -85,8 +85,8 @@ private:
     int pauseCounter;
     ScrollType scrollType;
     QPoint origPoint;
-
     bool m_clickable;
+    bool m_sizeGiven;
 
     QString m_leftMouseButtonAction;
     QString m_middleMouseButtonAction;

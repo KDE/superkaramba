@@ -262,7 +262,7 @@ void ImageLabel::applyTransformations(bool useSmoothScale)
     update();
 }
 
-void ImageLabel::slotCopyResult(KIO::Job* job)
+void ImageLabel::slotCopyResult(KJob* job)
 {
     QString tempFile = ((KIO::FileCopyJob*)job)->destUrl().path();
     if (job->error() == 0) {
@@ -292,8 +292,8 @@ void ImageLabel::setValue(const QString &fn)
         tmpFile.open();
         KIO::FileCopyJob* copy = KIO::file_copy(fileName, tmpFile.fileName(), 0600,
                                                 true, false, false);
-        connect(copy, SIGNAL(result(KIO::Job*)),
-                this, SLOT(slotCopyResult(KIO::Job*)));
+        connect(copy, SIGNAL(result(KJob*)),
+                this, SLOT(slotCopyResult(KJob*)));
         return;
     } else {
         if (m_karamba->theme().isThemeFile(fileName)) {
@@ -335,7 +335,7 @@ void ImageLabel::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     Q_UNUSED(option);
     Q_UNUSED(widget);
 
-        //only draw image if not hidden
+    //only draw image if not hidden
     if (!m_hidden) {
         if (cblend == 0) {
             //draw the pixmap
@@ -426,9 +426,9 @@ void ImageLabel::parseImages(const QString &fn, const QString &fn_roll, int _xof
         if (KIO::NetAccess::download(KUrl(path), tmpFile, 0)) {
             pixmap_off = QPixmap(tmpFile);
             KIO::NetAccess::removeTempFile(tmpFile);
-            qDebug("Downloaded: %s to %s", path.toAscii().constData(), tmpFile.toAscii().constData());
+            kDebug() << "Downloaded: " << path << " to " << tmpFile << endl;
         } else {
-            qDebug("Error Downloading: %s", path.toAscii().constData());
+            kDebug() << "Error Downloading: " << path << endl;
         }
     } else {
         pixmap_off = QPixmap(path);

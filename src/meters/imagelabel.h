@@ -159,7 +159,7 @@ private slots:
 
     // gets called if a timed effects needs to bee removed
     void slotEffectExpired();
-    void slotCopyResult(KIO::Job* job);
+    void slotCopyResult(KJob* job);
 
 signals:
     void pixmapLoaded();

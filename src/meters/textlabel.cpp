@@ -32,7 +32,8 @@ TextLabel::TextLabel(Karamba *k, int x, int y, int w, int h)
         scrollPause(0),
         pauseCounter(0),
         scrollType(ScrollNone),
-        m_clickable(false)
+        m_clickable(false),
+        m_sizeGiven(true)
 {
     origPoint = QPoint(x, y);
 
@@ -42,9 +43,10 @@ TextLabel::TextLabel(Karamba *k, int x, int y, int w, int h)
     else
         clip = Qt::TextDontClip;
 
-    if (h == 0 || w == 0) {
+    if (h <= 0 || w <= 0) {
         setWidth(-1);
         setHeight(-1);
+        m_sizeGiven = false;
     }
 }
 
@@ -124,14 +126,16 @@ void TextLabel::calculateTextSize()
        Meter::setHeight(textSize.height());
     }
 
-    if (alignment == Qt::AlignLeft) {
-        Meter::setX(origPoint.x());
-    }
-    else if (alignment == Qt::AlignRight) {
-        Meter::setX(origPoint.x() - textSize.width());
-    }
-    else if (alignment == Qt::AlignHCenter) {
-        Meter::setX(origPoint.x() - textSize.width() / 2);
+    if (!m_sizeGiven) {
+        if (alignment == Qt::AlignLeft) {
+            Meter::setX(origPoint.x());
+        }
+        else if (alignment == Qt::AlignRight) {
+            Meter::setX(origPoint.x() - textSize.width());
+        }
+        else if (alignment == Qt::AlignHCenter) {
+            Meter::setX(origPoint.x() - textSize.width() / 2);
+        }
     }
 }
 
