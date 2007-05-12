@@ -111,19 +111,34 @@ Karamba::Karamba(const KUrl &themeFile, int instance, bool subTheme, const QPoin
         m_subTheme(subTheme),
         m_animation(0),
         m_timer(0),
-        m_backgroundInterface(0)
+        m_backgroundInterface(0),
+        m_useFancyEffects(true),
+        m_useAntialiasing(true)
 {
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     if (args->isSet("usefallback")) {
         m_useKross = false;
     }
 
+    QString environment = getenv("SK_FANCY");
+    if (!environment.compare("false", Qt::CaseInsensitive)) {
+        m_useFancyEffects = false;
+    }
+
+    environment = getenv("SK_AA");
+    if (!environment.compare("false", Qt::CaseInsensitive)) {
+        m_useAntialiasing = false;
+    }
     if (m_view == 0 && m_scene == 0) {
         m_scene = new QGraphicsScene;
         m_scene->addItem(this);
         m_view = new MainWidget(m_scene);
-        m_view->setRenderHints(QPainter::Antialiasing |
+
+        if (m_useAntialiasing) {
+            m_view->setRenderHints(QPainter::Antialiasing |
                                QPainter::SmoothPixmapTransform);
+        }
+
         m_globalView = false;
         m_view->show();
     }
@@ -262,7 +277,7 @@ Karamba::Karamba(const KUrl &themeFile, int instance, bool subTheme, const QPoin
         m_toggleLocked->setChecked(false);
     }
 
-    if (!reload) {
+    if (!reload && m_useFancyEffects) {
         m_timer = new QTimeLine(1000);
         m_timer->setFrameRange(0, 1000);
 

@@ -244,6 +244,9 @@ private:
 
     OrgKdeKdesktopBackgroundInterface* m_backgroundInterface;
 
+    bool m_useFancyEffects;
+    bool m_useAntialiasing;
+
     bool parseConfig();
     Sensor *findSensorFromList(const Meter *meter) const;
     QString findSensorFromMap(const Sensor *sensor) const;
