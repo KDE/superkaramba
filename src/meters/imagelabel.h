@@ -206,13 +206,9 @@ private:
     int yoff, yon;
     QString imagePath;
 
-    QString toolTipText;
-
     QString m_leftMouseButtonAction;
     QString m_middleMouseButtonAction;
     QString m_rightMouseButtonAction;
-
-    bool event(QEvent *event);
 };
 
 #endif // IMAGELABEL_H

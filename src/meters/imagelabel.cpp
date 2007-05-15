@@ -515,7 +515,7 @@ void ImageLabel::rolloverImage(QMouseEvent *e)
 
 void ImageLabel::setTooltip(QString txt)
 {
-    toolTipText = txt;
+    setToolTip(txt);
 }
 
 
@@ -588,14 +588,6 @@ void ImageLabel::attachClickArea(QString leftMouseButton,
 
     setAcceptedMouseButtons(Qt::LeftButton | Qt::MidButton | Qt::RightButton);
     setCursor(QCursor(Qt::PointingHandCursor));
-}
-
-bool ImageLabel::event(QEvent *event)
-{
-    if (event->type() == QEvent::ToolTip)
-        QToolTip::showText(QPoint(getX(), getY()), toolTipText);
-
-    return true;
 }
 
 void ImageLabel::setPixel(const QPoint &point, const QColor &pixel)
