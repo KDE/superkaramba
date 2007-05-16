@@ -102,6 +102,7 @@ int main(int argc, char **argv)
     about.addAuthor("Petri Damstén", 0, "petri.damsten@iki.fi");
     about.addAuthor("Alexander Wiedenbruch", 0, "mail@wiedenbruch.de");
     about.addAuthor("Luke Kenneth Casson Leighton", 0, "lkcl@lkcl.net");
+    about.addCredit("Sebastian Sauer", "Work on Kross, tutorials and examples", "mail@dipe.org");
     KCmdLineArgs::init(argc, argv, &about);
     KCmdLineArgs::addCmdLineOptions(options);
     KarambaApplication::addCmdLineOptions();

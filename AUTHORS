@@ -31,6 +31,9 @@ Luke Kenneth Casson Leighton <lkcl@lkcl.net>
  - Karamba "object"-style auto-wrapper to OO-itise python interface
  - drag-drop receives x,y coordinates of mouse at drop time.
 
+Alexander Wiedenbruch <mail@wiedenbruch.de>
+ - Port to KDE 4
+
 HELP, PATCHES, AND EXISTING CODE:
 
 Matthias Elter <elter@kde.org>
@@ -38,9 +41,10 @@ Matthias Elter <elter@kde.org>
 
 Vova Kuznetsov <kv000@mail.ru>
 
-Alexander Wiedenbruch <Alexander@wiedenbruch.de> - Patches and Testing
-
 Scott Grayban <sgrayban@mandriva.org> - Mandriva RPM Packager
+
+Sebastian Sauer <mail@dipe.org>
+ - Support for JavaScript-, Ruby- and Python-themes with Kross
 
 THANKS:
 
