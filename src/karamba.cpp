@@ -942,7 +942,7 @@ void Karamba::setSensor(const LineParser& lineParser, Meter* meter)
         sensor = m_sensorMap["UPTIME"];
         if (sensor == 0) {
             int interval = lineParser.getInt("INTERVAL");
-            interval = (interval == 0) ? 60000 : interval;
+            interval = (interval == 0) ? 1000 : interval;
             sensor = (m_sensorMap["UPTIME"] = new UptimeSensor(interval));
             m_sensorList.append(sensor);
         }
@@ -959,7 +959,7 @@ void Karamba::setSensor(const LineParser& lineParser, Meter* meter)
 
         if (sensor == 0) {
             int interval = lineParser.getInt("INTERVAL");
-            interval = (interval == 0) ? 30000 : interval;
+            interval = (interval == 0) ? 5000 : interval;
             sensor = (m_sensorMap["SENSOR"] = new SensorSensor(interval, m_tempUnit));
             m_sensorList.append(sensor);
         }
@@ -994,7 +994,7 @@ void Karamba::setSensor(const LineParser& lineParser, Meter* meter)
         sensor = m_sensorMap["DATE"];
         if (sensor == 0) {
             int interval = lineParser.getInt("INTERVAL");
-            interval = (interval == 0) ? 60000 : interval;
+            interval = (interval == 0) ? 1000 : interval;
             sensor = (m_sensorMap["DATE"] = new DateSensor(interval));
             m_sensorList.append(sensor);
         }
@@ -1057,7 +1057,7 @@ void Karamba::setSensor(const LineParser& lineParser, Meter* meter)
         if (sensor == 0) {
             int interval = lineParser.getInt("INTERVAL");
 
-            interval = (interval == 0) ? 3600000 : interval;
+            interval = (interval == 0) ? 1000 : interval;
             QString encoding = lineParser.getString("ENCODING");
 
             sensor = (m_sensorMap["PROGRAM"+progName] =
