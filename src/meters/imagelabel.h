@@ -29,6 +29,7 @@
 
 #include <kio/netaccess.h>
 #include <kio/copyjob.h>
+#include <KSvgRenderer>
 
 #include "karamba.h"
 #include "meter.h"
@@ -155,11 +156,18 @@ public:
     bool clickable();
     void setPixel(const QPoint &point, const QColor &pixel);
 
+    bool enableAnimation(bool enable);
+    bool animationEnabled() const;
+
+    bool drawElement(const QString &element);
+    QString elementDrawn() const;
+
 private slots:
 
     // gets called if a timed effects needs to bee removed
     void slotEffectExpired();
     void slotCopyResult(KJob* job);
+    void repaintSvg();
 
 signals:
     void pixmapLoaded();
@@ -209,6 +217,11 @@ private:
     QString m_leftMouseButtonAction;
     QString m_middleMouseButtonAction;
     QString m_rightMouseButtonAction;
+
+    KSvgRenderer *m_renderer;
+    bool m_connected;
+
+    QString m_element;
 };
 
 #endif // IMAGELABEL_H

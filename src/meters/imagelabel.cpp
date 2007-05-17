@@ -130,7 +130,7 @@ QPixmap ToAlpha::apply(QPixmap pixmap)
 /***********************************************************************/
 
 ImageLabel::ImageLabel(Karamba* k, int ix, int iy, int iw, int ih) :
-        Meter(k, ix, iy, iw, ih), m_allowClick(false), zoomed(false), rollover(false)
+        Meter(k, ix, iy, iw, ih), m_allowClick(false), zoomed(false), rollover(false), m_renderer(0), m_connected(false)
 {
     pixmap = QPixmap(iw, ih);
     pixmap.fill(Qt::transparent);
@@ -150,7 +150,8 @@ ImageLabel::ImageLabel(Karamba* k, int ix, int iy, int iw, int ih) :
 }
 
 ImageLabel::ImageLabel(Karamba* k) :
-        Meter(k), zoomed(false), rollover(false)
+        Meter(k), zoomed(false), rollover(false), m_renderer(0),
+        m_connected(false)
 {
     cblend = 0;
     background = 0;
@@ -163,6 +164,8 @@ ImageLabel::~ImageLabel()
         imageEffect = 0;
     }
     if (!old_tip_rect.isNull()) {}
+
+    delete m_renderer;
 }
 
 void ImageLabel::setValue(int v)
@@ -237,20 +240,32 @@ void ImageLabel::applyTransformations(bool useSmoothScale)
 
     pixmap = realpixmap;
     if (doRotate) {
-        // KDE and QT seem to miss a high quality image rotation
         QMatrix rotMat;
         rotMat.rotate(rot_angle);
-        pixmap = pixmap.transformed(rotMat);
+        pixmap = pixmap.transformed(rotMat, Qt::SmoothTransformation);
     }
+
     if (doScale) {
-        if (useSmoothScale) {
-            pixmap = QPixmap::fromImage(pixmap.toImage().scaled(scale_w, scale_h, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+        if (m_renderer) {
+            QPixmap pm(scale_w, scale_h);
+            pm.fill(Qt::transparent);
+            QPainter painter(&pm);
+            if (m_element.isEmpty()) {
+                m_renderer->render(&painter);
+            } else {
+                m_renderer->render(&painter, m_element);
+            }
+            pixmap = pm;
         } else {
-            double widthFactor = ((double)scale_w) / ((double)pixmap.width());
-            double heightFactor = ((double)scale_h) / ((double)pixmap.height());
-            QMatrix scaleMat;
-            scaleMat.scale(widthFactor, heightFactor);
-            pixmap = pixmap.transformed(scaleMat);
+            if (useSmoothScale) {
+                pixmap = QPixmap::fromImage(pixmap.toImage().scaled(scale_w, scale_h, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+            } else {
+                double widthFactor = ((double)scale_w) / ((double)pixmap.width());
+                double heightFactor = ((double)scale_h) / ((double)pixmap.height());
+                QMatrix scaleMat;
+                scaleMat.scale(widthFactor, heightFactor);
+                pixmap = pixmap.transformed(scaleMat);
+            }
         }
     }
     if (imageEffect != 0) {
@@ -298,10 +313,35 @@ void ImageLabel::setValue(const QString &fn)
     } else {
         if (m_karamba->theme().isThemeFile(fileName)) {
             QByteArray ba = m_karamba->theme().readThemeFile(fileName);
-            pm.loadFromData(ba);
+            if (fileName.endsWith("svg", Qt::CaseInsensitive) || fileName.endsWith("svgz", Qt::CaseInsensitive)) {
+                m_renderer = new KSvgRenderer(ba);
+            } else {
+                pm.loadFromData(ba);
+            }
         } else {
-            pm.load(fileName);
+            if (fileName.endsWith("svg", Qt::CaseInsensitive) || fileName.endsWith("svgz", Qt::CaseInsensitive)) {
+                m_renderer = new KSvgRenderer(fileName);
+           } else {
+                pm.load(fileName);
+            }
         }
+
+        if (m_renderer) {
+            QPixmap tmpPm(m_renderer->defaultSize());
+            tmpPm.fill(Qt::transparent);
+            QPainter painter(&tmpPm);
+            if (m_element.isEmpty()) {
+                m_renderer->render(&painter);
+            } else {
+                m_renderer->render(&painter, m_element);
+            }
+            pm = tmpPm;
+
+            if (m_renderer->animated()) {
+                m_connected = connect(m_renderer, SIGNAL(repaintNeeded()), this, SLOT(repaintSvg()));
+            }
+        }
+
         imagePath = fileName;
     }
     setValue(pm);
@@ -595,6 +635,66 @@ void ImageLabel::setPixel(const QPoint &point, const QColor &pixel)
     QPainter painter(&pixmap);
     painter.setPen(pixel);
     painter.drawPoint(point);
+}
+
+void ImageLabel::repaintSvg()
+{
+    QPainter painter(&pixmap);
+    pixmap.fill(Qt::transparent);
+
+    if (m_element.isEmpty()) {
+        m_renderer->render(&painter);
+    } else {
+        m_renderer->render(&painter, m_element);
+    }
+
+    update();
+}
+
+bool ImageLabel::enableAnimation(bool enable)
+{
+    if (!m_renderer || !m_renderer->animated()) {
+        return false;
+    }
+
+    if (enable && !m_connected) {
+            m_connected = connect(m_renderer, SIGNAL(repaintNeeded()), this, SLOT(repaintSvg()));
+    } else if (!enable && m_connected) {
+            m_connected = !disconnect(m_renderer, SIGNAL(repaintNeeded()), this, SLOT(repaintSvg()));
+    }
+
+    return true;
+}
+
+bool ImageLabel::animationEnabled() const
+{
+    return m_connected;
+}
+
+bool ImageLabel::drawElement(const QString &element)
+{
+    if (element.isEmpty()) {
+        m_element.clear();
+
+        repaintSvg();
+
+        return true;
+    }
+
+    if (m_renderer && m_renderer->elementExists(element)) {
+        m_element = element;
+
+        repaintSvg();
+
+        return true;
+    }
+
+    return false;
+}
+
+QString ImageLabel::elementDrawn() const
+{
+    return m_element;
 }
 
 #include "imagelabel.moc"

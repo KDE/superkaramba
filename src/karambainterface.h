@@ -202,6 +202,11 @@ public Q_SLOTS:
     bool resizeImageSmooth(Karamba *k, ImageLabel *image, int width, int height) const;
     bool rotateImage(const Karamba *k, ImageLabel *image, int deg) const;
     bool setPixel(Karamba *k, ImageLabel *image, int x, int y, int r, int g, int b, int a = 255);
+    bool changeImageAnimation(Karamba *k, ImageLabel *image, bool enable) const;
+    bool getImageAnimation(Karamba *k, ImageLabel *image) const;
+    bool setImageElement(Karamba* k, ImageLabel *image, const QString &element) const;
+    bool resetImageElement(Karamba* k, ImageLabel *image) const;
+    QString getImageElement(Karamba *k, ImageLabel *image) const;
 
     // InputBox
     QObject* createInputBox(Karamba* k, int x, int y, int w, int h, const QString &text) const;

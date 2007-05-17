@@ -1934,6 +1934,126 @@ bool KarambaInterface::setPixel(Karamba *k, ImageLabel *image, int x, int y, int
     return true;
 }
 
+/** Image/changeImageAnimation
+*
+* SYNOPSIS
+*   boolean changeImageAnimation(widget, image, enable)
+* DESCRIPTION
+*   This function can be used to enable or disable
+*   animations in an SVG image. The animation is on by
+*   default.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to image -- image
+*   * boolean enable -- enable or disable animations
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::changeImageAnimation(Karamba *k, ImageLabel *image, bool enable) const
+{
+    if (!checkKarambaAndMeter(k, image, "ImageLabel")) {
+        return false;
+    }
+
+    return image->enableAnimation(enable);
+}
+
+/** Image/getImageAnimation
+*
+* SYNOPSIS
+*   boolean getImageAnimation(widget, image)
+* DESCRIPTION
+*   This function returns if the animation of
+*   an SVG image is currently activated.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to image -- image
+* RETURN VALUE
+*   true if animation is activated or false
+*   if it is deactivated or not an SVG image.
+*/
+bool KarambaInterface::getImageAnimation(Karamba *k, ImageLabel *image) const
+{
+    if (!checkKarambaAndMeter(k, image, "ImageLabel")) {
+        return false;
+    }
+
+    return image->animationEnabled();
+}
+
+/** Image/setImageElement
+*
+* SYNOPSIS
+*   boolean setImageElement(widget, image, element)
+* DESCRIPTION
+*   This function will only draw the named element
+*   of an SVG image.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to image -- image
+*   * string element -- ID of the element to draw
+* RETURN VALUE
+*   true if the element is available or false
+*   if it is not an SVG image.
+*/
+bool KarambaInterface::setImageElement(Karamba* k, ImageLabel *image, const QString &element) const
+{
+    if (!checkKarambaAndMeter(k, image, "ImageLabel")) {
+        return false;
+    }
+
+    return image->drawElement(element);
+}
+
+/** Image/resetImageElement
+*
+* SYNOPSIS
+*   boolean resetImageElement(widget, image)
+* DESCRIPTION
+*   This function reset a previous set element.
+*   A call to this function will result in a
+*   completly drawn SVG image.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to image -- image
+* RETURN VALUE
+*   true if successful
+*/
+bool KarambaInterface::resetImageElement(Karamba* k, ImageLabel *image) const
+{
+    if (!checkKarambaAndMeter(k, image, "ImageLabel")) {
+        return false;
+    }
+
+    return image->drawElement(QString());
+}
+
+/** Image/getImageElement
+*
+* SYNOPSIS
+*   string getImageElement(widget, image)
+* DESCRIPTION
+*   This function returns the ID of the currently drawn
+*   element of an SVG image.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to image -- image
+* RETURN VALUE
+*   ID of the element or empty string if the image
+*   is not an SVG image or the complete SVG image is drawn.
+*/
+QString KarambaInterface::getImageElement(Karamba *k, ImageLabel *image) const
+{
+    if (!checkKarambaAndMeter(k, image, "ImageLabel")) {
+        return QString::null;
+    }
+
+    return image->elementDrawn();
+}
+
+
+
+
 
 
 /** Config/addMenuConfigOption
