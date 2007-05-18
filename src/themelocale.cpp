@@ -365,6 +365,7 @@ void tl_nl_load_domain(QIODevice* device, int size,
             long int nb = (long int) device->read(read_ptr, to_read);
             if (nb == -1) {
                 device->close();
+                free(data);
                 return;
             }
 
