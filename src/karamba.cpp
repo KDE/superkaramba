@@ -1079,7 +1079,7 @@ void Karamba::setSensor(const LineParser& lineParser, Meter* meter)
         if (sensor == 0) {
             int interval = lineParser.getInt("INTERVAL");
 
-            interval = (interval == 0) ? 1000 : interval;
+            interval = (interval == 0) ? 60000 : interval;
             QString encoding = lineParser.getString("ENCODING");
 
             sensor = (m_sensorMap["PROGRAM"+progName] =
