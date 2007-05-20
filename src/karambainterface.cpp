@@ -41,10 +41,6 @@
 #include <KCmdLineArgs>
 #include <KAboutData>
 
-#include <kross/core/krossconfig.h>
-#include <kross/core/manager.h>
-#include <kross/core/action.h>
-
 /// \internal d-pointer class.
 class KarambaInterface::Private
 {
@@ -71,14 +67,6 @@ KarambaInterface::KarambaInterface(Karamba *k)
     , d(new Private(k))
 {
     setObjectName("karamba");
-
-    bool initOK = initInterpreter(k->theme());
-
-    if (initOK) {
-        d->action->trigger();
-    } else {
-        kWarning() << "No Script file was found: " << k->theme().scriptModule() << endl;
-    }
 }
 
 KarambaInterface::~KarambaInterface()
@@ -86,8 +74,15 @@ KarambaInterface::~KarambaInterface()
     delete d;
 }
 
-bool KarambaInterface::initInterpreter(const ThemeFile &theme)
+void KarambaInterface::startInterpreter()
 {
+    d->action->trigger();
+}
+
+bool KarambaInterface::initInterpreter()
+{
+    const ThemeFile &theme = d->karamba->theme();
+
     // Get the theme path
     QDir scriptDir;
     if (theme.isZipTheme()) {
@@ -97,6 +92,14 @@ bool KarambaInterface::initInterpreter(const ThemeFile &theme)
     }
 
     QString interpreter = Kross::Manager::self().interpreternameForFile(theme.scriptModule());
+    if (interpreter.isEmpty()) {
+        KMessageBox::sorry(0, i18n(
+                "SuperKaramba cannot continue to run this theme."
+                "One or more of the required components of the Kross scripting architecture is not installed. "
+                "Please consult this theme's documentation and install the necessary Kross components."),
+                i18n("Please install additional Kross components"));
+        return false;
+    }
 
     // Set up Interpreter
     QFileInfo fi(scriptDir, theme.scriptModule());

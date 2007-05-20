@@ -23,6 +23,10 @@
 
 #include <QObject>
 
+#include <kross/core/krossconfig.h>
+#include <kross/core/manager.h>
+#include <kross/core/action.h>
+
 #include "karamba.h"
 #include "themelocale.h"
 
@@ -41,6 +45,9 @@ class KarambaInterface : public QObject
 public:
     KarambaInterface(Karamba *k);
     virtual ~KarambaInterface();
+
+    void startInterpreter();
+    bool initInterpreter();
 
     // Calls to scripts ----------------------
     void callInitWidget(Karamba *k);
@@ -94,8 +101,6 @@ private:
     /// \internal d-pointer instance.
     Private* const d;
 
-    bool initInterpreter(const ThemeFile &theme);
-
     bool checkKaramba(const Karamba *k) const;
     bool checkMeter(const Karamba *k, const Meter *m, const QString &type) const;
     bool checkKarambaAndMeter(const Karamba *k, const Meter *m, const QString &type) const;
@@ -120,8 +125,6 @@ private:
     QObject* setMeterStringValue(const Karamba *k, Meter *m, const QString &type, const QString
             &value) const;
     bool menuExists(const Karamba* currTheme, const KMenu* menu) const;
-
-
 
 public Q_SLOTS:
     // Bar

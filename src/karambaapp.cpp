@@ -114,7 +114,11 @@ void KarambaApplication::karambaClosed(Karamba *k)
 
     buildToolTip();
 
-    delete k;
+    k->deleteLater();
+
+    if (m_karambas.count() == 0 && m_themesDialog->isVisible() == false) {
+        quit();
+    }
 }
 
 bool KarambaApplication::themeExists(const QString &prettyName) const

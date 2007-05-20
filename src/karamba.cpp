@@ -113,7 +113,8 @@ Karamba::Karamba(const KUrl &themeFile, int instance, bool subTheme, const QPoin
         m_timer(0),
         m_backgroundInterface(0),
         m_useFancyEffects(true),
-        m_useAntialiasing(true)
+        m_useAntialiasing(true),
+        m_errorInInit(false)
 {
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     if (args->isSet("usefallback")) {
@@ -148,6 +149,9 @@ Karamba::Karamba(const KUrl &themeFile, int instance, bool subTheme, const QPoin
     m_view->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
 
     if (!m_theme.set(themeFile)) {
+        kDebug() << "Could not load theme file" << endl;
+        m_errorInInit = true;
+        QTimer::singleShot(0, this, SLOT(startKaramba()));
         return;
     }
 
@@ -340,7 +344,10 @@ Karamba::~Karamba()
 
 void Karamba::startKaramba()
 {
-    emit widgetStarted(this, true, false);
+    if (m_errorInInit) {
+        emit widgetStarted(this, false, false);
+        return;
+    }
 
     if (m_theme.scriptModuleExists()) {
         kDebug() << "Loading script module: " << m_theme.scriptModule() << endl;
@@ -350,16 +357,31 @@ void Karamba::startKaramba()
 
         if (!m_useKross) {
             m_python = new KarambaPython(m_theme, false);
+
+            emit widgetStarted(this, true, false);
+
             m_python->initWidget(this);
         } else {
             m_interface = new KarambaInterface(this);
-            m_interface->callInitWidget(this);
+            bool interpreterStarted = m_interface->initInterpreter();
+
+            emit widgetStarted(this, interpreterStarted, false);
+
+            if (!interpreterStarted) {
+                delete m_interface;
+                m_interface = 0;
+            } else {
+                m_interface->startInterpreter();
+                m_interface->callInitWidget(this);
+            }
         }
 
         update();
 
         connect(m_stepTimer, SIGNAL(timeout()), SLOT(step()));
         m_stepTimer->start(m_interval);
+    } else {
+        emit widgetStarted(this, true, false);
     }
 
     show();
@@ -1767,8 +1789,9 @@ void Karamba::keyPressEvent(QKeyEvent *event)
 void Karamba::slotFileChanged(const QString &file)
 {
     QString pythonFile = m_theme.path() + '/' + m_theme.scriptModule();
-    if (file == m_theme.file() || file == pythonFile)
+    if (file == m_theme.file() || file == pythonFile) {
         reloadConfig();
+    }
 }
 
 void Karamba::setMenuExtension(KMenu *menu)

@@ -258,6 +258,7 @@ bool ThemeFile::set(const KUrl &url)
     m_theme = m_name + ".theme";
     m_script = m_name;
 
+    bool fileExtensionFound = false;
     QStringList availInterp = Kross::Manager::self().interpreters();
     foreach (QString interpreter, availInterp) {
         QString fileExtension = Kross::Manager::self().interpreterInfo(interpreter)->wildcard();
@@ -265,8 +266,12 @@ bool ThemeFile::set(const KUrl &url)
 
         if (fileExists(fi.path() + '/' + m_script + fileExtension)) {
             m_script += fileExtension;
+            fileExtensionFound = true;
             break;
         }
+    }
+    if (!fileExtensionFound) {
+        m_script += ".py";
     }
 
     m_id = m_name;
@@ -411,14 +416,8 @@ bool ThemeFile::scriptModuleExists() const
         return false;
     }
 
-    QStringList availInterp = Kross::Manager::self().interpreters();
-    foreach (QString interpreter, availInterp) {
-        QString fileExtension = Kross::Manager::self().interpreterInfo(interpreter)->wildcard();
-        fileExtension.remove(0, 1);
-
-        if (fileExists(m_script)) {
-            return true;
-        }
+    if (fileExists(m_script)) {
+        return true;
     }
 
     return false;

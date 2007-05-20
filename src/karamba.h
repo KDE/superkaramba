@@ -247,6 +247,8 @@ private:
     bool m_useFancyEffects;
     bool m_useAntialiasing;
 
+    bool m_errorInInit;
+
     bool parseConfig();
     Sensor *findSensorFromList(const Meter *meter) const;
     QString findSensorFromMap(const Sensor *sensor) const;
