@@ -35,7 +35,7 @@ bool checkKaramba(long widget)
         PyErr_SetString(PyExc_ValueError, "widget pointer was 0.");
         return false;
     }
-
+/*
     if (!karambaApp->hasKaramba((Karamba*)widget)) {
         QString tmp;
 
@@ -43,7 +43,7 @@ bool checkKaramba(long widget)
         PyErr_SetString(PyExc_ValueError, tmp.toAscii().constData());
         return false;
     }
-
+*/
     return true;
 }
 

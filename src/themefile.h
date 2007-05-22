@@ -36,7 +36,7 @@ class ZipFile;
 /**
 @author See README for the list of authors
 */
-class ThemeFile
+class KDE_EXPORT ThemeFile
 {
 public:
     typedef QVector<ThemeFile> List;

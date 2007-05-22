@@ -69,6 +69,7 @@ private:
 
 private Q_SLOTS:
     void toggleSystemTray();
+    void sendDataToTheme(const QString &themeName, const QString &data, bool notify);
 
 private:
     QList<Karamba*> m_karambas;

@@ -1,21 +1,12 @@
-########### next target ###############
-
-SET(superkaramba_SRCS
-main.cpp
+########### superkaramba lib ###############
+SET(superkaramba_LIB_SRCS
 karamba.cpp
 mainwidget.cpp
-karambaapp.cpp
 lineparser.cpp
 themefile.cpp
 themelocale.cpp
-themesdlg.cpp
-themewidget.cpp
-kwidgetlistbox.cpp
 taskmanager.cpp
-#systemtray.cpp
 showdesktop.cpp
-#sknewstuff.cpp
-karambasessionmanaged.cpp
 karambainterface.cpp
 
 meters/meter.cpp
@@ -59,39 +50,61 @@ python/task.cpp
 python/config.cpp
 )
 
-KDE4_ADD_UI_FILES(superkaramba_SRCS
+KDE4_ADD_KCFG_FILES(superkaramba_LIB_SRCS
+superkarambasettings.kcfgc
+)
+
+set(kdesktop_xml ${DBUS_INTERFACES_DIR}/org.kde.kdesktop.Background.xml)
+QT4_ADD_DBUS_INTERFACE(superkaramba_LIB_SRCS ${kdesktop_xml} kdesktop_background_interface)
+
+KDE4_AUTOMOC(${superkaramba_LIB_SRCS})
+
+KDE4_ADD_LIBRARY(superkaramba SHARED ${superkaramba_LIB_SRCS})
+set_target_properties(superkaramba PROPERTIES VERSION 1.0.0 SOVERSION 1 )
+
+TARGET_LINK_LIBRARIES(superkaramba
+${KDE4_KIO_LIBS}
+${KDE4_KROSSCORE_LIBS}
+${PYTHON_LIBRARIES}
+)
+
+install(TARGETS superkaramba DESTINATION ${LIB_INSTALL_DIR})
+
+########### superkaramba bin ###############
+
+SET(superkaramba_BIN_SRCS
+main.cpp
+karambaapp.cpp
+themesdlg.cpp
+themewidget.cpp
+kwidgetlistbox.cpp
+#sknewstuff.cpp
+karambasessionmanaged.cpp
+)
+
+KDE4_ADD_UI_FILES(superkaramba_BIN_SRCS
 themewidget_layout.ui
 themes_layout.ui
 )
 
-KDE4_ADD_KCFG_FILES(superkaramba_SRCS
+KDE4_ADD_KCFG_FILES(superkaramba_BIN_SRCS
 superkarambasettings.kcfgc
 )
 
-QT4_ADD_DBUS_ADAPTOR(superkaramba_SRCS org.kde.superkaramba.xml karambaapp.h KarambaApplication)
+QT4_ADD_DBUS_ADAPTOR(superkaramba_BIN_SRCS org.kde.superkaramba.xml karambaapp.h KarambaApplication)
 
-set(kdesktop_xml ${DBUS_INTERFACES_DIR}/org.kde.kdesktop.Background.xml)
-QT4_ADD_DBUS_INTERFACE(superkaramba_SRCS ${kdesktop_xml} kdesktop_background_interface)
+KDE4_AUTOMOC(${superkaramba_BIN_SRCS})
 
-KDE4_AUTOMOC(${superkaramba_SRCS})
+KDE4_ADD_EXECUTABLE(superkaramba-bin ${superkaramba_BIN_SRCS})
 
-KDE4_ADD_EXECUTABLE(superkaramba ${superkaramba_SRCS})
-
-TARGET_LINK_LIBRARIES(superkaramba 
-${KDE4_KNEWSTUFF_LIBS}
-${KDE4_KIO_LIBS}
-${KDE4_KROSSCORE_LIBS}
-${PYTHON_LIBRARIES}
+TARGET_LINK_LIBRARIES(superkaramba-bin
 ${KDE4_KNEWSTUFF2_LIBS}
-#${QT_QTOPENGL_LIBRARY}
+superkaramba
 )
 
-install(TARGETS superkaramba DESTINATION ${BIN_INSTALL_DIR})
-
-
-########### install files ###############
-
+install(TARGETS superkaramba-bin DESTINATION ${BIN_INSTALL_DIR})
 install(FILES superkarambaui.rc DESTINATION ${DATA_INSTALL_DIR}/superkaramba)
 install(FILES superkaramba.desktop  DESTINATION ${XDG_APPS_DIR})
 install(FILES org.kde.superkaramba.xml DESTINATION ${DBUS_INTERFACES_DIR})
 install(FILES superkaramba.knsrc DESTINATION ${CONFIG_INSTALL_DIR})
+

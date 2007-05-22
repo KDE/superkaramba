@@ -444,7 +444,7 @@ static QString getIncomingData(long widget)
  */
 long openNamedTheme(char* path, char *name, bool is_sub_theme)
 {
-
+    Q_UNUSED(name)
     QString filename;
     Karamba* newTheme = 0;
 
@@ -453,13 +453,13 @@ long openNamedTheme(char* path, char *name, bool is_sub_theme)
     QFileInfo file(filename);
 
     if (file.exists()) {
-        QString prettyName(name);
+/*        QString prettyName(name);
         KarambaApplication* app = (KarambaApplication*)qApp;
-        if (!app->themeExists(prettyName)) {
-            newTheme = new Karamba(KUrl(filename), -1, is_sub_theme);
+        if (!app->themeExists(prettyName)) {*/
+            newTheme = new Karamba(KUrl(filename), 0, -1, is_sub_theme);
 
             newTheme->show();
-        }
+//        }
     }
     return (long)newTheme;
 }

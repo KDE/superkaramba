@@ -128,7 +128,7 @@ void ThemeLocale::unload()
     }
 }
 
-QString ThemeLocale::translate(const QString &text) const
+KDE_EXPORT QString ThemeLocale::translate(const QString &text) const
 {
     if (text == 0)
         return QString::null;

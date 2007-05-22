@@ -95,6 +95,8 @@ void KarambaApplication::karambaStarted(Karamba *k, bool success, bool reload)
             connect(k, SIGNAL(widgetClosed(Karamba*)),
                 this, SLOT(karambaClosed(Karamba*)));
 
+            connect(k, SIGNAL(notifyTheme(const QString&, const QString&, bool)), this, SLOT(sendDataToTheme(const QString&, const QString&, bool)));
+
             if (!SuperKarambaSettings::showSysTray()) {
                 showKarambaMenuExtension();
             }
@@ -322,6 +324,15 @@ void KarambaApplication::setupSysTray(KAboutData* about)
             this, SLOT(showThemesDialog(QSystemTrayIcon::ActivationReason)));
 }
 
+void KarambaApplication::sendDataToTheme(const QString &themeName, const QString &data, bool notify)
+{
+    if (notify) {
+        themeNotify(themeName, data);
+    } else {
+        setIncomingData(themeName, data);
+    }
+}
+
 //
 // D-Bus methods
 //
@@ -349,7 +360,7 @@ void KarambaApplication::hideSystemTray(bool hide)
 
 void KarambaApplication::openNamedTheme(const QString &file, const QString &themeName, bool subTheme)
 {
-    Karamba *k = new Karamba(KUrl(file), -1, subTheme);
+    Karamba *k = new Karamba(KUrl(file), 0, -1, subTheme);
     k->setPrettyName(themeName);
     connect(k, SIGNAL(widgetStarted(Karamba*, bool, bool)),
         this, SLOT(karambaStarted(Karamba*, bool, bool)));

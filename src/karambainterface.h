@@ -38,7 +38,7 @@
 #include "meters/textlabel.h"
 #include "meters/clickarea.h"
 
-class KarambaInterface : public QObject
+class KDE_EXPORT KarambaInterface : public QObject
 {
     Q_OBJECT
 
@@ -264,7 +264,7 @@ public Q_SLOTS:
     bool attachClickArea(const Karamba *k, Meter *m, const QString &leftButton = QString(),
                          const QString &middleButton = QString(), const QString &rightButton =
                          QString()) const;
-    bool callTheme(const Karamba *k, const QString &theme, const QString &info) const;
+    bool callTheme(Karamba *k, const QString &theme, const QString &info) const;
     bool changeInterval(Karamba *k, int interval) const;
     int execute(const QString &command) const;
     QObject* createClickArea(Karamba *k, int x, int y, int width, int height,
@@ -292,7 +292,7 @@ public Q_SLOTS:
     bool run(const QString &appName, const QString &command, const QString &icon, const QStringList
             &arguments);
     QString getIncomingData(const Karamba *k) const;
-    bool setIncomingData(const Karamba *k, const QString &prettyThemeName, const QString &data) const;
+    bool setIncomingData(Karamba *k, const QString &prettyThemeName, const QString &data) const;
     bool toggleShowDesktop(const Karamba *k) const;
     bool translateAll(const Karamba *k, int x, int y) const;
     QString userLanguage(const Karamba *k) const;

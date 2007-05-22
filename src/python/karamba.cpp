@@ -412,7 +412,7 @@ KarambaPython::~KarambaPython()
     }
 }
 
-void KarambaPython::initPython()
+KDE_EXPORT void KarambaPython::initPython()
 {
     // initialize Python
     Py_Initialize();
@@ -427,7 +427,7 @@ void KarambaPython::initPython()
     PyEval_ReleaseLock();
 }
 
-void KarambaPython::shutdownPython()
+KDE_EXPORT void KarambaPython::shutdownPython()
 {
     // shut down the interpreter
     PyInterpreterState * mainInterpreterState = mainThreadState->interp;

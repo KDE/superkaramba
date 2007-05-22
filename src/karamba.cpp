@@ -77,11 +77,18 @@
 #include "themelocale.h"
 #include "superkarambasettings.h"
 
-Karamba::Karamba(const KUrl &themeFile, int instance, bool subTheme, const QPoint &startPos, bool reload)
+extern "C" {
+    KDE_EXPORT QGraphicsItem* startKaramba(const KUrl &theme, QGraphicsView *view)
+    {
+        return new Karamba(theme, view);
+    }
+}
+
+Karamba::Karamba(const KUrl &themeFile, QGraphicsView *view, int instance, bool subTheme, const QPoint &startPos, bool reload)
         : QObject(),
-        QGraphicsItemGroup(),
-        m_scene(0),
-        m_view(0),
+        QGraphicsItemGroup(0, view ? view->scene() : 0),
+        m_scene(view ? view->scene() : 0),
+        m_view(view),
         m_KWinModule(0),
         m_useKross(true),
         m_python(0),
@@ -107,7 +114,7 @@ Karamba::Karamba(const KUrl &themeFile, int instance, bool subTheme, const QPoin
         m_config(0),
         m_instance(instance),
         m_wantRightButton(false),
-        m_globalView(true),
+        m_globalView(view ? true : false),
         m_subTheme(subTheme),
         m_animation(0),
         m_timer(0),
@@ -116,9 +123,11 @@ Karamba::Karamba(const KUrl &themeFile, int instance, bool subTheme, const QPoin
         m_useAntialiasing(true),
         m_errorInInit(false)
 {
-    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    if (args->isSet("usefallback")) {
-        m_useKross = false;
+    if (!m_globalView) {
+        KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+        if (args->isSet("usefallback")) {
+            m_useKross = false;
+        }
     }
 
     QString environment = getenv("SK_FANCY");
@@ -130,7 +139,8 @@ Karamba::Karamba(const KUrl &themeFile, int instance, bool subTheme, const QPoin
     if (!environment.compare("false", Qt::CaseInsensitive)) {
         m_useAntialiasing = false;
     }
-    if (m_view == 0 && m_scene == 0) {
+
+    if (!m_globalView) {
         m_scene = new QGraphicsScene;
         m_scene->addItem(this);
         m_view = new MainWidget(m_scene);
@@ -140,7 +150,6 @@ Karamba::Karamba(const KUrl &themeFile, int instance, bool subTheme, const QPoin
                                QPainter::SmoothPixmapTransform);
         }
 
-        m_globalView = false;
         m_view->show();
     }
 
@@ -1184,9 +1193,9 @@ void Karamba::reloadConfig()
     Karamba *k = 0;
 
     if (m_globalView)
-        k = new Karamba(m_theme.getUrlPath(), -1, false, QPoint(), true);
+        k = new Karamba(m_theme.getUrlPath(), m_view, -1, false, QPoint(), true);
     else
-        k = new Karamba(m_theme.getUrlPath(), -1, false, QPoint(), true);
+        k = new Karamba(m_theme.getUrlPath(), 0, -1, false, QPoint(), true);
 
     if (k != 0) {
         emit widgetStarted(k, true, true);
@@ -1857,14 +1866,17 @@ void Karamba::notifyTheme(const QString &sender, const QString &data)
     m_interface->callThemeNotify(this, sender, data);
 }
 
-bool Karamba::sendDataToTheme(const QString &prettyThemeName, const QString &data) const
+bool Karamba::sendDataToTheme(const QString &prettyThemeName, const QString &data)
 {
+    /*
     Karamba *k = karambaApp->getKaramba(prettyThemeName);
     if (k == 0) {
         return false;
     }
 
     k->notifyTheme(m_prettyName, data);
+    */
+    emit notifyTheme(prettyThemeName, data, true);
 
     return true;
 }
@@ -1874,14 +1886,18 @@ QString Karamba::retrieveReceivedData() const
     return m_storedData;
 }
 
-bool Karamba::sendData(const QString &prettyThemeName, const QString &data) const
+bool Karamba::sendData(const QString &prettyThemeName, const QString &data)
 {
+    /*
     Karamba *k = karambaApp->getKaramba(prettyThemeName);
     if (k == 0) {
         return false;
     }
 
     k->setIncomingData(data);
+    */
+
+    emit notifyTheme(prettyThemeName, data, false);
 
     return true;
 }

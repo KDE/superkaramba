@@ -151,8 +151,8 @@ bool KarambaInterface::checkKaramba(const Karamba *k) const
         return false;
     }
 
-    if (!karambaApp->hasKaramba(k)) {
-        kWarning() << "Widget " << (long)k << " not found" << endl;
+    if (k != d->karamba) {
+        kWarning() << "Widget " << (long)k << " invalid" << endl;
         return false;
     }
 
@@ -3272,7 +3272,7 @@ bool KarambaInterface::attachClickArea(const Karamba *k, Meter *m,
 *  RETURN VALUE
 *    true if successful
 */
-bool KarambaInterface::callTheme(const Karamba *k, const QString &theme, const QString &info) const
+bool KarambaInterface::callTheme(Karamba *k, const QString &theme, const QString &info) const
 {
     if (!checkKaramba(k)) {
         return false;
@@ -3813,16 +3813,18 @@ bool KarambaInterface::managementPopup(const Karamba *k) const
 Karamba* KarambaInterface::openNamedTheme(const QString &themePath, const QString &themeName,
         bool subTheme) const
 {
+    Q_UNUSED(themeName);
+
     Karamba *newTheme = 0;
     QFileInfo file(themePath);
 
     if (file.exists()) {
-        QString prettyName(themeName);
+/*        QString prettyName(themeName);
         KarambaApplication* app = (KarambaApplication*)qApp;
-        if (!app->themeExists(prettyName)) {
-            newTheme = new Karamba(KUrl(themePath), -1, subTheme);
+        if (!app->themeExists(prettyName)) {*/
+            newTheme = new Karamba(KUrl(themePath), 0, -1, subTheme);
             newTheme->show();
-        }
+//        }
     }
     return newTheme;
 }
@@ -3964,7 +3966,7 @@ QString KarambaInterface::getIncomingData(const Karamba *k) const
 */
 
 // Is the theme path or the pretty name required?
-bool KarambaInterface::setIncomingData(const Karamba *k, const QString &prettyThemeName, const QString &data)
+bool KarambaInterface::setIncomingData(Karamba *k, const QString &prettyThemeName, const QString &data)
     const
 {
     if (checkKaramba(k)) {

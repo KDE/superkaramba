@@ -54,12 +54,12 @@ class TextField;
 class KarambaInterface;
 class KarambaPython;
 
-class Karamba : public QObject, public QGraphicsItemGroup
+class KDE_EXPORT Karamba : public QObject, public QGraphicsItemGroup
 {
     Q_OBJECT
 
 public:
-    explicit Karamba(const KUrl &themeFile, int instance = -1, bool subTheme = false, const QPoint &startPos = QPoint(), bool reload = false);
+    explicit Karamba(const KUrl &themeFile, QGraphicsView *view = 0, int instance = -1, bool subTheme = false, const QPoint &startPos = QPoint(), bool reload = false);
 
     virtual ~Karamba();
 
@@ -122,9 +122,9 @@ public:
 
     void setIncomingData(const QString &data);
     void notifyTheme(const QString &sender, const QString &data);
-    bool sendDataToTheme(const QString &prettyThemeName, const QString &data) const;
+    bool sendDataToTheme(const QString &prettyThemeName, const QString &data);
     QString retrieveReceivedData() const;
-    bool sendData(const QString &prettyThemeName, const QString &data) const;
+    bool sendData(const QString &prettyThemeName, const QString &data);
 
     void setOnTop(bool stayOnTop);
     bool isSubTheme() const;
@@ -160,6 +160,7 @@ private Q_SLOTS:
 Q_SIGNALS:
     void widgetStarted(Karamba*, bool, bool);
     void widgetClosed(Karamba*);
+    void notifyTheme(const QString&, const QString&, bool);
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);

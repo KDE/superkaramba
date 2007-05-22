@@ -181,7 +181,7 @@ void ThemesDlg::addToDesktop(QPoint pos, ThemeWidget* w)
     if (w) {
         ThemeFile* tf = w->themeFile();
         if (tf) {
-            Karamba *k = new Karamba(tf->file(), -1, false, pos);
+            Karamba *k = new Karamba(tf->file(), 0, -1, false, pos);
             connect(k, SIGNAL(widgetStarted(Karamba*, bool, bool)),
                 karambaApp, SLOT(karambaStarted(Karamba*, bool, bool)));
         }
