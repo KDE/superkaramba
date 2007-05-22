@@ -175,80 +175,8 @@ protected:
     void keyPressEvent(QKeyEvent *event);
 
 private:
-    ThemeFile m_theme;
-    QGraphicsScene *m_scene;
-    QGraphicsView *m_view;
-
-    KWindowSystem *m_KWinModule;
-
-    bool m_useKross;
-    KarambaPython *m_python;
-    KarambaInterface *m_interface;
-
-    bool m_foundKaramba;
-    bool m_onTop;
-    bool m_managed;
-
-    NETWinInfo *m_info;
-
-    QRect size;
-
-    u_int m_desktop;
-
-    u_int m_interval;
-
-    char m_tempUnit;
-
-    TextField *m_defaultTextField;
-
-    int m_scaleStep;
-    bool m_showMenu;
-
-    QList<Sensor*> m_sensorList;
-    QMap<QString, Sensor*> m_sensorMap;
-
-    KMenu *m_popupMenu;
-    KToggleAction *m_toggleLocked;
-    KMenu *m_themeConfMenu;
-    KMenu *m_toDesktopMenu;
-    KMenu *m_globalMenu;
-
-    QTimer *m_stepTimer;
-
-    QSignalMapper *m_signalMapperConfig;
-    QSignalMapper *m_signalMapperDesktop;
-
-    KConfig *m_config;
-
-    int m_instance;
-
-    QList<KMenu*> m_menuList;
-
-    QString m_prettyName;
-
-    QString m_storedData;
-
-    double m_updateTime;
-
-    bool m_wantRightButton;
-
-    QPoint m_mouseClickPos;
-
-    bool m_globalView;
-
-    bool m_subTheme;
-
-    QPoint m_themeCenter;
-
-    QGraphicsItemAnimation *m_animation;
-    QTimeLine *m_timer;
-
-    OrgKdeKdesktopBackgroundInterface* m_backgroundInterface;
-
-    bool m_useFancyEffects;
-    bool m_useAntialiasing;
-
-    bool m_errorInInit;
+    class Private;
+    Private* const d;
 
     bool parseConfig();
     Sensor *findSensorFromList(const Meter *meter) const;

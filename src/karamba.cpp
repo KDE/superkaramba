@@ -84,82 +84,201 @@ extern "C" {
     }
 }
 
+class Karamba::Private
+{
+    public:
+        ThemeFile theme;
+        QGraphicsScene *scene;
+        QGraphicsView *view;
+
+        KWindowSystem *KWinModule;
+
+        bool useKross;
+        KarambaPython *python;
+        KarambaInterface *interface;
+
+        bool foundKaramba;
+        bool onTop;
+        bool managed;
+
+        NETWinInfo *info;
+
+        QRect size;
+
+        u_int desktop;
+
+        u_int interval;
+
+        char tempUnit;
+
+        TextField *defaultTextField;
+
+        int scaleStep;
+        bool showMenu;
+
+        QList<Sensor*> sensorList;
+        QMap<QString, Sensor*> sensorMap;
+
+        KMenu *popupMenu;
+        KToggleAction *toggleLocked;
+        KMenu *themeConfMenu;
+        KMenu *toDesktopMenu;
+        KMenu *globalMenu;
+
+        QTimer *stepTimer;
+
+        QSignalMapper *signalMapperConfig;
+        QSignalMapper *signalMapperDesktop;
+
+        KConfig *config;
+
+        int instance;
+
+        QList<KMenu*> menuList;
+
+        QString prettyName;
+
+        QString storedData;
+
+        double updateTime;
+
+        bool wantRightButton;
+
+        QPoint mouseClickPos;
+
+        bool globalView;
+
+        bool subTheme;
+
+        QPoint themeCenter;
+
+        QGraphicsItemAnimation *animation;
+        QTimeLine *timer;
+
+        OrgKdeKdesktopBackgroundInterface* backgroundInterface;
+
+        bool useFancyEffects;
+        bool useAntialiasing;
+
+        bool errorInInit;
+
+        Private(QGraphicsView *view, int instance, bool subTheme) :
+            scene(view ? view->scene() : 0),
+            view(view),
+            KWinModule(0),
+            useKross(true),
+            python(0),
+            interface(0),
+            foundKaramba(false),
+            onTop(false),
+            managed(false),
+            info(0),
+            desktop(0),
+            interval(0),
+            tempUnit('C'),
+            defaultTextField(0),
+            scaleStep(-1),
+            showMenu(false),
+            popupMenu(0),
+            toggleLocked(0),
+            themeConfMenu(0),
+            toDesktopMenu(0),
+            globalMenu(0),
+            stepTimer(0),
+            signalMapperConfig(0),
+            signalMapperDesktop(0),
+            config(0),
+            instance(instance),
+            wantRightButton(false),
+            globalView(view ? true : false),
+            subTheme(subTheme),
+            animation(0),
+            timer(0),
+            backgroundInterface(0),
+            useFancyEffects(true),
+            useAntialiasing(true),
+            errorInInit(false)
+        {
+        }
+
+        ~Private()
+        {
+            delete config;
+
+            delete info;
+
+            if (python) {
+                delete python;
+            }
+
+            if (interface) {
+                delete interface;
+            }
+
+            qDeleteAll(sensorList);
+            sensorList.clear();
+
+            delete toDesktopMenu;
+            delete themeConfMenu,
+            delete toggleLocked;
+            delete popupMenu;
+
+            delete stepTimer;
+
+            delete animation;
+            delete timer;
+
+            delete backgroundInterface;
+
+            if (!globalView) {
+                delete view;
+                delete scene;
+            }
+        }
+};
+
 Karamba::Karamba(const KUrl &themeFile, QGraphicsView *view, int instance, bool subTheme, const QPoint &startPos, bool reload)
         : QObject(),
         QGraphicsItemGroup(0, view ? view->scene() : 0),
-        m_scene(view ? view->scene() : 0),
-        m_view(view),
-        m_KWinModule(0),
-        m_useKross(true),
-        m_python(0),
-        m_interface(0),
-        m_foundKaramba(false),
-        m_onTop(false),
-        m_managed(false),
-        m_info(0),
-        m_desktop(0),
-        m_interval(0),
-        m_tempUnit('C'),
-        m_defaultTextField(0),
-        m_scaleStep(-1),
-        m_showMenu(false),
-        m_popupMenu(0),
-        m_toggleLocked(0),
-        m_themeConfMenu(0),
-        m_toDesktopMenu(0),
-        m_globalMenu(0),
-        m_stepTimer(0),
-        m_signalMapperConfig(0),
-        m_signalMapperDesktop(0),
-        m_config(0),
-        m_instance(instance),
-        m_wantRightButton(false),
-        m_globalView(view ? true : false),
-        m_subTheme(subTheme),
-        m_animation(0),
-        m_timer(0),
-        m_backgroundInterface(0),
-        m_useFancyEffects(true),
-        m_useAntialiasing(true),
-        m_errorInInit(false)
+        d(new Private(view, instance, subTheme))
 {
-    if (!m_globalView) {
+    if (!d->globalView) {
         KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
         if (args->isSet("usefallback")) {
-            m_useKross = false;
+            d->useKross = false;
         }
     }
 
     QString environment = getenv("SK_FANCY");
     if (!environment.compare("false", Qt::CaseInsensitive)) {
-        m_useFancyEffects = false;
+        d->useFancyEffects = false;
     }
 
     environment = getenv("SK_AA");
     if (!environment.compare("false", Qt::CaseInsensitive)) {
-        m_useAntialiasing = false;
+        d->useAntialiasing = false;
     }
 
-    if (!m_globalView) {
-        m_scene = new QGraphicsScene;
-        m_scene->addItem(this);
-        m_view = new MainWidget(m_scene);
+    if (!d->globalView) {
+        d->scene = new QGraphicsScene;
+        d->scene->addItem(this);
+        d->view = new MainWidget(d->scene);
 
-        if (m_useAntialiasing) {
-            m_view->setRenderHints(QPainter::Antialiasing |
+        if (d->useAntialiasing) {
+            d->view->setRenderHints(QPainter::Antialiasing |
                                QPainter::SmoothPixmapTransform);
         }
 
-        m_view->show();
+        d->view->show();
     }
 
     hide();
 
-    m_view->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
+    d->view->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
 
-    if (!m_theme.set(themeFile)) {
+    if (!d->theme.set(themeFile)) {
         kDebug() << "Could not load theme file" << endl;
-        m_errorInInit = true;
+        d->errorInInit = true;
         QTimer::singleShot(0, this, SLOT(startKaramba()));
         return;
     }
@@ -168,31 +287,31 @@ Karamba::Karamba(const KUrl &themeFile, QGraphicsView *view, int instance, bool 
     connect(dirWatch, SIGNAL(dirty(const QString &)),
             SLOT(slotFileChanged(const QString &)));
 
-    if (!dirWatch->contains(m_theme.file()))
-        dirWatch->addFile(m_theme.file());
+    if (!dirWatch->contains(d->theme.file()))
+        dirWatch->addFile(d->theme.file());
 
-    if (!m_theme.isZipTheme() && m_theme.scriptModuleExists()) {
-        QString scriptFile = m_theme.path() + '/' + m_theme.scriptModule();
+    if (!d->theme.isZipTheme() && d->theme.scriptModuleExists()) {
+        QString scriptFile = d->theme.path() + '/' + d->theme.scriptModule();
         if (!dirWatch->contains(scriptFile))
             dirWatch->addFile(scriptFile);
     }
 
-    if (m_prettyName.isEmpty())
-        m_prettyName = QString("%1 - %2").arg(m_theme.name()).arg(m_instance);
+    if (d->prettyName.isEmpty())
+        d->prettyName = QString("%1 - %2").arg(d->theme.name()).arg(d->instance);
 
-    setObjectName("karamba - " + m_prettyName);
+    setObjectName("karamba - " + d->prettyName);
 
-    m_info = new NETWinInfo(QX11Info::display(), m_view->winId(),
+    d->info = new NETWinInfo(QX11Info::display(), d->view->winId(),
                             QX11Info::appRootWindow(), NET::WMState);
 
-    m_defaultTextField = new TextField();
+    d->defaultTextField = new TextField();
 
-    m_KWinModule = KWindowSystem::self();
-    connect(m_KWinModule, SIGNAL(currentDesktopChanged(int)), this,
+    d->KWinModule = KWindowSystem::self();
+    connect(d->KWinModule, SIGNAL(currentDesktopChanged(int)), this,
             SLOT(currentDesktopChanged(int)));
 
-    m_backgroundInterface = new org::kde::kdesktop::Background("org.kde.kdesktop", "/Background", QDBusConnection::sessionBus());
-    connect(m_backgroundInterface, SIGNAL(backgroundChanged(int)), this,
+    d->backgroundInterface = new org::kde::kdesktop::Background("org.kde.kdesktop", "/Background", QDBusConnection::sessionBus());
+    connect(d->backgroundInterface, SIGNAL(backgroundChanged(int)), this,
             SLOT(currentWallpaperChanged(int)));
 
     setAcceptsHoverEvents(true);
@@ -209,32 +328,32 @@ Karamba::Karamba(const KUrl &themeFile, QGraphicsView *view, int instance, bool 
     connect(TaskManager::self(), SIGNAL(startupRemoved(Startup::StartupPtr)), this,
             SLOT(startupRemoved(Startup::StartupPtr)));
 
-    m_signalMapperConfig = new QSignalMapper(this);
-    connect(m_signalMapperConfig, SIGNAL(mapped(QObject*)), this,
+    d->signalMapperConfig = new QSignalMapper(this);
+    connect(d->signalMapperConfig, SIGNAL(mapped(QObject*)), this,
             SLOT(slotToggleConfigOption(QObject*)));
 
-    m_signalMapperDesktop = new QSignalMapper(this);
-    connect(m_signalMapperDesktop, SIGNAL(mapped(int)), this,
+    d->signalMapperDesktop = new QSignalMapper(this);
+    connect(d->signalMapperDesktop, SIGNAL(mapped(int)), this,
             SLOT(slotDesktopChanged(int)));
 
     preparePopupMenu();
 
     parseConfig();
 
-    if (!(m_onTop || m_managed))
-        KWindowSystem::lowerWindow(m_view->winId());
+    if (!(d->onTop || d->managed))
+        KWindowSystem::lowerWindow(d->view->winId());
     /*
-      m_view->setFocusPolicy(Qt::StrongFocus);
-      KWindowSystem::setType(m_view->winId(), NET::Dock);
-      KWindowSystem::setState(m_view->winId(), NET::KeepBelow);
-      KWindowSystem::lowerWindow(m_view->winId());
+      d->view->setFocusPolicy(Qt::StrongFocus);
+      KWindowSystem::setType(d->view->winId(), NET::Dock);
+      KWindowSystem::setState(d->view->winId(), NET::KeepBelow);
+      KWindowSystem::lowerWindow(d->view->winId());
     */
     QString instanceString;
-    if (m_instance > 1)
-        instanceString = QString("-%1").arg(m_instance);
+    if (d->instance > 1)
+        instanceString = QString("-%1").arg(d->instance);
 
     QString cfg = QDir::home().absolutePath() + "/.superkaramba/"
-                  + m_theme.id() + instanceString + ".rc";
+                  + d->theme.id() + instanceString + ".rc";
     kDebug() << cfg << endl;
 
     QFile themeConfigFile(cfg);
@@ -245,17 +364,17 @@ Karamba::Karamba(const KUrl &themeFile, QGraphicsView *view, int instance, bool 
         themeConfigFile.close();
     }
 
-    m_config = new KConfig(cfg, KConfig::NoGlobals);
+    d->config = new KConfig(cfg, KConfig::NoGlobals);
 
     // Karamba specific Config Entries
-    KConfigGroup cg(m_config, "internal");
-    bool locked = m_toggleLocked->isChecked();
+    KConfigGroup cg(d->config, "internal");
+    bool locked = d->toggleLocked->isChecked();
     locked = cg.readEntry("lockedPosition", locked);
-    m_toggleLocked->setChecked(locked);
+    d->toggleLocked->setChecked(locked);
 
     int desktop = 0;
     desktop = cg.readEntry("desktop", desktop);
-    if (desktop > m_KWinModule->numberOfDesktops()) {
+    if (desktop > d->KWinModule->numberOfDesktops()) {
         desktop = 0;
     }
 
@@ -272,43 +391,43 @@ Karamba::Karamba(const KUrl &themeFile, QGraphicsView *view, int instance, bool 
             ypos = 0;
 
         if (startPos.isNull()) {
-            if (m_globalView) {
+            if (d->globalView) {
                     setPos(xpos, ypos);
             } else {
-                    m_view->move(xpos, ypos);
+                    d->view->move(xpos, ypos);
             }
         }
     }
 
     if (!startPos.isNull()) {
-        if (m_globalView) {
-            setPos(startPos - m_themeCenter);
+        if (d->globalView) {
+            setPos(startPos - d->themeCenter);
         } else {
-            m_view->move(startPos - m_themeCenter);
+            d->view->move(startPos - d->themeCenter);
         }
 
-        m_toggleLocked->setChecked(false);
+        d->toggleLocked->setChecked(false);
     }
 
-    if (!reload && m_useFancyEffects) {
-        m_timer = new QTimeLine(1000);
-        m_timer->setFrameRange(0, 1000);
+    if (!reload && d->useFancyEffects) {
+        d->timer = new QTimeLine(1000);
+        d->timer->setFrameRange(0, 1000);
 
-        m_animation = new QGraphicsItemAnimation;
-        m_animation->setItem(this);
-        m_animation->setTimeLine(m_timer);
+        d->animation = new QGraphicsItemAnimation;
+        d->animation->setItem(this);
+        d->animation->setTimeLine(d->timer);
 
         // Use 201 here because 200.0/200.0 < 1 => theme is still scaled
         for (int i = 0; i < 201; i++) {
-            m_animation->setScaleAt(i / 200.0, 1 / 200.0 * i, 1 / 200.0 * i);
+            d->animation->setScaleAt(i / 200.0, 1 / 200.0 * i, 1 / 200.0 * i);
             QPointF animPos(
-                boundingRect().width()/2*(1-m_animation->verticalScaleAt(i / 200.0)),
-                boundingRect().height()/2*(1-m_animation->horizontalScaleAt(i / 200.0))
+                boundingRect().width()/2*(1-d->animation->verticalScaleAt(i / 200.0)),
+                boundingRect().height()/2*(1-d->animation->horizontalScaleAt(i / 200.0))
             );
-                m_animation->setPosAt(i / 200.0, animPos);
+                d->animation->setPosAt(i / 200.0, animPos);
         }
 
-        m_timer->start();
+        d->timer->start();
     }
 
     QTimer::singleShot(0, this, SLOT(startKaramba()));
@@ -316,79 +435,49 @@ Karamba::Karamba(const KUrl &themeFile, QGraphicsView *view, int instance, bool 
 
 Karamba::~Karamba()
 {
-    m_scene->removeItem(this);
+    d->scene->removeItem(this);
 
-    delete m_config;
-
-    delete m_info;
-
-    if (m_python) {
-        delete m_python;
-    }
-
-    if (m_interface) {
-        delete m_interface;
-    }
-
-    qDeleteAll(m_sensorList);
-    m_sensorList.clear();
-
-    delete m_toDesktopMenu;
-    delete m_themeConfMenu,
-    delete m_toggleLocked;
-    delete m_popupMenu;
-
-    delete m_stepTimer;
-
-    delete m_animation;
-    delete m_timer;
-
-    delete m_backgroundInterface;
-
-    if (!m_globalView) {
-        delete m_view;
-        delete m_scene;
-    }
+    delete d;
 }
 
 void Karamba::startKaramba()
 {
-    if (m_errorInInit) {
+    if (d->errorInInit) {
         emit widgetStarted(this, false, false);
         return;
     }
 
-    if (m_theme.scriptModuleExists()) {
-        kDebug() << "Loading script module: " << m_theme.scriptModule() << endl;
+    if (d->theme.scriptModuleExists()) {
+        kDebug() << "Loading script module: " << d->theme.scriptModule() << endl;
 
-        m_stepTimer = new QTimer(this);
-        m_stepTimer->setSingleShot(true);
+        d->stepTimer = new QTimer(this);
+        d->stepTimer->setSingleShot(true);
 
-        if (!m_useKross) {
-            m_python = new KarambaPython(m_theme, false);
+        if (!d->useKross) {
+            d->python = new KarambaPython(d->theme, false);
 
             emit widgetStarted(this, true, false);
 
-            m_python->initWidget(this);
+            d->python->initWidget(this);
         } else {
-            m_interface = new KarambaInterface(this);
-            bool interpreterStarted = m_interface->initInterpreter();
+            d->interface = new KarambaInterface(this);
+            bool interpreterStarted = d->interface->initInterpreter();
 
             emit widgetStarted(this, interpreterStarted, false);
 
             if (!interpreterStarted) {
-                delete m_interface;
-                m_interface = 0;
+                delete d->interface;
+                d->interface = 0;
             } else {
-                m_interface->startInterpreter();
-                m_interface->callInitWidget(this);
+                d->interface->startInterpreter();
+                d->interface->callInitWidget(this);
             }
         }
 
         update();
 
-        connect(m_stepTimer, SIGNAL(timeout()), SLOT(step()));
-        m_stepTimer->start(m_interval);
+        connect(d->stepTimer, SIGNAL(timeout()), SLOT(step()));
+        d->stepTimer->start(d->interval);
     } else {
         emit widgetStarted(this, true, false);
     }
@@ -398,23 +487,23 @@ void Karamba::startKaramba()
 
 QString Karamba::prettyName() const
 {
-    return m_prettyName;
+    return d->prettyName;
 }
 
 void Karamba::setPrettyName(const QString &prettyThemeName)
 {
-    m_prettyName = prettyThemeName;
+    d->prettyName = prettyThemeName;
 }
 
 void Karamba::step()
 {
-    m_stepTimer->start(m_interval);
+    d->stepTimer->start(d->interval);
 
-    if (m_python)
-        m_python->widgetUpdated(this);
+    if (d->python)
+        d->python->widgetUpdated(this);
 
-    if (m_interface)
-        m_interface->callWidgetUpdated(this);
+    if (d->interface)
+        d->interface->callWidgetUpdated(this);
 
     update();
 }
@@ -430,7 +519,7 @@ bool Karamba::parseConfig()
     //qDebug("karamba::parseConfig");
     bool passive = true;
 
-    if (m_theme.open()) {
+    if (d->theme.open()) {
         QStack<QPoint> offsetStack;
         LineParser lineParser;
         int x = 0;
@@ -440,14 +529,14 @@ bool Karamba::parseConfig()
 
         offsetStack.push(QPoint(0, 0));
 
-        while (m_theme.nextLine(lineParser)) {
+        while (d->theme.nextLine(lineParser)) {
             x = lineParser.getInt("X") + offsetStack.top().x();
             y = lineParser.getInt("Y") + offsetStack.top().y();
             w = lineParser.getInt("W");
             h = lineParser.getInt("H");
 
-            if (lineParser.meter() == "KARAMBA" && !m_foundKaramba) {
-                m_toggleLocked->setChecked(lineParser.getBoolean("LOCKED"));
+            if (lineParser.meter() == "KARAMBA" && !d->foundKaramba) {
+                d->toggleLocked->setChecked(lineParser.getBoolean("LOCKED"));
 
                 x = (x < 0) ? 0 : x;
                 y = (y < 0) ? 0 : y;
@@ -460,11 +549,11 @@ bool Karamba::parseConfig()
                 // Store the center of the theme,
                 // so it can be centered when a user
                 // drags it from the theme dialog.
-                m_themeCenter = QPoint(w/2, h/2);
+                d->themeCenter = QPoint(w/2, h/2);
 
                 setFixedSize(w, h);
-                if (!m_globalView)
-                    m_view->setFixedSize(w + 5, h + 5);
+                if (!d->globalView)
+                    d->view->setFixedSize(w + 5, h + 5);
 
                 if (lineParser.getBoolean("RIGHT")) {
                     QDesktopWidget *d = QApplication::desktop();
@@ -480,43 +569,43 @@ bool Karamba::parseConfig()
                     y = 0;
                 }
 
-                if (m_globalView)
+                if (d->globalView)
                     setPos(x, y);
                 else
-                    m_view->move(x, y);
+                    d->view->move(x, y);
 
                 if (lineParser.getBoolean("ONTOP")) {
-                    m_onTop = true;
-                    KWindowSystem::setState(m_view->winId(), NET::KeepAbove);
+                    d->onTop = true;
+                    KWindowSystem::setState(d->view->winId(), NET::KeepAbove);
                 }
 
                 if (lineParser.getBoolean("MANAGED")) {
-                    m_managed = true;
+                    d->managed = true;
                     Qt::WindowFlags flags = Qt::Dialog;
                     flags & Qt::WA_DeleteOnClose;
-                    m_view->setWindowFlags(flags);
+                    d->view->setWindowFlags(flags);
                 } else {
-                    m_info->setState(NETWinInfo::SkipTaskbar
+                    d->info->setState(NETWinInfo::SkipTaskbar
                                      | NETWinInfo::SkipPager, NETWinInfo::SkipTaskbar
                                      | NETWinInfo::SkipPager);
-                    if (m_onTop) {
-                        KWindowSystem::setState(m_view->winId(), NET::KeepAbove);
+                    if (d->onTop) {
+                        KWindowSystem::setState(d->view->winId(), NET::KeepAbove);
                     }
                 }
 
                 if (lineParser.getBoolean("ONALLDESKTOPS")) {
-                    m_desktop = 200; // ugly
+                    d->desktop = 200; // ugly
                 }
 
                 bool dfound = false;
                 //int desktop = lineParser.getInt("DESKTOP", line, dfound);
                 if (dfound) {
-                    m_info->setDesktop(dfound);
+                    d->info->setDesktop(dfound);
                 }
 
                 if (lineParser.getBoolean("TOPBAR")) {
                     setPos(x, 0);
-                    KWindowSystem::setStrut(m_view->winId(), 0, 0, h, 0);
+                    KWindowSystem::setStrut(d->view->winId(), 0, 0, h, 0);
                     //toggleLocked->setChecked(true);
                     //toggleLocked->setEnabled(false);
                 }
@@ -524,7 +613,7 @@ bool Karamba::parseConfig()
                 if (lineParser.getBoolean("BOTTOMBAR")) {
                     int dh = QApplication::desktop()->height();
                     setPos(x, dh - h);
-                    KWindowSystem::setStrut(m_view->winId(), 0, 0, 0, h);
+                    KWindowSystem::setStrut(d->view->winId(), 0, 0, 0, h);
                     //toggleLocked->setChecked(true);
                     //toggleLocked->setEnabled(false);
                 }
@@ -532,21 +621,21 @@ bool Karamba::parseConfig()
                 if (lineParser.getBoolean("RIGHTBAR")) {
                     int dw = QApplication::desktop()->width();
                     setPos(dw - w, y);
-                    KWindowSystem::setStrut(m_view->winId(), 0, w, 0, 0);
+                    KWindowSystem::setStrut(d->view->winId(), 0, w, 0, 0);
                     //toggleLocked->setChecked(true);
                     //toggleLocked->setEnabled(false);
                 }
 
                 if (lineParser.getBoolean("LEFTBAR")) {
                     setPos(0, y);
-                    KWindowSystem::setStrut(m_view->winId(), w, 0, 0, 0);
+                    KWindowSystem::setStrut(d->view->winId(), w, 0, 0, 0);
                     //toggleLocked->setChecked( true );
                     //toggleLocked->setEnabled(false);
                 }
 
-                if (m_globalView)
+                if (d->globalView)
                     setFlag(QGraphicsItem::ItemIsMovable,
-                            m_toggleLocked->isChecked());
+                            d->toggleLocked->isChecked());
 
 
                 /* Masking gone
@@ -558,16 +647,16 @@ bool Karamba::parseConfig()
                 QByteArray ba;
                 if( info.isRelative() )
                 {
-                  absPath = m_theme.path();
+                  absPath = d->theme.path();
                   absPath.append(path);
-                  ba = m_theme.readThemeFile(path);
+                  ba = d->theme.readThemeFile(path);
                 }
                 else
                 {
                   absPath = path;
-                  ba = m_theme.readThemeFile(info.fileName());
+                  ba = d->theme.readThemeFile(info.fileName());
                 }
-                if(m_theme.isZipTheme())
+                if(d->theme.isZipTheme())
                 {
                   bmMask.loadFromData(ba);
                 }
@@ -575,24 +664,24 @@ bool Karamba::parseConfig()
                 {
                   bmMask.load(absPath);
                 }
-                m_view->setMask(bmMask);
+                d->view->setMask(bmMask);
                 */
 
-                m_interval = lineParser.getInt("INTERVAL");
-                m_interval = (m_interval == 0) ? 1000 : m_interval;
+                d->interval = lineParser.getInt("INTERVAL");
+                d->interval = (d->interval == 0) ? 1000 : d->interval;
 
                 QString temp = lineParser.getString("TEMPUNIT", "C").toUpper();
-                m_tempUnit = temp.at(0).toAscii();
-                m_foundKaramba = true;
+                d->tempUnit = temp.at(0).toAscii();
+                d->foundKaramba = true;
             }
 
             if (lineParser.meter() == "THEME") {
                 QString path = lineParser.getString("PATH");
                 QFileInfo info(path);
                 if (info.isRelative())
-                    path = m_theme.path() + '/' + path;
+                    path = d->theme.path() + '/' + path;
 
-                new Karamba(path/*, m_view, m_scene*/);
+                new Karamba(path/*, d->view, d->scene*/);
             }
 
             if (lineParser.meter() == "<GROUP>") {
@@ -607,7 +696,7 @@ bool Karamba::parseConfig()
             }
 
             if (lineParser.meter() == "CLICKAREA") {
-                m_view->setInteractive(true);
+                d->view->setInteractive(true);
 
                 bool preview = lineParser.getBoolean("PREVIEW");
                 ClickArea *tmp = new ClickArea(this, preview, x, y, w, h);
@@ -650,20 +739,20 @@ bool Karamba::parseConfig()
             }
 
             if (lineParser.meter() == "DEFAULTFONT") {
-                delete m_defaultTextField;
-                m_defaultTextField = new TextField();
+                delete d->defaultTextField;
+                d->defaultTextField = new TextField();
 
-                m_defaultTextField->setColor(lineParser.getColor("COLOR",
+                d->defaultTextField->setColor(lineParser.getColor("COLOR",
                                              QColor("black")));
-                m_defaultTextField->setBGColor(lineParser.getColor("BGCOLOR",
+                d->defaultTextField->setBGColor(lineParser.getColor("BGCOLOR",
                                                QColor("white")));
-                m_defaultTextField->setFont(lineParser.getString("FONT", "Helvetica"));
-                m_defaultTextField->setFontSize(lineParser.getInt("FONTSIZE", 12));
-                m_defaultTextField->setAlignment(lineParser.getString("ALIGN",
+                d->defaultTextField->setFont(lineParser.getString("FONT", "Helvetica"));
+                d->defaultTextField->setFontSize(lineParser.getInt("FONTSIZE", 12));
+                d->defaultTextField->setAlignment(lineParser.getString("ALIGN",
                                                  "LEFT"));
-                m_defaultTextField->setFixedPitch(lineParser.getBoolean("FIXEDPITCH",
+                d->defaultTextField->setFixedPitch(lineParser.getBoolean("FIXEDPITCH",
                                                   false));
-                m_defaultTextField->setShadow(lineParser.getInt("SHADOW", 0));
+                d->defaultTextField->setShadow(lineParser.getInt("SHADOW", 0));
             }
 
             if (lineParser.meter() == "TEXT" ||
@@ -672,8 +761,8 @@ bool Karamba::parseConfig()
                     lineParser.meter() == "INPUT") {
                 TextField defTxt;
 
-                if (m_defaultTextField)
-                    defTxt = *m_defaultTextField;
+                if (d->defaultTextField)
+                    defTxt = *d->defaultTextField;
 
                 TextField* tmpText = new TextField();
 
@@ -695,7 +784,7 @@ bool Karamba::parseConfig()
                 if (lineParser.meter() == "TEXT") {
                     TextLabel *tmp = new TextLabel(this, x, y, w, h);
                     tmp->setValue(
-                        m_theme.locale()->translate(lineParser.getString("VALUE")));
+                        d->theme.locale()->translate(lineParser.getString("VALUE")));
                     tmp->setTextProps(tmpText);
 
                     QString name = lineParser.getString("NAME");
@@ -706,7 +795,7 @@ bool Karamba::parseConfig()
                 }
 
                 if (lineParser.meter() == "CLICKMAP") {
-                    m_view->setInteractive(true);
+                    d->view->setInteractive(true);
 
                     ClickMap *tmp = new ClickMap(this, x, y, w, h);
                     tmp->setTextProps(tmpText);
@@ -724,7 +813,7 @@ bool Karamba::parseConfig()
                     bool dUl = lineParser.getBoolean("UNDERLINE");
 
                     tmp->setText(
-                        m_theme.locale()->translate(lineParser.getString("VALUE")), dUl);
+                        d->theme.locale()->translate(lineParser.getString("VALUE")), dUl);
                     tmp->setTextProps(tmpText);
 //          tmp->setWidth(w);
 //          tmp->setHeight(h);
@@ -747,7 +836,7 @@ bool Karamba::parseConfig()
 
                     tmp->setTextProps(tmpText);
                     tmp->setValue(
-                        m_theme.locale()->translate(lineParser.getString("VALUE")));
+                        d->theme.locale()->translate(lineParser.getString("VALUE")));
 
                     //meterList->append(tmp);
                     //passive = false;
@@ -790,18 +879,18 @@ bool Karamba::parseConfig()
             }
         }
 
-        if (passive && !m_managed) {
+        if (passive && !d->managed) {
             // Matthew Kay: set window type to "dock"
             // (plays better with taskbar themes this way)
-            //KWindowSystem::setType(m_view->winId(), NET::Dock);
+            //KWindowSystem::setType(d->view->winId(), NET::Dock);
             //KDE 3.2 addition for the always on top issues
-            //KWindowSystem::setState(m_view->winId(), NET::KeepBelow);
+            //KWindowSystem::setState(d->view->winId(), NET::KeepBelow);
         }
 
-        m_theme.close();
+        d->theme.close();
     }
     //qDebug("parseConfig ok: %d", foundKaramba);
-    if (!m_foundKaramba) {
+    if (!d->foundKaramba) {
         //  interval = initKaramba( "", 0, 0, 0, 0 );
         //   this->close(true);
         //delete this;
@@ -813,15 +902,15 @@ bool Karamba::parseConfig()
 
 TextField* Karamba::getDefaultTextProps()
 {
-    return m_defaultTextField;
+    return d->defaultTextField;
 }
 
 QString Karamba::findSensorFromMap(const Sensor* sensor) const
 {
     //qDebug("karamba::findSensorFromMap");
     QMap<QString, Sensor*>::ConstIterator it;
-    QMap<QString, Sensor*>::ConstIterator end(m_sensorMap.end());
-    for (it = m_sensorMap.begin(); it != end; ++it) {
+    QMap<QString, Sensor*>::ConstIterator end(d->sensorMap.end());
+    for (it = d->sensorMap.begin(); it != end; ++it) {
         if (it.value() == sensor)
             return it.key();
     }
@@ -830,7 +919,7 @@ QString Karamba::findSensorFromMap(const Sensor* sensor) const
 
 Sensor *Karamba::findSensorFromList(const Meter* meter) const
 {
-    foreach(Sensor *sensor, m_sensorList) {
+    foreach(Sensor *sensor, d->sensorList) {
         if (sensor->hasMeter(meter))
             return sensor;
     }
@@ -847,8 +936,8 @@ void Karamba::deleteMeterFromSensors(Meter* meter)
         sensor->deleteMeter(meter);
         if (sensor->isEmpty()) {
             QString s = findSensorFromMap(sensor);
-            m_sensorMap.remove(s);
-            m_sensorList.removeAll(sensor);
+            d->sensorMap.remove(s);
+            d->sensorList.removeAll(sensor);
             delete sensor;
         }
     }
@@ -886,18 +975,18 @@ void Karamba::setSensor(const LineParser& lineParser, Meter* meter)
 
     if (sens == "CPU") {
         QString cpuNbr = lineParser.getString("CPU");
-        sensor = m_sensorMap["CPU"+cpuNbr];
+        sensor = d->sensorMap["CPU"+cpuNbr];
 
         if (sensor == 0) {
             int interval = lineParser.getInt("INTERVAL");
             interval = (interval == 0) ? 1000 : interval;
-            sensor = (m_sensorMap["CPU" + cpuNbr] = new CPUSensor(cpuNbr, interval));
-            m_sensorList.append(sensor);
+            sensor = (d->sensorMap["CPU" + cpuNbr] = new CPUSensor(cpuNbr, interval));
+            d->sensorList.append(sensor);
         }
 
         SensorParams *sp = new SensorParams(meter);
         sp->addParam("FORMAT",
-                     m_theme.locale()->translate(lineParser.getString("FORMAT")));
+                     d->theme.locale()->translate(lineParser.getString("FORMAT")));
 
         sp->addParam("DECIMALS", lineParser.getString("DECIMALS"));
 
@@ -906,30 +995,30 @@ void Karamba::setSensor(const LineParser& lineParser, Meter* meter)
     }
 
     if (sens == "MEMORY") {
-        sensor = m_sensorMap["MEMORY"];
+        sensor = d->sensorMap["MEMORY"];
         if (sensor == 0) {
             int interval = lineParser.getInt("INTERVAL");
             interval = (interval == 0) ? 3000 : interval;
-            sensor = (m_sensorMap["MEMORY"] = new MemSensor(interval));
-            m_sensorList.append(sensor);
+            sensor = (d->sensorMap["MEMORY"] = new MemSensor(interval));
+            d->sensorList.append(sensor);
         }
 
         SensorParams *sp = new SensorParams(meter);
         sp->addParam("FORMAT",
-                     m_theme.locale()->translate(lineParser.getString("FORMAT")));
+                     d->theme.locale()->translate(lineParser.getString("FORMAT")));
 
         sensor->addMeter(sp);
         sensor->setMaxValue(sp);
     }
 
     if (sens == "DISK") {
-        sensor = m_sensorMap["DISK"];
+        sensor = d->sensorMap["DISK"];
 
         if (sensor == 0) {
             int interval = lineParser.getInt("INTERVAL");
             interval = (interval == 0) ? 5000 : interval;
-            sensor = (m_sensorMap["DISK"] = new DiskSensor(interval));
-            m_sensorList.append(sensor);
+            sensor = (d->sensorMap["DISK"] = new DiskSensor(interval));
+            d->sensorList.append(sensor);
         }
         // meter->setMax( ((DiskSensor*)sensor)->getTotalSpace(mntPt)/1024 );
         SensorParams *sp = new SensorParams(meter);
@@ -944,7 +1033,7 @@ void Karamba::setSensor(const LineParser& lineParser, Meter* meter)
         }
         sp->addParam("MOUNTPOINT", mntPt);
         sp->addParam("FORMAT",
-                     m_theme.locale()->translate(lineParser.getString("FORMAT")));
+                     d->theme.locale()->translate(lineParser.getString("FORMAT")));
         sensor->addMeter(sp);
         sensor->setMaxValue(sp);
     }
@@ -953,51 +1042,51 @@ void Karamba::setSensor(const LineParser& lineParser, Meter* meter)
         int interval = lineParser.getInt("INTERVAL");
         interval = (interval == 0) ? 2000 : interval;
         QString device = lineParser.getString("DEVICE");
-        sensor = m_sensorMap["NETWORK"+device];
+        sensor = d->sensorMap["NETWORK"+device];
 
         if (sensor == 0) {
-            sensor = (m_sensorMap["NETWORK"+device] =
+            sensor = (d->sensorMap["NETWORK"+device] =
                           new NetworkSensor(device, interval));
-            m_sensorList.append(sensor);
+            d->sensorList.append(sensor);
         }
 
         SensorParams *sp = new SensorParams(meter);
         sp->addParam("FORMAT",
-                     m_theme.locale()->translate(lineParser.getString("FORMAT")));
+                     d->theme.locale()->translate(lineParser.getString("FORMAT")));
 
         sp->addParam("DECIMALS", lineParser.getString("DECIMALS"));
         sensor->addMeter(sp);
     }
 
     if (sens == "UPTIME") {
-        sensor = m_sensorMap["UPTIME"];
+        sensor = d->sensorMap["UPTIME"];
         if (sensor == 0) {
             int interval = lineParser.getInt("INTERVAL");
             interval = (interval == 0) ? 1000 : interval;
-            sensor = (m_sensorMap["UPTIME"] = new UptimeSensor(interval));
-            m_sensorList.append(sensor);
+            sensor = (d->sensorMap["UPTIME"] = new UptimeSensor(interval));
+            d->sensorList.append(sensor);
         }
 
         SensorParams *sp = new SensorParams(meter);
         sp->addParam("FORMAT",
-                     m_theme.locale()->translate(lineParser.getString("FORMAT")));
+                     d->theme.locale()->translate(lineParser.getString("FORMAT")));
 
         sensor->addMeter(sp);
     }
 
     if (sens == "SENSOR") {
-        sensor = m_sensorMap["SENSOR"];
+        sensor = d->sensorMap["SENSOR"];
 
         if (sensor == 0) {
             int interval = lineParser.getInt("INTERVAL");
             interval = (interval == 0) ? 5000 : interval;
-            sensor = (m_sensorMap["SENSOR"] = new SensorSensor(interval, m_tempUnit));
-            m_sensorList.append(sensor);
+            sensor = (d->sensorMap["SENSOR"] = new SensorSensor(interval, d->tempUnit));
+            d->sensorList.append(sensor);
         }
 
         SensorParams *sp = new SensorParams(meter);
         sp->addParam("FORMAT",
-                     m_theme.locale()->translate(lineParser.getString("FORMAT")));
+                     d->theme.locale()->translate(lineParser.getString("FORMAT")));
         sp->addParam("TYPE", lineParser.getString("TYPE"));
         sensor->addMeter(sp);
     }
@@ -1005,16 +1094,16 @@ void Karamba::setSensor(const LineParser& lineParser, Meter* meter)
     if (sens == "TEXTFILE") {
         QString path = lineParser.getString("PATH");
         bool rdf = lineParser.getBoolean("RDF");
-        sensor = m_sensorMap["TEXTFILE"+path];
+        sensor = d->sensorMap["TEXTFILE"+path];
 
         if (sensor == 0) {
             int interval = lineParser.getInt("INTERVAL");
             interval = (interval == 0) ? 60000 : interval;
             QString encoding = lineParser.getString("ENCODING");
 
-            sensor = (m_sensorMap["TEXTFILE"+path] =
+            sensor = (d->sensorMap["TEXTFILE"+path] =
                           new TextFileSensor(path, rdf, interval, encoding));
-            m_sensorList.append(sensor);
+            d->sensorList.append(sensor);
         }
 
         SensorParams *sp = new SensorParams(meter);
@@ -1022,17 +1111,17 @@ void Karamba::setSensor(const LineParser& lineParser, Meter* meter)
     }
 
     if (sens == "TIME") {
-        sensor = m_sensorMap["DATE"];
+        sensor = d->sensorMap["DATE"];
         if (sensor == 0) {
             int interval = lineParser.getInt("INTERVAL");
             interval = (interval == 0) ? 1000 : interval;
-            sensor = (m_sensorMap["DATE"] = new DateSensor(interval));
-            m_sensorList.append(sensor);
+            sensor = (d->sensorMap["DATE"] = new DateSensor(interval));
+            d->sensorList.append(sensor);
         }
         SensorParams *sp = new SensorParams(meter);
 
         sp->addParam("FORMAT",
-                     m_theme.locale()->translate(lineParser.getString("FORMAT")));
+                     d->theme.locale()->translate(lineParser.getString("FORMAT")));
         sp->addParam("CALWIDTH", lineParser.getString("CALWIDTH"));
         sp->addParam("CALHEIGHT", lineParser.getString("CALHEIGHT"));
 
@@ -1053,7 +1142,7 @@ void Karamba::setSensor(const LineParser& lineParser, Meter* meter)
         }
         SensorParams *sp = new SensorParams(meter);
         sp->addParam("FORMAT",
-                     m_theme.locale()->translate(lineParser.getString("FORMAT")));
+                     d->theme.locale()->translate(lineParser.getString("FORMAT")));
         sensor->addMeter(sp);
         sensor->setMaxValue(sp);
     }
@@ -1075,7 +1164,7 @@ void Karamba::setSensor(const LineParser& lineParser, Meter* meter)
         }
         SensorParams *sp = new SensorParams(meter);
         sp->addParam("FORMAT",
-                     m_theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
+                     d->theme.locale()->translate(lineParser.getString("FORMAT").ascii()));
         sensor->addMeter(sp);
         sensor->setMaxValue(sp);
       }
@@ -1083,7 +1172,7 @@ void Karamba::setSensor(const LineParser& lineParser, Meter* meter)
 
     if (sens == "PROGRAM") {
         QString progName = lineParser.getString("PROGRAM");
-        sensor = m_sensorMap["PROGRAM"+progName];
+        sensor = d->sensorMap["PROGRAM"+progName];
 
         if (sensor == 0) {
             int interval = lineParser.getInt("INTERVAL");
@@ -1091,31 +1180,31 @@ void Karamba::setSensor(const LineParser& lineParser, Meter* meter)
             interval = (interval == 0) ? 60000 : interval;
             QString encoding = lineParser.getString("ENCODING");
 
-            sensor = (m_sensorMap["PROGRAM"+progName] =
+            sensor = (d->sensorMap["PROGRAM"+progName] =
                           new ProgramSensor(progName, interval, encoding));
-            m_sensorList.append(sensor);
+            d->sensorList.append(sensor);
         }
 
         SensorParams *sp = new SensorParams(meter);
         sp->addParam("LINE", QString::number(lineParser.getInt("LINE")));
-        sp->addParam("THEMAPATH", m_theme.path());
+        sp->addParam("THEMAPATH", d->theme.path());
         sensor->addMeter(sp);
     }
 
     if (sens == "RSS") {
         QString source = lineParser.getString("SOURCE");
         QString format =
-            m_theme.locale()->translate(lineParser.getString("FORMAT"));
+            d->theme.locale()->translate(lineParser.getString("FORMAT"));
 
-        sensor = m_sensorMap["RSS"+source];
+        sensor = d->sensorMap["RSS"+source];
         if (sensor == 0) {
             int interval = lineParser.getInt("INTERVAL");
             interval = (interval == 0) ? 60000 : interval;
             QString encoding = lineParser.getString("ENCODING");
 
-            sensor = (m_sensorMap["RSS"+source] =
+            sensor = (d->sensorMap["RSS"+source] =
                           new RssSensor(source, interval, format, encoding));
-            m_sensorList.append(sensor);
+            d->sensorList.append(sensor);
         }
         SensorParams *sp = new SensorParams(meter);
         sp->addParam("SOURCE", lineParser.getString("SOURCE"));
@@ -1132,24 +1221,24 @@ void Karamba::setSensor(const LineParser& lineParser, Meter* meter)
 
 void Karamba::updateSensors()
 {
-    foreach(Sensor *sensor, m_sensorList)
+    foreach(Sensor *sensor, d->sensorList)
     sensor->update();
 }
 
 void Karamba::slotToggleLocked()
 {
-    if (m_globalView)
+    if (d->globalView)
         setFlag(QGraphicsItem::ItemIsMovable,
-                m_toggleLocked->isChecked());
+                d->toggleLocked->isChecked());
 }
 
 void Karamba::closeWidget()
 {
-    if (m_python)
-        m_python->widgetClosed(this);
+    if (d->python)
+        d->python->widgetClosed(this);
 
-    if (m_interface)
-        m_interface->callWidgetClosed(this);
+    if (d->interface)
+        d->interface->callWidgetClosed(this);
 
     writeConfigData();
 
@@ -1158,21 +1247,21 @@ void Karamba::closeWidget()
 
 KConfig* Karamba::getConfig() const
 {
-    return m_config;
+    return d->config;
 }
 
 void Karamba::writeConfigData()
 {
-    KConfigGroup cg(m_config, "internal");
-    cg.writeEntry("lockedPosition", m_toggleLocked-> isChecked());
-    cg.writeEntry("desktop", m_desktop);
+    KConfigGroup cg(d->config, "internal");
+    cg.writeEntry("lockedPosition", d->toggleLocked-> isChecked());
+    cg.writeEntry("desktop", d->desktop);
 
     cg.changeGroup("theme");
 
     // Widget Position
-    if (!m_globalView) {
-        cg.writeEntry("widgetPosX", m_view->x());
-        cg.writeEntry("widgetPosY", m_view->y());
+    if (!d->globalView) {
+        cg.writeEntry("widgetPosX", d->view->x());
+        cg.writeEntry("widgetPosY", d->view->y());
     } else {
         cg.writeEntry("widgetPosX", x());
         cg.writeEntry("widgetPosY", y());
@@ -1183,7 +1272,7 @@ void Karamba::writeConfigData()
     cg.writeEntry("widgetHeight", boundingRect().height());
 
     // write changes to DiskSensor
-    m_config->sync();
+    d->config->sync();
 }
 
 void Karamba::reloadConfig()
@@ -1192,10 +1281,10 @@ void Karamba::reloadConfig()
 
     Karamba *k = 0;
 
-    if (m_globalView)
-        k = new Karamba(m_theme.getUrlPath(), m_view, -1, false, QPoint(), true);
+    if (d->globalView)
+        k = new Karamba(d->theme.getUrlPath(), d->view, -1, false, QPoint(), true);
     else
-        k = new Karamba(m_theme.getUrlPath(), 0, -1, false, QPoint(), true);
+        k = new Karamba(d->theme.getUrlPath(), 0, -1, false, QPoint(), true);
 
     if (k != 0) {
         emit widgetStarted(k, true, true);
@@ -1207,62 +1296,62 @@ void Karamba::reloadConfig()
 void Karamba::setOnTop(bool stayOnTop)
 {
     if (stayOnTop) {
-        KWindowSystem::setState(m_view->winId(), NET::KeepAbove);
+        KWindowSystem::setState(d->view->winId(), NET::KeepAbove);
     } else {
-        KWindowSystem::setState(m_view->winId(), NET::KeepBelow);
+        KWindowSystem::setState(d->view->winId(), NET::KeepBelow);
     }
 
-    m_onTop = stayOnTop;
+    d->onTop = stayOnTop;
 }
 
 void Karamba::preparePopupMenu()
 {
-    m_popupMenu = new KMenu();
+    d->popupMenu = new KMenu();
 
-    m_popupMenu->addAction(KIcon("view-refresh"), i18n("Update"), this,
+    d->popupMenu->addAction(KIcon("view-refresh"), i18n("Update"), this,
                            SLOT(updateSensors()), Qt::Key_F5);
 
-    m_toggleLocked = new KToggleAction(KIcon("move"), i18n("Toggle &Locked Position"), this);
-    m_toggleLocked->setShortcut(KShortcut(Qt::CTRL + Qt::Key_L));
-    m_toggleLocked->setCheckedState(KGuiItem("Toggle &Locked Position",
+    d->toggleLocked = new KToggleAction(KIcon("move"), i18n("Toggle &Locked Position"), this);
+    d->toggleLocked->setShortcut(KShortcut(Qt::CTRL + Qt::Key_L));
+    d->toggleLocked->setCheckedState(KGuiItem("Toggle &Locked Position",
                                     KIcon("system-lock-screen")));
-    connect(m_toggleLocked, SIGNAL(triggered()), this, SLOT(slotToggleLocked()));
-    m_popupMenu->addAction(m_toggleLocked);
+    connect(d->toggleLocked, SIGNAL(triggered()), this, SLOT(slotToggleLocked()));
+    d->popupMenu->addAction(d->toggleLocked);
 
-    m_popupMenu->addSeparator();
+    d->popupMenu->addSeparator();
 
-    m_themeConfMenu = new KMenu();
-    m_themeConfMenu->setTitle(i18n("Configure &Theme"));
-    QAction *newAC = m_popupMenu->addMenu(m_themeConfMenu);
+    d->themeConfMenu = new KMenu();
+    d->themeConfMenu->setTitle(i18n("Configure &Theme"));
+    QAction *newAC = d->popupMenu->addMenu(d->themeConfMenu);
     newAC->setVisible(false);
 
-    m_toDesktopMenu = new KMenu();
-    m_toDesktopMenu->setTitle(i18n("To Des&ktop"));
-    m_popupMenu->addMenu(m_toDesktopMenu);
+    d->toDesktopMenu = new KMenu();
+    d->toDesktopMenu->setTitle(i18n("To Des&ktop"));
+    d->popupMenu->addMenu(d->toDesktopMenu);
 
-    QAction *allDesktop = m_toDesktopMenu->addAction((i18n("&All Desktops")));
-    connect(allDesktop, SIGNAL(triggered()), m_signalMapperDesktop, SLOT(map()));
+    QAction *allDesktop = d->toDesktopMenu->addAction((i18n("&All Desktops")));
+    connect(allDesktop, SIGNAL(triggered()), d->signalMapperDesktop, SLOT(map()));
     allDesktop->setCheckable(true);
-    m_signalMapperDesktop->setMapping(allDesktop, 0);
+    d->signalMapperDesktop->setMapping(allDesktop, 0);
 
-    for (int desktop = 1; desktop <= m_KWinModule->numberOfDesktops(); desktop++) {
+    for (int desktop = 1; desktop <= d->KWinModule->numberOfDesktops(); desktop++) {
         QString name = i18n("Desktop");
         name += QString(" &%1").arg(desktop);
-        QAction* action = m_toDesktopMenu->addAction(name);
+        QAction* action = d->toDesktopMenu->addAction(name);
         action->setCheckable(true);
-        connect(action, SIGNAL(triggered()), m_signalMapperDesktop, SLOT(map()));
-        m_signalMapperDesktop->setMapping(action, desktop);
+        connect(action, SIGNAL(triggered()), d->signalMapperDesktop, SLOT(map()));
+        d->signalMapperDesktop->setMapping(action, desktop);
     }
 
-    m_popupMenu->addAction(KIcon("reload3"), i18n("&Reload Theme"), this,
+    d->popupMenu->addAction(KIcon("reload3"), i18n("&Reload Theme"), this,
                            SLOT(reloadConfig()), Qt::CTRL + Qt::Key_R);
-    m_popupMenu->addAction(KIcon("window-close"), i18n("&Close This Theme"), this,
+    d->popupMenu->addAction(KIcon("window-close"), i18n("&Close This Theme"), this,
                            SLOT(closeWidget()), Qt::CTRL + Qt::Key_C);
 }
 
 void Karamba::slotDesktopChanged(int desktop)
 {
-    QList<QAction*> actions = m_toDesktopMenu->actions();
+    QList<QAction*> actions = d->toDesktopMenu->actions();
 
     for (int i = 0; i < actions.count(); i++) {
         if (i == desktop)
@@ -1272,52 +1361,52 @@ void Karamba::slotDesktopChanged(int desktop)
     }
 
     if (desktop)
-        m_info->setDesktop(desktop);
+        d->info->setDesktop(desktop);
     else
-        m_info->setDesktop(NETWinInfo::OnAllDesktops);
+        d->info->setDesktop(NETWinInfo::OnAllDesktops);
 }
 
 void Karamba::currentWallpaperChanged(int desktop)
 {
-    if (m_python) {
-        m_python->wallpaperChanged(this, desktop);
+    if (d->python) {
+        d->python->wallpaperChanged(this, desktop);
     }
 
-    if (m_interface) {
-        m_interface->callWallpaperChanged(this, desktop);
+    if (d->interface) {
+        d->interface->callWallpaperChanged(this, desktop);
     }
 }
 
 void Karamba::addMenuConfigOption(const QString &key, const QString &name)
 {
-    m_themeConfMenu->menuAction()->setVisible(true);
+    d->themeConfMenu->menuAction()->setVisible(true);
 
     KAction *newAction = new KToggleAction(name, this);
 
     newAction->setObjectName(key);
-    connect(newAction, SIGNAL(triggered()), m_signalMapperConfig, SLOT(map()));
-    m_signalMapperConfig->setMapping(newAction, newAction);
-    m_themeConfMenu->addAction(newAction);
+    connect(newAction, SIGNAL(triggered()), d->signalMapperConfig, SLOT(map()));
+    d->signalMapperConfig->setMapping(newAction, newAction);
+    d->themeConfMenu->addAction(newAction);
 
-    newAction->setChecked(m_config->group("config menu").readEntry(key, false));
+    newAction->setChecked(d->config->group("config menu").readEntry(key, false));
 }
 
 void Karamba::slotToggleConfigOption(QObject* sender)
 {
     KToggleAction *action = (KToggleAction*)sender;
 
-    m_config->group("config menu").writeEntry(action->objectName(), action->isChecked());
+    d->config->group("config menu").writeEntry(action->objectName(), action->isChecked());
 
-    if (m_python)
-        m_python->menuOptionChanged(this, action->objectName(), action->isChecked());
+    if (d->python)
+        d->python->menuOptionChanged(this, action->objectName(), action->isChecked());
 
-    if (m_interface)
-        m_interface->callMenuOptionChanged(this, action->objectName(), action->isChecked());
+    if (d->interface)
+        d->interface->callMenuOptionChanged(this, action->objectName(), action->isChecked());
 }
 
 bool Karamba::setMenuConfigOption(const QString &key, bool value)
 {
-    QList<QAction*> actions = m_themeConfMenu->actions();
+    QList<QAction*> actions = d->themeConfMenu->actions();
     QAction *action;
     foreach(action, actions) {
         if (action->objectName() == key) {
@@ -1331,7 +1420,7 @@ bool Karamba::setMenuConfigOption(const QString &key, bool value)
 
 bool Karamba::readMenuConfigOption(const QString &key) const
 {
-    QList<QAction*> actions = m_themeConfMenu->actions();
+    QList<QAction*> actions = d->themeConfMenu->actions();
     QAction *action;
     foreach(action, actions) {
         if (action->objectName() == key) {
@@ -1349,7 +1438,7 @@ KMenu *Karamba::addPopupMenu()
     connect(tmp, SIGNAL(triggered(QAction*)), this,
             SLOT(passMenuItemClicked(QAction*)));
 
-    m_menuList.append(tmp);
+    d->menuList.append(tmp);
     return tmp;
 }
 
@@ -1362,20 +1451,20 @@ QAction* Karamba::addMenuItem(KMenu *menu, const QString &text, const QString &i
 void Karamba::popupMenu(KMenu *menu, const QPoint &pos) const
 {
 //  QPoint diff = mapToGlobal(QGraphicsItemGroup::pos().toPoint()).toPoint();
-    menu->popup(m_view->pos() + pos + boundingRect().toRect().topLeft());
+    menu->popup(d->view->pos() + pos + boundingRect().toRect().topLeft());
 }
 
 void Karamba::deletePopupMenu(KMenu *menu)
 {
-    int index = m_menuList.indexOf(menu);
-    m_menuList.takeAt(index);
+    int index = d->menuList.indexOf(menu);
+    d->menuList.takeAt(index);
 
     delete menu;
 }
 
 void Karamba::deleteMenuItem(QAction *action)
 {
-    foreach(KMenu* menu, m_menuList) {
+    foreach(KMenu* menu, d->menuList) {
         QList<QAction*> actions = menu->actions();
         if (actions.contains(action)) {
             menu->removeAction(action);
@@ -1386,7 +1475,7 @@ void Karamba::deleteMenuItem(QAction *action)
 
 bool Karamba::popupMenuExisting(const KMenu *menu) const
 {
-    return m_menuList.contains(const_cast<KMenu*>(menu));
+    return d->menuList.contains(const_cast<KMenu*>(menu));
 }
 
 void Karamba::scaleImageLabel(Meter *meter, int width,
@@ -1407,17 +1496,17 @@ void Karamba::moveMeter(Meter *meter, int x, int y) const
 
 void Karamba::passMenuItemClicked(QAction* action)
 {
-    if (m_python)
-        m_python->menuItemClicked(this, (KMenu*)action->parentWidget(), (long)action);
+    if (d->python)
+        d->python->menuItemClicked(this, (KMenu*)action->parentWidget(), (long)action);
 
-    if (m_interface)
-        m_interface->callMenuItemClicked(this, (KMenu*)action->parentWidget(), action);
+    if (d->interface)
+        d->interface->callMenuItemClicked(this, (KMenu*)action->parentWidget(), action);
 
 }
 
 void Karamba::popupGlobalMenu() const
 {
-    m_popupMenu->popup(QCursor::pos());
+    d->popupMenu->popup(QCursor::pos());
 }
 
 bool Karamba::hasMeter(const Meter* meter) const
@@ -1428,7 +1517,7 @@ bool Karamba::hasMeter(const Meter* meter) const
 
 QRectF Karamba::boundingRect() const
 {
-    return size;
+    return d->size;
 }
 
 void Karamba::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
@@ -1439,10 +1528,10 @@ void Karamba::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     Q_UNUSED(widget);
     //painter->drawText(0,0,"test");
     /*
-    if(m_showMenu || m_scaleStep > 0)
+    if(d->showMenu || d->scaleStep > 0)
     {
       setZValue(1);
-      painter->setOpacity(0.075*m_scaleStep);
+      painter->setOpacity(0.075*d->scaleStep);
       painter->setBrush(Qt::gray);
       painter->setPen(Qt::gray);
 
@@ -1458,93 +1547,93 @@ void Karamba::timerEvent(QTimerEvent *event)
     Q_UNUSED(event);
     /*
       QGraphicsItem *item;
-      QList<QGraphicsItem*> items = m_view->items
+      QList<QGraphicsItem*> items = d->view->items
                                     (mapToScene(boundingRect()).toPolygon());
       foreach(item, items)
       {
-        ((Meter*)item)->setOpacity(1-0.05*m_scaleStep);
+        ((Meter*)item)->setOpacity(1-0.05*d->scaleStep);
       }
 
-      if(m_showMenu)
-        m_scaleStep++;
+      if(d->showMenu)
+        d->scaleStep++;
       else
-        m_scaleStep--;
+        d->scaleStep--;
 
       update();
 
-      if((m_scaleStep == -1) || (m_scaleStep == 10))
+      if((d->scaleStep == -1) || (d->scaleStep == 10))
         killTimer(event->timerId());
     */
 }
 
 void Karamba::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
-    if (!m_wantRightButton) {
-        m_popupMenu->exec(event->screenPos());
+    if (!d->wantRightButton) {
+        d->popupMenu->exec(event->screenPos());
     }
 }
 
 void Karamba::activeTaskChanged(Task::TaskPtr t)
 {
-    if (m_python)
-        m_python->activeTaskChanged(this, t.data());
+    if (d->python)
+        d->python->activeTaskChanged(this, t.data());
 
-    if (m_interface)
-        m_interface->callActiveTaskChanged(this, t.data());
+    if (d->interface)
+        d->interface->callActiveTaskChanged(this, t.data());
 }
 
 void Karamba::taskAdded(Task::TaskPtr t)
 {
-    if (m_python)
-        m_python->taskAdded(this, t.data());
+    if (d->python)
+        d->python->taskAdded(this, t.data());
 
-    if (m_interface)
-        m_interface->callTaskAdded(this, t.data());
+    if (d->interface)
+        d->interface->callTaskAdded(this, t.data());
 }
 
 void Karamba::taskRemoved(Task::TaskPtr t)
 {
-    if (m_python)
-        m_python->taskRemoved(this, t.data());
+    if (d->python)
+        d->python->taskRemoved(this, t.data());
 
-    if (m_interface)
-        m_interface->callTaskRemoved(this, t.data());
+    if (d->interface)
+        d->interface->callTaskRemoved(this, t.data());
 }
 
 void Karamba::startupAdded(Startup::StartupPtr t)
 {
-    if (m_python)
-        m_python->startupAdded(this, t.data());
+    if (d->python)
+        d->python->startupAdded(this, t.data());
 
-    if (m_interface)
-        m_interface->callStartupAdded(this, t.data());
+    if (d->interface)
+        d->interface->callStartupAdded(this, t.data());
 }
 
 void Karamba::startupRemoved(Startup::StartupPtr t)
 {
-    if (m_python)
-        m_python->startupRemoved(this, t.data());
+    if (d->python)
+        d->python->startupRemoved(this, t.data());
 
-    if (m_interface)
-        m_interface->callStartupRemoved(this, t.data());
+    if (d->interface)
+        d->interface->callStartupRemoved(this, t.data());
 }
 
 void Karamba::processExited(K3Process* proc)
 {
-    if (m_python)
-        m_python->commandFinished(this, (int)proc->pid());
+    if (d->python)
+        d->python->commandFinished(this, (int)proc->pid());
 
-    if (m_interface)
-        m_interface->callCommandFinished(this, (int)proc->pid());
+    if (d->interface)
+        d->interface->callCommandFinished(this, (int)proc->pid());
 }
 
 void Karamba::receivedStdout(K3Process *proc, char *buffer, int)
 {
-    if (m_python)
-        m_python->commandOutput(this, (int)proc->pid(), buffer);
+    if (d->python)
+        d->python->commandOutput(this, (int)proc->pid(), buffer);
 
-    if (m_interface)
-        m_interface->callCommandOutput(this, (int)proc->pid(), buffer);
+    if (d->interface)
+        d->interface->callCommandOutput(this, (int)proc->pid(), buffer);
 }
 
 void Karamba::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
@@ -1557,12 +1646,12 @@ void Karamba::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
 void Karamba::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
     if (event->mimeData()->hasText()) {
-        if (m_python)
-            m_python->itemDropped(this, event->mimeData()->text(),
+        if (d->python)
+            d->python->itemDropped(this, event->mimeData()->text(),
                                   (int)event->pos().x(), (int)event->pos().y());
 
-        if (m_interface)
-            m_interface->callItemDropped(this, event->mimeData()->text(),
+        if (d->interface)
+            d->interface->callItemDropped(this, event->mimeData()->text(),
                                          (int)event->pos().x(), (int)event->pos().y());
 
     }
@@ -1570,28 +1659,28 @@ void Karamba::dropEvent(QGraphicsSceneDragDropEvent *event)
 
 void Karamba::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    m_mouseClickPos = event->pos().toPoint();
+    d->mouseClickPos = event->pos().toPoint();
 
-    if (!m_toggleLocked->isChecked())
+    if (!d->toggleLocked->isChecked())
         return;
 
     int button = passEvent(event);
 
-    if (m_python)
-        m_python->widgetClicked(this, (int)event->pos().x(),
+    if (d->python)
+        d->python->widgetClicked(this, (int)event->pos().x(),
                                 (int)event->pos().y(), button);
 
-    if (m_interface)
-        m_interface->callWidgetClicked(this, (int)event->pos().x(),
+    if (d->interface)
+        d->interface->callWidgetClicked(this, (int)event->pos().x(),
                                        (int)event->pos().y(), button);
 }
 
 void Karamba::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    if (!m_toggleLocked->isChecked())
+    if (!d->toggleLocked->isChecked())
         return;
 
-    QList<QGraphicsItem*>items = m_scene->items(mapToScene(event->pos()));
+    QList<QGraphicsItem*>items = d->scene->items(mapToScene(event->pos()));
     foreach (QGraphicsItem *item, items) {
         if (Input *input = dynamic_cast<Input*>(item)) {
             input->mouseEventRelease(event);
@@ -1601,16 +1690,16 @@ void Karamba::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
 void Karamba::setWantRightButton(bool enable)
 {
-    m_wantRightButton = enable;
+    d->wantRightButton = enable;
 }
 
 void Karamba::currentDesktopChanged(int i)
 {
-    if (m_python)
-        m_python->desktopChanged(this, i);
+    if (d->python)
+        d->python->desktopChanged(this, i);
 
-    if (m_interface)
-        m_interface->callDesktopChanged(this, i);
+    if (d->interface)
+        d->interface->callDesktopChanged(this, i);
 }
 
 int Karamba::passEvent(QEvent *e)
@@ -1620,7 +1709,7 @@ int Karamba::passEvent(QEvent *e)
     int button = 0;
 
     if (QGraphicsSceneMouseEvent *event = dynamic_cast<QGraphicsSceneMouseEvent*>(e)) {
-        items = m_scene->items(mapToScene(event->pos()));
+        items = d->scene->items(mapToScene(event->pos()));
         pos = event->pos();
 
         if (event->button() == Qt::LeftButton)
@@ -1630,7 +1719,7 @@ int Karamba::passEvent(QEvent *e)
         else if (event->button() == Qt::RightButton)
             button = 3;
     } else if (QGraphicsSceneWheelEvent *event = dynamic_cast<QGraphicsSceneWheelEvent*>(e)) {
-        items = m_scene->items(mapToScene(event->pos()));
+        items = d->scene->items(mapToScene(event->pos()));
         pos = event->pos();
 
         if (event->delta() > 0)
@@ -1639,7 +1728,7 @@ int Karamba::passEvent(QEvent *e)
             button = 5;
     }
 
-    if (button == 3 && !m_wantRightButton) {
+    if (button == 3 && !d->wantRightButton) {
         return 0;
     }
 
@@ -1663,10 +1752,10 @@ int Karamba::passEvent(QEvent *e)
             pass = rich->mouseEvent(e);
             if (pass) {
                 QString anchor = rich->getAnchor(pos);
-                if (m_python)
-                    m_python->meterClicked(this, anchor.toAscii().data(), button);
-                if (m_interface)
-                    m_interface->callMeterClicked(this, anchor, button);
+                if (d->python)
+                    d->python->meterClicked(this, anchor.toAscii().data(), button);
+                if (d->interface)
+                    d->interface->callMeterClicked(this, anchor, button);
             }
         }
 
@@ -1676,11 +1765,11 @@ int Karamba::passEvent(QEvent *e)
         }
 
         if (pass && allowClick) {
-            if (m_python)
-                m_python->meterClicked(this, (Meter*)item, button);
+            if (d->python)
+                d->python->meterClicked(this, (Meter*)item, button);
 
-            if (m_interface)
-                m_interface->callMeterClicked(this, (Meter*)item, button);
+            if (d->interface)
+                d->interface->callMeterClicked(this, (Meter*)item, button);
         }
     }
 
@@ -1691,58 +1780,58 @@ void Karamba::wheelEvent(QGraphicsSceneWheelEvent *event)
 {
     int button = passEvent(event);
 
-    if (m_python)
-        m_python->widgetClicked(this, (int)event->pos().x(), (int)event->pos().y(), button);
+    if (d->python)
+        d->python->widgetClicked(this, (int)event->pos().x(), (int)event->pos().y(), button);
 
-    if (m_interface)
-        m_interface->callWidgetClicked(this, (int)event->pos().x(), (int)event->pos().y(), button);
+    if (d->interface)
+        d->interface->callWidgetClicked(this, (int)event->pos().x(), (int)event->pos().y(), button);
 }
 
 void Karamba::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
 {
-    QList<QGraphicsItem*>items = m_scene->items(mapToScene(event->pos()));
+    QList<QGraphicsItem*>items = d->scene->items(mapToScene(event->pos()));
     foreach (QGraphicsItem *item, items) {
         if (Input *input = dynamic_cast<Input*>(item)) {
             input->mouseEventMove(event);
         }
     }
 
-    if (m_python)
-        m_python->widgetMouseMoved(this, (int)event->pos().x(), (int)event->pos().y(), 0/*button*/);
+    if (d->python)
+        d->python->widgetMouseMoved(this, (int)event->pos().x(), (int)event->pos().y(), 0/*button*/);
 
-    if (m_interface)
-        m_interface->callWidgetMouseMoved(this, (int)event->pos().x(), (int)event->pos().y(), 0/*button*/);
+    if (d->interface)
+        d->interface->callWidgetMouseMoved(this, (int)event->pos().x(), (int)event->pos().y(), 0/*button*/);
 
 }
 
 QGraphicsScene* Karamba::getScene() const
 {
-    return m_scene;
+    return d->scene;
 }
 
 QGraphicsView* Karamba::getView() const
 {
-    return m_view;
+    return d->view;
 }
 
 int Karamba::getNumberOfDesktops() const
 {
-    return m_KWinModule->numberOfDesktops();
+    return d->KWinModule->numberOfDesktops();
 }
 
 void Karamba::changeInterval(u_int newInterval)
 {
-    m_interval = newInterval;
+    d->interval = newInterval;
 }
 
 double Karamba::getUpdateTime() const
 {
-    return m_updateTime;
+    return d->updateTime;
 }
 
 void Karamba::setUpdateTime(double newTime)
 {
-    m_updateTime = newTime;
+    d->updateTime = newTime;
 }
 
 void Karamba::keyPressed(const QString& s, const Meter* meter)
@@ -1751,31 +1840,31 @@ void Karamba::keyPressed(const QString& s, const Meter* meter)
       return;
     }
 
-    if (m_python) {
-        m_python->keyPressed(this, meter, s);
+    if (d->python) {
+        d->python->keyPressed(this, meter, s);
     }
 
-    if (m_interface) {
-        m_interface->callKeyPressed(this, (Meter*)meter, s);
+    if (d->interface) {
+        d->interface->callKeyPressed(this, (Meter*)meter, s);
     }
 }
 
 void Karamba::setFixedSize(u_int w, u_int h)
 {
-    size.setWidth(w);
-    size.setHeight(h);
+    d->size.setWidth(w);
+    d->size.setHeight(h);
 }
 
 const ThemeFile& Karamba::theme() const
 {
-    return m_theme;
+    return d->theme;
 }
 
 void Karamba::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    if (!m_globalView) {
-        if (!m_toggleLocked->isChecked())
-            m_view->move(event->screenPos() - m_mouseClickPos);
+    if (!d->globalView) {
+        if (!d->toggleLocked->isChecked())
+            d->view->move(event->screenPos() - d->mouseClickPos);
     } else {
         event->ignore();
         QGraphicsItemGroup::mouseMoveEvent(event);
@@ -1784,7 +1873,7 @@ void Karamba::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void Karamba::keyPressEvent(QKeyEvent *event)
 {
-    QGraphicsItem *item = m_scene->focusItem();
+    QGraphicsItem *item = d->scene->focusItem();
 
     if (Input* input = dynamic_cast<Input*>(item)) {
         if (input && input->hasFocus()) {
@@ -1797,73 +1886,73 @@ void Karamba::keyPressEvent(QKeyEvent *event)
 
 void Karamba::slotFileChanged(const QString &file)
 {
-    QString pythonFile = m_theme.path() + '/' + m_theme.scriptModule();
-    if (file == m_theme.file() || file == pythonFile) {
+    QString pythonFile = d->theme.path() + '/' + d->theme.scriptModule();
+    if (file == d->theme.file() || file == pythonFile) {
         reloadConfig();
     }
 }
 
 void Karamba::setMenuExtension(KMenu *menu)
 {
-    m_popupMenu->addSeparator();
+    d->popupMenu->addSeparator();
 
-    m_globalMenu = menu;
-    m_popupMenu->addMenu(menu);
+    d->globalMenu = menu;
+    d->popupMenu->addMenu(menu);
 }
 
 void Karamba::removeMenuExtension()
 {
-    m_popupMenu->removeAction(m_globalMenu->menuAction());
-    m_globalMenu = 0;       // m_globalMenu is deleted in removeAction
+    d->popupMenu->removeAction(d->globalMenu->menuAction());
+    d->globalMenu = 0;       // d->globalMenu is deleted in removeAction
 }
 
 bool Karamba::hasMenuExtension() const
 {
-    return m_globalMenu != 0;
+    return d->globalMenu != 0;
 }
 
 int Karamba::instance()
 {
-    return m_instance;
+    return d->instance;
 }
 
 void Karamba::setInstance(int instance)
 {
-    m_instance = instance;
+    d->instance = instance;
 }
 
 void Karamba::moveToPos(QPoint pos)
 {
-    if (!m_globalView)
-        m_view->move(pos);
+    if (!d->globalView)
+        d->view->move(pos);
     else
         setPos(pos);
 }
 
 void Karamba::resizeTo(int width, int height)
 {
-    if (!m_globalView)
-        m_view->setFixedSize(width, height);
+    if (!d->globalView)
+        d->view->setFixedSize(width, height);
 
     setFixedSize(width, height);
 }
 
 QPoint Karamba::getPosition() const
 {
-    if (!m_globalView)
-        return m_view->pos();
+    if (!d->globalView)
+        return d->view->pos();
     else
         return pos().toPoint();
 }
 
 void Karamba::setIncomingData(const QString &data)
 {
-    m_storedData = data;
+    d->storedData = data;
 }
 
 void Karamba::notifyTheme(const QString &sender, const QString &data)
 {
-    m_interface->callThemeNotify(this, sender, data);
+    d->interface->callThemeNotify(this, sender, data);
 }
 
 bool Karamba::sendDataToTheme(const QString &prettyThemeName, const QString &data)
@@ -1874,7 +1963,7 @@ bool Karamba::sendDataToTheme(const QString &prettyThemeName, const QString &dat
         return false;
     }
 
-    k->notifyTheme(m_prettyName, data);
+    k->notifyTheme(d->prettyName, data);
     */
     emit notifyTheme(prettyThemeName, data, true);
 
@@ -1883,7 +1972,7 @@ bool Karamba::sendDataToTheme(const QString &prettyThemeName, const QString &dat
 
 QString Karamba::retrieveReceivedData() const
 {
-    return m_storedData;
+    return d->storedData;
 }
 
 bool Karamba::sendData(const QString &prettyThemeName, const QString &data)
@@ -1904,5 +1993,5 @@ bool Karamba::sendData(const QString &prettyThemeName, const QString &data)
 
 bool Karamba::isSubTheme() const
 {
-    return m_subTheme;
+    return d->subTheme;
 }

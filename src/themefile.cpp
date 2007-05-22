@@ -125,8 +125,47 @@ private:
     KTempDir* m_tempDir;
 };
 
+class ThemeFile::Private
+{
+public:
+    QString path;
+    bool zipTheme;
+    QString file;
+    QString id;
+    QString mo;
+    QString name;
+    QString theme;
+    QString script;
+    QString icon;
+    QString version;
+    QString license;
+    QTextStream* stream;
+    QByteArray ba;
+    QFile fl;
+    QString description;
+    QString author;
+    QString authorEmail;
+    QString homepage;
+    ThemeLocale* locale;
+    ZipFile* zip;
+    KUrl UrlPath;
+
+    Private()
+        : zipTheme(false), stream(0), locale(0), zip(0)
+    {
+    }
+
+    ~Private()
+    {
+        delete stream;
+        delete locale;
+        delete zip;
+    }
+
+};
+
 ThemeFile::ThemeFile(const KUrl& url)
-        : m_zipTheme(false), m_stream(0), m_locale(0), m_zip(0)
+    : d(new Private)
 {
     if (url.isValid())
         set(url);
@@ -134,9 +173,7 @@ ThemeFile::ThemeFile(const KUrl& url)
 
 ThemeFile::~ThemeFile()
 {
-    delete m_stream;
-    delete m_locale;
-    delete m_zip;
+    delete d;
 }
 
 bool ThemeFile::open()
@@ -145,18 +182,18 @@ bool ThemeFile::open()
 
     close();
 
-    if (m_zipTheme) {
-        m_zip->setFile(m_theme);
-        m_ba = m_zip->data();
-        if (m_ba.size() > 0) {
-            m_stream = new QTextStream(m_ba, QIODevice::ReadOnly);
+    if (d->zipTheme) {
+        d->zip->setFile(d->theme);
+        d->ba = d->zip->data();
+        if (d->ba.size() > 0) {
+            d->stream = new QTextStream(d->ba, QIODevice::ReadOnly);
             result = true;
         }
     } else {
-        m_fl.setFileName(m_file);
+        d->fl.setFileName(d->file);
 
-        if (m_fl.open(QIODevice::ReadOnly | QIODevice::Text)) {
-            m_stream = new QTextStream(&m_fl);        // use a text stream
+        if (d->fl.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            d->stream = new QTextStream(&d->fl);        // use a text stream
             result = true;
         }
     }
@@ -167,8 +204,8 @@ bool ThemeFile::nextLine(LineParser& parser)
 {
     parser.set("");
 
-    if (m_stream) {
-        QString result = m_stream->readLine();
+    if (d->stream) {
+        QString result = d->stream->readLine();
 
         if (result.isNull())
             return false;
@@ -180,11 +217,11 @@ bool ThemeFile::nextLine(LineParser& parser)
 
 bool ThemeFile::close()
 {
-    if (m_stream) {
-        delete m_stream;
-        m_stream = 0;
-        m_fl.close();
-        m_ba.resize(0);
+    if (d->stream) {
+        delete d->stream;
+        d->stream = 0;
+        d->fl.close();
+        d->ba.resize(0);
         return true;
     }
     return false;
@@ -192,19 +229,19 @@ bool ThemeFile::close()
 
 bool ThemeFile::isValid() const
 {
-    return (exists() && !m_name.isEmpty() && !m_theme.isEmpty());
+    return (exists() && !d->name.isEmpty() && !d->theme.isEmpty());
 }
 
 bool ThemeFile::exists() const
 {
-    QFileInfo file(m_file);
+    QFileInfo file(d->file);
     return file.exists();
 }
 
 QPixmap ThemeFile::icon() const
 {
     QPixmap icon;
-    icon.loadFromData(readThemeFile(m_icon));
+    icon.loadFromData(readThemeFile(d->icon));
     return icon;
 }
 
@@ -240,23 +277,23 @@ bool ThemeFile::set(const KUrl &url)
                                        false, kapp->activeWindow())) {
             return false;
         }
-        m_file = localFile.filePath();
+        d->file = localFile.filePath();
     } else {
         if (url.directory().isEmpty() || url.directory() == "/")
-            m_file = canonicalFile(QDir::current().filePath(url.fileName()));
+            d->file = canonicalFile(QDir::current().filePath(url.fileName()));
         else
-            m_file = canonicalFile(url.path());
+            d->file = canonicalFile(url.path());
         if (!exists())
             return false;
     }
 
-    m_UrlPath = url;
+    d->UrlPath = url;
 
-    QFileInfo fi(m_file);
+    QFileInfo fi(d->file);
 
-    m_name = fi.completeBaseName();
-    m_theme = m_name + ".theme";
-    m_script = m_name;
+    d->name = fi.completeBaseName();
+    d->theme = d->name + ".theme";
+    d->script = d->name;
 
     bool fileExtensionFound = false;
     QStringList availInterp = Kross::Manager::self().interpreters();
@@ -264,43 +301,43 @@ bool ThemeFile::set(const KUrl &url)
         QString fileExtension = Kross::Manager::self().interpreterInfo(interpreter)->wildcard();
         fileExtension.remove(0, 1);
 
-        if (fileExists(fi.path() + '/' + m_script + fileExtension)) {
-            m_script += fileExtension;
+        if (fileExists(fi.path() + '/' + d->script + fileExtension)) {
+            d->script += fileExtension;
             fileExtensionFound = true;
             break;
         }
     }
     if (!fileExtensionFound) {
-        m_script += ".py";
+        d->script += ".py";
     }
 
-    m_id = m_name;
+    d->id = d->name;
 
-    if (isZipFile(m_file)) {
-        m_path = m_file;
-        m_zipTheme = true;
-        m_zip = new ZipFile();
-        m_zip->setZip(m_file);
+    if (isZipFile(d->file)) {
+        d->path = d->file;
+        d->zipTheme = true;
+        d->zip = new ZipFile();
+        d->zip->setZip(d->file);
     } else {
-        m_path = fi.absoluteDir().absolutePath() + '/';
-        m_zipTheme = false;
+        d->path = fi.absoluteDir().absolutePath() + '/';
+        d->zipTheme = false;
     }
     parseXml();
 
-    QFileInfo fimo(m_script);
-    if (m_script.isEmpty())
-        fimo.setFile(m_theme);
+    QFileInfo fimo(d->script);
+    if (d->script.isEmpty())
+        fimo.setFile(d->theme);
     else
-        fimo.setFile(m_script);
-    m_mo = fimo.completeBaseName();
+        fimo.setFile(d->script);
+    d->mo = fimo.completeBaseName();
 
-    m_locale = new ThemeLocale(this);
+    d->locale = new ThemeLocale(this);
     return isValid();
 }
 
 KUrl ThemeFile::getUrlPath()
 {
-    return m_UrlPath;
+    return d->UrlPath;
 }
 
 void ThemeFile::parseXml()
@@ -317,27 +354,27 @@ void ThemeFile::parseXml()
         QDomElement e = n.toElement();
         if (!e.isNull()) {
             if (e.tagName() == "name") {
-                m_name = e.text();
+                d->name = e.text();
             } else if (e.tagName() == "themefile") {
-                m_theme = e.text();
+                d->theme = e.text();
             } else if (e.tagName() == "python_module") {
-                m_script = e.text();
+                d->script = e.text();
             } else if (e.tagName() == "script_module") {
-                m_script = e.text();
+                d->script = e.text();
             } else if (e.tagName() == "description") {
-                m_description = e.text();
+                d->description = e.text();
             } else if (e.tagName() == "author") {
-                m_author = e.text();
+                d->author = e.text();
             } else if (e.tagName() == "author_email") {
-                m_authorEmail = e.text();
+                d->authorEmail = e.text();
             } else if (e.tagName() == "homepage") {
-                 m_homepage = e.text();
+                 d->homepage = e.text();
             } else if (e.tagName() == "icon") {
-                m_icon = e.text();
+                d->icon = e.text();
             } else if (e.tagName() == "version") {
-                m_version = e.text();
+                d->version = e.text();
             } else if (e.tagName() == "license") {
-                m_license = e.text();
+                d->license = e.text();
             }
         }
         n = n.nextSibling();
@@ -365,8 +402,8 @@ bool ThemeFile::fileExists(const QString& filename) const
 {
     if (isThemeFile(filename)) {
         if (isZipTheme()) {
-            m_zip->setFile(filename);
-            return m_zip->exists();
+            d->zip->setFile(filename);
+            return d->zip->exists();
         } else
             return QFileInfo(path() + '/' + filename).exists();
     } else
@@ -380,8 +417,8 @@ QByteArray ThemeFile::readThemeFile(const QString& filename) const
     QByteArray ba;
 
     if (isZipTheme()) {
-        m_zip->setFile(filename);
-        ba = m_zip->data();
+        d->zip->setFile(filename);
+        ba = d->zip->data();
     } else {
         QFile file(path() + '/' + filename);
 
@@ -412,11 +449,11 @@ bool ThemeFile::isZipFile(const QString& filename)
 
 bool ThemeFile::scriptModuleExists() const
 {
-    if (m_script.isEmpty()) {
+    if (d->script.isEmpty()) {
         return false;
     }
 
-    if (fileExists(m_script)) {
+    if (fileExists(d->script)) {
         return true;
     }
 
@@ -433,8 +470,79 @@ QString ThemeFile::canonicalFile(const QString& file)
 QString ThemeFile::extractArchive() const
 {
     if (isZipTheme()) {
-        return m_zip->extractArchive();
+        return d->zip->extractArchive();
     }
 
     return QString();
 }
+
+bool ThemeFile::isZipTheme() const
+{
+    return d->zipTheme;
+}
+
+const QString& ThemeFile::name() const
+{
+    return d->name;
+}
+
+const QString& ThemeFile::version() const
+{
+    return d->version;
+}
+
+const QString& ThemeFile::license() const
+{
+    return d->license;
+}
+
+const QString& ThemeFile::id() const
+{
+    return d->id;
+}
+
+const QString& ThemeFile::mo() const
+{
+    return d->mo;
+}
+
+const QString& ThemeFile::file() const
+{
+    return d->file;
+}
+
+const QString& ThemeFile::scriptModule() const
+{
+    return d->script;
+}
+
+const QString& ThemeFile::path() const
+{
+    return d->path;
+}
+
+const QString& ThemeFile::description() const
+{
+    return d->description;
+}
+
+const QString& ThemeFile::author() const
+{
+    return d->author;
+}
+
+const QString& ThemeFile::authorEmail() const
+{
+    return d->authorEmail;
+}
+
+const QString& ThemeFile::homepage() const
+{
+    return d->homepage;
+}
+
+const ThemeLocale* ThemeFile::locale() const
+{
+    return d->locale;
+}
+

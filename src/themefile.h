@@ -44,69 +44,27 @@ public:
     ThemeFile(const KUrl& url = KUrl());
     ~ThemeFile();
 
-    bool isZipTheme() const
-    {
-        return m_zipTheme;
-    };
-    const QString& name() const
-    {
-        return m_name;
-    };
-    const QString& version() const
-    {
-        return m_version;
-    };
-    const QString& license() const
-    {
-        return m_license;
-    };
-    const QString& id() const
-    {
-        return m_id;
-    };
-    const QString& mo() const
-    {
-        return m_mo;
-    };
-    const QString& file() const
-    {
-        return m_file;
-    };
-    const QString& scriptModule() const
-    {
-        return m_script;
-    };
+    bool isZipTheme() const;
+    const QString& name() const;
+    const QString& version() const;
+    const QString& license() const;
+    const QString& id() const;
+    const QString& mo() const;
+    const QString& file() const;
+    const QString& scriptModule() const;
     bool scriptModuleExists() const;
-    const QString& path() const
-    {
-        return m_path;
-    };
-    const QString& description() const
-    {
-        return m_description;
-    };
-    const QString& author() const
-    {
-        return m_author;
-    };
-    const QString& authorEmail() const
-    {
-        return m_authorEmail;
-    };
-    const QString& homepage() const
-    {
-        return m_homepage;
-    };
+    const QString& path() const;
+    const QString& description() const;
+    const QString& author() const;
+    const QString& authorEmail() const;
+    const QString& homepage() const;
     QPixmap icon() const;
     bool exists() const;
     bool isThemeFile(const QString& filename) const;
     bool isValid() const;
     QByteArray readThemeFile(const QString& filename) const;
     bool fileExists(const QString& filename) const;
-    const ThemeLocale* locale() const
-    {
-        return m_locale;
-    };
+    const ThemeLocale* locale() const;
     bool canUninstall() const;
     KUrl getUrlPath();
 
@@ -124,27 +82,8 @@ private:
     void parseXml();
     void mkdir(QDir dir);
 
-    QString m_path;
-    bool m_zipTheme;
-    QString m_file;
-    QString m_id;
-    QString m_mo;
-    QString m_name;
-    QString m_theme;
-    QString m_script;
-    QString m_icon;
-    QString m_version;
-    QString m_license;
-    QTextStream* m_stream;
-    QByteArray m_ba;
-    QFile m_fl;
-    QString m_description;
-    QString m_author;
-    QString m_authorEmail;
-    QString m_homepage;
-    ThemeLocale* m_locale;
-    ZipFile* m_zip;
-    KUrl m_UrlPath;
+    class Private;
+    Private* const d;
 };
 
 #endif
