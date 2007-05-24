@@ -238,7 +238,7 @@ void KarambaApplication::toggleSystemTray()
     }
 
     SuperKarambaSettings::setShowSysTray(m_sysTrayIcon->isVisible());
-    SuperKarambaSettings::writeConfig();
+    SuperKarambaSettings::self()->writeConfig();
 }
 
 void KarambaApplication::showKarambaMenuExtension(bool show)

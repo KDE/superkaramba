@@ -78,7 +78,7 @@ void ThemesDlg::saveUserAddedThemes()
             ++it;
     }
     SuperKarambaSettings::setUserAddedThemes(t);
-    SuperKarambaSettings::writeConfig();
+    SuperKarambaSettings::self()->writeConfig();
 }
 
 QStringList ThemesDlg::themes()
