@@ -131,6 +131,9 @@ public:
 
     void redrawWidget();
 
+    void makeActive();
+    void makePassive();
+
     K3Process *currProcess;
     Systemtray *systray;
 

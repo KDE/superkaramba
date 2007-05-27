@@ -125,7 +125,7 @@ class Karamba::Private
         KMenu *toDesktopMenu;
         KMenu *globalMenu;
 
-        QTimer *stepTimer;
+        QTimer stepTimer;
 
         QSignalMapper *signalMapperConfig;
         QSignalMapper *signalMapperDesktop;
@@ -184,7 +184,6 @@ class Karamba::Private
             themeConfMenu(0),
             toDesktopMenu(0),
             globalMenu(0),
-            stepTimer(0),
             signalMapperConfig(0),
             signalMapperDesktop(0),
             config(0),
@@ -222,8 +221,6 @@ class Karamba::Private
             delete themeConfMenu,
             delete toggleLocked;
             delete popupMenu;
-
-            delete stepTimer;
 
             delete animation;
             delete timer;
@@ -342,14 +339,10 @@ Karamba::Karamba(const KUrl &themeFile, QGraphicsView *view, int instance, bool 
 
     parseConfig();
 
-    if (!(d->onTop || d->managed))
-        KWindowSystem::lowerWindow(d->view->winId());
-    /*
-      d->view->setFocusPolicy(Qt::StrongFocus);
-      KWindowSystem::setType(d->view->winId(), NET::Dock);
-      KWindowSystem::setState(d->view->winId(), NET::KeepBelow);
-      KWindowSystem::lowerWindow(d->view->winId());
-    */
+    if (!d->globalView) {
+        KWindowSystem::setState(d->view->winId(), NET::KeepBelow);
+    }
+
     QString instanceString;
     if (d->instance > 1)
         instanceString = QString("-%1").arg(d->instance);
@@ -436,6 +429,10 @@ Karamba::Karamba(const KUrl &themeFile, QGraphicsView *view, int instance, bool 
     }
 
     QTimer::singleShot(0, this, SLOT(startKaramba()));
+
+    if (!(d->onTop || d->managed)) {
+        KWindowSystem::lowerWindow(d->view->winId());
+    }
 }
 
 Karamba::~Karamba()
@@ -455,8 +452,7 @@ void Karamba::startKaramba()
     if (d->theme.scriptModuleExists()) {
         kDebug() << "Loading script module: " << d->theme.scriptModule() << endl;
 
-        d->stepTimer = new QTimer(this);
-        d->stepTimer->setSingleShot(true);
+        d->stepTimer.setSingleShot(true);
 
         if (!d->useKross) {
             d->python = new KarambaPython(d->theme, false);
@@ -481,8 +477,8 @@ void Karamba::startKaramba()
 
         update();
 
-        connect(d->stepTimer, SIGNAL(timeout()), SLOT(step()));
-        d->stepTimer->start(d->interval);
+        connect(&d->stepTimer, SIGNAL(timeout()), SLOT(step()));
+        d->stepTimer.start(d->interval);
     } else {
         emit widgetStarted(this, true, false);
     }
@@ -502,7 +498,7 @@ void Karamba::setPrettyName(const QString &prettyThemeName)
 
 void Karamba::step()
 {
-    d->stepTimer->start(d->interval);
+    d->stepTimer.start(d->interval);
 
     if (d->python)
         d->python->widgetUpdated(this);
@@ -844,7 +840,7 @@ bool Karamba::parseConfig()
                         d->theme.locale()->translate(lineParser.getString("VALUE")));
 
                     //meterList->append(tmp);
-                    //passive = false;
+                    passive = false;
                 }
 
                 delete tmpText;
@@ -885,11 +881,8 @@ bool Karamba::parseConfig()
         }
 
         if (passive && !d->managed) {
-            // Matthew Kay: set window type to "dock"
-            // (plays better with taskbar themes this way)
-            //KWindowSystem::setType(d->view->winId(), NET::Dock);
-            //KDE 3.2 addition for the always on top issues
-            //KWindowSystem::setState(d->view->winId(), NET::KeepBelow);
+            KWindowSystem::setType(d->view->winId(), NET::Dock);
+            KWindowSystem::setState(d->view->winId(), NET::KeepBelow);
         }
 
         d->theme.close();
@@ -903,6 +896,29 @@ bool Karamba::parseConfig()
     } else {
         return true;
     }
+}
+
+void Karamba::makeActive()
+{
+    KWindowSystem::setType(d->view->winId(), NET::Normal);
+    KWindowSystem::setState(d->view->winId(), NET::Modal);
+}
+
+void Karamba::makePassive()
+{
+    if (d->managed) {
+        return;
+    }
+
+    QList<QGraphicsItem*> items = QGraphicsItemGroup::children();
+    foreach (QGraphicsItem* item, items) {
+        if (dynamic_cast<Input*>(item) != 0) {
+            return;
+        }
+    }
+
+    KWindowSystem::setType(d->view->winId(), NET::Dock);
+    KWindowSystem::setState(d->view->winId(), NET::KeepBelow);
 }
 
 TextField* Karamba::getDefaultTextProps()

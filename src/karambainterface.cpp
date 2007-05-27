@@ -2255,6 +2255,8 @@ QObject* KarambaInterface::createInputBox(Karamba* k, int x, int y, int w, int h
 
     k->addToGroup(tmp);
 
+    k->makeActive();
+
     return tmp;
 }
 
@@ -2279,6 +2281,8 @@ bool KarambaInterface::deleteInputBox(Karamba *k, Input *input) const
     if (!checkKarambaAndMeter(k, input, "Input")) {
         return false;
     }
+
+    k->makePassive();
 
     return k->removeMeter(input);
 }
