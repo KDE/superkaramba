@@ -134,8 +134,8 @@ public:
     void makeActive();
     void makePassive();
 
-    K3Process *currProcess;
-    Systemtray *systray;
+    void setProcess(K3Process *process);
+    K3Process* process() const;
 
 public Q_SLOTS:
     void closeWidget();

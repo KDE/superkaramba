@@ -135,7 +135,8 @@ PyObject* py_execute_command_interactive(PyObject *, PyObject* args)
 
     Karamba* currTheme = (Karamba*)widget;
 
-    currTheme->currProcess = new K3Process;
+    K3Process *currProcess = new K3Process;
+    currTheme->setProcess(currProcess);
 
     /* get the number of lines passed to us */
     numLines = PyList_Size(listObj);
@@ -154,20 +155,20 @@ PyObject* py_execute_command_interactive(PyObject *, PyObject* args)
         line = PyString2QString(strObj);
 
         /* now do the parsing */
-        *(currTheme->currProcess) << line;
+        *(currProcess) << line;
 
     }
-    QApplication::connect(currTheme->currProcess,
+    QApplication::connect(currProcess,
                           SIGNAL(processExited(K3Process *)),
                           currTheme,
                           SLOT(processExited(K3Process *)));
-    QApplication::connect(currTheme->currProcess,
+    QApplication::connect(currProcess,
                           SIGNAL(receivedStdout(K3Process *, char *, int)),
                           currTheme,
                           SLOT(receivedStdout(K3Process *, char *, int)));
-    currTheme->currProcess->start(K3Process::NotifyOnExit, K3Process::Stdout);
+    currProcess->start(K3Process::NotifyOnExit, K3Process::Stdout);
 
-    return Py_BuildValue((char*)"l", (int)(currTheme->currProcess->pid()));
+    return Py_BuildValue((char*)"l", (int)(currProcess->pid()));
 }
 
 long attachClickArea(long widget, long meter, QString LeftButton, QString MiddleButton, QString RightButton)
@@ -561,6 +562,10 @@ PyObject* py_get_number_of_desktops(PyObject *, PyObject *args)
 /* now a method we need to expose to Python */
 int translateAll(long widget, int x, int y)
 {
+    Q_UNUSED(widget);
+    Q_UNUSED(x);
+    Q_UNUSED(y);
+    /*
     Karamba* currTheme = (Karamba*)widget;
     QList <QGraphicsItem*> items = ((QGraphicsItemGroup*)currTheme)->children();
 
@@ -575,6 +580,7 @@ int translateAll(long widget, int x, int y)
         currTheme->systray->move(currTheme->systray->x() + x,
                                  currTheme->systray->y() + y);
     }
+    */
     return 0;
 }
 

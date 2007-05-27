@@ -3463,22 +3463,23 @@ int KarambaInterface::executeInteractive(Karamba *k, const QStringList &command)
         return 0;
     }
 
-    k->currProcess = new K3Process;
-    *(k->currProcess) << command;
+    K3Process *process = new K3Process;
+    k->setProcess(process);
+    *process << command;
 
-    connect(k->currProcess,
+    connect(process,
                           SIGNAL(processExited(K3Process *)),
                           k,
                           SLOT(processExited(K3Process *)));
 
-    connect(k->currProcess,
+    connect(process,
                           SIGNAL(receivedStdout(K3Process *, char *, int)),
                           k,
                           SLOT(receivedStdout(K3Process *, char *, int)));
 
-    k->currProcess->start(K3Process::NotifyOnExit, K3Process::Stdout);
+    process->start(K3Process::NotifyOnExit, K3Process::Stdout);
 
-    return k->currProcess->pid();
+    return process->pid();
 }
 
 /** Misc/getIp

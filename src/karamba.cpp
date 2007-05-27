@@ -162,6 +162,9 @@ class Karamba::Private
 
         bool errorInInit;
 
+        K3Process *currProcess;
+        Systemtray *systray;
+
         Private(QGraphicsView *view, int instance, bool subTheme) :
             scene(view ? view->scene() : 0),
             view(view),
@@ -196,7 +199,9 @@ class Karamba::Private
             backgroundInterface(0),
             useFancyEffects(true),
             useAntialiasing(true),
-            errorInInit(false)
+            errorInInit(false),
+            currProcess(0),
+            systray(0)
         {
         }
 
@@ -231,6 +236,9 @@ class Karamba::Private
                 delete view;
                 delete scene;
             }
+
+            delete currProcess;
+            delete systray;
         }
 };
 
@@ -2016,3 +2024,15 @@ bool Karamba::isSubTheme() const
 {
     return d->subTheme;
 }
+
+void Karamba::setProcess(K3Process *process)
+{
+    delete process;
+    d->currProcess = process;
+}
+
+K3Process* Karamba::process() const
+{
+    return d->currProcess;
+}
+
