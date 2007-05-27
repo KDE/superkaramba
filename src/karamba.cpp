@@ -1690,18 +1690,23 @@ void Karamba::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     d->mouseClickPos = event->pos().toPoint();
 
-    if (!d->toggleLocked->isChecked())
+    KWindowSystem::lowerWindow(d->view->winId());
+
+    if (!d->toggleLocked->isChecked()) {
         return;
+    }
 
     int button = passEvent(event);
 
-    if (d->python)
+    if (d->python) {
         d->python->widgetClicked(this, (int)event->pos().x(),
                                 (int)event->pos().y(), button);
+    }
 
-    if (d->interface)
+    if (d->interface) {
         d->interface->callWidgetClicked(this, (int)event->pos().x(),
                                        (int)event->pos().y(), button);
+    }
 }
 
 void Karamba::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
