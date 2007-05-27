@@ -274,7 +274,9 @@ Karamba::Karamba(const KUrl &themeFile, QGraphicsView *view, int instance, bool 
 
     hide();
 
-    d->view->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
+    if (!d->globalView) {
+        d->view->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
+    }
 
     if (!d->theme.set(themeFile)) {
         kDebug() << "Could not load theme file" << endl;
@@ -368,8 +370,11 @@ Karamba::Karamba(const KUrl &themeFile, QGraphicsView *view, int instance, bool 
 
     // Karamba specific Config Entries
     KConfigGroup cg(d->config, "internal");
-    bool locked = d->toggleLocked->isChecked();
-    locked = cg.readEntry("lockedPosition", locked);
+    bool locked = true;
+    if (!d->globalView) {
+        locked = d->toggleLocked->isChecked();
+        locked = cg.readEntry("lockedPosition", locked);
+    }
     d->toggleLocked->setChecked(locked);
 
     int desktop = 0;
@@ -1866,8 +1871,8 @@ void Karamba::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         if (!d->toggleLocked->isChecked())
             d->view->move(event->screenPos() - d->mouseClickPos);
     } else {
-        event->ignore();
-        QGraphicsItemGroup::mouseMoveEvent(event);
+        QPointF diff =  event->pos() - d->mouseClickPos;
+        moveBy(diff.x(), diff.y());
     }
 }
 
