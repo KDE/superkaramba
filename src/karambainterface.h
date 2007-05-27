@@ -195,7 +195,7 @@ public Q_SLOTS:
             QString &channel, int ms = 0) const;
     bool changeImageIntensity(const Karamba *k, ImageLabel *image, double ratio, int ms = 0) const;
     bool changeImageToGray(const Karamba *k, ImageLabel *image, int ms = 0) const;
-    bool changeImageToAlpha(const Karamba *k, ImageLabel *image, int a, int r=-1, int g=-1, int b=-1, int ms = 0) const;
+    bool changeImageAlpha(const Karamba *k, ImageLabel *image, int a, int r=-1, int g=-1, int b=-1, int ms = 0) const;
     QObject* createBackgroundImage(Karamba *k, int x, int y, const QString &imagePath) const;
     QObject* createTaskIcon(Karamba *k, int x, int y, int ctask) const;
     int getImageHeight(const Karamba *k, const ImageLabel *image) const;
@@ -208,7 +208,7 @@ public Q_SLOTS:
     bool changeImageAnimation(Karamba *k, ImageLabel *image, bool enable) const;
     bool getImageAnimation(Karamba *k, ImageLabel *image) const;
     bool setImageElement(Karamba* k, ImageLabel *image, const QString &element) const;
-    bool resetImageElement(Karamba* k, ImageLabel *image) const;
+    bool setImageElementAll(Karamba* k, ImageLabel *image) const;
     QString getImageElement(Karamba *k, ImageLabel *image) const;
 
     // InputBox
@@ -300,6 +300,7 @@ public Q_SLOTS:
     bool wantRightButton(Karamba *k, bool enable) const;
     QStringList version() const;
     QVariantList desktopSize() const;
+    QString getIconByName(const QString &icon, int size) const;
 
     // RichText
     QObject* createRichText(Karamba* k, const QString &text, bool underline = false) const;

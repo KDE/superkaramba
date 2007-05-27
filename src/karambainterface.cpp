@@ -40,6 +40,7 @@
 #include <KMessageBox>
 #include <KCmdLineArgs>
 #include <KAboutData>
+#include <KIconLoader>
 
 /// \internal d-pointer class.
 class KarambaInterface::Private
@@ -1435,6 +1436,8 @@ QVariantList KarambaInterface::getImageSize(const Karamba *k, const ImageLabel *
 *   reference setImagePath(widget, image, path)
 * DESCRIPTION
 *   This will change image of a image widget.
+*   Note, starting with SuperKaramba version 0.50 (KDE4.0) this
+*   function accepts SVG.
 * ARGUMENTS
 *   * reference to widget -- karamba
 *   * reference to image -- image
@@ -1641,27 +1644,32 @@ bool KarambaInterface::changeImageToGray(const Karamba *k, ImageLabel *image, in
     return true;
 }
 
-/** Image/changeImageToAlpha
+/** Image/changeImageAlpha
 *
 * SYNOPSIS
-*   boolean changeImageToAlpha(widget, image, alpha, red=-1, green=-1, blue=-1, millisec=-1)
+*   boolean changeImageAlpha(widget, image, alpha, red=-1, green=-1, blue=-1, millisec=0)
 * DESCRIPTION
-*   This will make the image transparent with the given alpha value.
-*   Additionally a color (red, green, blue) can be made completely
-*   transparent. This function also allows a combination of both
-*   effects.
+*   This will change the image transparency to the given alpha value.
+*   The R,G, or B value of -1 indicates that pixels of all intensities
+*   in this channel will be assigned the given alpha.
+*   If a color (R,G, or B) intensity is specified in the range of 0-255,
+*   the alpha value is applied only to the pixels with that intensity.
+*   This allows to make, for example, only black (R=0,G=0,B=0) pixels transparent,
+*   while keeping all other pixel's alpha unchanged.
+*   The value of millisec instructs how long the transparency effect should stay.
+*   The value of 0 makes the alpha effect permanent.
 * ARGUMENTS
 *   * reference to widget -- karamba
 *   * reference to image -- image
 *   * integer alpha -- alpha value to use
-*   * integer red -- red component of color
-*   * integer green -- green component of color
+*   * integer red -- specific intensity of red component (optional) (defaults to "all intensities")
+*   * integer green -- specific intensity of green component (optional) (defaults to "all intensities")
 *   * integer blue -- blue component of color
-*   * integer millisec -- milliseconds before the image is restored (optional)
+*   * integer millisec -- specific intensity of blue component (optional) (defaults to "all intensities")
 * RETURN VALUE
 *   true if successful
 */
-bool KarambaInterface::changeImageToAlpha(const Karamba *k, ImageLabel *image, int a, int r, int g, int b, int ms) const
+bool KarambaInterface::changeImageAlpha(const Karamba *k, ImageLabel *image, int a, int r, int g, int b, int ms) const
 {
     if (!checkKarambaAndMeter(k, image, "ImageLabel")) {
         return false;
@@ -2008,10 +2016,10 @@ bool KarambaInterface::setImageElement(Karamba* k, ImageLabel *image, const QStr
     return image->drawElement(element);
 }
 
-/** Image/resetImageElement
+/** Image/setImageElementAll
 *
 * SYNOPSIS
-*   boolean resetImageElement(widget, image)
+*   boolean setImageElementAll(widget, image)
 * DESCRIPTION
 *   This function reset a previous set element.
 *   A call to this function will result in a
@@ -2022,7 +2030,7 @@ bool KarambaInterface::setImageElement(Karamba* k, ImageLabel *image, const QStr
 * RETURN VALUE
 *   true if successful
 */
-bool KarambaInterface::resetImageElement(Karamba* k, ImageLabel *image) const
+bool KarambaInterface::setImageElementAll(Karamba* k, ImageLabel *image) const
 {
     if (!checkKarambaAndMeter(k, image, "ImageLabel")) {
         return false;
@@ -4146,6 +4154,25 @@ QVariantList KarambaInterface::desktopSize() const
     ret << screenSize.height();
 
     return ret;
+}
+
+/** Misc/getIconByName
+*
+* SYNOPSIS
+*   strint getIconByName(name, size)
+* DESCRIPTION
+*   Returns the absolute path to the icon.
+*   This function respects the current used icon
+*   set.
+*  ARGUMENTS
+*    * string name -- name of the icon
+*    * integer size -- Size of the icon (16, 22, 32, 48, 64, 128 available)
+* RETURN VALUE
+*   string with the absolute path to the icon.
+*/
+QString KarambaInterface::getIconByName(const QString &icon, int size) const
+{
+    return KIconLoader::global()->iconPath(icon, -size);
 }
 
 
