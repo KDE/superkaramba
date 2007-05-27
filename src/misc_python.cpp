@@ -653,7 +653,7 @@ PyObject* py_hide(PyObject *, PyObject *args)
 #include <sys/ioctl.h>
 #include <net/if.h>
 #include <arpa/inet.h>
-#ifdef __FreeBSD__
+#if defined(__FreeBSD__) || defined(__DragonFly__)
 #include <netinet/in.h>
 #endif
 #if defined(Q_OS_SOLARIS)
