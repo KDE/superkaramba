@@ -130,7 +130,7 @@ bool KarambaInterface::initInterpreter()
                 "sys.path.insert(0, karamba.getThemePath())\n"
                 "sys.path.insert(0, '')\n"
                 "execfile(\"%1\", globals(), locals())\n"
-            ).arg(scriptFile));
+            ).arg(scriptFile).toLatin1());
         } else {
             d->action->setFile(scriptFile);
         }
