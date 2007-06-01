@@ -44,6 +44,8 @@
 #include <KToggleAction>
 #include <KCmdLineArgs>
 
+#include "karambamanager.h"
+
 #include "meters/textfield.h"
 #include "meters/richtextlabel.h"
 #include "meters/bar.h"
@@ -78,7 +80,7 @@
 #include "superkarambasettings.h"
 
 extern "C" {
-    KDE_EXPORT QGraphicsItem* startKaramba(const KUrl &theme, QGraphicsView *view)
+    KDE_EXPORT QGraphicsItemGroup* startKaramba(const KUrl &theme, QGraphicsView *view)
     {
         return new Karamba(theme, view);
     }
@@ -191,6 +193,7 @@ class Karamba::Private
             signalMapperDesktop(0),
             config(0),
             instance(instance),
+            storedData(""),
             wantRightButton(false),
             globalView(view ? true : false),
             subTheme(subTheme),
@@ -371,11 +374,8 @@ Karamba::Karamba(const KUrl &themeFile, QGraphicsView *view, int instance, bool 
 
     // Karamba specific Config Entries
     KConfigGroup cg(d->config, "internal");
-    bool locked = true;
-    if (!d->globalView) {
-        locked = d->toggleLocked->isChecked();
-        locked = cg.readEntry("lockedPosition", locked);
-    }
+    bool locked = d->toggleLocked->isChecked();
+    locked = cg.readEntry("lockedPosition", locked);
     d->toggleLocked->setChecked(locked);
 
     int desktop = 0;
@@ -453,7 +453,7 @@ Karamba::~Karamba()
 void Karamba::startKaramba()
 {
     if (d->errorInInit) {
-        emit widgetStarted(this, false, false);
+        deleteLater();
         return;
     }
 
@@ -465,14 +465,10 @@ void Karamba::startKaramba()
         if (!d->useKross) {
             d->python = new KarambaPython(d->theme, false);
 
-            emit widgetStarted(this, true, false);
-
             d->python->initWidget(this);
         } else {
             d->interface = new KarambaInterface(this);
             bool interpreterStarted = d->interface->initInterpreter();
-
-            emit widgetStarted(this, interpreterStarted, false);
 
             if (!interpreterStarted) {
                 delete d->interface;
@@ -487,9 +483,9 @@ void Karamba::startKaramba()
 
         connect(&d->stepTimer, SIGNAL(timeout()), SLOT(step()));
         d->stepTimer.start(d->interval);
-    } else {
-        emit widgetStarted(this, true, false);
     }
+
+    KarambaManager::self()->addKaramba(this);
 
     show();
 }
@@ -1271,7 +1267,7 @@ void Karamba::closeWidget()
 
     writeConfigData();
 
-    emit widgetClosed(this);
+    KarambaManager::self()->removeKaramba(this);
 }
 
 KConfig* Karamba::getConfig() const
@@ -1316,7 +1312,7 @@ void Karamba::reloadConfig()
         k = new Karamba(d->theme.getUrlPath(), 0, -1, false, QPoint(), true);
 
     if (k != 0) {
-        emit widgetStarted(k, true, true);
+        KarambaManager::self()->addKaramba(k);
     }
 
     closeWidget();
@@ -1897,11 +1893,14 @@ const ThemeFile& Karamba::theme() const
 void Karamba::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     if (!d->globalView) {
-        if (!d->toggleLocked->isChecked())
+        if (!d->toggleLocked->isChecked()) {
             d->view->move(event->screenPos() - d->mouseClickPos);
+        }
     } else {
-        QPointF diff =  event->pos() - d->mouseClickPos;
-        moveBy(diff.x(), diff.y());
+        if (!d->toggleLocked->isChecked()) {
+            QPointF diff =  event->pos() - d->mouseClickPos;
+            moveBy(diff.x(), diff.y());
+        }
     }
 }
 
@@ -1991,15 +1990,12 @@ void Karamba::notifyTheme(const QString &sender, const QString &data)
 
 bool Karamba::sendDataToTheme(const QString &prettyThemeName, const QString &data)
 {
-    /*
-    Karamba *k = karambaApp->getKaramba(prettyThemeName);
+    Karamba *k = KarambaManager::self()->getKarambaByName(prettyThemeName);
     if (k == 0) {
         return false;
     }
 
     k->notifyTheme(d->prettyName, data);
-    */
-    emit notifyTheme(prettyThemeName, data, true);
 
     return true;
 }
@@ -2011,16 +2007,12 @@ QString Karamba::retrieveReceivedData() const
 
 bool Karamba::sendData(const QString &prettyThemeName, const QString &data)
 {
-    /*
-    Karamba *k = karambaApp->getKaramba(prettyThemeName);
+    Karamba *k = KarambaManager::self()->getKarambaByName(prettyThemeName);
     if (k == 0) {
         return false;
     }
 
     k->setIncomingData(data);
-    */
-
-    emit notifyTheme(prettyThemeName, data, false);
 
     return true;
 }

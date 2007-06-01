@@ -25,6 +25,7 @@
 #include "karambaapp.h"
 #include "lineparser.h"
 #include "showdesktop.h"
+#include "karambamanager.h"
 
 #include <QGraphicsScene>
 #include <QNetworkInterface>
@@ -3832,12 +3833,10 @@ Karamba* KarambaInterface::openNamedTheme(const QString &themePath, const QStrin
     QFileInfo file(themePath);
 
     if (file.exists()) {
-/*        QString prettyName(themeName);
-        KarambaApplication* app = (KarambaApplication*)qApp;
-        if (!app->themeExists(prettyName)) {*/
+        Karamba *k = KarambaManager::self()->getKaramba(themeName);
+        if (!k) {
             newTheme = new Karamba(KUrl(themePath), 0, -1, subTheme);
-            newTheme->show();
-//        }
+        }
     }
     return newTheme;
 }
@@ -3860,7 +3859,6 @@ Karamba* KarambaInterface::openTheme(const QString &themePath) const
 
     if (file.exists()) {
         newTheme = new Karamba(KUrl(themePath));
-        newTheme->show();
     }
 
     return newTheme;
@@ -3982,7 +3980,7 @@ QString KarambaInterface::getIncomingData(const Karamba *k) const
 bool KarambaInterface::setIncomingData(Karamba *k, const QString &prettyThemeName, const QString &data)
     const
 {
-    if (checkKaramba(k)) {
+    if (!checkKaramba(k)) {
         return false;
     }
 

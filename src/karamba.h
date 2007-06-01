@@ -160,11 +160,6 @@ private Q_SLOTS:
 
     void step();
 
-Q_SIGNALS:
-    void widgetStarted(Karamba*, bool, bool);
-    void widgetClosed(Karamba*);
-    void notifyTheme(const QString&, const QString&, bool);
-
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);

@@ -14,6 +14,7 @@
 #define KARAMBAAPP_H
 
 #include <QSystemTrayIcon>
+#include <QGraphicsItemGroup>
 
 #include <KUniqueApplication>
 
@@ -38,17 +39,13 @@ public:
 
     int newInstance();
 
-    bool hasKaramba(const Karamba *k) const;
-    Karamba* getKaramba(const QString &prettyName) const;
-    bool themeExists(const QString &prettyName) const;
-
     void setupSysTray(KAboutData* about);
 
 public Q_SLOTS:
     void showThemesDialog(QSystemTrayIcon::ActivationReason reason = QSystemTrayIcon::Unknown);
 
-    void karambaStarted(Karamba*, bool, bool);
-    void karambaClosed(Karamba*);
+    void karambaStarted(QGraphicsItemGroup*);
+    void karambaClosed(QGraphicsItemGroup*);
 
     Q_SCRIPTABLE bool closeTheme(const QString &prettyThemeName);
     Q_SCRIPTABLE void hideSystemTray(bool hide);
@@ -72,8 +69,6 @@ private Q_SLOTS:
     void sendDataToTheme(const QString &themeName, const QString &data, bool notify);
 
 private:
-    QList<Karamba*> m_karambas;
-
     KSystemTrayIcon *m_sysTrayIcon;
     KHelpMenu *m_helpMenu;
 

@@ -8,6 +8,7 @@ themelocale.cpp
 taskmanager.cpp
 showdesktop.cpp
 karambainterface.cpp
+karambamanager.cpp
 
 meters/meter.cpp
 meters/bar.cpp
