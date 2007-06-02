@@ -297,7 +297,7 @@ public Q_SLOTS:
     bool translateAll(const Karamba *k, int x, int y) const;
     QString userLanguage(const Karamba *k) const;
     QStringList userLanguages(const Karamba *k) const;
-    bool wantRightButton(Karamba *k, bool enable) const;
+    bool setWantRightButton(Karamba *k, bool enable) const;
     QStringList version() const;
     QVariantList desktopSize() const;
     QString getIconByName(const QString &icon, int size) const;

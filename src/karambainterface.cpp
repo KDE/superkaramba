@@ -4091,10 +4091,10 @@ QStringList KarambaInterface::userLanguages(const Karamba *k) const
     return KGlobal::locale()->languageList();
 }
 
-/** Misc/wantRightButton
+/** Misc/setWantRightButton
 *
 *  SYNOPSIS
-*    boolean wantRightButton(widget, want_receive_right_button)
+*    boolean setWantRightButton(widget, want_receive_right_button)
 *  DESCRIPTION
 *    The right click menu of SuperKaramba allows themes
 *    to be loaded, closed, moved to other screens.
@@ -4107,7 +4107,7 @@ QStringList KarambaInterface::userLanguages(const Karamba *k) const
 *  RETURN VALUE
 *    true if successful
 */
-bool KarambaInterface::wantRightButton(Karamba *k, bool enable) const
+bool KarambaInterface::setWantRightButton(Karamba *k, bool enable) const
 {
     if (!checkKaramba(k)) {
         return false;
