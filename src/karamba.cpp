@@ -277,6 +277,8 @@ Karamba::Karamba(const KUrl &themeFile, QGraphicsView *view, int instance, bool 
                                QPainter::SmoothPixmapTransform);
         }
 
+        d->scene->setItemIndexMethod(QGraphicsScene::NoIndex);
+
         d->view->show();
     }
 
@@ -311,8 +313,10 @@ Karamba::Karamba(const KUrl &themeFile, QGraphicsView *view, int instance, bool 
 
     setObjectName("karamba - " + d->prettyName);
 
-    d->info = new NETWinInfo(QX11Info::display(), d->view->winId(),
+    if (!d->globalView) {
+        d->info = new NETWinInfo(QX11Info::display(), d->view->winId(),
                             QX11Info::appRootWindow(), NET::WMState);
+    }
 
     d->defaultTextField = new TextField();
 
@@ -349,10 +353,6 @@ Karamba::Karamba(const KUrl &themeFile, QGraphicsView *view, int instance, bool 
     preparePopupMenu();
 
     parseConfig();
-
-    if (!d->globalView) {
-        KWindowSystem::setState(d->view->winId(), NET::KeepBelow);
-    }
 
     QString instanceString;
     if (d->instance > 1)
@@ -415,7 +415,7 @@ Karamba::Karamba(const KUrl &themeFile, QGraphicsView *view, int instance, bool 
         d->toggleLocked->setChecked(false);
     }
 
-    if (!reload && d->useFancyEffects) {
+    if (!d->globalView && !reload && d->useFancyEffects) {
         d->timer = new QTimeLine(1000);
         d->timer->setFrameRange(0, 1000);
 
@@ -438,7 +438,8 @@ Karamba::Karamba(const KUrl &themeFile, QGraphicsView *view, int instance, bool 
 
     QTimer::singleShot(0, this, SLOT(startKaramba()));
 
-    if (!(d->onTop || d->managed)) {
+    if (!(d->onTop || d->managed) && !d->globalView) {
+        KWindowSystem::setState(d->view->winId(), NET::KeepBelow);
         KWindowSystem::lowerWindow(d->view->winId());
     }
 }
@@ -557,8 +558,9 @@ bool Karamba::parseConfig()
                 d->themeCenter = QPoint(w/2, h/2);
 
                 setFixedSize(w, h);
-                if (!d->globalView)
+                if (!d->globalView) {
                     d->view->setFixedSize(w + 5, h + 5);
+                }
 
                 if (lineParser.getBoolean("RIGHT")) {
                     QDesktopWidget *d = QApplication::desktop();
@@ -574,26 +576,34 @@ bool Karamba::parseConfig()
                     y = 0;
                 }
 
-                if (d->globalView)
+                if (d->globalView) {
                     setPos(x, y);
-                else
+                } else {
                     d->view->move(x, y);
+                }
 
                 if (lineParser.getBoolean("ONTOP")) {
                     d->onTop = true;
-                    KWindowSystem::setState(d->view->winId(), NET::KeepAbove);
+                    if (!d->globalView) {
+                        KWindowSystem::setState(d->view->winId(), NET::StaysOnTop);
+                   }
                 }
 
                 if (lineParser.getBoolean("MANAGED")) {
                     d->managed = true;
-                    Qt::WindowFlags flags = Qt::Dialog;
-                    flags & Qt::WA_DeleteOnClose;
-                    d->view->setWindowFlags(flags);
+                    if (!d->globalView) {
+                        Qt::WindowFlags flags = Qt::Dialog;
+                        flags & Qt::WA_DeleteOnClose;
+                        d->view->setWindowFlags(flags);
+                        d->view->show();
+                    }
                 } else {
-                    d->info->setState(NETWinInfo::SkipTaskbar
+                    if (!d->globalView) {
+                        d->info->setState(NETWinInfo::SkipTaskbar
                                      | NETWinInfo::SkipPager, NETWinInfo::SkipTaskbar
                                      | NETWinInfo::SkipPager);
-                    if (d->onTop) {
+                    }
+                    if (d->onTop && !d->globalView) {
                         KWindowSystem::setState(d->view->winId(), NET::KeepAbove);
                     }
                 }
@@ -604,38 +614,54 @@ bool Karamba::parseConfig()
 
                 bool dfound = false;
                 //int desktop = lineParser.getInt("DESKTOP", line, dfound);
-                if (dfound) {
+                if (dfound && !d->globalView) {
                     d->info->setDesktop(dfound);
                 }
 
                 if (lineParser.getBoolean("TOPBAR")) {
-                    setPos(x, 0);
-                    KWindowSystem::setStrut(d->view->winId(), 0, 0, h, 0);
-                    //toggleLocked->setChecked(true);
-                    //toggleLocked->setEnabled(false);
+                    if (!d->globalView) {
+                        KWindowSystem::setStrut(d->view->winId(), 0, 0, h, 0);
+                        d->view->move(x, 0);
+                    } else {
+                        setPos(x, 0);
+                    }
+                    d->toggleLocked->setChecked(true);
+                    d->toggleLocked->setEnabled(false);
                 }
 
                 if (lineParser.getBoolean("BOTTOMBAR")) {
                     int dh = QApplication::desktop()->height();
-                    setPos(x, dh - h);
-                    KWindowSystem::setStrut(d->view->winId(), 0, 0, 0, h);
-                    //toggleLocked->setChecked(true);
-                    //toggleLocked->setEnabled(false);
+                    if (d->globalView) {
+                        setPos(x, dh - h);
+                    } else {
+                        KWindowSystem::setStrut(d->view->winId(), 0, 0, 0, h);
+                        d->view->move(x, dh - h);
+                    }
+                    d->toggleLocked->setChecked(true);
+                    d->toggleLocked->setEnabled(false);
                 }
 
                 if (lineParser.getBoolean("RIGHTBAR")) {
                     int dw = QApplication::desktop()->width();
-                    setPos(dw - w, y);
-                    KWindowSystem::setStrut(d->view->winId(), 0, w, 0, 0);
-                    //toggleLocked->setChecked(true);
-                    //toggleLocked->setEnabled(false);
+                    if (d->globalView) {
+                        setPos(dw - w, y);
+                    } else {
+                        KWindowSystem::setStrut(d->view->winId(), 0, w, 0, 0);
+                        d->view->move(dw - w, y);
+                    }
+                    d->toggleLocked->setChecked(true);
+                    d->toggleLocked->setEnabled(false);
                 }
 
                 if (lineParser.getBoolean("LEFTBAR")) {
-                    setPos(0, y);
-                    KWindowSystem::setStrut(d->view->winId(), w, 0, 0, 0);
-                    //toggleLocked->setChecked( true );
-                    //toggleLocked->setEnabled(false);
+                    if (d->globalView) {
+                        setPos(0, y);
+                    } else {
+                        KWindowSystem::setStrut(d->view->winId(), w, 0, 0, 0);
+                        d->view->move(0, y);
+                    }
+                    d->toggleLocked->setChecked( true );
+                    d->toggleLocked->setEnabled(false);
                 }
 
                 if (d->globalView)
@@ -701,7 +727,9 @@ bool Karamba::parseConfig()
             }
 
             if (lineParser.meter() == "CLICKAREA") {
-                d->view->setInteractive(true);
+                if (!d->globalView) {
+                    d->view->setInteractive(true);
+                }
 
                 bool preview = lineParser.getBoolean("PREVIEW");
                 ClickArea *tmp = new ClickArea(this, preview, x, y, w, h);
@@ -800,7 +828,9 @@ bool Karamba::parseConfig()
                 }
 
                 if (lineParser.meter() == "CLICKMAP") {
-                    d->view->setInteractive(true);
+                    if (!d->globalView) {
+                        d->view->setInteractive(true);
+                    }
 
                     ClickMap *tmp = new ClickMap(this, x, y, w, h);
                     tmp->setTextProps(tmpText);
@@ -884,7 +914,7 @@ bool Karamba::parseConfig()
             }
         }
 
-        if (passive && !d->managed) {
+        if (passive && !d->managed && !d->onTop && !d->globalView) {
             KWindowSystem::setType(d->view->winId(), NET::Dock);
             KWindowSystem::setState(d->view->winId(), NET::KeepBelow);
         }
@@ -904,8 +934,10 @@ bool Karamba::parseConfig()
 
 void Karamba::makeActive()
 {
-    KWindowSystem::setType(d->view->winId(), NET::Normal);
-    KWindowSystem::setState(d->view->winId(), NET::Modal);
+    if (!d->globalView) {
+        KWindowSystem::setType(d->view->winId(), NET::Normal);
+        KWindowSystem::setState(d->view->winId(), NET::Modal);
+    }
 }
 
 void Karamba::makePassive()
@@ -921,8 +953,10 @@ void Karamba::makePassive()
         }
     }
 
-    KWindowSystem::setType(d->view->winId(), NET::Dock);
-    KWindowSystem::setState(d->view->winId(), NET::KeepBelow);
+    if (!d->globalView) {
+        KWindowSystem::setType(d->view->winId(), NET::Dock);
+        KWindowSystem::setState(d->view->winId(), NET::KeepBelow);
+    }
 }
 
 TextField* Karamba::getDefaultTextProps()
@@ -1321,9 +1355,13 @@ void Karamba::reloadConfig()
 void Karamba::setOnTop(bool stayOnTop)
 {
     if (stayOnTop) {
-        KWindowSystem::setState(d->view->winId(), NET::KeepAbove);
+        if (!d->globalView) {
+            KWindowSystem::setState(d->view->winId(), NET::KeepAbove);
+        }
     } else {
-        KWindowSystem::setState(d->view->winId(), NET::KeepBelow);
+        if (!d->globalView) {
+            KWindowSystem::setState(d->view->winId(), NET::KeepBelow);
+        }
     }
 
     d->onTop = stayOnTop;
@@ -1385,10 +1423,13 @@ void Karamba::slotDesktopChanged(int desktop)
             actions[i]->setChecked(false);
     }
 
-    if (desktop)
-        d->info->setDesktop(desktop);
-    else
-        d->info->setDesktop(NETWinInfo::OnAllDesktops);
+    if (!d->globalView) {
+        if (desktop) {
+            d->info->setDesktop(desktop);
+        } else {
+            d->info->setDesktop(NETWinInfo::OnAllDesktops);
+        }
+    }
 }
 
 void Karamba::currentWallpaperChanged(int desktop)
@@ -1686,7 +1727,9 @@ void Karamba::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     d->mouseClickPos = event->pos().toPoint();
 
-    KWindowSystem::lowerWindow(d->view->winId());
+    if (!(d->onTop || d->managed) && !d->globalView) {
+        KWindowSystem::lowerWindow(d->view->winId());
+    }
 
     if (!d->toggleLocked->isChecked()) {
         return;
@@ -1964,18 +2007,20 @@ void Karamba::moveToPos(QPoint pos)
 
 void Karamba::resizeTo(int width, int height)
 {
-    if (!d->globalView)
+    if (!d->globalView) {
         d->view->setFixedSize(width, height);
+    }
 
     setFixedSize(width, height);
 }
 
 QPoint Karamba::getPosition() const
 {
-    if (!d->globalView)
+    if (!d->globalView) {
         return d->view->pos();
-    else
+    } else {
         return pos().toPoint();
+    }
 }
 
 void Karamba::setIncomingData(const QString &data)
