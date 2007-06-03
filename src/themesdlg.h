@@ -31,7 +31,6 @@
 /**
 @author See README for the list of authors
 */
-class ThemeFile;
 class KArchiveDirectory;
 
 class ThemesDlg : public QDialog, public Ui::ThemesLayout

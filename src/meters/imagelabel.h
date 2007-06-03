@@ -35,7 +35,6 @@
 #include "meter.h"
 
 class ImageLabel;
-class KIO::CopyJob;
 
 // Abstract Effects Baseclass
 class Effect : public QObject

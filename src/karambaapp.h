@@ -20,13 +20,10 @@
 
 #define karambaApp ((KarambaApplication*)qApp)
 
-class QGraphicsView;
-class QGraphicsScene;
 class KCmdLineArgs;
 class KSystemTrayIcon;
 class KHelpMenu;
 class ThemesDlg;
-class MainWidget;
 class Karamba;
 
 class KarambaApplication : public KUniqueApplication

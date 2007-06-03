@@ -39,11 +39,8 @@
 
 class QGraphicsView;
 class QGraphicsScene;
-class QSignalMapper;
 
 class KMenu;
-class KToggleAction;
-class KWindowSystem;
 class KConfig;
 class K3Process;
 
@@ -51,8 +48,6 @@ class Meter;
 class Sensor;
 class Systemtray;
 class TextField;
-class KarambaInterface;
-class KarambaPython;
 
 class KDE_EXPORT Karamba : public QObject, public QGraphicsItemGroup
 {

@@ -27,7 +27,6 @@
 #include <KNS/Entry>
 
 class ThemesDlg;
-class KArchiveDirectory;
 
 class SKNewStuff : public KNewStuff
 {
