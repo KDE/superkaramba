@@ -184,8 +184,8 @@ QStringList ThemeLocale::languageList()
 
     QString lang;
     foreach(lang, langs) {
-        QString ln, ct, chrset;
-        KLocale::splitLocale(lang, ln, ct, chrset);
+        QString ln, ct, modf, chrset;
+        KLocale::splitLocale(lang, ln, ct, modf, chrset);
         /*
         We don't use these in zip themes...
         if (!ct.isEmpty())
