@@ -27,170 +27,277 @@
 #endif
 
 #include <Python.h>
-#include <qobject.h>
-#include "karamba.h"
-#include "meter.h"
-#include "meter_python.h"
-#include "systray_python.h"
+#include <QObject>
+#include "../karamba.h"
+#include "../meters/meter.h"
+#include "python/meter.h"
+#include "python/systray.h"
 
+#include <KDebug>
+
+#if 0
 long moveSystray(long widget, long x, long y, long w, long h)
 {
-    karamba* currTheme = (karamba*)widget;
+    Karamba* currTheme = (Karamba*)widget;
 
-    if (currTheme->systray != 0) {
-        currTheme->systray->move((int)x, (int)y);
-        currTheme->systray->setMinimumSize((int)w, (int)h);
-        currTheme->systray->layoutSystray();
-        currTheme->systray->show();
+    if (currTheme->systemTray() != 0) {
+        currTheme->systemTray()->move((int)x, (int)y);
+        currTheme->systemTray()->setMinimumSize((int)w, (int)h);
+        currTheme->systemTray()->layoutsystemTray();
+        currTheme->systemTray()->show();
     }
     return 1;
 }
+#endif
 
 PyObject* py_move_systray(PyObject *, PyObject *args)
 {
+    Q_UNUSED(args);
+
+    static bool firstMessage = false;
+
+    if (!firstMessage) {
+        kWarning() << "Call to \"moveSystray\" not available in this version of SuperKaramba" << endl;
+        firstMessage = true;
+    }
+
+    return 0;
+
+#if 0
     long widget, x, y, w, h;
     if (!PyArg_ParseTuple(args, (char*)"lllll:moveSystray", &widget, &x, &y, &w, &h))
         return NULL;
     if (!checkKaramba(widget))
         return NULL;
     return Py_BuildValue((char*)"l", moveSystray(widget, x, y, w, h));
+#endif
 }
 
 /* now a method we need to expose to Python */
+#if 0
 long showSystray(long widget)
 {
-    karamba* currTheme = (karamba*)widget;
+    Karamba* currTheme = (Karamba*)widget;
 
-    if (currTheme->systray != 0) {
-        currTheme->systray->show();
+    if (currTheme->systemTray() != 0) {
+        currTheme->systemTray()->show();
     }
     return 1;
 }
+#endif
 
 PyObject* py_show_systray(PyObject *, PyObject *args)
 {
+    Q_UNUSED(args);
+
+    static bool firstMessage = false;
+
+    if (!firstMessage) {
+        kWarning() << "Call to \"moveSystray\" not available in this version of SuperKaramba" << endl;
+        firstMessage = true;
+    }
+
+    return 0;
+
+#if 0
     long widget;
     if (!PyArg_ParseTuple(args, (char*)"l:showSystray", &widget))
         return NULL;
     if (!checkKaramba(widget))
         return NULL;
     return Py_BuildValue((char*)"l", showSystray(widget));
+#endif
 }
 
 /* now a method we need to expose to Python */
+#if 0
 long hideSystray(long widget)
 {
-    karamba* currTheme = (karamba*)widget;
+    Karamba* currTheme = (Karamba*)widget;
 
-    if (currTheme->systray != 0) {
-        currTheme->systray->hide();
+    if (currTheme->systemTray() != 0) {
+        currTheme->systemTray()->hide();
     }
     return 1;
 }
+#endif
 
 PyObject* py_hide_systray(PyObject *, PyObject *args)
 {
+    Q_UNUSED(args);
+
+    static bool firstMessage = false;
+
+    if (!firstMessage) {
+        kWarning() << "Call to \"moveSystray\" not available in this version of SuperKaramba" << endl;
+        firstMessage = true;
+    }
+
+    return 0;
+
+#if 0
     long widget;
     if (!PyArg_ParseTuple(args, (char*)"l:hideSystray", &widget))
         return NULL;
     if (!checkKaramba(widget))
         return NULL;
     return Py_BuildValue((char*)"l", hideSystray(widget));
+#endif
 }
 
 /* now a method we need to expose to Python */
+#if 0
 long createSystray(long widget, long x, long y, long w, long h)
 {
-    karamba* currTheme = (karamba*)widget;
+    Karamba* currTheme = (Karamba*)widget;
 
     //Don't create more than one systray
-    if (currTheme->systray == 0) {
-        currTheme->systray = new Systemtray(currTheme);
-        currTheme->systray->move((int)x, (int)y);
-        currTheme->systray->setMinimumSize((int)w, (int)h);
-        currTheme->systray->initSystray();
-        QObject::connect(currTheme->systray, SIGNAL(updated()),
+    if (currTheme->systemTray() == 0) {
+        currTheme->systemTray() = new Systemtray(currTheme);
+        currTheme->systemTray()->move((int)x, (int)y);
+        currTheme->systemTray()->setMinimumSize((int)w, (int)h);
+        currTheme->systemTray()->initsystemTray();
+        QObject::connect(currTheme->systemTray(), SIGNAL(updated()),
                          currTheme, SLOT(systrayUpdated()));
-        currTheme->systray->show();
+        currTheme->systemTray()->show();
     }
 
     return 1;
 }
+#endif
 
 PyObject* py_create_systray(PyObject *, PyObject *args)
 {
+    Q_UNUSED(args);
+
+    static bool firstMessage = false;
+
+    if (!firstMessage) {
+        kWarning() << "Call to \"moveSystray\" not available in this version of SuperKaramba" << endl;
+        firstMessage = true;
+    }
+
+    return 0;
+
+#if 0
     long widget, x, y, w, h;
     if (!PyArg_ParseTuple(args, (char*)"lllll:createSystray", &widget, &x, &y, &w, &h))
         return NULL;
     if (!checkKaramba(widget))
         return NULL;
     return Py_BuildValue((char*)"l", createSystray(widget, x, y, w, h));
+#endif
 }
 
 /* now a method we need to expose to Python */
+#if 0
 long getCurrentWindowCount(long widget)
 {
-    karamba* currTheme = (karamba*)widget;
+    Karamba* currTheme = (Karamba*)widget;
     int num;
 
     num = 0;
 
-    if (currTheme->systray != 0) {
-        num = currTheme->systray->getCurrentWindowCount();
+    if (currTheme->systemTray() != 0) {
+        num = currTheme->systemTray()->getCurrentWindowCount();
     }
     return num;
 }
+#endif
 
 PyObject* py_get_current_window_count(PyObject *, PyObject *args)
 {
+    Q_UNUSED(args);
+
+    static bool firstMessage = false;
+
+    if (!firstMessage) {
+        kWarning() << "Call to \"moveSystray\" not available in this version of SuperKaramba" << endl;
+        firstMessage = true;
+    }
+
+    return 0;
+
+#if 0
     long widget;
     if (!PyArg_ParseTuple(args, (char*)"l:getCurrentWindowCount", &widget))
         return NULL;
     if (!checkKaramba(widget))
         return NULL;
     return Py_BuildValue((char*)"l", getCurrentWindowCount(widget));
+#endif
 }
 
 /* now a method we need to expose to Python */
+#if 0
 long updateSystrayLayout(long widget)
 {
-    karamba* currTheme = (karamba*)widget;
+    Karamba* currTheme = (Karamba*)widget;
 
-    if (currTheme->systray != 0) {
-        currTheme->systray->layoutSystray();
+    if (currTheme->systemTray() != 0) {
+        currTheme->systemTray()->layoutsystemTray();
     }
     return 1;
 }
+#endif
 
 PyObject* py_update_systray_layout(PyObject *, PyObject *args)
 {
+    Q_UNUSED(args);
+
+    static bool firstMessage = false;
+
+    if (!firstMessage) {
+        kWarning() << "Call to \"moveSystray\" not available in this version of SuperKaramba" << endl;
+        firstMessage = true;
+    }
+
+    return 0;
+
+#if 0
     long widget;
     if (!PyArg_ParseTuple(args, (char*)"l:updateSystrayLayout", &widget))
         return NULL;
     if (!checkKaramba(widget))
         return NULL;
     return Py_BuildValue((char*)"l", updateSystrayLayout(widget));
+#endif
 }
 
 /* get the systray size from python */
+#if 0
 int getSystraySize(long widget)
 {
-    karamba* currTheme = (karamba*)widget;
-    if (currTheme->systray == 0) {
+    Karamba* currTheme = (Karamba*)widget;
+    if (currTheme->systemTray() == 0) {
         return 0;
     } else {
-        return currTheme->systray->getTraySize();
+        return currTheme->systemTray()->getTraySize();
     }
 }
+#endif
 
 // Returns the size of the systray
 PyObject* py_get_systray_size(PyObject*, PyObject* args)
 {
+    Q_UNUSED(args);
+
+    static bool firstMessage = false;
+
+    if (!firstMessage) {
+        kWarning() << "Call to \"moveSystray\" not available in this version of SuperKaramba" << endl;
+        firstMessage = true;
+    }
+
+    return 0;
+
+#if 0
     long widget;
 
     if (!PyArg_ParseTuple(args, "l:getSystraySize", &widget))
         return NULL;
 
     return Py_BuildValue("l", getSystraySize(widget));
+#endif
 }
 

@@ -301,6 +301,7 @@ public Q_SLOTS:
     QStringList version() const;
     QVariantList desktopSize() const;
     QString getIconByName(const QString &icon, int size) const;
+    QString getExecutingApplication() const;
 
     // RichText
     QObject* createRichText(Karamba* k, const QString &text, bool underline = false) const;
@@ -322,15 +323,14 @@ public Q_SLOTS:
     bool setRichTextSensor(Karamba *k, RichTextLabel *label, const QString &sensor) const;
     QString getRichTextSensor(const Karamba *k, const RichTextLabel *label) const;
 
-    /*
-        // Systray
-        long createSystray
-        long getCurrentWindowCount
-        long hideSystray
-        long moveSystray
-        long showSystray
-        long updateSystrayLayout
-    */
+    // Systray
+    QObject* createSystray(const Karamba *k, int x, int y, int w, int h) const;
+    int getCurrentWindowCount(const Karamba *k) const;
+    bool hideSystray(const Karamba *k) const;
+    bool moveSystray(const Karamba *k, int x, int y, int w, int h) const;
+    bool showSystray(const Karamba *k) const;
+    bool updateSystrayLayout(const Karamba *k) const;
+    bool getSystraySize(const Karamba *k) const;
 
     // Task
     QVariantList getStartupInfo(const Karamba *k, const Startup::StartupPtr startup)

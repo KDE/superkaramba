@@ -137,6 +137,9 @@ public:
     void setProcess(K3Process *process);
     K3Process* process() const;
 
+    void setSystemTray(Systemtray*);
+    Systemtray* systemTray();
+
 public Q_SLOTS:
     void closeWidget();
     void reloadConfig();

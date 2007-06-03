@@ -45,7 +45,7 @@ python/input.cpp
 python/misc.cpp
 python/svcgrp.cpp
 python/menu.cpp
-#python/systray.cpp
+python/systray.cpp
 python/widget.cpp
 python/task.cpp
 python/config.cpp

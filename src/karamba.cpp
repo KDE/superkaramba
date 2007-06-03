@@ -2078,3 +2078,13 @@ K3Process* Karamba::process() const
     return d->currProcess;
 }
 
+void Karamba::setSystemTray(Systemtray *systray)
+{
+    d->systray = systray;
+}
+
+Systemtray* Karamba::systemTray()
+{
+    return d->systray;
+}
+

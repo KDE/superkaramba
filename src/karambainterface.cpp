@@ -4178,7 +4178,22 @@ QString KarambaInterface::getIconByName(const QString &icon, int size) const
     return KIconLoader::global()->iconPath(icon, -size);
 }
 
-
+/** Misc/getExecutingApplication
+*
+* SYNOPSIS
+*   strint getExecutingApplication()
+* DESCRIPTION
+*   Returns the name of the application that runs the
+*   theme. It will return "superkaramba" if it runs in
+*   SuperKaramba or "plasma" if the theme runs in the
+*   Plasma desktop.
+* RETURN VALUE
+*   string with the application name
+*/
+QString KarambaInterface::getExecutingApplication() const
+{
+    return QApplication::applicationName();
+}
 
 
 
@@ -4592,6 +4607,129 @@ QString KarambaInterface::getRichTextSensor(const Karamba *k, const RichTextLabe
 }
 
 
+
+
+QObject* KarambaInterface::createSystray(const Karamba *k, int x, int y, int w, int h) const
+{
+    Q_UNUSED(x);
+    Q_UNUSED(y);
+    Q_UNUSED(w);
+    Q_UNUSED(h);
+
+    if (!checkKaramba(k)) {
+        return 0;
+    }
+
+    static bool firstMessage = false;
+
+    if (!firstMessage) {
+        kWarning() << "Call to \"createSystray\" not available in this version of SuperKaramba" << endl;
+        firstMessage = true;
+    }
+
+    return 0;
+}
+
+int KarambaInterface::getCurrentWindowCount(const Karamba *k) const
+{
+    if (!checkKaramba(k)) {
+        return -1;
+    }
+
+    static bool firstMessage = false;
+
+    if (!firstMessage) {
+        kWarning() << "Call to \"getCurrentWindowCount\" not available in this version of SuperKaramba" << endl;
+        firstMessage = true;
+    }
+
+    return -1;
+}
+
+bool KarambaInterface::hideSystray(const Karamba *k) const
+{
+    if (!checkKaramba(k)) {
+        return false;
+    }
+
+    static bool firstMessage = false;
+
+    if (!firstMessage) {
+        kWarning() << "Call to \"hideSystray\" not available in this version of SuperKaramba" << endl;
+        firstMessage = true;
+    }
+
+    return false;
+}
+
+bool KarambaInterface::moveSystray(const Karamba *k, int x, int y, int w, int h) const
+{
+    Q_UNUSED(x);
+    Q_UNUSED(y);
+    Q_UNUSED(w);
+    Q_UNUSED(h);
+
+    if (!checkKaramba(k)) {
+        return false;
+    }
+
+    static bool firstMessage = false;
+
+    if (!firstMessage) {
+        kWarning() << "Call to \"moveSystray\" not available in this version of SuperKaramba" << endl;
+        firstMessage = true;
+    }
+
+    return false;
+}
+
+bool KarambaInterface::showSystray(const Karamba *k) const
+{
+    if (!checkKaramba(k)) {
+        return false;
+    }
+
+    static bool firstMessage = false;
+
+    if (!firstMessage) {
+        kWarning() << "Call to \"showSystray\" not available in this version of SuperKaramba" << endl;
+        firstMessage = true;
+    }
+
+    return false;
+}
+
+bool KarambaInterface::updateSystrayLayout(const Karamba *k) const
+{
+    if (!checkKaramba(k)) {
+        return false;
+    }
+
+    static bool firstMessage = false;
+
+    if (!firstMessage) {
+        kWarning() << "Call to \"updateSystrayLayout\" not available in this version of SuperKaramba" << endl;
+        firstMessage = true;
+    }
+
+    return false;
+}
+
+bool KarambaInterface::getSystraySize(const Karamba *k) const
+{
+    if (!checkKaramba(k)) {
+        return false;
+    }
+
+    static bool firstMessage = false;
+
+    if (!firstMessage) {
+        kWarning() << "Call to \"getSystraySize\" not available in this version of SuperKaramba" << endl;
+        firstMessage = true;
+    }
+
+    return false;
+}
 
 
 

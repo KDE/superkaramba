@@ -44,7 +44,7 @@
 #include "python/menu.h"
 #include "python/config.h"
 #include "python/task.h"
-//#include "systray_python.h"
+#include "python/systray.h"
 #include "python/svcgrp.h"
 #include "python/misc.h"
 #include "python/input.h"
@@ -214,8 +214,6 @@ static PyMethodDef karamba_methods[] =
         {(char*)"performTaskAction", py_perform_task_action, METH_VARARGS, (char*)"Do something with a task, such as minimize it"},
 
         // System Tray - systray_python.cpp
-        /*
-        KDE4
         {(char*)"createSystray", py_create_systray, METH_VARARGS, (char*)"Create a Systray"},
         {(char*)"hideSystray", py_hide_systray, METH_VARARGS, (char*)"Hide the Systray"},
         {(char*)"showSystray", py_show_systray, METH_VARARGS, (char*)"Show the Systray"},
@@ -224,7 +222,6 @@ static PyMethodDef karamba_methods[] =
         {(char*)"updateSystrayLayout", py_update_systray_layout, METH_VARARGS, (char*)"Update Systray layout"},
         {(char*)"getSystraySize", py_get_systray_size, METH_VARARGS, 
         (char*)"Get the size of the Systray"},
-        */
 
         // Misc - misc_python.cpp
         {(char*)"getThemePath", py_get_theme_path, METH_VARARGS, (char*)"Get the file path of the theme"},
