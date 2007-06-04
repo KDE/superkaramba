@@ -193,7 +193,7 @@ void KarambaApplication::toggleSystemTray()
             m_sysTrayIcon->show();
     }
 
-    SuperKarambaSettings::setShowSysTray(m_sysTrayIcon->isVisible());
+    SuperKarambaSettings::setShowSysTray(m_sysTrayIcon ? m_sysTrayIcon->isVisible() : false);
     SuperKarambaSettings::self()->writeConfig();
 }
 
