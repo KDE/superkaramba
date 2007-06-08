@@ -1,3 +1,6 @@
+#!/usr/bin/env superkaramba-bin
+# coding: utf-8
+
 #this import statement allows access to the karamba functions
 import karamba
 
