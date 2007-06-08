@@ -1,3 +1,6 @@
+#!/usr/bin/env superkaramba-bin
+# coding: utf-8
+
 #Unicode Example
 
 #For Symbol Tables look at www.unicode.org/charts/
