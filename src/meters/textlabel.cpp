@@ -413,7 +413,7 @@ bool TextLabel::mouseEvent(QEvent* e)
             program = m_rightMouseButtonAction;
 
         if (!program.isEmpty())
-            KRun::runCommand(program);
+            KRun::runCommand(program,0L);
         else
             return true;
     }

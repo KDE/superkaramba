@@ -110,7 +110,7 @@ PyObject* py_execute_command(PyObject *, PyObject* args)
 
     if (!PyArg_ParseTuple(args, (char*)"O:execute", &s))
         return NULL;
-    return Py_BuildValue((char*)"l", KRun::runCommand(PyString2QString(s)));
+    return Py_BuildValue((char*)"l", KRun::runCommand(PyString2QString(s),0L));
 }
 
 // Runs a command, returns 0 if it could not start command

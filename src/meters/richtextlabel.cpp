@@ -179,7 +179,7 @@ bool RichTextLabel::mouseEvent(QEvent *e)
 
     if (link[0] != '#') {
         if (button == Qt::LeftButton)
-            KRun::runCommand(link);
+            KRun::runCommand(link,0L);
 
         return false;
     } else

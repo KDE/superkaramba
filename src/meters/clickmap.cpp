@@ -48,7 +48,7 @@ void ClickMap::mousePressEvent(QGraphicsSceneMouseEvent *e)
     if (index >= 1 && index <= (int)displays.count()) {
         // qDebug( "You clicked item " + QString::number( index ) + ", " +
         //  displays[index - 1] + " " + links[index - 1] );
-        KRun::runCommand("konqueror " + links[index - 1]);
+        KRun::runCommand("konqueror " + links[index - 1],0L);
     }
 
     return;

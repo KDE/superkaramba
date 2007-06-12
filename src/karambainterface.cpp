@@ -3333,7 +3333,7 @@ bool KarambaInterface::changeInterval(Karamba *k, int interval) const
 */
 int KarambaInterface::execute(const QString &command) const
 {
-    return KRun::runCommand(command);
+    return KRun::runCommand(command,0L);
 }
 
 /** Misc/createClickArea

@@ -416,7 +416,7 @@ bool ImageLabel::mouseEvent(QEvent *e)
         }
 
         if (!program.isEmpty()) {
-            KRun::runCommand(program);
+            KRun::runCommand(program,0L);
         } else {
             return true;
         }

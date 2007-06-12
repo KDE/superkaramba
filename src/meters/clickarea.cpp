@@ -46,7 +46,7 @@ bool ClickArea::mouseEvent(QEvent *e)
 
         if (!program.isEmpty()) {
             //qDebug(program);
-            KRun::runCommand(program);
+            KRun::runCommand(program,0L);
         }
     }
 
