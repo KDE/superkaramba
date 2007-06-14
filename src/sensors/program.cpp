@@ -10,7 +10,6 @@
 
 #include "program.h"
 
-#include <QStringList>
 
 ProgramSensor::ProgramSensor(const QString &progName, int interval, const QString &encoding)
         : Sensor(interval)
