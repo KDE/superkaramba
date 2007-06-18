@@ -39,15 +39,44 @@ void ProgramSensor::receivedStdout(K3Process *, char *buffer, int len)
     sensorResult += codec->toUnicode(buffer);
 }
 
+void ProgramSensor::replaceLine(QString &format, const QString &line)
+{
+    const QStringList tokens = line.split(QRegExp("\\s+"), QString::SkipEmptyParts);
+    QRegExp dblDigit("%(\\d\\d)");
+    replaceArgs(dblDigit, format, tokens);
+    QRegExp digit("%(\\d)");
+    replaceArgs(digit, format, tokens);
+}
+
+void ProgramSensor::replaceArgs(QRegExp& regEx, QString& format, const QStringList& tokens)
+{
+    int pos = 0;
+    while (pos >= 0) {
+        pos = regEx.indexIn(format, pos);
+        if (pos > -1) {
+            QString matched = regEx.cap(1);
+            int tokenIndex = matched.toInt() - 1;
+            QString replacement = "";
+            if (tokenIndex < tokens.size()) {
+                replacement = tokens.at(tokenIndex);
+            }
+            format.replace(QRegExp("%" + matched), replacement);
+            pos += regEx.matchedLength();
+        }
+    }
+}
+
+
 void ProgramSensor::processExited(K3Process *)
 {
     int lineNbr;
     SensorParams *sp;
     Meter *meter;
+    QString value;
     QVector<QString> lines;
     QStringList stringList = sensorResult.split('\n');
     QStringList::ConstIterator end(stringList.end());
-    for (QStringList::ConstIterator it = stringList.begin(); it != end; ++it) {
+   for (QStringList::ConstIterator it = stringList.begin(); it != end; ++it) {
         lines.push_back(*it);
     }
 
@@ -59,14 +88,29 @@ void ProgramSensor::processExited(K3Process *)
         if (meter != 0) {
             lineNbr = (sp->getParam("LINE")).toInt();
             if (lineNbr >= 1  && lineNbr <= (int) count) {
-                meter->setValue(lines[lineNbr-1]);
+                value = lines[lineNbr-1];
+            } else if (-lineNbr >= 1 && -lineNbr <= (int) count) {
+                value = lines[count+lineNbr];
+            } else if (lineNbr != 0) {
+                value.clear();
+            } else {
+                value = sensorResult;
             }
-            if (-lineNbr >= 1 && -lineNbr <= (int) count) {
-                meter->setValue(lines[count+lineNbr]);
+
+            QString format = sp->getParam("FORMAT");
+            if (!format.isEmpty()) {
+                QString returnValue;
+                QStringList lineList = value.split('\n');
+                QStringList::ConstIterator lineListEnd(lineList.end());
+                for (QStringList::ConstIterator line = lineList.begin(); line != lineListEnd; ++line, returnValue += '\n') {
+                    QString formatCopy = format;
+                    replaceLine(formatCopy, *line);
+                    returnValue += formatCopy;
+                }
+                value = returnValue;
             }
-            if (lineNbr == 0) {
-                meter->setValue(sensorResult);
-            }
+
+            meter->setValue(value);
         }
     }
 

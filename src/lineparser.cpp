@@ -78,6 +78,9 @@ QString LineParser::getString(const QString &w, const QString &def) const
     } else {
         result = rx.cap(1);
     }
+
+    result.replace("%quote", "\"");
+
     if (found)
         return result;
     else

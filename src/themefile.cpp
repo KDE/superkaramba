@@ -31,6 +31,7 @@
 #include <KMessageBox>
 #include <KStandardDirs>
 #include <KLocale>
+#include <kio/job.h>
 #include <KIO/NetAccess>
 #include <kross/core/manager.h>
 #include <kross/core/interpreter.h>
@@ -273,10 +274,13 @@ bool ThemeFile::set(const KUrl &url)
                 return false;
             }
         }
-        if (!KIO::NetAccess::file_copy(url, localFile.filePath(), -1, true,
-                                       false, kapp->activeWindow())) {
+
+        KIO::Job *job = KIO::file_copy(url, localFile.filePath(), -1, true, false, true);
+
+        if (!KIO::NetAccess::synchronousRun(job, kapp->activeWindow())) {
             return false;
         }
+
         d->file = localFile.filePath();
     } else {
         if (url.directory().isEmpty() || url.directory() == "/")

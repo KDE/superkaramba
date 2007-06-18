@@ -30,6 +30,9 @@ private:
     QString programName;
     QString sensorResult;
 
+    void replaceLine(QString& format, const QString& line);
+    void replaceArgs(QRegExp& regEx, QString& format, const QStringList& tokens);
+
 public slots:
     void receivedStdout(K3Process *proc, char *buffer, int buflen);
     void processExited(K3Process *proc);

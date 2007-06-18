@@ -12,6 +12,8 @@
 
 #include <QTextStream>
 
+#include <KDebug>
+
 #ifdef __FreeBSD__
 #include <sys/param.h>
 #include <sys/sysctl.h>
@@ -68,15 +70,58 @@ NetworkSensor::NetworkSensor(const QString &dev, int interval): Sensor(interval)
     if ((if_number == -1) && (if_gw != -1))
         if_number = if_gw;
 #else
-    if (device.isEmpty())
-        device = "eth0";
+    if (device.isEmpty()) {
+        device = DEFAULT_DEVICE;
+    }
 #endif
+    interfaceList = device.split("|", QString::SkipEmptyParts);
+    refreshDevice();
+    getIPAddress();
+
     getInOutBytes(receivedBytes, transmittedBytes);
     netTimer.start();
 
 }
+
+void NetworkSensor::refreshDevice() {
+    int rank = interfaceList.count();
+    //TODO: what about BSD?
+    QFile file ("/proc/net/dev");
+
+    if (file.open(IO_ReadOnly | IO_Translate)) {
+        QTextStream t(&file);       // use a text stream
+        t.readLine();               // reads: "Inter-|   Receive..."
+        t.readLine();                  // reads: " face |bytes    "
+        QString line = t.readLine();   // finally reads something we care about
+
+        QStringList::ConstIterator listEnd(interfaceList.end());
+        while ((rank != 0) && (line != 0)) {
+            int i = 0;
+            for (QStringList::ConstIterator dev = interfaceList.begin();
+                (dev != listEnd) && (i < rank);
+                ++dev, ++i)
+                {
+                    if (line.contains(*dev)) {
+                        device = (*dev);
+                        //deviceLine = line;
+                        rank = i;
+                    }
+                }
+                line = t.readLine();
+        }
+        file.close();
+    }
+
+    if (rank >= interfaceList.count()) {
+        device = NO_DEVICE;
+        //deviceLine = "";
+    }
+}
+
 NetworkSensor::~NetworkSensor()
-{}
+{
+}
+
 void NetworkSensor::getInOutBytes(unsigned long &in, unsigned long &out) const
 {
 #ifdef __FreeBSD__
@@ -110,18 +155,58 @@ void NetworkSensor::getInOutBytes(unsigned long &in, unsigned long &out) const
         }
 
         if (line.contains(device)) {
-            QRegExp rx("\\W+" + device + ":\\D*(\\d+)(?:\\D+\\d+){7}\\D+(\\d+)", Qt::CaseInsensitive);
+            QRegExp rx("\\W*" + device + ":\\D*(\\d+)(?:\\D+\\d+){7}\\D+(\\d+)", Qt::CaseInsensitive);
             rx.indexIn(line);
             in = rx.cap(1).toULong();
             out = rx.cap(2).toULong();
         } else {
-            qDebug("Network sensor: can not find %s", device.toAscii().constData());
+            kDebug() << "Network sensor: can not find " << device << endl;
             in = 0;
             out = 0;
         }
         file.close();
     }
 #endif
+}
+
+void NetworkSensor::getIPAddress()
+{
+    struct ifaddrs *ifa = NULL, *ifp = NULL;
+
+    if (getifaddrs (&ifp) < 0) {
+        kDebug() << "getifaddrs failed" << endl;
+        ipAddress = NO_IP;
+        return;
+    }
+
+    for (ifa = ifp; ifa; ifa = ifa->ifa_next) {
+        char ip[200];
+        socklen_t salen;
+
+        if (ifa->ifa_addr->sa_family == AF_INET) {
+            salen = sizeof (struct sockaddr_in);
+        } else if (ifa->ifa_addr->sa_family == AF_INET6) {
+            //continue since this doesn't support IPv6 at this point
+            continue;
+            //salen = sizeof (struct sockaddr_in6);
+        } else {
+            continue;
+        }
+
+        if (getnameinfo(ifa->ifa_addr, salen, ip, sizeof (ip), NULL, 0, NI_NUMERICHOST) < 0) {
+            kDebug() << "getnameinfo < 0" << endl;
+            continue;
+        }
+
+        if (device == QString::fromLatin1(ifa->ifa_name)) {
+            ipAddress = QString::fromLatin1(ip);
+            freeifaddrs(ifp);
+            return;
+        }
+    }
+
+    freeifaddrs(ifp);
+    ipAddress = NO_IP;
 }
 
 void NetworkSensor::update()
@@ -133,6 +218,8 @@ void NetworkSensor::update()
 
     unsigned long inB, outB;
     const double delay = (double) netTimer.elapsed(); // msec elapsed since last update
+    refreshDevice();
+    getIPAddress();
     getInOutBytes(inB, outB);
     netTimer.restart();
 
@@ -158,8 +245,13 @@ void NetworkSensor::update()
         format.replace(QRegExp("%out", Qt::CaseInsensitive),
                        QString::number((outB - transmittedBytes) / delay, 'f', decimals));
 
+        format.replace(QRegExp("%dev", Qt::CaseInsensitive), device);
+
+        format.replace(QRegExp("%ip", Qt::CaseInsensitive), ipAddress);
+
         meter->setValue(format);
     }
+
     receivedBytes = inB;
     transmittedBytes = outB;
 }

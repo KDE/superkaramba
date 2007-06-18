@@ -22,6 +22,15 @@
 #include <net/if_mib.h>
 #endif
 
+#include <ifaddrs.h>
+#include <stdio.h>
+#include <netdb.h>
+
+
+#define NO_DEVICE "<none>"
+#define DEFAULT_DEVICE "eth1|eth0"
+#define NO_IP "-.-.-.-"
+
 class NetworkSensor :  public Sensor
 {
     Q_OBJECT
@@ -35,13 +44,16 @@ private:
     unsigned long receivedBytes;
     unsigned long transmittedBytes;
     QTime netTimer;
+    QString ipAddress;
     QString device;
+    QStringList interfaceList;
 #ifdef __FreeBSD__
     int if_number;
     ifmibdata if_mib;
 #endif
     void getInOutBytes(unsigned long &in, unsigned long &out) const;
-
+    void getIPAddress();
+    void refreshDevice();
 };
 #endif // NETWORKSENSOR_H
 

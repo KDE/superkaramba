@@ -1230,7 +1230,11 @@ void Karamba::setSensor(const LineParser& lineParser, Meter* meter)
     */
 
     if (sens == "PROGRAM") {
-        QString progName = lineParser.getString("PROGRAM");
+        QString progName = lineParser.getString("PROGRAMNAME");
+        if (progName.isEmpty()) {
+            progName = lineParser.getString("PROGRAM");
+        }
+
         sensor = d->sensorMap["PROGRAM"+progName];
 
         if (sensor == 0) {
@@ -1239,14 +1243,16 @@ void Karamba::setSensor(const LineParser& lineParser, Meter* meter)
             interval = (interval == 0) ? 60000 : interval;
             QString encoding = lineParser.getString("ENCODING");
 
+            QString prog = lineParser.getString("PROGRAM");
             sensor = (d->sensorMap["PROGRAM"+progName] =
-                          new ProgramSensor(progName, interval, encoding));
+                          new ProgramSensor(prog, interval, encoding));
             d->sensorList.append(sensor);
         }
 
         SensorParams *sp = new SensorParams(meter);
         sp->addParam("LINE", QString::number(lineParser.getInt("LINE")));
         sp->addParam("THEMAPATH", d->theme.path());
+        sp->addParam("FORMAT", d->theme.locale()->translate(lineParser.getString("FORMAT")));
         sensor->addMeter(sp);
     }
 
