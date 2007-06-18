@@ -533,7 +533,7 @@ bool TaskManager::isOnScreen(int screen, const WId wid)
         return true;
     }
 
-    KWindowInfo wi = KWindowSystem::windowInfo(wid, NET::WMKDEFrameStrut);
+    KWindowInfo wi = KWindowSystem::windowInfo(wid, NET::WMFrameExtents);
 
     // for window decos that fudge a bit and claim to extend beyond the
     // edge of the screen, we just contract a bit.
