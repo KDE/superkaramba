@@ -1,0 +1,10 @@
+karamba x=0 y=0 w=170 h=80 interval=1000 locked=false
+
+defaultfont font="Bitstream Vera Sans" fontsize=14 color=225,225,225 shadow=2 bgcolor=20,20,20 
+
+text x=0 y=0 sensor=network format="%dev : %ip"
+
+text x=0 y=15 sensor=program programname="testProg" program="cat /proc/net/dev | sed 's/:/ /'" line=-2 format="%1 rxbytes: %2" interval=1000
+text x=0 y=30 sensor=program programname="testProg" line=-2 format="%1 txbytes: %10 %20"
+
+text x=0 y=45 sensor=program program="echo -n '1 2 3 4 5'" format="1:%1 2:%2 3:%3 4:%4 5:%5 6:%6" interval=1000
