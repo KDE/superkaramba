@@ -430,27 +430,27 @@ void KarambaInterface::callMenuItemClicked(Karamba* k, KMenu* menu, QAction *id)
 
 void KarambaInterface::callActiveTaskChanged(Karamba *k, Task* t)
 {
-    emit activeTaskChanged(k, (long long)t);
+    emit activeTaskChanged(k, t);
 }
 
 void KarambaInterface::callTaskAdded(Karamba *k, Task *t)
 {
-    emit taskAdded(k, (long long)t);
+    emit taskAdded(k, t);
 }
 
 void KarambaInterface::callTaskRemoved(Karamba *k, Task *t)
 {
-    emit taskRemoved(k, (long long)t);
+    emit taskRemoved(k, t);
 }
 
 void KarambaInterface::callStartupAdded(Karamba *k, Startup *t)
 {
-    emit startupAdded(k, (long long)t);
+    emit startupAdded(k, t);
 }
 
 void KarambaInterface::callStartupRemoved(Karamba *k, Startup *t)
 {
-    emit startupRemoved(k, (long long)t);
+    emit startupRemoved(k, t);
 }
 
 void KarambaInterface::callCommandFinished(Karamba *k, int pid)
@@ -4752,7 +4752,7 @@ bool KarambaInterface::getSystraySize(const Karamba *k) const
 *   * 2 = Executable name
 *   * 3 = A reference back to the task you got info on
 */
-QVariantList KarambaInterface::getStartupInfo(const Karamba *k, const Startup::StartupPtr startup)
+QVariantList KarambaInterface::getStartupInfo(const Karamba *k, const Startup *startup)
     const
 {
     if (!checkKaramba(k)) {
@@ -4764,7 +4764,7 @@ QVariantList KarambaInterface::getStartupInfo(const Karamba *k, const Startup::S
     ret << startup->text();
     ret << startup->icon();
     ret << startup->bin();
-    ret << startup.data();
+    ret << qVariantFromValue((QObject*)startup);
 
     return ret;
 }
@@ -4792,7 +4792,7 @@ QVariantList KarambaInterface::getStartupList(const Karamba *k) const
 
     Startup::List startupList = TaskManager::self()->startups();
     foreach (Startup::StartupPtr startup, startupList) {
-        ret << startup.data();
+        ret << qVariantFromValue((QObject*)startup.data());
     }
 
     return ret;
@@ -4823,7 +4823,7 @@ QVariantList KarambaInterface::getStartupList(const Karamba *k) const
 *   * 7 = Is this window focused? fale = no, true = yes
 *   * 8 = A reference back to the task you got info on
 */
-QVariantList KarambaInterface::getTaskInfo(const Karamba *k, Task::TaskPtr task) const
+QVariantList KarambaInterface::getTaskInfo(const Karamba *k, Task* task) const
 {
     if (!checkKaramba(k)) {
         return QVariantList();
@@ -4839,7 +4839,7 @@ QVariantList KarambaInterface::getTaskInfo(const Karamba *k, Task::TaskPtr task)
     ret << task->isIconified();
     ret << task->isShaded();
     ret << task->isActive();
-    ret << task.data();
+    ret << qVariantFromValue((QObject*)task);
 
     return ret;
 }
@@ -4869,7 +4869,7 @@ QVariantList KarambaInterface::getTaskList(const Karamba *k) const
 
     Task::TaskPtr task;
     foreach(task, taskList) {
-        ret << task.data();
+        ret << qVariantFromValue((QObject*)task.data());
     }
 
     return ret;
@@ -4936,7 +4936,7 @@ QStringList KarambaInterface::getTaskNames(const Karamba *k) const
 * RETURN VALUE
 *   boolean if successful
 */
-bool KarambaInterface::performTaskAction(const Karamba *k, Task::TaskPtr task, int action)
+bool KarambaInterface::performTaskAction(const Karamba *k, Task* task, int action)
     const
 {
     if (!checkKaramba(k)) {

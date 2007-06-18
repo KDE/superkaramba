@@ -414,6 +414,9 @@ void TaskManager::activeWindowChanged(WId w)
         if (_active) {
             _active->setActive(false);
             _active = 0;
+
+            // there is no active window at the moment
+            emit activeTaskChanged(Task::TaskPtr(0));
         }
     } else {
         if (_active)
@@ -421,6 +424,8 @@ void TaskManager::activeWindowChanged(WId w)
 
         _active = t;
         _active->setActive(true);
+
+        emit activeTaskChanged(_active);
     }
 }
 

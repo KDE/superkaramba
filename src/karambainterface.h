@@ -78,11 +78,11 @@ Q_SIGNALS:
     void widgetClosed(QObject*);
     void menuItemClicked(QObject*, QObject*, QObject*);
     void menuOptionChanged(QObject*, QString, bool);
-    void activeTaskChanged(QObject*, long long);
-    void taskAdded(QObject*, long long);
-    void taskRemoved(QObject*, long long);
-    void startupAdded(QObject*, long long);
-    void startupRemoved(QObject*, long long);
+    void activeTaskChanged(QObject*, QObject*);
+    void taskAdded(QObject*, QObject*);
+    void taskRemoved(QObject*, QObject*);
+    void startupAdded(QObject*, QObject*);
+    void startupRemoved(QObject*, QObject*);
     void commandFinished(QObject*, int);
     void commandOutput(QObject*, int, QString);
     void itemDropped(QObject*, QString, int, int);
@@ -333,13 +333,13 @@ public Q_SLOTS:
     bool getSystraySize(const Karamba *k) const;
 
     // Task
-    QVariantList getStartupInfo(const Karamba *k, const Startup::StartupPtr startup)
+    QVariantList getStartupInfo(const Karamba *k, const Startup* startup)
     const;
     QVariantList getStartupList(const Karamba *k) const;
-    QVariantList getTaskInfo(const Karamba *k, Task::TaskPtr task) const;
+    QVariantList getTaskInfo(const Karamba *k, Task* task) const;
     QVariantList getTaskList(const Karamba *k) const;
     QStringList getTaskNames(const Karamba *k) const;
-    bool performTaskAction(const Karamba *k, Task::TaskPtr task, int action) const;
+    bool performTaskAction(const Karamba *k, Task* task, int action) const;
 
     // Text
     QObject* createText(Karamba* k, int x, int y, int width, int height, const QString &text) const;

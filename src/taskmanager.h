@@ -694,6 +694,11 @@ public:
 
 Q_SIGNALS:
     /**
+     * Emitted when the active window changed
+     */
+    void activeTaskChanged(Task::TaskPtr);
+
+    /**
      * Emitted when a new task has started.
      */
     void taskAdded(Task::TaskPtr);
