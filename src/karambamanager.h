@@ -38,6 +38,7 @@ class KDE_EXPORT KarambaManager : public QObject
         Karamba* getKaramba(const QString &prettyThemeName) const;
         Karamba* getKarambaByName(const QString &name) const;
         QList<Karamba*> getKarambas() const;
+        bool checkKaramba(const Karamba *karamba) const;
 
     Q_SIGNALS:
         void karambaStarted(QGraphicsItemGroup*);

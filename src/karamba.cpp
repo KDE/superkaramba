@@ -466,6 +466,8 @@ void Karamba::startKaramba()
         if (!d->useKross) {
             d->python = new KarambaPython(d->theme, false);
 
+            KarambaManager::self()->addKaramba(this);
+
             d->python->initWidget(this);
         } else {
             d->interface = new KarambaInterface(this);
@@ -475,6 +477,8 @@ void Karamba::startKaramba()
                 delete d->interface;
                 d->interface = 0;
             } else {
+                KarambaManager::self()->addKaramba(this);
+
                 d->interface->startInterpreter();
                 d->interface->callInitWidget(this);
             }
@@ -485,8 +489,6 @@ void Karamba::startKaramba()
         connect(&d->stepTimer, SIGNAL(timeout()), SLOT(step()));
         d->stepTimer.start(d->interval);
     }
-
-    KarambaManager::self()->addKaramba(this);
 
     show();
 }

@@ -93,6 +93,11 @@ QList<Karamba*> KarambaManager::getKarambas() const
     return d->karambaList;
 }
 
+bool KarambaManager::checkKaramba(const Karamba *karamba) const
+{
+    return d->karambaList.contains(const_cast<Karamba*>(karamba));
+}
+
 
 #include "karambamanager.moc"
 

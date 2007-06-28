@@ -153,7 +153,7 @@ bool KarambaInterface::checkKaramba(const Karamba *k) const
         return false;
     }
 
-    if (k != d->karamba) {
+    if (!KarambaManager::self()->checkKaramba(k)) {
         kWarning() << "Widget " << (long)k << " invalid" << endl;
         return false;
     }
