@@ -37,15 +37,6 @@ static const char *description =
 
 static const char *version = "0.50";
 
-static KCmdLineOptions options[] =
-    {
-        // { "+[URL]", I18N_NOOP( "Document to open" ), 0 },
-        // { "!nosystray", I18N_NOOP("Disable systray icon"), 0 },
-        { "usefallback", I18N_NOOP("Use the original python bindings as scripting backend. Off by default."), 0 },
-        { "+file", I18N_NOOP("A required argument 'file'"), 0 },
-        { 0, 0, 0 }
-    };
-
 int main(int argc, char **argv)
 {
     // Taken from KRunner by A. Seigo
@@ -92,18 +83,24 @@ int main(int argc, char **argv)
         }
     }
 
-    KAboutData about("superkaramba", I18N_NOOP("SuperKaramba"),
-                     version, description,
+    KAboutData about("superkaramba", 0, ki18n("SuperKaramba"),
+                     version, ki18n(description),
                      KAboutData::License_GPL,
-                     "(c) 2003-2006 The SuperKaramba developers");
-    about.addAuthor("Adam Geitgey", 0, "adam@rootnode.org");
-    about.addAuthor("Hans Karlsson", 0, "karlsson.h@home.se");
-    about.addAuthor("Ryan Nickell", 0, "p0z3r@earthlink.net");
-    about.addAuthor("Petri Damstén", 0, "petri.damsten@iki.fi");
-    about.addAuthor("Alexander Wiedenbruch", 0, "mail@wiedenbruch.de");
-    about.addAuthor("Luke Kenneth Casson Leighton", 0, "lkcl@lkcl.net");
-    about.addCredit("Sebastian Sauer", I18N_NOOP("Work on Kross, tutorials and examples"), "mail@dipe.org");
+                     ki18n("(c) 2003-2006 The SuperKaramba developers"));
+    about.addAuthor(ki18n("Adam Geitgey"), KLocalizedString(), "adam@rootnode.org");
+    about.addAuthor(ki18n("Hans Karlsson"), KLocalizedString(), "karlsson.h@home.se");
+    about.addAuthor(ki18n("Ryan Nickell"), KLocalizedString(), "p0z3r@earthlink.net");
+    about.addAuthor(ki18n("Petri Damstén"), KLocalizedString(), "petri.damsten@iki.fi");
+    about.addAuthor(ki18n("Alexander Wiedenbruch"), KLocalizedString(), "mail@wiedenbruch.de");
+    about.addAuthor(ki18n("Luke Kenneth Casson Leighton"), KLocalizedString(), "lkcl@lkcl.net");
+    about.addCredit(ki18n("Sebastian Sauer"), ki18n("Work on Kross, tutorials and examples"), "mail@dipe.org");
     KCmdLineArgs::init(argc, argv, &about);
+
+    KCmdLineOptions options;
+    // { "+[URL]", I18N_NOOP( "Document to open" ), 0 },
+// { "!nosystray", I18N_NOOP("Disable systray icon"), 0 },
+    options.add("usefallback", ki18n("Use the original python bindings as scripting backend. Off by default."));
+    options.add("+file", ki18n("A required argument 'file'"));
     KCmdLineArgs::addCmdLineOptions(options);
     KarambaApplication::addCmdLineOptions();
     KarambaSessionManaged ksm;

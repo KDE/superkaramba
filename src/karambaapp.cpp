@@ -61,7 +61,7 @@ void KarambaApplication::checkCommandLine(KCmdLineArgs *args, QList<KUrl> &lst)
 
     if (args->count() > 0) {
         for (int i = 0; i < (args->count()); i++) {
-            if (args->arg(i) && *args->arg(i)) {
+            if (!args->arg(i).isEmpty()) {
                 KUrl url = args->url(i);
                 lst.append(url);
             }
