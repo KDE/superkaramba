@@ -157,7 +157,7 @@ class Karamba::Private
         QGraphicsItemAnimation *animation;
         QTimeLine *timer;
 
-        OrgKdeKdesktopBackgroundInterface* backgroundInterface;
+        //OrgKdeKdesktopBackgroundInterface* backgroundInterface;
 
         bool useFancyEffects;
         bool useAntialiasing;
@@ -199,7 +199,7 @@ class Karamba::Private
             subTheme(subTheme),
             animation(0),
             timer(0),
-            backgroundInterface(0),
+            //backgroundInterface(0),
             useFancyEffects(true),
             useAntialiasing(true),
             errorInInit(false),
@@ -233,7 +233,7 @@ class Karamba::Private
             delete animation;
             delete timer;
 
-            delete backgroundInterface;
+            //delete backgroundInterface;
 
             if (!globalView) {
                 delete view;
@@ -323,11 +323,13 @@ Karamba::Karamba(const KUrl &themeFile, QGraphicsView *view, int instance, bool 
     d->KWinModule = KWindowSystem::self();
     connect(d->KWinModule, SIGNAL(currentDesktopChanged(int)), this,
             SLOT(currentDesktopChanged(int)));
-
+//TODO port it
+    
+#if 0
     d->backgroundInterface = new org::kde::kdesktop::Background("org.kde.kdesktop", "/Background", QDBusConnection::sessionBus());
     connect(d->backgroundInterface, SIGNAL(backgroundChanged(int)), this,
             SLOT(currentWallpaperChanged(int)));
-
+#endif
     setAcceptsHoverEvents(true);
 
     // Setup of the Task Manager Callbacks

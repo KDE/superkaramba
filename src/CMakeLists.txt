@@ -55,8 +55,8 @@ KDE4_ADD_KCFG_FILES(superkaramba_LIB_SRCS
 superkarambasettings.kcfgc
 )
 
-set(kdesktop_xml ${DBUS_INTERFACES_DIR}/org.kde.kdesktop.Background.xml)
-QT4_ADD_DBUS_INTERFACE(superkaramba_LIB_SRCS ${kdesktop_xml} kdesktop_background_interface)
+#set(kdesktop_xml ${DBUS_INTERFACES_DIR}/org.kde.kdesktop.Background.xml)
+#QT4_ADD_DBUS_INTERFACE(superkaramba_LIB_SRCS ${kdesktop_xml} kdesktop_background_interface)
 
 KDE4_AUTOMOC(${superkaramba_LIB_SRCS})
 
