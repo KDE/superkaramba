@@ -31,7 +31,6 @@
 #include <QGraphicsItemAnimation>
 
 #include <KUrl>
-#include <kdesktop_background_interface.h>
 #include <netwm.h>
 
 #include "themefile.h"
