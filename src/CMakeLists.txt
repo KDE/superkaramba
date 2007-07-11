@@ -58,8 +58,6 @@ superkarambasettings.kcfgc
 #set(kdesktop_xml ${DBUS_INTERFACES_DIR}/org.kde.kdesktop.Background.xml)
 #QT4_ADD_DBUS_INTERFACE(superkaramba_LIB_SRCS ${kdesktop_xml} kdesktop_background_interface)
 
-KDE4_AUTOMOC(${superkaramba_LIB_SRCS})
-
 KDE4_ADD_LIBRARY(superkaramba SHARED ${superkaramba_LIB_SRCS})
 set_target_properties(superkaramba PROPERTIES VERSION 1.0.0 SOVERSION 1 )
 
@@ -100,8 +98,6 @@ superkarambasettings.kcfgc
 )
 
 QT4_ADD_DBUS_ADAPTOR(superkaramba_BIN_SRCS org.kde.superkaramba.xml karambaapp.h KarambaApplication)
-
-KDE4_AUTOMOC(${superkaramba_BIN_SRCS})
 
 KDE4_ADD_EXECUTABLE(superkaramba-bin ${superkaramba_BIN_SRCS})
 
