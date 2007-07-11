@@ -59,7 +59,7 @@ superkarambasettings.kcfgc
 #QT4_ADD_DBUS_INTERFACE(superkaramba_LIB_SRCS ${kdesktop_xml} kdesktop_background_interface)
 
 KDE4_ADD_LIBRARY(superkaramba SHARED ${superkaramba_LIB_SRCS})
-set_target_properties(superkaramba PROPERTIES VERSION 1.0.0 SOVERSION 1 )
+set_target_properties(superkaramba PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION} )
 
 
 TARGET_LINK_LIBRARIES(superkaramba
