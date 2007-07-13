@@ -2079,7 +2079,7 @@ bool Karamba::isSubTheme() const
 
 void Karamba::setProcess(K3Process *process)
 {
-    delete process;
+    delete d->currProcess;
     d->currProcess = process;
 }
 
