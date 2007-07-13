@@ -20,7 +20,7 @@ public:
     const QString& meter() const
     {
         return m_meter;
-    };
+    }
 
 private:
     QString m_line;

@@ -60,7 +60,7 @@ public:
     bool isExtensionLoaded()
     {
         return pythonThemeExtensionLoaded;
-    };
+    }
     bool initWidget(Karamba* k);
     bool widgetUpdated(Karamba* k);
     bool widgetClosed(Karamba* k);

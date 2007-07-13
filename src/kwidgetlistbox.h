@@ -54,7 +54,7 @@ public:
     uint count() const
     {
         return rowCount();
-    };
+    }
 
     void showItems(show_callback func = 0, void* data = 0);
 

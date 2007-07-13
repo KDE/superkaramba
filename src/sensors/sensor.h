@@ -28,7 +28,7 @@ public:
     int isEmpty()
     {
         return objList->isEmpty();
-    };
+    }
     virtual void setMaxValue(SensorParams *s);
 
 private:

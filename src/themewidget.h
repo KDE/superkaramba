@@ -38,13 +38,13 @@ public:
     ThemeFile* themeFile() const
     {
         return m_themeFile;
-    };
+    }
 
     int  addInstance();
     int  instances() const
     {
         return m_instancePool.count();
-    };
+    }
     void removeInstance(int instance);
 
     void setDescriptionText(const QString &text);

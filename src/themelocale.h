@@ -48,7 +48,7 @@ public:
     QString language() const
     {
         return m_language;
-    };
+    }
 
     static QStringList languageList();
 

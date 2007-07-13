@@ -29,13 +29,13 @@ class KarambaSessionManaged : public KSessionManager
 {
 public:
     KarambaSessionManaged()
-    {};
+    {}
 
     virtual bool commitData(QSessionManager&);
     virtual bool saveState(QSessionManager&);
 
     virtual ~KarambaSessionManaged()
-    {};
+    {}
 };
 
 #endif
