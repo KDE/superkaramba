@@ -178,22 +178,19 @@ void KarambaApplication::toggleSystemTray()
 {
     //kDebug() << k_funcinfo << endl;
     if (m_sysTrayIcon->isVisible()) {
-        if (m_sysTrayIcon) {
-            KMessageBox::information(m_themesDialog, i18n("<qt>Hiding the system tray icon will keep SuperKaramba running "
-                                     "in background. To show it again use the theme menu.</qt>"),
-                                     i18n("Hiding System Tray Icon"), "hideIcon");
+        KMessageBox::information(m_themesDialog, i18n("<qt>Hiding the system tray icon will keep SuperKaramba running "
+                                                      "in background. To show it again use the theme menu.</qt>"),
+                                 i18n("Hiding System Tray Icon"), "hideIcon");
 
-            m_sysTrayIcon->hide();
-        }
+        m_sysTrayIcon->hide();
         showKarambaMenuExtension();
     } else {
         showKarambaMenuExtension(false);
 
-        if (m_sysTrayIcon)
-            m_sysTrayIcon->show();
+        m_sysTrayIcon->show();
     }
 
-    SuperKarambaSettings::setShowSysTray(m_sysTrayIcon ? m_sysTrayIcon->isVisible() : false);
+    SuperKarambaSettings::setShowSysTray(m_sysTrayIcon->isVisible());
     SuperKarambaSettings::self()->writeConfig();
 }
 
