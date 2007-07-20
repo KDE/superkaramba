@@ -35,6 +35,7 @@
 
 #include "themefile.h"
 #include "taskmanager.h"
+#include "superkaramba_export.h"
 
 class QGraphicsView;
 class QGraphicsScene;
@@ -48,7 +49,7 @@ class Sensor;
 class Systemtray;
 class TextField;
 
-class KDE_EXPORT Karamba : public QObject, public QGraphicsItemGroup
+class SUPERKARAMBA_EXPORT Karamba : public QObject, public QGraphicsItemGroup
 {
     Q_OBJECT
 

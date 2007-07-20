@@ -22,7 +22,7 @@
 
 
 #include <QStringList>
-
+#include "superkaramba_export.h"
 class ThemeFile;
 
 /**
@@ -43,7 +43,7 @@ public:
     ThemeLocale(ThemeFile* theme);
     ~ThemeLocale();
 
-    QString translate(const QString &text) const;
+    SUPERKARAMBA_EXPORT QString translate(const QString &text) const;
     void setLanguage(const QStringList &languages);
     QString language() const
     {

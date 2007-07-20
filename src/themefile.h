@@ -29,6 +29,7 @@
 #include <QTextStream>
 #include <QDir>
 
+#include "superkaramba_export.h"
 class LineParser;
 class ThemeLocale;
 class ZipFile;
@@ -36,7 +37,8 @@ class ZipFile;
 /**
 @author See README for the list of authors
 */
-class KDE_EXPORT ThemeFile
+
+class SUPERKARAMBA_EXPORT ThemeFile
 {
 public:
     typedef QVector<ThemeFile> List;

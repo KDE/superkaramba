@@ -27,6 +27,7 @@
 #include <kross/core/manager.h>
 #include <kross/core/action.h>
 
+#include "superkaramba_export.h"
 #include "karamba.h"
 #include "themelocale.h"
 
@@ -38,7 +39,7 @@
 #include "meters/textlabel.h"
 #include "meters/clickarea.h"
 
-class KDE_EXPORT KarambaInterface : public QObject
+class SUPERKARAMBA_EXPORT KarambaInterface : public QObject
 {
     Q_OBJECT
 

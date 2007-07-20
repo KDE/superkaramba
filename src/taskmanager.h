@@ -58,6 +58,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endif
 #endif
 
+#include "superkaramba_export.h"
+
 class KWindowSystem;
 class TaskManager;
 
@@ -69,7 +71,7 @@ typedef QList<WId> WindowList;
  * @see TaskManager
  * @see KWinModule
  */
-class KDE_EXPORT Task: public QObject, public KShared
+class SUPERKARAMBA_EXPORT Task: public QObject, public KShared
 {
     Q_OBJECT
     Q_PROPERTY(QString visibleName READ visibleName)
@@ -517,7 +519,7 @@ private:
  * FIXME: should be folded into the Task class the same way it has been with
  *        AppletInfo and KUrl
  */
-class KDE_EXPORT TaskDrag : public QDrag
+class SUPERKARAMBA_EXPORT TaskDrag : public QDrag
 {
 public:
     /**
@@ -544,7 +546,7 @@ public:
  *
  * @see TaskManager
  */
-class KDE_EXPORT Startup: public QObject, public KShared
+class SUPERKARAMBA_EXPORT Startup: public QObject, public KShared
 {
     Q_OBJECT
     Q_PROPERTY(QString text READ text)
@@ -610,7 +612,7 @@ private:
  * @see Startup
  * @see KWinModule
  */
-class KDE_EXPORT TaskManager : public QObject
+class SUPERKARAMBA_EXPORT TaskManager : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(int currentDesktop READ currentDesktop)

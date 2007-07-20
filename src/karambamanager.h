@@ -24,8 +24,9 @@
 #include <QObject>
 
 #include "karamba.h"
+#include "superkaramba_export.h"
 
-class KDE_EXPORT KarambaManager : public QObject
+class SUPERKARAMBA_EXPORT KarambaManager : public QObject
 {
     Q_OBJECT
 
