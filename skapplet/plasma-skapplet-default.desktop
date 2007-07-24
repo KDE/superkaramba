@@ -1,0 +1,16 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=SuperKaramba
+Comment=SuperKaramba Plasma Applet
+Type=Service
+ServiceTypes=Plasma/Applet
+
+X-KDE-Library=plasma_applet_skapplet
+X-KDE-PluginInfo-Author=The SuperKaramba Team
+X-KDE-PluginInfo-Name=skapplet
+X-KDE-PluginInfo-Version=0.1
+X-KDE-PluginInfo-Website=
+X-KDE-PluginInfo-Category=
+X-KDE-PluginInfo-Depends=
+X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-EnabledByDefault=true
