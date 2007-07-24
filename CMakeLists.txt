@@ -2,7 +2,7 @@ PROJECT(superkaramba)
 
 FIND_PACKAGE(PythonLibs REQUIRED)
 #FIND_PACKAGE(XMMS REQUIRED)
-macro_optional_find_package(Plasma REQUIRED)
+macro_optional_find_package(Plasma)
 
 INCLUDE_DIRECTORIES(
 ${CMAKE_CURRENT_SOURCE_DIR}
