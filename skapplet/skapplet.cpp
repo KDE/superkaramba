@@ -49,7 +49,6 @@ extern "C" {
 SuperKarambaApplet::SuperKarambaApplet(QObject *parent, const QStringList &args)
     : Plasma::Applet(parent, args)
     , m_themeItem(0)
-    , m_timer(new QTimer(this))
 {
     kDebug() << "========================> SuperKarambaApplet Ctor" << endl;
     setHasConfigurationInterface(true);
@@ -77,38 +76,11 @@ SuperKarambaApplet::SuperKarambaApplet(QObject *parent, const QStringList &args)
             m_themePath = filedialog->selectedUrl();
 
     }
-
-    /*
-    m_showTimeString = cg.readEntry("showTimeString", false);
-    m_showSecondHand = cg.readEntry("showSecondHand", false);
-    m_pixelSize = cg.readEntry("size", 250);
-    m_timezone = cg.readEntry("timezone", "Local");
-    m_theme = new Plasma::Svg("widgets/clock", this);
-    m_theme->setContentType(Plasma::Svg::SingleImage);
-    m_theme->resize(m_pixelSize, m_pixelSize);
-
-    Plasma::DataEngine* timeEngine = dataEngine("time");
-    timeEngine->connectSource(m_timezone, this);
-    timeEngine->setProperty("reportSeconds", m_showSecondHand);
-    */
-
-    constraintsUpdated();
-    m_timer->setInterval(1000);
-    m_timer->setSingleShot(false);
-    connect(m_timer, SIGNAL(timeout()), this, SLOT(slotTimeout()));
-    //m_timer->start();
 }
 
 SuperKarambaApplet::~SuperKarambaApplet()
 {
     kDebug() << "========================> SuperKarambaApplet Dtor" << endl;
-}
-
-void SuperKarambaApplet::slotTimeout()
-{
-    kDebug() << "SuperKarambaApplet::slotTimeout()" << endl;
-    //update();
-    //constraintsUpdated();
 }
 
 void SuperKarambaApplet::loadKaramba()
@@ -123,15 +95,18 @@ void SuperKarambaApplet::loadKaramba()
     if (lib) {
         startKaramba createKaramba = 0;
         createKaramba = (startKaramba)lib->resolveFunction("startKaramba");
-        if (createKaramba)
+        if (createKaramba) {
             m_themeItem = createKaramba(m_themePath, gfxScene->views()[0]);
+        }
     } else {
         kWarning() << "Could not load " << karambaLib << endl;
     }
 }
 
-void SuperKarambaApplet::paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void SuperKarambaApplet::paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *option, const QRect &rect)
 {
+    Q_UNUSED(rect);
+
     if( ! m_themeItem ) {
         if( m_themePath.isValid() ) {
             loadKaramba();
@@ -144,7 +119,7 @@ void SuperKarambaApplet::paintInterface(QPainter *painter, const QStyleOptionGra
 
     if( m_themeItem ) {
         //kDebug()<<"SuperKarambaApplet::paintInterface: Has m_themeItem"<<endl;
-        m_themeItem->paint(painter, option, widget);
+        m_themeItem->paint(painter, option);
     }
     else {
         kDebug()<<"SuperKarambaApplet::paintInterface: m_themeItem is NULL !!!"<<endl;
@@ -202,156 +177,14 @@ void SuperKarambaApplet::constraintsUpdated()
     Plasma::Applet::constraintsUpdated();
 }
 
-#if 0
-QRectF Clock::boundingRect() const
-{
-    return m_bounds;
-}
 
-void Clock::constraintsUpdated()
+QRectF SuperKarambaApplet::boundingRect() const
 {
-    prepareGeometryChange();
-    if (formFactor() == Plasma::Planar ||
-        formFactor() == Plasma::MediaCenter) {
-        QSize s = m_theme->size();
-        m_bounds = QRect(0, 0, s.width(), s.height());
-        update();
+    if (m_themeItem) {
+        return m_themeItem->boundingRect();
     } else {
-        QFontMetrics fm(QApplication::font());
-        m_bounds = QRectF(0, 0, fm.width("00:00:00") * 1.2, fm.height() * 1.5);
+        return Applet::boundingRect();
     }
 }
-
-void Clock::updated(const QString& source, const Plasma::DataEngine::Data &data)
-{
-    Q_UNUSED(source);
-    m_time = data["Time"].toTime();
-
-    if (m_time.minute() == m_lastTimeSeen.minute() &&
-        m_time.second() == m_lastTimeSeen.second()) {
-        // avoid unnecessary repaints
-        //kDebug() << "avoided unecessary update!" << endl;
-        return;
-    }
-
-    m_lastTimeSeen = m_time;
-    update();
-}
-
-void Clock::drawHand(QPainter *p, int rotation, const QString &handName)
-{
-    Q_UNUSED(p);
-    Q_UNUSED(rotation);
-    Q_UNUSED(handName);
-// TODO: IMPLEMENT ME!
-//     p->save();
-//     QRectF tempRect(0, 0, 0, 0);
-//     QSizeF boundSize = boundingRect().size();
-//     QSize elementSize;
-// 
-//     p->translate(boundSize.width()/2, boundSize.height()/2);
-//     p->rotate(rotation);
-//     elementSize = m_theme->elementSize(handName);
-//     if (scaleFactor != 1) {
-//         elementSize = QSize(elementSize.width()*scaleFactor, elementSize.height()*scaleFactor);
-//     }
-//     p->translate(-elementSize.width()/2, -elementSize.width());
-//     m_theme->resize(elementSize);
-//     tempRect.setSize(elementSize);
-//     m_theme->paint(p, tempRect, handName);
-//     p->restore();
-}
-
-void Clock::paintInterface(QPainter *p, const QStyleOptionGraphicsItem *option, QWidget *widget)
-{
-    Q_UNUSED(option)
-    Q_UNUSED(widget)
-
-    QRectF tempRect(0, 0, 0, 0);
-    QRectF boundRect = boundingRect();
-
-    QSizeF boundSize = boundRect.size();
-    QSize elementSize;
-
-    p->setRenderHint(QPainter::SmoothPixmapTransform);
-
-    qreal seconds = 6.0 * m_time.second() - 180;
-    qreal minutes = 6.0 * m_time.minute() - 180;
-    qreal hours = 30.0 * m_time.hour() - 180 + ((m_time.minute() / 59.0) * 30.0);
-
-    if (formFactor() == Plasma::Horizontal ||
-        formFactor() == Plasma::Vertical) {
-        QString time = m_time.toString();
-        QFontMetrics fm(QApplication::font());
-        if (m_showSecondHand) {
-            p->drawText((int)(boundRect.width() * 0.1), (int)(boundRect.height() * 0.25), m_time.toString());
-        } else {
-            p->drawText((int)(boundRect.width() * 0.1), (int)(boundRect.height() * 0.25), m_time.toString("hh:mm"));
-        }
-        return;
-    }
-    m_theme->paint(p, boundRect, "ClockFace");
-
-    p->save();
-    p->translate(boundSize.width()/2, boundSize.height()/2);
-    p->rotate(hours);
-    elementSize = m_theme->elementSize("HourHand");
-
-    p->translate(-elementSize.width()/2, -elementSize.width());
-    tempRect.setSize(elementSize);
-    m_theme->paint(p, tempRect, "HourHand");
-    p->restore();
-
-//     drawHand(p, hours, "SecondHand", 1);
-    p->save();
-    p->translate(boundSize.width()/2, boundSize.height()/2);
-    p->rotate(minutes);
-    elementSize = m_theme->elementSize("MinuteHand");
-    elementSize = QSize(elementSize.width(), elementSize.height());
-    p->translate(-elementSize.width()/2, -elementSize.width());
-    tempRect.setSize(elementSize);
-    m_theme->paint(p, tempRect, "MinuteHand");
-    p->restore();
-
-    //Make sure we paint the second hand on top of the others
-    if (m_showSecondHand) {
-        p->save();
-        p->translate(boundSize.width()/2, boundSize.height()/2);
-        p->rotate(seconds);
-        elementSize = m_theme->elementSize("SecondHand");
-        elementSize = QSize(elementSize.width(), elementSize.height());
-        p->translate(-elementSize.width()/2, -elementSize.width());
-        tempRect.setSize(elementSize);
-        m_theme->paint(p, tempRect, "SecondHand");
-        p->restore();
-    }
-
-
-    p->save();
-    m_theme->resize(boundSize);
-    elementSize = m_theme->elementSize("HandCenterScrew");
-    tempRect.setSize(elementSize);
-    p->translate(boundSize.width() / 2 - elementSize.width() / 2, boundSize.height() / 2 - elementSize.height() / 2);
-    m_theme->paint(p, tempRect, "HandCenterScrew");
-    p->restore();
-
-    if (m_showTimeString) {
-        if (m_showSecondHand) {
-            //FIXME: temporary time output
-            QString time = m_time.toString();
-            QFontMetrics fm(QApplication::font());
-            p->drawText((int)(boundRect.width()/2 - fm.width(time) / 2),
-                        (int)((boundRect.height()/2) - fm.xHeight()*3), m_time.toString());
-        } else {
-            QString time = m_time.toString("hh:mm");
-            QFontMetrics fm(QApplication::font());
-            p->drawText((int)(boundRect.width()/2 - fm.width(time) / 2),
-                        (int)((boundRect.height()/2) - fm.xHeight()*3), m_time.toString("hh:mm"));
-        }
-    }
-
-    m_theme->paint(p, boundRect, "Glass");
-}
-#endif
 
 #include "skapplet.moc"
