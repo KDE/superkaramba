@@ -100,8 +100,6 @@ public:
     void scaleImageLabel(Meter *meter, int width,
                          int height) const;
     void moveMeter(Meter *meter, int x, int y) const;
-    void popupGlobalMenu() const;
-
     void writeConfigData();
 
     void setMenuExtension(KMenu*);
@@ -147,6 +145,7 @@ public Q_SLOTS:
     void activeTaskChanged(Task::TaskPtr);
     void passMenuItemClicked(QAction* action);
     void slotFileChanged(const QString &file);
+    void popupGlobalMenu() const;
 
 private Q_SLOTS:
     void startKaramba();

@@ -1952,7 +1952,7 @@ void Karamba::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     } else {
         if (!d->toggleLocked->isChecked()) {
             QPointF diff =  event->pos() - d->mouseClickPos;
-            moveBy(diff.x(), diff.y());
+            parentItem()->moveBy(diff.x(), diff.y());
         }
     }
 }
