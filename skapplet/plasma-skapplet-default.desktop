@@ -1,6 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=SuperKaramba
+Name[is]=SúperKaramba
+Name[ne]=सुपरकराम्बा
+Name[sr]=СуперКарамба
+Name[x-test]=xxSuperKarambaxx
 Comment=SuperKaramba Plasma Applet
 Type=Service
 ServiceTypes=Plasma/Applet
