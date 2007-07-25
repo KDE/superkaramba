@@ -50,7 +50,6 @@ class SuperKarambaApplet : public Plasma::Applet
         SuperKarambaApplet(QObject *parent, const QStringList &args);
         virtual ~SuperKarambaApplet();
 
-        virtual void paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *option, const QRect &rect);
         QRectF boundingRect() const;
         virtual void constraintsUpdated();
 
@@ -59,12 +58,14 @@ class SuperKarambaApplet : public Plasma::Applet
 
     private slots:
         void configAccepted();
+        void loadKaramba();
 
     private:
         KUrl m_themePath;
         QGraphicsItemGroup* m_themeItem;
 
-        void loadKaramba();
+    signals:
+        void showKarambaMenu();
 };
 
 K_EXPORT_PLASMA_APPLET(skapplet, SuperKarambaApplet)

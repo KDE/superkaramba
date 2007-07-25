@@ -74,13 +74,15 @@ SuperKarambaApplet::SuperKarambaApplet(QObject *parent, const QStringList &args)
         filedialog->setMode( KFile::File | KFile::ExistingOnly | KFile::LocalOnly );
         if( filedialog->exec() )
             m_themePath = filedialog->selectedUrl();
-
     }
+
+    QTimer::singleShot(0, this, SLOT(loadKaramba()));
 }
 
 SuperKarambaApplet::~SuperKarambaApplet()
 {
     kDebug() << "========================> SuperKarambaApplet Dtor" << endl;
+    delete m_themeItem;
 }
 
 void SuperKarambaApplet::loadKaramba()
@@ -97,54 +99,22 @@ void SuperKarambaApplet::loadKaramba()
         createKaramba = (startKaramba)lib->resolveFunction("startKaramba");
         if (createKaramba) {
             m_themeItem = createKaramba(m_themePath, gfxScene->views()[0]);
+            m_themeItem->setParentItem(this);
+            m_themeItem->setPos(0, 0);
+
+            QObject* item = dynamic_cast<QObject*>(m_themeItem);
+            if (item) {
+                connect(this, SIGNAL(showKarambaMenu()), item, SLOT(popupGlobalMenu()));
+            }
         }
     } else {
         kWarning() << "Could not load " << karambaLib << endl;
     }
 }
 
-void SuperKarambaApplet::paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *option, const QRect &rect)
-{
-    Q_UNUSED(rect);
-
-    if( ! m_themeItem ) {
-        if( m_themePath.isValid() ) {
-            loadKaramba();
-        }
-        else {
-            kDebug() << "No Theme defined" << endl;
-            return;
-        }
-    }
-
-    if( m_themeItem ) {
-        //kDebug()<<"SuperKarambaApplet::paintInterface: Has m_themeItem"<<endl;
-        m_themeItem->paint(painter, option);
-    }
-    else {
-        kDebug()<<"SuperKarambaApplet::paintInterface: m_themeItem is NULL !!!"<<endl;
-    }
-}
-
 void SuperKarambaApplet::showConfigurationInterface()
 {
-    kDebug() << "START -------------> SuperKarambaApplet::showConfigurationInterface" << endl;
-
-    KDialog* dialog = new KDialog();
-    dialog->setCaption( "Configure SuperKaramba" );
-    dialog->setButtons( KDialog::Ok | KDialog::Cancel | KDialog::Apply );
-    /*
-    ui.setupUi(m_dialog->mainWidget());
-    ui.timeZones->setSelected(m_timezone, true);
-    ui.spinSize->setValue((int)m_bounds.width());
-    ui.showTimeStringCheckBox->setChecked(m_showTimeString);
-    ui.showSecondHandCheckBox->setChecked(m_showSecondHand);
-    */
-    connect( dialog, SIGNAL(applyClicked()), this, SLOT(configAccepted()) );
-    connect( dialog, SIGNAL(okClicked()), this, SLOT(configAccepted()) );
-    dialog->show();
-    kDebug() << "DONE -------------> SuperKarambaApplet::showConfigurationInterface" << endl;
-    delete dialog;
+    emit showKarambaMenu();
 }
 
 void SuperKarambaApplet::configAccepted()
@@ -176,7 +146,6 @@ void SuperKarambaApplet::constraintsUpdated()
     kDebug() << "SuperKarambaApplet::constraintsUpdated" << endl;
     Plasma::Applet::constraintsUpdated();
 }
-
 
 QRectF SuperKarambaApplet::boundingRect() const
 {
