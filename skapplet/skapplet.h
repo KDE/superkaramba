@@ -52,6 +52,7 @@ class SuperKarambaApplet : public Plasma::Applet
 
         QRectF boundingRect() const;
         virtual void constraintsUpdated();
+        void paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *option, const QRect &rect);
 
     public slots:
         virtual void showConfigurationInterface();

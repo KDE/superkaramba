@@ -399,20 +399,12 @@ Karamba::Karamba(const KUrl &themeFile, QGraphicsView *view, int instance, bool 
             ypos = 0;
 
         if (startPos.isNull()) {
-            if (d->globalView) {
-                    setPos(xpos, ypos);
-            } else {
-                    d->view->move(xpos, ypos);
-            }
+            moveToPos(QPoint(xpos, ypos));
         }
     }
 
     if (!startPos.isNull()) {
-        if (d->globalView) {
-            setPos(startPos - d->themeCenter);
-        } else {
-            d->view->move(startPos - d->themeCenter);
-        }
+        moveToPos(startPos - d->themeCenter);
 
         d->toggleLocked->setChecked(false);
     }
@@ -448,6 +440,8 @@ Karamba::Karamba(const KUrl &themeFile, QGraphicsView *view, int instance, bool 
 
 Karamba::~Karamba()
 {
+    writeConfigData();
+
     d->scene->removeItem(this);
 
     delete d;
@@ -580,11 +574,7 @@ bool Karamba::parseConfig()
                     y = 0;
                 }
 
-                if (d->globalView) {
-                    setPos(x, y);
-                } else {
-                    d->view->move(x, y);
-                }
+                moveToPos(QPoint(x, y));
 
                 if (lineParser.getBoolean("ONTOP")) {
                     d->onTop = true;
@@ -627,8 +617,9 @@ bool Karamba::parseConfig()
                         KWindowSystem::setStrut(d->view->winId(), 0, 0, h, 0);
                         d->view->move(x, 0);
                     } else {
-                        setPos(x, 0);
+                        moveToPos(QPoint(x, 0));
                     }
+
                     d->toggleLocked->setChecked(true);
                     d->toggleLocked->setEnabled(false);
                 }
@@ -636,7 +627,7 @@ bool Karamba::parseConfig()
                 if (lineParser.getBoolean("BOTTOMBAR")) {
                     int dh = QApplication::desktop()->height();
                     if (d->globalView) {
-                        setPos(x, dh - h);
+                        moveToPos(QPoint(x, dh - h));
                     } else {
                         KWindowSystem::setStrut(d->view->winId(), 0, 0, 0, h);
                         d->view->move(x, dh - h);
@@ -648,7 +639,7 @@ bool Karamba::parseConfig()
                 if (lineParser.getBoolean("RIGHTBAR")) {
                     int dw = QApplication::desktop()->width();
                     if (d->globalView) {
-                        setPos(dw - w, y);
+                        moveToPos(QPoint(dw - w, y));
                     } else {
                         KWindowSystem::setStrut(d->view->winId(), 0, w, 0, 0);
                         d->view->move(dw - w, y);
@@ -659,7 +650,7 @@ bool Karamba::parseConfig()
 
                 if (lineParser.getBoolean("LEFTBAR")) {
                     if (d->globalView) {
-                        setPos(0, y);
+                        moveToPos(QPoint(0, y));
                     } else {
                         KWindowSystem::setStrut(d->view->winId(), w, 0, 0, 0);
                         d->view->move(0, y);
@@ -1309,8 +1300,6 @@ void Karamba::closeWidget()
     if (d->interface)
         d->interface->callWidgetClosed(this);
 
-    writeConfigData();
-
     KarambaManager::self()->removeKaramba(this);
 }
 
@@ -1332,8 +1321,13 @@ void Karamba::writeConfigData()
         cg.writeEntry("widgetPosX", d->view->x());
         cg.writeEntry("widgetPosY", d->view->y());
     } else {
-        cg.writeEntry("widgetPosX", x());
-        cg.writeEntry("widgetPosY", y());
+        if (parentItem()) {
+            cg.writeEntry("widgetPosX", parentItem()->x());
+            cg.writeEntry("widgetPosY", parentItem()->y());
+        } else {
+            cg.writeEntry("widgetPosX", x());
+            cg.writeEntry("widgetPosY", y());
+        }
     }
 
     // Widget Size
@@ -1602,7 +1596,6 @@ void Karamba::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     Q_UNUSED(painter);
     Q_UNUSED(option);
     Q_UNUSED(widget);
-    //painter->drawText(0,0,"test");
     /*
     if(d->showMenu || d->scaleStep > 0)
     {
@@ -2009,10 +2002,16 @@ void Karamba::setInstance(int instance)
 
 void Karamba::moveToPos(QPoint pos)
 {
-    if (!d->globalView)
+    if (!d->globalView) {
         d->view->move(pos);
-    else
-        setPos(pos);
+    } else {
+        if (parentItem()) {
+            setPos(0,0);
+            parentItem()->setPos(pos);
+        } else {
+            setPos(pos);
+        }
+    }
 }
 
 void Karamba::resizeTo(int width, int height)
@@ -2029,7 +2028,11 @@ QPoint Karamba::getPosition() const
     if (!d->globalView) {
         return d->view->pos();
     } else {
-        return pos().toPoint();
+        if (parentItem()) {
+            return parentItem()->pos().toPoint();
+        } else {
+            return pos().toPoint();
+        }
     }
 }
 
@@ -2097,4 +2100,5 @@ Systemtray* Karamba::systemTray()
 {
     return d->systray;
 }
+
 

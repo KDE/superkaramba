@@ -54,7 +54,9 @@ class SUPERKARAMBA_EXPORT Karamba : public QObject, public QGraphicsItemGroup
     Q_OBJECT
 
 public:
-    explicit Karamba(const KUrl &themeFile, QGraphicsView *view = 0, int instance = -1, bool subTheme = false, const QPoint &startPos = QPoint(), bool reload = false);
+    explicit Karamba(const KUrl &themeFile, QGraphicsView *view = 0,
+            int instance = -1, bool subTheme = false,
+            const QPoint &startPos = QPoint(), bool reload = false);
 
     virtual ~Karamba();
 
@@ -109,7 +111,6 @@ public:
     int instance();
     void setInstance(int instance);
 
-    void moveToPos(QPoint pos);
     void resizeTo(int width, int height);
     QPoint getPosition() const;
 
@@ -146,6 +147,7 @@ public Q_SLOTS:
     void passMenuItemClicked(QAction* action);
     void slotFileChanged(const QString &file);
     void popupGlobalMenu() const;
+    void moveToPos(QPoint pos);
 
 private Q_SLOTS:
     void startKaramba();

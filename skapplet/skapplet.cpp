@@ -22,11 +22,8 @@
 
 //#include <math.h>
 
-//#include <QApplication>
 #include <QFile>
-//#include <QBitmap>
 #include <QGraphicsScene>
-//#include <QMatrix>
 #include <QPaintEvent>
 #include <QPainter>
 #include <QPixmap>
@@ -34,8 +31,6 @@
 
 #include <KDebug>
 #include <KLocale>
-//#include <KIcon>
-//#include <KSharedConfig>
 #include <KDialog>
 #include <KFileDialog>
 
@@ -76,7 +71,7 @@ SuperKarambaApplet::SuperKarambaApplet(QObject *parent, const QStringList &args)
             m_themePath = filedialog->selectedUrl();
     }
 
-    QTimer::singleShot(0, this, SLOT(loadKaramba()));
+    QTimer::singleShot(100, this, SLOT(loadKaramba()));
 }
 
 SuperKarambaApplet::~SuperKarambaApplet()
@@ -99,17 +94,25 @@ void SuperKarambaApplet::loadKaramba()
         createKaramba = (startKaramba)lib->resolveFunction("startKaramba");
         if (createKaramba) {
             m_themeItem = createKaramba(m_themePath, gfxScene->views()[0]);
+            QPointF origPos = m_themeItem->pos();
             m_themeItem->setParentItem(this);
-            m_themeItem->setPos(0, 0);
 
             QObject* item = dynamic_cast<QObject*>(m_themeItem);
             if (item) {
                 connect(this, SIGNAL(showKarambaMenu()), item, SLOT(popupGlobalMenu()));
+                QMetaObject::invokeMethod(item, "moveToPos", Q_ARG(QPoint, origPos.toPoint()));
             }
         }
     } else {
         kWarning() << "Could not load " << karambaLib << endl;
     }
+}
+
+void SuperKarambaApplet::paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *option, const QRect &rect)
+{
+    Q_UNUSED(painter);
+    Q_UNUSED(option);
+    Q_UNUSED(rect);
 }
 
 void SuperKarambaApplet::showConfigurationInterface()
