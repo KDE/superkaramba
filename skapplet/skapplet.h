@@ -60,10 +60,14 @@ class SuperKarambaApplet : public Plasma::Applet
     private slots:
         void configAccepted();
         void loadKaramba();
+        void karambaStarted(QGraphicsItemGroup*);
+        void karambaClosed(QGraphicsItemGroup*);
 
     private:
-        KUrl m_themePath;
-        QGraphicsItemGroup* m_themeItem;
+        /// \internal d-pointer class.
+        class Private;
+        /// \internal d-pointer instance.
+        Private* const d;
 
     signals:
         void showKarambaMenu();

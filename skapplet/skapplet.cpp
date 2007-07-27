@@ -27,8 +27,9 @@
 #include <QPaintEvent>
 #include <QPainter>
 #include <QPixmap>
+#include <QPointer>
 #include <QStyleOptionGraphicsItem>
-
+#include <QGraphicsItemGroup>
 #include <KDebug>
 #include <KLocale>
 #include <KDialog>
@@ -36,27 +37,35 @@
 
 #include <plasma/svg.h>
 
-extern "C" {
-    /// The SuperKaramba library exports this function.
-    typedef QGraphicsItemGroup* (*startKaramba)(const KUrl &theme, QGraphicsView *view);
-}
+#include "../src/karamba.h"
+#include "../src/karambamanager.h"
+
+/// \internal d-pointer class.
+class SuperKarambaApplet::Private
+{
+    public:
+        KUrl themePath;
+        QPointer<Karamba> themeItem;
+
+        Private() : themeItem(0) {}
+        ~Private() { delete themeItem; }
+};
 
 SuperKarambaApplet::SuperKarambaApplet(QObject *parent, const QStringList &args)
     : Plasma::Applet(parent, args)
-    , m_themeItem(0)
+    , d(new Private())
 {
     kDebug() << "========================> SuperKarambaApplet Ctor" << endl;
     setHasConfigurationInterface(true);
 
     KConfigGroup cg = config("SuperKaramba");
-    m_themePath = cg.readEntry("theme", KUrl());
+    d->themePath = cg.readEntry("theme", KUrl());
 
-    if( ! m_themePath.isValid() ) {
-        //m_themePath = KUrl("file:///home/kde4/svn/_src/KDE/kdeutils/superkaramba/examples/rubyclock/clock.theme");
-        //m_themePath = KUrl("/home/kde4/svn/_src/KDE/kdeutils/superkaramba/examples/richtext/richtext.theme");
-        //m_themePath = KUrl("/home/kde4/svn/_src/KDE/kdeutils/superkaramba/examples/pythonclock/pythonclock.theme");
-        //m_themePath = KUrl("/home/kde4/svn/_src/KDE/kdeutils/superkaramba/examples/aeroai/aero_aio.skz");
-
+    if( ! d->themePath.isValid() ) {
+        //d->themePath = KUrl("file:///home/kde4/svn/_src/KDE/kdeutils/superkaramba/examples/rubyclock/clock.theme");
+        //d->themePath = KUrl("/home/kde4/svn/_src/KDE/kdeutils/superkaramba/examples/richtext/richtext.theme");
+        //d->themePath = KUrl("/home/kde4/svn/_src/KDE/kdeutils/superkaramba/examples/pythonclock/pythonclock.theme");
+        //d->themePath = KUrl("/home/kde4/svn/_src/KDE/kdeutils/superkaramba/examples/aeroai/aero_aio.skz");
 
         KFileDialog* filedialog = new KFileDialog(
             KUrl("kfiledialog:///SuperKarambaPlasmaApplet"), // startdir
@@ -68,7 +77,7 @@ SuperKarambaApplet::SuperKarambaApplet(QObject *parent, const QStringList &args)
         filedialog->setOperationMode( KFileDialog::Opening );
         filedialog->setMode( KFile::File | KFile::ExistingOnly | KFile::LocalOnly );
         if( filedialog->exec() )
-            m_themePath = filedialog->selectedUrl();
+            d->themePath = filedialog->selectedUrl();
     }
 
     QTimer::singleShot(100, this, SLOT(loadKaramba()));
@@ -77,35 +86,25 @@ SuperKarambaApplet::SuperKarambaApplet(QObject *parent, const QStringList &args)
 SuperKarambaApplet::~SuperKarambaApplet()
 {
     kDebug() << "========================> SuperKarambaApplet Dtor" << endl;
-    delete m_themeItem;
+    delete d;
 }
 
 void SuperKarambaApplet::loadKaramba()
 {
-    kDebug() << "SuperKarambaApplet::loadKaramba() Theme: " << m_themePath << endl;
+    kDebug() << "SuperKarambaApplet::loadKaramba() Theme: " << d->themePath << endl;
 
     QGraphicsScene *gfxScene = scene();
     Q_ASSERT( gfxScene );
+    Q_ASSERT( gfxScene->views().count() > 0 );
 
-    QString karambaLib = QFile::encodeName(KLibLoader::self()->findLibrary(QLatin1String("libsuperkaramba")));
-    KLibrary *lib = KLibLoader::self()->library(karambaLib);
-    if (lib) {
-        startKaramba createKaramba = 0;
-        createKaramba = (startKaramba)lib->resolveFunction("startKaramba");
-        if (createKaramba) {
-            m_themeItem = createKaramba(m_themePath, gfxScene->views()[0]);
-            QPointF origPos = m_themeItem->pos();
-            m_themeItem->setParentItem(this);
+    d->themeItem = new Karamba(d->themePath, gfxScene->views()[0]);
+    QPointF origPos = d->themeItem->pos();
+    d->themeItem->setParentItem(this);
+    connect(this, SIGNAL(showKarambaMenu()), d->themeItem, SLOT(popupGlobalMenu()));
+    d->themeItem->moveToPos( origPos.toPoint() );
 
-            QObject* item = dynamic_cast<QObject*>(m_themeItem);
-            if (item) {
-                connect(this, SIGNAL(showKarambaMenu()), item, SLOT(popupGlobalMenu()));
-                QMetaObject::invokeMethod(item, "moveToPos", Q_ARG(QPoint, origPos.toPoint()));
-            }
-        }
-    } else {
-        kWarning() << "Could not load " << karambaLib << endl;
-    }
+    connect(KarambaManager::self(), SIGNAL(karambaStarted(QGraphicsItemGroup*)), this, SLOT(karambaStarted(QGraphicsItemGroup*)));
+    connect(KarambaManager::self(), SIGNAL(karambaClosed(QGraphicsItemGroup*)), this, SLOT(karambaClosed(QGraphicsItemGroup*)));
 }
 
 void SuperKarambaApplet::paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *option, const QRect &rect)
@@ -125,7 +124,7 @@ void SuperKarambaApplet::configAccepted()
     kDebug() << "SuperKarambaApplet::configAccepted" << endl;
 
     KConfigGroup cg = config("SuperKaramba");
-    cg.writeEntry("theme", m_themePath);
+    cg.writeEntry("theme", d->themePath);
     /*
     m_showTimeString = ui.showTimeStringCheckBox->checkState() == Qt::Checked;
     m_showSecondHand = ui.showSecondHandCheckBox->checkState() == Qt::Checked;
@@ -152,10 +151,35 @@ void SuperKarambaApplet::constraintsUpdated()
 
 QRectF SuperKarambaApplet::boundingRect() const
 {
-    if (m_themeItem) {
-        return m_themeItem->boundingRect();
+    if (d->themeItem) {
+        return d->themeItem->boundingRect();
     } else {
         return Applet::boundingRect();
+    }
+}
+
+void SuperKarambaApplet::karambaStarted(QGraphicsItemGroup* group)
+{
+    if( ! d->themeItem ) {
+        kDebug()<<">>>>>>>>>>>> SuperKarambaApplet::karambaStarted"<<endl;
+        d->themeItem = dynamic_cast< Karamba* >( group );
+        Q_ASSERT(d->themeItem);
+
+        QPointF origPos = d->themeItem->pos();
+        d->themeItem->setParentItem(this);
+        connect(this, SIGNAL(showKarambaMenu()), d->themeItem, SLOT(popupGlobalMenu()));
+        d->themeItem->moveToPos( origPos.toPoint() );
+
+        QGraphicsItem::update();
+        constraintsUpdated();
+    }
+}
+
+void SuperKarambaApplet::karambaClosed(QGraphicsItemGroup* group)
+{
+    if( d->themeItem == group ) {
+        kDebug()<<">>>>>>>>>>>> SuperKarambaApplet::karambaClosed"<<endl;
+        d->themeItem = 0;
     }
 }
 
