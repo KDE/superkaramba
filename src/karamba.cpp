@@ -1379,6 +1379,7 @@ void Karamba::preparePopupMenu()
                            SLOT(updateSensors()), Qt::Key_F5);
 
     d->toggleLocked = new KToggleAction(KIcon("move"), i18n("Toggle &Locked Position"), this);
+    d->toggleLocked->setObjectName("moveAction");
     d->toggleLocked->setShortcut(KShortcut(Qt::CTRL + Qt::Key_L));
     d->toggleLocked->setCheckedState(KGuiItem("Toggle &Locked Position",
                                     KIcon("system-lock-screen")));
