@@ -21,27 +21,14 @@
 #ifndef SKAPPLET_H
 #define SKAPPLET_H
 
-#include <QImage>
 #include <QPaintDevice>
-#include <QLabel>
-#include <QPixmap>
-#include <QTimer>
 #include <QPaintEvent>
 #include <QPainter>
-#include <QTimer>
-#include <QX11Info>
 #include <QWidget>
 #include <QGraphicsItem>
-#include <QColor>
 
 #include <plasma/applet.h>
 #include <plasma/dataengine.h>
-//#include "ui_clockConfig.h"
-
-namespace Plasma
-{
-    class Svg;
-}
 
 class SuperKarambaApplet : public Plasma::Applet
 {
@@ -71,7 +58,5 @@ class SuperKarambaApplet : public Plasma::Applet
         /// \internal d-pointer instance.
         Private* const d;
 };
-
-K_EXPORT_PLASMA_APPLET(skapplet, SuperKarambaApplet)
 
 #endif
