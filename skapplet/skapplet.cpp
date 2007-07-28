@@ -54,15 +54,17 @@ class SuperKarambaApplet::Private : public QObject
 {
     public:
         SuperKarambaApplet* applet;
+        SuperKarambaAppletAdaptor* appletadaptor;
         QPointer<Karamba> themeItem;
         KUrl themePath;
 
-        explicit Private(SuperKarambaApplet* a) : applet(a), themeItem(0) {}
-        ~Private() { delete themeItem; }
+        explicit Private(SuperKarambaApplet* a) : applet(a), appletadaptor(0), themeItem(0) {}
+        ~Private() { delete appletadaptor; delete themeItem; }
 
         void initTheme()
         {
             Q_ASSERT(applet);
+            Q_ASSERT(themeItem);
             QPointF origPos = themeItem->pos();
             themeItem->setParentItem(applet);
             themeItem->moveToPos( origPos.toPoint() );
@@ -80,7 +82,8 @@ class SuperKarambaApplet::Private : public QObject
                 applet->setLockApplet( moveAction->isChecked() );
             }
 
-            new SuperKarambaAppletAdaptor(applet);
+            delete appletadaptor;
+            appletadaptor = new SuperKarambaAppletAdaptor(themeItem, applet);
         }
 
         void setLockApplet(bool locked)

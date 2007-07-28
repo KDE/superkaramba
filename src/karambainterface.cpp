@@ -120,6 +120,13 @@ bool KarambaInterface::initInterpreter()
         // language.
         d->action->addObject(this, "karamba", Kross::ChildrenInterface::AutoConnectSignals);
 
+        // If the karamba QObject has a child named "PlasmaApplet" publish that child
+        // as well. This is used in the SuperKaramba Plasma Applet skapplet to pass
+        // an own reference to an SuperKarambaAppletAdaptor instance to the script.
+        if( QObject* appletadaptor = d->karamba->findChild<QObject*>("PlasmaApplet") ) {
+            d->action->addObject(appletadaptor);
+        }
+
         // this is for backward-compatibility and needed cause the prev python
         // implementation does provide the current path within the sys.path and
         // some scripts are using it to do custom stuff. So, while the preferred

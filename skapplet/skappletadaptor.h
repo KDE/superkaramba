@@ -38,7 +38,9 @@ class SuperKarambaAppletAdaptor : public QObject
 {
         Q_OBJECT
     public:
-        explicit SuperKarambaAppletAdaptor(SuperKarambaApplet *applet) : QObject(applet), m_applet(applet) {}
+        SuperKarambaAppletAdaptor(QObject* parent, SuperKarambaApplet *applet) : QObject(parent), m_applet(applet) {
+            setObjectName("PlasmaApplet");
+        }
         virtual ~SuperKarambaAppletAdaptor() { qDeleteAll(m_engines.values()); }
 
     public Q_SLOTS:
