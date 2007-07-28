@@ -67,11 +67,12 @@ class SuperKarambaApplet::Private : public QObject
             themeItem->setParentItem(applet);
             themeItem->moveToPos( origPos.toPoint() );
 
-            //testcases
+            /*testcases
             applet->scene()->installEventFilter(this);
             QGraphicsView* view = applet->scene()->views()[0];
             view->installEventFilter(this);
             view->viewport()->installEventFilter(this);
+            */
 
             KToggleAction* moveAction = themeItem->findChild<KToggleAction*>("moveAction");
             if( moveAction ) {
