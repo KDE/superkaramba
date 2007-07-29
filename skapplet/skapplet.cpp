@@ -76,22 +76,8 @@ class SuperKarambaApplet::Private : public QObject
             view->viewport()->installEventFilter(this);
             */
 
-            KToggleAction* moveAction = themeItem->findChild<KToggleAction*>("moveAction");
-            if( moveAction ) {
-                connect(moveAction, SIGNAL(toggled(bool)), applet, SLOT(moveActionToggled(bool)));
-                applet->setLockApplet( moveAction->isChecked() );
-            }
-
             delete appletadaptor;
             appletadaptor = new SuperKarambaAppletAdaptor(themeItem, applet);
-        }
-
-        void setLockApplet(bool locked)
-        {
-            Q_ASSERT(themeItem);
-            KToggleAction* moveAction = themeItem->findChild<KToggleAction*>("moveAction");
-            if( moveAction )
-                moveAction->setChecked(locked);
         }
 
     private:
@@ -245,18 +231,6 @@ void SuperKarambaApplet::karambaClosed(QGraphicsItemGroup* group)
         kDebug()<<">>>>>>>>>>>> SuperKarambaApplet::karambaClosed"<<endl;
         d->themeItem = 0;
     }
-}
-
-void SuperKarambaApplet::moveActionToggled(bool toggled)
-{
-    if( lockApplet() != toggled )
-        setLockApplet(toggled);
-}
-
-void SuperKarambaApplet::slotLockApplet(bool locked)
-{
-    Plasma::Applet::slotLockApplet(locked);
-    d->setLockApplet(locked);
 }
 
 #include "skapplet.moc"
