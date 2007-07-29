@@ -159,6 +159,11 @@ SuperKarambaApplet::~SuperKarambaApplet()
     delete d;
 }
 
+Karamba* SuperKarambaApplet::karamba() const
+{
+    return d->themeItem;
+}
+
 void SuperKarambaApplet::loadKaramba()
 {
     kDebug() << "SuperKarambaApplet::loadKaramba() Theme: " << d->themePath << endl;

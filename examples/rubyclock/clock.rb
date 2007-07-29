@@ -20,3 +20,30 @@ def widgetUpdated(widget)
     Karamba.changeRichText(widget, @richtext, Time.now.to_s)
     Karamba.redrawWidget(widget)
 end
+
+# require 'karamba'
+# require 'PlasmaApplet'
+# 
+# @engine = PlasmaApplet.dataEngine("time")
+# @engine.setProperty("reportSeconds", true)
+# @engine.connectSource("Local")
+# 
+# def getText()
+#     return @engine.query("Local").to_s
+# end
+# 
+# def initWidget(widget)
+#     puts "-------> initWidget"
+#     Karamba.resizeWidget(widget, 400, 400)
+#     #@text = Karamba.createText(widget, 10, 10, 380, 380, self.getText())
+#     @text = Karamba.createText(widget, 10, 10, 380, 380, "bbbbbbbbbbbbbb")
+#     Karamba.redrawWidget(widget)
+# end
+# 
+# def widgetUpdated(widget)
+#     #Karamba.reloadTheme(widget)
+#     puts "-------> widgetUpdated"
+#     #Karamba.changeText(widget, @text, self.getText())
+#     Karamba.changeText(widget, @text, "aaaaaaaaaaaaaaa")
+#     Karamba.redrawWidget(widget)
+# end

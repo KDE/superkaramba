@@ -30,12 +30,16 @@
 #include <plasma/applet.h>
 #include <plasma/dataengine.h>
 
+class Karamba;
+
 class SuperKarambaApplet : public Plasma::Applet
 {
         Q_OBJECT
     public:
         SuperKarambaApplet(QObject *parent, const QStringList &args);
         virtual ~SuperKarambaApplet();
+
+        Karamba* karamba() const;
 
         QRectF boundingRect() const;
         virtual void constraintsUpdated();

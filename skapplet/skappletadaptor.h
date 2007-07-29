@@ -27,8 +27,13 @@
 #include <plasma/applet.h>
 #include <plasma/dataengine.h>
 
+#include <plasma/widgets/widget.h>
+//#include <plasma/widgets/label.h>
+//#include <plasma/widgets/lineedit.h>
+
 #include "skapplet.h"
 #include "skengineadaptor.h"
+#include "skwidgetadaptor.h"
 
 /**
 * The SuperKarambaAppletAdaptor class implements an adaptor for
@@ -80,6 +85,17 @@ class SuperKarambaAppletAdaptor : public QObject
             SuperKarambaEngineAdaptor* engineadaptor = new SuperKarambaEngineAdaptor(engine);
             m_engines.insert(name, engineadaptor);
             return engineadaptor;
+        }
+
+        /**
+        * Create and return a new Plasma::Widget instance.
+        */
+        QObject* widget(const QString& typeName = QString(), QObject* parentWidget = 0) {
+            SuperKarambaWidgetAdaptor* parentWidgetAdaptor = dynamic_cast<SuperKarambaWidgetAdaptor*>(parentWidget);
+            SuperKarambaWidgetAdaptor* widgetAdaptor = new SuperKarambaWidgetAdaptor(this, m_applet, parentWidgetAdaptor);
+            if( ! typeName.isEmpty() )
+                widgetAdaptor->setType(typeName);
+            return widgetAdaptor;
         }
 
     Q_SIGNALS:

@@ -84,12 +84,16 @@ class SuperKarambaEngineAdaptor : public QObject
         * Connect with a source. Each time the source is updated
         * the sourceUpdated() signal will be emitted.
         */
-        void connectSource(const QString& source) { m_engine->connectSource(source, this); }
+        void connectSource(const QString& source, QObject* visualization = 0) {
+            m_engine->connectSource(source, visualization ? visualization : this);
+        }
 
         /**
         * Disconnect from a source.
         */
-        void disconnectSource(const QString& source) { m_engine->disconnectSource(source, this); }
+        void disconnectSource(const QString& source, QObject* visualization = 0) {
+            m_engine->disconnectSource(source, visualization ? visualization : this);
+        }
 
 #if 0
         /**
