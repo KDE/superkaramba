@@ -35,18 +35,29 @@
 #include "skengineadaptor.h"
 #include "skwidgetadaptor.h"
 
+namespace Skip {
+
 /**
-* The SuperKarambaAppletAdaptor class implements an adaptor for
+* The AppletAdaptor class implements an adaptor for
 * \a SuperKarambaApplet Plasma::Applet objects.
 */
-class SuperKarambaAppletAdaptor : public QObject
+class AppletAdaptor : public QObject
 {
         Q_OBJECT
     public:
-        SuperKarambaAppletAdaptor(QObject* parent, SuperKarambaApplet *applet) : QObject(parent), m_applet(applet) {
+        AppletAdaptor(QObject* parent, SuperKarambaApplet *applet) : QObject(parent), m_applet(applet), m_widget(new Plasma::Widget(applet->karamba())) {
             setObjectName("PlasmaApplet");
         }
-        virtual ~SuperKarambaAppletAdaptor() { qDeleteAll(m_engines.values()); }
+        virtual ~AppletAdaptor() {
+            delete m_widget;
+            qDeleteAll(m_engines.values());
+        }
+
+        void paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *option, const QRect &rect) {
+            Q_UNUSED(option);
+            Painter p(this, painter);
+            emit paint(&p, rect);
+        }
 
     public Q_SLOTS:
 
@@ -73,7 +84,7 @@ class SuperKarambaAppletAdaptor : public QObject
         * requests.
         *
         * @param name Name of the data engine to load
-        * @return a \a SuperKarambaEngineAdaptor object if it was loaded
+        * @return a \a EngineAdaptor object if it was loaded
         *         else NULL is returned.
         */
         QObject* dataEngine(const QString& name) {
@@ -82,7 +93,7 @@ class SuperKarambaAppletAdaptor : public QObject
             Plasma::DataEngine* engine = m_applet->dataEngine(name);
             if( (! engine) || (! engine->isValid()) )
                 return 0;
-            SuperKarambaEngineAdaptor* engineadaptor = new SuperKarambaEngineAdaptor(engine);
+            EngineAdaptor* engineadaptor = new EngineAdaptor(engine);
             m_engines.insert(name, engineadaptor);
             return engineadaptor;
         }
@@ -90,12 +101,15 @@ class SuperKarambaAppletAdaptor : public QObject
         /**
         * Create and return a new Plasma::Widget instance.
         */
-        QObject* widget(const QString& typeName = QString(), QObject* parentWidget = 0) {
+        QObject* widget(const QString& widgetName) {
+            //Plasma::Widget* parent = dynamic_cast<SuperKarambaWidgetAdaptor*>(parentWidget);
+            return WidgetFactory::createWidget(widgetName, this, m_widget);
+            /*
             SuperKarambaWidgetAdaptor* parentWidgetAdaptor = dynamic_cast<SuperKarambaWidgetAdaptor*>(parentWidget);
             SuperKarambaWidgetAdaptor* widgetAdaptor = new SuperKarambaWidgetAdaptor(this, m_applet, parentWidgetAdaptor);
-            if( ! typeName.isEmpty() )
-                widgetAdaptor->setType(typeName);
+            if( ! typeName.isEmpty() ) widgetAdaptor->setType(typeName);
             return widgetAdaptor;
+            */
         }
 
     Q_SIGNALS:
@@ -105,9 +119,17 @@ class SuperKarambaAppletAdaptor : public QObject
         */
         void showConfigurationInterface();
 
+        /**
+        * This signal is emitted if the configuration interface should be shown.
+        */
+        void paint(QObject* painter, const QRect &rect);
+
     private:
         SuperKarambaApplet *m_applet;
-        QHash<QString, SuperKarambaEngineAdaptor*> m_engines;
+        Plasma::Widget* m_widget;
+        QHash<QString, EngineAdaptor*> m_engines;
 };
+
+} // end of namespace SuperKarambaPlasmaApplet
 
 #endif

@@ -26,20 +26,22 @@
 #include <QVariant>
 #include <plasma/dataengine.h>
 
+namespace Skip {
+
 /**
-* The SuperKarambaEngineAdaptor class implements an adaptor for
+* The EngineAdaptor class implements an adaptor for
 * Plasma::DataEngine objects.
 */
-class SuperKarambaEngineAdaptor : public QObject
+class EngineAdaptor : public QObject
 {
         Q_OBJECT
     public:
-        explicit SuperKarambaEngineAdaptor(Plasma::DataEngine* engine) : QObject(), m_engine(engine) {
+        explicit EngineAdaptor(Plasma::DataEngine* engine) : QObject(), m_engine(engine) {
             connect(m_engine, SIGNAL(newSource(QString)), this, SIGNAL(sourceAdded(QString)));
             connect(m_engine, SIGNAL(sourceRemoved(QString)), this, SIGNAL(sourceRemoved(QString)));
             //m_engine->setProperty("reportSeconds", true);
         }
-        virtual ~SuperKarambaEngineAdaptor() {}
+        virtual ~EngineAdaptor() {}
 
         QVariantMap dataToMap(Plasma::DataEngine::Data data) {
             QVariantMap map;
@@ -125,12 +127,14 @@ class SuperKarambaEngineAdaptor : public QObject
     private Q_SLOTS:
 
         void updated(const QString& source, Plasma::DataEngine::Data data) {
-            //kDebug()<<"SuperKarambaEngineAdaptor::updated source="<<source<<endl;
+            //kDebug()<<"EngineAdaptor::updated source="<<source<<endl;
             emit sourceUpdated(source, dataToMap(data));
         }
 
     private:
         Plasma::DataEngine* m_engine;
 };
+
+} // end of namespace SuperKarambaPlasmaApplet
 
 #endif

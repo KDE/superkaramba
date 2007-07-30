@@ -54,7 +54,7 @@ class SuperKarambaApplet::Private : public QObject
 {
     public:
         SuperKarambaApplet* applet;
-        SuperKarambaAppletAdaptor* appletadaptor;
+        Skip::AppletAdaptor* appletadaptor;
         QPointer<Karamba> themeItem;
         KUrl themePath;
 
@@ -69,16 +69,33 @@ class SuperKarambaApplet::Private : public QObject
             themeItem->setParentItem(applet);
             themeItem->moveToPos( origPos.toPoint() );
 
-            /*testcases
+            //testcases
             applet->scene()->installEventFilter(this);
             QGraphicsView* view = applet->scene()->views()[0];
             view->installEventFilter(this);
             view->viewport()->installEventFilter(this);
+
+            /*
+            KToggleAction* moveAction = themeItem->findChild<KToggleAction*>("moveAction");
+            if( moveAction ) {
+                connect(moveAction, SIGNAL(toggled(bool)), applet, SLOT(moveActionToggled(bool)));
+                applet->setLockApplet( moveAction->isChecked() );
+            }
             */
 
             delete appletadaptor;
-            appletadaptor = new SuperKarambaAppletAdaptor(themeItem, applet);
+            appletadaptor = new Skip::AppletAdaptor(themeItem, applet);
         }
+
+        /*
+        void setLockApplet(bool locked)
+        {
+            Q_ASSERT(themeItem);
+            KToggleAction* moveAction = themeItem->findChild<KToggleAction*>("moveAction");
+            if( moveAction )
+                moveAction->setChecked(locked);
+        }
+        */
 
     private:
         bool eventFilter(QObject* watched, QEvent* event)
@@ -86,6 +103,8 @@ class SuperKarambaApplet::Private : public QObject
             switch( event->type() ) {
                 case QEvent::ContextMenu:
                     kDebug() << "eventFilter type=ContextMenu watched=" << (watched ? QString("%1 [%2]").arg(watched->objectName()).arg(watched->metaObject()->className()) : "NULL") << endl;
+                    //static_cast<QContextMenuEvent*>(event);
+                    //return true;
                     break;
                 case QEvent::GraphicsSceneContextMenu:
                     kDebug() << "eventFilter type=GraphicsSceneContextMenu watched=" << (watched ? QString("%1 [%2]").arg(watched->objectName()).arg(watched->metaObject()->className()) : "NULL") << endl;
@@ -94,7 +113,6 @@ class SuperKarambaApplet::Private : public QObject
                     kDebug() << "eventFilter type=KeyPress watched=" << (watched ? QString("%1 [%2]").arg(watched->objectName()).arg(watched->metaObject()->className()) : "NULL") << endl;
                     //QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
                     //qDebug() << "Ate key press" << keyEvent->key();
-                    //return true;
                     break;
                 default:
                     break;
@@ -167,9 +185,8 @@ void SuperKarambaApplet::loadKaramba()
 
 void SuperKarambaApplet::paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *option, const QRect &rect)
 {
-    Q_UNUSED(painter);
-    Q_UNUSED(option);
-    Q_UNUSED(rect);
+    if( d->appletadaptor )
+        d->appletadaptor->paintInterface(painter, option, rect);
 }
 
 void SuperKarambaApplet::showConfigurationInterface()
@@ -232,5 +249,19 @@ void SuperKarambaApplet::karambaClosed(QGraphicsItemGroup* group)
         d->themeItem = 0;
     }
 }
+
+/*
+void SuperKarambaApplet::moveActionToggled(bool toggled)
+{
+    if( lockApplet() != toggled )
+        setLockApplet(toggled);
+}
+
+void SuperKarambaApplet::slotLockApplet(bool locked)
+{
+    Plasma::Applet::slotLockApplet(locked);
+    d->setLockApplet(locked);
+}
+*/
 
 #include "skapplet.moc"
