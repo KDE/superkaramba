@@ -119,7 +119,7 @@ SuperKarambaApplet::SuperKarambaApplet(QObject *parent, const QStringList &args)
     setHasConfigurationInterface(true);
 
     KConfigGroup cg = config();
-    d->themePath = cg.readEntry("theme", KUrl());
+    d->themePath = KUrl();//cg.readEntry("theme", KUrl());
     d->locked = cg.readEntry("locked", true);
 
     if( ! d->themePath.isValid() ) {
