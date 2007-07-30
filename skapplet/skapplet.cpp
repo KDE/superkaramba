@@ -130,7 +130,7 @@ SuperKarambaApplet::SuperKarambaApplet(QObject *parent, const QStringList &args)
     kDebug() << "========================> SuperKarambaApplet Ctor" << endl;
     setHasConfigurationInterface(true);
 
-    KConfigGroup cg = config("SuperKaramba");
+    KConfigGroup cg = config();
     d->themePath = cg.readEntry("theme", KUrl());
 
     if( ! d->themePath.isValid() ) {
