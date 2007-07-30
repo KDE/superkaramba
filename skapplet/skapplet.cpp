@@ -85,14 +85,6 @@ class SuperKarambaApplet::Private : public QObject
             appletadaptor = new Skip::AppletAdaptor(themeItem, applet);
         }
 
-        bool isLocked()
-        {
-            Q_ASSERT(themeItem);
-            if( KToggleAction* moveAction = themeItem->findChild<KToggleAction*>("moveAction") )
-                return moveAction->isChecked();
-            return locked;
-        }
-
     private:
         bool eventFilter(QObject* watched, QEvent* event)
         {
