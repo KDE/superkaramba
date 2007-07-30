@@ -57,8 +57,9 @@ class SuperKarambaApplet::Private : public QObject
         Skip::AppletAdaptor* appletadaptor;
         QPointer<Karamba> themeItem;
         KUrl themePath;
+        bool locked;
 
-        explicit Private(SuperKarambaApplet* a) : applet(a), appletadaptor(0), themeItem(0) {}
+        explicit Private(SuperKarambaApplet* a) : applet(a), appletadaptor(0), themeItem(0), locked(true) {}
         ~Private() { delete appletadaptor; delete themeItem; }
 
         void initTheme()
@@ -75,27 +76,22 @@ class SuperKarambaApplet::Private : public QObject
             view->installEventFilter(this);
             view->viewport()->installEventFilter(this);
 
-            /*
-            KToggleAction* moveAction = themeItem->findChild<KToggleAction*>("moveAction");
-            if( moveAction ) {
-                connect(moveAction, SIGNAL(toggled(bool)), applet, SLOT(moveActionToggled(bool)));
-                applet->setLockApplet( moveAction->isChecked() );
+            if( KToggleAction* moveAction = themeItem->findChild<KToggleAction*>("moveAction") ) {
+                moveAction->setChecked(locked);
+                connect(moveAction, SIGNAL(toggled(bool)), applet, SLOT(lockedActionToggled(bool)));
             }
-            */
 
             delete appletadaptor;
             appletadaptor = new Skip::AppletAdaptor(themeItem, applet);
         }
 
-        /*
-        void setLockApplet(bool locked)
+        bool isLocked()
         {
             Q_ASSERT(themeItem);
-            KToggleAction* moveAction = themeItem->findChild<KToggleAction*>("moveAction");
-            if( moveAction )
-                moveAction->setChecked(locked);
+            if( KToggleAction* moveAction = themeItem->findChild<KToggleAction*>("moveAction") )
+                return moveAction->isChecked();
+            return locked;
         }
-        */
 
     private:
         bool eventFilter(QObject* watched, QEvent* event)
@@ -132,6 +128,7 @@ SuperKarambaApplet::SuperKarambaApplet(QObject *parent, const QStringList &args)
 
     KConfigGroup cg = config();
     d->themePath = cg.readEntry("theme", KUrl());
+    d->locked = cg.readEntry("locked", true);
 
     if( ! d->themePath.isValid() ) {
         //d->themePath = KUrl("file:///home/kde4/svn/_src/KDE/kdeutils/superkaramba/examples/rubyclock/clock.theme");
@@ -198,23 +195,10 @@ void SuperKarambaApplet::showConfigurationInterface()
 void SuperKarambaApplet::configAccepted()
 {
     kDebug() << "SuperKarambaApplet::configAccepted" << endl;
-
-    KConfigGroup cg = config("SuperKaramba");
+    KConfigGroup cg = config();
     cg.writeEntry("theme", d->themePath);
-    /*
-    m_showTimeString = ui.showTimeStringCheckBox->checkState() == Qt::Checked;
-    m_showSecondHand = ui.showSecondHandCheckBox->checkState() == Qt::Checked;
-    cg.writeEntry("showTimeString", m_showTimeString);
-    cg.writeEntry("showSecondHand", m_showSecondHand);
-    dataEngine("time")->setProperty("reportSeconds", m_showSecondHand);
-    */
+    cg.writeEntry("locked", d->locked);
     QGraphicsItem::update();
-    /*
-    cg.writeEntry("size", ui.spinSize->value());
-    m_theme->resize(ui.spinSize->value(), ui.spinSize->value());
-    QStringList tzs = ui.timeZones->selection();
-    dataEngine("time")->connectSource(m_timezone, this);
-    */
     constraintsUpdated();
     cg.config()->sync();
 }
@@ -250,18 +234,10 @@ void SuperKarambaApplet::karambaClosed(QGraphicsItemGroup* group)
     }
 }
 
-/*
-void SuperKarambaApplet::moveActionToggled(bool toggled)
+void SuperKarambaApplet::lockedActionToggled(bool toggled)
 {
-    if( lockApplet() != toggled )
-        setLockApplet(toggled);
+    d->locked = toggled;
+    configAccepted();
 }
-
-void SuperKarambaApplet::slotLockApplet(bool locked)
-{
-    Plasma::Applet::slotLockApplet(locked);
-    d->setLockApplet(locked);
-}
-*/
 
 #include "skapplet.moc"

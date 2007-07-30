@@ -53,10 +53,7 @@ class SuperKarambaApplet : public Plasma::Applet
         void loadKaramba();
         void karambaStarted(QGraphicsItemGroup*);
         void karambaClosed(QGraphicsItemGroup*);
-        /*
-        void moveActionToggled(bool);
-        void slotLockApplet(bool);
-        */
+        void lockedActionToggled(bool);
 
     private:
         /// \internal d-pointer class.
