@@ -90,9 +90,8 @@ class SuperKarambaApplet::Private : public QObject
                 contextActions.append(configAction);
             }
 
-            if( KAction* reloadAction = themeItem->findChild<KAction*>("reloadAction") ) {
-                contextActions.append(reloadAction);
-            }
+            //if( KAction* reloadAction = themeItem->findChild<KAction*>("reloadAction") )
+            //    contextActions.append(reloadAction);
 
             delete appletadaptor;
             appletadaptor = new Skip::AppletAdaptor(themeItem, applet);
