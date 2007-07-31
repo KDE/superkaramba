@@ -60,6 +60,8 @@ class SuperKarambaApplet : public Plasma::Applet
         class Private;
         /// \internal d-pointer instance.
         Private* const d;
+
+        virtual QList<QAction*> contextActions();
 };
 
 #endif

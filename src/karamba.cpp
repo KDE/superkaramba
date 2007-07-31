@@ -123,6 +123,7 @@ class Karamba::Private
 
         KMenu *popupMenu;
         KToggleAction *toggleLocked;
+        KAction* reloadTheme;
         KMenu *themeConfMenu;
         KMenu *toDesktopMenu;
         KMenu *globalMenu;
@@ -186,6 +187,7 @@ class Karamba::Private
             showMenu(false),
             popupMenu(0),
             toggleLocked(0),
+            reloadTheme(0),
             themeConfMenu(0),
             toDesktopMenu(0),
             globalMenu(0),
@@ -228,6 +230,7 @@ class Karamba::Private
             delete toDesktopMenu;
             delete themeConfMenu,
             delete toggleLocked;
+            delete reloadTheme;
             delete popupMenu;
 
             delete animation;
@@ -1379,7 +1382,7 @@ void Karamba::preparePopupMenu()
                            SLOT(updateSensors()), Qt::Key_F5);
 
     d->toggleLocked = new KToggleAction(KIcon("move"), i18n("Toggle &Locked Position"), this);
-    d->toggleLocked->setObjectName("moveAction");
+    d->toggleLocked->setObjectName("lockedAction");
     d->toggleLocked->setShortcut(KShortcut(Qt::CTRL + Qt::Key_L));
     d->toggleLocked->setCheckedState(KGuiItem("Toggle &Locked Position",
                                     KIcon("system-lock-screen")));
@@ -1391,6 +1394,8 @@ void Karamba::preparePopupMenu()
     d->themeConfMenu = new KMenu();
     d->themeConfMenu->setTitle(i18n("Configure &Theme"));
     QAction *newAC = d->popupMenu->addMenu(d->themeConfMenu);
+    newAC->setObjectName("configureTheme");
+    newAC->setParent(this);
     newAC->setVisible(false);
 
     d->toDesktopMenu = new KMenu();
@@ -1411,8 +1416,12 @@ void Karamba::preparePopupMenu()
         d->signalMapperDesktop->setMapping(action, desktop);
     }
 
-    d->popupMenu->addAction(KIcon("reload3"), i18n("&Reload Theme"), this,
-                           SLOT(reloadConfig()), Qt::CTRL + Qt::Key_R);
+    d->reloadTheme = new KAction(KIcon("reload3"), i18n("&Reload Theme"), this);
+    d->reloadTheme->setObjectName("reloadAction");
+    d->reloadTheme->setShortcut(KShortcut(Qt::CTRL + Qt::Key_R));
+    connect(d->reloadTheme, SIGNAL(triggered()), this, SLOT(reloadConfig()));
+    d->popupMenu->addAction(d->reloadTheme);
+
     d->popupMenu->addAction(KIcon("window-close"), i18n("&Close This Theme"), this,
                            SLOT(closeWidget()), Qt::CTRL + Qt::Key_C);
 }

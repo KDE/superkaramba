@@ -18,6 +18,7 @@ function initWidget(widget)
 {
     println(">>> initWidget");
     textWidget = karamba.createText(widget, 0, 20, 200, 20, currentTime());
+    karamba.redrawWidget(widget)
 }
 
 // this is called everytime your widget is updated

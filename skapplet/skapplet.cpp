@@ -39,6 +39,7 @@
 #include <KDebug>
 #include <KLocale>
 #include <KDialog>
+#include <KMenu>
 #include <KFileDialog>
 #include <KToggleAction>
 
@@ -58,6 +59,7 @@ class SuperKarambaApplet::Private : public QObject
         QPointer<Karamba> themeItem;
         KUrl themePath;
         bool locked;
+        QList<QAction*> contextActions;
 
         explicit Private(SuperKarambaApplet* a) : applet(a), appletadaptor(0), themeItem(0), locked(true) {}
         ~Private() { delete appletadaptor; delete themeItem; }
@@ -66,6 +68,8 @@ class SuperKarambaApplet::Private : public QObject
         {
             Q_ASSERT(applet);
             Q_ASSERT(themeItem);
+            contextActions.clear();
+
             QPointF origPos = themeItem->pos();
             themeItem->setParentItem(applet);
             themeItem->moveToPos( origPos.toPoint() );
@@ -76,9 +80,18 @@ class SuperKarambaApplet::Private : public QObject
             view->installEventFilter(this);
             view->viewport()->installEventFilter(this);
 
-            if( KToggleAction* moveAction = themeItem->findChild<KToggleAction*>("moveAction") ) {
-                moveAction->setChecked(locked);
-                connect(moveAction, SIGNAL(toggled(bool)), applet, SLOT(lockedActionToggled(bool)));
+            if( KToggleAction* lockedAction = themeItem->findChild<KToggleAction*>("lockedAction") ) {
+                lockedAction->setChecked(locked);
+                connect(lockedAction, SIGNAL(toggled(bool)), applet, SLOT(lockedActionToggled(bool)));
+                contextActions.append(lockedAction);
+            }
+
+            if( QAction* configAction = themeItem->findChild<QAction*>("configureTheme") ) {
+                contextActions.append(configAction);
+            }
+
+            if( KAction* reloadAction = themeItem->findChild<KAction*>("reloadAction") ) {
+                contextActions.append(reloadAction);
             }
 
             delete appletadaptor;
@@ -230,6 +243,11 @@ void SuperKarambaApplet::lockedActionToggled(bool toggled)
 {
     d->locked = toggled;
     configAccepted();
+}
+
+QList<QAction*> SuperKarambaApplet::contextActions()
+{
+    return d->contextActions;
 }
 
 #include "skapplet.moc"
