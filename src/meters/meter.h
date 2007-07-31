@@ -15,10 +15,12 @@
 #include <QMouseEvent>
 #include <QGraphicsItem>
 
+#include "../superkaramba_export.h"
+
 class QPainter;
 class Karamba;
 
-class Meter : public QObject, public QGraphicsItem
+class SUPERKARAMBA_EXPORT Meter : public QObject, public QGraphicsItem
 {
     Q_OBJECT
 public:
