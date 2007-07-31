@@ -85,10 +85,26 @@ class EngineConnector : public QObject
         */
         void setFormat(const QString& format) { m_format = format; }
 
+    Q_SIGNALS:
+
+        /**
+         * Emitted when a data source got updated.
+         *
+         * This signal will only be emitted if no or an emoty source was defined.
+         *
+         * \param source The name of the data source.
+         * \param data The map of the data that got changed.
+         **/
+        void sourceUpdated(const QString& source, QVariantMap data);
+
     private Q_SLOTS:
 
         /// Plasma calls this if data changed.
         void updated(const QString& source, Plasma::DataEngine::Data data) {
+            if( m_source.isEmpty() ) {
+                emit sourceUpdated(source, dataToMap(data));
+                return;
+            }
             if( source != m_source )
                 return;
             QString v = m_format;
