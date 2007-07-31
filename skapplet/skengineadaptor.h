@@ -30,6 +30,27 @@
 
 namespace Skip {
 
+/// \internal helper function that translates plasma data into a QVariantMap.
+static QVariantMap dataToMap(Plasma::DataEngine::Data data) {
+    QVariantMap map;
+    Plasma::DataEngine::DataIterator it(data);
+    while( it.hasNext() ) {
+        it.next();
+        map.insert(it.key(), it.value());
+    }
+    return map;
+}
+
+/*
+/// \internal helper function that translates a QVariantMap into plasma data.
+static Plasma::DataEngine::Data mapToData(QVariantMap map) {
+    Plasma::DataEngine::Data data;
+    for(QVariantMap::Iterator it = map.begin(); it != map.end(); ++it)
+        data.insert(it.key(), it.value());
+    return data;
+}
+*/
+
 /**
 * This is a helper class that connects a Plasma::DataEngine together
 * with a SuperKaramba Meter.
@@ -38,7 +59,7 @@ class EngineConnector : public QObject
 {
         Q_OBJECT
     public:
-        explicit EngineConnector(Meter *meter) : QObject(meter), m_meter(meter) { Q_ASSERT(m_meter); }
+        explicit EngineConnector(Meter *meter, const QString& source) : QObject(meter), m_meter(meter), m_source(source) { Q_ASSERT(m_meter); }
         virtual ~EngineConnector() {}
         Meter* meter() const { return m_meter; }
 
@@ -66,12 +87,18 @@ class EngineConnector : public QObject
 
     private Q_SLOTS:
 
+        /// Plasma calls this if data changed.
         void updated(const QString& source, Plasma::DataEngine::Data data) {
-            Q_UNUSED(source);
-            Q_UNUSED(data);
-            kDebug()<<"##################### EngineConnector::updated()"<<endl;
-            //if( source != m_source ) return;
-            //TODO m_meter->setValue(m_format, data.contains(m_data) ? data[m_data] : QVariant());
+            if( source != m_source )
+                return;
+            QString v = m_format;
+            Plasma::DataEngine::DataIterator it(data);
+            while( it.hasNext() ) {
+                it.next();
+                QString s = QString("%%1").arg( it.key() );
+                v.replace(s,it.value().toString());
+            }
+            m_meter->setValue(v);
         }
 
     private:
@@ -121,11 +148,14 @@ class EngineAdaptor : public QObject
         * Connect with a source. Each time the source is updated
         * the sourceUpdated() signal will be emitted.
         */
-        void connectSource(const QString& source, QObject* visualization = 0) {
-            if( Meter* m = dynamic_cast<Meter*>(visualization) )
-                m_engine->connectSource(source, new EngineConnector(m));
-            else
-                m_engine->connectSource(source, visualization ? visualization : this);
+        QObject* connectSource(const QString& source, QObject* visualization = 0) {
+            if( Meter* m = dynamic_cast<Meter*>(visualization) ) {
+                EngineConnector* c = new EngineConnector(m, source);
+                m_engine->connectSource(source, c);
+                return c;
+            }
+            m_engine->connectSource(source, visualization ? visualization : this);
+            return 0;
         }
 
         /**
@@ -171,23 +201,6 @@ class EngineAdaptor : public QObject
 
     private:
         Plasma::DataEngine* m_engine;
-
-        QVariantMap dataToMap(Plasma::DataEngine::Data data) {
-            QVariantMap map;
-            Plasma::DataEngine::DataIterator it(data);
-            while( it.hasNext() ) {
-                it.next();
-                map.insert(it.key(), it.value());
-            }
-            return map;
-        }
-
-        Plasma::DataEngine::Data mapToData(QVariantMap map) {
-            Plasma::DataEngine::Data data;
-            for(QVariantMap::Iterator it = map.begin(); it != map.end(); ++it)
-                data.insert(it.key(), it.value());
-            return data;
-        }
 };
 
 } // end of namespace SuperKarambaPlasmaApplet
