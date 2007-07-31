@@ -18,7 +18,7 @@ Sensor::Sensor(int iMsec)
 
 void Sensor::start()
 {
-    if (!timer.isActive()) {
+    if (msec>=0 && !timer.isActive()) {
         connect(&timer, SIGNAL(timeout()), this, SLOT(update()));
         timer.start((msec == 0) ? 1000 : msec);
     }
