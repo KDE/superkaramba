@@ -11,6 +11,7 @@
 #include "network.h"
 
 #include <QTextStream>
+#include <QNetworkInterface>
 
 #include <KDebug>
 
@@ -171,6 +172,17 @@ void NetworkSensor::getInOutBytes(unsigned long &in, unsigned long &out) const
 
 void NetworkSensor::getIPAddress()
 {
+    QList<QNetworkInterface> interfaces = QNetworkInterface::allInterfaces();
+
+    foreach (QNetworkInterface interface, interfaces) {
+        if (device == interface.name()) {
+            QList<QNetworkAddressEntry> entries = interface.addressEntries();
+            if (entries.count() > 0) {
+                ipAddress = entries[0].ip().toString();
+            }
+        }
+    }
+#if 0
     struct ifaddrs *ifa = NULL, *ifp = NULL;
 
     if (getifaddrs (&ifp) < 0) {
@@ -207,6 +219,7 @@ void NetworkSensor::getIPAddress()
 
     freeifaddrs(ifp);
     ipAddress = NO_IP;
+#endif
 }
 
 void NetworkSensor::update()
