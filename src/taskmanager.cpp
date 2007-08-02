@@ -283,7 +283,7 @@ void TaskManager::windowAdded(WId w)
             if (t) {
                 if (t->window() != w) {
                     t->addTransient(w, info);
-                    // kDebug() << "TM: Transient " << w << " added for Task: " << t->window() << endl;
+                    // kDebug() << "TM: Transient " << w << " added for Task: " << t->window() ;
                 }
                 return;
             }
@@ -293,7 +293,7 @@ void TaskManager::windowAdded(WId w)
     Task::TaskPtr t(new Task(w, this));
     m_tasksByWId[w] = t;
 
-    // kDebug() << "TM: Task added for WId: " << w << endl;
+    // kDebug() << "TM: Task added for WId: " << w ;
 
     emit taskAdded(t);
 }
@@ -316,10 +316,10 @@ void TaskManager::windowRemoved(WId w)
             _active = 0;
         }
 
-        //kDebug() << "TM: Task for WId " << w << " removed." << endl;
+        //kDebug() << "TM: Task for WId " << w << " removed." ;
     } else {
         t->removeTransient(w);
-        //kDebug() << "TM: Transient " << w << " for Task " << t->window() << " removed." << endl;
+        //kDebug() << "TM: Transient " << w << " for Task " << t->window() << " removed." ;
     }
 }
 
@@ -356,7 +356,7 @@ void TaskManager::windowChanged(WId w, unsigned int dirty)
         return;
     }
 
-    //kDebug() << "TaskManager::windowChanged " << w << " " << dirty << endl;
+    //kDebug() << "TaskManager::windowChanged " << w << " " << dirty ;
 
     if (dirty & NET::WMState) {
         t->updateDemandsAttentionState(w);
@@ -407,7 +407,7 @@ void TaskManager::updateWindowPixmap(WId w)
 
 void TaskManager::activeWindowChanged(WId w)
 {
-    //kDebug() << "TaskManager::activeWindowChanged" << endl;
+    //kDebug() << "TaskManager::activeWindowChanged" ;
 
     Task::TaskPtr t = findTask(w);
     if (!t) {
@@ -1045,19 +1045,19 @@ void Task::close()
 
 void Task::raise()
 {
-//    kDebug(1210) << "Task::raise(): " << name() << endl;
+//    kDebug(1210) << "Task::raise(): " << name() ;
     KWindowSystem::raiseWindow(_win);
 }
 
 void Task::lower()
 {
-//    kDebug(1210) << "Task::lower(): " << name() << endl;
+//    kDebug(1210) << "Task::lower(): " << name() ;
     KWindowSystem::lowerWindow(_win);
 }
 
 void Task::activate()
 {
-//    kDebug(1210) << "Task::activate():" << name() << endl;
+//    kDebug(1210) << "Task::activate():" << name() ;
     WId w = _win;
     if (_transients_demanding_attention.count() > 0) {
         w = _transients_demanding_attention.last();

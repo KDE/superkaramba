@@ -370,7 +370,7 @@ void ImageLabel::setValue(QPixmap& pix)
 void ImageLabel::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                        QWidget *widget)
 {
-//  kDebug() << "image update: " << imagePath  << endl;
+//  kDebug() << "image update: " << imagePath  ;
 
     Q_UNUSED(option);
     Q_UNUSED(widget);
@@ -466,9 +466,9 @@ void ImageLabel::parseImages(const QString &fn, const QString &fn_roll, int _xof
         if (KIO::NetAccess::download(KUrl(path), tmpFile, 0)) {
             pixmap_off = QPixmap(tmpFile);
             KIO::NetAccess::removeTempFile(tmpFile);
-            kDebug() << "Downloaded: " << path << " to " << tmpFile << endl;
+            kDebug() << "Downloaded: " << path << " to " << tmpFile ;
         } else {
-            kDebug() << "Error Downloading: " << path << endl;
+            kDebug() << "Error Downloading: " << path ;
         }
     } else {
         pixmap_off = QPixmap(path);

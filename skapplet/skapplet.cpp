@@ -102,15 +102,15 @@ class SuperKarambaApplet::Private : public QObject
         {
             switch( event->type() ) {
                 case QEvent::ContextMenu:
-                    kDebug() << "eventFilter type=ContextMenu watched=" << (watched ? QString("%1 [%2]").arg(watched->objectName()).arg(watched->metaObject()->className()) : "NULL") << endl;
+                    kDebug() << "eventFilter type=ContextMenu watched=" << (watched ? QString("%1 [%2]").arg(watched->objectName()).arg(watched->metaObject()->className()) : "NULL") ;
                     //static_cast<QContextMenuEvent*>(event);
                     //return true;
                     break;
                 case QEvent::GraphicsSceneContextMenu:
-                    kDebug() << "eventFilter type=GraphicsSceneContextMenu watched=" << (watched ? QString("%1 [%2]").arg(watched->objectName()).arg(watched->metaObject()->className()) : "NULL") << endl;
+                    kDebug() << "eventFilter type=GraphicsSceneContextMenu watched=" << (watched ? QString("%1 [%2]").arg(watched->objectName()).arg(watched->metaObject()->className()) : "NULL") ;
                     break;
                 case QEvent::KeyPress:
-                    kDebug() << "eventFilter type=KeyPress watched=" << (watched ? QString("%1 [%2]").arg(watched->objectName()).arg(watched->metaObject()->className()) : "NULL") << endl;
+                    kDebug() << "eventFilter type=KeyPress watched=" << (watched ? QString("%1 [%2]").arg(watched->objectName()).arg(watched->metaObject()->className()) : "NULL") ;
                     //QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
                     //qDebug() << "Ate key press" << keyEvent->key();
                     break;
@@ -127,7 +127,7 @@ SuperKarambaApplet::SuperKarambaApplet(QObject *parent, const QStringList &args)
 {
     //watchForFocus(d,true);
 
-    kDebug() << "========================> SuperKarambaApplet Ctor" << endl;
+    kDebug() << "========================> SuperKarambaApplet Ctor" ;
     setHasConfigurationInterface(true);
 
     KConfigGroup cg = config();
@@ -159,7 +159,7 @@ SuperKarambaApplet::SuperKarambaApplet(QObject *parent, const QStringList &args)
 
 SuperKarambaApplet::~SuperKarambaApplet()
 {
-    kDebug() << "========================> SuperKarambaApplet Dtor" << endl;
+    kDebug() << "========================> SuperKarambaApplet Dtor" ;
     //watchForFocus(d, false);
     delete d;
 }
@@ -171,7 +171,7 @@ Karamba* SuperKarambaApplet::karamba() const
 
 void SuperKarambaApplet::loadKaramba()
 {
-    kDebug() << "SuperKarambaApplet::loadKaramba() Theme: " << d->themePath << endl;
+    kDebug() << "SuperKarambaApplet::loadKaramba() Theme: " << d->themePath ;
 
     QGraphicsScene *gfxScene = scene();
     Q_ASSERT( gfxScene );
@@ -198,7 +198,7 @@ void SuperKarambaApplet::showConfigurationInterface()
 
 void SuperKarambaApplet::configAccepted()
 {
-    kDebug() << "SuperKarambaApplet::configAccepted" << endl;
+    kDebug() << "SuperKarambaApplet::configAccepted" ;
     KConfigGroup cg = config();
     cg.writeEntry("theme", d->themePath);
     cg.writeEntry("locked", d->locked);
@@ -209,7 +209,7 @@ void SuperKarambaApplet::configAccepted()
 
 void SuperKarambaApplet::constraintsUpdated()
 {
-    kDebug() << "SuperKarambaApplet::constraintsUpdated" << endl;
+    kDebug() << "SuperKarambaApplet::constraintsUpdated" ;
     Plasma::Applet::constraintsUpdated();
 }
 
@@ -221,7 +221,7 @@ QRectF SuperKarambaApplet::boundingRect() const
 void SuperKarambaApplet::karambaStarted(QGraphicsItemGroup* group)
 {
     if( ! d->themeItem ) {
-        kDebug()<<">>>>>>>>>>>> SuperKarambaApplet::karambaStarted"<<endl;
+        kDebug()<<">>>>>>>>>>>> SuperKarambaApplet::karambaStarted";
         d->themeItem = dynamic_cast< Karamba* >( group );
         Q_ASSERT(d->themeItem);
         d->initTheme();
@@ -233,7 +233,7 @@ void SuperKarambaApplet::karambaStarted(QGraphicsItemGroup* group)
 void SuperKarambaApplet::karambaClosed(QGraphicsItemGroup* group)
 {
     if( d->themeItem == group ) {
-        kDebug()<<">>>>>>>>>>>> SuperKarambaApplet::karambaClosed"<<endl;
+        kDebug()<<">>>>>>>>>>>> SuperKarambaApplet::karambaClosed";
         d->themeItem = 0;
     }
 }

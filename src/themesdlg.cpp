@@ -49,7 +49,7 @@ ThemesDlg::ThemesDlg(QWidget *parent, const char *name)
 
 ThemesDlg::~ThemesDlg()
 {
-    //kDebug() << k_funcinfo << endl;
+    //kDebug() << k_funcinfo ;
     saveUserAddedThemes();
 
     delete m_newStuff;
@@ -257,7 +257,7 @@ int ThemesDlg::themeIndex(const QString &file)
 
 void ThemesDlg::addSkzThemeToDialog(const QString &file)
 {
-    //kDebug() << "addSkzThemeToDialog(): file = " << file << endl;
+    //kDebug() << "addSkzThemeToDialog(): file = " << file ;
     addThemeToList(file);
     writeNewStuffConfig(file);
 }
@@ -265,7 +265,7 @@ void ThemesDlg::addSkzThemeToDialog(const QString &file)
 void ThemesDlg::addThemeToDialog(const KArchiveDirectory *archiveDir,
                                  const QString& destDir)
 {
-    kDebug() << "addThemeToDialog(): destDir = " << destDir << endl;
+    kDebug() << "addThemeToDialog(): destDir = " << destDir ;
     QStringList entries = archiveDir->entries();
 
     QStringList::Iterator end(entries.end());
@@ -318,7 +318,7 @@ void ThemesDlg::configSanityCheck()
 
         }
         if (removeKey) {
-            kDebug() << "sanityCheck() deleting entry " << keyName << endl;
+            kDebug() << "sanityCheck() deleting entry " << keyName ;
             config->group("KNewStuffStatus").deleteEntry(keyName);
         }
     }
@@ -327,7 +327,7 @@ void ThemesDlg::configSanityCheck()
 
 int ThemesDlg::addThemeToList(const QString &file)
 {
-    kDebug() << "addThemeToList() file: " << file << endl;
+    kDebug() << "addThemeToList() file: " << file ;
     int i = themeIndex(file);
     if (i < 0) {
         ThemeWidget* item = new ThemeWidget(new ThemeFile(file));
@@ -395,7 +395,7 @@ bool ThemesDlg::filter(int index, QWidget* widget, void* data)
 
 bool ThemesDlg::isDownloaded(const QString& path)
 {
-    kDebug() << "isDownloaded path: " << path << endl;
+    kDebug() << "isDownloaded path: " << path ;
     KSharedConfigPtr config = KGlobal::config();
     return !config->group("KNewStuffNames").readEntry(path, QString()).isEmpty();
 }
@@ -410,13 +410,13 @@ void ThemesDlg::uninstall()
     karambaApp->closeTheme(tf->name());
 
     if (!tf->isZipTheme()) {
-        kDebug() << "encountered unpacked theme" << endl;
+        kDebug() << "encountered unpacked theme" ;
         //Don't move it to the trash if it is a local theme
         if (isDownloaded(tempPath)) {
             QFileInfo remPath(tf->path());
             QDir remDir(remPath.dir());
             remDir.cdUp();
-            kDebug() << "moving " << remDir.path() << " to the trash" << endl;
+            kDebug() << "moving " << remDir.path() << " to the trash" ;
             KIO::trash(remDir.path());
         }
         tableThemes->removeItem((QWidget*)w);
@@ -449,11 +449,11 @@ void ThemesDlg::uninstall()
             KGlobal::config()->sync();
         }
     } else {
-        kDebug() << "encountered skz theme" << endl;
+        kDebug() << "encountered skz theme" ;
         if (isDownloaded(theme.path())) {
             QFileInfo remPath(theme.path());
             QDir remDir(remPath.dir());
-            kDebug() << "moving " << remDir.path() << " to the trash" << endl;
+            kDebug() << "moving " << remDir.path() << " to the trash" ;
             KIO::trash(remDir.path());
         }
         tableThemes->removeItem((QWidget*)w);
@@ -461,9 +461,9 @@ void ThemesDlg::uninstall()
         KSharedConfigPtr config = KGlobal::config();
         QString name = config->group("KNewStuffNames").readEntry(theme.path(), QString());
         if (!name.isEmpty()) {
-            kDebug() << "removing " << theme.path() << " from superkarambarc" << endl;
+            kDebug() << "removing " << theme.path() << " from superkarambarc" ;
             KGlobal::config()->group("KNewStuffNames").deleteEntry(theme.path());
-            kDebug() << "removing " << name << " from superkarambarc" << endl;
+            kDebug() << "removing " << name << " from superkarambarc" ;
             KGlobal::config()->group("KNewStuffStatus").deleteEntry(name);
             KGlobal::config()->sync();
         }

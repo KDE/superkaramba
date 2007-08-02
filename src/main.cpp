@@ -53,7 +53,7 @@ int main(int argc, char **argv)
     Colormap colormap = 0;
     Visual *visual = 0;
 
-    kDebug() << "Composition Manager: " << haveCompManager << endl;
+    kDebug() << "Composition Manager: " << haveCompManager ;
 
     if (haveCompManager) {
         int screen = DefaultScreen(dpy);
@@ -114,7 +114,7 @@ int main(int argc, char **argv)
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     if (args->isSet("usefallback")) {
         noUseKross = true;
-        kDebug() << "Using fallback python scripting backend!" << endl;
+        kDebug() << "Using fallback python scripting backend!" ;
     }
 
     KarambaApplication app(dpy, Qt::HANDLE(visual), Qt::HANDLE(colormap));

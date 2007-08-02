@@ -211,7 +211,7 @@ class EngineAdaptor : public QObject
     private Q_SLOTS:
 
         void updated(const QString& source, Plasma::DataEngine::Data data) {
-            //kDebug()<<"EngineAdaptor::updated source="<<source<<endl;
+            //kDebug()<<"EngineAdaptor::updated source="<<source;
             emit sourceUpdated(source, dataToMap(data));
         }
 

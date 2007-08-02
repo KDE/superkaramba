@@ -143,7 +143,7 @@ bool KarambaInterface::initInterpreter()
             d->action->setFile(scriptFile);
         }
 
-        kDebug() << "Using " << interpreter << " script: " << scriptFile << endl;
+        kDebug() << "Using " << interpreter << " script: " << scriptFile ;
 
         return true;
     }
@@ -156,12 +156,12 @@ bool KarambaInterface::initInterpreter()
 bool KarambaInterface::checkKaramba(const Karamba *k) const
 {
     if (!k) {
-        kWarning() << "Widget pointer was 0" << endl;
+        kWarning() << "Widget pointer was 0" ;
         return false;
     }
 
     if (!KarambaManager::self()->checkKaramba(k)) {
-        kWarning() << "Widget " << (long)k << " invalid" << endl;
+        kWarning() << "Widget " << (long)k << " invalid" ;
         return false;
     }
 
@@ -171,17 +171,17 @@ bool KarambaInterface::checkKaramba(const Karamba *k) const
 bool KarambaInterface::checkMeter(const Karamba *k, const Meter *m, const QString &type) const
 {
     if (!m) {
-        kWarning() << "Meter pointer was 0" << endl;
+        kWarning() << "Meter pointer was 0" ;
         return false;
     }
 
     if (!k->hasMeter(m)) {
-        kWarning() << "Widget does not have meter " << (long)m << endl;
+        kWarning() << "Widget does not have meter " << (long)m ;
         return false;
     }
 
     if (!m->inherits(type.toAscii().data())) {
-        kWarning() << "Meter is not of type " << type << endl;
+        kWarning() << "Meter is not of type " << type ;
         return false;
     }
 
@@ -4630,7 +4630,7 @@ QObject* KarambaInterface::createSystray(const Karamba *k, int x, int y, int w, 
     static bool firstMessage = false;
 
     if (!firstMessage) {
-        kWarning() << "Call to \"createSystray\" not available in this version of SuperKaramba" << endl;
+        kWarning() << "Call to \"createSystray\" not available in this version of SuperKaramba" ;
         firstMessage = true;
     }
 
@@ -4646,7 +4646,7 @@ int KarambaInterface::getCurrentWindowCount(const Karamba *k) const
     static bool firstMessage = false;
 
     if (!firstMessage) {
-        kWarning() << "Call to \"getCurrentWindowCount\" not available in this version of SuperKaramba" << endl;
+        kWarning() << "Call to \"getCurrentWindowCount\" not available in this version of SuperKaramba" ;
         firstMessage = true;
     }
 
@@ -4662,7 +4662,7 @@ bool KarambaInterface::hideSystray(const Karamba *k) const
     static bool firstMessage = false;
 
     if (!firstMessage) {
-        kWarning() << "Call to \"hideSystray\" not available in this version of SuperKaramba" << endl;
+        kWarning() << "Call to \"hideSystray\" not available in this version of SuperKaramba" ;
         firstMessage = true;
     }
 
@@ -4683,7 +4683,7 @@ bool KarambaInterface::moveSystray(const Karamba *k, int x, int y, int w, int h)
     static bool firstMessage = false;
 
     if (!firstMessage) {
-        kWarning() << "Call to \"moveSystray\" not available in this version of SuperKaramba" << endl;
+        kWarning() << "Call to \"moveSystray\" not available in this version of SuperKaramba" ;
         firstMessage = true;
     }
 
@@ -4699,7 +4699,7 @@ bool KarambaInterface::showSystray(const Karamba *k) const
     static bool firstMessage = false;
 
     if (!firstMessage) {
-        kWarning() << "Call to \"showSystray\" not available in this version of SuperKaramba" << endl;
+        kWarning() << "Call to \"showSystray\" not available in this version of SuperKaramba" ;
         firstMessage = true;
     }
 
@@ -4715,7 +4715,7 @@ bool KarambaInterface::updateSystrayLayout(const Karamba *k) const
     static bool firstMessage = false;
 
     if (!firstMessage) {
-        kWarning() << "Call to \"updateSystrayLayout\" not available in this version of SuperKaramba" << endl;
+        kWarning() << "Call to \"updateSystrayLayout\" not available in this version of SuperKaramba" ;
         firstMessage = true;
     }
 
@@ -4731,7 +4731,7 @@ bool KarambaInterface::getSystraySize(const Karamba *k) const
     static bool firstMessage = false;
 
     if (!firstMessage) {
-        kWarning() << "Call to \"getSystraySize\" not available in this version of SuperKaramba" << endl;
+        kWarning() << "Call to \"getSystraySize\" not available in this version of SuperKaramba" ;
         firstMessage = true;
     }
 

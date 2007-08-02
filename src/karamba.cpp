@@ -292,7 +292,7 @@ Karamba::Karamba(const KUrl &themeFile, QGraphicsView *view, int instance, bool 
     }
 
     if (!d->theme.set(themeFile)) {
-        kDebug() << "Could not load theme file" << endl;
+        kDebug() << "Could not load theme file" ;
         d->errorInInit = true;
         QTimer::singleShot(0, this, SLOT(startKaramba()));
         return;
@@ -365,7 +365,7 @@ Karamba::Karamba(const KUrl &themeFile, QGraphicsView *view, int instance, bool 
 
     QString cfg = QDir::home().absolutePath() + "/.superkaramba/"
                   + d->theme.id() + instanceString + ".rc";
-    kDebug() << cfg << endl;
+    kDebug() << cfg ;
 
     QFile themeConfigFile(cfg);
     // Tests if config file Exists
@@ -458,7 +458,7 @@ void Karamba::startKaramba()
     }
 
     if (d->theme.scriptModuleExists()) {
-        kDebug() << "Loading script module: " << d->theme.scriptModule() << endl;
+        kDebug() << "Loading script module: " << d->theme.scriptModule() ;
 
         d->stepTimer.setSingleShot(true);
 

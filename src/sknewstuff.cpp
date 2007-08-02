@@ -39,7 +39,7 @@ SKNewStuff::SKNewStuff(ThemesDlg *dlg) :
 
 bool SKNewStuff::install(const QString &fileName)
 {
-    kDebug() << "SKNewStuff::install(): " << fileName << endl;
+    kDebug() << "SKNewStuff::install(): " << fileName ;
 
     KMimeType::Ptr result = KMimeType::findByUrl(fileName);
     KStandardDirs myStdDir;
@@ -49,7 +49,7 @@ bool SKNewStuff::install(const QString &fileName)
     const QString destDir = baseDestDir + base + '/';
     KStandardDirs::makeDir(destDir);
 
-    kDebug() << "SKNewStuff::install() mimetype: " << result->name() << endl;
+    kDebug() << "SKNewStuff::install() mimetype: " << result->name() ;
 
     if (result->name() == "application/x-gzip" ||
             result->name() == "application/x-compressed-tar" ||
@@ -71,7 +71,7 @@ bool SKNewStuff::install(const QString &fileName)
         archive.close();
     } else if (result->name() == "application/zip" ||
                result->name() == "application/x-superkaramba") {
-        kDebug() << "SKNewStuff::install() zip mimetype encountered" << endl;
+        kDebug() << "SKNewStuff::install() zip mimetype encountered" ;
         //TODO: write a routine to check if this is a valid .skz file
         //otherwise we need to unpack it like it is an old theme that was packaged
         //as a .zip instead of .bz2 or .tar.gz
@@ -84,9 +84,9 @@ bool SKNewStuff::install(const QString &fileName)
         //Add the skz theme to the Theme Dialog
         mDlg->addSkzThemeToDialog(destFile.path());
     } else if (result->name() == "plain/text") {
-        kDebug() << "SKNewStuff::install() plain text" << endl;
+        kDebug() << "SKNewStuff::install() plain text" ;
     } else if (result->name() == "text/html") {
-        kDebug() << "SKNewStuff::install() text/html" << endl;
+        kDebug() << "SKNewStuff::install() text/html" ;
         KRun::runUrl(m_sourceLink, "text/html", 0);
     } else {
         kDebug() << "SKNewStuff::install() Error no compatible mimetype encountered to install"
@@ -98,7 +98,7 @@ bool SKNewStuff::install(const QString &fileName)
 
 bool SKNewStuff::createUploadFile(const QString &fileName)
 {
-    kDebug() << "SKNewStuff::createUploadFile(): " << fileName << endl;
+    kDebug() << "SKNewStuff::createUploadFile(): " << fileName ;
     return true;
 }
 

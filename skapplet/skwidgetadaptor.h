@@ -60,7 +60,7 @@ class WidgetAdaptor : public QObject {
         QObject* impl() const { return m_impl; }
     public Q_SLOTS:
         virtual void updated(const QString& source, Plasma::DataEngine::Data data) {
-            kDebug() << "WidgetAdaptor name=" << m_impl->objectName() << " class=" << m_impl->metaObject()->className() << endl;
+            kDebug() << "WidgetAdaptor name=" << m_impl->objectName() << " class=" << m_impl->metaObject()->className() ;
             QMetaObject::invokeMethod(m_impl, "updated", Q_ARG(QString, source), Q_ARG(Plasma::DataEngine::Data, data));
         }
     private:
@@ -166,7 +166,7 @@ class SvgAdaptor : public WidgetAdaptor {
             m_svg->paint(painter->painter(), point, elementID);
         }
         void updated(const QString& source, Plasma::DataEngine::Data) {
-            kDebug() << "SvgAdaptor::updated source=" << source << endl;
+            kDebug() << "SvgAdaptor::updated source=" << source ;
         }
     private:
         Plasma::Svg* m_svg;

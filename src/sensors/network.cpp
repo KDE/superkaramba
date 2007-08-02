@@ -161,7 +161,7 @@ void NetworkSensor::getInOutBytes(unsigned long &in, unsigned long &out) const
             in = rx.cap(1).toULong();
             out = rx.cap(2).toULong();
         } else {
-            kDebug() << "Network sensor: can not find " << device << endl;
+            kDebug() << "Network sensor: can not find " << device ;
             in = 0;
             out = 0;
         }
@@ -186,7 +186,7 @@ void NetworkSensor::getIPAddress()
     struct ifaddrs *ifa = NULL, *ifp = NULL;
 
     if (getifaddrs (&ifp) < 0) {
-        kDebug() << "getifaddrs failed" << endl;
+        kDebug() << "getifaddrs failed" ;
         ipAddress = NO_IP;
         return;
     }
@@ -206,7 +206,7 @@ void NetworkSensor::getIPAddress()
         }
 
         if (getnameinfo(ifa->ifa_addr, salen, ip, sizeof (ip), NULL, 0, NI_NUMERICHOST) < 0) {
-            kDebug() << "getnameinfo < 0" << endl;
+            kDebug() << "getnameinfo < 0" ;
             continue;
         }
 

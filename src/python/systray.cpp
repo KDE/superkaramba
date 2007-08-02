@@ -57,7 +57,7 @@ PyObject* py_move_systray(PyObject *, PyObject *args)
     static bool firstMessage = false;
 
     if (!firstMessage) {
-        kWarning() << "Call to \"moveSystray\" not available in this version of SuperKaramba" << endl;
+        kWarning() << "Call to \"moveSystray\" not available in this version of SuperKaramba" ;
         firstMessage = true;
     }
 
@@ -93,7 +93,7 @@ PyObject* py_show_systray(PyObject *, PyObject *args)
     static bool firstMessage = false;
 
     if (!firstMessage) {
-        kWarning() << "Call to \"moveSystray\" not available in this version of SuperKaramba" << endl;
+        kWarning() << "Call to \"moveSystray\" not available in this version of SuperKaramba" ;
         firstMessage = true;
     }
 
@@ -129,7 +129,7 @@ PyObject* py_hide_systray(PyObject *, PyObject *args)
     static bool firstMessage = false;
 
     if (!firstMessage) {
-        kWarning() << "Call to \"moveSystray\" not available in this version of SuperKaramba" << endl;
+        kWarning() << "Call to \"moveSystray\" not available in this version of SuperKaramba" ;
         firstMessage = true;
     }
 
@@ -173,7 +173,7 @@ PyObject* py_create_systray(PyObject *, PyObject *args)
     static bool firstMessage = false;
 
     if (!firstMessage) {
-        kWarning() << "Call to \"moveSystray\" not available in this version of SuperKaramba" << endl;
+        kWarning() << "Call to \"moveSystray\" not available in this version of SuperKaramba" ;
         firstMessage = true;
     }
 
@@ -212,7 +212,7 @@ PyObject* py_get_current_window_count(PyObject *, PyObject *args)
     static bool firstMessage = false;
 
     if (!firstMessage) {
-        kWarning() << "Call to \"moveSystray\" not available in this version of SuperKaramba" << endl;
+        kWarning() << "Call to \"moveSystray\" not available in this version of SuperKaramba" ;
         firstMessage = true;
     }
 
@@ -248,7 +248,7 @@ PyObject* py_update_systray_layout(PyObject *, PyObject *args)
     static bool firstMessage = false;
 
     if (!firstMessage) {
-        kWarning() << "Call to \"moveSystray\" not available in this version of SuperKaramba" << endl;
+        kWarning() << "Call to \"moveSystray\" not available in this version of SuperKaramba" ;
         firstMessage = true;
     }
 
@@ -285,7 +285,7 @@ PyObject* py_get_systray_size(PyObject*, PyObject* args)
     static bool firstMessage = false;
 
     if (!firstMessage) {
-        kWarning() << "Call to \"moveSystray\" not available in this version of SuperKaramba" << endl;
+        kWarning() << "Call to \"moveSystray\" not available in this version of SuperKaramba" ;
         firstMessage = true;
     }
 
