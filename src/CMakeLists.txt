@@ -106,6 +106,8 @@ ${KDE4_KNEWSTUFF2_LIBS}
 superkaramba
 )
 
+set_target_properties(superkaramba-bin PROPERTIES OUTPUT_NAME superkaramba)
+
 install(TARGETS superkaramba-bin DESTINATION ${BIN_INSTALL_DIR})
 install(FILES superkarambaui.rc DESTINATION ${DATA_INSTALL_DIR}/superkaramba)
 install(FILES superkaramba.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
