@@ -89,7 +89,7 @@ void NetworkSensor::refreshDevice() {
     //TODO: what about BSD?
     QFile file ("/proc/net/dev");
 
-    if (file.open(IO_ReadOnly | IO_Translate)) {
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QTextStream t(&file);       // use a text stream
         t.readLine();               // reads: "Inter-|   Receive..."
         t.readLine();                  // reads: " face |bytes    "
