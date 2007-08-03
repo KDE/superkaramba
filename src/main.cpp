@@ -24,6 +24,8 @@
 #include "karambasessionmanaged.h"
 #include "python/karamba.h"
 
+#include "config-superkaramba.h"
+
 #include <KLocale>
 #include <KConfig>
 #include <KStandardDirs>
@@ -99,7 +101,9 @@ int main(int argc, char **argv)
     KCmdLineOptions options;
     // { "+[URL]", I18N_NOOP( "Document to open" ), 0 },
 // { "!nosystray", I18N_NOOP("Disable systray icon"), 0 },
-    options.add("usefallback", ki18n("Use the original python bindings as scripting backend. Off by default."));
+#ifdef PYTHON_INCLUDE_PATH
+   options.add("usefallback", ki18n("Use the original python bindings as scripting backend. Off by default."));
+#endif
     options.add("+file", ki18n("A required argument 'file'"));
     KCmdLineArgs::addCmdLineOptions(options);
     KarambaApplication::addCmdLineOptions();
@@ -110,26 +114,33 @@ int main(int argc, char **argv)
         exit(0);
     }
 
+#ifdef PYTHON_INCLUDE_PATH
     bool noUseKross = false;
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     if (args->isSet("usefallback")) {
         noUseKross = true;
         kDebug() << "Using fallback python scripting backend!" ;
     }
+#endif
 
     KarambaApplication app(dpy, Qt::HANDLE(visual), Qt::HANDLE(colormap));
 
     app.setupSysTray(&about);
     int ret = 0;
+
+#ifdef PYTHON_INCLUDE_PATH
     if (noUseKross) {
         KarambaPython::initPython();
     }
+#endif
 
     ret = app.exec();
 
+#ifdef PYTHON_INCLUDE_PATH
     if (noUseKross) {
         KarambaPython::shutdownPython();
     }
+#endif
 
     return ret;
 }

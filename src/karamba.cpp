@@ -44,6 +44,8 @@
 #include <KToggleAction>
 #include <KCmdLineArgs>
 
+#include "config-superkaramba.h"
+
 #include "karambamanager.h"
 
 #include "meters/textfield.h"
@@ -96,7 +98,9 @@ class Karamba::Private
         KWindowSystem *KWinModule;
 
         bool useKross;
+#ifdef PYTHON_INCLUDE_PATH
         KarambaPython *python;
+#endif
         KarambaInterface *interface;
 
         bool foundKaramba;
@@ -173,7 +177,9 @@ class Karamba::Private
             view(view),
             KWinModule(0),
             useKross(true),
+#ifdef PYTHON_INCLUDE_PATH
             python(0),
+#endif
             interface(0),
             foundKaramba(false),
             onTop(false),
@@ -216,9 +222,11 @@ class Karamba::Private
 
             delete info;
 
+#ifdef PYTHON_INCLUDE_PATH
             if (python) {
                 delete python;
             }
+#endif
 
             if (interface) {
                 delete interface;
@@ -254,10 +262,12 @@ Karamba::Karamba(const KUrl &themeFile, QGraphicsView *view, int instance, bool 
         d(new Private(view, instance, subTheme))
 {
     if (!d->globalView) {
+        #ifdef PYTHON_INCLUDE_PATH
         KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
         if (args->isSet("usefallback")) {
             d->useKross = false;
         }
+        #endif
     }
 
     QString environment = getenv("SK_FANCY");
@@ -463,11 +473,13 @@ void Karamba::startKaramba()
         d->stepTimer.setSingleShot(true);
 
         if (!d->useKross) {
+#ifdef PYTHON_INCLUDE_PATH
             d->python = new KarambaPython(d->theme, false);
 
             KarambaManager::self()->addKaramba(this);
 
             d->python->initWidget(this);
+#endif
         } else {
             d->interface = new KarambaInterface(this);
             bool interpreterStarted = d->interface->initInterpreter();
@@ -506,8 +518,10 @@ void Karamba::step()
 {
     d->stepTimer.start(d->interval);
 
+#ifdef PYTHON_INCLUDE_PATH
     if (d->python)
         d->python->widgetUpdated(this);
+#endif
 
     if (d->interface)
         d->interface->callWidgetUpdated(this);
@@ -1297,8 +1311,10 @@ void Karamba::slotToggleLocked()
 
 void Karamba::closeWidget()
 {
+#ifdef PYTHON_INCLUDE_PATH
     if (d->python)
         d->python->widgetClosed(this);
+#endif
 
     if (d->interface)
         d->interface->callWidgetClosed(this);
@@ -1448,9 +1464,11 @@ void Karamba::slotDesktopChanged(int desktop)
 
 void Karamba::currentWallpaperChanged(int desktop)
 {
+#ifdef PYTHON_INCLUDE_PATH
     if (d->python) {
         d->python->wallpaperChanged(this, desktop);
     }
+#endif
 
     if (d->interface) {
         d->interface->callWallpaperChanged(this, desktop);
@@ -1477,8 +1495,10 @@ void Karamba::slotToggleConfigOption(QObject* sender)
 
     d->config->group("config menu").writeEntry(action->objectName(), action->isChecked());
 
+#ifdef PYTHON_INCLUDE_PATH
     if (d->python)
         d->python->menuOptionChanged(this, action->objectName(), action->isChecked());
+#endif
 
     if (d->interface)
         d->interface->callMenuOptionChanged(this, action->objectName(), action->isChecked());
@@ -1576,8 +1596,10 @@ void Karamba::moveMeter(Meter *meter, int x, int y) const
 
 void Karamba::passMenuItemClicked(QAction* action)
 {
+#ifdef PYTHON_INCLUDE_PATH
     if (d->python)
         d->python->menuItemClicked(this, (KMenu*)action->parentWidget(), (long)action);
+#endif
 
     if (d->interface)
         d->interface->callMenuItemClicked(this, (KMenu*)action->parentWidget(), action);
@@ -1654,8 +1676,10 @@ void Karamba::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 
 void Karamba::activeTaskChanged(Task::TaskPtr t)
 {
+#ifdef PYTHON_INCLUDE_PATH
     if (d->python)
         d->python->activeTaskChanged(this, t.data());
+#endif
 
     if (d->interface)
         d->interface->callActiveTaskChanged(this, t.data());
@@ -1663,8 +1687,10 @@ void Karamba::activeTaskChanged(Task::TaskPtr t)
 
 void Karamba::taskAdded(Task::TaskPtr t)
 {
+#ifdef PYTHON_INCLUDE_PATH
     if (d->python)
         d->python->taskAdded(this, t.data());
+#endif
 
     if (d->interface)
         d->interface->callTaskAdded(this, t.data());
@@ -1672,8 +1698,10 @@ void Karamba::taskAdded(Task::TaskPtr t)
 
 void Karamba::taskRemoved(Task::TaskPtr t)
 {
+#ifdef PYTHON_INCLUDE_PATH
     if (d->python)
         d->python->taskRemoved(this, t.data());
+#endif
 
     if (d->interface)
         d->interface->callTaskRemoved(this, t.data());
@@ -1681,8 +1709,10 @@ void Karamba::taskRemoved(Task::TaskPtr t)
 
 void Karamba::startupAdded(Startup::StartupPtr t)
 {
+#ifdef PYTHON_INCLUDE_PATH
     if (d->python)
         d->python->startupAdded(this, t.data());
+#endif
 
     if (d->interface)
         d->interface->callStartupAdded(this, t.data());
@@ -1690,8 +1720,10 @@ void Karamba::startupAdded(Startup::StartupPtr t)
 
 void Karamba::startupRemoved(Startup::StartupPtr t)
 {
+#ifdef PYTHON_INCLUDE_PATH
     if (d->python)
         d->python->startupRemoved(this, t.data());
+#endif
 
     if (d->interface)
         d->interface->callStartupRemoved(this, t.data());
@@ -1699,8 +1731,10 @@ void Karamba::startupRemoved(Startup::StartupPtr t)
 
 void Karamba::processExited(K3Process* proc)
 {
+#ifdef PYTHON_INCLUDE_PATH
     if (d->python)
         d->python->commandFinished(this, (int)proc->pid());
+#endif
 
     if (d->interface)
         d->interface->callCommandFinished(this, (int)proc->pid());
@@ -1708,8 +1742,10 @@ void Karamba::processExited(K3Process* proc)
 
 void Karamba::receivedStdout(K3Process *proc, char *buffer, int)
 {
+#ifdef PYTHON_INCLUDE_PATH
     if (d->python)
         d->python->commandOutput(this, (int)proc->pid(), buffer);
+#endif
 
     if (d->interface)
         d->interface->callCommandOutput(this, (int)proc->pid(), buffer);
@@ -1725,9 +1761,11 @@ void Karamba::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
 void Karamba::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
     if (event->mimeData()->hasText()) {
+        #ifdef PYTHON_INCLUDE_PATH
         if (d->python)
             d->python->itemDropped(this, event->mimeData()->text(),
                                   (int)event->pos().x(), (int)event->pos().y());
+        #endif
 
         if (d->interface)
             d->interface->callItemDropped(this, event->mimeData()->text(),
@@ -1750,10 +1788,12 @@ void Karamba::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
     int button = passEvent(event);
 
+#ifdef PYTHON_INCLUDE_PATH
     if (d->python) {
         d->python->widgetClicked(this, (int)event->pos().x(),
                                 (int)event->pos().y(), button);
     }
+#endif
 
     if (d->interface) {
         d->interface->callWidgetClicked(this, (int)event->pos().x(),
@@ -1781,8 +1821,10 @@ void Karamba::setWantRightButton(bool enable)
 
 void Karamba::currentDesktopChanged(int i)
 {
+#ifdef PYTHON_INCLUDE_PATH
     if (d->python)
         d->python->desktopChanged(this, i);
+#endif
 
     if (d->interface)
         d->interface->callDesktopChanged(this, i);
@@ -1838,8 +1880,10 @@ int Karamba::passEvent(QEvent *e)
             pass = rich->mouseEvent(e);
             if (pass) {
                 QString anchor = rich->getAnchor(pos);
+                #ifdef PYTHON_INCLUDE_PATH
                 if (d->python)
                     d->python->meterClicked(this, anchor.toAscii().data(), button);
+                #endif
                 if (d->interface)
                     d->interface->callMeterClicked(this, anchor, button);
             }
@@ -1851,8 +1895,10 @@ int Karamba::passEvent(QEvent *e)
         }
 
         if (pass && allowClick) {
+            #ifdef PYTHON_INCLUDE_PATH
             if (d->python)
                 d->python->meterClicked(this, (Meter*)item, button);
+            #endif
 
             if (d->interface)
                 d->interface->callMeterClicked(this, (Meter*)item, button);
@@ -1866,8 +1912,10 @@ void Karamba::wheelEvent(QGraphicsSceneWheelEvent *event)
 {
     int button = passEvent(event);
 
+#ifdef PYTHON_INCLUDE_PATH
     if (d->python)
         d->python->widgetClicked(this, (int)event->pos().x(), (int)event->pos().y(), button);
+#endif
 
     if (d->interface)
         d->interface->callWidgetClicked(this, (int)event->pos().x(), (int)event->pos().y(), button);
@@ -1882,8 +1930,10 @@ void Karamba::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
         }
     }
 
+#ifdef PYTHON_INCLUDE_PATH
     if (d->python)
         d->python->widgetMouseMoved(this, (int)event->pos().x(), (int)event->pos().y(), 0/*button*/);
+#endif
 
     if (d->interface)
         d->interface->callWidgetMouseMoved(this, (int)event->pos().x(), (int)event->pos().y(), 0/*button*/);
@@ -1926,9 +1976,11 @@ void Karamba::keyPressed(const QString& s, const Meter* meter)
       return;
     }
 
+#ifdef PYTHON_INCLUDE_PATH
     if (d->python) {
         d->python->keyPressed(this, meter, s);
     }
+#endif
 
     if (d->interface) {
         d->interface->callKeyPressed(this, (Meter*)meter, s);
