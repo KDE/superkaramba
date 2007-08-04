@@ -1,6 +1,14 @@
 INCLUDE (CheckIncludeFiles)
 CONFIGURE_FILE(config-superkaramba.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-superkaramba.h)
 
+########### the Plasma::DataEngine-sensor ###############
+macro_optional_find_package(Plasma)
+if(PLASMA_FOUND)
+    set(PLASMASENSOR_SRC "sensors/plasmaengine.cpp")
+    set(PLASMASENSOR_LIB plasma)
+    ADD_DEFINITIONS(-DPLASMASENSOR_ENABLED)
+endif(PLASMA_FOUND)
+
 ########### superkaramba lib ###############
 SET(superkaramba_LIB_SRCS
 karamba.cpp
@@ -36,6 +44,7 @@ sensors/sensorparams.cpp
 sensors/lmsensor.cpp
 sensors/textfile.cpp
 sensors/rss.cpp
+${PLASMASENSOR_SRC}
 )
 
 #COMPILE_SUPERKARAMBA_WITH_PYTHON is set by upper-level CMakeLists.txt
@@ -74,6 +83,7 @@ ${KDE4_KIO_LIBS}
 ${KDE4_KROSSCORE_LIBS}
 ${PYTHON_LIBRARIES}
 ${CMAKE_DL_LIBS}
+${PLASMASENSOR_LIB}
 )
 
 IF(CMAKE_SYSTEM MATCHES "FreeBSD.*")

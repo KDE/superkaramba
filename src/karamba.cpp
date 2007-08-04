@@ -71,6 +71,10 @@
 #include "sensors/lmsensor.h"
 #include "sensors/cpu.h"
 
+#ifdef PLASMASENSOR_ENABLED
+    #include "sensors/plasmaengine.h"
+#endif
+
 #include "python/karamba.h"
 
 #include "karambaapp.h"
@@ -1287,6 +1291,34 @@ void Karamba::setSensor(const LineParser& lineParser, Meter* meter)
         sp->addParam("SOURCE", lineParser.getString("SOURCE"));
         sensor->addMeter(sp);
     }
+
+#ifdef PLASMASENSOR_ENABLED
+    if (sens == "PLASMA") {
+        QString engine = lineParser.getString("ENGINE");
+        QString source = lineParser.getString("SOURCE");
+        kDebug()<<"PlasmaEngineSensor engine="<<engine<<" source="<<source<<endl;
+        sensor = d->sensorMap["PLASMA."+engine+"."+source];
+        if (sensor == 0) {
+            PlasmaSensor* plasmasensor = new PlasmaSensor();
+            plasmasensor->setEngine(engine);
+            if( ! source.isEmpty() ) {
+                QObject* connector = plasmasensor->connectSource(source, meter);
+                if( PlasmaSensorConnector* c = dynamic_cast<PlasmaSensorConnector*>(connector) ) {
+                    c->setFormat( lineParser.getString("FORMAT") );
+                }
+            }
+
+            sensor = plasmasensor;
+            d->sensorMap["PLASMA."+engine+"."+source] = sensor;
+            d->sensorList.append(sensor);
+        }
+        SensorParams *sp = new SensorParams(meter);
+        sp->addParam("THEMAPATH", d->theme.path());
+        sp->addParam("ENGINE", engine);
+        sp->addParam("SOURCE", source);
+        sensor->addMeter(sp);
+    }
+#endif
 
     if (sensor != 0) {
         sensor->update();
