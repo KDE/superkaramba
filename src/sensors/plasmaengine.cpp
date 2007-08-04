@@ -102,7 +102,7 @@ void PlasmaSensorConnector::setFormat(const QString& format)
     d->format = format;
 }
 
-void PlasmaSensorConnector::updated(const QString& source, Plasma::DataEngine::Data data)
+void PlasmaSensorConnector::updated(const QString& source, const Plasma::DataEngine::Data &data)
 {
     //kDebug()<<"PlasmaSensorConnector::updated d->source="<<d->source<<" source="<<source<<endl;
     if( d->source.isEmpty() ) {

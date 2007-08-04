@@ -81,7 +81,7 @@ class PlasmaSensorConnector : public QObject
         /**
         * Plasma calls this if data changed.
         */
-        void updated(const QString& source, Plasma::DataEngine::Data data);
+        void updated(const QString& source, const Plasma::DataEngine::Data &data);
 
     private:
         /// \internal d-pointer class.
