@@ -45,7 +45,7 @@ class AppletAdaptor : public QObject
 {
         Q_OBJECT
     public:
-        AppletAdaptor(QObject* parent, SuperKarambaApplet *applet) : QObject(parent), m_applet(applet), m_widget(new Plasma::Widget(applet->karamba())) {
+        AppletAdaptor(QObject* parent, SuperKarambaApplet *applet) : QObject(parent), m_applet(applet), m_widget(new Plasma::Widget(applet->karamba())), m_painterenabled(false) {
             setObjectName("PlasmaApplet");
         }
         virtual ~AppletAdaptor() {
@@ -55,8 +55,10 @@ class AppletAdaptor : public QObject
 
         void paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *option, const QRect &rect) {
             Q_UNUSED(option);
-            Painter p(this, painter);
-            emit paint(&p, rect);
+            if( m_painterenabled ) {
+                Painter p(this, painter);
+                emit paint(&p, rect);
+            }
         }
 
     public Q_SLOTS:
@@ -113,6 +115,21 @@ class AppletAdaptor : public QObject
             */
         }
 
+        /**
+        * Return true if the painter is enabled.
+        *
+        * If the painter is enabled this applet will emit \a paint() signals
+        * each time (re-)painting is requested. Please note, that while this
+        * may eat more performance, it allows you to use the \a Skip::Painter
+        * class to draw stuff yourself within scripts.
+        */
+        bool isPainterEnabled() { return m_painterenabled; }
+
+        /**
+        * Enable or disable the painter.
+        */
+        void setPainterEnabled(bool enabled) { m_painterenabled = enabled; }
+
     Q_SIGNALS:
 
         /**
@@ -121,13 +138,17 @@ class AppletAdaptor : public QObject
         void showConfigurationInterface();
 
         /**
-        * This signal is emitted if the configuration interface should be shown.
+        * This signal is emitted if the painter is enabled and if (re-)painting
+        * should be done.
+        *
+        * See also the \a isPainterEnabled() and the \a setPainterEnabled() methods.
         */
         void paint(QObject* painter, const QRect &rect);
 
     private:
         SuperKarambaApplet *m_applet;
         Plasma::Widget* m_widget;
+        bool m_painterenabled;
         QHash<QString, PlasmaSensor*> m_engines;
 };
 
