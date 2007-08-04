@@ -32,7 +32,7 @@
 //#include <plasma/widgets/lineedit.h>
 
 #include "skapplet.h"
-#include "skengineadaptor.h"
+#include "sensors/plasmaengine.h"
 #include "skwidgetadaptor.h"
 
 namespace Skip {
@@ -93,9 +93,10 @@ class AppletAdaptor : public QObject
             Plasma::DataEngine* engine = m_applet->dataEngine(name);
             if( (! engine) || (! engine->isValid()) )
                 return 0;
-            EngineAdaptor* engineadaptor = new EngineAdaptor(engine);
-            m_engines.insert(name, engineadaptor);
-            return engineadaptor;
+            PlasmaSensor* sensor = new PlasmaSensor;
+            sensor->setEngineImpl(engine, name);
+            m_engines.insert(name, sensor);
+            return sensor;
         }
 
         /**
@@ -127,7 +128,7 @@ class AppletAdaptor : public QObject
     private:
         SuperKarambaApplet *m_applet;
         Plasma::Widget* m_widget;
-        QHash<QString, EngineAdaptor*> m_engines;
+        QHash<QString, PlasmaSensor*> m_engines;
 };
 
 } // end of namespace SuperKarambaPlasmaApplet

@@ -23,6 +23,7 @@
 
 #include <QObject>
 
+#include "superkaramba_export.h"
 #include "sensor.h"
 #include "meters/meter.h"
 
@@ -93,7 +94,7 @@ class PlasmaSensorConnector : public QObject
 * The PlasmaSensor class implements a SuperKaramba sensor that
 * provides access to Plasma::DataEngine objects.
 */
-class PlasmaSensor :  public Sensor
+class SUPERKARAMBA_EXPORT PlasmaSensor :  public Sensor
 {
         Q_OBJECT
     public:
