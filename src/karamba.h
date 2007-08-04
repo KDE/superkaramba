@@ -78,7 +78,6 @@ public:
     void setSensor(const LineParser& lineParser, Meter* meter);
     void deleteMeterFromSensors(Meter* meter);
     TextField* getDefaultTextProps();
-    void updateSensors();
     void setFixedSize(u_int w, u_int h);
     bool readMenuConfigOption(const QString &key) const;
     KConfig* getConfig() const;
@@ -135,6 +134,7 @@ public:
     Systemtray* systemTray();
 
 public Q_SLOTS:
+    void updateSensors();
     void closeWidget();
     void reloadConfig();
     void processExited(K3Process *proc);
