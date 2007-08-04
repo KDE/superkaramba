@@ -343,7 +343,7 @@ public Q_SLOTS:
     bool performTaskAction(const Karamba *k, Task* task, int action) const;
 
     // Text
-    QObject* createText(Karamba* k, int x, int y, int width, int height, const QString &text) const;
+    QObject* createText(Karamba* k, int x, int y, int width, int height, const QString &text = "") const;
     bool deleteText(Karamba *k, TextLabel *text) const;
     bool moveText(Karamba *k, TextLabel *text, int x, int y) const;
     QVariantList getTextPos(const Karamba *k, const TextLabel *text) const;
