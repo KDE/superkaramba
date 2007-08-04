@@ -52,6 +52,7 @@ class Painter : public QObject {
         QPainter* m_painter;
 };
 
+#if 0
 class WidgetAdaptor : public QObject {
         Q_OBJECT
     public:
@@ -134,11 +135,12 @@ class IconAdaptor : public WidgetAdaptor {
     private:
         Plasma::Icon* m_icon;
 };
+#endif
 
-class SvgAdaptor : public WidgetAdaptor {
+class SvgAdaptor : public Plasma::Widget {
         Q_OBJECT
     public:
-        SvgAdaptor(QObject* parent) : WidgetAdaptor(parent, this, false), m_svg(0) {}
+        SvgAdaptor(QGraphicsItem* parent) : Plasma::Widget(parent), m_svg(0) {}
         virtual ~SvgAdaptor() { delete m_svg; }
     public Q_SLOTS:
         void setImageFile(const QString& imagefile) {
@@ -162,7 +164,10 @@ class SvgAdaptor : public WidgetAdaptor {
             m_svg->setContentType(ct);
         }
         void paint(Painter* painter, const QPointF& point, const QString& elementID = QString()) {
-            if( ! m_svg || ! painter ) return;
+            if( ! m_svg || ! painter ) {
+                kDebug() << "SvgAdaptor::updated No SVG or invalid painter.";
+                return;
+            }
             m_svg->paint(painter->painter(), point, elementID);
         }
         void updated(const QString& source, Plasma::DataEngine::Data) {
@@ -174,18 +179,30 @@ class SvgAdaptor : public WidgetAdaptor {
 
 class WidgetFactory {
     public:
-        static WidgetAdaptor* createWidget(const QString& _widgetName, QObject* parent, Plasma::Widget* parentWidget) {
+        static QObject* createWidget(const QString& _widgetName, Plasma::Widget* parent) {
             const QString widgetName = _widgetName.toLower();
-            //if( widgetName == "Label" )
-            //    return new LabelAdaptor(parent, new Plasma::Label(parentWidget), true);
+
             if( widgetName == "lineedit" )
-                return new LineEditAdaptor(parent, new Plasma::LineEdit(parentWidget), true);
+                return new Plasma::LineEdit(parent);
             if( widgetName == "pushbutton" || widgetName == "button" )
-                return new ButtonAdaptor(parent, new Plasma::PushButton(parentWidget), true);
+                return new Plasma::PushButton(parent);
             if( widgetName == "icon" )
-                return new IconAdaptor(parent, new Plasma::Icon(parentWidget), true);
+                return new Plasma::Icon(parent);
             if( widgetName == "svg" )
                 return new SvgAdaptor(parent);
+
+#if 0
+            //if( widgetName == "Label" )
+            //    return new LabelAdaptor(parent, new Plasma::Label(parent), true);
+            if( widgetName == "lineedit" )
+                return new LineEditAdaptor(parent, new Plasma::LineEdit(parent), true);
+            if( widgetName == "pushbutton" || widgetName == "button" )
+                return new ButtonAdaptor(parent, new Plasma::PushButton(parent), true);
+            if( widgetName == "icon" )
+                return new IconAdaptor(parent, new Plasma::Icon(parent), true);
+            if( widgetName == "svg" )
+                return new SvgAdaptor(parent);
+#endif
             return 0;
         }
 };

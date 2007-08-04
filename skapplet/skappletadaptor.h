@@ -106,7 +106,7 @@ class AppletAdaptor : public QObject
         */
         QObject* widget(const QString& widgetName) {
             //Plasma::Widget* parent = dynamic_cast<SuperKarambaWidgetAdaptor*>(parentWidget);
-            return WidgetFactory::createWidget(widgetName, this, m_widget);
+            return WidgetFactory::createWidget(widgetName, m_widget);
             /*
             SuperKarambaWidgetAdaptor* parentWidgetAdaptor = dynamic_cast<SuperKarambaWidgetAdaptor*>(parentWidget);
             SuperKarambaWidgetAdaptor* widgetAdaptor = new SuperKarambaWidgetAdaptor(this, m_applet, parentWidgetAdaptor);
