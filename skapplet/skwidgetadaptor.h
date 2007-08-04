@@ -56,7 +56,7 @@ class Painter : public QObject {
 class WidgetAdaptor : public QObject {
         Q_OBJECT
     public:
-        WidgetAdaptor(QObject* parent, QObject* implementation, bool owner) : QObject(parent), m_impl(implementation), m_owner(owner) {}
+        WidgetAdaptor(QObject* imp, bool owner) : QObject(imp), m_impl(imp), m_owner(owner) {}
         virtual ~WidgetAdaptor() { if(m_owner) delete m_impl; }
         QObject* impl() const { return m_impl; }
     public Q_SLOTS:
@@ -67,73 +67,6 @@ class WidgetAdaptor : public QObject {
     private:
         QPointer<QObject> m_impl;
         bool m_owner;
-};
-
-/*
-class LabelAdaptor : public WidgetAdaptor {
-        Q_OBJECT
-    public:
-        LabelAdaptor(QObject* parent, Plasma::Label* label, bool owner) : WidgetAdaptor(parent, label, owner), m_label(label) {}
-        virtual ~LabelAdaptor() {}
-    public Q_SLOTS:
-        QString text() const { return m_label->text(); }
-        void setText(const QString& text) { m_label->setText(text); }
-    private:
-        Plasma::Label* m_label;
-};
-*/
-
-class LineEditAdaptor : public WidgetAdaptor {
-        Q_OBJECT
-    public:
-        LineEditAdaptor(QObject* parent, Plasma::LineEdit* edit, bool owner) : WidgetAdaptor(parent, edit, owner), m_edit(edit) {
-            connect(edit, SIGNAL(editingFinished()), this, SIGNAL(editingFinished()));
-            connect(edit, SIGNAL(textChanged(QString)), this, SIGNAL(textChanged(QString)));
-        }
-        virtual ~LineEditAdaptor() {}
-    public Q_SLOTS:
-        void setDefaultText(const QString &text) { m_edit->setDefaultText(text); }
-        const QString toHtml() { return m_edit->toHtml(); }
-        const QString toPlainText() { return m_edit->toPlainText(); }
-    Q_SIGNALS:
-        void editingFinished();
-        void textChanged(const QString& text);
-    private:
-        Plasma::LineEdit* m_edit;
-};
-
-class ButtonAdaptor : public WidgetAdaptor {
-        Q_OBJECT
-    public:
-        ButtonAdaptor(QObject* parent, Plasma::PushButton* button, bool owner) : WidgetAdaptor(parent, button, owner), m_button(button) {
-            connect(button, SIGNAL(clicked()), this, SIGNAL(clicked()));
-        }
-        virtual ~ButtonAdaptor() {}
-    public Q_SLOTS:
-        void setText(const QString &text) { m_button->setText(text); }
-        void setIcon(const QString& iconname)  { m_button->setIcon(iconname); }
-    Q_SIGNALS:
-        void clicked();
-    private:
-        Plasma::PushButton* m_button;
-};
-
-class IconAdaptor : public WidgetAdaptor {
-        Q_OBJECT
-    public:
-        IconAdaptor(QObject* parent, Plasma::Icon* icon, bool owner) : WidgetAdaptor(parent, icon, owner), m_icon(icon) {
-            connect(icon, SIGNAL(pressed(bool)), this, SIGNAL(pressed(bool)));
-            connect(icon, SIGNAL(clicked()), this, SIGNAL(clicked()));
-        }
-        virtual ~IconAdaptor() {}
-    public Q_SLOTS:
-        void setIcon(const QString& iconname) { m_icon->setIcon( KIcon(iconname) ); }
-        void setIconSize(double width, double height) { m_icon->setIconSize( QSizeF(width,height) ); }
-    Q_SIGNALS:
-        void pressed(bool down);
-        void clicked();
-    private:
-        Plasma::Icon* m_icon;
 };
 #endif
 
@@ -180,30 +113,24 @@ class SvgAdaptor : public Plasma::Widget {
 class WidgetFactory {
     public:
         static QObject* createWidget(const QString& _widgetName, Plasma::Widget* parent) {
+            QObject* widget = 0;
             const QString widgetName = _widgetName.toLower();
-
+            if( widgetName == "label" )
+                widget = new Plasma::Label(parent);
             if( widgetName == "lineedit" )
-                return new Plasma::LineEdit(parent);
+                widget = new Plasma::LineEdit(parent);
             if( widgetName == "pushbutton" || widgetName == "button" )
-                return new Plasma::PushButton(parent);
+                widget = new Plasma::PushButton(parent);
             if( widgetName == "icon" )
-                return new Plasma::Icon(parent);
+                widget = new Plasma::Icon(parent);
             if( widgetName == "svg" )
-                return new SvgAdaptor(parent);
-
-#if 0
-            //if( widgetName == "Label" )
-            //    return new LabelAdaptor(parent, new Plasma::Label(parent), true);
-            if( widgetName == "lineedit" )
-                return new LineEditAdaptor(parent, new Plasma::LineEdit(parent), true);
-            if( widgetName == "pushbutton" || widgetName == "button" )
-                return new ButtonAdaptor(parent, new Plasma::PushButton(parent), true);
-            if( widgetName == "icon" )
-                return new IconAdaptor(parent, new Plasma::Icon(parent), true);
-            if( widgetName == "svg" )
-                return new SvgAdaptor(parent);
-#endif
-            return 0;
+                widget = new SvgAdaptor(parent);
+            /*
+            if( parent )
+                if( Plasma::Widget* w = dynamic_cast<Plasma::Widget*>(widget) )
+                    parent->addChild(w);
+            */
+            return widget;
         }
 };
 
