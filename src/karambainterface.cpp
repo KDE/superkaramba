@@ -5700,7 +5700,7 @@ bool KarambaInterface::toggleWidgetRedraw(const Karamba *k, bool enable) const
 /** Sensor/getPlasmaSensor
 *
 * SYNOPSIS
-*   boolean getPlasmaSensor(widget, engine, source, format)
+*   dataengine getPlasmaSensor(widget, engine, source, format)
 * DESCRIPTION
 *   Returns a sensor for Plasma::DataEngine objects.
 * ARGUMENTS
