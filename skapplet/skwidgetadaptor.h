@@ -27,6 +27,9 @@
 #include <QRectF>
 #include <QVariant>
 #include <QPainter>
+#include <QBrush>
+#include <QColor>
+#include <QPen>
 #include <kdebug.h>
 #include <kicon.h>
 #include <plasma/dataengine.h>
@@ -48,8 +51,34 @@ class Painter : public QObject {
         Painter(QObject* parent, QPainter* painter) : QObject(parent), m_painter(painter) {}
         virtual ~Painter() {}
         QPainter* painter() const { return m_painter; }
+
+    public Q_SLOTS:
+        void setColor(const QString& color) { m_painter->setBrush( getColor(m_painter->brush(),color) ); }
+        void setBackgroundColor(const QString& color) { m_painter->setBackground( getColor(m_painter->background(),color) ); }
+        void setPenColor(const QString& color) { m_painter->setPen(QColor(color)); }
+        //void setPenWidth(double width) { QPen pen = m_painter->pen(); pen.setWidthF(width); pen.setStyle(Qt::SolidLine); m_painter->setPen(pen); }
+
+        void drawEllipse(const QRectF& r) { m_painter->drawEllipse(r); }
+        void drawLine(const QPointF& p1, const QPointF& p2) { m_painter->drawLine(p1, p2); }
+        void drawPie(const QRectF& r, int startAngle, int spanAngle) { m_painter->drawPie(r, startAngle, spanAngle); }
+        void drawPoint(const QPointF& p) { m_painter->drawPoint(p); }
+        void drawRect(const QRectF& r) { m_painter->drawRect(r); }
+        void drawText(const QPointF& position, const QString& text) { m_painter->drawText(position, text); }
+        //void drawText(const QRectF& r, const QString& text) { m_painter->drawText(r, text); }
+
     private:
         QPainter* m_painter;
+
+        QBrush getColor(const QBrush& _brush, const QString& color) {
+            QBrush brush = _brush;
+            QColor c(color);
+            if( c.isValid() ) {
+                //brush.setColor(c);
+                //if( brush.style() == Qt::NoBrush ) brush.setStyle(Qt::SolidPattern);
+                brush = QBrush(c);
+            }
+            return brush;
+        }
 };
 
 #if 0
