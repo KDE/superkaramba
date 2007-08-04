@@ -50,19 +50,33 @@ namespace Skip {
 */
 class Painter : public QObject {
         Q_OBJECT
+        Q_ENUMS(BrushStyle);
     public:
         Painter(QObject* parent, QPainter* painter) : QObject(parent), m_painter(painter) {}
         virtual ~Painter() {}
         QPainter* painter() const { return m_painter; }
+        enum BrushStyle {
+            NoBrush = Qt::NoBrush,
+            SolidBrush = Qt::SolidPattern,
+            DenseBrush = Qt::Dense7Pattern,
+            LinearGradientBrush = Qt::LinearGradientPattern,
+            ConicalGradientBrush = Qt::ConicalGradientPattern,
+            RadialGradientBrush = Qt::RadialGradientPattern
+        };
 
     public Q_SLOTS:
         void save() { m_painter->save(); }
         void restore() { m_painter->restore(); }
 
         void setColor(const QString& color) { m_painter->setBrush( getColor(m_painter->brush(),color) ); }
+        void setStyle(int brushStyle) { m_painter->setBrush( getBrushStyle(m_painter->brush(),brushStyle) ); }
+
         void setBackgroundColor(const QString& color) { m_painter->setBackground( getColor(m_painter->background(),color) ); }
+        void setBackgroundStyle(int brushStyle) { m_painter->setBackground( getBrushStyle(m_painter->background(),brushStyle) ); }
+
         void setPenColor(const QString& color) { m_painter->setPen(QColor(color)); }
         //void setPenWidth(double width) { QPen pen = m_painter->pen(); pen.setWidthF(width); pen.setStyle(Qt::SolidLine); m_painter->setPen(pen); }
+        void setOpacity(double opacity) { m_painter->setOpacity(opacity); }
 
         void rotate(double angle) { m_painter->rotate(angle); }
         void scale(double x, double y) { m_painter->scale(x,y); }
@@ -80,16 +94,20 @@ class Painter : public QObject {
     private:
         QPainter* m_painter;
 
-        QBrush getColor(const QBrush& _brush, const QString& color) {
-            QBrush brush = _brush;
+        QBrush getColor(QBrush brush, const QString& color) {
             QColor c(color);
             if( c.isValid() ) {
-                //brush.setColor(c);
-                //if( brush.style() == Qt::NoBrush ) brush.setStyle(Qt::SolidPattern);
-                brush = QBrush(c);
+                brush.setColor(c);
+                if( brush.style() == Qt::NoBrush )
+                    brush.setStyle(Qt::SolidPattern);
             }
             return brush;
         }
+        QBrush getBrushStyle(QBrush brush, int brushStyle) {
+            brush.setStyle( (Qt::BrushStyle) brushStyle );
+            return brush;
+        }
+
 };
 
 #if 0

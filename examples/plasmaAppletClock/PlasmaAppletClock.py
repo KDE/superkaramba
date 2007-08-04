@@ -34,13 +34,16 @@ def initWidget(widget):
                 self.setSelected(selected)
         def setSelected(self, selected):
             self.isSelected = selected
-            if selected: self.pencolor = "#ff0000"
-            else: self.pencolor = "#0000ff"
+            if selected: self.pencolor = "#dd0000"
+            else: self.pencolor = "#0000dd"
         def paint(self, painter):
+            painter.save()
             painter.setColor("#aaaaff")
             painter.setPenColor(self.pencolor)
+            painter.setOpacity(0.6)
             painter.drawEllipse(self.rect)
             painter.drawText(self.pos, self.text)
+            painter.restore()
 
     analogButton = Button([30.0,30.0], "Analog Clock")
     digitalButton = Button([150.0,30.0], "Digital Clock")
@@ -60,7 +63,7 @@ def initWidget(widget):
                 painter.save()
                 painter.translate( 125, 125 )
                 painter.scale(0.6,0.6)
-                painter.rotate(6.0 * second*2 - 180)
+                painter.rotate(6.0 * second - 180)
                 svg.paint(painter, [0,0], 'SecondHand')
                 painter.restore()
 
