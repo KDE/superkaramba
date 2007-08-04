@@ -1,4 +1,4 @@
-#!/usr/bin/env superkaramba-bin
+#!/usr/bin/env superkaramba
 # coding: utf-8
 
 #Unicode Example
