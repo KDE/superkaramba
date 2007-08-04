@@ -171,17 +171,17 @@ bool KarambaInterface::checkKaramba(const Karamba *k) const
 bool KarambaInterface::checkMeter(const Karamba *k, const Meter *m, const QString &type) const
 {
     if (!m) {
-        kWarning() << "Meter pointer was 0" ;
+        kWarning() << "Meter pointer was 0";
         return false;
     }
 
     if (!k->hasMeter(m)) {
-        kWarning() << "Widget does not have meter " << (long)m ;
+        kWarning() << "Widget does not have meter" << (long)m;
         return false;
     }
 
     if (!m->inherits(type.toAscii().data())) {
-        kWarning() << "Meter is not of type " << type ;
+        kWarning() << "Meter is not of type" << type;
         return false;
     }
 
@@ -265,8 +265,9 @@ QObject* KarambaInterface::getThemeMeter(const Karamba *k, const QString &meter,
     foreach(item, list) {
         Meter *m = (Meter*)item;
         if (m->objectName() == meter) {
-            if (checkMeter(k, m, type));
-            return m;
+            if (checkMeter(k, m, type)) {
+                return m;
+            }
         }
     }
 
