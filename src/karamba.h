@@ -133,6 +133,8 @@ public:
     void setSystemTray(Systemtray*);
     Systemtray* systemTray();
 
+    QObject* getPlasmaSensor(const QString& engine, const QString& source = QString());
+
 public Q_SLOTS:
     void updateSensors();
     void closeWidget();

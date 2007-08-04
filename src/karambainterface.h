@@ -378,6 +378,9 @@ public Q_SLOTS:
     bool redrawWidgetBackground(const Karamba *k) const;
     bool resizeWidget(Karamba *k, int width, int height) const;
     bool toggleWidgetRedraw(const Karamba *k, bool enable) const;
+
+    // Sensor
+    QObject* getPlasmaSensor(Karamba *k, const QString& engine, const QString& source = QString());
 };
 
 #endif

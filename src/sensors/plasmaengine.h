@@ -59,6 +59,7 @@ class PlasmaSensorConnector : public QObject
 
         /**
         * Set the format the data should use for displaying.
+        * 
         */
         void setFormat(const QString& format);
 

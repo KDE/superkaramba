@@ -2195,4 +2195,23 @@ Systemtray* Karamba::systemTray()
     return d->systray;
 }
 
+QObject* Karamba::getPlasmaSensor(const QString& engine, const QString& source)
+{
+#ifdef PLASMASENSOR_ENABLED
+    Sensor* sensor = d->sensorMap["PLASMA."+engine+"."+source];
+    if (sensor == 0) {
+        PlasmaSensor* plasmasensor = new PlasmaSensor();
+        plasmasensor->setEngine(engine);
+        sensor = plasmasensor;
+        d->sensorMap["PLASMA."+engine+"."+source] = sensor;
+        d->sensorList.append(sensor);
+    }
+    return sensor;
+#else
+    Q_UNUSED(engine);
+    Q_UNUSED(source);
+    Q_UNUSED(format);
+    return 0;
+#endif
+}
 

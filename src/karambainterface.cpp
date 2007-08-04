@@ -5697,3 +5697,23 @@ bool KarambaInterface::toggleWidgetRedraw(const Karamba *k, bool enable) const
     return true;
 }
 
+/** Sensor/getPlasmaSensor
+*
+* SYNOPSIS
+*   boolean getPlasmaSensor(widget, engine, source, format)
+* DESCRIPTION
+*   Returns a sensor for Plasma::DataEngine objects.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * string engine -- The name of the dataengine. This could be for example "time" for the Plasma TimeEngine.
+*   * string source -- The source. E.g. "Local" for the Plasma TimeEngine.
+* RETURN VALUE
+*   the reference to an instance of the SuperKaramba PlasmaSensor class. See also http://websvn.kde.org/trunk/kdeutils/superkaramba/src/sensors/plasmaengine.h
+*/
+QObject* KarambaInterface::getPlasmaSensor(Karamba *k, const QString& engine, const QString& source)
+{
+    if (!checkKaramba(k)) {
+        return 0;
+    }
+    return k->getPlasmaSensor(engine, source);
+}
