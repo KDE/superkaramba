@@ -45,6 +45,9 @@
 
 namespace Skip {
 
+/**
+* The Painter class implements access to a QPainter.
+*/
 class Painter : public QObject {
         Q_OBJECT
     public:
@@ -107,6 +110,9 @@ class WidgetAdaptor : public QObject {
 };
 #endif
 
+/**
+* The SvgAdaptor class enables access to the Plasma::Svg implementation.
+*/
 class SvgAdaptor : public Plasma::Widget {
         Q_OBJECT
     public:
@@ -147,6 +153,9 @@ class SvgAdaptor : public Plasma::Widget {
         Plasma::Svg* m_svg;
 };
 
+/**
+* The WidgetFactory class is a factory to create Plasma widgets.
+*/
 class WidgetFactory {
     public:
         static QObject* createWidget(const QString& _widgetName, Plasma::Widget* parent) {
