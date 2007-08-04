@@ -2210,7 +2210,6 @@ QObject* Karamba::getPlasmaSensor(const QString& engine, const QString& source)
 #else
     Q_UNUSED(engine);
     Q_UNUSED(source);
-    Q_UNUSED(format);
     return 0;
 #endif
 }
