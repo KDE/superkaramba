@@ -53,10 +53,18 @@ class Painter : public QObject {
         QPainter* painter() const { return m_painter; }
 
     public Q_SLOTS:
+        void save() { m_painter->save(); }
+        void restore() { m_painter->restore(); }
+
         void setColor(const QString& color) { m_painter->setBrush( getColor(m_painter->brush(),color) ); }
         void setBackgroundColor(const QString& color) { m_painter->setBackground( getColor(m_painter->background(),color) ); }
         void setPenColor(const QString& color) { m_painter->setPen(QColor(color)); }
         //void setPenWidth(double width) { QPen pen = m_painter->pen(); pen.setWidthF(width); pen.setStyle(Qt::SolidLine); m_painter->setPen(pen); }
+
+        void rotate(double angle) { m_painter->rotate(angle); }
+        void scale(double x, double y) { m_painter->scale(x,y); }
+        void shear(double x, double y) { m_painter->shear(x,y); }
+        void translate(double x, double y) { m_painter->translate(x,y); }
 
         void drawEllipse(const QRectF& r) { m_painter->drawEllipse(r); }
         void drawLine(const QPointF& p1, const QPointF& p2) { m_painter->drawLine(p1, p2); }

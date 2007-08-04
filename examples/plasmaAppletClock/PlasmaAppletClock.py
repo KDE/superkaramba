@@ -1,7 +1,7 @@
 #!/usr/bin/env superkaramba
 # coding: utf-8
 
-import PlasmaApplet
+import time, PlasmaApplet
 mousePos = []
 
 engine = PlasmaApplet.dataEngine("time")
@@ -53,14 +53,26 @@ def initWidget(widget):
         analogButton.checkSelected()
         digitalButton.checkSelected()
 
-        if analogButton.isSelected:
-            svg.paint(painter, [50.0, 50.0])
-        if digitalButton.isSelected:
-            data = engine.query("Local")
-            painter.setColor("#aaaaff")
-            painter.setPenColor("#0000ff")
-            painter.drawRect([50,80,150,36])
-            painter.drawText([70.0,100.0], "%s %s" % (data["Date"],data["Time"]))
+        if analogButton.isSelected or digitalButton.isSelected:
+
+            if analogButton.isSelected:
+                (year,month,day,hour,minute,second,weekday,yearday,daylightSavingAdjustment) = time.localtime()
+                painter.save()
+                painter.translate( 125, 125 )
+                painter.scale(0.6,0.6)
+                painter.rotate(6.0 * second*2 - 180)
+                svg.paint(painter, [0,0], 'SecondHand')
+                painter.restore()
+
+            svg.paint(painter, [50,50,70,70], 'HandCenterScrew' )
+            svg.paint(painter, [50,50,100,100], 'Glass' );
+
+            if digitalButton.isSelected:
+                data = engine.query("Local")
+                #painter.setColor("#000099")
+                painter.setPenColor("#ccccff")
+                #painter.drawRect([50,80,150,36])
+                painter.drawText([70.0,125.0], "%s %s" % (data["Date"],data["Time"]))
 
         analogButton.paint(painter)
         digitalButton.paint(painter)
