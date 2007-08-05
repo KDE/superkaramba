@@ -55,7 +55,7 @@ class SuperKarambaApplet::Private : public QObject
 {
     public:
         SuperKarambaApplet* applet;
-        Skip::AppletAdaptor* appletadaptor;
+        QPointer<Skip::AppletAdaptor> appletadaptor;
         QPointer<Karamba> themeItem;
         KUrl themePath;
         bool locked;

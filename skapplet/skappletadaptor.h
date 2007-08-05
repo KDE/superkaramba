@@ -49,7 +49,7 @@ class AppletAdaptor : public QObject
             setObjectName("PlasmaApplet");
         }
         virtual ~AppletAdaptor() {
-            delete m_widget;
+            //delete m_widget; //already handled
             qDeleteAll(m_engines.values());
         }
 
