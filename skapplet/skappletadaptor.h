@@ -24,6 +24,7 @@
 #include <QObject>
 #include <QHash>
 #include <QVariant>
+#include <QPointer>
 #include <plasma/applet.h>
 #include <plasma/dataengine.h>
 
@@ -49,7 +50,7 @@ class AppletAdaptor : public QObject
             setObjectName("PlasmaApplet");
         }
         virtual ~AppletAdaptor() {
-            //delete m_widget; //already handled
+            delete m_widget;
             qDeleteAll(m_engines.values());
         }
 
@@ -147,7 +148,7 @@ class AppletAdaptor : public QObject
 
     private:
         SuperKarambaApplet *m_applet;
-        Plasma::Widget* m_widget;
+        QPointer<Plasma::Widget> m_widget;
         bool m_painterenabled;
         QHash<QString, PlasmaSensor*> m_engines;
 };
