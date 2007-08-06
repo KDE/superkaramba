@@ -457,7 +457,8 @@ Karamba::Karamba(const KUrl &themeFile, QGraphicsView *view, int instance, bool 
 
 Karamba::~Karamba()
 {
-    writeConfigData();
+    if (d->toggleLocked) // may NULL e.g. if "Could not load theme file"
+        writeConfigData();
 
     d->scene->removeItem(this);
 
