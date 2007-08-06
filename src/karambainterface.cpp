@@ -3503,14 +3503,28 @@ int KarambaInterface::executeInteractive(Karamba *k, const QStringList &command)
 * RETURN VALUE
 *   ip address as string
 */
-QString KarambaInterface::getIP(const Karamba *k, const QString &interface) const
+QString KarambaInterface::getIp(const Karamba *k, const QString &interface) const
 {
     if (!checkKaramba(k)) {
         return QString::null;
     }
 
     QNetworkInterface iface = QNetworkInterface::interfaceFromName(interface);
-    return iface.addressEntries()[0].ip().toString();
+    if (iface.isValid()) {
+        QNetworkInterface::InterfaceFlags flags = iface.flags();
+        if (flags & QNetworkInterface::IsUp) {
+            QList<QNetworkAddressEntry> list = iface.addressEntries();
+            if (list.count() > 0) {
+                return list[0].ip().toString();
+            } else {
+                return "Error";
+            }
+        } else {
+            return "Disconnected";
+        }
+    } else {
+        return "Error";
+    }
 }
 
 /** Misc/getNumberOfDesktop

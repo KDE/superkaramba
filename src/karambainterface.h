@@ -273,7 +273,7 @@ public Q_SLOTS:
     QObject* createServiceClickArea(Karamba *k, int x, int y, int width, int height,
         const QString &name, const QString &exec, const QString &icon) const;
     int executeInteractive(Karamba *k, const QStringList &command);
-    QString getIP(const Karamba *k, const QString &interface) const;
+    QString getIp(const Karamba *k, const QString &interface) const;
     int getNumberOfDesktops(const Karamba *k) const;
     QString getPrettyThemeName(const Karamba *k) const;
     QVariantList getServiceGroups(const QString &path) const;
