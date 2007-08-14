@@ -116,7 +116,7 @@ bool KarambaInterface::initInterpreter()
         d->action->setInterpreter(interpreter);
 
         // publish this instance, so that scripts are able to access it with e.g.
-        // import karamba or require 'karamba' depending on the choosed scripting
+        // import karamba or require 'karamba' depending on the chosen scripting
         // language.
         d->action->addObject(this, "karamba", Kross::ChildrenInterface::AutoConnectSignals);
 
@@ -1927,7 +1927,7 @@ bool KarambaInterface::rotateImage(const Karamba *k, ImageLabel *image, int deg)
 * SYNOPSIS
 *   boolean setPixel(widget, image, x, y, r, g, b, a=255)
 * DESCRIPTION
-*   This sets the pixel in the image at the positon x, y to
+*   This sets the pixel in the image at the position x, y to
 *   the color r, g, b with the alpha channel a.
 *   You can use this function to draw your own images with
 *   your theme script.
@@ -2032,7 +2032,7 @@ bool KarambaInterface::setImageElement(Karamba* k, ImageLabel *image, const QStr
 * DESCRIPTION
 *   This function reset a previous set element.
 *   A call to this function will result in a
-*   completly drawn SVG image.
+*   completely drawn SVG image.
 * ARGUMENTS
 *   * reference to widget -- karamba
 *   * reference to image -- image
