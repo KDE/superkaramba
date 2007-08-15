@@ -25,7 +25,6 @@
  *  along with SuperKaramba; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  ****************************************************************************/
-#include "config.h"
 
 #include "themelocale.h"
 #include "themefile.h"
@@ -34,6 +33,8 @@
 #include <KLocale>
 
 #include <QBuffer>
+
+#include <config-superkaramba.h>
 
 #ifdef HAVE_SYS_TYPES_H
 #include <sys/types.h>
