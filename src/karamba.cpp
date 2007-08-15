@@ -1026,7 +1026,7 @@ QString Karamba::getSensor(const Meter* meter) const
     if (sensor)
         return findSensorFromMap(sensor);
 
-    return QString::null;
+    return QString();
 }
 
 bool Karamba::removeMeter(Meter* meter)

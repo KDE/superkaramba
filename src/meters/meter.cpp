@@ -139,7 +139,7 @@ void Meter::setValue(int)
 
 QString Meter::getStringValue() const
 {
-    return QString::null;
+    return QString();
 }
 
 void Meter::setValue(const QString&)

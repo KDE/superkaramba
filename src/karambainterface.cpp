@@ -237,7 +237,7 @@ QString KarambaInterface::getMeterSensor(const Karamba *k, const Meter *m, const
     const
 {
     if (!checkKarambaAndMeter(k, m, type)) {
-        return QString::null;
+        return QString();
     }
 
     return k->getSensor(m);
@@ -391,7 +391,7 @@ QString KarambaInterface::getMeterStringValue(const Karamba *k, const Meter *m, 
     const
 {
     if (!checkKarambaAndMeter(k, m, type)) {
-        return QString::null;
+        return QString();
     }
 
     return m->getStringValue();
@@ -891,7 +891,7 @@ bool KarambaInterface::setBarImage(const Karamba *k, Bar *bar, const QString &im
 QString KarambaInterface::getBarImage(const Karamba *k, const Bar *bar) const
 {
     if (!checkKarambaAndMeter(k, bar, "Bar")) {
-        return QString::null;
+        return QString();
     }
 
     return bar->getImage();
@@ -2065,7 +2065,7 @@ bool KarambaInterface::setImageElementAll(Karamba* k, ImageLabel *image) const
 QString KarambaInterface::getImageElement(Karamba *k, ImageLabel *image) const
 {
     if (!checkKarambaAndMeter(k, image, "ImageLabel")) {
-        return QString::null;
+        return QString();
     }
 
     return image->elementDrawn();
@@ -2138,7 +2138,7 @@ bool KarambaInterface::addMenuConfigOption(Karamba *k, const QString &key, const
 QString KarambaInterface::readConfigEntry(const Karamba *k, const QString &key) const
 {
     if (!checkKaramba(k)) {
-        return QString::null;
+        return QString();
     }
 
     return k->getConfig()->group("theme").readEntry(key, QString());
@@ -2503,7 +2503,7 @@ bool KarambaInterface::changeInputBoxFont(const Karamba *k, Input *input, const 
 QString KarambaInterface::getInputBoxFont(const Karamba *k, const Input *input) const
 {
     if (!checkKarambaAndMeter(k, input, "Input")) {
-        return QString::null;
+        return QString();
     }
 
     return input->getFont();
@@ -3506,7 +3506,7 @@ int KarambaInterface::executeInteractive(Karamba *k, const QStringList &command)
 QString KarambaInterface::getIp(const Karamba *k, const QString &interface) const
 {
     if (!checkKaramba(k)) {
-        return QString::null;
+        return QString();
     }
 
     QNetworkInterface iface = QNetworkInterface::interfaceFromName(interface);
@@ -3565,7 +3565,7 @@ int KarambaInterface::getNumberOfDesktops(const Karamba *k) const
 QString KarambaInterface::getPrettyThemeName(const Karamba *k) const
 {
     if (!checkKaramba(k)) {
-        return QString::null;
+        return QString();
     }
 
     return k->prettyName();
@@ -3683,7 +3683,7 @@ QString KarambaInterface::getThemePath(const Karamba *k) const
     }
 
     if (!checkKaramba(k)) {
-        return QString::null;
+        return QString();
     }
 
     return k->theme().path();
@@ -3901,7 +3901,7 @@ Karamba* KarambaInterface::openTheme(const QString &themePath) const
 QString KarambaInterface::readThemeFile(const Karamba *k, const QString &file) const
 {
     if (!checkKaramba(k)) {
-        return QString::null;
+        return QString();
     }
 
     return k->theme().readThemeFile(file);
@@ -3971,7 +3971,7 @@ bool KarambaInterface::run(const QString &appName, const QString &command, const
 QString KarambaInterface::getIncomingData(const Karamba *k) const
 {
     if (!checkKaramba(k)) {
-        return QString::null;
+        return QString();
     }
 
     return k->retrieveReceivedData();
@@ -4081,7 +4081,7 @@ bool KarambaInterface::translateAll(const Karamba *k, int x, int y) const
 QString KarambaInterface::userLanguage(const Karamba *k) const
 {
     if (!checkKaramba(k)) {
-        return QString::null;
+        return QString();
     }
 
     return KGlobal::locale()->language();
@@ -4541,7 +4541,7 @@ bool KarambaInterface::changeRichTextFont(const Karamba *k, RichTextLabel *label
 QString KarambaInterface::getRichTextFont(const Karamba *k, const RichTextLabel *label) const
 {
     if (!checkKarambaAndMeter(k, label, "RichTextLabel")) {
-        return QString::null;
+        return QString();
     }
 
     return label->getFont();

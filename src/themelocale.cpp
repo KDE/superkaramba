@@ -134,7 +134,7 @@ void ThemeLocale::unload()
 QString ThemeLocale::translate(const QString &text) const
 {
     if (text == 0)
-        return QString::null;
+        return QString();
     if (m_domain.data) {
         QString result = QString::fromUtf8(tl_nl_find_msg(&m_domain, text.toAscii().constData()));
         if (result.isEmpty())
