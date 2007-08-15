@@ -1,4 +1,7 @@
 INCLUDE (CheckIncludeFiles)
+
+check_include_files(sys/types.h HAVE_SYS_TYPES_H)
+
 CONFIGURE_FILE(config-superkaramba.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-superkaramba.h)
 
 ########### the Plasma::DataEngine-sensor ###############
