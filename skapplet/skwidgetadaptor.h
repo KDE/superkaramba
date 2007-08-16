@@ -50,7 +50,7 @@ namespace Skip {
 */
 class Painter : public QObject {
         Q_OBJECT
-        Q_ENUMS(BrushStyle);
+        Q_ENUMS(BrushStyle)
     public:
         Painter(QObject* parent, QPainter* painter) : QObject(parent), m_painter(painter) {}
         virtual ~Painter() {}
