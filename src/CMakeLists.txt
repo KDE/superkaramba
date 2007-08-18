@@ -110,7 +110,6 @@ karambaapp.cpp
 themesdlg.cpp
 themewidget.cpp
 kwidgetlistbox.cpp
-#sknewstuff.cpp
 karambasessionmanaged.cpp
 )
 

@@ -25,7 +25,6 @@
 
 #include "ui_themes_layout.h"
 #include "karambaapp.h"
-#include "sknewstuff.h"
 #include "themewidget.h"
 
 /**
@@ -60,6 +59,7 @@ protected slots:
     virtual void getNewStuff();
     virtual void search(const QString& text);
     virtual void uninstall();
+    virtual void installNewTheme(const QString &newTheme);
 
 protected:
     static bool filter(int index, QWidget* widget, void* data);
@@ -68,7 +68,7 @@ protected:
     QStringList themes();
 
 private:
-    KNS::Engine *m_newStuff;
+    bool m_newStuffInitialized;
     QStringList m_newStuffStatus;
 };
 

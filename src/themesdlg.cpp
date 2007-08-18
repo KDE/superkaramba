@@ -30,10 +30,14 @@
 #include <KStandardDirs>
 #include <KIconLoader>
 #include <KIO/CopyJob>
+#include <KDirWatch>
+#include <KTar>
+#include <KIO/NetAccess>
+#include <KRun>
 
 ThemesDlg::ThemesDlg(QWidget *parent, const char *name)
         : QDialog(parent),
-        m_newStuff(0)
+        m_newStuffInitialized(false)
 {
     setupUi(this);
     setObjectName(name);
@@ -51,8 +55,6 @@ ThemesDlg::~ThemesDlg()
 {
     //kDebug() << k_funcinfo ;
     saveUserAddedThemes();
-
-    delete m_newStuff;
 }
 
 void ThemesDlg::saveUserAddedThemes()
@@ -207,24 +209,73 @@ void ThemesDlg::openLocalTheme()
 
 void ThemesDlg::getNewStuff()
 {
-/*
-    KSharedConfigPtr cfg = KGlobal::config();
-    KConfigGroup config(cfg, "KNewStuff");
-    config.writePathEntry("ProvidersUrl",
-                          QString::fromLatin1("http://download.kde.org/khotnewstuff/karamba-providers.xml"));
-    config.sync();
+    if (!m_newStuffInitialized) {
+        KDirWatch *dirWatch = KDirWatch::self();
+        connect(dirWatch, SIGNAL(created(const QString &)),
+            SLOT(installNewTheme(const QString &)));
 
-    m_newStuffStatus = cfg->group("KNewStuffStatus").entryMap().keys();
-    //This check is b/c KNewStuff will download, throw an error,
-    //and still have the entry in the config that it was successful
-    configSanityCheck();
-*/
-    if (!m_newStuff) {
-        m_newStuff = new KNS::Engine;
-        m_newStuff->init("superkaramba.knsrc");
+        QString destDir = KStandardDirs::locateLocal("appdata", "themes/");
+        dirWatch->addDir(destDir, KDirWatch::WatchFiles);
+
+        m_newStuffInitialized = true;
     }
 
-    m_newStuff->downloadDialog();
+    KNS::Engine::download();
+}
+
+void ThemesDlg::installNewTheme(const QString &newTheme)
+{
+    // The created signal is already emitted before the file is
+    // completely written, so wait until the new theme exists
+    KMimeType::Ptr result;
+    do {
+        result = KMimeType::findByUrl(newTheme);
+    } while (result->name() == "application/x-zerosize");
+
+    if (result->name() == "application/x-gzip" ||
+        result->name() == "application/x-compressed-tar" ||
+        result->name() == "application/x-bzip" ||
+        result->name() == "application/x-bzip" ||
+        result->name() == "application/x-bzip-compressed-tar" ||
+        result->name() == "application/x-bzip-compressed-tar2" ||
+        result->name() == "application/x-tar" ||
+        result->name() == "application/x-tarz") {
+
+        kDebug() << "SKNewStuff::install() gzip/bzip2 mimetype encountered" << endl;
+
+        KTar archive(newTheme);
+        if (!archive.open(QIODevice::ReadOnly)) {
+            return;
+        }
+
+        QString destDir = KStandardDirs::locateLocal("appdata", "themes/");
+
+        const KArchiveDirectory *archiveDir = archive.directory();
+        archiveDir->copyTo(destDir);
+        //Add the theme to the Theme Dialog
+        addThemeToDialog(archiveDir, destDir);
+        archive.close();
+    } else if (result->name() == "application/zip" ||
+               result->name() == "application/x-superkaramba") {
+
+        kDebug() << "SKNewStuff::install() zip mimetype encountered" << endl;
+        //TODO: write a routine to check if this is a valid .skz file
+        //otherwise we need to unpack it like it is an old theme that was packaged
+        //as a .zip instead of .bz2 or .tar.gz
+
+        //Add the skz theme to the Theme Dialog
+        addSkzThemeToDialog(newTheme);
+    } else if (result->name() == "plain/text") {
+        kDebug() << "SKNewStuff::install() plain text" << endl;
+    } else if (result->name() == "text/html" ||
+        result->name() == "application/x-php") {
+
+        kDebug() << "SKNewStuff::install() text/html" << endl;
+        KRun::runUrl(newTheme, "text/html", 0);
+    } else {
+        kDebug() << "SKNewStuff::install() Error no compatible mimetype encountered to install" << endl;
+        return;
+    }
 }
 
 void ThemesDlg::selectionChanged(int index)
