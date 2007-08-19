@@ -1,6 +1,6 @@
 
-#ifndef SENSORSENSOR_H
-#define SENSORSENSOR_H
+#ifndef LMSENSOR_H
+#define LMSENSOR_H
 
 #include <K3Process>
 #include <K3ProcIO>
@@ -36,8 +36,6 @@ private slots:
     void receivedStdout(K3Process *, char *buffer, int);
     void processExited(K3Process *);
 
-
-
 };
 
-#endif
+#endif // LMSENSOR_H

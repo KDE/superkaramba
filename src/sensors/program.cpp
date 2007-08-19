@@ -60,7 +60,7 @@ void ProgramSensor::replaceArgs(QRegExp& regEx, QString& format, const QStringLi
             if (tokenIndex < tokens.size()) {
                 replacement = tokens.at(tokenIndex);
             }
-            format.replace(QRegExp("%" + matched), replacement);
+            format.replace(QRegExp('%' + matched), replacement);
             pos += regEx.matchedLength();
         }
     }

@@ -18,8 +18,8 @@
  ***************************************************************************
  */
 
-#ifndef TESTCARDAPPLET_H
-#define TESTCARDAPPLET_H
+#ifndef SYSTEMTRAY_H
+#define SYSTEMTRAY_H
 
 #include <qobject.h>
 #include <qpixmap.h>
@@ -67,4 +67,4 @@ private:
     int no_of_systray_windows;
 };
 
-#endif
+#endif // SYSTEMTRAY_H

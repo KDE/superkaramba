@@ -20,8 +20,8 @@
 *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 ****************************************************************************/
 
-#ifndef KARAMBASM_H_
-#define KARAMBASM_H_
+#ifndef KARAMBASESSIONMANAGED_H
+#define KARAMBASESSIONMANAGED_H
 
 #include <KSessionManager>
 
@@ -38,4 +38,4 @@ public:
     {}
 };
 
-#endif
+#endif // KARAMBASESSIONMANAGED_H

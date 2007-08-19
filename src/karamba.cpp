@@ -1104,7 +1104,7 @@ void Karamba::setSensor(const LineParser& lineParser, Meter* meter)
         }
         // remove any trailing '/' from mount points in the .theme config, our
         // mntMap doesn't like trailing '/'s for matching in DiskSensor
-        if (mntPt.length() > 1 && mntPt.endsWith("/")) {
+        if (mntPt.length() > 1 && mntPt.endsWith('/')) {
             mntPt.remove(mntPt.length() - 1, 1);
         }
         sp->addParam("MOUNTPOINT", mntPt);
@@ -1298,7 +1298,7 @@ void Karamba::setSensor(const LineParser& lineParser, Meter* meter)
         QString engine = lineParser.getString("ENGINE");
         QString source = lineParser.getString("SOURCE");
         kDebug()<<"PlasmaEngineSensor engine="<<engine<<" source="<<source<<endl;
-        sensor = d->sensorMap["PLASMA."+engine+"."+source];
+        sensor = d->sensorMap["PLASMA." + engine + '.' + source];
         if (sensor == 0) {
             PlasmaSensor* plasmasensor = new PlasmaSensor();
             plasmasensor->setEngine(engine);
@@ -1319,7 +1319,7 @@ void Karamba::setSensor(const LineParser& lineParser, Meter* meter)
             }
 
             sensor = plasmasensor;
-            d->sensorMap["PLASMA."+engine+"."+source] = sensor;
+            d->sensorMap["PLASMA." + engine + '.' + source] = sensor;
             d->sensorList.append(sensor);
         }
 
@@ -2209,12 +2209,12 @@ Systemtray* Karamba::systemTray()
 QObject* Karamba::getPlasmaSensor(const QString& engine, const QString& source)
 {
 #ifdef PLASMASENSOR_ENABLED
-    Sensor* sensor = d->sensorMap["PLASMA."+engine+"."+source];
+    Sensor* sensor = d->sensorMap["PLASMA." + engine + '.' + source];
     if (sensor == 0) {
         PlasmaSensor* plasmasensor = new PlasmaSensor();
         plasmasensor->setEngine(engine);
         sensor = plasmasensor;
-        d->sensorMap["PLASMA."+engine+"."+source] = sensor;
+        d->sensorMap["PLASMA." + engine + '.' + source] = sensor;
         d->sensorList.append(sensor);
     }
     return sensor;

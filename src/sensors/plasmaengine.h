@@ -198,4 +198,4 @@ class SUPERKARAMBA_EXPORT PlasmaSensor :  public Sensor
         Private* const d;
 };
 
-#endif // MEMSENSOR_H
+#endif // PLASMASENSOR_H
