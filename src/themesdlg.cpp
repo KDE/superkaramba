@@ -53,7 +53,7 @@ ThemesDlg::ThemesDlg(QWidget *parent, const char *name)
 
 ThemesDlg::~ThemesDlg()
 {
-    //kDebug() << k_funcinfo ;
+    //kDebug() ;
     saveUserAddedThemes();
 }
 
