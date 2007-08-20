@@ -18,8 +18,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef PLASMASENSOR_H
-#define PLASMASENSOR_H
+#ifndef PLASMAENGINE_H
+#define PLASMAENGINE_H
 
 #include <QObject>
 
@@ -198,4 +198,4 @@ class SUPERKARAMBA_EXPORT PlasmaSensor :  public Sensor
         Private* const d;
 };
 
-#endif // PLASMASENSOR_H
+#endif // PLASMAENGINE_H

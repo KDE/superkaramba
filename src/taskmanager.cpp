@@ -32,7 +32,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <QDesktopWidget>
 #include <QPixmap>
 #include <QList>
-#include <QX11Info>
 
 #include <KGlobal>
 #include <KIconLoader>
