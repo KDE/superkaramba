@@ -126,7 +126,7 @@ void ThemesDlg::populateListbox()
     item->setHeaderText(i18n("Open Local Theme"));
     item->setDescriptionText(i18n("Add local theme to the list."));
     item->buttonGo->setProperty("stdItem", 18);
-    item->buttonGo->setText(i18n("Open..."));
+    item->buttonGo->setText(i18nc("Open theme button", "Open..."));
     QObject::connect((QObject*)(item->buttonGo), SIGNAL(clicked()),
                      (QObject*)(this), SLOT(openLocalTheme()));
     tableThemes->insertItem((QWidget*)item);
