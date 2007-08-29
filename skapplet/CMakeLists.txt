@@ -14,7 +14,7 @@ include_directories(
 set(skapplet_SRCS skapplet.cpp)
 qt4_wrap_cpp(skapplet_SRCS skappletadaptor.h skwidgetadaptor.h)
 kde4_add_plugin(plasma_applet_skapplet ${skapplet_SRCS})
-target_link_libraries(plasma_applet_skapplet superkaramba plasma ${KDE4_KIO_LIBS})
+target_link_libraries(plasma_applet_skapplet superkaramba ${PLASMA_LIBRARIES} ${KDE4_KIO_LIBS})
 
 install(TARGETS plasma_applet_skapplet DESTINATION ${PLUGIN_INSTALL_DIR})
 install(FILES plasma-skapplet-default.desktop DESTINATION ${SERVICES_INSTALL_DIR})
