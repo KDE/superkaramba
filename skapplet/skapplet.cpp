@@ -121,7 +121,7 @@ class SuperKarambaApplet::Private : public QObject
         }
 };
 
-SuperKarambaApplet::SuperKarambaApplet(QObject *parent, const QStringList &args)
+SuperKarambaApplet::SuperKarambaApplet(QObject *parent, const QVariantList &args)
     : Plasma::Applet(parent, args)
     , d(new Private(this))
 {

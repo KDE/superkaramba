@@ -36,7 +36,7 @@ class SuperKarambaApplet : public Plasma::Applet
 {
         Q_OBJECT
     public:
-        SuperKarambaApplet(QObject *parent, const QStringList &args);
+        SuperKarambaApplet(QObject *parent, const QVariantList &args);
         virtual ~SuperKarambaApplet();
 
         Karamba* karamba() const;
