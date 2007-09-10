@@ -29,7 +29,6 @@
 #include <QCursor>
 #include <QBitmap>
 
-#include <KImageEffect>
 #include <KPixmapEffect>
 #include <KTemporaryFile>
 #include <kio/job.h>
