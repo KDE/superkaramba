@@ -381,11 +381,15 @@ void ImageLabel::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
             //draw the pixmap
             painter->drawPixmap(0, 0, pixmap);
         } else {
-            //Blend this image with a color
-            QImage image = pixmap.toImage();
+	    //Blend this image with a color
+	    QImage image = pixmap.toImage();
+	    QPainter p;
 
-            QImage result = KImageEffect::blend(QColor(255, 0, 0), image, 0.5f);
-            painter->drawImage(0, 0, result);
+	    p.begin(&image);
+	    p.setCompositionMode(QPainter::CompositionMode_SourceAtop);
+	    p.fillRect(image.rect(), QColor(255, 0, 0, 0.5f));
+	    p.end();
+            painter->drawImage(0, 0, image);
         }
     }
 
