@@ -389,7 +389,7 @@ void ImageLabel::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 	    p.setCompositionMode(QPainter::CompositionMode_SourceAtop);
 	    p.fillRect(image.rect(), QColor(255, 0, 0, 0.5f));
 	    p.end();
-            painter->drawImage(0, 0, image);
+	    painter->drawImage(0, 0, image);
         }
     }
 
