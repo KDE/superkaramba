@@ -106,7 +106,7 @@ ToGray::ToGray(ImageLabel* img, int millisec) : Effect(img, millisec)
 
 QPixmap ToGray::apply(QPixmap pixmap)
 {
-    QImage image = pixmap().toImage();
+    QImage image = pixmap.toImage();
     KIconEffect::toGray(image, 1.0f); // maybe Blitz::grayscale() would be better
     return pixmap = QPixmap::fromImage(image);
 }
@@ -261,7 +261,7 @@ void ImageLabel::applyTransformations(bool useSmoothScale)
             pixmap = pm;
         } else {
             if (useSmoothScale) {
-                pixmap = QPixmap::fromImage(pixmap().toImage().scaled(scale_w, scale_h, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+                pixmap = QPixmap::fromImage(pixmap.toImage().scaled(scale_w, scale_h, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
             } else {
                 double widthFactor = ((double)scale_w) / ((double)pixmap.width());
                 double heightFactor = ((double)scale_h) / ((double)pixmap.height());
@@ -385,7 +385,7 @@ void ImageLabel::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
             painter->drawPixmap(0, 0, pixmap);
         } else {
 	    //Blend this image with a color
-	    QImage image = pixmap().toImage();
+	    QImage image = pixmap.toImage();
 	    QPainter p;
 
 	    p.begin(&image);
