@@ -30,6 +30,7 @@
 #include <QBitmap>
 
 #include <KPixmapEffect>
+#include <KIconEffect>
 #include <KTemporaryFile>
 #include <kio/job.h>
 #include <KRun>
@@ -104,7 +105,9 @@ ToGray::ToGray(ImageLabel* img, int millisec) : Effect(img, millisec)
 
 QPixmap ToGray::apply(QPixmap pixmap)
 {
-    return KPixmapEffect::toGray(pixmap);
+    QImage image = pixmap.toImage();
+    KIconEffect::toGray(image, 1.0f); // maybe Blitz::grayscale() would be better
+    return pixmap = QPixmap::fromImage(image);
 }
 
 // Alpha
