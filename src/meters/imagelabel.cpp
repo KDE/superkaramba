@@ -30,7 +30,8 @@
 #include <QtGui/QBitmap>
 #include <QtGui/QImage>
 
-#include <KPixmapEffect>
+#include <qimageblitz.h>
+
 #include <KIconEffect>
 #include <KTemporaryFile>
 #include <kio/job.h>
@@ -72,7 +73,8 @@ Intensity::Intensity(ImageLabel* img, float r, int millisec) :
 
 QPixmap Intensity::apply(QPixmap pixmap)
 {
-    return KPixmapEffect::intensity(pixmap, ratio);
+    QImage img = pixmap.toImage();
+    return QPixmap::fromImage(Blitz::intensity(img, ratio));
 }
 
 // ChannelIntensity
@@ -96,8 +98,9 @@ ChannelIntensity::ChannelIntensity(ImageLabel* img, float r, const QString &c,
 
 QPixmap ChannelIntensity::apply(QPixmap pixmap)
 {
-    return KPixmapEffect::channelIntensity(pixmap, ratio,
-                                           (KPixmapEffect::RGBComponent)channel);
+    QImage img = pixmap.toImage();
+    return QPixmap::fromImage(Blitz::channelIntensity(img, ratio,
+                                           Blitz::RGBChannel(channel+2)));
 }
 
 // ToGray

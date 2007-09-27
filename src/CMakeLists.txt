@@ -2,6 +2,8 @@ INCLUDE (CheckIncludeFiles)
 
 check_include_files(sys/types.h HAVE_SYS_TYPES_H)
 
+include_directories( ${BLITZ_INCLUDES} )
+
 CONFIGURE_FILE(config-superkaramba.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-superkaramba.h)
 
 ########### the Plasma::DataEngine-sensor ###############
@@ -92,6 +94,7 @@ ${PLASMASENSOR_LIB}
 if(COMPILE_SUPERKARAMBA_WITH_PYTHON)
 TARGET_LINK_LIBRARIES(superkaramba
 ${PYTHON_LIBRARIES}
+${BLITZ_LIBRARIES}
 )
 endif(COMPILE_SUPERKARAMBA_WITH_PYTHON)
 
