@@ -17,6 +17,7 @@ Comment[pt]='Applet' do Plasma para o SuperKaramba
 Comment[pt_BR]='Applet' do Plasma para o SuperKaramba
 Comment[sv]=SuperKaramba Plasma-miniprogram
 Comment[ta]=சூப்பர் கரம்பா ப்ளாஸ்மா குறுநிரல்
+Comment[x-test]=xxSuperKaramba Plasma Appletxx
 Comment[zh_CN]=SuperKaramba Plasma 小程序
 Comment[zh_TW]=SuperKaramba Plasma 小程式
 Type=Service
