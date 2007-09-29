@@ -51,6 +51,7 @@ class SuperKarambaApplet : public Plasma::Applet
     private slots:
         void configAccepted();
         void loadKaramba();
+        void loadFailed();
         void karambaStarted(QGraphicsItemGroup*);
         void karambaClosed(QGraphicsItemGroup*);
         void lockedActionToggled(bool);

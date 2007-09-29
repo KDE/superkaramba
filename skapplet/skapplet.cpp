@@ -131,15 +131,10 @@ SuperKarambaApplet::SuperKarambaApplet(QObject *parent, const QVariantList &args
     setHasConfigurationInterface(true);
 
     KConfigGroup cg = config();
-    d->themePath = KUrl();//cg.readEntry("theme", KUrl());
+    d->themePath = cg.readEntry("theme", KUrl());
     d->locked = cg.readEntry("locked", true);
 
     if( ! d->themePath.isValid() ) {
-        //d->themePath = KUrl("file:///home/kde4/svn/_src/KDE/kdeutils/superkaramba/examples/rubyclock/clock.theme");
-        //d->themePath = KUrl("/home/kde4/svn/_src/KDE/kdeutils/superkaramba/examples/richtext/richtext.theme");
-        //d->themePath = KUrl("/home/kde4/svn/_src/KDE/kdeutils/superkaramba/examples/pythonclock/pythonclock.theme");
-        //d->themePath = KUrl("/home/kde4/svn/_src/KDE/kdeutils/superkaramba/examples/aeroai/aero_aio.skz");
-
         KFileDialog* filedialog = new KFileDialog(
             KUrl("kfiledialog:///SuperKarambaPlasmaApplet"), // startdir
             i18n("*.skz *.theme|Theme Files\n*|All Files"), // filter
@@ -153,14 +148,22 @@ SuperKarambaApplet::SuperKarambaApplet(QObject *parent, const QVariantList &args
             d->themePath = filedialog->selectedUrl();
     }
 
-    if( d->themePath.isValid() )
+    if( d->themePath.isValid() ) {
         QTimer::singleShot(100, this, SLOT(loadKaramba()));
+    } else {
+        // Wait till the Phase Animator finished
+        QTimer::singleShot(1000, this, SLOT(loadFailed()));
+   }
 }
 
 SuperKarambaApplet::~SuperKarambaApplet()
 {
     kDebug() << "========================> SuperKarambaApplet Dtor" ;
     //watchForFocus(d, false);
+    KConfigGroup cg = config();
+    cg.writeEntry("theme", d->themePath);
+    cg.writeEntry("locked", d->locked);
+
     delete d;
 }
 
@@ -235,7 +238,18 @@ void SuperKarambaApplet::karambaClosed(QGraphicsItemGroup* group)
     if( d->themeItem == group ) {
         kDebug()<<">>>>>>>>>>>> SuperKarambaApplet::karambaClosed";
         d->themeItem = 0;
+        d->themePath = KUrl();
+        scene()->removeItem(this);
+        deleteLater();
     }
+}
+
+void SuperKarambaApplet::loadFailed()
+{
+    kDebug()<<">>>>>>>>>>>> SuperKarambaApplet::loadFailed";
+    d->themePath = KUrl();
+    scene()->removeItem(this);
+    deleteLater();
 }
 
 void SuperKarambaApplet::lockedActionToggled(bool toggled)
