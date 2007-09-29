@@ -136,7 +136,6 @@ public:
     virtual void hide();
 
     void setTooltip(QString txt);
-    int cblend;
     int background;
     // Pixmap Effects
     void removeEffects();

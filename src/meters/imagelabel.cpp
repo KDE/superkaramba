@@ -142,7 +142,6 @@ ImageLabel::ImageLabel(Karamba* k, int ix, int iy, int iw, int ih) :
     pixmap.fill(Qt::transparent);
 
     background = 0;
-    cblend = 0;
     //scaleMat.reset();
     //rotMat.reset();
     scale_w = 1;
@@ -159,7 +158,6 @@ ImageLabel::ImageLabel(Karamba* k) :
         Meter(k), zoomed(false), rollover(false), m_renderer(0),
         m_connected(false)
 {
-    cblend = 0;
     background = 0;
 }
 
@@ -383,20 +381,8 @@ void ImageLabel::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 
     //only draw image if not hidden
     if (!m_hidden) {
-        if (cblend == 0) {
-            //draw the pixmap
-            painter->drawPixmap(0, 0, pixmap);
-        } else {
-	    //Blend this image with a color
-	    QImage image = pixmap.toImage();
-	    QPainter p;
-
-	    p.begin(&image);
-	    p.setCompositionMode(QPainter::CompositionMode_SourceAtop);
-	    p.fillRect(image.rect(), QColor(255, 0, 0, 0.5f));
-	    p.end();
-	    painter->drawImage(0, 0, image);
-        }
+        //draw the pixmap
+        painter->drawPixmap(0, 0, pixmap);
     }
 
     // start Timer

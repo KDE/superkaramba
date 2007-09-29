@@ -36,8 +36,8 @@
 #include <KActionCollection>
 #include <KMenu>
 
-KarambaApplication::KarambaApplication(Display *display, Qt::HANDLE visual, Qt::HANDLE colormap)
-        :   KUniqueApplication(display, visual, colormap),
+KarambaApplication::KarambaApplication()
+        :   KUniqueApplication(),
         m_themesDialog(0)
 {
     connect(KarambaManager::self(), SIGNAL(karambaStarted(QGraphicsItemGroup*)), this, SLOT(karambaStarted(QGraphicsItemGroup*)));
@@ -134,6 +134,14 @@ int KarambaApplication::newInstance()
     else {
         if (m_themesDialog)
             m_themesDialog->show();
+    }
+
+    if (!KWindowSystem::compositingActive()) {
+        KMessageBox::information(0,
+                i18n("Please enable the desktop effects to get "
+                    "full transparency support in SuperKaramba."),
+                QString(),
+                "noTransparencyMessage");
     }
 
     return 0;

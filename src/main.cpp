@@ -31,6 +31,7 @@
 #include <KStandardDirs>
 #include <KCmdLineArgs>
 #include <KAboutData>
+#include <KWindowSystem>
 
 #include <X11/extensions/Xrender.h>
 
@@ -41,50 +42,6 @@ static const char *version = "0.50";
 
 int main(int argc, char **argv)
 {
-    // Taken from KRunner by A. Seigo
-    Display *dpy = XOpenDisplay(0); // open default display
-    if (!dpy) {
-        qWarning("Cannot connect to the X server");
-        exit(1);
-    }
-
-    bool argbVisual = false ;
-    bool haveCompManager = !XGetSelectionOwner(dpy, XInternAtom(dpy,
-                           "_NET_WM_CM_S0", false));
-    haveCompManager = true;
-    Colormap colormap = 0;
-    Visual *visual = 0;
-
-    kDebug() << "Composition Manager: " << haveCompManager ;
-
-    if (haveCompManager) {
-        int screen = DefaultScreen(dpy);
-        int eventBase, errorBase;
-
-        if (XRenderQueryExtension(dpy, &eventBase, &errorBase)) {
-            int nvi;
-            XVisualInfo templ;
-            templ.screen  = screen;
-            templ.depth   = 32;
-            templ.c_class = TrueColor;
-            XVisualInfo *xvi = XGetVisualInfo(dpy, VisualScreenMask |
-                                              VisualDepthMask |
-                                              VisualClassMask,
-                                              &templ, &nvi);
-            for (int i = 0; i < nvi; ++i) {
-                XRenderPictFormat *format = XRenderFindVisualFormat(dpy,
-                                            xvi[i].visual);
-                if (format->type == PictTypeDirect && format->direct.alphaMask) {
-                    visual = xvi[i].visual;
-                    colormap = XCreateColormap(dpy, RootWindow(dpy, screen),
-                                               visual, AllocNone);
-                    argbVisual = true;
-                    break;
-                }
-            }
-        }
-    }
-
     KAboutData about("superkaramba", 0, ki18n("SuperKaramba"),
                      version, ki18n(description),
                      KAboutData::License_GPL,
@@ -123,7 +80,7 @@ int main(int argc, char **argv)
     }
 #endif
 
-    KarambaApplication app(dpy, Qt::HANDLE(visual), Qt::HANDLE(colormap));
+    KarambaApplication app;
 
     app.setupSysTray(&about);
     int ret = 0;

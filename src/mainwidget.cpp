@@ -22,7 +22,7 @@
 
 #include <QTime>
 
-#include <kmanagerselection.h>
+#include <KWindowSystem>
 
 MainWidget::MainWidget(QGraphicsScene *scene, QWidget *parent)
         : QGraphicsView(scene, parent),
@@ -31,9 +31,7 @@ MainWidget::MainWidget(QGraphicsScene *scene, QWidget *parent)
     setWindowFlags(Qt::FramelessWindowHint);
     setFrameStyle(QFrame::NoFrame);
 
-    Display *dpy = XOpenDisplay(0);
-    m_hasCompManager = !XGetSelectionOwner(dpy,
-                                           XInternAtom(dpy, "_NET_WM_CM_S0", false));
+    m_hasCompManager = KWindowSystem::compositingActive();
 
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
