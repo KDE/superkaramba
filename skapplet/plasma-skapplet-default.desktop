@@ -1,12 +1,14 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=SuperKaramba
+Name[ar]=سوبركارامبا
 Name[is]=SúperKaramba
 Name[ne]=सुपरकराम्बा
 Name[sr]=СуперКарамба
 Name[ta]=சூப்பர் கரம்பா
 Name[x-test]=xxSuperKarambaxx
 Comment=SuperKaramba Plasma Applet
+Comment[ar]=بريمج بلازما سوبركارامبا
 Comment[el]=Εφαρμογίδιο πλάσμα SuperKaramba
 Comment[es]=Applet de SuperKaramba para Plasma
 Comment[he]=יישומון Plasma  עבור Superkaramba
