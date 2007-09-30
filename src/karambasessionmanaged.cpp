@@ -26,27 +26,32 @@
 #include <KApplication>
 #include <KConfig>
 #include <KSessionManager>
+#include "karambamanager.h"
 
 bool KarambaSessionManaged::saveState(QSessionManager&)
 {
     QList<QString> openThemes;
 
-    QWidgetList list = QApplication::allWidgets();
-    foreach(QWidget *w, list) {
-        if (QString(w->objectName()).startsWith("karamba")) {
-            Karamba* k = (Karamba*) w;
-
-            if (k->isSubTheme())
-              continue;
-
-            QString path = QFileInfo(k->theme().file()).absoluteFilePath();
-            k->writeConfigData();
-            openThemes.append(path);
+    QList<Karamba*> themes = KarambaManager::self()->getKarambas();
+    foreach(Karamba *k, themes) {
+        if (k->isSubTheme()) {
+            continue;
         }
+
+        QString path = QFileInfo(k->theme().file()).absoluteFilePath();
+        k->writeConfigData();
+        openThemes.append(path);
     }
 
-    KConfig* config = kapp->sessionConfig();
-    config->group("General Options").writeEntry("OpenThemes", openThemes);
+    KSharedConfigPtr config = KGlobal::config();
+    KConfigGroup group(config, "Session");
+    group.writeEntry("OpenThemes", openThemes);
+
+    /*
+    KConfig *config = kapp->sessionConfig();
+    KConfigGroup group(config, "Session");
+    group.writeEntry("OpenThemes", openThemes);
+    */
     return true;
 }
 

@@ -108,8 +108,15 @@ void KarambaApplication::karambaClosed(QGraphicsItemGroup *item)
 void KarambaApplication::checkPreviousSession(QList<KUrl> &lst)
 {
     if (isSessionRestored()) {
-        KConfig* config = sessionConfig();
-        QList<QString> themePaths = config->group("General Options").readEntry("OpenThemes", QList<QString>());
+        KSharedConfigPtr config = KGlobal::config();
+        KConfigGroup group(config, "Session");
+        QList<QString> themePaths = group.readEntry("OpenThemes", QList<QString>());
+        /*
+        KConfig *config = sessionConfig();
+        KConfigGroup group(config, "Session");
+        QList<QString> themePaths = group.readEntry("OpenThemes", QList<QString>());
+        */
+
         foreach(QString path, themePaths) {
             lst.append(KUrl(path));
         }
