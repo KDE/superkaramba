@@ -42,7 +42,7 @@ class SuperKarambaApplet : public Plasma::Applet
         Karamba* karamba() const;
 
         QRectF boundingRect() const;
-        virtual void constraintsUpdated();
+        virtual void constraintsUpdated(Plasma::Constraints constraints);
         void paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *option, const QRect &rect);
 
     public slots:

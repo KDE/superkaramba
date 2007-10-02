@@ -206,14 +206,14 @@ void SuperKarambaApplet::configAccepted()
     cg.writeEntry("theme", d->themePath);
     cg.writeEntry("locked", d->locked);
     QGraphicsItem::update();
-    constraintsUpdated();
+    constraintsUpdated(Plasma::AllConstraints);
     cg.config()->sync();
 }
 
-void SuperKarambaApplet::constraintsUpdated()
+void SuperKarambaApplet::constraintsUpdated(Plasma::Constraints contraints)
 {
     kDebug() << "SuperKarambaApplet::constraintsUpdated" ;
-    Plasma::Applet::constraintsUpdated();
+    Plasma::Applet::constraintsUpdated(contraints);
 }
 
 QRectF SuperKarambaApplet::boundingRect() const
@@ -229,7 +229,7 @@ void SuperKarambaApplet::karambaStarted(QGraphicsItemGroup* group)
         Q_ASSERT(d->themeItem);
         d->initTheme();
         QGraphicsItem::update();
-        constraintsUpdated();
+        constraintsUpdated(Plasma::AllConstraints);
     }
 }
 
