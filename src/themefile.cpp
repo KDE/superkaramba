@@ -249,7 +249,7 @@ QPixmap ThemeFile::icon() const
 bool ThemeFile::set(const KUrl &url)
 {
     if (!url.isLocalFile() && !url.protocol().isEmpty()) {
-        if (KMessageBox::warningContinueCancel(kapp->activeWindow(),
+        if (KMessageBox::warningContinueCancel(qApp->activeWindow(),
                                                i18n("You are about to install and run %1 SuperKaramba theme. Since "
                                                     "themes can contain executable code you should only install themes "
                                                     "from sources that you trust. Continue?",
@@ -265,7 +265,7 @@ bool ThemeFile::set(const KUrl &url)
         QFileInfo localFile = themeDir.filePath(url.fileName());
 
         if (localFile.exists()) {
-            if (KMessageBox::warningContinueCancel(kapp->activeWindow(),
+            if (KMessageBox::warningContinueCancel(qApp->activeWindow(),
                                                    i18n("%1 already exists. Do you want to overwrite it?", localFile.filePath()),
                                                    i18n("File Exists"),
                                                    KGuiItem(i18n("Overwrite"))
@@ -275,9 +275,9 @@ bool ThemeFile::set(const KUrl &url)
             }
         }
 
-        KIO::Job *job = KIO::file_copy(url, localFile.filePath(), -1, true, false, true);
+        KIO::Job *job = KIO::file_copy(url, localFile.filePath(), -1, KIO::Overwrite);
 
-        if (!KIO::NetAccess::synchronousRun(job, kapp->activeWindow())) {
+        if (!KIO::NetAccess::synchronousRun(job, qApp->activeWindow())) {
             return false;
         }
 
