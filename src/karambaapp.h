@@ -16,6 +16,7 @@
 #include <QSystemTrayIcon>
 #include <QGraphicsItemGroup>
 
+#include <KUrl>
 #include <KUniqueApplication>
 
 #define karambaApp ((KarambaApplication*)qApp)

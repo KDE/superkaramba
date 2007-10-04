@@ -35,6 +35,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <KGlobal>
 #include <KIconLoader>
+#include <KConfigGroup>
 #include <KLocale>
 #include <K3StaticDeleter>
 #include <KWindowSystem>

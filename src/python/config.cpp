@@ -37,6 +37,8 @@
 #include "python/meter.h"
 #include "python/config.h"
 
+#include <kconfiggroup.h>
+
 #include "../karamba.h"
 
 // API-Function addMenuConfigOption

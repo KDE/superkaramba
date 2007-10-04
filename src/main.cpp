@@ -26,8 +26,11 @@
 
 #include "config-superkaramba.h"
 
+#include <stdlib.h>
+
 #include <KLocale>
 #include <KConfig>
+#include <KDebug>
 #include <KStandardDirs>
 #include <KCmdLineArgs>
 #include <KAboutData>

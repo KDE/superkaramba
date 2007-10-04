@@ -25,6 +25,7 @@
 
 #include <KApplication>
 #include <KConfig>
+#include <KConfigGroup>
 #include <KSessionManager>
 #include "karambamanager.h"
 
