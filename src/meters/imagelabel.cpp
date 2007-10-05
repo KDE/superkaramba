@@ -310,7 +310,7 @@ void ImageLabel::setValue(const QString &fn)
         tmpFile.setAutoRemove(false);
         tmpFile.open();
         KIO::FileCopyJob* copy = KIO::file_copy(fileName, tmpFile.fileName(), 0600,
-                                                true, false, false);
+                                                KIO::Overwrite);
         connect(copy, SIGNAL(result(KJob*)),
                 this, SLOT(slotCopyResult(KJob*)));
         return;
