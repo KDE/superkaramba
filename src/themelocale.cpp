@@ -29,6 +29,8 @@
 #include "themelocale.h"
 #include "themefile.h"
 
+#include <stdlib.h>
+
 #include <KGlobal>
 #include <KLocale>
 

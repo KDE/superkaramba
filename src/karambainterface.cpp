@@ -35,6 +35,8 @@
 #include <QDesktopWidget>
 
 #include <KMenu>
+#include <KDebug>
+#include <KConfigGroup>
 #include <KService>
 #include <KServiceGroup>
 #include <KLocale>

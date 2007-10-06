@@ -34,6 +34,7 @@
 
 #include <KIconEffect>
 #include <KTemporaryFile>
+#include <KDebug>
 #include <kio/job.h>
 #include <KRun>
 
