@@ -28,22 +28,12 @@
 #include <QStyleOptionGraphicsItem>
 #include <QGraphicsItemGroup>
 #include <QGraphicsView>
-//#include <QPaintEvent>
-//#include <QImage>
-//#include <QLabel>
-//#include <QPixmap>
-//#include <QX11Info>
-//#include <QColor>
-//#include <QPixmap>
-//#include <QFile>
 #include <KDebug>
 #include <KLocale>
 #include <KDialog>
 #include <KMenu>
 #include <KFileDialog>
 #include <KToggleAction>
-
-//#include <plasma/svg.h>
 
 #include "../src/karamba.h"
 #include "../src/karambamanager.h"
@@ -61,7 +51,7 @@ class SuperKarambaApplet::Private : public QObject
         bool locked;
         QList<QAction*> contextActions;
 
-        explicit Private(SuperKarambaApplet* a) : applet(a), appletadaptor(0), themeItem(0), locked(true) {}
+        explicit Private(SuperKarambaApplet* a) : applet(a), appletadaptor(0), themeItem(0), locked(false) {}
         ~Private() { delete appletadaptor; delete themeItem; }
 
         void initTheme()
@@ -127,14 +117,18 @@ SuperKarambaApplet::SuperKarambaApplet(QObject *parent, const QVariantList &args
 {
     //watchForFocus(d,true);
 
-    kDebug() << "========================> SuperKarambaApplet Ctor" ;
+    kDebug() << "========================> SuperKarambaApplet Ctor" << args ;
     setHasConfigurationInterface(true);
 
-    KConfigGroup cg = config();
-    d->themePath = cg.readEntry("theme", KUrl());
-    d->locked = cg.readEntry("locked", true);
+    if (args.count() < 3) {
+        KConfigGroup cg = config();
+        d->themePath = cg.readEntry("theme", KUrl());
+        d->locked = cg.readEntry("locked", true);
+    } else {
+        d->themePath = args[2].toString();
+    }
 
-    if( ! d->themePath.isValid() ) {
+    if( !d->themePath.isValid() ) {
         KFileDialog* filedialog = new KFileDialog(
             KUrl("kfiledialog:///SuperKarambaPlasmaApplet"), // startdir
             i18n("*.skz *.theme|Theme Files\n*|All Files"), // filter
@@ -261,6 +255,34 @@ void SuperKarambaApplet::lockedActionToggled(bool toggled)
 QList<QAction*> SuperKarambaApplet::contextActions()
 {
     return d->contextActions;
+}
+
+extern "C" {
+    KDE_EXPORT QList<QMap<QString, QVariant> > installedThemes()
+    {
+        KSharedConfigPtr config = KSharedConfig::openConfig("superkarambarc");
+        KConfigGroup cg(config, "themes");
+
+        QStringList themes = cg.readPathListEntry("UserAddedThemes");
+
+        QList<QMap<QString, QVariant> > result;
+
+        foreach (QString theme, themes) {
+            ThemeFile themeFile(theme);
+
+            QMap<QString, QVariant> metadata;
+            QVariantList arguments;
+            arguments << theme;
+            metadata["arguments"] = arguments;
+            metadata["name"] = themeFile.name();
+            metadata["description"] = themeFile.description();
+            metadata["icon"] = KIcon(themeFile.icon());
+
+            result << metadata;
+        }
+
+        return result;
+    }
 }
 
 #include "skapplet.moc"
