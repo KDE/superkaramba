@@ -405,7 +405,7 @@ Karamba::Karamba(const KUrl &themeFile, QGraphicsView *view, int instance, bool 
 
     slotDesktopChanged(desktop);
 
-    cg.changeGroup("theme");
+    cg = KConfigGroup(d->config, "theme");
     if (cg.hasKey("widgetPosX") && cg.hasKey("widgetPosY")) {
         int xpos = cg.readEntry("widgetPosX", 0);
         int ypos = cg.readEntry("widgetPosY", 0);
@@ -1376,7 +1376,7 @@ void Karamba::writeConfigData()
     cg.writeEntry("lockedPosition", d->toggleLocked-> isChecked());
     cg.writeEntry("desktop", d->desktop);
 
-    cg.changeGroup("theme");
+    cg = KConfigGroup(d->config, "theme");
 
     // Widget Position
     if (!d->globalView) {
@@ -1440,11 +1440,10 @@ void Karamba::preparePopupMenu()
     d->popupMenu->addAction(KIcon("view-refresh"), i18n("Update"), this,
                            SLOT(updateSensors()), Qt::Key_F5);
 
-    d->toggleLocked = new KToggleAction(KIcon("move"), i18n("Toggle &Locked Position"), this);
+    d->toggleLocked = new KToggleAction(i18n("&Locked Position"), this);
     d->toggleLocked->setObjectName("lockedAction");
     d->toggleLocked->setShortcut(KShortcut(Qt::CTRL + Qt::Key_L));
-    d->toggleLocked->setCheckedState(KGuiItem("Toggle &Locked Position",
-                                    KIcon("system-lock-screen")));
+    d->toggleLocked->setCheckedState(KGuiItem(i18n("&Locked Position")));
     connect(d->toggleLocked, SIGNAL(triggered()), this, SLOT(slotToggleLocked()));
     d->popupMenu->addAction(d->toggleLocked);
 
@@ -1475,7 +1474,7 @@ void Karamba::preparePopupMenu()
         d->signalMapperDesktop->setMapping(action, desktop);
     }
 
-    d->reloadTheme = new KAction(KIcon("reload3"), i18n("&Reload Theme"), this);
+    d->reloadTheme = new KAction(KIcon("view-refresh"), i18n("&Reload Theme"), this);
     d->reloadTheme->setObjectName("reloadAction");
     d->reloadTheme->setShortcut(KShortcut(Qt::CTRL + Qt::Key_R));
     connect(d->reloadTheme, SIGNAL(triggered()), this, SLOT(reloadConfig()));
