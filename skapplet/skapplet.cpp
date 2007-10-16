@@ -276,7 +276,12 @@ extern "C" {
             metadata["arguments"] = arguments;
             metadata["name"] = themeFile.name();
             metadata["description"] = themeFile.description();
-            metadata["icon"] = KIcon(themeFile.icon());
+            QPixmap icon = themeFile.icon();
+            if (icon.isNull()) {
+                metadata["icon"] = KIcon("application-x-plasma");
+            } else {
+                metadata["icon"] = KIcon(themeFile.icon());
+            }
 
             result << metadata;
         }
