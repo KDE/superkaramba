@@ -263,7 +263,7 @@ extern "C" {
         KSharedConfigPtr config = KSharedConfig::openConfig("superkarambarc");
         KConfigGroup cg(config, "themes");
 
-        QStringList themes = cg.readPathListEntry("UserAddedThemes");
+        QStringList themes = cg.readPathEntry("UserAddedThemes", QStringList());
 
         QList<QMap<QString, QVariant> > result;
 
