@@ -2137,13 +2137,16 @@ bool KarambaInterface::addMenuConfigOption(Karamba *k, const QString &key, const
 * RETURN VALUE
 *   config value for key
 */
-QString KarambaInterface::readConfigEntry(const Karamba *k, const QString &key) const
+QVariant KarambaInterface::readConfigEntry(const Karamba *k, const QString &key) const
 {
     if (!checkKaramba(k)) {
         return QString();
     }
 
-    return k->getConfig()->group("theme").readEntry(key, QString());
+    QString type = k->getConfig()->group("types").readEntry(key, QString());
+    QVariant def(QVariant::nameToType(type.toAscii().data()));
+
+    return k->getConfig()->group("theme").readEntry(key, def);
 }
 
 /** Config/readMenuConfigOption
@@ -2217,7 +2220,7 @@ bool KarambaInterface::setMenuConfigOption(Karamba *k, const QString &key, bool 
 * RETURN VALUE
 *   true if successful
 */
-bool KarambaInterface::writeConfigEntry(const Karamba *k, const QString &key, const QString &value)
+bool KarambaInterface::writeConfigEntry(const Karamba *k, const QString &key, const QVariant &value)
     const
 {
     if (!checkKaramba(k)) {
@@ -2225,6 +2228,8 @@ bool KarambaInterface::writeConfigEntry(const Karamba *k, const QString &key, co
     }
 
     k->getConfig()->group("theme").writeEntry(key, value);
+
+    k->getConfig()->group("types").writeEntry(key, QString(QVariant::typeToName(value.type())));
 
     return true;
 }

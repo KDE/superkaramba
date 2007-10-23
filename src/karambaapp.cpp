@@ -330,15 +330,11 @@ void KarambaApplication::openNamedTheme(const QString &file, const QString &them
 {
     Karamba *k = new Karamba(KUrl(file), 0, -1, subTheme);
     k->setPrettyName(themeName);
-    connect(k, SIGNAL(widgetStarted(Karamba*, bool, bool)),
-        this, SLOT(karambaStarted(Karamba*, bool, bool)));
 }
 
 void KarambaApplication::openTheme(const QString &file)
 {
-    Karamba *k = new Karamba(KUrl(file));
-    connect(k, SIGNAL(widgetStarted(Karamba*, bool, bool)),
-        this, SLOT(karambaStarted(Karamba*, bool, bool)));
+    new Karamba(KUrl(file));
 }
 
 void KarambaApplication::quitSuperKaramba()

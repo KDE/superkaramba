@@ -152,10 +152,10 @@ public Q_SLOTS:
 
     // Config
     bool addMenuConfigOption(Karamba *k, const QString &key, const QString &name) const;
-    QString readConfigEntry(const Karamba *k, const QString &key) const;
+    QVariant readConfigEntry(const Karamba *k, const QString &key) const;
     bool readMenuConfigOption(const Karamba *k, const QString &key) const;
     bool setMenuConfigOption(Karamba *k, const QString &key, bool value) const;
-    bool writeConfigEntry(const Karamba *k, const QString &key, const QString &value) const;
+    bool writeConfigEntry(const Karamba *k, const QString &key, const QVariant &value) const;
 
     // Graph
     QObject* createGraph(Karamba* k, int x, int y, int w, int h, int points) const;

@@ -48,7 +48,7 @@ int main(int argc, char **argv)
     KAboutData about("superkaramba", 0, ki18n("SuperKaramba"),
                      version, ki18n(description),
                      KAboutData::License_GPL,
-                     ki18n("(c) 2003-2006 The SuperKaramba developers"));
+                     ki18n("(c) 2003-2007 The SuperKaramba developers"));
     about.addAuthor(ki18n("Adam Geitgey"), KLocalizedString(), "adam@rootnode.org");
     about.addAuthor(ki18n("Hans Karlsson"), KLocalizedString(), "karlsson.h@home.se");
     about.addAuthor(ki18n("Ryan Nickell"), KLocalizedString(), "p0z3r@earthlink.net");
