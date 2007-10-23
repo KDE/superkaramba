@@ -389,7 +389,7 @@ Karamba::Karamba(const KUrl &themeFile, QGraphicsView *view, int instance, bool 
         themeConfigFile.close();
     }
 
-    d->config = new KConfig(cfg, KConfig::NoGlobals);
+    d->config = new KConfig(cfg, KConfig::CascadeConfig);
 
     // Karamba specific Config Entries
     KConfigGroup cg(d->config, "internal");
