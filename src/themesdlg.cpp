@@ -304,7 +304,6 @@ void ThemesDlg::addSkzThemeToDialog(const QString &file)
 {
     //kDebug() << "addSkzThemeToDialog(): file = " << file ;
     addThemeToList(file);
-    writeNewStuffConfig(file);
 }
 
 void ThemesDlg::addThemeToDialog(const KArchiveDirectory *archiveDir,
@@ -322,52 +321,9 @@ void ThemesDlg::addThemeToDialog(const KArchiveDirectory *archiveDir,
             QFileInfo fi(*it);
             if (fi.suffix() == "theme") {
                 addThemeToList(destDir + *it);
-                writeNewStuffConfig(destDir);
             }
         }
     }
-}
-
-void ThemesDlg::writeNewStuffConfig(const QString &file)
-{
-    KSharedConfigPtr config = KGlobal::config();
-    QStringList keys = config->entryMap("KNewStuffStatus").keys();
-
-    for (QStringList::Iterator it = m_newStuffStatus.begin();
-            it != m_newStuffStatus.end(); ++it) {
-        keys.erase(it);
-    }
-    if (!keys.isEmpty()) {
-        config->group("KNewStuffNames").writeEntry(file, keys[0]);
-        config->sync();
-    }
-}
-
-void ThemesDlg::configSanityCheck()
-{
-    KSharedConfigPtr config = KGlobal::config();
-    QStringList statusKeys = config->entryMap("KNewStuffStatus").keys();
-    QStringList nameKeys = config->entryMap("KNewStuffNames").keys();
-    QStringList removeList;
-
-    for (QStringList::Iterator it = statusKeys.begin();
-            it != statusKeys.end(); ++it) {
-        QString keyName(*it);
-        bool removeKey = true;
-        for (QStringList::Iterator it2 = nameKeys.begin();
-                it2 != nameKeys.end(); ++it2) {
-            QString tempName(config->group("KNewStuffNames").readEntry(*it2, QString()));
-            if (tempName.compare(keyName) == 0) {
-                removeKey = false;
-            }
-
-        }
-        if (removeKey) {
-            kDebug() << "sanityCheck() deleting entry " << keyName ;
-            config->group("KNewStuffStatus").deleteEntry(keyName);
-        }
-    }
-    config->sync();
 }
 
 int ThemesDlg::addThemeToList(const QString &file)
