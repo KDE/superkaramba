@@ -36,8 +36,8 @@
 #include <KActionCollection>
 #include <KMenu>
 
-KarambaApplication::KarambaApplication()
-        :   KUniqueApplication(),
+KarambaApplication::KarambaApplication(Display *display, Qt::HANDLE visual, Qt::HANDLE colormap)
+        :   KUniqueApplication(display, visual, colormap),
         m_themesDialog(0)
 {
     connect(KarambaManager::self(), SIGNAL(karambaStarted(QGraphicsItemGroup*)), this, SLOT(karambaStarted(QGraphicsItemGroup*)));

@@ -32,7 +32,7 @@ class KarambaApplication : public KUniqueApplication
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.SuperKaramba")
 public:
-    KarambaApplication();
+    KarambaApplication(Display *display, Qt::HANDLE visual, Qt::HANDLE colormap);
     ~KarambaApplication();
 
     int newInstance();

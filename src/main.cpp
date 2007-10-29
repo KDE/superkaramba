@@ -45,6 +45,42 @@ static const char *version = "0.50";
 
 int main(int argc, char **argv)
 {
+    Display *dpy = XOpenDisplay(0); // open default display
+    if (!dpy) {
+        kWarning() << "Cannot connect to the X server";
+        exit(1);
+    }
+
+    Colormap colormap = 0;
+    Visual *visual = 0;
+
+    if (KWindowSystem::compositingActive()) {
+        int screen = DefaultScreen(dpy);
+        int eventBase, errorBase;
+
+        if (XRenderQueryExtension(dpy, &eventBase, &errorBase)) {
+            int nvi;
+            XVisualInfo templ;
+            templ.screen  = screen;
+            templ.depth   = 32;
+            templ.c_class = TrueColor;
+            XVisualInfo *xvi = XGetVisualInfo(dpy, VisualScreenMask |
+                                              VisualDepthMask |
+                                              VisualClassMask,
+                                              &templ, &nvi);
+            for (int i = 0; i < nvi; ++i) {
+                XRenderPictFormat *format = XRenderFindVisualFormat(dpy,
+                                            xvi[i].visual);
+                if (format->type == PictTypeDirect && format->direct.alphaMask) {
+                    visual = xvi[i].visual;
+                    colormap = XCreateColormap(dpy, RootWindow(dpy, screen),
+                                               visual, AllocNone);
+                    break;
+                }
+            }
+        }
+    }
+
     KAboutData about("superkaramba", 0, ki18n("SuperKaramba"),
                      version, ki18n(description),
                      KAboutData::License_GPL,
@@ -83,7 +119,7 @@ int main(int argc, char **argv)
     }
 #endif
 
-    KarambaApplication app;
+    KarambaApplication app(dpy, Qt::HANDLE(visual), Qt::HANDLE(colormap));
 
     app.setupSysTray(&about);
     int ret = 0;
