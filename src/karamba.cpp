@@ -1592,8 +1592,11 @@ QAction* Karamba::addMenuItem(KMenu *menu, const QString &text, const QString &i
 
 void Karamba::popupMenu(KMenu *menu, const QPoint &pos) const
 {
-//  QPoint diff = mapToGlobal(QGraphicsItemGroup::pos().toPoint()).toPoint();
-    menu->popup(d->view->pos() + pos + boundingRect().toRect().topLeft());
+    if (!d->globalView) {
+        menu->popup(d->view->pos() + pos + boundingRect().toRect().topLeft());
+    } else {
+        menu->popup(mapToScene(pos).toPoint());
+    }
 }
 
 void Karamba::deletePopupMenu(KMenu *menu)
