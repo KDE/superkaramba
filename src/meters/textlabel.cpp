@@ -119,24 +119,26 @@ void TextLabel::calculateTextSize()
     }
 
     if (getWidth() <= 0) {
-        Meter::setWidth(textSize.width());
+        setWidth(textSize.width());
     }
 
     if (getHeight() <= 0) {
-       Meter::setHeight(textSize.height());
+        setHeight(textSize.height());
     }
 
     if (!m_sizeGiven) {
         if (alignment == Qt::AlignLeft) {
-            Meter::setX(origPoint.x());
+            setX(origPoint.x());
         }
         else if (alignment == Qt::AlignRight) {
-            Meter::setX(origPoint.x() - textSize.width());
+            setX(origPoint.x() - textSize.width());
         }
         else if (alignment == Qt::AlignHCenter) {
-            Meter::setX(origPoint.x() - textSize.width() / 2);
+            setX(origPoint.x() - textSize.width() / 2);
         }
     }
+
+    update();
 }
 
 void TextLabel::setValue(const QString &text)
@@ -144,7 +146,6 @@ void TextLabel::setValue(const QString &text)
     value = text.split('\n');
 
     calculateTextSize();
-    update();
 }
 
 void TextLabel::setValue(int v)
@@ -152,7 +153,6 @@ void TextLabel::setValue(int v)
     value = QStringList(QString::number(v));
 
     calculateTextSize();
-    update();
 }
 
 void TextLabel::setBGColor(QColor clr)
@@ -452,3 +452,13 @@ int TextLabel::getTextWidth() const
     QFontMetrics fm(font);
     return fm.width(value[0]);
 }
+
+void TextLabel::setSize(int x, int y, int width, int height)
+{
+    origPoint = QPoint(x, y);
+    setWidth(width);
+    setHeight(height);
+
+    calculateTextSize();
+}
+

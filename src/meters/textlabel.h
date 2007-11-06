@@ -67,6 +67,7 @@ public:
     bool clickable();
 
     int getTextWidth() const;
+    void setSize(int x, int y, int width, int height);
 
 private:
     int alignment;
