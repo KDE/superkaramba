@@ -164,8 +164,8 @@ class SvgAdaptor : public Plasma::Widget {
             }
             m_svg->paint(painter->painter(), point, elementID);
         }
-        void updated(const QString& source, Plasma::DataEngine::Data) {
-            kDebug() << "SvgAdaptor::updated source=" << source ;
+        void dataUpdated(const QString& source, Plasma::DataEngine::Data) {
+            kDebug() << "SvgAdaptor::dataUpdated source=" << source ;
         }
     private:
         Plasma::Svg* m_svg;

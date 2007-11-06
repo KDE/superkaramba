@@ -81,7 +81,7 @@ class PlasmaSensorConnector : public QObject
         /**
         * Plasma calls this if data changed.
         */
-        void updated(const QString& source, const Plasma::DataEngine::Data &data);
+        void dataUpdated(const QString& source, const Plasma::DataEngine::Data &data);
 
     private:
         /// \internal d-pointer class.
@@ -189,7 +189,7 @@ class SUPERKARAMBA_EXPORT PlasmaSensor :  public Sensor
         /**
         * Plasma calls this if data changed.
         */
-        virtual void updated(const QString& source, Plasma::DataEngine::Data data);
+        virtual void dataUpdated(const QString& source, Plasma::DataEngine::Data data);
 
     private:
         /// \internal d-pointer class.

@@ -102,9 +102,9 @@ void PlasmaSensorConnector::setFormat(const QString& format)
     d->format = format;
 }
 
-void PlasmaSensorConnector::updated(const QString& source, const Plasma::DataEngine::Data &data)
+void PlasmaSensorConnector::dataUpdated(const QString& source, const Plasma::DataEngine::Data &data)
 {
-    //kDebug()<<"PlasmaSensorConnector::updated d->source="<<d->source<<" source="<<source<<endl;
+    //kDebug()<<"PlasmaSensorConnector::dataUpdated d->source="<<d->source<<" source="<<source<<endl;
     if( d->source.isEmpty() ) {
         emit sourceUpdated(source, dataToMap(data));
         return;
@@ -259,9 +259,9 @@ void PlasmaSensor::update()
     */
 }
 
-void PlasmaSensor::updated(const QString& source, Plasma::DataEngine::Data data)
+void PlasmaSensor::dataUpdated(const QString& source, Plasma::DataEngine::Data data)
 {
-    //kDebug()<<"PlasmaSensor::updated source="<<source<<endl;
+    //kDebug()<<"PlasmaSensor::dataUpdated source="<<source<<endl;
     emit sourceUpdated(source, dataToMap(data));
 }
 
