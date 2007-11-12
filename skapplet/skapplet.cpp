@@ -119,6 +119,7 @@ SuperKarambaApplet::SuperKarambaApplet(QObject *parent, const QVariantList &args
 
     kDebug() << "========================> SuperKarambaApplet Ctor" << args ;
     setHasConfigurationInterface(true);
+    setDrawStandardBackground(false);
 
     if (args.count() < 3) {
         KConfigGroup cg = config();
