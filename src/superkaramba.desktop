@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=SuperKaramba
 Name[ar]=سوبركارامبا
 Name[is]=SúperKaramba
@@ -97,7 +96,7 @@ GenericName[uk]=Віджети стільниці
 GenericName[x-test]=xxDesktop Widgetsxx
 GenericName[zh_CN]=桌面部件
 GenericName[zh_TW]=桌面元件
-DocPath=superkaramba/index.html
+X-DocPath=superkaramba/index.html
 Categories=Qt;KDE;Utility;X-KDE-Utilities-Desktop;
 OnlyShowIn=KDE;
 X-DBUS-StartupType=Unique
