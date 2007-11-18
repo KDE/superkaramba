@@ -119,7 +119,6 @@ SuperKarambaApplet::SuperKarambaApplet(QObject *parent, const QVariantList &args
 
     kDebug() << "========================> SuperKarambaApplet Ctor" << args ;
     setHasConfigurationInterface(true);
-    setDrawStandardBackground(false);
 
     if (args.count() < 3) {
         KConfigGroup cg = config();
@@ -205,10 +204,11 @@ void SuperKarambaApplet::configAccepted()
     cg.config()->sync();
 }
 
-void SuperKarambaApplet::constraintsUpdated(Plasma::Constraints contraints)
+void SuperKarambaApplet::constraintsUpdated(Plasma::Constraints constraints)
 {
-    kDebug() << "SuperKarambaApplet::constraintsUpdated" ;
-    Plasma::Applet::constraintsUpdated(contraints);
+    Q_UNUSED(constraints)
+
+    setDrawStandardBackground(false);
 }
 
 QRectF SuperKarambaApplet::boundingRect() const

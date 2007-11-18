@@ -1456,6 +1456,10 @@ void Karamba::preparePopupMenu()
     newAC->setParent(this);
     newAC->setVisible(false);
 
+    if (d->globalView) {
+        return;
+    }
+
     d->toDesktopMenu = new KMenu();
     d->toDesktopMenu->setTitle(i18n("To Des&ktop"));
     d->popupMenu->addMenu(d->toDesktopMenu);
@@ -1486,6 +1490,10 @@ void Karamba::preparePopupMenu()
 
 void Karamba::slotDesktopChanged(int desktop)
 {
+    if (d->globalView) {
+        return;
+    }
+
     QList<QAction*> actions = d->toDesktopMenu->actions();
 
     for (int i = 0; i < actions.count(); i++) {
@@ -1495,12 +1503,10 @@ void Karamba::slotDesktopChanged(int desktop)
             actions[i]->setChecked(false);
     }
 
-    if (!d->globalView) {
-        if (desktop) {
-            d->info->setDesktop(desktop);
-        } else {
-            d->info->setDesktop(NETWinInfo::OnAllDesktops);
-        }
+    if (desktop) {
+        d->info->setDesktop(desktop);
+    } else {
+        d->info->setDesktop(NETWinInfo::OnAllDesktops);
     }
 }
 
