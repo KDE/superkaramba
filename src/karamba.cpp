@@ -537,7 +537,7 @@ void Karamba::step()
 void Karamba::redrawWidget()
 {
     // Force the event loop to process the update() calls
-    QCoreApplication::processEvents();
+    // QCoreApplication::processEvents();
 }
 
 bool Karamba::parseConfig()
