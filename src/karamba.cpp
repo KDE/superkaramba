@@ -1610,7 +1610,7 @@ void Karamba::deletePopupMenu(KMenu *menu)
     int index = d->menuList.indexOf(menu);
     d->menuList.takeAt(index);
 
-    delete menu;
+    menu->deleteLater();
 }
 
 void Karamba::deleteMenuItem(QAction *action)
