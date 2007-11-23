@@ -456,8 +456,7 @@ int TextLabel::getTextWidth() const
 void TextLabel::setSize(int x, int y, int width, int height)
 {
     origPoint = QPoint(x, y);
-    setWidth(width);
-    setHeight(height);
+    Meter::setSize(x, y, width, height);
 
     calculateTextSize();
 }
