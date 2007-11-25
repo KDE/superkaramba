@@ -118,11 +118,11 @@ void TextLabel::calculateTextSize()
         ++it;
     }
 
-    if (getWidth() <= 0) {
+    if ((getWidth() <= 0) || !m_sizeGiven) {
         setWidth(textSize.width());
     }
 
-    if (getHeight() <= 0) {
+    if ((getHeight() <= 0) || !m_sizeGiven) {
         setHeight(textSize.height());
     }
 
@@ -354,8 +354,8 @@ void TextLabel::paint(QPainter *p, const QStyleOptionGraphicsItem *option,
     if (!m_hidden) {
         int i = 0; // lineHeight;
         int row = 1;
-        int width = getWidth();
-        int height = getHeight();
+        int width = Meter::getWidth();
+        int height = Meter::getHeight();
         QRect meterRect(0, 0, width, height);
         QRect textRect;
         QPoint next;
@@ -453,9 +453,44 @@ int TextLabel::getTextWidth() const
     return fm.width(value[0]);
 }
 
+int TextLabel::getX() const
+{
+    return origPoint.x();
+}
+
+int TextLabel::getY() const
+{
+    return origPoint.y();
+}
+
+int TextLabel::getWidth() const
+{
+    if (!m_sizeGiven) {
+        return -1;
+    } else {
+        return Meter::getWidth();
+    }
+}
+
+int TextLabel::getHeight() const
+{
+    if (!m_sizeGiven) {
+        return -1;
+    } else {
+        return Meter::getHeight();
+    }
+}
+
 void TextLabel::setSize(int x, int y, int width, int height)
 {
     origPoint = QPoint(x, y);
+
+    if (height <= 0 || width <= 0) {
+        m_sizeGiven = false;
+    } else {
+        m_sizeGiven = true;
+    }
+
     Meter::setSize(x, y, width, height);
 
     calculateTextSize();

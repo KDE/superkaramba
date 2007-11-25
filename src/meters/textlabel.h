@@ -69,6 +69,12 @@ public:
     int getTextWidth() const;
     void setSize(int x, int y, int width, int height);
 
+    int getX() const;
+    int getY() const;
+
+    int getWidth() const;
+    int getHeight() const;
+
 private:
     int alignment;
     int clip;
