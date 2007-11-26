@@ -1979,6 +1979,10 @@ void Karamba::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
         if (Input *input = dynamic_cast<Input*>(item)) {
             input->mouseEventMove(event);
         }
+
+        if (ImageLabel *image = dynamic_cast<ImageLabel*>(item)) {
+            image->rolloverImage(event);
+        }
     }
 
 #ifdef PYTHON_INCLUDE_PATH

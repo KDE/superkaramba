@@ -516,7 +516,7 @@ void ImageLabel::setBackground(int b)
     background = b;
 }
 
-void ImageLabel::rolloverImage(QMouseEvent *e)
+void ImageLabel::rolloverImage(QGraphicsSceneHoverEvent *e)
 {
     if (!rollover)
         return;
@@ -524,7 +524,7 @@ void ImageLabel::rolloverImage(QMouseEvent *e)
     prepareGeometryChange();
 
     if (zoomed) {
-        if (!rect_off.contains(e->pos())) {
+        if (!rect_off.contains(e->pos().toPoint())) {
             // rollover the image to the zoomed image
             //setValue(fn_roll);
             setX(xoff);
@@ -535,7 +535,7 @@ void ImageLabel::rolloverImage(QMouseEvent *e)
             zoomed = false;
         }
     } else {
-        if (rect_off.contains(e->pos())) {
+        if (rect_off.contains(e->pos().toPoint())) {
             // rollover the image to the zoomed image
             //setValue(fn_roll);
             setX(xon);

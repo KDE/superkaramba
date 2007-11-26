@@ -130,7 +130,7 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                QWidget *widget);
 
-    void rolloverImage(QMouseEvent *e);
+    void rolloverImage(QGraphicsSceneHoverEvent *e);
     void parseImages(const QString &fn, const QString &fn_roll, int, int, int, int);
     virtual void show();
     virtual void hide();
