@@ -121,7 +121,7 @@ void ThemesDlg::populateListbox()
     tableThemes->insertItem((QWidget*)(item));
 
     item = new ThemeWidget;
-    item->iconLabel->setPixmap(KIconLoader::global()->loadIcon("ksysguard",
+    item->iconLabel->setPixmap(KIconLoader::global()->loadIcon("document-open",
                                KIconLoader::NoGroup, KIconLoader::SizeHuge));
     item->setHeaderText(i18n("Open Local Theme"));
     item->setDescriptionText(i18n("Add local theme to the list."));
