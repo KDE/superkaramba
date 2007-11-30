@@ -472,6 +472,8 @@ void Karamba::startKaramba()
         return;
     }
 
+    KarambaManager::self()->addKaramba(this);
+
     if (d->theme.scriptModuleExists()) {
         kDebug() << "Loading script module: " << d->theme.scriptModule() ;
 
@@ -480,8 +482,6 @@ void Karamba::startKaramba()
         if (!d->useKross) {
 #ifdef PYTHON_INCLUDE_PATH
             d->python = new KarambaPython(d->theme, false);
-
-            KarambaManager::self()->addKaramba(this);
 
             d->python->initWidget(this);
 #endif
@@ -493,8 +493,6 @@ void Karamba::startKaramba()
                 delete d->interface;
                 d->interface = 0;
             } else {
-                KarambaManager::self()->addKaramba(this);
-
                 d->interface->startInterpreter();
                 d->interface->callInitWidget(this);
             }
@@ -1979,7 +1977,9 @@ void Karamba::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
         if (Input *input = dynamic_cast<Input*>(item)) {
             input->mouseEventMove(event);
         }
+    }
 
+    foreach (QGraphicsItem *item, QGraphicsItemGroup::children()) {
         if (ImageLabel *image = dynamic_cast<ImageLabel*>(item)) {
             image->rolloverImage(event);
         }
