@@ -50,6 +50,7 @@ class SuperKarambaApplet::Private : public QObject
         KUrl themePath;
         bool locked;
         QList<QAction*> contextActions;
+        QVariantList args;
 
         explicit Private(SuperKarambaApplet* a) : applet(a), appletadaptor(0), themeItem(0), locked(false) {}
         ~Private() { delete appletadaptor; delete themeItem; }
@@ -120,13 +121,20 @@ SuperKarambaApplet::SuperKarambaApplet(QObject *parent, const QVariantList &args
     kDebug() << "========================> SuperKarambaApplet Ctor" << args ;
     setHasConfigurationInterface(true);
 
-    if (args.count() < 3) {
+    d->args = args;
+}
+
+void SuperKarambaApplet::init()
+{
+    if (d->args.count() < 3) {
         KConfigGroup cg = config();
         d->themePath = cg.readEntry("theme", KUrl());
         d->locked = cg.readEntry("locked", true);
     } else {
-        d->themePath = args[2].toString();
+        d->themePath = d->args[2].toString();
     }
+
+    setDrawStandardBackground(false);
 
     if( !d->themePath.isValid() ) {
         KFileDialog* filedialog = new KFileDialog(

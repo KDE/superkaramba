@@ -39,6 +39,8 @@ class SuperKarambaApplet : public Plasma::Applet
         SuperKarambaApplet(QObject *parent, const QVariantList &args);
         virtual ~SuperKarambaApplet();
 
+        void init();
+
         Karamba* karamba() const;
 
         QRectF boundingRect() const;
