@@ -48,11 +48,10 @@ class SuperKarambaApplet::Private : public QObject
         QPointer<Skip::AppletAdaptor> appletadaptor;
         QPointer<Karamba> themeItem;
         KUrl themePath;
-        bool locked;
         QList<QAction*> contextActions;
         QVariantList args;
 
-        explicit Private(SuperKarambaApplet* a) : applet(a), appletadaptor(0), themeItem(0), locked(false) {}
+        explicit Private(SuperKarambaApplet* a) : applet(a), appletadaptor(0), themeItem(0) {}
         ~Private() { delete appletadaptor; delete themeItem; }
 
         void initTheme()
@@ -72,9 +71,10 @@ class SuperKarambaApplet::Private : public QObject
             view->viewport()->installEventFilter(this);
 
             if( KToggleAction* lockedAction = themeItem->findChild<KToggleAction*>("lockedAction") ) {
-                lockedAction->setChecked(locked);
-                connect(lockedAction, SIGNAL(toggled(bool)), applet, SLOT(lockedActionToggled(bool)));
-                contextActions.append(lockedAction);
+                // disable locked action since Plasma will handle it for us.
+                if( ! lockedAction->isChecked() )
+                    lockedAction->setChecked(true);
+                lockedAction->setVisible(false);
             }
 
             if( QAction* configAction = themeItem->findChild<QAction*>("configureTheme") ) {
@@ -129,7 +129,6 @@ void SuperKarambaApplet::init()
     if (d->args.count() < 3) {
         KConfigGroup cg = config();
         d->themePath = cg.readEntry("theme", KUrl());
-        d->locked = cg.readEntry("locked", true);
     } else {
         d->themePath = d->args[2].toString();
     }
@@ -164,7 +163,6 @@ SuperKarambaApplet::~SuperKarambaApplet()
     //watchForFocus(d, false);
     KConfigGroup cg = config();
     cg.writeEntry("theme", d->themePath);
-    cg.writeEntry("locked", d->locked);
 
     delete d;
 }
@@ -206,7 +204,6 @@ void SuperKarambaApplet::configAccepted()
     kDebug() << "SuperKarambaApplet::configAccepted" ;
     KConfigGroup cg = config();
     cg.writeEntry("theme", d->themePath);
-    cg.writeEntry("locked", d->locked);
     QGraphicsItem::update();
     constraintsUpdated(Plasma::AllConstraints);
     cg.config()->sync();
@@ -253,12 +250,6 @@ void SuperKarambaApplet::loadFailed()
     d->themePath = KUrl();
     scene()->removeItem(this);
     deleteLater();
-}
-
-void SuperKarambaApplet::lockedActionToggled(bool toggled)
-{
-    d->locked = toggled;
-    configAccepted();
 }
 
 QList<QAction*> SuperKarambaApplet::contextActions()

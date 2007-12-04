@@ -56,7 +56,6 @@ class SuperKarambaApplet : public Plasma::Applet
         void loadFailed();
         void karambaStarted(QGraphicsItemGroup*);
         void karambaClosed(QGraphicsItemGroup*);
-        void lockedActionToggled(bool);
 
     private:
         /// \internal d-pointer class.
