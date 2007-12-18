@@ -1,7 +1,7 @@
 PROJECT(superkaramba)
 
 macro_optional_find_package(PythonLibs)
-macro_optional_find_package(Plasma)
+find_package(Plasma)
 
 if(PYTHON_LIBRARIES AND PYTHON_INCLUDE_PATH)
   SET(COMPILE_SUPERKARAMBA_WITH_PYTHON ON)
