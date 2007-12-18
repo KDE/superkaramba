@@ -4,9 +4,9 @@ macro_optional_find_package(PythonLibs)
 find_package(Plasma)
 
 if(PYTHON_LIBRARIES AND PYTHON_INCLUDE_PATH)
-  SET(COMPILE_SUPERKARAMBA_WITH_PYTHON ON)
+  SET(PYTHONLIBS_FOUND ON)
 endif(PYTHON_LIBRARIES AND PYTHON_INCLUDE_PATH)
-macro_log_feature(COMPILE_SUPERKARAMBA_WITH_PYTHON "Python Libraries" "The Python library is required to build the legacy SuperKaramba bindings for Python" "http://www.python.org")
+macro_log_feature(PYTHONLIBS_FOUND "Python Libraries" "The Python library is required to build the legacy SuperKaramba bindings for Python" "http://www.python.org")
 
 INCLUDE_DIRECTORIES(
   ${CMAKE_CURRENT_SOURCE_DIR}
@@ -15,9 +15,9 @@ INCLUDE_DIRECTORIES(
   ${KDE4_INCLUDE_DIR}
 )
 
-if(COMPILE_SUPERKARAMBA_WITH_PYTHON)
+if(PYTHONLIBS_FOUND)
   INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_PATH})
-endif(COMPILE_SUPERKARAMBA_WITH_PYTHON)
+endif(PYTHONLIBS_FOUND)
 
 ADD_SUBDIRECTORY( src )
 ADD_SUBDIRECTORY( icons )
