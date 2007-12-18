@@ -1,8 +1,3 @@
-#project(plasma-skapplet)
-#find_package(KDE4 REQUIRED)
-#find_package(Plasma REQUIRED)
-#include(KDE4Defaults)
-
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/superkaramba/src

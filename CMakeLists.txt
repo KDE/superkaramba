@@ -1,6 +1,5 @@
 PROJECT(superkaramba)
 
-#FIND_PACKAGE(XMMS REQUIRED)
 macro_optional_find_package(PythonLibs)
 macro_optional_find_package(Plasma)
 
