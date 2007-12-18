@@ -51,8 +51,8 @@ sensors/rss.cpp
 ${PLASMASENSOR_SRC}
 )
 
-#COMPILE_SUPERKARAMBA_WITH_PYTHON is set by upper-level CMakeLists.txt
-if(COMPILE_SUPERKARAMBA_WITH_PYTHON)
+#PYTHONLIBS_FOUND is set by upper-level CMakeLists.txt
+if(PYTHONLIBS_FOUND)
 LIST(APPEND superkaramba_LIB_SRCS
   python/karamba.cpp
   python/meter.cpp
@@ -70,7 +70,7 @@ LIST(APPEND superkaramba_LIB_SRCS
   python/task.cpp
   python/config.cpp
 )
-endif(COMPILE_SUPERKARAMBA_WITH_PYTHON)
+endif(PYTHONLIBS_FOUND)
 
 KDE4_ADD_KCFG_FILES(superkaramba_LIB_SRCS
   superkarambasettings.kcfgc
@@ -92,12 +92,12 @@ ${PLASMASENSOR_LIB}
 ${BLITZ_LIBRARIES}
 )
 
-if(COMPILE_SUPERKARAMBA_WITH_PYTHON)
+if(PYTHONLIBS_FOUND)
 TARGET_LINK_LIBRARIES(superkaramba
 ${PYTHON_LIBRARIES}
 ${BLITZ_LIBRARIES}
 )
-endif(COMPILE_SUPERKARAMBA_WITH_PYTHON)
+endif(PYTHONLIBS_FOUND)
 
 IF(CMAKE_SYSTEM MATCHES "FreeBSD.*")
   TARGET_LINK_LIBRARIES(superkaramba
