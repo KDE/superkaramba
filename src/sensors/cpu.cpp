@@ -164,11 +164,11 @@ void CPUSensor::update()
 
         index = format.indexOf("%system", 0, Qt::CaseInsensitive);
         if (index != -1)
-            format.replace(index, 7, QString::number(idle));
+            format.replace(index, 7, QString::number(system));
 
-        index = format.indexOf("%load", 0, Qt::CaseInsensitive);
+        index = format.indexOf("%idle", 0, Qt::CaseInsensitive);
         if (index != -1)
-            format.replace(index, 5, QString::number(system));
+          format.replace(index, 5, QString::number(idle));
 
         meter->setValue(format);
     }
