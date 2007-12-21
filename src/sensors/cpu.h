@@ -34,6 +34,7 @@ private:
     int system;
     int nice;
     int idle;
+    int suload;
 
     void getTicks(long &u, long &s, long &n, long &i);
     QString cpuNbr;

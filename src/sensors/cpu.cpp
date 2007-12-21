@@ -116,6 +116,7 @@ int CPUSensor::getCPULoad()
     idle = (totalTicks == 0) ? 0 : (int)(100.0 * (iTicks - idleTicks) / (totalTicks + 0.001) + 0.5);
     system = (totalTicks == 0) ? 0 : (int)(100.0 * (sTicks - sysTicks) / (totalTicks + 0.001) + 0.5);
     nice = (totalTicks == 0) ? 0 : (int)(100.0 * (nTicks - niceTicks) / (totalTicks + 0.001) + 0.5);
+    suload = (totalTicks == 0) ? 0 : (int)(100.0 * ((uTicks + sTicks) - (userTicks + sysTicks)) / (totalTicks+0.001) + 0.5);
 
     userTicks = uTicks;
     sysTicks = sTicks;
@@ -169,6 +170,10 @@ void CPUSensor::update()
         index = format.indexOf("%idle", 0, Qt::CaseInsensitive);
         if (index != -1)
           format.replace(index, 5, QString::number(idle));
+
+        index = format.indexOf("%suload", 0, Qt::CaseInsensitive);
+        if (index != -1)
+          format.replace(index, 7, QString::number(suload));
 
         meter->setValue(format);
     }
