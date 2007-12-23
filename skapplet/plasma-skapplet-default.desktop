@@ -39,6 +39,7 @@ X-KDE-PluginInfo-Name=skapplet
 X-KDE-PluginInfo-Version=0.1
 X-KDE-PluginInfo-Website=
 X-KDE-PluginInfo-Category=SuperKaramba
+X-KDE-PluginInfo-Category[x-test]=xxSuperKarambaxx
 X-KDE-PluginInfo-Depends=
 X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-EnabledByDefault=true
