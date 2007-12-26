@@ -1409,10 +1409,6 @@ void Karamba::reloadConfig()
     else
         k = new Karamba(d->theme.getUrlPath(), 0, -1, false, QPoint(), true);
 
-    if (k != 0) {
-        KarambaManager::self()->addKaramba(k);
-    }
-
     closeWidget();
 }
 
