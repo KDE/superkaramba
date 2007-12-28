@@ -27,7 +27,7 @@ private:
     QString extraParams;
 
     QMap<QString, QString> sensorMap;
-#ifdef __FreeBSD__
+#if defined(__FreeBSD__) || defined(Q_OS_NETBSD)
     QMap<QString, QString> sensorMapBSD;
 #endif
     QString sensorResult;
