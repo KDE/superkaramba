@@ -9,13 +9,8 @@ All the info for programmers is in examples/api.html.
 TO COMPILE:
 ----------
 
-Optional:  
-
-make -f Makefile.cvs
-
 Required:
-
-./configure
+cmake . 
 make
 make install
 
