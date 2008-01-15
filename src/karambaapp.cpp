@@ -239,8 +239,13 @@ void KarambaApplication::showThemesDialog(QSystemTrayIcon::ActivationReason reas
 {
     if (reason == QSystemTrayIcon::Context)
         m_sysTrayIcon->show();
-    else
+    else {
+      if (m_themesDialog->isVisible()) {
+        m_themesDialog->hide();
+      } else {
         m_themesDialog->show();
+      }
+    }
 }
 
 void KarambaApplication::setupSysTray(KAboutData* about)
