@@ -16,11 +16,13 @@
 #include <K3ProcIO>
 #include <QTextCodec>
 
+class Karamba;
+
 class ProgramSensor :  public Sensor
 {
     Q_OBJECT
 public:
-    explicit ProgramSensor(const QString &programName, int msec = 1000, const QString &encoding = QString());
+    explicit ProgramSensor(Karamba* k, const QString &programName, int msec = 1000, const QString &encoding = QString());
     ~ProgramSensor();
     void update();
 
@@ -29,6 +31,7 @@ private:
     K3ShellProcess ksp;
     QString programName;
     QString sensorResult;
+    Karamba* m_karamba;
 
     void replaceLine(QString& format, const QString& line);
     void replaceArgs(QRegExp& regEx, QString& format, const QStringList& tokens);

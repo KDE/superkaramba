@@ -207,6 +207,10 @@ bool ThemeFile::nextLine(LineParser& parser)
 
     if (d->stream) {
         QString result = d->stream->readLine();
+        while ( result.endsWith("\\") ) {
+            result.chop(1); // remove continuation directive
+            result += d->stream->readLine();
+        }
 
         if (result.isNull())
             return false;

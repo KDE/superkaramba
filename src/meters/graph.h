@@ -26,18 +26,37 @@ public:
     ~Graph();
 
     void setValue(int);
-    int getValue() const
-    {
-        return lastValue;
-    }
+    int getValue() const;
     void setValue(const QString&);
+    QColor getFillColor() const;
+    void setFillColor(QColor);
+    void setScrollDirection(const QString&);
+    QString getScrollDirection() const;
+    void setPlotDirection(const QString&);
+    QString getPlotDirection() const;
+    bool shouldFill() const;
+    void shouldFill(bool b);
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                QWidget *widget);
-
 private:
+
+    enum SCROLL_DIR {
+        SCROLL_LEFT = -1,
+        SCROLL_RIGHT = 1
+    };
+
+    enum PLOT_DIR {
+        PLOT_DOWN = -1,
+        PLOT_UP = 1
+    };
+
     int nbrPoints;
     int lastValue;
 
+    bool fill;
+    SCROLL_DIR scrollDir;
+    PLOT_DIR plotDir;
+    QColor fillColor;
     QVector<int> m_values;
 };
 

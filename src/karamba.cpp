@@ -341,7 +341,7 @@ Karamba::Karamba(const KUrl &themeFile, QGraphicsView *view, int instance, bool 
     connect(d->KWinModule, SIGNAL(currentDesktopChanged(int)), this,
             SLOT(currentDesktopChanged(int)));
 //TODO port it
-    
+
 #if 0
     d->backgroundInterface = new org::kde::kdesktop::Background("org.kde.kdesktop", "/Background", QDBusConnection::sessionBus());
     connect(d->backgroundInterface, SIGNAL(backgroundChanged(int)), this,
@@ -558,6 +558,8 @@ bool Karamba::parseConfig()
             y = lineParser.getInt("Y") + offsetStack.top().y();
             w = lineParser.getInt("W");
             h = lineParser.getInt("H");
+
+            bool hidden = lineParser.getBoolean("HIDDEN");
 
             if (lineParser.meter() == "KARAMBA" && !d->foundKaramba) {
                 d->toggleLocked->setChecked(lineParser.getBoolean("LOCKED"));
@@ -782,6 +784,8 @@ bool Karamba::parseConfig()
 
                 if (!tiptext.isEmpty())
                     tmp->setTooltip(tiptext);
+                if ( hidden )
+                    tmp->hide();
 
                 setSensor(lineParser, (Meter*)tmp);
             }
@@ -839,6 +843,9 @@ bool Karamba::parseConfig()
                     if (!name.isEmpty())
                         tmp->setObjectName(name);
 
+                    if ( hidden )
+                        tmp->hide();
+
                     setSensor(lineParser, (Meter*)tmp);
                 }
 
@@ -871,6 +878,9 @@ bool Karamba::parseConfig()
                     QString name = lineParser.getString("NAME");
                     if (!name.isEmpty())
                         tmp->setObjectName(name);
+
+                    if ( hidden )
+                        tmp->hide();
 
                     setSensor(lineParser, (Meter*)tmp);
                     //clickList->append(tmp);
@@ -908,6 +918,9 @@ bool Karamba::parseConfig()
                 if (!name.isEmpty())
                     tmp->setObjectName(name);
 
+                if ( hidden )
+                    tmp->hide();
+
                 setSensor(lineParser, (Meter*)tmp);
                 //meterList->append(tmp);
             }
@@ -922,7 +935,16 @@ bool Karamba::parseConfig()
                 if (!name.isEmpty())
                     tmp->setObjectName(name);
 
+                tmp->setPlotDirection(lineParser.getString("PLOT"));
+                tmp->setScrollDirection(lineParser.getString("SCROLL"));
                 tmp->setColor(lineParser.getColor("COLOR"));
+
+                QString fillString = lineParser.getString("FILLCOLOR");
+                if ( ! fillString.isEmpty() )
+                  tmp->setFillColor(lineParser.getColor("FILLCOLOR"));
+
+                if ( hidden )
+                    tmp->hide();
 
                 setSensor(lineParser, (Graph*)tmp);
                 //meterList->append(tmp);
@@ -1260,7 +1282,7 @@ void Karamba::setSensor(const LineParser& lineParser, Meter* meter)
 
             QString prog = lineParser.getString("PROGRAM");
             sensor = (d->sensorMap["PROGRAM"+progName] =
-                          new ProgramSensor(prog, interval, encoding));
+                          new ProgramSensor(this, prog, interval, encoding));
             d->sensorList.append(sensor);
         }
 
@@ -2233,3 +2255,56 @@ QObject* Karamba::getPlasmaSensor(const QString& engine, const QString& source)
 #endif
 }
 
+QString Karamba::getMeterValue(const QString& name)
+{
+  if ( ! name.isNull() ) {
+    Meter* meter = (Meter*) getMeter(name);
+    if(meter != 0) {
+      QString retVal = meter->getStringValue();
+      if( retVal.isEmpty() ) {
+        int intVal = meter->getValue();
+        // if intVal > minimum, consider it a valid value
+        if ( intVal >= meter->getMin() ) {
+          retVal = QString::number(intVal);
+        }
+      }
+      return retVal;
+    }
+  }
+  return QString("");
+}
+
+void Karamba::replaceNamedValues(QString* source)
+{
+  //kDebug() << "%named replacement before:'" + *source + "'";
+  QRegExp rx ("%named:(\\w+)", Qt::CaseInsensitive);
+  int pos = 0;
+  while ( pos >= 0 ) {
+    pos = rx.indexIn(*source, pos);
+    if ( pos >= 0 ) {
+      QString namedReplacement = rx.cap(1);
+      if( !namedReplacement.isEmpty() ) {
+        QString replacementValue = getMeterValue(namedReplacement);
+        if( replacementValue.isNull()) {
+          replacementValue = QString("");
+        }
+        source->replace(QRegExp("%named:" + namedReplacement, Qt::CaseInsensitive), replacementValue);
+      }
+    }
+  }
+  //kDebug() << "%named replacement  after:'" + *source + "'";
+}
+
+Meter* Karamba::getMeter(const QString& name)
+{
+  //meterList...how I miss thee
+  QList<QGraphicsItem*> items = QGraphicsItemGroup::children();
+  foreach (QGraphicsItem *item, items) {
+    if (Meter* meter = dynamic_cast<Meter*>(item)) {
+      if(name == meter->objectName()){
+        return (Meter*) meter;
+      }
+    }
+  }
+  return 0;
+}

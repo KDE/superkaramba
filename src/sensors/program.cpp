@@ -9,10 +9,12 @@
  ***************************************************************************/
 
 #include "program.h"
+#include "karamba.h"
 
 
-ProgramSensor::ProgramSensor(const QString &progName, int interval, const QString &encoding)
-        : Sensor(interval)
+ProgramSensor::ProgramSensor(Karamba* k, const QString &progName, int interval, const QString &encoding)
+        : Sensor(interval),
+        m_karamba(k)
 {
     if (!encoding.isEmpty()) {
         codec = QTextCodec::codecForName(encoding.toAscii().constData());
@@ -76,7 +78,7 @@ void ProgramSensor::processExited(K3Process *)
     QVector<QString> lines;
     QStringList stringList = sensorResult.split('\n');
     QStringList::ConstIterator end(stringList.end());
-   for (QStringList::ConstIterator it = stringList.begin(); it != end; ++it) {
+    for (QStringList::ConstIterator it = stringList.begin(); it != end; ++it) {
         lines.push_back(*it);
     }
 
@@ -102,10 +104,13 @@ void ProgramSensor::processExited(K3Process *)
                 QString returnValue;
                 QStringList lineList = value.split('\n');
                 QStringList::ConstIterator lineListEnd(lineList.end());
-                for (QStringList::ConstIterator line = lineList.begin(); line != lineListEnd; ++line, returnValue += '\n') {
+                for (QStringList::ConstIterator line = lineList.begin(); line != lineListEnd; ++line) {
                     QString formatCopy = format;
                     replaceLine(formatCopy, *line);
                     returnValue += formatCopy;
+                    if ( lineList.size() > 1) {
+                      returnValue += '\n';
+                    }
                 }
                 value = returnValue;
             }
@@ -119,10 +124,17 @@ void ProgramSensor::processExited(K3Process *)
 
 void ProgramSensor::update()
 {
-    ksp.clearArguments();
-    ksp << programName;
+    QString prog = programName;
+    m_karamba->replaceNamedValues(&prog);
+    if ( prog.isEmpty() || prog.startsWith("%echo ")) {
+        sensorResult += prog.mid(6);
+        processExited(NULL);
+    } else {
+        ksp.clearArguments();
+        ksp << prog;
 
-    ksp.start(K3ProcIO::NotifyOnExit, K3ProcIO::Stdout);
+        ksp.start(K3ProcIO::NotifyOnExit, K3ProcIO::Stdout);
+    }
 }
 
 #include "program.moc"

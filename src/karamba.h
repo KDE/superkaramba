@@ -135,6 +135,10 @@ public:
 
     QObject* getPlasmaSensor(const QString& engine, const QString& source = QString());
 
+    void replaceNamedValues(QString* source);
+    QString getMeterValue(const QString& name);
+    Meter* getMeter(const QString& name);
+
 public Q_SLOTS:
     void updateSensors();
     void closeWidget();

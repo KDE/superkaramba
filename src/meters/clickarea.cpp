@@ -11,6 +11,7 @@
  ***************************************************************************/
 
 #include "clickarea.h"
+#include "karamba.h"
 
 #include <QMouseEvent>
 #include <QCursor>
@@ -43,6 +44,7 @@ bool ClickArea::mouseEvent(QEvent *e)
         QString program;
         program = onClick;
         program.replace(QRegExp("%v", Qt::CaseInsensitive), value);
+        m_karamba->replaceNamedValues(&program);
 
         if (!program.isEmpty()) {
             //qDebug(program);
