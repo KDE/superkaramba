@@ -1,0 +1,52 @@
+karamba x=100 y=10 w=110 h=240 interval=1000 locked=true
+defaultfont font="bitstream vera sans" fontsize=14 color=255,255,255 bgcolor=20,20,20
+
+image path=background.png
+
+<group> x=5 y=5
+   text x=0 y=0 \
+   	shadow=1\
+	value="scroll left"
+   text x=100 y=0 \
+  	align=right shadow=1\
+   	name="leftValue"
+   graph x=0 y=20 w=100 h=30 name=graphLeft \
+   	 points=100 scroll=left \
+	 color=0,255,255
+</group>
+
+<group> x=5 y=60
+   text x=0 y=0 \
+   	shadow=1\
+	value="plot down"
+   text x=100 y=0 \
+  	align=right shadow=1\
+   	name="downValue"
+   graph x=0 y=20 w=100 h=30 name=graphDown \
+   	 points=100 plot=down \
+	 color=0,255,255
+</group>
+
+<group> x=5 y=120
+   text x=0 y=0 \
+   	shadow=1\
+   	value="filled" 
+   text x=100 y=0 \
+  	align=right shadow=1\
+   	name="filledValue" 
+   graph x=0 y=20 w=100 h=30 name=graphFilled \
+   	 points=100 \
+	 color=0,255,255 fillcolor=0,150,255,100
+</group>
+
+<group> x=5 y=180
+   text x=0 y=0 \
+   	shadow=1\
+   	value="min < 0" 
+   text x=100 y=0 \
+  	align=right shadow=1\
+   	name="minValue" 
+   graph x=0 y=20 w=100 h=30 name=graphMin \
+   	 points=100 min=-50 max=50\
+	 color=0,255,255 fillcolor=0,150,255,100
+</group>
