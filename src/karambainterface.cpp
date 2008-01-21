@@ -1229,9 +1229,193 @@ QVariantList KarambaInterface::getGraphColor(const Karamba *k, const Graph *grap
     return getMeterColor(k, graph, "Graph");
 }
 
+/** Graph/setGraphFillColor
+ *
+ * SYNOPSIS
+ *   boolean setGraphFillColor(widget, graph, red, green, blue, alpha=255)
+ * DESCRIPTION
+ *   Sets current graph fill color.
+ * ARGUMENTS
+ *   * reference to widget -- karamba
+ *   * reference to graph -- pointer to graph
+ *   * integer red -- red component of color
+ *   * integer green -- green component of color
+ *   * integer blue -- blue component of color
+ *   * integer alpha -- alpha component of color (optional)
+ * RETURN VALUE
+ *   true if successful
+ */
+bool KarambaInterface::setGraphFillColor(const Karamba *k, Graph *graph, int red, int green, int blue, int alpha)
+    const
+{
+  if (!checkKarambaAndMeter(k, graph, "Graph")) {
+    return false;
+  }
 
+  graph->setFillColor(QColor(red, green, blue, alpha));
+  return true;
+}
 
+/** Graph/getGraphFillColor
+ *
+ * SYNOPSIS
+ *   array getGraphFillColor(widget, graph)
+ * DESCRIPTION
+ *   Gets the current graph fill color components.
+ * ARGUMENTS
+ *   * reference to widget -- karamba
+ *   * reference to graph -- graph
+ * RETURN VALUE
+ *   (red, green, blue, alpha)
+ */
+QVariantList KarambaInterface::getGraphFillColor(const Karamba *k, const Graph *graph) const
+{
+     if (!checkKarambaAndMeter(k, graph, "Graph")) {
+        return QVariantList();
+      }
 
+      QColor color = graph->getFillColor();
+
+      QVariantList ret;
+      ret << color.red();
+      ret << color.green();
+      ret << color.blue();
+      ret << color.alpha();
+
+      return ret;
+}
+
+/** Graph/getGraphScroll
+ *
+ * SYNOPSIS
+ *   QString getGraphScroll(widget, graph)
+ * DESCRIPTION
+ *   get string description of the scroll direction
+ * ARGUMENTS
+ *   * reference to widget -- karamba
+ *   * reference to graph -- graph
+ * RETURN VALUE
+ *   QString "left" or "right"
+ */
+QString KarambaInterface::getGraphScroll(const Karamba *k, const Graph *graph) const
+{
+  if (!checkKarambaAndMeter(k, graph, "Graph")) {
+    return QString();
+  }
+
+  return graph->getScrollDirection();
+}
+
+/** Graph/getGraphScroll
+ *
+ * SYNOPSIS
+ *   bool getGraphScroll(widget, graph)
+ * DESCRIPTION
+ *   get string description of the scroll direction of 'left' or 'right'
+ * ARGUMENTS
+ *   * reference to widget -- karamba
+ *   * reference to graph -- graph
+ *   * reference to new scroll value -- scroll
+ * RETURN VALUE
+ *   bool to indicate success
+ */
+bool KarambaInterface::setGraphScroll(const Karamba *k, Graph *graph, const QString &scroll) const
+{
+  if (!checkKarambaAndMeter(k, graph, "Graph")) {
+    return false;
+  }
+
+  graph->setScrollDirection(scroll);
+  return true;
+}
+
+/** Graph/getGraphPlot
+ *
+ * SYNOPSIS
+ *   QString getGraphPlot(widget, graph)
+ * DESCRIPTION
+ *   get string description of the plot direction
+ * ARGUMENTS
+ *   * reference to widget -- karamba
+ *   * reference to graph -- graph
+ * RETURN VALUE
+ *   QString "up" or "down"
+ */
+QString KarambaInterface::getGraphPlot(const Karamba *k, const Graph *graph) const
+{
+  if (!checkKarambaAndMeter(k, graph, "Graph")) {
+    return QString();
+  }
+
+  return graph->getPlotDirection();
+}
+
+/** Graph/setGraphPlot
+ *
+ * SYNOPSIS
+ *   bool setGraphPlot(widget, graph, plot)
+ * DESCRIPTION
+ *   sets the direction that the graph plots positive numbers to be 'up' or 'down'
+ * ARGUMENTS
+ *   * reference to widget -- karamba
+ *   * reference to graph -- graph
+ *   * reference to new plot direction value -- plot
+ * RETURN VALUE
+ *   bool to indicate success
+ */
+bool KarambaInterface::setGraphPlot(const Karamba *k, Graph *graph, const QString &plot) const
+{
+  if (!checkKarambaAndMeter(k, graph, "Graph")) {
+    return false;
+  }
+
+  graph->setPlotDirection(plot);
+  return true;
+}
+
+/** Graph/getGraphShouldFill
+ *
+ * SYNOPSIS
+ *   QString getGraphShouldFill(widget, graph)
+ * DESCRIPTION
+ *   get bool describing whether or not the graph will draw itself filled
+ * ARGUMENTS
+ *   * reference to widget -- karamba
+ *   * reference to graph -- graph
+ * RETURN VALUE
+ *   bool true if graph should draw itself filled
+ */
+bool KarambaInterface::getGraphShouldFill(const Karamba *k, const Graph *graph) const
+{
+  if (!checkKarambaAndMeter(k, graph, "Graph")) {
+    return false;
+  }
+
+  return graph->shouldFill();
+}
+
+/** Graph/setGraphShouldFill
+ *
+ * SYNOPSIS
+ *   bool setGraphShouldFill(widget, graph, shouldFill)
+ * DESCRIPTION
+ *   set whether or not the graph should draw itself filled
+ * ARGUMENTS
+ *   * reference to widget -- karamba
+ *   * reference to graph -- graph
+ *   * bool to dictate fill -- shouldFill
+ * RETURN VALUE
+ *   bool to indicate success
+ */
+bool KarambaInterface::setGraphShouldFill(const Karamba *k, Graph *graph, bool shouldFill) const
+{
+  if (!checkKarambaAndMeter(k, graph, "Graph")) {
+    return false;
+  }
+
+  graph->shouldFill(shouldFill);
+  return true;
+}
 
 /** Image/createImage
 *
@@ -4832,7 +5016,7 @@ QVariantList KarambaInterface::getStartupList(const Karamba *k) const
 * SYNOPSIS
 *   list getTaskInfo(widget, task)
 * DESCRIPTION
-*   This returns all of the info about a certain task in the form of a 
+*   This returns all of the info about a certain task in the form of a
 *   list. widget is a reference to the current widget. Task is a reference to
 *   the window you want info about which you obtain by calling getTaskList().
 * ARGUMENTS

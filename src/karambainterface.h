@@ -175,6 +175,14 @@ public Q_SLOTS:
     bool showGraph(const Karamba *k, Graph *graph) const;
     bool setGraphColor(const Karamba *k, Graph *graph, int red, int green, int blue, int alpha=255) const;
     QVariantList getGraphColor(const Karamba *k, const Graph *graph) const;
+    bool setGraphFillColor(const Karamba *k, Graph *graph, int red, int green, int blue, int alpha=255) const;
+    QVariantList getGraphFillColor(const Karamba *k, const Graph *graph) const;
+    QString getGraphScroll(const Karamba *k, const Graph *graph) const;
+    bool setGraphScroll(const Karamba *k, Graph *graph, const QString &scroll) const;
+    QString getGraphPlot(const Karamba *k, const Graph *graph) const;
+    bool setGraphPlot(const Karamba *k, Graph *graph, const QString &plot) const;
+    bool getGraphShouldFill(const Karamba *k, const Graph *graph) const;
+    bool setGraphShouldFill(const Karamba *k, Graph *graph, bool shouldFill) const;
 
     // ImageLabel
     QObject* createImage(Karamba* k, int x, int y, const QString &image) const;
