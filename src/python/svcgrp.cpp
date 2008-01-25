@@ -13,7 +13,7 @@
  *   (at your option) any later version.                                   *
  ***************************************************************************/
 
-#ifdef _XOPEN_SOURCE
+#if defined(_XOPEN_SOURCE) && !defined(__SUNPRO_CC)
 #undef _XOPEN_SOURCE
 #endif
 

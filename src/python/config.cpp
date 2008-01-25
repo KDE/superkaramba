@@ -22,7 +22,7 @@
 *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 ****************************************************************************/
 
-#ifdef _XOPEN_SOURCE
+#if defined(_XOPEN_SOURCE) && !defined(__SUNPRO_CC)
 #undef _XOPEN_SOURCE
 #endif
 
