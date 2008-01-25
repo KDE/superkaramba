@@ -15,14 +15,16 @@
 #include <QDateTime>
 #include <QFile>
 
-#ifdef __FreeBSD__
+#ifdef Q_OS_FREEBSD
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <net/if.h>
 #include <net/if_mib.h>
 #endif
 
+#ifndef Q_OS_SOLARIS
 #include <ifaddrs.h>
+#endif
 #include <stdio.h>
 #include <netdb.h>
 
