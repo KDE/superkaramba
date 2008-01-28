@@ -639,6 +639,10 @@ PyObject* py_hide(PyObject *, PyObject *args)
 #ifdef __FreeBSD__
 #include <netinet/in.h>
 #endif
+#ifdef __OpenBSD__
+#include <sys/types.h>
+#include <netinet/in.h>
+#endif
 #if defined(Q_OS_SOLARIS)
 #include <sys/sockio.h>
 #endif
