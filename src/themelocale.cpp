@@ -203,14 +203,16 @@ QStringList ThemeLocale::languageList()
         langs.insert(0, ln);
     }
     languageList += langs;
+
     // Remove empty strings
-    QStringList::Iterator end(languageList.end());
-    for (QStringList::Iterator it = languageList.begin(); it != end;) {
-        if ((*it).isEmpty())
+    for (QStringList::Iterator it = languageList.begin(); it != languageList.end();) {
+        if ((*it).isEmpty()) {
             it = languageList.erase(it);
-        else
+        } else {
             ++it;
+        }
     }
+
     return languageList;
 }
 
