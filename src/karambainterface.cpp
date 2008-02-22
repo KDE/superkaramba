@@ -5952,7 +5952,7 @@ QObject* KarambaInterface::createCanvasWidget(Karamba *k, QWidget* widget)
 /** CanvasWidget/moveCanvasWidget
 *
 * SYNOPSIS
-*   boolean createCanvasWidget(widget, canvaswidget, x, y, w, h)
+*   boolean moveCanvasWidget(widget, canvaswidget, x, y, w, h)
 * DESCRIPTION
 *   Moves the canvaswidget object to a new position.
 * ARGUMENTS
@@ -5963,7 +5963,7 @@ QObject* KarambaInterface::createCanvasWidget(Karamba *k, QWidget* widget)
 *   * integer w -- width
 *   * integer h -- height
 * RETURN VALUE
-*   the reference to an instance of a QGraphicsProxyWidget canvaswidget object.
+*   true if the move was successful done else false.
 */
 bool KarambaInterface::moveCanvasWidget(Karamba *k, QObject* canvaswidget, int x, int y, int w, int h)
 {
