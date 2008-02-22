@@ -33,6 +33,8 @@
 #include <QDomDocument>
 #include <QFileInfo>
 #include <QDesktopWidget>
+#include <QGraphicsProxyWidget>
+#include <QGraphicsView>
 
 #include <KMenu>
 #include <KDebug>
@@ -5922,4 +5924,24 @@ QObject* KarambaInterface::getPlasmaSensor(Karamba *k, const QString& engine, co
         return 0;
     }
     return k->getPlasmaSensor(engine, source);
+}
+
+/** Sensor/addQWidget
+*
+* SYNOPSIS
+*   proxywidget addQWidget(widget, widget)
+* DESCRIPTION
+*   Adds a QWidget to the scene and returns a QGraphicsProxyWidget object.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to widget -- the QWidget which should be added to the QGraphicsScene.
+* RETURN VALUE
+*   the reference to an instance of a QGraphicsProxyWidget object.
+*/
+QObject* KarambaInterface::addQWidget(Karamba *k, QWidget* widget)
+{
+    QGraphicsProxyWidget* proxy = k->getScene()->addWidget(widget);
+    proxy->setGeometry(k->boundingRect());
+    proxy->setVisible(true);
+    return proxy;
 }
