@@ -391,7 +391,8 @@ public Q_SLOTS:
     QObject* getPlasmaSensor(Karamba *k, const QString& engine, const QString& source = QString());
 
     // QWidgets on the Canvas
-    QObject* addQWidget(Karamba *k, QWidget* widget);
+    QObject* createCanvasWidget(Karamba *k, QWidget* widget);
+    bool moveCanvasWidget(Karamba *k, QObject* canvaswidget, int x, int y, int w, int h);
 };
 
 #endif

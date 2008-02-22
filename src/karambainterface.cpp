@@ -5926,22 +5926,51 @@ QObject* KarambaInterface::getPlasmaSensor(Karamba *k, const QString& engine, co
     return k->getPlasmaSensor(engine, source);
 }
 
-/** Sensor/addQWidget
+/** Sensor/createCanvasWidget
 *
 * SYNOPSIS
-*   proxywidget addQWidget(widget, widget)
+*   canvaswidget createCanvasWidget(widget, widget)
 * DESCRIPTION
-*   Adds a QWidget to the scene and returns a QGraphicsProxyWidget object.
+*   Adds a QWidget to the scene and returns a canvaswidget object.
 * ARGUMENTS
 *   * reference to widget -- karamba
 *   * reference to widget -- the QWidget which should be added to the QGraphicsScene.
 * RETURN VALUE
-*   the reference to an instance of a QGraphicsProxyWidget object.
+*   the reference to an instance of a QGraphicsProxyWidget canvaswidget object.
 */
-QObject* KarambaInterface::addQWidget(Karamba *k, QWidget* widget)
+QObject* KarambaInterface::createCanvasWidget(Karamba *k, QWidget* widget)
 {
+    if (!checkKaramba(k)) {
+        return 0;
+    }
     QGraphicsProxyWidget* proxy = k->getScene()->addWidget(widget);
     proxy->setGeometry(k->boundingRect());
     proxy->setVisible(true);
     return proxy;
+}
+
+/** Sensor/moveCanvasWidget
+*
+* SYNOPSIS
+*   boolean createCanvasWidget(widget, canvaswidget, x, y, w, h)
+* DESCRIPTION
+*   Moves the canvaswidget object to a new position.
+* ARGUMENTS
+*   * reference to widget -- karamba
+*   * reference to widget -- the QGraphicsProxyWidget canvaswidget object which should be moved.
+*   * integer x -- x coordinate
+*   * integer y -- y coordinate
+*   * integer w -- width
+*   * integer h -- height
+* RETURN VALUE
+*   the reference to an instance of a QGraphicsProxyWidget canvaswidget object.
+*/
+bool KarambaInterface::moveCanvasWidget(Karamba *k, QObject* canvaswidget, int x, int y, int w, int h)
+{
+    QGraphicsProxyWidget* proxy = dynamic_cast<QGraphicsProxyWidget*>(canvaswidget);
+    if (!checkKaramba(k) || !proxy) {
+        return false;
+    }
+    proxy->setGeometry(QRectF(x, y, w, h));
+    return true;
 }

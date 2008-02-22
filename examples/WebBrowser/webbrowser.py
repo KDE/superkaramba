@@ -12,7 +12,7 @@ def initWidget(widget):
     khtml_part.javaScriptEnabled = True
     khtml_part.javaEnabled = False
     khtml_part.pluginsEnabled = False
-    proxywidget = karamba.addQWidget(widget, frame)
+    proxywidget = karamba.createCanvasWidget(widget, frame)
     def selectionChanged():
         print khtml_part.executeScript("window.scrollBy(0,50);");
     khtml_part.connect("selectionChanged()", selectionChanged)
