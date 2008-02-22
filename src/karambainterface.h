@@ -387,10 +387,10 @@ public Q_SLOTS:
     bool resizeWidget(Karamba *k, int width, int height) const;
     bool toggleWidgetRedraw(const Karamba *k, bool enable) const;
 
-    // Plasma::DataEngine as SuperKaramba-Sensor
+    // Sensor
     QObject* getPlasmaSensor(Karamba *k, const QString& engine, const QString& source = QString());
 
-    // QWidgets on the Canvas
+    // CanvasWidget
     QObject* createCanvasWidget(Karamba *k, QWidget* widget);
     bool moveCanvasWidget(Karamba *k, QObject* canvaswidget, int x, int y, int w, int h);
 };

@@ -5926,7 +5926,7 @@ QObject* KarambaInterface::getPlasmaSensor(Karamba *k, const QString& engine, co
     return k->getPlasmaSensor(engine, source);
 }
 
-/** Sensor/createCanvasWidget
+/** CanvasWidget/createCanvasWidget
 *
 * SYNOPSIS
 *   canvaswidget createCanvasWidget(widget, widget)
@@ -5949,7 +5949,7 @@ QObject* KarambaInterface::createCanvasWidget(Karamba *k, QWidget* widget)
     return proxy;
 }
 
-/** Sensor/moveCanvasWidget
+/** CanvasWidget/moveCanvasWidget
 *
 * SYNOPSIS
 *   boolean createCanvasWidget(widget, canvaswidget, x, y, w, h)
