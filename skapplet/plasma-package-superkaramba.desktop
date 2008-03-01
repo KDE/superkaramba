@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=SuperKaramba Theme Files
+Comment=Karamba Desktop Themes
+Type=Service
+Icon=superkaramba
+X-EngineName=superkaramba
+X-KDE-PluginInfo-Name=superkaramba
+X-KDE-ServiceTypes=Plasma/PackageStructure
+X-KDE-Library=plasma_package_superkaramba
+X-Plasma-PackageFileFilter=*.skz

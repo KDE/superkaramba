@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=SuperKaramba
+Comment=Karamba Desktop Theme
+X-KDE-ServiceTypes=Plasma/ScriptEngine
+Type=Service
+Icon=superkaramba
+X-KDE-Library=plasma_scriptengine_superkaramba
+X-EngineName=superkaramba
+X-Plasma-Language=superkaramba
+X-Plasma-ComponentTypes=Applet
+X-Plasma-PackageFormat=superkaramba
+X-KDE-PluginInfo-Name=superkaramba

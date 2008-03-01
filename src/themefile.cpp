@@ -118,6 +118,12 @@ public:
         return m_tempDir->name();
     }
 
+    bool extractArchiveTo(const QString& path)
+    {
+        m_dir->copyTo(path);
+        return true;
+    }
+
 private:
     KZip* m_zip;
     const KArchiveFile* m_file;
@@ -482,6 +488,11 @@ QString ThemeFile::extractArchive() const
     }
 
     return QString();
+}
+
+bool ThemeFile::extractArchiveTo(const QString& path)
+{
+    return isZipTheme() ? d->zip->extractArchiveTo(path) : false;
 }
 
 bool ThemeFile::isZipTheme() const

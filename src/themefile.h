@@ -76,6 +76,7 @@ public:
     bool close();
 
     QString extractArchive() const;
+    bool extractArchiveTo(const QString& path);
 
     static bool isZipFile(const QString& filename);
     static QString canonicalFile(const QString& file);
