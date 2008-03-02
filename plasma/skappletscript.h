@@ -18,8 +18,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef SKSCRIPTAPPLET_H
-#define SKSCRIPTAPPLET_H
+#ifndef SKAPPLETSCRIPT_H
+#define SKAPPLETSCRIPT_H
 
 #include <plasma/scripting/appletscript.h>
 #include <plasma/dataengine.h>
@@ -27,12 +27,12 @@
 #include <plasma/applet.h>
 #include <plasma/containment.h>
 
-class SkScriptApplet : public Plasma::AppletScript
+class SkAppletScript : public Plasma::AppletScript
 {
     Q_OBJECT
 public:
-    SkScriptApplet(QObject *parent, const QVariantList &args);
-    virtual ~SkScriptApplet();
+    SkAppletScript(QObject *parent, const QVariantList &args);
+    virtual ~SkAppletScript();
 
     /**
      * Called when it is safe to initialize the internal state.

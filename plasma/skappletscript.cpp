@@ -18,7 +18,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "skscriptapplet.h"
+#include "skappletscript.h"
 //#include "skappletadaptor.h"
 
 #include "../src/karamba.h"
@@ -33,9 +33,9 @@
 #include <KDialog>
 #include <KToggleAction>
 
-K_EXPORT_PLASMA_APPLETSCRIPTENGINE(superkaramba, SkScriptApplet)
+K_EXPORT_PLASMA_APPLETSCRIPTENGINE(superkaramba, SkAppletScript)
 
-class SkScriptApplet::Private
+class SkAppletScript::Private
 {
     public:
         QString themeFile;
@@ -52,7 +52,7 @@ class SkScriptApplet::Private
         ~Private() { delete dialog; delete theme; }
 };
 
-SkScriptApplet::SkScriptApplet(QObject *parent, const QVariantList &args)
+SkAppletScript::SkAppletScript(QObject *parent, const QVariantList &args)
     : Plasma::AppletScript(parent)
     , d(new Private)
 {
@@ -61,13 +61,13 @@ SkScriptApplet::SkScriptApplet(QObject *parent, const QVariantList &args)
     d->readonlyType = Private::Never;
 }
 
-SkScriptApplet::~SkScriptApplet()
+SkAppletScript::~SkAppletScript()
 {
     kDebug();
     delete d;
 }
 
-bool SkScriptApplet::init()
+bool SkAppletScript::init()
 {
     Q_ASSERT( applet() );
     applet()->setHasConfigurationInterface(true);
@@ -94,7 +94,7 @@ bool SkScriptApplet::init()
     return true;
 }
 
-void SkScriptApplet::loadKaramba()
+void SkAppletScript::loadKaramba()
 {
     Q_ASSERT( applet() );
     Q_ASSERT( applet()->scene() );
@@ -126,12 +126,12 @@ void SkScriptApplet::loadKaramba()
     }
 }
 
-QSizeF SkScriptApplet::contentSizeHint() const
+QSizeF SkAppletScript::contentSizeHint() const
 {
     return d->theme ? d->theme->boundingRect().size() : Plasma::AppletScript::contentSizeHint();
 }
 
-void SkScriptApplet::paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *option, const QRect &contentsRect)
+void SkAppletScript::paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *option, const QRect &contentsRect)
 {
     //if( d->appletadaptor ) d->appletadaptor->paintInterface(painter, option, contentsRect);
     Q_UNUSED(painter);
@@ -139,12 +139,12 @@ void SkScriptApplet::paintInterface(QPainter *painter, const QStyleOptionGraphic
     Q_UNUSED(contentsRect);
 }
 
-QList<QAction*> SkScriptApplet::contextActions()
+QList<QAction*> SkAppletScript::contextActions()
 {
     return d->actions;
 }
 
-void SkScriptApplet::constraintsUpdated(Plasma::Constraints constraints)
+void SkAppletScript::constraintsUpdated(Plasma::Constraints constraints)
 {
     if( constraints & Plasma::SizeConstraint ) {
         //TODO scale
@@ -184,7 +184,7 @@ void setCurrentItem(QComboBox* combo, int currentIndex)
     }
 }
 
-void SkScriptApplet::showConfigurationInterface()
+void SkAppletScript::showConfigurationInterface()
 {
     if (! d->dialog) {
         d->dialog = new KDialog();
@@ -225,9 +225,9 @@ void SkScriptApplet::showConfigurationInterface()
     d->dialog->show();
 }
 
-void SkScriptApplet::configAccepted()
+void SkAppletScript::configAccepted()
 {
-    kDebug() << ">>>>>>>>>>>> SkScriptApplet::configAccepted" ;
+    kDebug() << ">>>>>>>>>>>> SkAppletScript::configAccepted" ;
     d->backgroundType = d->backgroundComboBox->itemData(d->backgroundComboBox->currentIndex()).toInt();
     d->readonlyType = d->readonlyComboBox->itemData(d->readonlyComboBox->currentIndex()).toInt();
 
@@ -239,19 +239,19 @@ void SkScriptApplet::configAccepted()
     //cg.config()->sync();
 }
 
-void SkScriptApplet::karambaStarted(QGraphicsItemGroup* group)
+void SkAppletScript::karambaStarted(QGraphicsItemGroup* group)
 {
     if( d->theme && d->theme == group ) {
-        kDebug()<<">>>>>>>>>>>> SkScriptApplet::karambaStarted theme-name="<<d->theme->theme().name();
+        kDebug()<<">>>>>>>>>>>> SkAppletScript::karambaStarted theme-name="<<d->theme->theme().name();
         applet()->setContentSize(d->theme->boundingRect().size());
         applet()->updateConstraints(Plasma::SizeConstraint);
     }
 }
 
-void SkScriptApplet::karambaClosed(QGraphicsItemGroup* group)
+void SkAppletScript::karambaClosed(QGraphicsItemGroup* group)
 {
     if( d->theme && d->theme == group ) {
-        kDebug()<<">>>>>>>>>>>> SkScriptApplet::karambaClosed theme-name="<<d->theme->theme().name();
+        kDebug()<<">>>>>>>>>>>> SkAppletScript::karambaClosed theme-name="<<d->theme->theme().name();
         //d->themeFile = QString();
         d->theme = 0;
         Q_ASSERT( applet() );
@@ -262,7 +262,7 @@ void SkScriptApplet::karambaClosed(QGraphicsItemGroup* group)
     }
 }
 
-bool SkScriptApplet::eventFilter(QObject* watched, QEvent* event)
+bool SkAppletScript::eventFilter(QObject* watched, QEvent* event)
 {
     switch( event->type() ) {
         case QEvent::ContextMenu: {
@@ -284,4 +284,4 @@ bool SkScriptApplet::eventFilter(QObject* watched, QEvent* event)
     return Plasma::AppletScript::eventFilter(watched, event);
 }
 
-#include "skscriptapplet.moc"
+#include "skappletscript.moc"

@@ -15,8 +15,8 @@ include_directories(
 #install(TARGETS plasma_applet_skapplet DESTINATION ${PLUGIN_INSTALL_DIR})
 #install(FILES plasma-skapplet-default.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
-# SkScriptApplet implementation of a Plasma::AppletScript
-set(skscriptengine_SRCS skscriptapplet.cpp)
+# SkAppletScript implementation of a Plasma::AppletScript
+set(skscriptengine_SRCS skappletscript.cpp)
 kde4_add_plugin(plasma_scriptengine_superkaramba ${skscriptengine_SRCS})
 target_link_libraries(plasma_scriptengine_superkaramba superkaramba ${PLASMA_LIBS} ${KDE4_KDECORE_LIBS})
 install(TARGETS plasma_scriptengine_superkaramba DESTINATION ${PLUGIN_INSTALL_DIR})
