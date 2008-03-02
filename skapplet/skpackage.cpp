@@ -24,6 +24,7 @@
 
 #include <kdesktopfile.h>
 #include <kconfiggroup.h>
+#include <kstandarddirs.h>
 
 K_EXPORT_PLASMA_PACKAGESTRUCTURE(superkaramba, SkPackage)
 
@@ -54,21 +55,28 @@ bool SkPackage::installPackage(const QString &archivePath, const QString &packag
         return false;
     }
 
-    const QString desktopfile = QFileInfo(path, QString("plasma-%1.desktop").arg(name)).absoluteFilePath();
+    const QString desktopfile = KStandardDirs::locateLocal("services", QString("plasma-scriptengine-%1.desktop").arg(name));
     KDesktopFile desktop(desktopfile);
     KConfigGroup group = desktop.desktopGroup();
+
     group.writeEntry("Name", theme.name());
+    group.writeEntry("Comment", i18n("SuperKaramba Theme"));
+    group.writeEntry("Icon", "superkaramba");
     group.writeEntry("Type", "Service");
-    //group.writeEntry("Icon", "");
     group.writeEntry("ServiceTypes", "Plasma/Applet");
-    group.writeEntry("X-KDE-Library", "plasma_applet_skapplet");
+
+    group.writeEntry("X-KDE-PluginInfo-Name", name);
     group.writeEntry("X-KDE-PluginInfo-Version", theme.version());
     group.writeEntry("X-KDE-PluginInfo-Author", theme.author());
     group.writeEntry("X-KDE-PluginInfo-Email", theme.authorEmail());
     group.writeEntry("X-KDE-PluginInfo-Website", theme.homepage());
     group.writeEntry("X-KDE-PluginInfo-License", theme.license());
     group.writeEntry("X-KDE-PluginInfo-Category", "SuperKaramba");
-    group.writeEntry("X-KDE-PluginInfo-EnabledByDefault", "false");
+    group.writeEntry("X-KDE-PluginInfo-EnabledByDefault", "true");
+
+    group.writeEntry("X-Plasma-Language", "superkaramba");
+    group.writeEntry("X-Plasma-ComponentTypes", "Applet");
+    group.writeEntry("X-Plasma-PackageFormat", "superkaramba");
 
     setPath(path);
     return true;

@@ -19,31 +19,79 @@
  */
 
 #include "skscriptapplet.h"
+//#include "skappletadaptor.h"
 
-using namespace Plasma;
+#include "../src/karamba.h"
+#include "../src/karambamanager.h"
+
+#include <QGraphicsScene>
 
 K_EXPORT_PLASMA_APPLETSCRIPTENGINE(superkaramba, SkScriptApplet)
 
+class SkScriptApplet::Private
+{
+    public:
+        QString themeFile;
+        QPointer<Karamba> theme;
+
+        Private() : theme(0) {}
+        ~Private() { delete theme; }
+};
+
 SkScriptApplet::SkScriptApplet(QObject *parent, const QVariantList &args)
     : Plasma::AppletScript(parent)
+    , d(new Private)
 {
-    kDebug();
+    Q_UNUSED(args);
+
+    //setDrawStandardBackground(false);
 }
 
 SkScriptApplet::~SkScriptApplet()
 {
     kDebug();
+    delete d;
 }
 
 bool SkScriptApplet::init()
 {
-    kDebug();
+    QString name = QDir(package()->path()).dirName();
+    if( name.toLower().startsWith("sk_") )
+        name = name.mid(3);
+
+    Q_ASSERT( package() );
+    QFileInfo fi(package()->path(), QString("%1.theme").arg(name));
+    if( ! fi.exists() )
+        return false;
+
+    d->themeFile = fi.absoluteFilePath();
+
+    Q_ASSERT( applet() );
+    QGraphicsScene *gfxScene = applet()->scene();
+    Q_ASSERT( gfxScene );
+    Q_ASSERT( gfxScene->views().count() > 0 );
+
+    Q_ASSERT( ! d->theme );
+    d->theme = new Karamba(d->themeFile, gfxScene->views()[0]);
+    //d->initTheme();
+
+    QPointF origPos = d->theme->pos();
+    d->theme->setParentItem(applet());
+    d->theme->moveToPos(origPos.toPoint());
+
+    //d->appletadaptor = new Skip::AppletAdaptor(d->theme, applet());
+
     return true;
+}
+
+QSizeF SkScriptApplet::contentSizeHint() const
+{
+    return d->theme ? d->theme->boundingRect().size() : Plasma::AppletScript::contentSizeHint();
 }
 
 void SkScriptApplet::paintInterface(QPainter *p, const QStyleOptionGraphicsItem *option, const QRect &contentsRect)
 {
-    kDebug();
+    //if( d->appletadaptor ) d->appletadaptor->paintInterface(p, option, contentsRect);
 }
 
 #include "skscriptapplet.moc"

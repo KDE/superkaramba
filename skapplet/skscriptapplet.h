@@ -23,6 +23,8 @@
 
 #include <plasma/scripting/appletscript.h>
 #include <plasma/dataengine.h>
+#include <plasma/package.h>
+#include <plasma/applet.h>
 
 class SkScriptApplet : public Plasma::AppletScript
 {
@@ -35,6 +37,12 @@ public:
      * Called when it is safe to initialize the internal state.
      */
     virtual bool init();
+
+    /**
+     * Called to discover the content size hint for the item.
+     * The default implementation simply returns the Applet's contentSizeHint
+     */
+    virtual QSizeF contentSizeHint() const;
 
     /**
      * Called when the applet should be painted.
@@ -51,8 +59,10 @@ public slots:
     void dataUpdated( const QString &name, const Plasma::DataEngine::Data &data );
     void showConfigurationInterface();
     void configAccepted();
-private:
 */
+private:
+    class Private;
+    Private *d;
 };
 
 #endif
