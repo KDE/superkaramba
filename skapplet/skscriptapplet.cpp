@@ -94,7 +94,7 @@ void SkScriptApplet::loadKaramba()
     d->theme->setParentItem(applet());
     d->theme->moveToPos(origPos.toPoint());
 
-    //scene->installEventFilter(applet());
+    scene->installEventFilter(applet());
     view->installEventFilter(applet());
     view->viewport()->installEventFilter(applet());
 
