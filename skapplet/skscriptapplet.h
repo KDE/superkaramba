@@ -60,9 +60,15 @@ public slots:
     void showConfigurationInterface();
     void configAccepted();
 */
+
+private Q_SLOTS:
+    void loadKaramba();
+    void karambaStarted(QGraphicsItemGroup* group);
+    void karambaClosed(QGraphicsItemGroup* group);
+
 private:
     class Private;
-    Private *d;
+    Private *const d;
 };
 
 #endif
