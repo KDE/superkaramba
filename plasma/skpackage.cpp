@@ -31,6 +31,7 @@ K_EXPORT_PLASMA_PACKAGESTRUCTURE(superkaramba, SkPackage)
 SkPackage::SkPackage(QObject *parent, const QVariantList &args)
     : Plasma::PackageStructure(parent)
 {
+    Q_UNUSED(args);
     setDefaultMimetypes( QStringList() << "application/zip" << "application/x-superkaramba" );
 }
 
