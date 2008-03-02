@@ -34,7 +34,7 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *e);
-    void keyPressEvent ( QKeyEvent * e ) {};
+    void keyPressEvent ( QKeyEvent * ) {};
 
 private:
     bool m_hasCompManager;

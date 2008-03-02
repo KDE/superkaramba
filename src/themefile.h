@@ -61,6 +61,7 @@ public:
     const QString& authorEmail() const;
     const QString& homepage() const;
     QPixmap icon() const;
+    QString iconName() const;
     bool exists() const;
     bool isThemeFile(const QString& filename) const;
     bool isValid() const;

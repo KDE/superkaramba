@@ -62,7 +62,9 @@ bool SkPackage::installPackage(const QString &archivePath, const QString &packag
 
     group.writeEntry("Name", theme.name());
     group.writeEntry("Comment", i18n("SuperKaramba Theme"));
-    group.writeEntry("Icon", "superkaramba");
+
+    const QString iconfile = theme.iconName().isEmpty() ? "superkaramba" : QFileInfo(path, theme.iconName()).absoluteFilePath();
+    group.writeEntry("Icon", iconfile);
     group.writeEntry("Type", "Service");
     group.writeEntry("ServiceTypes", "Plasma/Applet");
 

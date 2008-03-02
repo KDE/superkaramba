@@ -256,6 +256,11 @@ QPixmap ThemeFile::icon() const
     return icon;
 }
 
+QString ThemeFile::iconName() const
+{
+    return d->icon;
+}
+
 bool ThemeFile::set(const KUrl &url)
 {
     if (!url.isLocalFile() && !url.protocol().isEmpty()) {
