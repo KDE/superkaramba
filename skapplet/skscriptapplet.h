@@ -25,6 +25,7 @@
 #include <plasma/dataengine.h>
 #include <plasma/package.h>
 #include <plasma/applet.h>
+#include <plasma/containment.h>
 
 class SkScriptApplet : public Plasma::AppletScript
 {
@@ -45,30 +46,55 @@ public:
     virtual QSizeF contentSizeHint() const;
 
     /**
+     * Called when any of the geometry constraints have been updated.
+     *
+     * This is always called prior to painting and should be used as an
+     * opportunity to layout the widget, calculate sizings, etc.
+     *
+     * Do not call update() from this method; an update() will be triggered
+     * at the appropriate time for the applet.
+     *
+     * @param constraints the type of constraints that were updated
+     */
+    virtual void constraintsUpdated(Plasma::Constraints constraints);
+
+    /**
      * Called when the applet should be painted.
      *
      * @param painter the QPainter to use
      * @param option the style option containing such flags as selection, level of detail, etc
      * @param contentsRect the rect to paint within; automatically adjusted for
      *                     the background, if any
-     **/
+     */
     virtual void paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *option, const QRect &contentsRect);
 
-/*
-public slots:
-    void dataUpdated( const QString &name, const Plasma::DataEngine::Data &data );
-    void showConfigurationInterface();
-    void configAccepted();
-*/
+    /**
+     * Returns a list of context-related QAction instances.
+     *
+     * @return A list of actions. The default implementation returns an
+     *         empty list.
+     */
+    virtual QList<QAction*> contextActions();
+
+public Q_SLOTS:
+
+    //void dataUpdated( const QString &name, const Plasma::DataEngine::Data &data );
+
+    /**
+     * Show a configuration dialog.
+     */
+    virtual void showConfigurationInterface();
 
 private Q_SLOTS:
     void loadKaramba();
     void karambaStarted(QGraphicsItemGroup* group);
     void karambaClosed(QGraphicsItemGroup* group);
+    void configAccepted();
 
 private:
     class Private;
     Private *const d;
+    bool eventFilter(QObject* watched, QEvent* event);
 };
 
 #endif
