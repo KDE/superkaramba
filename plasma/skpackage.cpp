@@ -22,6 +22,8 @@
 
 #include "../src/themefile.h"
 
+#include <QDBusMessage>
+#include <QDBusConnection>
 #include <kdesktopfile.h>
 #include <kconfiggroup.h>
 #include <kstandarddirs.h>
@@ -56,12 +58,17 @@ bool SkPackage::installPackage(const QString &archivePath, const QString &packag
         return false;
     }
 
+    setPath(path);
+
+    // write a desktop-file that is used by Plasma to know about our new applet.
     const QString desktopfile = KStandardDirs::locateLocal("services", QString("plasma-scriptengine-%1.desktop").arg(name));
     KDesktopFile desktop(desktopfile);
     KConfigGroup group = desktop.desktopGroup();
 
     group.writeEntry("Name", theme.name());
     group.writeEntry("Comment", i18n("SuperKaramba Theme"));
+    group.writeEntry("Type", "Service");
+    group.writeEntry("ServiceTypes", "Plasma/Applet");
 
     QString iconfile = "superkaramba";
     if( ! theme.iconName().isEmpty() ) {
@@ -70,9 +77,6 @@ bool SkPackage::installPackage(const QString &archivePath, const QString &packag
             iconfile = fi.absoluteFilePath();
     }
     group.writeEntry("Icon", iconfile);
-
-    group.writeEntry("Type", "Service");
-    group.writeEntry("ServiceTypes", "Plasma/Applet");
 
     group.writeEntry("X-KDE-PluginInfo-Name", name);
     group.writeEntry("X-KDE-PluginInfo-Version", theme.version());
@@ -83,11 +87,22 @@ bool SkPackage::installPackage(const QString &archivePath, const QString &packag
     group.writeEntry("X-KDE-PluginInfo-Category", "SuperKaramba");
     group.writeEntry("X-KDE-PluginInfo-EnabledByDefault", "true");
 
+    // the SkAppletScript ScriptEngine implementation is responsible for our new applet.
     group.writeEntry("X-Plasma-Language", "superkaramba");
+    // its an applet.
     group.writeEntry("X-Plasma-ComponentTypes", "Applet");
+    // the SkPackage PackageStructure implementation is responsible for the applets package format.
     group.writeEntry("X-Plasma-PackageFormat", "superkaramba");
 
-    setPath(path);
+    group.sync();
+
+    // rebuild the cache to let e.g. Plasma know about our new desktop-file.
+    //FIXME would be better if we just let plasma know about the new desktop-file and let it add on the fly without using the sycoca
+    QDBusMessage msg = QDBusMessage::createSignal("/", "org.kde.KSycoca", "notifyDatabaseChanged" );
+    msg << QStringList();
+    if( QDBusConnection::sessionBus().isConnected() )
+        QDBusConnection::sessionBus().send(msg);
+
     return true;
 }
 
