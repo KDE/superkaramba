@@ -187,7 +187,16 @@ QList<QAction*> SkAppletScript::contextActions()
 void SkAppletScript::constraintsUpdated(Plasma::Constraints constraints)
 {
     if( constraints & Plasma::SizeConstraint ) {
-        //TODO scale
+        if( d->theme ) {
+            const QRectF r = d->theme->boundingRect();
+            const QSizeF s = applet()->contentSize();
+            const qreal x = s.width() / r.width();
+            const qreal y = s.height() / r.height();
+
+            QTransform t = d->theme->transform();
+            t.reset();
+            d->theme->setTransform(t.scale(x, y));
+        }
     }
     if( constraints & Plasma::ImmutableConstraint ) {
         Q_ASSERT( applet() );
