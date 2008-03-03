@@ -20,7 +20,7 @@
 
 #include "skpackage.h"
 
-#include "../src/themefile.h"
+#include "themefile.h"
 
 #include <kconfiggroup.h>
 #include <kstandarddirs.h>

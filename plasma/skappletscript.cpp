@@ -19,10 +19,10 @@
  */
 
 #include "skappletscript.h"
-//#include "skappletadaptor.h"
+#include "skappletadaptor.h"
 
-#include "../src/karamba.h"
-#include "../src/karambamanager.h"
+#include "karamba.h"
+#include "karambamanager.h"
 
 #include <QTimer>
 #include <QLabel>
@@ -129,6 +129,8 @@ void SkAppletScript::loadKaramba()
     if( QAction* configAction = d->theme->findChild<QAction*>("configureTheme") ) {
         d->actions << configAction;
     }
+
+    new SkAppletAdaptor(d->theme, applet());
 
     connect(d->theme, SIGNAL(error(QString)), this, SLOT(scriptError(QString)));
 }

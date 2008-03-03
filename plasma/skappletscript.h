@@ -28,11 +28,27 @@
 #include <plasma/containment.h>
 #include <plasma/theme.h>
 
+/**
+ * The SkAppletScript class implements a \a Plasma::AppletScript to
+ * implement a \a Plasma::ScriptEngine for SuperKaramba.
+ */
 class SkAppletScript : public Plasma::AppletScript
 {
     Q_OBJECT
 public:
+
+    /**
+     * Constructor.
+     *
+     * \param parent The parent QObject this QObject will be
+     * child of.
+     * \param args The optional list of arguments.
+     */
     SkAppletScript(QObject *parent, const QVariantList &args);
+
+    /**
+     * Destructor.
+     */
     virtual ~SkAppletScript();
 
     /**
@@ -42,7 +58,7 @@ public:
 
     /**
      * Called to discover the content size hint for the item.
-     * The default implementation simply returns the Applet's contentSizeHint
+     * \return returns the contentSizeHint of the SuperKaramba Theme.
      */
     virtual QSizeF contentSizeHint() const;
 
@@ -82,7 +98,7 @@ public Q_SLOTS:
     //void dataUpdated( const QString &name, const Plasma::DataEngine::Data &data );
 
     /**
-     * Show a configuration dialog.
+     * Shows the configuration dialog for general SkAppletScript settings.
      */
     virtual void showConfigurationInterface();
 

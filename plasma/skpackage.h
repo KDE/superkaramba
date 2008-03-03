@@ -25,11 +25,28 @@
 #include <plasma/packagestructure.h>
 #include <plasma/packagemetadata.h>
 
+/**
+ * The SkPackage class implements a \a Plasma::PackageStructure to
+ * deal with SuperKaramba Theme Files - those handy *.skz files
+ * packaged as zip.
+ */
 class SkPackage : public Plasma::PackageStructure
 {
     Q_OBJECT
 public:
+
+    /**
+     * Constructor.
+     *
+     * \param parent The parent QObject this QObject will be
+     * child of.
+     * \param args The optional list of arguments.
+     */
     SkPackage(QObject *parent, const QVariantList &args);
+
+    /**
+     * Destructor.
+     */
     virtual ~SkPackage();
 
     /**
