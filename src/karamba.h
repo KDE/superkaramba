@@ -154,6 +154,10 @@ public Q_SLOTS:
     void slotFileChanged(const QString &file);
     void popupGlobalMenu() const;
     void moveToPos(QPoint pos);
+    void emitError(const QString& errormessage);
+
+Q_SIGNALS:
+    void error(const QString& errormessage);
 
 private Q_SLOTS:
     void startKaramba();

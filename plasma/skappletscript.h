@@ -26,6 +26,7 @@
 #include <plasma/package.h>
 #include <plasma/applet.h>
 #include <plasma/containment.h>
+#include <plasma/theme.h>
 
 class SkAppletScript : public Plasma::AppletScript
 {
@@ -90,6 +91,7 @@ private Q_SLOTS:
     void karambaStarted(QGraphicsItemGroup* group);
     void karambaClosed(QGraphicsItemGroup* group);
     void configAccepted();
+    void scriptError(const QString& err);
 
 private:
     class Private;

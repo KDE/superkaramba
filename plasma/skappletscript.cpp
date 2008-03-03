@@ -32,6 +32,8 @@
 #include <QGraphicsView>
 #include <KDialog>
 #include <KToggleAction>
+#include <KColorScheme>
+#include <KGlobalSettings>
 
 K_EXPORT_PLASMA_APPLETSCRIPTENGINE(superkaramba, SkAppletScript)
 
@@ -41,6 +43,7 @@ class SkAppletScript::Private
         QString themeFile;
         QPointer<Karamba> theme;
         QList<QAction*> actions;
+        QStringList errors;
 
         enum { Always = 0, Never, Immutable, NotImmutable };
         KDialog* dialog;
@@ -96,6 +99,8 @@ bool SkAppletScript::init()
 
 void SkAppletScript::loadKaramba()
 {
+    d->errors.clear();
+
     Q_ASSERT( applet() );
     Q_ASSERT( applet()->scene() );
     Q_ASSERT( applet()->scene()->views().count() > 0 );
@@ -124,6 +129,14 @@ void SkAppletScript::loadKaramba()
     if( QAction* configAction = d->theme->findChild<QAction*>("configureTheme") ) {
         d->actions << configAction;
     }
+
+    connect(d->theme, SIGNAL(error(QString)), this, SLOT(scriptError(QString)));
+}
+
+void SkAppletScript::scriptError(const QString& err)
+{
+    d->errors << err;
+    //applet()->setFailedToLaunch(true, e);
 }
 
 QSizeF SkAppletScript::contentSizeHint() const
@@ -131,12 +144,39 @@ QSizeF SkAppletScript::contentSizeHint() const
     return d->theme ? d->theme->boundingRect().size() : Plasma::AppletScript::contentSizeHint();
 }
 
-void SkAppletScript::paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *option, const QRect &contentsRect)
+void SkAppletScript::paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *, const QRect &contentsRect)
 {
     //if( d->appletadaptor ) d->appletadaptor->paintInterface(painter, option, contentsRect);
-    Q_UNUSED(painter);
-    Q_UNUSED(option);
-    Q_UNUSED(contentsRect);
+
+    if( d->errors.count() > 0 ) {
+        QColor fontcolor = KColorScheme(QPalette::Active, KColorScheme::View, Plasma::Theme::self()->colors()).foreground().color();
+        painter->setPen(QPen(fontcolor));
+
+        painter->setRenderHint(QPainter::SmoothPixmapTransform);
+        painter->setRenderHint(QPainter::Antialiasing);
+
+        const QString title = i18n("Failed to launch SuperKaramba Theme");
+
+        QFont titlefont;
+        titlefont.setBold( true );
+        painter->setFont(titlefont);
+
+        QRect titlerect = painter->boundingRect(contentsRect, 0, title);
+        painter->drawText(titlerect, title, QTextOption());
+
+        QRect textrect = contentsRect;
+        textrect.setY( titlerect.y() + titlerect.height() + 4 );
+
+        const QString text = d->errors.join("\n");
+
+        QFont textfont;
+        textfont.setPointSize( KGlobalSettings::smallestReadableFont().pointSize() );
+        painter->setFont(textfont);
+
+        QTextOption textopts;
+        textopts.setWrapMode(QTextOption::WrapAnywhere);
+        painter->drawText(textrect, text, textopts);
+    }
 }
 
 QList<QAction*> SkAppletScript::contextActions()

@@ -83,6 +83,10 @@ KarambaInterface::~KarambaInterface()
 void KarambaInterface::startInterpreter()
 {
     d->action->trigger();
+    if( d->action->hadError() ) {
+        const QString err = QString("%1\n\n%2").arg(d->action->errorMessage()).arg(d->action->errorTrace());
+        d->karamba->emitError(err);
+    }
 }
 
 bool KarambaInterface::initInterpreter()

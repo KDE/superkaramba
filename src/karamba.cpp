@@ -482,7 +482,6 @@ void Karamba::startKaramba()
         if (!d->useKross) {
 #ifdef PYTHON_INCLUDE_PATH
             d->python = new KarambaPython(d->theme, false);
-
             d->python->initWidget(this);
 #endif
         } else {
@@ -2307,4 +2306,9 @@ Meter* Karamba::getMeter(const QString& name)
     }
   }
   return 0;
+}
+
+void Karamba::emitError(const QString& errormessage)
+{
+  emit error(errormessage);
 }
