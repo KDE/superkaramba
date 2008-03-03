@@ -22,9 +22,6 @@
 
 #include "../src/themefile.h"
 
-#include <QDBusMessage>
-#include <QDBusConnection>
-#include <kdesktopfile.h>
 #include <kconfiggroup.h>
 #include <kstandarddirs.h>
 
@@ -60,6 +57,31 @@ bool SkPackage::installPackage(const QString &archivePath, const QString &packag
 
     setPath(path);
 
+    Plasma::PackageMetadata data;
+    data.setPluginName(name);
+    data.setImplementationLanguage("superkaramba");
+    //data.setType(const QString& type);
+    //data.setServiceType(const QString &);
+    data.setName(theme.name());
+    data.setDescription(i18n("SuperKaramba Theme"));
+    data.setAuthor(theme.author());
+    data.setEmail(theme.authorEmail());
+    data.setVersion(theme.version());
+    data.setWebsite(theme.homepage());
+    data.setLicense(theme.license());
+    //data.setApplication(const QString &);
+    //data.setRequiredVersion(const QString &);
+
+    QString iconfile = "superkaramba";
+    if( ! theme.iconName().isEmpty() ) {
+        QFileInfo fi(path, theme.iconName());
+        if( fi.exists() )
+            iconfile = fi.absoluteFilePath();
+    }
+
+    Plasma::Package::registerPackage(data, iconfile);
+
+#if 0
     // write a desktop-file that is used by Plasma to know about our new applet.
     const QString desktopfile = KStandardDirs::locateLocal("services", QString("plasma-scriptengine-%1.desktop").arg(name));
     KDesktopFile desktop(desktopfile);
@@ -102,7 +124,7 @@ bool SkPackage::installPackage(const QString &archivePath, const QString &packag
     msg << QStringList();
     if( QDBusConnection::sessionBus().isConnected() )
         QDBusConnection::sessionBus().send(msg);
-
+#endif
     return true;
 }
 

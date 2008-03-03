@@ -21,7 +21,9 @@
 #ifndef SKPACKAGE_H
 #define SKPACKAGE_H
 
+#include <plasma/package.h>
 #include <plasma/packagestructure.h>
+#include <plasma/packagemetadata.h>
 
 class SkPackage : public Plasma::PackageStructure
 {
