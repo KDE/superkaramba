@@ -1,6 +1,10 @@
 [Desktop Entry]
 Name=SuperKaramba Theme Files
+Name[pt]=Ficheiros de Temas do SuperKaramba
+Name[pt_BR]=Ficheiros de Temas do SuperKaramba
 Comment=Karamba Desktop Themes
+Comment[pt]=Temas do Ambiente do Karamba
+Comment[pt_BR]=Temas do Ambiente do Karamba
 Type=Service
 Icon=superkaramba
 X-EngineName=superkaramba
