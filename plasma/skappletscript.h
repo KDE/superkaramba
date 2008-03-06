@@ -27,6 +27,7 @@
 #include <plasma/applet.h>
 #include <plasma/containment.h>
 #include <plasma/theme.h>
+#include <plasma/layouts/layout.h>
 
 /**
  * The SkAppletScript class implements a \a Plasma::AppletScript to
@@ -107,6 +108,8 @@ private Q_SLOTS:
     void karambaStarted(QGraphicsItemGroup* group);
     void karambaClosed(QGraphicsItemGroup* group);
     void configAccepted();
+    void positionChanged();
+    void sizeChanged();
     void scriptError(const QString& err);
 
 private:

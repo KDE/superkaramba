@@ -2063,6 +2063,7 @@ void Karamba::setFixedSize(u_int w, u_int h)
 {
     d->size.setWidth(w);
     d->size.setHeight(h);
+    emit sizeChanged();
 }
 
 const ThemeFile& Karamba::theme() const
@@ -2095,6 +2096,14 @@ void Karamba::keyPressEvent(QKeyEvent *event)
     }
 
     keyPressed(event->text(), (Meter*)item);
+}
+
+QVariant Karamba::itemChange(GraphicsItemChange change, const QVariant &value)
+{
+    if(change == QGraphicsItem::ItemPositionHasChanged) {
+        emit positionChanged();
+    }
+    return QGraphicsItemGroup::itemChange(change, value);
 }
 
 void Karamba::slotFileChanged(const QString &file)

@@ -157,6 +157,8 @@ public Q_SLOTS:
     void emitError(const QString& errormessage);
 
 Q_SIGNALS:
+    void positionChanged();
+    void sizeChanged();
     void error(const QString& errormessage);
 
 private Q_SLOTS:
@@ -180,6 +182,7 @@ protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void timerEvent(QTimerEvent *event);
     void keyPressEvent(QKeyEvent *event);
+    QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
 private:
     class Private;

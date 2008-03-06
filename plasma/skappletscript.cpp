@@ -42,6 +42,7 @@ class SkAppletScript::Private
     public:
         QString themeFile;
         QPointer<Karamba> theme;
+        SkAppletAdaptor* appletadaptor;
         QList<QAction*> actions;
         QStringList errors;
 
@@ -51,7 +52,7 @@ class SkAppletScript::Private
 
         int backgroundType, readonlyType;
 
-        Private() : theme(0), dialog(0) {}
+        Private() : theme(0), appletadaptor(0), dialog(0) {}
         ~Private() { delete dialog; delete theme; }
 };
 
@@ -73,11 +74,28 @@ SkAppletScript::~SkAppletScript()
 bool SkAppletScript::init()
 {
     Q_ASSERT( applet() );
-    applet()->setHasConfigurationInterface(true);
-    applet()->setDrawStandardBackground(false);
-    applet()->setAspectRatioMode(Qt::IgnoreAspectRatio);
-    //applet()->setRemainSquare(true);
-    applet()->setContentSize(100, 60);
+    Q_ASSERT( package() );
+
+    if( applet()->isContainment() ) { // Plasma::Containment
+        Plasma::Containment *c = dynamic_cast<Plasma::Containment *>(applet());
+
+        c->setContainmentType(Plasma::Containment::PanelContainment);
+        c->setZValue(150);
+        c->setFormFactor(Plasma::Horizontal);
+        c->setLocation(Plasma::TopEdge);
+        //c->setScreen(0);
+        //c->addApplet("clock");
+        //c->flushUpdatedConstraints();
+        //if (c->layout()) c->layout()->invalidate();
+        //c->updateConstraints(Plasma::AllConstraints);
+        //package()->metadata()->;
+    }
+    else { // Plasma::Applet
+        applet()->setHasConfigurationInterface(true);
+        applet()->setDrawStandardBackground(false);
+        applet()->setAspectRatioMode(Qt::IgnoreAspectRatio);
+        applet()->setContentSize(500, 60);
+    }
 
     KConfigGroup cg = applet()->config();
     d->backgroundType = cg.readEntry("background", d->backgroundType);
@@ -87,7 +105,6 @@ bool SkAppletScript::init()
     if( name.toLower().startsWith("sk_") )
         name = name.mid(3);
 
-    Q_ASSERT( package() );
     QFileInfo fi(package()->path(), QString("%1.theme").arg(name));
     if( ! fi.exists() )
         return false;
@@ -107,7 +124,6 @@ void SkAppletScript::loadKaramba()
     QGraphicsScene *scene = applet()->scene();
     QGraphicsView* view = scene->views()[0];
 
-    Q_ASSERT( KarambaManager::self() );
     connect(KarambaManager::self(), SIGNAL(karambaStarted(QGraphicsItemGroup*)), this, SLOT(karambaStarted(QGraphicsItemGroup*)));
     connect(KarambaManager::self(), SIGNAL(karambaClosed(QGraphicsItemGroup*)), this, SLOT(karambaClosed(QGraphicsItemGroup*)));
 
@@ -118,6 +134,8 @@ void SkAppletScript::loadKaramba()
     d->theme->moveToPos(QPoint(int(geometry.x()), int(geometry.y())));
 
     //view->viewport()->installEventFilter(this);
+
+    d->appletadaptor = new SkAppletAdaptor(d->theme, applet());
 
     if( KToggleAction* lockedAction = d->theme->findChild<KToggleAction*>("lockedAction") ) {
         // disable locked action since Plasma will handle it for us.
@@ -130,15 +148,28 @@ void SkAppletScript::loadKaramba()
         d->actions << configAction;
     }
 
-    new SkAppletAdaptor(d->theme, applet());
-
+    positionChanged();
+    sizeChanged();
+    connect(d->theme, SIGNAL(positionChanged()), this, SLOT(positionChanged()));
+    connect(d->theme, SIGNAL(sizeChanged()), this, SLOT(sizeChanged()));
     connect(d->theme, SIGNAL(error(QString)), this, SLOT(scriptError(QString)));
+}
+
+void SkAppletScript::positionChanged()
+{
+    applet()->setPos( d->theme->pos() );
+    //applet()->updateConstraints(Plasma::SizeConstraint);
+}
+
+void SkAppletScript::sizeChanged()
+{
+    applet()->setContentSize( d->theme->boundingRect().size() );
+    //applet()->updateConstraints(Plasma::SizeConstraint);
 }
 
 void SkAppletScript::scriptError(const QString& err)
 {
     d->errors << err;
-    //applet()->setFailedToLaunch(true, e);
 }
 
 QSizeF SkAppletScript::contentSizeHint() const
@@ -146,10 +177,8 @@ QSizeF SkAppletScript::contentSizeHint() const
     return d->theme ? d->theme->boundingRect().size() : Plasma::AppletScript::contentSizeHint();
 }
 
-void SkAppletScript::paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *, const QRect &contentsRect)
+void SkAppletScript::paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *option, const QRect &contentsRect)
 {
-    //if( d->appletadaptor ) d->appletadaptor->paintInterface(painter, option, contentsRect);
-
     if( d->errors.count() > 0 ) {
         QColor fontcolor = KColorScheme(QPalette::Active, KColorScheme::View, Plasma::Theme::self()->colors()).foreground().color();
         painter->setPen(QPen(fontcolor));
@@ -178,6 +207,15 @@ void SkAppletScript::paintInterface(QPainter *painter, const QStyleOptionGraphic
         QTextOption textopts;
         textopts.setWrapMode(QTextOption::WrapAnywhere);
         painter->drawText(textrect, text, textopts);
+    }
+    else {
+        //painter->save();
+        //painter->setCompositionMode(QPainter::CompositionMode_Source);
+        //painter->fillRect(contentsRect,Qt::transparent);
+        //painter->restore();
+
+        if( d->appletadaptor )
+            d->appletadaptor->paintInterface(painter, option, contentsRect);
     }
 }
 
