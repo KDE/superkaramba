@@ -30,7 +30,6 @@
 #include <QGridLayout>
 #include <QGraphicsScene>
 #include <QGraphicsView>
-#include <KDialog>
 #include <KToggleAction>
 #include <KColorScheme>
 #include <KGlobalSettings>
@@ -46,14 +45,8 @@ class SkAppletScript::Private
         QList<QAction*> actions;
         QStringList errors;
 
-        enum { Always = 0, Never, Immutable, NotImmutable };
-        KDialog* dialog;
-        QComboBox *backgroundComboBox, *readonlyComboBox;
-
-        int backgroundType, readonlyType;
-
-        Private() : theme(0), appletadaptor(0), dialog(0) {}
-        ~Private() { delete dialog; delete theme; }
+        Private() : theme(0), appletadaptor(0) {}
+        ~Private() { delete theme; }
 };
 
 SkAppletScript::SkAppletScript(QObject *parent, const QVariantList &args)
@@ -61,8 +54,6 @@ SkAppletScript::SkAppletScript(QObject *parent, const QVariantList &args)
     , d(new Private)
 {
     Q_UNUSED(args);
-    d->backgroundType = Private::Immutable;
-    d->readonlyType = Private::Never;
 }
 
 SkAppletScript::~SkAppletScript()
@@ -91,15 +82,11 @@ bool SkAppletScript::init()
         //package()->metadata()->;
     }
     else { // Plasma::Applet
-        applet()->setHasConfigurationInterface(true);
+        applet()->setHasConfigurationInterface(false);//true);
         applet()->setDrawStandardBackground(false);
         applet()->setAspectRatioMode(Qt::IgnoreAspectRatio);
-        applet()->setContentSize(300, 60);
+        applet()->setContentSize(400, 60);
     }
-
-    KConfigGroup cg = applet()->config();
-    d->backgroundType = cg.readEntry("background", d->backgroundType);
-    d->readonlyType = cg.readEntry("readonly", d->readonlyType);
 
     QString name = QDir(package()->path()).dirName();
     if( name.toLower().startsWith("sk_") )
@@ -110,7 +97,7 @@ bool SkAppletScript::init()
         return false;
 
     d->themeFile = fi.absoluteFilePath();
-    QTimer::singleShot(100, this, SLOT(loadKaramba()));
+    QTimer::singleShot(50, this, SLOT(loadKaramba()));
     return true;
 }
 
@@ -128,14 +115,28 @@ void SkAppletScript::loadKaramba()
     connect(KarambaManager::self(), SIGNAL(karambaClosed(QGraphicsItemGroup*)), this, SLOT(karambaClosed(QGraphicsItemGroup*)));
 
     Q_ASSERT( ! d->theme );
-    d->theme = new Karamba(d->themeFile, view);
+    d->theme = new Karamba(d->themeFile, view, -1, false, QPoint(), false, false);
     d->theme->setParentItem(applet());
     const QRectF geometry = applet()->geometry();
     d->theme->moveToPos(QPoint(int(geometry.x()), int(geometry.y())));
 
     //view->viewport()->installEventFilter(this);
 
-    d->appletadaptor = new SkAppletAdaptor(d->theme, applet());
+    if( applet()->isContainment() ) { // Plasma::Containment
+        Plasma::Containment *c = dynamic_cast<Plasma::Containment *>(applet());
+        Q_ASSERT(c);
+        d->appletadaptor = new SkContainmentAdaptor(d->theme, c);
+
+        // While Plasma::Applet does provide such a functionality, Plasma::Containment
+        // does not. So, let's add it manualy...
+        //QAction* configure = new QAction(i18n("Panel Settings"), this);
+        //configure->setIcon(KIcon("configure"));
+        //connect(configure, SIGNAL(triggered()), this, SLOT(showConfigurationInterface()));
+        //d->actions << configure;
+    }
+    else { // Plasma::Applet
+        d->appletadaptor = new SkAppletAdaptor(d->theme, applet());
+    }
 
     if( KToggleAction* lockedAction = d->theme->findChild<KToggleAction*>("lockedAction") ) {
         // disable locked action since Plasma will handle it for us.
@@ -148,16 +149,28 @@ void SkAppletScript::loadKaramba()
         d->actions << configAction;
     }
 
-    positionChanged();
-    sizeChanged();
     connect(d->theme, SIGNAL(positionChanged()), this, SLOT(positionChanged()));
     connect(d->theme, SIGNAL(sizeChanged()), this, SLOT(sizeChanged()));
     connect(d->theme, SIGNAL(error(QString)), this, SLOT(scriptError(QString)));
+
+    //QTimer::singleShot(0, d->theme, SLOT(startKaramba()));
+    d->theme->startKaramba();
 }
 
 void SkAppletScript::positionChanged()
 {
-    applet()->setPos( d->theme->pos() );
+    //FIXME WTF, sebsauer, 2008-03-07; somehow this doesn't seem to work correct if we are a panel :-(
+
+    //Q_ASSERT( ! managingLayout() );
+    QPointF p = d->theme->parentItem()->pos();
+
+    applet()->setPos(p);
+    //d->theme->getView()->move(p.x(),p.y());
+
+    //QRectF r = applet()->geometry();
+    //r.setTopLeft(p);
+    //applet()->setGeometry(r);
+
     //applet()->updateConstraints(Plasma::SizeConstraint);
 }
 
@@ -214,8 +227,9 @@ void SkAppletScript::paintInterface(QPainter *painter, const QStyleOptionGraphic
         //painter->fillRect(contentsRect,Qt::transparent);
         //painter->restore();
 
-        if( d->appletadaptor )
+        if( d->appletadaptor ) {
             d->appletadaptor->paintInterface(painter, option, contentsRect);
+        }
     }
 }
 
@@ -240,18 +254,11 @@ void SkAppletScript::constraintsUpdated(Plasma::Constraints constraints)
     }
     if( constraints & Plasma::ImmutableConstraint ) {
         Q_ASSERT( applet() );
-        applet()->setDrawStandardBackground(
-            ( d->backgroundType == Private::Always ) ||
-            ( d->backgroundType == Private::Immutable && ! applet()->isImmutable() ) ||
-            ( d->backgroundType == Private::NotImmutable && applet()->isImmutable() )
-        );
-        applet()->setHandlesChildEvents(
-            ( d->readonlyType == Private::Always ) ||
-            ( d->readonlyType == Private::Immutable && applet()->isImmutable() ) ||
-            ( d->readonlyType == Private::NotImmutable && ! applet()->isImmutable() )
-        );
+        //applet()->setDrawStandardBackground();
+        //applet()->setHandlesChildEvents();
         //if( d->theme ) d->theme->update();
         //applet()->update();
+
         if( applet()->drawStandardBackground() && d->theme ) {
             //QRectF geometry = applet()->geometry();
             //geometry.setSize( );
@@ -260,78 +267,24 @@ void SkAppletScript::constraintsUpdated(Plasma::Constraints constraints)
     }
 }
 
-void setCurrentItem(QComboBox* combo, int currentIndex)
-{
-    for(int i = combo->count() - 1; i >= 0; --i) {
-        if( combo->itemData(i).toInt() == currentIndex ) {
-            combo->setCurrentIndex(i);
-            return;
-        }
-    }
-    if( combo->count() > 0 ) {
-        combo->setCurrentIndex(0);
-    }
-}
-
 void SkAppletScript::showConfigurationInterface()
 {
-    if (! d->dialog) {
-        d->dialog = new KDialog();
-        d->dialog->setCaption( i18nc("@title:window","Configure SuperKaramba") );
-        d->dialog->setButtons( KDialog::Ok | KDialog::Cancel | KDialog::Apply );
-        connect(d->dialog, SIGNAL(applyClicked()), this, SLOT(configAccepted()));
-        connect(d->dialog, SIGNAL(okClicked()), this, SLOT(configAccepted()));
-
-        QWidget *p = d->dialog->mainWidget();
-        QGridLayout *l = new QGridLayout(p);
-        p->setLayout(l);
-
-        QLabel *backgroundLabel = new QLabel(i18n("Show Background:"), p);
-        l->addWidget(backgroundLabel, 0, 0);
-        d->backgroundComboBox = new QComboBox(p);
-        backgroundLabel->setBuddy(d->backgroundComboBox);
-        d->backgroundComboBox->addItem(i18n("Always"), int(Private::Always));
-        d->backgroundComboBox->addItem(i18n("Never"), int(Private::Never));
-        d->backgroundComboBox->addItem(i18n("If widgets are locked"), int(Private::Immutable));
-        d->backgroundComboBox->addItem(i18n("If widgets are unlocked"), int(Private::NotImmutable));
-        l->addWidget(d->backgroundComboBox, 0, 1);
-
-        QLabel *readonlyLabel = new QLabel(i18n("Read Only:"), p);
-        l->addWidget(readonlyLabel, 1, 0);
-        d->readonlyComboBox = new QComboBox(p);
-        readonlyLabel->setBuddy(d->readonlyComboBox);
-        d->readonlyComboBox->addItem(i18n("Always"), Private::Always);
-        d->readonlyComboBox->addItem(i18n("Never"), Private::Never);
-        d->readonlyComboBox->addItem(i18n("If widgets are locked"), Private::Immutable);
-        d->readonlyComboBox->addItem(i18n("If widgets are unlocked"), Private::NotImmutable);
-        l->addWidget(d->readonlyComboBox, 1, 1);
-
-        l->setColumnStretch(1,1);
-    }
-
-    setCurrentItem(d->backgroundComboBox, d->backgroundType);
-    setCurrentItem(d->readonlyComboBox, d->readonlyType);
-    d->dialog->show();
-}
-
-void SkAppletScript::configAccepted()
-{
-    kDebug() << ">>>>>>>>>>>> SkAppletScript::configAccepted" ;
-    d->backgroundType = d->backgroundComboBox->itemData(d->backgroundComboBox->currentIndex()).toInt();
-    d->readonlyType = d->readonlyComboBox->itemData(d->readonlyComboBox->currentIndex()).toInt();
-
-    KConfigGroup cg = applet()->config();
-    cg.writeEntry("background", d->backgroundType);
-    cg.writeEntry("readonly", d->readonlyType);
-
-    applet()->updateConstraints(Plasma::AllConstraints);
-    //cg.config()->sync();
+    //TODO
 }
 
 void SkAppletScript::karambaStarted(QGraphicsItemGroup* group)
 {
     if( d->theme && d->theme == group ) {
         kDebug()<<">>>>>>>>>>>> SkAppletScript::karambaStarted theme-name="<<d->theme->theme().name();
+
+        if( applet()->isContainment() ) {
+            Plasma::Containment *c = dynamic_cast<Plasma::Containment *>(applet());
+            Q_ASSERT(c);
+            foreach(Plasma::Applet* a, c->applets()) {
+                a->raise();
+            }
+        }
+
         applet()->setContentSize(d->theme->boundingRect().size());
         applet()->updateConstraints(Plasma::SizeConstraint);
     }

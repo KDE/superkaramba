@@ -107,7 +107,6 @@ private Q_SLOTS:
     void loadKaramba();
     void karambaStarted(QGraphicsItemGroup* group);
     void karambaClosed(QGraphicsItemGroup* group);
-    void configAccepted();
     void positionChanged();
     void sizeChanged();
     void scriptError(const QString& err);

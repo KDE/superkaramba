@@ -260,19 +260,19 @@ class Karamba::Private
         }
 };
 
-Karamba::Karamba(const KUrl &themeFile, QGraphicsView *view, int instance, bool subTheme, const QPoint &startPos, bool reload)
+Karamba::Karamba(const KUrl &themeFile, QGraphicsView *view, int instance, bool subTheme, const QPoint &startPos, bool reload, bool startkaramba)
         : QObject(),
         QGraphicsItemGroup(0, view ? view->scene() : 0),
         d(new Private(view, instance, subTheme))
 {
+#ifdef PYTHON_INCLUDE_PATH
     if (!d->globalView) {
-        #ifdef PYTHON_INCLUDE_PATH
         KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
         if (args->isSet("usefallback")) {
             d->useKross = false;
         }
-        #endif
     }
+#endif
 
     QString environment = getenv("SK_FANCY");
     if (!environment.compare("false", Qt::CaseInsensitive)) {
@@ -308,7 +308,8 @@ Karamba::Karamba(const KUrl &themeFile, QGraphicsView *view, int instance, bool 
     if (!d->theme.set(themeFile)) {
         kDebug() << "Could not load theme file" ;
         d->errorInInit = true;
-        QTimer::singleShot(0, this, SLOT(startKaramba()));
+        if (startkaramba)
+            QTimer::singleShot(0, this, SLOT(startKaramba()));
         return;
     }
 
@@ -447,7 +448,8 @@ Karamba::Karamba(const KUrl &themeFile, QGraphicsView *view, int instance, bool 
         d->timer->start();
     }
 
-    QTimer::singleShot(0, this, SLOT(startKaramba()));
+    if (startkaramba)
+        QTimer::singleShot(0, this, SLOT(startKaramba()));
 
     if (!(d->onTop || d->managed) && !d->globalView) {
         KWindowSystem::setState(d->view->winId(), NET::KeepBelow);
@@ -2155,6 +2157,7 @@ void Karamba::moveToPos(QPoint pos)
             setPos(pos);
         }
     }
+    emit positionChanged();
 }
 
 void Karamba::resizeTo(int width, int height)

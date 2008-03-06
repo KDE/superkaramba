@@ -22,6 +22,7 @@
 #define SKAPPLETADAPTOR_H
 
 #include <plasma/applet.h>
+#include <plasma/containment.h>
 #include <plasma/dataengine.h>
 //#include <plasma/widgets/widget.h>
 //#include <plasma/widgets/label.h>
@@ -132,6 +133,7 @@ class SkAppletAdaptor : public QObject
     public:
         SkAppletAdaptor(Karamba *karamba, Plasma::Applet *applet)
             : QObject(karamba)
+            , m_karamba(karamba)
             , m_applet(applet)
             //, m_widget(new Plasma::Widget(applet->karamba()))
             , m_painterenabled(false) {
@@ -236,11 +238,59 @@ class SkAppletAdaptor : public QObject
         */
         void paint(QObject* painter, const QRect &rect);
 
-    private:
+    protected:
+        Karamba *m_karamba;
         Plasma::Applet *m_applet;
         //QPointer<Plasma::Widget> m_widget;
         bool m_painterenabled;
         QHash<QString, PlasmaSensor*> m_engines;
+};
+
+/**
+* The SkContainmentAdaptor class extends the SkAppletAdaptor class
+* to implements an adaptor for Plasma::Containment objects.
+*/
+class SkContainmentAdaptor : public SkAppletAdaptor
+{
+        Q_OBJECT
+    public:
+        SkContainmentAdaptor(Karamba *karamba, Plasma::Containment *containment)
+            : SkAppletAdaptor(karamba, containment) {
+            connect(containment, SIGNAL(appletRemoved(Plasma::Applet*)), this, SLOT(appletRemoved(Plasma::Applet*)));
+        }
+        virtual ~SkContainmentAdaptor() { qDeleteAll(m_applets.values()); }
+        Plasma::Containment* containment() const { return static_cast<Plasma::Containment*>(m_applet); }
+    public Q_SLOTS:
+
+        /**
+        * Return the number of applets within this containment.
+        */
+        int appletCount() { return containment()->applets().count(); }
+
+        /**
+        * Return the applet with the defined index or NULL if there is no
+        * such applet within this containment.
+        */
+        QObject* applet(int index) {
+            if( index >= 0 && index < containment()->applets().count() )
+                if( Plasma::Applet *applet = containment()->applets()[index] ) {
+                    if( m_applets.contains(applet->id()) )
+                        return m_applets[applet->id()];
+                    SkAppletAdaptor *a = new SkAppletAdaptor(m_karamba, applet);
+                    m_applets.insert(applet->id(), a);
+                    return a;
+                }
+            return 0;
+        }
+
+    private Q_SLOTS:
+        void appletRemoved(Plasma::Applet* applet) {
+            if( m_applets.contains(applet->id()) )
+                delete m_applets.take(applet->id());
+        }
+    private:
+        Plasma::Containment *m_containment;
+        QMap<uint, SkAppletAdaptor*> m_applets;
 };
 
 #endif

@@ -56,7 +56,7 @@ class SUPERKARAMBA_EXPORT Karamba : public QObject, public QGraphicsItemGroup
 public:
     explicit Karamba(const KUrl &themeFile, QGraphicsView *view = 0,
             int instance = -1, bool subTheme = false,
-            const QPoint &startPos = QPoint(), bool reload = false);
+            const QPoint &startPos = QPoint(), bool reload = false, bool startkaramba = true);
 
     virtual ~Karamba();
 
@@ -140,6 +140,7 @@ public:
     Meter* getMeter(const QString& name);
 
 public Q_SLOTS:
+    void startKaramba();
     void updateSensors();
     void closeWidget();
     void reloadConfig();
@@ -162,7 +163,6 @@ Q_SIGNALS:
     void error(const QString& errormessage);
 
 private Q_SLOTS:
-    void startKaramba();
     void slotToggleLocked();
     void currentDesktopChanged(int i);
     void slotToggleConfigOption(QObject*);
