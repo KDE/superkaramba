@@ -94,7 +94,7 @@ bool SkAppletScript::init()
         applet()->setHasConfigurationInterface(true);
         applet()->setDrawStandardBackground(false);
         applet()->setAspectRatioMode(Qt::IgnoreAspectRatio);
-        applet()->setContentSize(500, 60);
+        applet()->setContentSize(300, 60);
     }
 
     KConfigGroup cg = applet()->config();
