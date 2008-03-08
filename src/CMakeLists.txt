@@ -105,7 +105,7 @@ IF(CMAKE_SYSTEM MATCHES "FreeBSD.*")
   )
 ENDIF(CMAKE_SYSTEM MATCHES "FreeBSD.*")
 
-install(TARGETS superkaramba DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS superkaramba ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### superkaramba bin ###############
 
