@@ -32,27 +32,27 @@ DiskSensor::DiskSensor( int msec ) : Sensor( msec )
 DiskSensor::~DiskSensor()
 {}
 
-int DiskSensor::getFreeSpace(QString mntPt) const
+long DiskSensor::getFreeSpace(QString mntPt) const
 {
     QRegExp rx( "^\\S*\\s*\\d+\\s+\\d+\\s+(\\d+)");
     rx.search(mntMap[mntPt]);
-    return rx.cap(1).toInt();
+    return rx.cap(1).toLong();
 }
 
-int DiskSensor::getUsedSpace(QString mntPt) const
+long DiskSensor::getUsedSpace(QString mntPt) const
 {
     QRegExp rx( "^\\S*\\s*\\d+\\s+(\\d+)\\s+\\d+");
     rx.search(mntMap[mntPt]);
-    return rx.cap(1).toInt();
+    return rx.cap(1).toLong();
 }
 
-int DiskSensor::getTotalSpace(QString mntPt) const
+long DiskSensor::getTotalSpace(QString mntPt) const
 {
 
     QRegExp rx( "^\\S*\\s*(\\d+)\\s+\\d+\\s+\\d+");
     rx.search(mntMap[mntPt]);
 
-    return rx.cap(1).toInt();
+    return rx.cap(1).toLong();
 
 }
 

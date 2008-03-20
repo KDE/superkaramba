@@ -26,9 +26,9 @@ public:
   void setMaxValue( SensorParams *sp );
 
 private:
-  int getFreeSpace(QString mntPt) const;
-  int getUsedSpace(QString mntPt) const;
-  int getTotalSpace(QString mntPt) const;
+  long getFreeSpace(QString mntPt) const;
+  long getUsedSpace(QString mntPt) const;
+  long getTotalSpace(QString mntPt) const;
   int getPercentUsed(QString mntPt) const;
   int getPercentFree(QString mntPt) const;
 
