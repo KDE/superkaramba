@@ -159,8 +159,9 @@ void SkAppletScript::loadKaramba()
     connect(d->theme, SIGNAL(sizeChanged()), this, SLOT(sizeChanged()));
     connect(d->theme, SIGNAL(error(QString)), this, SLOT(scriptError(QString)));
 
-    //applet()->setOpacity(0.5);
-    //QTimer::singleShot(0, d->theme, SLOT(startKaramba()));
+    // hack to prevent the applet's background from being drawn
+    applet()->setOpacity(0.0);
+
     d->theme->startKaramba();
 }
 
