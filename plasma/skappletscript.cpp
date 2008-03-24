@@ -88,13 +88,19 @@ bool SkAppletScript::init()
         applet()->setContentSize(400, 60);
     }
 
-    QString name = QDir(package()->path()).dirName();
+    QDir dir(package()->path());
+    QString name = dir.dirName();
     if( name.toLower().startsWith("sk_") )
         name = name.mid(3);
-
-    QFileInfo fi(package()->path(), QString("%1.theme").arg(name));
-    if( ! fi.exists() )
-        return false;
+    QFileInfo fi(dir, QString("%1.theme").arg(name));
+    if( ! fi.exists() ) {
+        QFileInfoList files = dir.entryInfoList(QStringList() << "*.theme", QDir::Files);
+        if(files.count() < 1) {
+            kWarning() << "Failed to locate the themefile in path=" << package()->path();
+            return false;
+        }
+        fi = files[0];
+    }
 
     d->themeFile = fi.absoluteFilePath();
     QTimer::singleShot(50, this, SLOT(loadKaramba()));
@@ -153,30 +159,51 @@ void SkAppletScript::loadKaramba()
     connect(d->theme, SIGNAL(sizeChanged()), this, SLOT(sizeChanged()));
     connect(d->theme, SIGNAL(error(QString)), this, SLOT(scriptError(QString)));
 
+    //applet()->setOpacity(0.5);
     //QTimer::singleShot(0, d->theme, SLOT(startKaramba()));
     d->theme->startKaramba();
 }
 
 void SkAppletScript::positionChanged()
 {
+    QPointF p = applet()->pos();
+    //QRectF r = applet()->geometry();
+
+//QSizeF s = r.size();
+//s = QSizeF(s.width()+p.x(),s.height()+p.y());
+//applet()->setContentSize(s);
+
+
     //FIXME WTF, sebsauer, 2008-03-07; somehow this doesn't seem to work correct if we are a panel :-(
 
     //Q_ASSERT( ! managingLayout() );
-    QPointF p = d->theme->parentItem()->pos();
 
-    applet()->setPos(p);
+    //applet()->setPos(p);
     //d->theme->getView()->move(p.x(),p.y());
 
-    //QRectF r = applet()->geometry();
-    //r.setTopLeft(p);
-    //applet()->setGeometry(r);
+/*
+QPointF p2;// = r.topLeft();
+p = QPointF(p.x()+p2.x(),p.y()+p2.y());
 
-    //applet()->updateConstraints(Plasma::SizeConstraint);
+    r.moveTo(p);
+    applet()->setGeometry(r);
+*/
+
+applet()->moveBy(p.x(),p.y());
+//applet()->parentItem()->moveBy(p.x(),p.y());
+
+
+    //applet()->update(r);
+    //d->theme->getView()->update();
+    //applet()->updateConstraints();//Plasma::SizeConstraint
 }
 
 void SkAppletScript::sizeChanged()
 {
-    applet()->setContentSize( d->theme->boundingRect().size() );
+    QRectF r = d->theme->boundingRect();
+    QSizeF s = r.size();
+    applet()->setContentSize(s);
+    applet()->setMinimumContentSize(s);//hack else a Panel may lose its size :-/
     //applet()->updateConstraints(Plasma::SizeConstraint);
 }
 
@@ -187,7 +214,11 @@ void SkAppletScript::scriptError(const QString& err)
 
 QSizeF SkAppletScript::contentSizeHint() const
 {
-    return d->theme ? d->theme->boundingRect().size() : Plasma::AppletScript::contentSizeHint();
+    if( ! d->theme )
+        return Plasma::AppletScript::contentSizeHint();
+    QRectF r = d->theme->boundingRect();
+    QSizeF s = r.size();
+    return s;
 }
 
 void SkAppletScript::paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *option, const QRect &contentsRect)

@@ -24,6 +24,7 @@
 #include <plasma/applet.h>
 #include <plasma/containment.h>
 #include <plasma/dataengine.h>
+#include <plasma/layouts/layout.h>
 //#include <plasma/widgets/widget.h>
 //#include <plasma/widgets/label.h>
 //#include <plasma/widgets/lineedit.h>
@@ -167,6 +168,10 @@ class SkAppletAdaptor : public QObject
         */
         QRectF boundingRect() { return m_applet->boundingRect(); }
 
+        QRectF geometry() const { return m_applet->geometry(); }
+        void setGeometry(const QRectF& geom) { m_applet->setGeometry(geom); }
+        void resize(const QSizeF &size) { m_applet->setMinimumContentSize(size);}//setMinimumSize(size);}//resize(size); }
+
         /**
         * Loads and returns the given DataEngine.
         *
@@ -257,6 +262,7 @@ class SkContainmentAdaptor : public SkAppletAdaptor
         SkContainmentAdaptor(Karamba *karamba, Plasma::Containment *containment)
             : SkAppletAdaptor(karamba, containment) {
             connect(containment, SIGNAL(appletRemoved(Plasma::Applet*)), this, SLOT(appletRemoved(Plasma::Applet*)));
+//containment->setOpacity(0.5);
         }
         virtual ~SkContainmentAdaptor() { qDeleteAll(m_applets.values()); }
         Plasma::Containment* containment() const { return static_cast<Plasma::Containment*>(m_applet); }
@@ -283,13 +289,29 @@ class SkContainmentAdaptor : public SkAppletAdaptor
             return 0;
         }
 
+        /**
+        * Adds an applet to this Containment. The choosen \p name is the plugin name for the
+        * applet, as given by KPluginInfo::pluginName() while the \p args are the optional
+        * arguments passed to the applet and \p geometry is where to place the applet, or
+        * to auto-place it if an invalid position is provided.
+        */
+        QObject* addApplet(const QString& appletname, const QVariantList& args = QVariantList(), const QRectF& geometry = QRectF(-1, -1, -1, -1)) {
+            if( Plasma::Applet *applet = containment()->addApplet(appletname, args, 0, geometry) ) {
+                SkAppletAdaptor *a = new SkAppletAdaptor(m_karamba, applet);
+                Q_ASSERT( ! m_applets.contains(applet->id()) );
+                m_applets.insert(applet->id(), a);
+                applet->raise();
+                return a;
+            }
+            return 0;
+        }
+
     private Q_SLOTS:
         void appletRemoved(Plasma::Applet* applet) {
             if( m_applets.contains(applet->id()) )
                 delete m_applets.take(applet->id());
         }
     private:
-        Plasma::Containment *m_containment;
         QMap<uint, SkAppletAdaptor*> m_applets;
 };
 
