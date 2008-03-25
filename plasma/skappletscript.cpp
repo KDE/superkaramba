@@ -160,7 +160,7 @@ void SkAppletScript::loadKaramba()
     connect(d->theme, SIGNAL(error(QString)), this, SLOT(scriptError(QString)));
 
     // hack to prevent the applet's background from being drawn
-    applet()->setOpacity(0.0);
+    //applet()->setOpacity(0.0);
 
     d->theme->startKaramba();
 }
@@ -272,6 +272,12 @@ QList<QAction*> SkAppletScript::contextActions()
 
 void SkAppletScript::constraintsUpdated(Plasma::Constraints constraints)
 {
+    if( constraints & Plasma::FormFactorConstraint ) {
+        if( ! applet()->isContainment() ) {
+            applet()->setDrawStandardBackground(false);
+        }
+    }
+
     if( constraints & Plasma::SizeConstraint ) {
         if( d->theme ) {
             const QRectF r = d->theme->boundingRect();
@@ -284,6 +290,7 @@ void SkAppletScript::constraintsUpdated(Plasma::Constraints constraints)
             d->theme->setTransform(t.scale(x, y));
         }
     }
+
     if( constraints & Plasma::ImmutableConstraint ) {
         Q_ASSERT( applet() );
         //applet()->setDrawStandardBackground();
