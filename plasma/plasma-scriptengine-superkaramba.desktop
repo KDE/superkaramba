@@ -18,6 +18,7 @@ Comment[ko]=Karamba 데스크톱 테마
 Comment[pt]=Tema do Ambiente do Karamba
 Comment[pt_BR]=Temas da Área de Trabalho do Karamba
 Comment[x-test]=xxKaramba Desktop Themexx
+Comment[zh_CN]=Karamba 桌面主题
 Comment[zh_TW]=Karamba 桌面主題
 X-KDE-ServiceTypes=Plasma/ScriptEngine
 Type=Service
