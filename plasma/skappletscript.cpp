@@ -85,7 +85,7 @@ bool SkAppletScript::init()
         applet()->setHasConfigurationInterface(false);//true);
         applet()->setDrawStandardBackground(false);
         applet()->setAspectRatioMode(Qt::IgnoreAspectRatio);
-        applet()->setContentSize(400, 60);
+        applet()->resize(400, 60);
     }
 
     QDir dir(package()->path());
@@ -203,8 +203,8 @@ void SkAppletScript::sizeChanged()
 {
     QRectF r = d->theme->boundingRect();
     QSizeF s = r.size();
-    applet()->setContentSize(s);
-    applet()->setMinimumContentSize(s);//hack else a Panel may lose its size :-/
+    applet()->resize(s);
+    applet()->setMinimumSize(s);//hack else a Panel may lose its size :-/
     //applet()->updateConstraints(Plasma::SizeConstraint);
 }
 
@@ -281,7 +281,7 @@ void SkAppletScript::constraintsUpdated(Plasma::Constraints constraints)
     if( constraints & Plasma::SizeConstraint ) {
         if( d->theme ) {
             const QRectF r = d->theme->boundingRect();
-            const QSizeF s = applet()->contentSize();
+            const QSizeF s = applet()->geometry().size();
             const qreal x = s.width() / r.width();
             const qreal y = s.height() / r.height();
 
@@ -301,7 +301,7 @@ void SkAppletScript::constraintsUpdated(Plasma::Constraints constraints)
         if( applet()->drawStandardBackground() && d->theme ) {
             //QRectF geometry = applet()->geometry();
             //geometry.setSize( );
-            applet()->setContentSize( d->theme->boundingRect().size() );
+            applet()->resize( d->theme->boundingRect().size() );
         }
     }
 }
@@ -324,7 +324,7 @@ void SkAppletScript::karambaStarted(QGraphicsItemGroup* group)
             }
         }
 
-        applet()->setContentSize(d->theme->boundingRect().size());
+        applet()->resize(d->theme->boundingRect().size());
         applet()->updateConstraints(Plasma::SizeConstraint);
     }
 }

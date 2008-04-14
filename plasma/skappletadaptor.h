@@ -170,7 +170,7 @@ class SkAppletAdaptor : public QObject
 
         QRectF geometry() const { return m_applet->geometry(); }
         void setGeometry(const QRectF& geom) { m_applet->setGeometry(geom); }
-        void resize(const QSizeF &size) { m_applet->setMinimumContentSize(size);}//setMinimumSize(size);}//resize(size); }
+        void resize(const QSizeF &size) { m_applet->resize(size);}//setMinimumSize(size);}//resize(size); }
 
         /**
         * Loads and returns the given DataEngine.
