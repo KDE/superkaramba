@@ -24,7 +24,6 @@
 #include <plasma/applet.h>
 #include <plasma/containment.h>
 #include <plasma/dataengine.h>
-#include <plasma/layouts/layout.h>
 //#include <plasma/widgets/widget.h>
 //#include <plasma/widgets/label.h>
 //#include <plasma/widgets/lineedit.h>

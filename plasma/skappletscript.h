@@ -27,7 +27,6 @@
 #include <plasma/applet.h>
 #include <plasma/containment.h>
 #include <plasma/theme.h>
-#include <plasma/layouts/layout.h>
 
 /**
  * The SkAppletScript class implements a \a Plasma::AppletScript to
