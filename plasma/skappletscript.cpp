@@ -82,7 +82,7 @@ bool SkAppletScript::init()
         //package()->metadata()->;
     }
     else { // Plasma::Applet
-        applet()->setHasConfigurationInterface(false);//true);
+        //applet()->setHasConfigurationInterface(false);//true);
         applet()->setDrawStandardBackground(false);
         applet()->setAspectRatioMode(Qt::IgnoreAspectRatio);
         applet()->resize(400, 60);
@@ -225,7 +225,7 @@ QSizeF SkAppletScript::contentSizeHint() const
 void SkAppletScript::paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *option, const QRect &contentsRect)
 {
     if( d->errors.count() > 0 ) {
-        QColor fontcolor = KColorScheme(QPalette::Active, KColorScheme::View, Plasma::Theme::self()->colors()).foreground().color();
+        QColor fontcolor = KColorScheme(QPalette::Active, KColorScheme::View, Plasma::Theme::self()->colorScheme()).foreground().color();
         painter->setPen(QPen(fontcolor));
 
         painter->setRenderHint(QPainter::SmoothPixmapTransform);
