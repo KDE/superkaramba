@@ -225,7 +225,7 @@ QSizeF SkAppletScript::contentSizeHint() const
 void SkAppletScript::paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *option, const QRect &contentsRect)
 {
     if( d->errors.count() > 0 ) {
-        QColor fontcolor = KColorScheme(QPalette::Active, KColorScheme::View, Plasma::Theme::self()->colorScheme()).foreground().color();
+        QColor fontcolor = KColorScheme(QPalette::Active, KColorScheme::View, Plasma::Theme::defaultTheme()->colorScheme()).foreground().color();
         painter->setPen(QPen(fontcolor));
 
         painter->setRenderHint(QPainter::SmoothPixmapTransform);
