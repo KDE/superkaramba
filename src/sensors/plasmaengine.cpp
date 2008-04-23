@@ -168,12 +168,12 @@ void PlasmaSensor::setEngine(const QString& name)
     if( d->engine ) {
         disconnect(d->engine, SIGNAL(newSource(QString)), this, SIGNAL(sourceAdded(QString)));
         disconnect(d->engine, SIGNAL(sourceRemoved(QString)), this, SIGNAL(sourceRemoved(QString)));
-        Plasma::DataEngineManager::self()->unload(d->engineName);
+        Plasma::DataEngineManager::self()->unloadEngine(d->engineName);
     }
     d->engineName = QString();
-    d->engine = Plasma::DataEngineManager::self()->get(name);
+    d->engine = Plasma::DataEngineManager::self()->engine(name);
     if( ! d->engine || ! d->engine->isValid() ) {
-        d->engine = Plasma::DataEngineManager::self()->load(name);
+        d->engine = Plasma::DataEngineManager::self()->loadEngine(name);
         if( ! d->engine || ! d->engine->isValid() ) {
             kWarning()<<"PlasmaSensor::setEngine: No such engine: "<<name<<endl;
             return;
