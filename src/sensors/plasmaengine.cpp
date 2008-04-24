@@ -222,7 +222,7 @@ QObject* PlasmaSensor::connectSource(const QString& source, QObject* visualizati
     if( Meter* m = dynamic_cast<Meter*>(visualization) ) {
         PlasmaSensorConnector* c = new PlasmaSensorConnector(m, source);
         d->engine->connectSource(source, c);
-        kDebug()<<"PlasmaSensor::connectSource meter, engine isValid="<<d->engine->isValid()<<" isUsed="<<d->engine->isUsed()<<endl;
+        kDebug()<<"PlasmaSensor::connectSource meter, engine isValid="<<d->engine->isValid();
         return c;
     }
     d->engine->connectSource(source, visualization ? visualization : this);
