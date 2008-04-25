@@ -70,7 +70,7 @@ bool SkAppletScript::init()
     if( applet()->isContainment() ) { // Plasma::Containment
         Plasma::Containment *c = dynamic_cast<Plasma::Containment *>(applet());
 
-        c->setContainmentType(Plasma::Containment::PanelContainment);
+        //c->setContainmentType(Plasma::Containment::PanelContainment);
         c->setZValue(150);
         c->setFormFactor(Plasma::Horizontal);
         c->setLocation(Plasma::TopEdge);
