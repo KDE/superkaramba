@@ -22,6 +22,7 @@ endif(PYTHONLIBS_FOUND)
 ADD_SUBDIRECTORY( src )
 ADD_SUBDIRECTORY( icons )
 
-if(PLASMA_FOUND)
-  ADD_SUBDIRECTORY( plasma )
-endif(PLASMA_FOUND)
+#sebsauer, 2008-04-25; disabled for now
+#if(PLASMA_FOUND)
+#  ADD_SUBDIRECTORY( plasma )
+#endif(PLASMA_FOUND)
