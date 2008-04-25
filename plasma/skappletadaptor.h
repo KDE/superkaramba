@@ -295,7 +295,7 @@ class SkContainmentAdaptor : public SkAppletAdaptor
         * to auto-place it if an invalid position is provided.
         */
         QObject* addApplet(const QString& appletname, const QVariantList& args = QVariantList(), const QRectF& geometry = QRectF(-1, -1, -1, -1)) {
-            if( Plasma::Applet *applet = containment()->addApplet(appletname, args, 0, geometry) ) {
+            if( Plasma::Applet *applet = containment()->addApplet(appletname, args, geometry) ) {
                 SkAppletAdaptor *a = new SkAppletAdaptor(m_karamba, applet);
                 Q_ASSERT( ! m_applets.contains(applet->id()) );
                 m_applets.insert(applet->id(), a);
