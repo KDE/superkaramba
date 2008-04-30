@@ -110,7 +110,7 @@ bool SkPackage::installPackage(const QString &archivePath, const QString &packag
     group.writeEntry("X-KDE-PluginInfo-EnabledByDefault", "true");
 
     // the SkAppletScript ScriptEngine implementation is responsible for our new applet.
-    group.writeEntry("X-Plasma-Language", "superkaramba");
+    group.writeEntry("X-Plasma-API", "superkaramba");
     // its an applet.
     group.writeEntry("X-Plasma-ComponentTypes", "Applet");
     // the SkPackage PackageStructure implementation is responsible for the applets package format.
