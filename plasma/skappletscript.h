@@ -75,7 +75,7 @@ public:
      *
      * @param constraints the type of constraints that were updated
      */
-    virtual void constraintsUpdated(Plasma::Constraints constraints);
+    virtual void constraintsEvent(Plasma::Constraints constraints);
 
     /**
      * Called when the applet should be painted.

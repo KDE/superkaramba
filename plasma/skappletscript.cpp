@@ -272,7 +272,7 @@ QList<QAction*> SkAppletScript::contextualActions()
     return d->actions;
 }
 
-void SkAppletScript::constraintsUpdated(Plasma::Constraints constraints)
+void SkAppletScript::constraintsEvent(Plasma::Constraints constraints)
 {
     if( constraints & Plasma::FormFactorConstraint ) {
 #if 0
@@ -295,6 +295,7 @@ void SkAppletScript::constraintsUpdated(Plasma::Constraints constraints)
         }
     }
 
+#if 0
     if( constraints & Plasma::ImmutableConstraint ) {
         Q_ASSERT( applet() );
         //applet()->setDrawStandardBackground();
@@ -302,14 +303,14 @@ void SkAppletScript::constraintsUpdated(Plasma::Constraints constraints)
         //if( d->theme ) d->theme->update();
         //applet()->update();
 
-#if 0
         if( applet()->drawStandardBackground() && d->theme ) {
             //QRectF geometry = applet()->geometry();
             //geometry.setSize( );
             applet()->resize( d->theme->boundingRect().size() );
         }
-#endif
     }
+#endif
+
 }
 
 void SkAppletScript::showConfigurationInterface()
