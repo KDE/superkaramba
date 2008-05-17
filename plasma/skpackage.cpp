@@ -40,7 +40,7 @@ SkPackage::~SkPackage()
 
 bool SkPackage::installPackage(const QString &archivePath, const QString &packageRoot)
 {
-    kDebug()<<"SkPackage::installPackage archivePath="<<archivePath<<"packageRoot="<<packageRoot;
+    kDebug()<<"archivePath="<<archivePath<<"packageRoot="<<packageRoot;
 
     ThemeFile theme(archivePath);
 
@@ -51,7 +51,9 @@ bool SkPackage::installPackage(const QString &archivePath, const QString &packag
     }
 
     const QString path = root.path();
-    if( ! theme.extractArchiveTo(path) ) {
+    //if( ! theme.extractArchiveTo(path) ) {
+    if( ! theme.copyArchiveTo(path) ) {
+        kWarning()<<"Failed to copy archive="<<archivePath<<" to path="<<path;
         return false;
     }
 
@@ -59,8 +61,8 @@ bool SkPackage::installPackage(const QString &archivePath, const QString &packag
 
     Plasma::PackageMetadata data;
     data.setPluginName(name);
-    data.setImplementationLanguage("superkaramba");
-    //data.setType(const QString& type);
+    data.setImplementationApi("superkaramba");
+    data.setType("SuperKaramba");
     //data.setServiceType(const QString &);
     data.setName(theme.name());
     data.setDescription(i18n("SuperKaramba Theme"));
@@ -69,11 +71,12 @@ bool SkPackage::installPackage(const QString &archivePath, const QString &packag
     data.setVersion(theme.version());
     data.setWebsite(theme.homepage());
     data.setLicense(theme.license());
-    //data.setApplication(const QString &);
+    //data.setApplication("superkaramba");
     //data.setRequiredVersion(const QString &);
 
     QString iconfile = "superkaramba";
     if( ! theme.iconName().isEmpty() ) {
+        theme.extractArchiveFileTo(theme.iconName(), path);
         QFileInfo fi(path, theme.iconName());
         if( fi.exists() )
             iconfile = fi.absoluteFilePath();

@@ -56,11 +56,13 @@ public:
      */
     virtual bool init();
 
+#if 0
     /**
      * Called to discover the content size hint for the item.
      * \return returns the contentSizeHint of the SuperKaramba Theme.
      */
     virtual QSizeF contentSizeHint() const;
+#endif
 
     /**
      * Called when any of the geometry constraints have been updated.

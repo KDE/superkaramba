@@ -32,6 +32,7 @@
 #include <KStandardDirs>
 #include <KLocale>
 #include <kio/job.h>
+#include <kio/copyjob.h>
 #include <KIO/NetAccess>
 #include <kross/core/manager.h>
 #include <kross/core/interpreter.h>
@@ -121,6 +122,16 @@ public:
     bool extractArchiveTo(const QString& path)
     {
         m_dir->copyTo(path);
+        return true;
+    }
+
+    bool extractArchiveFileTo(const QString& file, const QString& path)
+    {
+        const KArchiveEntry* entry = m_dir ? m_dir->entry(file) : 0;
+        const KArchiveFile* f = (entry && entry->isFile()) ? static_cast<const KArchiveFile*>(entry) : 0;
+        if (! f)
+            return false;
+        f->copyTo(path);
         return true;
     }
 
@@ -498,6 +509,23 @@ QString ThemeFile::extractArchive() const
 bool ThemeFile::extractArchiveTo(const QString& path)
 {
     return isZipTheme() ? d->zip->extractArchiveTo(path) : false;
+}
+
+bool ThemeFile::extractArchiveFileTo(const QString& file, const QString& path)
+{
+    return isZipTheme() ? d->zip->extractArchiveFileTo(file, path) : false;
+}
+
+bool ThemeFile::copyArchiveTo(const QString& path)
+{
+    if (! isZipTheme())
+        return false;
+    KUrl url = getUrlPath();
+    if (! url.isValid())
+        return false;
+    KIO::CopyJob* job = KIO::copy(url, path, KIO::HideProgressInfo | KIO::Overwrite);
+    bool ok = KIO::NetAccess::synchronousRun( job, 0 );
+    return ok;
 }
 
 bool ThemeFile::isZipTheme() const

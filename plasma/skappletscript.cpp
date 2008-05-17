@@ -83,8 +83,8 @@ bool SkAppletScript::init()
     }
     else { // Plasma::Applet
         //applet()->setHasConfigurationInterface(false);//true);
-        applet()->setDrawStandardBackground(false);
-        applet()->setAspectRatioMode(Qt::IgnoreAspectRatio);
+//applet()->setDrawStandardBackground(false);
+        applet()->setAspectRatioMode(Plasma::IgnoreAspectRatio);
         applet()->resize(400, 60);
     }
 
@@ -94,7 +94,7 @@ bool SkAppletScript::init()
         name = name.mid(3);
     QFileInfo fi(dir, QString("%1.theme").arg(name));
     if( ! fi.exists() ) {
-        QFileInfoList files = dir.entryInfoList(QStringList() << "*.theme", QDir::Files);
+        QFileInfoList files = dir.entryInfoList(QStringList() << "*.skz" << "*.theme", QDir::Files);
         if(files.count() < 1) {
             kWarning() << "Failed to locate the themefile in path=" << package()->path();
             return false;
@@ -213,6 +213,7 @@ void SkAppletScript::scriptError(const QString& err)
     d->errors << err;
 }
 
+#if 0
 QSizeF SkAppletScript::contentSizeHint() const
 {
     if( ! d->theme )
@@ -221,6 +222,7 @@ QSizeF SkAppletScript::contentSizeHint() const
     QSizeF s = r.size();
     return s;
 }
+#endif
 
 void SkAppletScript::paintInterface(QPainter *painter, const QStyleOptionGraphicsItem *option, const QRect &contentsRect)
 {
@@ -273,9 +275,11 @@ QList<QAction*> SkAppletScript::contextActions()
 void SkAppletScript::constraintsUpdated(Plasma::Constraints constraints)
 {
     if( constraints & Plasma::FormFactorConstraint ) {
+#if 0
         if( ! applet()->isContainment() ) {
             applet()->setDrawStandardBackground(false);
         }
+#endif
     }
 
     if( constraints & Plasma::SizeConstraint ) {
@@ -298,11 +302,13 @@ void SkAppletScript::constraintsUpdated(Plasma::Constraints constraints)
         //if( d->theme ) d->theme->update();
         //applet()->update();
 
+#if 0
         if( applet()->drawStandardBackground() && d->theme ) {
             //QRectF geometry = applet()->geometry();
             //geometry.setSize( );
             applet()->resize( d->theme->boundingRect().size() );
         }
+#endif
     }
 }
 
