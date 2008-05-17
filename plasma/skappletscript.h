@@ -93,7 +93,7 @@ public:
      * @return A list of actions. The default implementation returns an
      *         empty list.
      */
-    virtual QList<QAction*> contextActions();
+    virtual QList<QAction*> contextualActions();
 
 public Q_SLOTS:
 

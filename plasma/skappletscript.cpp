@@ -267,7 +267,7 @@ void SkAppletScript::paintInterface(QPainter *painter, const QStyleOptionGraphic
     }
 }
 
-QList<QAction*> SkAppletScript::contextActions()
+QList<QAction*> SkAppletScript::contextualActions()
 {
     return d->actions;
 }
