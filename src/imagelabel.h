@@ -107,7 +107,7 @@ public:
   ~ImageLabel();
   void setValue( QString imagePath );
 
-  void setValue( int );
+  void setValue( long );
   void setValue( QPixmap& );
   QString getStringValue() { return imagePath; };
   void scale( int, int );

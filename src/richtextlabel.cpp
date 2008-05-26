@@ -80,7 +80,7 @@ void RichTextLabel::setValue(QString text)
   setText(text);
 }
 
-void RichTextLabel::setValue(int v)
+void RichTextLabel::setValue(long v)
 {
   setText(QString::number(v));
 }

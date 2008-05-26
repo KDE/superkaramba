@@ -31,7 +31,7 @@ class RichTextLabel : public Meter
 
     void setText(QString text, bool linkUnderline = false);
     void setValue(QString text);
-    void setValue(int v);
+    void setValue(long v);
     QString getStringValue() { return source; };
 
     void setFont(QString font);

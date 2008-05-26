@@ -84,7 +84,7 @@ void ClickMap::setValue( QString v )
     }
 }
 
-void ClickMap::setValue( int v )
+void ClickMap::setValue( long v )
 {
     if ( v == 0 )
     {

@@ -39,17 +39,17 @@ public:
 
   virtual void setSize(int ix, int iy, int iw, int ih);
 
-  virtual void setMax(int max) { maxValue = max; };
-  virtual void setMin(int min) { minValue = min; };
-  virtual int getMax() { return minValue; };
-  virtual int getMin() { return maxValue; };
+  virtual void setMax(long max) { maxValue = max; };
+  virtual void setMin(long min) { minValue = min; };
+  virtual long getMax() { return minValue; };
+  virtual long getMin() { return maxValue; };
 
   void setThemePath( QString );
 
   virtual void mUpdate(QPainter *)=0 ;
 
-  virtual void setValue(int) {};
-  virtual int getValue() { return -1; };
+  virtual void setValue(long) {};
+  virtual long getValue() { return -1; };
   virtual void setValue(QString) {};
   virtual QString getStringValue() const { return QString::null; };
   virtual void recalculateValue() {};
@@ -89,8 +89,8 @@ protected: // Protected attributes
 
   bool clickable;
   int hidden;
-  int minValue;
-  int maxValue;
+  long minValue;
+  long maxValue;
 
   QColor color;
   karamba* m_karamba;

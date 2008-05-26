@@ -51,7 +51,7 @@ bool Bar::setImage(QString fileName)
   return res;
 }
 
-void Bar::setValue( int v )
+void Bar::setValue( long v )
 {
   if(v > maxValue)
   {
@@ -67,16 +67,16 @@ void Bar::setValue( int v )
 
   barValue = v;
 
-  int diff = maxValue - minValue;
+  long diff = maxValue - minValue;
   if(diff != 0)
   {
     if(vertical)
     {
-      value = int((v-minValue)*getHeight() / diff + 0.5);
+      value = long((v-minValue)*getHeight() / diff + 0.5);
     }
     else // horizontal
     {
-      value = int((v-minValue)*getWidth() / diff + 0.5);
+      value = long((v-minValue)*getWidth() / diff + 0.5);
     }
   }
   else
@@ -87,16 +87,16 @@ void Bar::setValue( int v )
 
 void Bar::setValue(QString v)
 {
-  setValue((int)(v.toDouble() + 0.5));
+  setValue((long)(v.toDouble() + 0.5));
 }
 
-void Bar::setMax(int m)
+void Bar::setMax(long m)
 {
   Meter::setMax(m);
   recalculateValue();
 }
 
-void Bar::setMin(int m)
+void Bar::setMin(long m)
 {
   Meter::setMin(m);
   recalculateValue();

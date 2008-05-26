@@ -29,7 +29,7 @@ Graph::~Graph()
     delete[] values;
 }
 
-void Graph::setValue( int v)
+void Graph::setValue( long v)
 {
     if( v > maxValue)
     {
@@ -48,7 +48,7 @@ void Graph::setValue( int v)
 
 void Graph::setValue( QString v )
 {
-  setValue((int)(v.toDouble() + 0.5));
+  setValue((long)(v.toDouble() + 0.5));
 }
 
 void Graph::mUpdate(QPainter *p)

@@ -93,7 +93,7 @@ void TextLabel::setValue( QString text)
     calculateTextSize();
 }
 
-void TextLabel::setValue( int v)
+void TextLabel::setValue( long v)
 {
     value = QStringList( QString::number( v ) );
     calculateTextSize();

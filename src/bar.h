@@ -24,15 +24,15 @@ public:
 
     void mUpdate( QPainter * );
 
-    virtual void setMax( int m );
-    virtual void setMin( int m );
+    virtual void setMax( long m );
+    virtual void setMin( long m );
 
 public slots:
     bool setImage( QString imagePath );
     QString getImage() { return imagePath; };
 
-    void setValue( int );
-    int  getValue() { return barValue; };
+    void setValue( long );
+    long  getValue() { return barValue; };
     void setValue( QString );
     void recalculateValue() {setValue(barValue); };
 
@@ -40,8 +40,8 @@ public slots:
     int  getVertical() { return vertical; };
 
 private:
-    int barValue;
-    int value;
+    long barValue;
+    long value;
 
     int pixmapWidth;
     int pixmapHeight;

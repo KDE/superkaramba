@@ -33,7 +33,7 @@ public:
 
     void setTextProps( TextField* );
     void setValue( QString );
-    void setValue( int );
+    void setValue( long );
     //virtual QString getStringValue() const { return value.join("\n"); };
     QString getStringValue() const { return value.join("\n"); };
     void setFontSize( int );

@@ -54,7 +54,7 @@ public:
     QRect getRectangle();
 
     void mUpdate( QPainter* );
-    void setValue( int );
+    void setValue( long );
     void setValue( QString );
 
     QRect rect;

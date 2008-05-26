@@ -30,7 +30,7 @@ public:
     virtual bool click( QMouseEvent* );
     void mUpdate( QPainter* );
     void setValue( QString );
-    void setValue( int );
+    void setValue( long );
     void setTextProps( TextField * );
 
 private:

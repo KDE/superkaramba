@@ -87,7 +87,7 @@ void ClickArea::mUpdate( QPainter *p )
 }
 
 
-void ClickArea::setValue( int v)
+void ClickArea::setValue( long v)
 {
 
     setValue( QString::number( v ) );

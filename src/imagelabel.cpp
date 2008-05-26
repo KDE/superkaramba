@@ -155,7 +155,7 @@ ImageLabel::~ImageLabel()
   }
 }
 
-void ImageLabel::setValue(int v)
+void ImageLabel::setValue(long v)
 {
  setValue( QString::number( v ) );
 }

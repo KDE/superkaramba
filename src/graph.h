@@ -24,8 +24,8 @@ public:
   Graph();
   ~Graph();
 
-  void setValue( int );
-  int getValue() { return lastValue; };
+  void setValue( long );
+  long getValue() { return lastValue; };
   void setValue( QString );
   void mUpdate( QPainter * );
 
