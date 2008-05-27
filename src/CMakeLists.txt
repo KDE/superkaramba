@@ -138,7 +138,7 @@ superkaramba
 
 set_target_properties(superkaramba-bin PROPERTIES OUTPUT_NAME superkaramba)
 
-install(TARGETS superkaramba-bin DESTINATION ${BIN_INSTALL_DIR})
+install(TARGETS superkaramba-bin ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(FILES superkarambaui.rc DESTINATION ${DATA_INSTALL_DIR}/superkaramba)
 install(FILES superkaramba.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install(FILES org.kde.superkaramba.xml DESTINATION ${DBUS_INTERFACES_INSTALL_DIR})
