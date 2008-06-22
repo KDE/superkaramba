@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=SuperKaramba Theme Files
+Name[ca]=Fitxers de temes del SuperKaramba
 Name[da]=SuperKaramba temafiler
 Name[de]=SuperKaramba Design-Dateien
 Name[el]=Αρχεία θεμάτων του SuperKaramba
@@ -23,6 +24,7 @@ Name[x-test]=xxSuperKaramba Theme Filesxx
 Name[zh_CN]=SuperKaramba 主题文件
 Name[zh_TW]=SuperKaramba 主題檔案
 Comment=Karamba Desktop Themes
+Comment[ca]=Temes d'escriptori del Karamba
 Comment[da]=Karamba desktoptemaer
 Comment[de]=Karamba Arbeitsflächendesigns
 Comment[el]=Θέματα επιφάνειας εργασίας του Karamba
