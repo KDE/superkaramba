@@ -62,7 +62,7 @@ bool SkPackage::installPackage(const QString &archivePath, const QString &packag
     Plasma::PackageMetadata data;
     data.setPluginName(name);
     data.setImplementationApi("superkaramba");
-    data.setType("SuperKaramba");
+    data.setCategory("SuperKaramba");
     //data.setServiceType(const QString &);
     data.setName(theme.name());
     data.setDescription(i18n("SuperKaramba Theme"));
