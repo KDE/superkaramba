@@ -1331,8 +1331,8 @@ void Karamba::setSensor(const LineParser& lineParser, Meter* meter)
             }
 
             QString propertiesLine = lineParser.getString("PROPERTIES");
-            QStringList properties = propertiesLine.split(",");
-            foreach (QString property, properties) {
+            const QStringList properties = propertiesLine.split(",");
+            foreach (const QString &property, properties) {
                 QStringList options = property.split(":");
                 if (options.count() == 2) {
                     plasmasensor->setProperty(options[0].toLatin1(), options[1]);

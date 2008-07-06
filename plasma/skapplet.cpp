@@ -267,7 +267,7 @@ extern "C" {
 
         QList<QMap<QString, QVariant> > result;
 
-        foreach (QString theme, themes) {
+        foreach (const QString &theme, themes) {
             ThemeFile themeFile(theme);
 
             QMap<QString, QVariant> metadata;

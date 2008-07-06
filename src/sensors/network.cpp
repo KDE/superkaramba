@@ -172,9 +172,9 @@ void NetworkSensor::getInOutBytes(unsigned long &in, unsigned long &out) const
 
 void NetworkSensor::getIPAddress()
 {
-    QList<QNetworkInterface> interfaces = QNetworkInterface::allInterfaces();
+    const QList<QNetworkInterface> interfaces = QNetworkInterface::allInterfaces();
 
-    foreach (QNetworkInterface interface, interfaces) {
+    foreach (const QNetworkInterface &interface, interfaces) {
         if (device == interface.name()) {
             QList<QNetworkAddressEntry> entries = interface.addressEntries();
             if (entries.count() > 0) {

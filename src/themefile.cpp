@@ -326,8 +326,8 @@ bool ThemeFile::set(const KUrl &url)
     d->script = d->name;
 
     bool fileExtensionFound = false;
-    QStringList availInterp = Kross::Manager::self().interpreters();
-    foreach (QString interpreter, availInterp) {
+    const QStringList availInterp = Kross::Manager::self().interpreters();
+    foreach (const QString &interpreter, availInterp) {
         QString fileExtension = Kross::Manager::self().interpreterInfo(interpreter)->wildcard();
         fileExtension.remove(0, 1);
 

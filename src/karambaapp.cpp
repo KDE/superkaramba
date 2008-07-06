@@ -71,7 +71,7 @@ void KarambaApplication::checkCommandLine(KCmdLineArgs *args, QList<KUrl> &lst)
 
 void KarambaApplication::startThemes(const QList<KUrl> &lst)
 {
-    foreach(KUrl url, lst) {
+    foreach(const KUrl &url, lst) {
         new Karamba(url);
     }
 }
@@ -110,14 +110,14 @@ void KarambaApplication::checkPreviousSession(QList<KUrl> &lst)
     if (isSessionRestored()) {
         KSharedConfigPtr config = KGlobal::config();
         KConfigGroup group(config, "Session");
-        QList<QString> themePaths = group.readEntry("OpenThemes", QList<QString>());
+        const QList<QString> themePaths = group.readEntry("OpenThemes", QList<QString>());
         /*
         KConfig *config = sessionConfig();
         KConfigGroup group(config, "Session");
         QList<QString> themePaths = group.readEntry("OpenThemes", QList<QString>());
         */
 
-        foreach(QString path, themePaths) {
+        foreach(const QString &path, themePaths) {
             lst.append(KUrl(path));
         }
     }
