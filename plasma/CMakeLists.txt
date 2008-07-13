@@ -1,7 +1,7 @@
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_SOURCE_DIR}/superkaramba/src
-    ${CMAKE_BINARY_DIR}/superkaramba/src
+    ${PROJECT_SOURCE_DIR}/src
+    ${PROJECT_BINARY_DIR}/src
     ${KDE4_INCLUDES}
     ${PLASMA_INCLUDE_DIR}
 )

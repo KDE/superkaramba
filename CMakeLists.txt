@@ -1,6 +1,7 @@
 PROJECT(superkaramba)
 
 find_package( KDE4 REQUIRED )
+find_package( Blitz REQUIRED )
 include( KDE4Defaults )
 include( MacroLibrary )
 include( MacroOptionalAddSubdirectory )
