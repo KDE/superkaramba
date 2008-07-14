@@ -147,6 +147,7 @@ void SuperKarambaApplet::init()
         filedialog->setMode( KFile::File | KFile::ExistingOnly | KFile::LocalOnly );
         if( filedialog->exec() )
             d->themePath = filedialog->selectedUrl();
+        delete filedialog;
     }
 
     if( d->themePath.isValid() ) {
