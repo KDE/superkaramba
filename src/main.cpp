@@ -41,7 +41,7 @@
 static const char *description =
     I18N_NOOP("A KDE Eye-candy Application");
 
-static const char *version = "0.50";
+static const char *version = "0.51";
 
 int main(int argc, char **argv)
 {
@@ -84,7 +84,8 @@ int main(int argc, char **argv)
     KAboutData about("superkaramba", 0, ki18n("SuperKaramba"),
                      version, ki18n(description),
                      KAboutData::License_GPL,
-                     ki18n("(c) 2003-2007 The SuperKaramba developers"));
+                     ki18n("(c) 2003-2008 The SuperKaramba developers"), KLocalizedString(),
+                     "http://utils.kde.org/projects/superkaramba");
     about.addAuthor(ki18n("Adam Geitgey"), KLocalizedString(), "adam@rootnode.org");
     about.addAuthor(ki18n("Hans Karlsson"), KLocalizedString(), "karlsson.h@home.se");
     about.addAuthor(ki18n("Ryan Nickell"), KLocalizedString(), "p0z3r@earthlink.net");
