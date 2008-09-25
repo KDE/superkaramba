@@ -211,7 +211,7 @@ PyObject* py_resizeInputBox(PyObject *self, PyObject *args);
 *   long changeInputBoxFont(widget, inputBox, font)
 * DESCRIPTION
 *   This will change the font of a Input Box widget. InputBox is the reference to the
-*   Input Box object to change. Font is a string the the name of the font to use.
+*   Input Box object to change. Font is a string with the name of the font to use.
 * ARGUMENTS
 *   * long widget -- karamba
 *   * long inputBox -- pointer to inputBox

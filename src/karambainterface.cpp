@@ -5532,7 +5532,7 @@ int KarambaInterface::getTextShadow(const Karamba *k, const TextLabel *text) con
 *   This will change the font of a text widget (only ones you created
 *   through python currently). Text is the reference to the text
 *   object to change that you saved from the createText() call. Font is a
-*   string the the name of the font to use.
+*   string with the name of the font to use.
 * ARGUMENTS
 *   * reference to widget -- karamba
 *   * reference to text -- text meter
