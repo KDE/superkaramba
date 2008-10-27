@@ -289,7 +289,7 @@ class SkContainmentAdaptor : public SkAppletAdaptor
         }
 
         /**
-        * Adds an applet to this Containment. The choosen \p name is the plugin name for the
+        * Adds an applet to this Containment. The chosen \p name is the plugin name for the
         * applet, as given by KPluginInfo::pluginName() while the \p args are the optional
         * arguments passed to the applet and \p geometry is where to place the applet, or
         * to auto-place it if an invalid position is provided.
