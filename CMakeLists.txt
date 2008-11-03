@@ -1,11 +1,5 @@
 PROJECT(superkaramba)
 
-find_package( KDE4 REQUIRED )
-find_package( Blitz REQUIRED )
-include( KDE4Defaults )
-include( MacroLibrary )
-include( MacroOptionalAddSubdirectory )
-
 macro_optional_find_package(PythonLibs)
 macro_optional_find_package(Plasma)
 
