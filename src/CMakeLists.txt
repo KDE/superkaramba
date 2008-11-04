@@ -7,11 +7,9 @@ include_directories( ${BLITZ_INCLUDES} )
 CONFIGURE_FILE(config-superkaramba.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-superkaramba.h)
 
 ########### the Plasma::DataEngine-sensor ###############
-if(PLASMA_FOUND)
-    set(PLASMASENSOR_SRC "sensors/plasmaengine.cpp")
-    set(PLASMASENSOR_LIB plasma)
-    ADD_DEFINITIONS(-DPLASMASENSOR_ENABLED)
-endif(PLASMA_FOUND)
+set(PLASMASENSOR_SRC "sensors/plasmaengine.cpp")
+set(PLASMASENSOR_LIB plasma)
+ADD_DEFINITIONS(-DPLASMASENSOR_ENABLED)
 
 ########### superkaramba lib ###############
 SET(superkaramba_LIB_SRCS

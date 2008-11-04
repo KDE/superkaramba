@@ -1,7 +1,6 @@
 PROJECT(superkaramba)
 
 macro_optional_find_package(PythonLibs)
-macro_optional_find_package(Plasma)
 
 if(PYTHON_LIBRARIES AND PYTHON_INCLUDE_PATH)
   SET(PYTHONLIBS_FOUND ON)
@@ -9,7 +8,6 @@ endif(PYTHON_LIBRARIES AND PYTHON_INCLUDE_PATH)
 
 macro_log_feature(PYTHONLIBS_FOUND "Python Libraries" "The Python library is required to build the legacy SuperKaramba bindings for Python" "http://www.python.org")
 
-macro_log_feature(PLASMA_FOUND "Plasma" "Plasma libraries and header files" "http://plasma.kde.org/" FALSE "" "Plasma is needed for superkaramba Plasma applet. Install kdebase-workspace.")
 
 INCLUDE_DIRECTORIES(
   ${CMAKE_CURRENT_SOURCE_DIR}
@@ -26,6 +24,4 @@ endif(PYTHONLIBS_FOUND)
 ADD_SUBDIRECTORY( src )
 macro_optional_add_subdirectory( icons )
 
-if(PLASMA_FOUND)
- macro_optional_add_subdirectory( plasma )
-endif(PLASMA_FOUND)
+macro_optional_add_subdirectory( plasma )
