@@ -77,8 +77,8 @@ void ProgramSensor::processExited(K3Process *)
     QString value;
     QVector<QString> lines;
     QStringList stringList = sensorResult.split('\n');
-    QStringList::ConstIterator end(stringList.end());
-    for (QStringList::ConstIterator it = stringList.begin(); it != end; ++it) {
+    QStringList::ConstIterator end(stringList.constEnd());
+    for (QStringList::ConstIterator it = stringList.constBegin(); it != end; ++it) {
         lines.push_back(*it);
     }
 
@@ -103,8 +103,8 @@ void ProgramSensor::processExited(K3Process *)
             if (!format.isEmpty()) {
                 QString returnValue;
                 QStringList lineList = value.split('\n');
-                QStringList::ConstIterator lineListEnd(lineList.end());
-                for (QStringList::ConstIterator line = lineList.begin(); line != lineListEnd; ++line) {
+                QStringList::ConstIterator lineListEnd(lineList.constEnd());
+                for (QStringList::ConstIterator line = lineList.constBegin(); line != lineListEnd; ++line) {
                     QString formatCopy = format;
                     replaceLine(formatCopy, *line);
                     returnValue += formatCopy;

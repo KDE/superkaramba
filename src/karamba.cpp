@@ -1006,8 +1006,8 @@ QString Karamba::findSensorFromMap(const Sensor* sensor) const
 {
     //qDebug("karamba::findSensorFromMap");
     QMap<QString, Sensor*>::ConstIterator it;
-    QMap<QString, Sensor*>::ConstIterator end(d->sensorMap.end());
-    for (it = d->sensorMap.begin(); it != end; ++it) {
+    QMap<QString, Sensor*>::ConstIterator end(d->sensorMap.constEnd());
+    for (it = d->sensorMap.constBegin(); it != end; ++it) {
         if (it.value() == sensor)
             return it.key();
     }

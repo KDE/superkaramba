@@ -95,10 +95,10 @@ void NetworkSensor::refreshDevice() {
         t.readLine();                  // reads: " face |bytes    "
         QString line = t.readLine();   // finally reads something we care about
 
-        QStringList::ConstIterator listEnd(interfaceList.end());
+        QStringList::ConstIterator listEnd(interfaceList.constEnd());
         while ((rank != 0) && (line != 0)) {
             int i = 0;
-            for (QStringList::ConstIterator dev = interfaceList.begin();
+            for (QStringList::ConstIterator dev = interfaceList.constBegin();
                 (dev != listEnd) && (i < rank);
                 ++dev, ++i)
                 {

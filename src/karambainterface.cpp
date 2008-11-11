@@ -3807,8 +3807,8 @@ QVariantList KarambaInterface::getServiceGroups(const QString &path) const
     KServiceGroup::List sl = root->entries(true, true, true, false);
     QStringList suppressGenericNames = root->suppressGenericNames();
 
-    KServiceGroup::List::ConstIterator it = sl.begin();
-    for (; it != sl.end(); ++it) {
+    KServiceGroup::List::ConstIterator it = sl.constBegin();
+    for (; it != sl.constEnd(); ++it) {
         KSycocaEntry *e = (KSycocaEntry*)(*it).data();
 
         QVariant subItem;
