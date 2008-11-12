@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=SuperKaramba Theme Files
+Name[ar]=ملفات  سوبركارامبا
 Name[ca]=Fitxers de temes del SuperKaramba
 Name[cs]=Soubory s motivy SuperKaramba
 Name[da]=SuperKaramba temafiler
@@ -31,6 +32,7 @@ Name[x-test]=xxSuperKaramba Theme Filesxx
 Name[zh_CN]=SuperKaramba 主题文件
 Name[zh_TW]=SuperKaramba 主題檔案
 Comment=Karamba Desktop Themes
+Comment[ar]=سمات كارامبا لسطح المكتب
 Comment[ca]=Temes d'escriptori del Karamba
 Comment[cs]=Motivy plochy pro SuperKaramba
 Comment[da]=Karamba desktoptemaer
