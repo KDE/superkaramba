@@ -85,7 +85,6 @@ bool SkAppletScript::init()
         //applet()->setHasConfigurationInterface(false);//true);
 //applet()->setDrawStandardBackground(false);
         applet()->setAspectRatioMode(Plasma::IgnoreAspectRatio);
-        applet()->resize(400, 60);
     }
 
     QDir dir(package()->path());
