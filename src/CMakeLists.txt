@@ -128,8 +128,11 @@ QT4_ADD_DBUS_ADAPTOR(superkaramba_BIN_SRCS org.kde.superkaramba.xml karambaapp.h
 KDE4_ADD_EXECUTABLE(superkaramba-bin ${superkaramba_BIN_SRCS})
 
 TARGET_LINK_LIBRARIES(superkaramba-bin
-${KDE4_KNEWSTUFF2_LIBS}
 superkaramba
+${KDE4_KNEWSTUFF2_LIBS}
+${KDE4_KIO_LIBS}
+${X11_LIBRARIES}
+${X11_Xrender_LIB}
 )
 
 set_target_properties(superkaramba-bin PROPERTIES OUTPUT_NAME superkaramba)
