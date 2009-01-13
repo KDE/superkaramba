@@ -55,7 +55,7 @@ PyObject* py_createInputBox(PyObject *, PyObject *args);
 *   This removes a Input Box object from memory. Please do not call functions of
 *   the Input Box after calling deleteInputBox, as it does not exist anymore and that
 *   could cause crashes in some cases.
-*   The karamba widget ist automatically set passive, when no more Input Boxes are on
+*   The karamba widget is automatically set passive, when no more Input Boxes are on
 *   the karamba widget.
 * ARGUMENTS
 *   * long widget -- karamba

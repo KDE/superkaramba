@@ -2474,7 +2474,7 @@ QObject* KarambaInterface::createInputBox(Karamba* k, int x, int y, int w, int h
 *   This removes the Input Box object from the widget. Please do not call functions of
 *   the Input Box after calling deleteInputBox, as it does not exist anymore and that
 *   could cause crashes in some cases.
-*   The karamba widget ist automatically set passive, when no more Input Boxes are on
+*   The karamba widget is automatically set passive, when no more Input Boxes are on
 *   the karamba widget.
 * ARGUMENTS
 *   * reference to widget -- karamba
