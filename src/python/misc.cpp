@@ -201,9 +201,9 @@ PyObject* py_attach_clickArea(PyObject*, PyObject* args, PyObject* dict)
     char* LeftButton = NULL;
     char* MiddleButton = NULL;
     char* RightButton = NULL;
-    const char* mouseButtons[] = {"Widget", "Meter", "LeftButton", "MiddleButton",
-                                  "RightButton", NULL
-                                 };
+    const char* const mouseButtons[] = {"Widget", "Meter", "LeftButton", "MiddleButton",
+                                        "RightButton", NULL
+                                       };
     if (!PyArg_ParseTupleAndKeywords(args, dict, (char*)"ll|sss:attachClickArea",
                                      (char**)mouseButtons, &widget, &meter, &LeftButton, &MiddleButton, &RightButton))
         return NULL;
