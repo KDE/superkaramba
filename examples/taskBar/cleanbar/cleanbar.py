@@ -192,7 +192,7 @@ def widgetClicked(widget, x, y, button):
     
     taskSelected = (x-198)/121
 
-    ## Make sure its a valid task
+    ## Make sure it is a valid task
     if (0 <= taskSelected < numOfTasks):
         taskList = karamba.getTaskList(widget)
 

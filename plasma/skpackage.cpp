@@ -114,7 +114,7 @@ bool SkPackage::installPackage(const QString &archivePath, const QString &packag
 
     // the SkAppletScript ScriptEngine implementation is responsible for our new applet.
     group.writeEntry("X-Plasma-API", "superkaramba");
-    // its an applet.
+    // it is an applet.
     group.writeEntry("X-Plasma-ComponentTypes", "Applet");
     // the SkPackage PackageStructure implementation is responsible for the applets package format.
     group.writeEntry("X-Plasma-PackageFormat", "superkaramba");
