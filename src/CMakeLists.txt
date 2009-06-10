@@ -140,8 +140,14 @@ KDE4_ADD_EXECUTABLE(superkaramba-bin ${superkaramba_BIN_SRCS})
 
 TARGET_LINK_LIBRARIES(superkaramba-bin
 ${KDE4_KNEWSTUFF2_LIBS}
+${KDE4_KIO_LIBS}
+${X11_LIBRARIES}
 superkaramba
 )
+
+IF(X11_Xrender_FOUND)
+  TARGET_LINK_LIBRARIES(superkaramba-bin ${X11_Xrender_LIB})
+ENDIF(X11_Xrender_FOUND)
 
 set_target_properties(superkaramba-bin PROPERTIES OUTPUT_NAME superkaramba)
 
