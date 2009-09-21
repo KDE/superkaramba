@@ -23,6 +23,9 @@ class Karamba;
 class SUPERKARAMBA_EXPORT Meter : public QObject, public QGraphicsItem
 {
     Q_OBJECT
+#if QT_VERSION >= 0x040600
+    Q_INTERFACES(QGraphicsItem)
+#endif	    
 public:
     Meter(Karamba* k, int ix, int iy, int iw, int ih);
     Meter(Karamba* k);
