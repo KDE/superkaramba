@@ -20,7 +20,7 @@ class TextLabel : public Meter
 {
     Q_OBJECT
 public:
-    typedef enum ScrollType { ScrollNone, ScrollNormal,
+    enum ScrollType { ScrollNone, ScrollNormal,
                               ScrollBackAndForth, ScrollOnePass };
 
     TextLabel(Karamba *k, int x, int y, int w, int h);

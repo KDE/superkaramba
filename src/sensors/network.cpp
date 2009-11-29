@@ -75,7 +75,7 @@ NetworkSensor::NetworkSensor(const QString &dev, int interval): Sensor(interval)
         device = DEFAULT_DEVICE;
     }
 #endif
-    interfaceList = device.split("|", QString::SkipEmptyParts);
+    interfaceList = device.split('|', QString::SkipEmptyParts);
     refreshDevice();
     getIPAddress();
 

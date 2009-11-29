@@ -3,7 +3,7 @@
 *
 *  Copyright (C) 2003 Hans Karlsson <karlsson.h@home.se>
 *  Copyright (C) 2003-2004 Adam Geitgey <adam@rootnode.org>
-*  Copyright (c) 2004 Petri Damst� <damu@iki.fi>
+*  Copyright (c) 2004 Petri Damstén <damu@iki.fi>
 *
 *  This file is part of SuperKaramba.
 *
@@ -26,12 +26,13 @@
 #undef _XOPEN_SOURCE
 #endif
 
+#include "python/widget.h"
+
 #include <Python.h>
 #include <qobject.h>
 #include "../karamba.h"
 #include "meters/meter.h"
 #include "python/meter.h"
-#include "python/widget.h"
 
 PyObject* py_get_widget_position(PyObject *, PyObject *args)
 {

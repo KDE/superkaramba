@@ -1,7 +1,7 @@
 /****************************************************************************
-*  bar_python.cpp  -  Functions for bar python api
+*  bar.h  -  Functions for bar python api
 *
-*  Copyright (c) 2004 Petri Damstén <damu@iki.fi>
+*  Copyright (c) 2004 Petri DamstÃ©n <damu@iki.fi>
 *
 *  This file is part of SuperKaramba.
 *
@@ -22,6 +22,8 @@
 
 #ifndef BAR_PYTHON_H
 #define BAR_PYTHON_H
+
+#include <Python.h>
 
 /** Bar/createBar
 *

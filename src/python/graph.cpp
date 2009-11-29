@@ -1,7 +1,7 @@
 /****************************************************************************
 *  graph_python.h  -  Functions for graph python api
 *
-*  Copyright (c) 2004 Petri Damst� <damu@iki.fi>
+*  Copyright (c) 2004 Petri Damstén <damu@iki.fi>
 *
 *  This file is part of SuperKaramba.
 *
@@ -24,13 +24,14 @@
 #undef _XOPEN_SOURCE
 #endif
 
+#include "python/graph.h"
+
 #include <Python.h>
 #include <qobject.h>
 #include "../karamba.h"
 #include "meters/meter.h"
 #include "python/meter.h"
 #include "meters/graph.h"
-#include "python/graph.h"
 
 PyObject* py_createGraph(PyObject *, PyObject *args)
 {

@@ -9,7 +9,7 @@
  *  Copyright (C) 1995 Software Foundation, Inc.
  *
  * This file is part of SuperKaramba.
- *  Copyright (c) 2005 Petri Damsten <damu@iki.fi>
+ *  Copyright (c) 2005 Petri Damstén <damu@iki.fi>
  *
  *  SuperKaramba is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -187,8 +187,7 @@ QStringList ThemeLocale::languageList()
     langs.append(QFile::decodeName(::getenv("LC_MESSAGES")));
     langs.append(QFile::decodeName(::getenv("LANG")));
 
-    QString lang;
-    foreach(lang, langs) {
+    foreach(const QString &lang, langs) {
         QString ln, ct, modf, chrset;
         KLocale::splitLocale(lang, ln, ct, modf, chrset);
         /*

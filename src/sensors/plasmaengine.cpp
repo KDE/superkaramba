@@ -170,7 +170,7 @@ void PlasmaSensor::setEngine(const QString& name)
         disconnect(d->engine, SIGNAL(sourceRemoved(QString)), this, SIGNAL(sourceRemoved(QString)));
         Plasma::DataEngineManager::self()->unloadEngine(d->engineName);
     }
-    d->engineName = QString();
+    d->engineName.clear();
     d->engine = Plasma::DataEngineManager::self()->engine(name);
     if( ! d->engine || ! d->engine->isValid() ) {
         d->engine = Plasma::DataEngineManager::self()->loadEngine(name);

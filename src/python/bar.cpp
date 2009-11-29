@@ -1,7 +1,7 @@
 /****************************************************************************
 *  bar_python.cpp  -  Functions for bar python api
 *
-*  Copyright (c) 2004 Petri Damst� <damu@iki.fi>
+*  Copyright (c) 2004 Petri Damstén <damu@iki.fi>
 *
 *  This file is part of SuperKaramba.
 *
@@ -24,13 +24,14 @@
 #undef _XOPEN_SOURCE
 #endif
 
+#include "python/bar.h"
+
 #include <Python.h>
 #include <qobject.h>
 #include "../karamba.h"
 #include "meters/meter.h"
 #include "python/meter.h"
 #include "meters/bar.h"
-#include "python/bar.h"
 
 PyObject* py_createBar(PyObject *, PyObject *args)
 {

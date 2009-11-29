@@ -2,7 +2,7 @@
 *  imagelabel.cpp  -  ImageLabel meter
 *
 *  Copyright (C) 2003 Hans Karlsson <karlsson.h@home.se>
-*  Copyright (c) 2004 Petri Damst� <damu@iki.fi>
+*  Copyright (c) 2004 Petri Damstén <damu@iki.fi>
 *
 *  This file is part of SuperKaramba.
 *
@@ -299,7 +299,7 @@ void ImageLabel::slotCopyResult(KJob* job)
 void ImageLabel::setValue(const QString &fn)
 {
     // use the first line
-    QStringList sList = fn.split("\n");
+    QStringList sList = fn.split('\n');
     QString fileName = *sList.begin();
     KUrl url(fileName);
     QRegExp rx("^[a-zA-Z]{1,5}:/", Qt::CaseInsensitive);
@@ -443,7 +443,7 @@ void ImageLabel::parseImages(const QString &fn, const QString &fn_roll, int _xof
     yon = _yon;
 
     // use the first line
-    QStringList sList = fn.split("\n");
+    QStringList sList = fn.split('\n');
     QString fileName = *sList.begin();
     QFileInfo fileInfo(fileName);
     QString path;
@@ -480,7 +480,7 @@ void ImageLabel::parseImages(const QString &fn, const QString &fn_roll, int _xof
         return;
 
     rollover = true;
-    sList = fn_roll.split("\n");
+    sList = fn_roll.split('\n');
     fileName = *sList.begin();
     fileInfo = QFileInfo(fileName);
 

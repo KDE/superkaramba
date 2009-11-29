@@ -3,7 +3,7 @@
 *
 *  Copyright (C) 2003 Hans Karlsson <karlsson.h@home.se>
 *  Copyright (C) 2003-2004 Adam Geitgey <adam@rootnode.org>
-*  Copyright (c) 2004 Petri Damstén <damu@iki.fi>
+*  Copyright (c) 2004 Petri DamstÃ©n <damu@iki.fi>
 *
 *  This file is part of SuperKaramba.
 *
@@ -24,6 +24,8 @@
 
 #ifndef TEXTLABEL_PYTHON_H
 #define TEXTLABEL_PYTHON_H
+
+#include <Python.h>
 
 /** Text/createText
 *

@@ -86,7 +86,7 @@ void MemSensor::processExited(K3Process *)
 {
 #ifdef Q_OS_FREEBSD
     QStringList stringList = sensorResult.split('\n');
-    sensorResult = QString();
+    sensorResult.clear();
     QStringList itemsList = stringList[1].split(' ');
 
     swapUsed = itemsList[2].toInt();

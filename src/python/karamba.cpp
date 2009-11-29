@@ -3,7 +3,7 @@
 *
 *  Copyright (C) 2003 Hans Karlsson <karlsson.h@home.se>
 *  Copyright (C) 2003-2004 Adam Geitgey <adam@rootnode.org>
-*  Copyright (c) 2004 Petri Damst� <damu@iki.fi>
+*  Copyright (c) 2004 Petri Damstén <damu@iki.fi>
 *  Copyright (c) 2004 Luke Kenneth Casson Leighton <lkcl@lkcl.net>
 *
 *  This file is part of SuperKaramba.
@@ -27,12 +27,12 @@
 #undef _XOPEN_SOURCE
 #endif
 
+#include "python/karamba.h"
+
 #include <Python.h>
 #include "karambaapp.h"
 #include "themefile.h"
 #include "karamba.h"
-
-#include "python/karamba.h"
 
 #include "python/meter.h"
 #include "python/bar.h"

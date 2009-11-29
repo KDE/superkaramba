@@ -5086,8 +5086,7 @@ QVariantList KarambaInterface::getTaskList(const Karamba *k) const
 
     QList<Task::TaskPtr> taskList = TaskManager::self()->tasks().values();
 
-    Task::TaskPtr task;
-    foreach(task, taskList) {
+    foreach(const Task::TaskPtr &task, taskList) {
         ret << qVariantFromValue((QObject*)task.data());
     }
 
@@ -5118,8 +5117,7 @@ QStringList KarambaInterface::getTaskNames(const Karamba *k) const
 
     QList<Task::TaskPtr> taskList = TaskManager::self()->tasks().values();
 
-    Task::TaskPtr task;
-    foreach(task, taskList) {
+    foreach(const Task::TaskPtr &task, taskList) {
         ret << task->name();
     }
 

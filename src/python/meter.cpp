@@ -12,12 +12,13 @@
 #undef _XOPEN_SOURCE
 #endif
 
+#include "python/meter.h"
+
 #include <Python.h>
 #include <qobject.h>
 #include "../karamba.h"
 #include "../karambaapp.h"
 #include "meters/meter.h"
-#include "python/meter.h"
 #include "lineparser.h"
 
 #include <QList>

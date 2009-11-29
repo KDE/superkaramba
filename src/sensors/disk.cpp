@@ -75,7 +75,7 @@ void DiskSensor::receivedStdout(K3Process *, char *buffer, int len)
 void DiskSensor::processExited(K3Process *)
 {
     QStringList stringList = sensorResult.split('\n');
-    sensorResult = "";
+    sensorResult.clear();
     QStringList::Iterator it = stringList.begin();
     //QRegExp rx( "^(/dev/).*(/\\S*)$");
     QRegExp rx(".*\\s+(/\\S*)$");
@@ -94,16 +94,15 @@ void DiskSensor::processExited(K3Process *)
     SensorParams *sp;
     Meter *meter;
 
-    QObject *lit;
-    foreach(lit, *objList) {
+    foreach(QObject *lit, *objList) {
         sp = qobject_cast<SensorParams*>(lit);
         meter = sp->getMeter();
         format = sp->getParam("FORMAT");
         mntPt = sp->getParam("MOUNTPOINT");
-        if (mntPt.length() == 0)
-            mntPt = "/";
+        if (mntPt.isEmpty())
+            mntPt = '/';
 
-        if (format.length() == 0) {
+        if (format.isEmpty()) {
             format = "%u";
         }
         format.replace(QRegExp("%fp", Qt::CaseInsensitive), QString::number(getPercentFree(mntPt)));

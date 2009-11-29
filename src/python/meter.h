@@ -11,9 +11,13 @@
 #ifndef METER_PYTHON_H
 #define METER_PYTHON_H
 
+#include <Python.h>
+
 // Python uses char* where it should use const char*
 #define PY_PARSE(a, b, c, d) (PyArg_ParseTuple(a, (char*)b, c, d))
 #define PY_BUILD(a, b)       (Py_BuildValue((char*)a, b))
+
+class QString;
 
 bool checkKaramba(long widget);
 bool checkMeter(long widget, long meter, const char* type);

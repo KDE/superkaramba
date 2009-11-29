@@ -17,13 +17,14 @@
 #undef _XOPEN_SOURCE
 #endif
 
+#include "python/svcgrp.h"
+
 #include <Python.h>
 #include "python/task.h"
 #include <qobject.h>
 #include <kservice.h>
 #include <kservicegroup.h>
 #include "../karamba.h"
-#include "python/svcgrp.h"
 
 static PyObject *get_svc_grp(KServiceGroup::Ptr const& g)
 {
