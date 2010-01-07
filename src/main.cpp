@@ -41,7 +41,7 @@
 static const char *description =
     I18N_NOOP("A KDE Eye-candy Application");
 
-static const char *version = "0.54";
+static const char version[] = "0.55";
 
 int main(int argc, char **argv)
 {
