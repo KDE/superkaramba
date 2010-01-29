@@ -38,7 +38,7 @@
 
 #include <X11/extensions/Xrender.h>
 
-static const char *description =
+static const char description[] =
     I18N_NOOP("A KDE Eye-candy Application");
 
 static const char version[] = "0.55";
