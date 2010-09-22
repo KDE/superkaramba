@@ -48,7 +48,7 @@ class SkPainterAdaptor : public QObject
         Q_OBJECT
         Q_ENUMS(BrushStyle)
     public:
-        SkPainterAdaptor(QObject* parent, QPainter* painter) : QObject(parent), m_painter(painter) { setObjectName("PlasmaPainter"); }
+        SkPainterAdaptor(QObject* parent, QPainter* painter) : QObject(parent), m_painter(painter) { setObjectName( QLatin1String("PlasmaPainter" )); }
         virtual ~SkPainterAdaptor() {}
         QPainter* painter() const { return m_painter; }
         enum BrushStyle {
@@ -137,7 +137,7 @@ class SkAppletAdaptor : public QObject
             , m_applet(applet)
             //, m_widget(new Plasma::Widget(applet->karamba()))
             , m_painterenabled(false) {
-            setObjectName("PlasmaApplet");
+            setObjectName( QLatin1String("PlasmaApplet" ));
         }
         virtual ~SkAppletAdaptor() {
             //delete m_widget;

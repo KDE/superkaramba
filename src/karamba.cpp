@@ -329,7 +329,7 @@ Karamba::Karamba(const KUrl &themeFile, QGraphicsView *view, int instance, bool 
     if (d->prettyName.isEmpty())
         d->prettyName = QString("%1 - %2").arg(d->theme.name()).arg(d->instance);
 
-    setObjectName("karamba - " + d->prettyName);
+    setObjectName( QLatin1String("karamba - " ) + d->prettyName);
 
     if (!d->globalView) {
         d->info = new NETWinInfo(QX11Info::display(), d->view->winId(),
@@ -1458,7 +1458,7 @@ void Karamba::preparePopupMenu()
                            SLOT(updateSensors()), Qt::Key_F5);
 
     d->toggleLocked = new KToggleAction(i18n("&Locked Position"), this);
-    d->toggleLocked->setObjectName("lockedAction");
+    d->toggleLocked->setObjectName( QLatin1String("lockedAction" ));
     d->toggleLocked->setShortcut(KShortcut(Qt::CTRL + Qt::Key_L));
     d->toggleLocked->setCheckedState(KGuiItem(i18n("&Locked Position")));
     connect(d->toggleLocked, SIGNAL(triggered()), this, SLOT(slotToggleLocked()));
@@ -1469,7 +1469,7 @@ void Karamba::preparePopupMenu()
     d->themeConfMenu = new KMenu();
     d->themeConfMenu->setTitle(i18n("Configure &Theme"));
     QAction *newAC = d->popupMenu->addMenu(d->themeConfMenu);
-    newAC->setObjectName("configureTheme");
+    newAC->setObjectName( QLatin1String("configureTheme" ));
     newAC->setParent(this);
     newAC->setVisible(false);
 
@@ -1496,7 +1496,7 @@ void Karamba::preparePopupMenu()
     }
 
     d->reloadTheme = new KAction(KIcon("view-refresh"), i18n("&Reload Theme"), this);
-    d->reloadTheme->setObjectName("reloadAction");
+    d->reloadTheme->setObjectName( QLatin1String("reloadAction" ));
     d->reloadTheme->setShortcut(KShortcut(Qt::CTRL + Qt::Key_R));
     connect(d->reloadTheme, SIGNAL(triggered()), this, SLOT(reloadConfig()));
     d->popupMenu->addAction(d->reloadTheme);

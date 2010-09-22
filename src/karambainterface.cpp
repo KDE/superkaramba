@@ -72,7 +72,7 @@ KarambaInterface::KarambaInterface(Karamba *k)
     : QObject()
     , d(new Private(k))
 {
-    setObjectName("karamba");
+    setObjectName( QLatin1String("karamba" ));
 }
 
 KarambaInterface::~KarambaInterface()
