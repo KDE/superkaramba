@@ -61,7 +61,7 @@ TaskManager::TaskManager()
         m_winModule(KWindowSystem::self()),
         m_trackGeometry(false)
 {
-    KGlobal::locale()->insertCatalog("libtaskmanager");
+    KGlobal::locale()->insertCatalog( QLatin1String( "libtaskmanager" ));
     connect(m_winModule, SIGNAL(windowAdded(WId)),
             this,       SLOT(windowAdded(WId)));
     connect(m_winModule, SIGNAL(windowRemoved(WId)),
@@ -565,7 +565,7 @@ Task::Task(WId win, QObject *parent, const char *name)
         _thumb(),
         _grab()
 {
-    setObjectName(name);
+    setObjectName( QLatin1String( name ) );
 
     // try to load icon via net_wm
     _pixmap = KWindowSystem::icon(_win, 16, 16, true);
@@ -1331,7 +1331,7 @@ Startup::Startup(const KStartupInfoId& id, const KStartupInfoData& data,
                  QObject * parent, const char *name)
         : QObject(parent), _id(id), _data(data)
 {
-    setObjectName(name);
+    setObjectName( QLatin1String( name ) );
 }
 
 Startup::~Startup()

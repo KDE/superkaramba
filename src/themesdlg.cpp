@@ -40,7 +40,7 @@ ThemesDlg::ThemesDlg(QWidget *parent, const char *name)
         m_newStuffInitialized(false)
 {
     setupUi(this);
-    setObjectName(name);
+    setObjectName( QLatin1String( name ) );
 
     populateListbox();
 

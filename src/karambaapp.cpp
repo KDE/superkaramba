@@ -216,16 +216,16 @@ void KarambaApplication::showKarambaMenuExtension(bool show)
             KMenu *menu = new KMenu();
             menu->setTitle("SuperKaramba");
 
-            menu->addAction(KIcon("superkaramba"),
+            menu->addAction(KIcon( QLatin1String( "superkaramba" )),
                             i18n("Show System Tray Icon"), this,
                             SLOT(toggleSystemTray()),
                             Qt::CTRL + Qt::Key_S);
 
-            menu->addAction(KIcon("get-hot-new-stuff"),
+            menu->addAction(KIcon( QLatin1String( "get-hot-new-stuff" )),
                             i18n("&Manage Themes..."), this,
                             SLOT(showThemesDialog()), Qt::CTRL + Qt::Key_M);
 
-            menu->addAction(KIcon("application-exit"),
+            menu->addAction(KIcon( QLatin1String( "application-exit" )),
                             i18n("&Quit SuperKaramba"), this,
                             SLOT(quitSuperKaramba()), Qt::CTRL + Qt::Key_Q);
             k->setMenuExtension(menu);
@@ -260,7 +260,7 @@ void KarambaApplication::setupSysTray(KAboutData* about)
     m_sysTrayIcon = new KSystemTrayIcon();
 
     QMenu *menu = m_sysTrayIcon->contextMenu();
-    menu->addAction(KIcon("superkaramba"),
+    menu->addAction(KIcon( QLatin1String( "superkaramba" )),
                     i18n("Hide System Tray Icon"), this,
                     SLOT(toggleSystemTray()));
 

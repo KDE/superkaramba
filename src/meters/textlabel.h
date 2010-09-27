@@ -30,10 +30,10 @@ public:
     void setTextProps(TextField*);
     void setValue(const QString& text);
     void setValue(int);
-    //virtual QString getStringValue() const { return value.join("\n"); };
+    //virtual QString getStringValue() const { return value.join( QLatin1String( "\n" )); };
     QString getStringValue() const
     {
-        return value.join("\n");
+        return value.join( QLatin1String( "\n" ));
     }
     void setFontSize(int);
     void setBGColor(QColor clr);

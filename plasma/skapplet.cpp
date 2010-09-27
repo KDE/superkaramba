@@ -279,7 +279,7 @@ extern "C" {
             metadata["description"] = themeFile.description();
             QPixmap icon = themeFile.icon();
             if (icon.isNull()) {
-                metadata["icon"] = KIcon("application-x-plasma");
+                metadata["icon"] = KIcon( QLatin1String( "application-x-plasma" ));
             } else {
                 metadata["icon"] = KIcon(themeFile.icon());
             }

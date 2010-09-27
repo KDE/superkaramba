@@ -135,7 +135,7 @@ void SkAppletScript::loadKaramba()
         // While Plasma::Applet does provide such a functionality, Plasma::Containment
         // does not. So, let's add it manualy...
         //QAction* configure = new QAction(i18n("Panel Settings"), this);
-        //configure->setIcon(KIcon("configure"));
+        //configure->setIcon(KIcon( QLatin1String( "configure" )));
         //connect(configure, SIGNAL(triggered()), this, SLOT(showConfigurationInterface()));
         //d->actions << configure;
     }
@@ -244,7 +244,7 @@ void SkAppletScript::paintInterface(QPainter *painter, const QStyleOptionGraphic
         QRect textrect = contentsRect;
         textrect.setY( titlerect.y() + titlerect.height() + 4 );
 
-        const QString text = d->errors.join("\n");
+        const QString text = d->errors.join( QLatin1String( "\n" ));
 
         QFont textfont;
         textfont.setPointSize( KGlobalSettings::smallestReadableFont().pointSize() );
