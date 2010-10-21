@@ -13,7 +13,7 @@
 #include <QFile>
 #include <QTextStream>
 
-#ifdef Q_OS_FREEBSD
+#if defined(Q_OS_FREEBSD) || defined(__DragonFly__)
 #include <sys/time.h>
 #include <sys/param.h>
 #include <sys/sysctl.h>
@@ -31,14 +31,14 @@
 #include <sys/swap.h>
 #endif
 
-#if defined Q_OS_FREEBSD || defined(Q_OS_NETBSD)
+#if defined Q_OS_FREEBSD || defined(Q_OS_NETBSD) || defined(__DragonFly__)
 /* define pagetok in terms of pageshift */
 #define pagetok(size) ((size) << pageshift)
 #endif
 
 MemSensor::MemSensor(int msec) : Sensor(msec)
 {
-#if defined Q_OS_FREEBSD || defined(Q_OS_NETBSD)
+#if defined Q_OS_FREEBSD || defined(Q_OS_NETBSD) || defined(__DragonFly__)
     /* get the page size with "getpagesize" and calculate pageshift from it */
     int pagesize = getpagesize();
     pageshift = 0;
@@ -49,7 +49,7 @@ MemSensor::MemSensor(int msec) : Sensor(msec)
 
     /* we only need the amount of log(2)1024 for our conversion */
     pageshift -= 10;
-# if (defined(Q_OS_FREEBSD) && __FreeBSD_version < 500018)
+# if (defined(Q_OS_FREEBSD) && __FreeBSD_version < 500018) && !defined(__DragonFly__)
     connect(&ksp, SIGNAL(receivedStdout(K3Process *, char *, int)),
             this, SLOT(receivedStdout(K3Process *, char *, int)));
     connect(&ksp, SIGNAL(processExited(K3Process *)),
@@ -60,7 +60,7 @@ MemSensor::MemSensor(int msec) : Sensor(msec)
     MaxSet = false;
 
     readValues();
-# elif defined Q_OS_FREEBSD
+# elif defined Q_OS_FREEBSD || defined(__DragonFly__)
     kd = kvm_open("/dev/null", "/dev/null", "/dev/null", O_RDONLY, "kvm_open");
 # endif
 #else
@@ -71,7 +71,7 @@ MemSensor::MemSensor(int msec) : Sensor(msec)
 MemSensor::~MemSensor()
 {}
 
-#ifdef Q_OS_FREEBSD
+#if defined(Q_OS_FREEBSD) || defined(__DragonFly__)
 void MemSensor::receivedStdout(K3Process *, char *buffer, int len)
 {
     buffer[len] = 0;
@@ -84,7 +84,7 @@ void MemSensor::receivedStdout(K3Process *, char *, int)
 
 void MemSensor::processExited(K3Process *)
 {
-#ifdef Q_OS_FREEBSD
+#if defined(Q_OS_FREEBSD) || defined(__DragonFly__)
     QStringList stringList = sensorResult.split('\n');
     sensorResult.clear();
     QStringList itemsList = stringList[1].split(' ');
@@ -96,7 +96,7 @@ void MemSensor::processExited(K3Process *)
 
 int MemSensor::getMemTotal()
 {
-#if defined Q_OS_FREEBSD || defined(Q_OS_NETBSD)
+#if defined Q_OS_FREEBSD || defined(Q_OS_NETBSD) || defined(__DragonFly__)
     static int mem = 0;
     size_t size = sizeof(mem);
 
@@ -111,7 +111,7 @@ int MemSensor::getMemTotal()
 
 int MemSensor::getMemFree()
 {
-#ifdef Q_OS_FREEBSD
+#if defined(Q_OS_FREEBSD) || defined(__DragonFly__)
     static int mem = 0;
     size_t size = sizeof(mem);
 
@@ -135,7 +135,7 @@ int MemSensor::getMemFree()
 
 int MemSensor::getBuffers()
 {
-#ifdef Q_OS_FREEBSD
+#if defined(Q_OS_FREEBSD) || defined(__DragonFly__)
     static int mem = 0;
     size_t size = sizeof(mem);
 
@@ -156,7 +156,7 @@ int MemSensor::getBuffers()
 
 int MemSensor::getCached()
 {
-#ifdef Q_OS_FREEBSD
+#if defined(Q_OS_FREEBSD) || defined(__DragonFly__)
     static int mem = 0;
     size_t size = sizeof(mem);
 
@@ -176,8 +176,8 @@ int MemSensor::getCached()
 
 int MemSensor::getSwapTotal()
 {
-#ifdef Q_OS_FREEBSD
-# if __FreeBSD_version < 500018
+#if defined(Q_OS_FREEBSD) || defined(__DragonFly__)
+# if defined(Q_OS_FREEBSD) && __FreeBSD_version < 500018
     return(swapTotal);
 # else
     int n = -1;
@@ -218,8 +218,8 @@ int MemSensor::getSwapTotal()
 
 int MemSensor::getSwapFree()
 {
-#ifdef Q_OS_FREEBSD
-# if __FreeBSD_version < 500018
+#if defined(Q_OS_FREEBSD) || defined(__DragonFly__)
+# if defined(Q_OS_FREEBSD) && __FreeBSD_version < 500018
     return(swapTotal - swapUsed);
 # else
     int n = -1;
@@ -263,8 +263,8 @@ int MemSensor::getSwapFree()
 
 void MemSensor::readValues()
 {
-#if defined Q_OS_FREEBSD || defined(Q_OS_NETBSD)
-# if (defined(Q_OS_FREEBSD) && __FreeBSD_version < 500018)
+#if defined Q_OS_FREEBSD || defined(Q_OS_NETBSD) || defined(__DragonFly__)
+# if (defined(Q_OS_FREEBSD) && __FreeBSD_version < 500018) && !defined(__DragonFly__)
     ksp.clearArguments();
     ksp << "swapinfo";
     ksp.start(K3Process::NotifyOnExit, K3ProcIO::Stdout);
@@ -298,7 +298,7 @@ void MemSensor::update()
     QObject *it;
     foreach(it, *objList) {
         sp = qobject_cast<SensorParams*>(it);
-#if (defined(Q_OS_FREEBSD) && __FreeBSD_version < 500018)
+#if (defined(Q_OS_FREEBSD) && __FreeBSD_version < 500018) && !defined(__DragonFly__)
         if ((!MaxSet) && (totalSwap > 0)) {
             setMaxValue(sp);
             bool set = true;
@@ -332,7 +332,7 @@ void MemSensor::update()
 
         meter->setValue(format);
     }
-#if (defined(Q_OS_FREEBSD) && __FreeBSD_version < 500018)
+#if (defined(Q_OS_FREEBSD) && __FreeBSD_version < 500018) && !defined(__DragonFly__)
     if (set)
         MaxSet = true;
 #endif

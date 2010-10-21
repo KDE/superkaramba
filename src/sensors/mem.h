@@ -12,7 +12,7 @@
 
 #include <K3Process>
 
-#ifdef __FreeBSD__
+#if defined(__FreeBSD__) || defined(__DragonFly__)
 #include <k3procio.h>
 #include <kvm.h>
 #include <osreldate.h>
@@ -43,7 +43,7 @@ public:
 private:
     QString meminfo;
     void readValues();
-#if defined __FreeBSD__ || defined(Q_OS_NETBSD)
+#if defined __FreeBSD__ || defined(Q_OS_NETBSD) || defined(__DragonFly__)
     int pageshift;           /* log base 2 of the pagesize */
     QString sensorResult;
     int swapTotal;
@@ -52,7 +52,7 @@ private:
     K3ShellProcess ksp;
     bool MaxSet;
 
-# elif defined __FreeBSD__
+# elif defined __FreeBSD__ || defined(__DragonFly__)
     kvm_t *kd;
     kvm_swap swapinfo;
 # endif
