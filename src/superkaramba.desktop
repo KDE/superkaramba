@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=SuperKaramba
 Name[ar]=سوبركارامبا
+Name[ast]=SuperKaramba
 Name[bg]=SuperKaramba
 Name[br]=SuperKaramba
 Name[ca]=SuperKaramba
@@ -64,6 +65,7 @@ Type=Application
 MimeType=application/x-superkaramba;
 Comment=An engine for cool desktop eyecandy.
 Comment[ar]=محرك لجماليات سطح مكتب لطيفة.
+Comment[ast]=Un motor pa escritoriu prestosu
 Comment[bg]=Модул за разкрасяване на работния плот.
 Comment[ca]=Un motor per fer més vistós l'escriptori.
 Comment[ca@valencia]=Un motor per fer més vistós l'escriptori.
@@ -120,6 +122,7 @@ Comment[zh_CN]=桌面养眼引擎。
 Comment[zh_TW]=桌面佈景選擇程式
 GenericName=Desktop Widgets
 GenericName[ar]=قطع سطح المكتب
+GenericName[ast]=Widgets d'Escritoriu
 GenericName[bg]=Джаджи
 GenericName[ca]=Estris de l'escriptori
 GenericName[ca@valencia]=Estris de l'escriptori
