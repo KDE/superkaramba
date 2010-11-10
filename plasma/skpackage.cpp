@@ -23,6 +23,7 @@
 #include "themefile.h"
 
 #include <kconfiggroup.h>
+#include <kdebug.h>
 #include <kstandarddirs.h>
 
 K_EXPORT_PLASMA_PACKAGESTRUCTURE(superkaramba, SkPackage)

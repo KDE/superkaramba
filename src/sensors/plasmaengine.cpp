@@ -19,6 +19,7 @@
  */
 
 #include "plasmaengine.h"
+#include <kdebug.h>
 
 #include <plasma/dataenginemanager.h>
 

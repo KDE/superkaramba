@@ -33,6 +33,7 @@
 #include <KToggleAction>
 #include <KColorScheme>
 #include <KGlobalSettings>
+#include <KDebug>
 
 K_EXPORT_PLASMA_APPLETSCRIPTENGINE(superkaramba, SkAppletScript)
 
