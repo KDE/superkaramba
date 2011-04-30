@@ -3991,7 +3991,7 @@ bool KarambaInterface::show(Karamba *k) const
 QString KarambaInterface::language(const Karamba *k) const
 {
     if (!checkKaramba(k)) {
-        return false;
+        return QString();
     }
 
     return k->theme().locale()->language();
