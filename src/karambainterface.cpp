@@ -5564,7 +5564,7 @@ bool KarambaInterface::changeTextFont(const Karamba *k, TextLabel *text, const Q
 QString KarambaInterface::getTextFont(const Karamba *k, const TextLabel *text) const
 {
     if (!checkKarambaAndMeter(k, text, "TextLabel")) {
-        return false;
+        return QString();
     }
 
     return text->getFont();
@@ -5675,7 +5675,7 @@ int KarambaInterface::getTextFontSize(const Karamba *k, const TextLabel *text) c
 QString KarambaInterface::getTextAlign(const Karamba *k, const TextLabel *text) const
 {
     if (!checkKarambaAndMeter(k, text, "TextLabel")) {
-        return false;
+        return QString();
     }
 
     return text->getAlignment();
