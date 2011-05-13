@@ -1,5 +1,10 @@
 PROJECT(superkaramba)
 
+if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
+    find_package(KDE4)
+    include(KDE4Defaults)
+endif()
+
 macro_optional_find_package(PythonLibs)
 
 if(PYTHON_LIBRARIES AND PYTHON_INCLUDE_PATH)
