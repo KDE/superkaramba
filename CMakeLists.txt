@@ -3,7 +3,12 @@ PROJECT(superkaramba)
 if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
     find_package(KDE4)
     include(KDE4Defaults)
+    set(IMAGEBLITZ_REQUIRED TRUE)
+else()
+    set(IMAGEBLITZ_REQUIRED FALSE)
 endif()
+macro_optional_find_package( QImageBlitz )
+macro_log_feature( QIMAGEBLITZ_FOUND "QImageBlitz" "An image effects library" "kdesupport" ${IMAGEBLITZ_REQUIRED} "" "Required for building SuperKaramba.")
 
 macro_optional_find_package(PythonLibs)
 
@@ -13,6 +18,13 @@ endif(PYTHON_LIBRARIES AND PYTHON_INCLUDE_PATH)
 
 macro_log_feature(PYTHONLIBS_FOUND "Python Libraries" "The Python library is required to build the legacy SuperKaramba bindings for Python" "http://www.python.org")
 
+if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
+    macro_display_feature_log()
+else()
+    if(NOT QIMAGEBLITZ_FOUND)
+        return()
+    endif()
+endif()
 
 INCLUDE_DIRECTORIES(
   ${CMAKE_CURRENT_SOURCE_DIR}
