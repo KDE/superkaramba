@@ -319,13 +319,13 @@ void ImageLabel::setValue(const QString &fn)
         if (m_karamba->theme().isThemeFile(fileName)) {
             QByteArray ba = m_karamba->theme().readThemeFile(fileName);
             if (fileName.endsWith("svg", Qt::CaseInsensitive) || fileName.endsWith("svgz", Qt::CaseInsensitive)) {
-                m_renderer = new KSvgRenderer(ba);
+                m_renderer = new QSvgRenderer(ba);
             } else {
                 pm.loadFromData(ba);
             }
         } else {
             if (fileName.endsWith("svg", Qt::CaseInsensitive) || fileName.endsWith("svgz", Qt::CaseInsensitive)) {
-                m_renderer = new KSvgRenderer(fileName);
+                m_renderer = new QSvgRenderer(fileName);
            } else {
                 pm.load(fileName);
             }

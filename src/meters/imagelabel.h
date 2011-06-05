@@ -26,10 +26,10 @@
 
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
+#include <QSvgRenderer>
 
 #include <kio/netaccess.h>
 #include <kio/copyjob.h>
-#include <KSvgRenderer>
 
 #include "karamba.h"
 #include "meter.h"
@@ -216,7 +216,7 @@ private:
     QString m_middleMouseButtonAction;
     QString m_rightMouseButtonAction;
 
-    KSvgRenderer *m_renderer;
+    QSvgRenderer *m_renderer;
     bool m_connected;
 
     QString m_element;
