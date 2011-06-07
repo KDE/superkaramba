@@ -69,7 +69,7 @@ void ThemesDlg::saveUserAddedThemes()
         remove = false;
         QStringList::Iterator jtend(dirs.end());
         for (QStringList::Iterator jt = dirs.begin(); jt != jtend; ++jt) {
-            if (QFileInfo(*it).dir().path() + '/' == *jt) {
+            if (QString(QFileInfo(*it).dir().path() + '/') == *jt) {
                 remove = true;
                 break;
             }

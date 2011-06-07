@@ -1,6 +1,11 @@
 PROJECT(superkaramba)
 
 macro_optional_find_package(PythonLibs)
+#Laurent doesn't compile for the moment
+remove_definitions( -DQT_NO_CAST_FROM_ASCII )
+remove_definitions( -DQT_NO_CAST_TO_ASCII )
+
+
 
 if(PYTHON_LIBRARIES AND PYTHON_INCLUDE_PATH)
   SET(PYTHONLIBS_FOUND ON)
