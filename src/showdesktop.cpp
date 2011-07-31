@@ -41,8 +41,8 @@ ShowDesktop::ShowDesktop()
     // on desktop changes or when a window is deiconified, we abort the show desktop mode
     connect(kWinModule, SIGNAL(currentDesktopChanged(int)),
             SLOT(slotCurrentDesktopChanged(int)));
-    connect(kWinModule, SIGNAL(windowChanged(WId, unsigned int)),
-            SLOT(slotWindowChanged(WId, unsigned int)));
+    connect(kWinModule, SIGNAL(windowChanged(WId,uint)),
+            SLOT(slotWindowChanged(WId,uint)));
 }
 
 void ShowDesktop::slotCurrentDesktopChanged(int)

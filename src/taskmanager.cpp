@@ -70,8 +70,8 @@ TaskManager::TaskManager()
             this,       SLOT(activeWindowChanged(WId)));
     connect(m_winModule, SIGNAL(currentDesktopChanged(int)),
             this,       SLOT(currentDesktopChanged(int)));
-    connect(m_winModule, SIGNAL(windowChanged(WId, unsigned int)),
-            this,       SLOT(windowChanged(WId, unsigned int)));
+    connect(m_winModule, SIGNAL(windowChanged(WId,uint)),
+            this,       SLOT(windowChanged(WId,uint)));
 
     // register existing windows
     const QList<WId> windows = m_winModule->windows();
@@ -99,14 +99,14 @@ void TaskManager::configure_startup()
         return;
     _startup_info = new KStartupInfo(KStartupInfo::CleanOnCantDetect, this);
     connect(_startup_info,
-            SIGNAL(gotNewStartup(const KStartupInfoId&, const KStartupInfoData&)),
-            SLOT(gotNewStartup(const KStartupInfoId&, const KStartupInfoData&)));
+            SIGNAL(gotNewStartup(KStartupInfoId,KStartupInfoData)),
+            SLOT(gotNewStartup(KStartupInfoId,KStartupInfoData)));
     connect(_startup_info,
-            SIGNAL(gotStartupChange(const KStartupInfoId&, const KStartupInfoData&)),
-            SLOT(gotStartupChange(const KStartupInfoId&, const KStartupInfoData&)));
+            SIGNAL(gotStartupChange(KStartupInfoId,KStartupInfoData)),
+            SLOT(gotStartupChange(KStartupInfoId,KStartupInfoData)));
     connect(_startup_info,
-            SIGNAL(gotRemoveStartup(const KStartupInfoId&, const KStartupInfoData&)),
-            SLOT(killStartup(const KStartupInfoId&)));
+            SIGNAL(gotRemoveStartup(KStartupInfoId,KStartupInfoData)),
+            SLOT(killStartup(KStartupInfoId)));
     c = KConfigGroup(&config, "TaskbarButtonSettings");
     _startup_info->setTimeout(c.readEntry("Timeout", 30));
 }

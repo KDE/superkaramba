@@ -160,13 +160,13 @@ PyObject* py_execute_command_interactive(PyObject *, PyObject* args)
 
     }
     QApplication::connect(currProcess,
-                          SIGNAL(processExited(K3Process *)),
+                          SIGNAL(processExited(K3Process*)),
                           currTheme,
-                          SLOT(processExited(K3Process *)));
+                          SLOT(processExited(K3Process*)));
     QApplication::connect(currProcess,
-                          SIGNAL(receivedStdout(K3Process *, char *, int)),
+                          SIGNAL(receivedStdout(K3Process*,char*,int)),
                           currTheme,
-                          SLOT(receivedStdout(K3Process *, char *, int)));
+                          SLOT(receivedStdout(K3Process*,char*,int)));
     currProcess->start(K3Process::NotifyOnExit, K3Process::Stdout);
 
     return Py_BuildValue((char*)"l", (int)(currProcess->pid()));

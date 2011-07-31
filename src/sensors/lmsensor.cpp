@@ -29,10 +29,10 @@ SensorSensor::SensorSensor(int interval, char tempUnit) : Sensor(interval)
 #endif
     if (tempUnit == 'F')
         extraParams = " -f";
-    connect(&ksp, SIGNAL(receivedStdout(K3Process *, char *, int)),
-            this, SLOT(receivedStdout(K3Process *, char *, int)));
-    connect(&ksp, SIGNAL(processExited(K3Process *)),
-            this, SLOT(processExited(K3Process *)));
+    connect(&ksp, SIGNAL(receivedStdout(K3Process*,char*,int)),
+            this, SLOT(receivedStdout(K3Process*,char*,int)));
+    connect(&ksp, SIGNAL(processExited(K3Process*)),
+            this, SLOT(processExited(K3Process*)));
 
     // readValues();
 }

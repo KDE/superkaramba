@@ -13,10 +13,10 @@
 
 DiskSensor::DiskSensor(int msec) : Sensor(msec)
 {
-    connect(&ksp, SIGNAL(receivedStdout(K3Process *, char *, int)),
-            this, SLOT(receivedStdout(K3Process *, char *, int)));
-    connect(&ksp, SIGNAL(processExited(K3Process *)),
-            this, SLOT(processExited(K3Process *)));
+    connect(&ksp, SIGNAL(receivedStdout(K3Process*,char*,int)),
+            this, SLOT(receivedStdout(K3Process*,char*,int)));
+    connect(&ksp, SIGNAL(processExited(K3Process*)),
+            this, SLOT(processExited(K3Process*)));
 
     // update values on startup
     ksp.clearArguments();

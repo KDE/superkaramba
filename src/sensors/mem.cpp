@@ -50,10 +50,10 @@ MemSensor::MemSensor(int msec) : Sensor(msec)
     /* we only need the amount of log(2)1024 for our conversion */
     pageshift -= 10;
 # if (defined(Q_OS_FREEBSD) && __FreeBSD_version < 500018) && !defined(__DragonFly__)
-    connect(&ksp, SIGNAL(receivedStdout(K3Process *, char *, int)),
-            this, SLOT(receivedStdout(K3Process *, char *, int)));
-    connect(&ksp, SIGNAL(processExited(K3Process *)),
-            this, SLOT(processExited(K3Process *)));
+    connect(&ksp, SIGNAL(receivedStdout(K3Process*,char*,int)),
+            this, SLOT(receivedStdout(K3Process*,char*,int)));
+    connect(&ksp, SIGNAL(processExited(K3Process*)),
+            this, SLOT(processExited(K3Process*)));
 
     swapTotal = swapUsed = 0;
 

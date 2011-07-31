@@ -32,8 +32,8 @@ KWidgetListbox::KWidgetListbox(QWidget *parent)
 
     setSelectionMode(QAbstractItemView::SingleSelection);
 
-    connect(this, SIGNAL(cellClicked(int, int)),
-            this, SLOT(selectionChanged(int, int)));
+    connect(this, SIGNAL(cellClicked(int,int)),
+            this, SLOT(selectionChanged(int,int)));
 
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 

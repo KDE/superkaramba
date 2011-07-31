@@ -314,8 +314,8 @@ Karamba::Karamba(const KUrl &themeFile, QGraphicsView *view, int instance, bool 
     }
 
     KDirWatch *dirWatch = KDirWatch::self();
-    connect(dirWatch, SIGNAL(dirty(const QString &)),
-            SLOT(slotFileChanged(const QString &)));
+    connect(dirWatch, SIGNAL(dirty(QString)),
+            SLOT(slotFileChanged(QString)));
 
     if (!dirWatch->contains(d->theme.file()))
         dirWatch->addFile(d->theme.file());

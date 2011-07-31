@@ -3674,14 +3674,14 @@ int KarambaInterface::executeInteractive(Karamba *k, const QStringList &command)
     *process << command;
 
     connect(process,
-                          SIGNAL(processExited(K3Process *)),
+                          SIGNAL(processExited(K3Process*)),
                           k,
-                          SLOT(processExited(K3Process *)));
+                          SLOT(processExited(K3Process*)));
 
     connect(process,
-                          SIGNAL(receivedStdout(K3Process *, char *, int)),
+                          SIGNAL(receivedStdout(K3Process*,char*,int)),
                           k,
-                          SLOT(receivedStdout(K3Process *, char *, int)));
+                          SLOT(receivedStdout(K3Process*,char*,int)));
 
     process->start(K3Process::NotifyOnExit, K3Process::Stdout);
 

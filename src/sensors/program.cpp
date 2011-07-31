@@ -26,10 +26,10 @@ ProgramSensor::ProgramSensor(Karamba* k, const QString &progName, int interval, 
 
     programName = progName;
     //update();
-    connect(&ksp, SIGNAL(receivedStdout(K3Process *, char *, int)),
-            this, SLOT(receivedStdout(K3Process *, char *, int)));
-    connect(&ksp, SIGNAL(processExited(K3Process *)),
-            this, SLOT(processExited(K3Process *)));
+    connect(&ksp, SIGNAL(receivedStdout(K3Process*,char*,int)),
+            this, SLOT(receivedStdout(K3Process*,char*,int)));
+    connect(&ksp, SIGNAL(processExited(K3Process*)),
+            this, SLOT(processExited(K3Process*)));
 }
 
 ProgramSensor::~ProgramSensor()

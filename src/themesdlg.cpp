@@ -46,7 +46,7 @@ ThemesDlg::ThemesDlg(QWidget *parent, const char *name)
 
     connect(buttonAddToDesktop, SIGNAL(clicked()), this, SLOT(addToDesktop()));
     connect(tableThemes, SIGNAL(selected(int)), this, SLOT(selectionChanged(int)));
-    connect(tableThemes, SIGNAL(itemDropped(QPoint, ThemeWidget*)), this, SLOT(addToDesktop(QPoint, ThemeWidget*)));
+    connect(tableThemes, SIGNAL(itemDropped(QPoint,ThemeWidget*)), this, SLOT(addToDesktop(QPoint,ThemeWidget*)));
     connect(editSearch, SIGNAL(textChanged(QString)), this, SLOT(search(QString)));
     connect(comboShow, SIGNAL(activated(QString)), this, SLOT(search(QString)));
 }
@@ -205,8 +205,8 @@ void ThemesDlg::getNewStuff()
 {
     if (!m_newStuffInitialized) {
         KDirWatch *dirWatch = KDirWatch::self();
-        connect(dirWatch, SIGNAL(created(const QString &)),
-            SLOT(installNewTheme(const QString &)));
+        connect(dirWatch, SIGNAL(created(QString)),
+            SLOT(installNewTheme(QString)));
 
         QString destDir = KStandardDirs::locateLocal("appdata", "themes/");
         dirWatch->addDir(destDir, KDirWatch::WatchFiles);
