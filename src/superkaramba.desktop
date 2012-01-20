@@ -186,7 +186,6 @@ GenericName[wa]=Ahesses do scribanne
 GenericName[x-test]=xxDesktop Widgetsxx
 GenericName[zh_CN]=桌面部件
 GenericName[zh_TW]=桌面元件
-X-DocPath=superkaramba/index.html
 Categories=Qt;KDE;Utility;X-KDE-Utilities-Desktop;
 OnlyShowIn=KDE;
 X-DBUS-StartupType=Unique
