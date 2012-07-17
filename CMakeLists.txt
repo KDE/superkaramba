@@ -20,7 +20,7 @@ endif()
 macro_optional_find_package( QImageBlitz )
 macro_log_feature( QIMAGEBLITZ_FOUND "QImageBlitz" "An image effects library" "kdesupport" ${IMAGEBLITZ_REQUIRED} "" "Required for building SuperKaramba.")
 
-macro_optional_find_package(PythonLibs)
+macro_optional_find_package(PythonLibs 2)
 #Laurent doesn't compile for the moment
 remove_definitions( -DQT_NO_CAST_FROM_ASCII )
 remove_definitions( -DQT_NO_CAST_TO_ASCII )
