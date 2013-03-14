@@ -138,6 +138,7 @@ class SkAppletAdaptor : public QObject
             //, m_widget(new Plasma::Widget(applet->karamba()))
             , m_painterenabled(false) {
             setObjectName( QLatin1String("PlasmaApplet" ));
+            m_applet->setBackgroundHints(Plasma::Applet::DefaultBackground);
         }
         virtual ~SkAppletAdaptor() {
             //delete m_widget;
