@@ -24,9 +24,9 @@ public:
     void setMaxValue(SensorParams *sp);
 
 private:
-    int getFreeSpace(const QString &mntPt) const;
-    int getUsedSpace(const QString &mntPt) const;
-    int getTotalSpace(const QString &mntPt) const;
+    qint64 getFreeSpace(const QString &mntPt) const;
+    qint64 getUsedSpace(const QString &mntPt) const;
+    qint64 getTotalSpace(const QString &mntPt) const;
     int getPercentUsed(const QString &mntPt) const;
     int getPercentFree(const QString &mntPt) const;
 
