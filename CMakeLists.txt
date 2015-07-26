@@ -1,3 +1,4 @@
+cmake_minimum_required(VERSION 2.8.9)
 PROJECT(superkaramba)
 
 if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})

@@ -8,7 +8,7 @@ CONFIGURE_FILE(config-superkaramba.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-su
 
 ########### the Plasma::DataEngine-sensor ###############
 set(PLASMASENSOR_SRC "sensors/plasmaengine.cpp")
-set(PLASMASENSOR_LIB plasma)
+set(PLASMASENSOR_LIB ${KDE4_PLASMA_LIBS})
 ADD_DEFINITIONS(-DPLASMASENSOR_ENABLED)
 
 ########### superkaramba lib ###############
@@ -81,6 +81,7 @@ KDE4_ADD_LIBRARY(superkaramba SHARED ${superkaramba_LIB_SRCS})
 set_target_properties(superkaramba PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION} )
 
 TARGET_LINK_LIBRARIES(superkaramba
+   LINK_PRIVATE
 ${KDE4_KIO_LIBS}
 ${KDE4_KPTY_LIBS}
 ${KDE4_KROSSCORE_LIBS}
@@ -103,11 +104,11 @@ if(PYTHONLIBS_FOUND)
     LIST(APPEND PYTHON_LIBRARIES ${LIBUTIL})
   ENDIF(LIBUTIL)
 
-  TARGET_LINK_LIBRARIES(superkaramba ${PYTHON_LIBRARIES})
+  TARGET_LINK_LIBRARIES(superkaramba LINK_PRIVATE ${PYTHON_LIBRARIES})
 endif(PYTHONLIBS_FOUND)
 
 if(CMAKE_SYSTEM_NAME MATCHES "FreeBSD" OR CMAKE_SYSTEM_NAME MATCHES "DragonFly")
-  target_link_libraries(superkaramba kvm)
+   target_link_libraries(superkaramba LINK_PRIVATE kvm)
 endif(CMAKE_SYSTEM_NAME MATCHES "FreeBSD" OR CMAKE_SYSTEM_NAME MATCHES "DragonFly")
 
 install(TARGETS superkaramba ${INSTALL_TARGETS_DEFAULT_ARGS})
